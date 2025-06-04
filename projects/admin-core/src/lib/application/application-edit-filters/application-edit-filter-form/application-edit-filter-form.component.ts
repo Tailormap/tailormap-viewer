@@ -15,6 +15,7 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -52,6 +53,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
   public uniqueValuesStrings$: Observable<string[]> | null = null;
+  private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
+  public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
 
   @Input()
   public newFilter: boolean = false;
@@ -241,6 +244,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setUniqueValues(attributeName: string) {
+    this.loadingUniqueValuesSubject$.next(true);
     this.uniqueValues$ = combineLatest([
       this.store$.select(selectSelectedApplicationName),
       this.store$.select(selectApplicationSelectedFilterLayerId),
@@ -260,7 +264,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     );
     this.uniqueValuesStrings$ = this.uniqueValues$.pipe(
       map(values => values.map(value => `${value}`)),
+      tap(() => this.loadingUniqueValuesSubject$.next(false)),
     );
+
   }
 
   public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {

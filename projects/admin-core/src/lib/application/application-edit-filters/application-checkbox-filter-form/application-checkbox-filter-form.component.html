@@ -1,46 +1,51 @@
-<div class="checkbox-filter-table">
-  <form [formGroup]="aliasForm">
-    <mat-table [dataSource]="attributeValuesSettings">
-      <ng-container matColumnDef="value">
-        <mat-header-cell *matHeaderCellDef>
-          <div i18n="@@admin-core.application.filter.unique-value">Value</div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let value">
-          <div class="wrap-text">{{ value.value }}</div>
-        </mat-cell>
-      </ng-container>
+@if (loadingUniqueValues) {
+  <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+} @else {
+  <div class="checkbox-filter-table">
+    <form [formGroup]="aliasForm">
+      <mat-table [dataSource]="attributeValuesSettings">
+        <ng-container matColumnDef="value">
+          <mat-header-cell *matHeaderCellDef>
+            <div i18n="@@admin-core.application.filter.unique-value">Value</div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <div class="wrap-text">{{ value.value }}</div>
+          </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="initially-selected">
-        <mat-header-cell *matHeaderCellDef>
-          <div i18n="@@admin-core.application.filter.initially-selected">Initially selected</div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let value">
-          <mat-checkbox (change)="changeBooleanSetting(value.value, 'initiallySelected', $event.checked)" [checked]="value.initiallySelected"></mat-checkbox>
-        </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="initially-selected">
+          <mat-header-cell *matHeaderCellDef>
+            <div i18n="@@admin-core.application.filter.initially-selected">Initially selected</div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <mat-checkbox (change)="changeBooleanSetting(value.value, 'initiallySelected', $event.checked)" [checked]="value.initiallySelected"></mat-checkbox>
+          </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="selectable">
-        <mat-header-cell *matHeaderCellDef>
-          <div i18n="@@admin-core.application.filter.selectable">Selectable</div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let value">
-          <mat-checkbox (change)="changeBooleanSetting(value.value, 'selectable', $event.checked)" [checked]="value.selectable"></mat-checkbox>
-        </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="selectable">
+          <mat-header-cell *matHeaderCellDef>
+            <div i18n="@@admin-core.application.filter.selectable">Selectable</div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <mat-checkbox (change)="changeBooleanSetting(value.value, 'selectable', $event.checked)" [checked]="value.selectable"></mat-checkbox>
+          </mat-cell>
+        </ng-container>
 
-      <ng-container matColumnDef="alias">
-        <mat-header-cell *matHeaderCellDef>
-          <div i18n="@@admin-core.application.filter.alias">Alias</div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let value">
-          <mat-form-field>
-            <input matInput [formControlName]="value.value"/>
-          </mat-form-field>
-        </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="alias">
+          <mat-header-cell *matHeaderCellDef>
+            <div i18n="@@admin-core.application.filter.alias">Alias</div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <mat-form-field>
+              <input matInput [formControlName]="value.value"/>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
 
-      <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columnLabels;"></mat-row>
-    </mat-table>
-  </form>
-</div>
+        <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnLabels;"></mat-row>
+      </mat-table>
+    </form>
+  </div>
+}
+

@@ -43,6 +43,9 @@ export class ApplicationCheckboxFilterFormComponent {
     this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
   }
 
+  @Input()
+  public loadingUniqueValues: boolean | null = false;
+
   @Output()
   public updateCheckboxFilter = new EventEmitter<CheckboxFilterModel>();
 

@@ -52,6 +52,7 @@
       } @else {
         <tm-admin-application-checkbox-filter-form
           [uniqueValues]="uniqueValuesStrings$ | async"
+          [loadingUniqueValues]="loadingUniqueValues$ | async"
           (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
       }
     }
