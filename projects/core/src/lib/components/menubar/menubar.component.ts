@@ -10,4 +10,6 @@ import { ComponentModel } from '@tailormap-viewer/api';
 export class MenubarComponent {
   @Input({ required: true })
   public config: ComponentModel[] = [];
+  @Input()
+  public hasHeader = false;
 }
