@@ -24,8 +24,23 @@ h1 {
   font-size: 24px;
   min-width: 0; /* Allow title to shrink */
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+@media screen and (max-width: 800px) {
+  h1 {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  h1 {
+    font-size: 16px;
+  }
 }
 
 .header-menu {
