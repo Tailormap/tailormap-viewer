@@ -62,6 +62,9 @@ export class HeaderComponentConfigComponent implements ConfigurationComponentMod
     this.heightControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(height => {
+        if (!height) {
+          return;
+        }
         this.componentConfigService.updateConfigForKey<HeaderComponentConfigModel>(this.type, 'height', height);
       });
     this.cssControl.valueChanges
