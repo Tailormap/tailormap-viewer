@@ -15,29 +15,11 @@ export class HeaderHelper {
     }
   }
 
-  public static calculateVisibleMenuItems(headerContainer: HTMLElement, measurementElement: HTMLElement): number {
+  public static shouldUseDropdownMenu(headerContainer: HTMLElement, measurementElement: HTMLElement): boolean {
     const logoWidth = HeaderHelper.getWidthWithMargin(headerContainer.querySelector('img'));
     const MIN_TITLE_WIDTH = 250; // Minimum width for the title area
-    const OVERFLOW_BUTTON_WIDTH = 48;
     const containerWidth = headerContainer.offsetWidth - logoWidth - MIN_TITLE_WIDTH;
-    const measurementItems = measurementElement.querySelectorAll('a');
-    let totalWidth = 0;
-    let visibleCount = 0;
-    for (let i = 0; i < measurementItems.length; i++) {
-      const itemWidth = HeaderHelper.getWidthWithMargin(measurementItems[i]);
-      if ((totalWidth + itemWidth) <= containerWidth) {
-        totalWidth += itemWidth;
-        visibleCount++;
-      } else {
-        break;
-      }
-    }
-    // If we need an overflow button, make sure we have space for it
-    const hasOverflowMenuItems = visibleCount < measurementItems.length;
-    if (visibleCount > 0 && hasOverflowMenuItems && totalWidth + OVERFLOW_BUTTON_WIDTH > containerWidth) {
-      visibleCount--;
-    }
-    return Math.max(0, visibleCount);
+    return measurementElement.offsetWidth > containerWidth;
   }
 
   private static getWidthWithMargin(element?: HTMLElement | null): number {
@@ -47,7 +29,9 @@ export class HeaderHelper {
     const style = window.getComputedStyle(element);
     const marginLeft = parseFloat(style.marginLeft) || 0;
     const marginRight = parseFloat(style.marginRight) || 0;
-    return element.offsetWidth + marginLeft + marginRight;
+    const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
+    return element.offsetWidth + marginLeft + marginRight + paddingLeft + paddingRight;
   }
 
 }

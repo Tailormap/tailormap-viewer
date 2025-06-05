@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, ComponentModel, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel } from '@tailormap-viewer/api';
@@ -18,22 +18,8 @@ export class HeaderComponent implements OnDestroy {
   public headerContainer = viewChild<ElementRef<HTMLDivElement>>('headerContainer');
   public measurementContainer = viewChild<ElementRef<HTMLDivElement>>('measurementContainer');
 
-  private menuItemsToShow = signal<number>(0);
+  public useDropdownMenu = signal(false);
   private resizeObserver: ResizeObserver | null = null;
-
-  public visibleMenuItems = computed(() => {
-    const config = this.config();
-    const itemsToShow = this.menuItemsToShow();
-    if (!config?.config?.menuItems) return [];
-    return config.config.menuItems.slice(0, itemsToShow);
-  });
-
-  public overflowMenuItems = computed(() => {
-    const config = this.config();
-    const itemsToShow = this.menuItemsToShow();
-    if (!config?.config?.menuItems) return [];
-    return config.config.menuItems.slice(itemsToShow);
-  });
 
   constructor(
     private store$: Store,
@@ -64,17 +50,17 @@ export class HeaderComponent implements OnDestroy {
       if (!entry || entry.target !== headerContainer) {
         return;
       }
-      this.calculateVisibleMenuItems();
+      this.checkUseDropdown();
     });
     this.resizeObserver.observe(headerContainer);
-    this.calculateVisibleMenuItems();
+    this.checkUseDropdown();
   }
 
-  public calculateVisibleMenuItems() {
+  public checkUseDropdown() {
     const headerContainer = this.headerContainer()?.nativeElement;
     const measurementContainer = this.measurementContainer()?.nativeElement;
     if (headerContainer && measurementContainer) {
-      this.menuItemsToShow.set(HeaderHelper.calculateVisibleMenuItems(headerContainer, measurementContainer));
+      this.useDropdownMenu.set(HeaderHelper.shouldUseDropdownMenu(headerContainer, measurementContainer));
     }
   }
 
