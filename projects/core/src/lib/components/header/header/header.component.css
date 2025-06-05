@@ -16,13 +16,20 @@
 
 img {
   max-height: 100%;
+  max-width: 50%;
+}
+
+@media screen and (max-width: 450px) {
+  img {
+    max-width: 30%;
+  }
 }
 
 h1 {
   flex: 1;
   margin: 0 16px;
   font-size: 24px;
-  min-width: 0; /* Allow title to shrink */
+  min-width: 0;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -34,12 +41,16 @@ h1 {
 @media screen and (max-width: 800px) {
   h1 {
     font-size: 20px;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
   }
 }
 
 @media screen and (max-width: 450px) {
   h1 {
     font-size: 16px;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
   }
 }
 
