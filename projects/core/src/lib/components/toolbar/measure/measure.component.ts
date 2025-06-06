@@ -101,11 +101,10 @@ export class MeasureComponent implements OnInit, OnDestroy {
       this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.MEASURE }));
       return;
     }
+    const enableArguments = { type: type === 'area' ? 'area' : 'line' };
+    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments }));
     this.toolActive = type;
     this.hideGeometry();
-    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments: {
-      type: type === 'area' ? 'area' : 'line',
-    } }));
   }
 
   private hideGeometry() {

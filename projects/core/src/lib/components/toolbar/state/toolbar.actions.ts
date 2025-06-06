@@ -24,6 +24,11 @@ export const deactivateTool = createAction(
   props<{ tool: ToolbarComponentEnum }>(),
 );
 
+export const deactivateToolButtonOnly = createAction(
+  `${toolbarActionsPrefix} Deactivate tool button only`,
+  props<{ tool: ToolbarComponentEnum }>(),
+);
+
 export const toggleTool = createAction(
   `${toolbarActionsPrefix} Toggle tool`,
   props<{ tool: ToolbarComponentEnum; enableArguments?: Record<string, unknown> }>(),

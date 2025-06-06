@@ -5,6 +5,7 @@ import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
 import { AuthenticatedUserService, ColumnMetadataModel, FeatureModel, LayerDetailsModel, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
+import { DateTime } from 'luxon';
 
 interface EditFormInput {
   feature: FeatureModel | undefined;
@@ -74,27 +75,45 @@ export class EditFormComponent implements OnDestroy {
       this.feature.columnMetadata,
       this.feature.isNewFeature ?? false,
     );
-
-    this.userDetails$.pipe(take(1)).subscribe(userDetails => {
-      const username = userDetails?.username ?? '';
-      this.form = FormHelper.createForm(this.formConfig, username);
-    });
+    this.form = FormHelper.createForm(this.formConfig);
 
     const changes$ = Object.keys(this.form.controls)
       .map(key => {
         const control = this.form.get(key);
         if (control) {
-          return control.valueChanges.pipe(map(value => [ key, value ]));
+          return control.valueChanges.pipe(
+            debounceTime(250),
+            map(value => [ key, value ]),
+          );
         }
         return null;
       })
       .filter((valueChanges$): valueChanges$ is FormGroup['valueChanges'] => !!valueChanges$);
     this.currentFormSubscription = merge(...changes$)
-      .pipe(debounceTime(250))
       .subscribe(([ changedKey, value ]) => {
         const val = FormHelper.getFormValue(value);
         this.featureAttributeChanged.emit({ attribute: changedKey, value: val, invalid: !this.form.valid });
       });
+
+    this.userDetails$.pipe(take(1)).subscribe(userDetails => {
+      // Auto-fill fields with username/date/timestamp
+      this.formConfig.forEach(field => {
+        const control = this.form.get(field.name);
+        if (control) {
+          if (field.autoFillUser) {
+            control.setValue(userDetails?.username ?? '');
+          }
+          if (field.autoFillDate) {
+            if (field.type === 'date') {
+              control.setValue(DateTime.now().toISODate());
+            } else if (field.type === 'timestamp') {
+              control.setValue(DateTime.now().toISO());
+            }
+          }
+        }
+      });
+    });
+
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
   }

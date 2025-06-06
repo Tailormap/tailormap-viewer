@@ -182,6 +182,9 @@
       <trans-unit id="core.drawing.arrow-on-every-segment" datatype="html">
         <source>On every segment</source>
       </trans-unit>
+      <trans-unit id="core.drawing.circle-radius" datatype="html">
+        <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+      </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
       </trans-unit>
@@ -250,6 +253,12 @@
       </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-height" datatype="html">
+        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-width" datatype="html">
+        <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

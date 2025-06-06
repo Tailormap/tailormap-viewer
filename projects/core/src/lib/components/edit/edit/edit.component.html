@@ -36,10 +36,20 @@
   </button>
 
   <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
-    <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
+    @if (editGeometryType === 'point' || editGeometryType === 'multipoint') {
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
+    } @else if (editGeometryType === 'linestring' || editGeometryType === 'multilinestring') {
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
+    } @else if (editGeometryType === 'polygon' || editGeometryType === 'multipolygon') {
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
+    } @else {
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
+      <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
+    }
   </mat-menu>
 </div>
