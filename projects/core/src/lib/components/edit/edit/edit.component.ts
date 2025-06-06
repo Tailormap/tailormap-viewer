@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, take } from 'rxjs';
+import { combineLatest, of, take } from 'rxjs';
 import { setEditActive, setEditCreateNewFeatureActive, setSelectedEditLayer } from '../state/edit.actions';
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { withLatestFrom } from 'rxjs/operators';
+import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { AttributeType, AuthenticatedUserService } from '@tailormap-viewer/api';
+import { AttributeType, AuthenticatedUserService, GeometryType } from '@tailormap-viewer/api';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
@@ -25,6 +25,7 @@ export class EditComponent implements OnInit {
   public active$ = this.store$.select(selectEditActive);
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
+  public editGeometryType:GeometryType|null = null;
 
   private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
@@ -47,9 +48,12 @@ export class EditComponent implements OnInit {
         this.layer.setValue(layer, { emitEvent: false });
       });
     this.layer.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(layer => {
-        this.store$.dispatch(setSelectedEditLayer({ layer }));
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(layerId => layerId ? this.applicationLayerService.getLayerDetails$(layerId) : of(null)))
+      .subscribe(layerDetails => {
+        this.store$.dispatch(setSelectedEditLayer({ layer: layerDetails ? layerDetails.layer.id : null }));
+        this.editGeometryType = layerDetails ? layerDetails.details.geometryType : null;
       });
     combineLatest([
       this.active$,

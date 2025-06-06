@@ -12,7 +12,10 @@ export class DescribeAppLayerService {
   private cachedDetails: Map<string, LayerDetailsModel> = new Map();
   private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
 
-  public getDescribeAppLayer$(applicationId: string, layerId: string): Observable<LayerDetailsModel> {
+  public getDescribeAppLayer$(applicationId: string | null, layerId: string): Observable<LayerDetailsModel> {
+    if (!applicationId) {
+      throw new Error('Application ID must be provided to describe a layer');
+    }
     const cachedDetails = this.cachedDetails.get(this.getCacheKey(applicationId, layerId));
     if (cachedDetails) {
       return of(cachedDetails);

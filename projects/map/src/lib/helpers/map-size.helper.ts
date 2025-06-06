@@ -1,20 +1,18 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Geometry } from 'ol/geom';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { getArea, getLength } from 'ol/sphere';
-import { fromCircle } from 'ol/geom/Polygon';
 
 export class MapSizeHelper {
 
   public static getSize(geometry?: Geometry) {
     if (GeometryTypeHelper.isLineGeometry(geometry)) {
-      return getLength(geometry);
+      return geometry.getLength();
     }
     if (GeometryTypeHelper.isPolygonGeometry(geometry)) {
-      return getArea(geometry);
+      return geometry.getArea();
     }
     if (GeometryTypeHelper.isCircleGeometry(geometry)) {
-      return getArea(fromCircle(geometry));
+      return Math.PI * Math.pow(geometry.getRadius(), 2);
     }
     return 0;
   }

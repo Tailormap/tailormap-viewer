@@ -35,11 +35,13 @@ export class DrawingFeatureIconComponent {
   private createSvgContent(feature: DrawingFeatureModel) {
     const style = feature.attributes.style;
     switch(feature.attributes.type) {
+      case DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS:
       case DrawingFeatureTypeEnum.CIRCLE:
       case DrawingFeatureTypeEnum.ELLIPSE:
         return `<circle cx="50" cy="50" r="35" stroke-dasharray="${this.getDashArray(style)}" style="${this.getStyle(style)}"></circle>`;
       case DrawingFeatureTypeEnum.POLYGON:
       case DrawingFeatureTypeEnum.RECTANGLE:
+      case DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE:
       case DrawingFeatureTypeEnum.SQUARE:
         return `<rect x="20" y="20" width="60" height="60" rx="5" stroke-dasharray="${this.getDashArray(style)}" style="${this.getStyle(style)}"></rect>`;
       case DrawingFeatureTypeEnum.LINE:
