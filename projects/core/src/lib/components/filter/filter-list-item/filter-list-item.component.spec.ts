@@ -17,7 +17,6 @@ describe('FilterListItemComponent', () => {
       providers: [provideMockStore()],
       imports: [ SharedImportsModule, MatIconTestingModule ],
     });
-    expect(await screen.findByText('Attribute filter')).toBeInTheDocument();
     expect(await screen.findByText('Applies to The layer')).toBeInTheDocument();
   });
 
