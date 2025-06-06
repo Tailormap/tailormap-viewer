@@ -1,55 +1,60 @@
-<ng-container *ngIf="(layoutService.componentsConfig$ | async) as layoutConfig">
-  <div class="menubar">
-    <tm-menubar [config]="layoutConfig.config"></tm-menubar>
-  </div>
-  <div class="content">
-    <div class="center">
-      <div class="left">
-        <tm-menubar-panel>
-          <tm-toc *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)"></tm-toc>
-          <tm-legend *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)"></tm-legend>
-          <tm-drawing *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.DRAWING)"></tm-drawing>
-          <tm-print *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.PRINT)"></tm-print>
-          <tm-filter *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)"></tm-filter>
-          <tm-registered-components-renderer [config]="layoutConfig.config" area="panel"></tm-registered-components-renderer>
-        </tm-menubar-panel>
-      </div>
-      <div class="map">
-        <tm-feature-info *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)"></tm-feature-info>
-        <tm-edit-dialog *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)"></tm-edit-dialog>
-        <tm-map></tm-map>
-        <tm-registered-components-renderer [config]="layoutConfig.config" area="map"></tm-registered-components-renderer>
-        <tm-attribute-list *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.ATTRIBUTE_LIST)"></tm-attribute-list>
-        <div class="map-controls-left">
-          <tm-measure *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.MEASURE)"></tm-measure>
-          <tm-clicked-coordinates *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)"></tm-clicked-coordinates>
-          <tm-streetview *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.STREETVIEW)"></tm-streetview>
-          <tm-simple-search *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)"></tm-simple-search>
-          <tm-edit *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)"></tm-edit>
-          <tm-coordinate-link-window *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)"></tm-coordinate-link-window>
-          <tm-share-viewer *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.SHARE_VIEWER)"></tm-share-viewer>
-          <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left"></tm-registered-components-renderer>
-          <tm-switch3-d></tm-switch3-d>
-          <tm-terrain-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)"></tm-terrain-layer-toggle>
+@let layoutConfig = layoutService.componentsConfig$ | async;
+@if (layoutConfig) {
+  @let hasHeaderComponent = layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER);
+  @if (hasHeaderComponent) { <tm-header></tm-header> }
+  <div class="viewer">
+    <div class="menubar">
+      <tm-menubar [config]="layoutConfig.config" [hasHeader]="hasHeaderComponent"></tm-menubar>
+    </div>
+    <div class="content">
+      <div class="center">
+        <div class="left">
+          <tm-menubar-panel>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.DRAWING)) { <tm-drawing></tm-drawing> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.PRINT)) { <tm-print></tm-print> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
+            <tm-registered-components-renderer [config]="layoutConfig.config" area="panel"></tm-registered-components-renderer>
+          </tm-menubar-panel>
         </div>
-        <div class="map-controls-right">
-          <tm-background-layer-toggle *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)"></tm-background-layer-toggle>
-          <div class="map-controls-column">
-            <tm-zoom-buttons *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.ZOOM)"></tm-zoom-buttons>
-            <tm-geolocation *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.GEOLOCATION)"></tm-geolocation>
-            <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-right"></tm-registered-components-renderer>
+        <div class="map">
+          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
+          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit-dialog></tm-edit-dialog> }
+          <tm-map></tm-map>
+          <tm-registered-components-renderer [config]="layoutConfig.config" area="map"></tm-registered-components-renderer>
+          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.ATTRIBUTE_LIST)) { <tm-attribute-list></tm-attribute-list> }
+          <div class="map-controls-left">
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MEASURE)) { <tm-measure></tm-measure> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)) { <tm-clicked-coordinates></tm-clicked-coordinates> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.STREETVIEW)) { <tm-streetview></tm-streetview> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)) { <tm-coordinate-link-window></tm-coordinate-link-window> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SHARE_VIEWER)) { <tm-share-viewer></tm-share-viewer> }
+            <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left"></tm-registered-components-renderer>
+            <tm-switch3-d></tm-switch3-d>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) { <tm-terrain-layer-toggle></tm-terrain-layer-toggle> }
+          </div>
+          <div class="map-controls-right">
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)) { <tm-background-layer-toggle></tm-background-layer-toggle> }
+            <div class="map-controls-column">
+              @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.ZOOM)) { <tm-zoom-buttons></tm-zoom-buttons> }
+              @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.GEOLOCATION)) { <tm-geolocation></tm-geolocation> }
+              <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-right"></tm-registered-components-renderer>
+            </div>
+          </div>
+          <div class="map-controls-left map-controls-left--on-bottom">
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SCALE_BAR)) { <tm-scale-bar></tm-scale-bar> }
+            <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left-bottom"></tm-registered-components-renderer>
+          </div>
+          <div class="map-controls-right map-controls-right--on-bottom">
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOUSE_COORDINATES)) { <tm-mouse-coordinates></tm-mouse-coordinates> }
+            <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-right-bottom"></tm-registered-components-renderer>
           </div>
         </div>
-        <div class="map-controls-left map-controls-left--on-bottom">
-          <tm-scale-bar *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.SCALE_BAR)"></tm-scale-bar>
-          <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left-bottom"></tm-registered-components-renderer>
-        </div>
-        <div class="map-controls-right map-controls-right--on-bottom">
-          <tm-mouse-coordinates *ngIf="layoutService.isComponentEnabled(layoutConfig, componentTypes.MOUSE_COORDINATES)"></tm-mouse-coordinates>
-          <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-right-bottom"></tm-registered-components-renderer>
-        </div>
       </div>
+      <div class="bottom"></div>
     </div>
-    <div class="bottom"></div>
   </div>
-</ng-container>
+}

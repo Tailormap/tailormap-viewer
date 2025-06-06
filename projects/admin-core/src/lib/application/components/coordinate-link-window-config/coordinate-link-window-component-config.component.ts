@@ -118,7 +118,7 @@ export class CoordinateLinkWindowComponentConfigComponent implements Configurati
           projection,
         };
       });
-    this.componentConfigService.updateConfig<CoordinateLinkWindowConfigModel>(this.type, 'urls', urls);
+    this.componentConfigService.updateConfigForKey<CoordinateLinkWindowConfigModel>(this.type, 'urls', urls);
   }
 
   private createForm(url?: CoordinateLinkWindowConfigUrlModel): UrlFormType {

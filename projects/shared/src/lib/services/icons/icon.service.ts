@@ -14,7 +14,7 @@ export class IconService {
   public icons: IconDefinition[] = [
     'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error', 'remove_all', 'remove',
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
-    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy',
+    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy', 'menu',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
     'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'coordinates',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',

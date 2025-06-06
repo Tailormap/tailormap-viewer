@@ -12,6 +12,7 @@ import { PrintModule } from './print/print.module';
 import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
+import { HeaderModule } from './header';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { RegisteredComponentsModule } from './registered-components-renderer/reg
     PrintModule,
     FilterComponentModule,
     EditComponentModule,
+    HeaderModule,
     RegisteredComponentsModule,
   ],
 })

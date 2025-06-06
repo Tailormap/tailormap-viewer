@@ -1,0 +1,64 @@
+<tm-admin-base-component-config [type]="type" [label]="label" [config]="config">
+  <h2 i18n="@@admin-core.components.header-layout-settings">Layout settings</h2>
+  <div class="row">
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.components.header-height">Header Height</mat-label>
+      <input matInput type="number" [formControl]="heightControl" />
+    </mat-form-field>
+  </div>
+  <div class="controls">
+    <div class="control">
+      <strong i18n="@@admin-core.components.header-logo">Logo</strong>
+      <tm-admin-select-upload [category]="HEADER_LOGO_CATEGORY"
+                              (fileSelected)="onImageChanged($event)"
+                              [selectedFile]="config?.logoFileId ?? null"></tm-admin-select-upload>
+    </div>
+    <div class="control">
+      <strong i18n="@@admin-core.components.header-text-color">Text Color</strong>
+      <tm-color-picker
+        [dropdownPosition]="dropdownPosition"
+        [color]="config?.textColor ?? '#000000'"
+        (colorChange)="onTextColorChanged($event)"></tm-color-picker>
+    </div>
+    <div class="control">
+      <strong i18n="@@admin-core.components.header-background-color">Background Color</strong>
+      <tm-color-picker
+        [dropdownPosition]="dropdownPosition"
+        [color]="config?.backgroundColor || '#ffffff'"
+        (colorChange)="onBackgroundColorChanged($event)"></tm-color-picker>
+    </div>
+  </div>
+  <div class="menu-form">
+    <h2 i18n="@@admin-core.components.header-menu-items">Menu Items</h2>
+    @for(menuItem of menuItems.controls; track menuItem; let i = $index) {
+      <div class="menu-form-row" [formGroup]="menuItem">
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.common.label">Label</mat-label>
+          <input matInput type="text" formControlName="label" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.common.url">URL</mat-label>
+          <input matInput type="text" formControlName="url" />
+        </mat-form-field>
+        <button mat-icon-button (click)="deleteMenuItem(i)">
+          <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+      </div>
+    }
+    <button class="add-menu-item-button" mat-flat-button (click)="addMenuItem()">
+      <mat-icon svgIcon="plus"></mat-icon>
+      <span i18n="@@admin-core.components.header-add-menu-item">Add Menu Item</span>
+    </button>
+  </div>
+  <div class="row">
+    <h2 i18n="@@admin-core.components.header-advanced-settings">Advanced settings</h2>
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.components.header-css">Extra CSS</mat-label>
+      <textarea matInput
+                placeholder="Extra CSS"
+                i18n-placeholder="@@admin-core.components.header-css"
+                [formControl]="cssControl"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</tm-admin-base-component-config>

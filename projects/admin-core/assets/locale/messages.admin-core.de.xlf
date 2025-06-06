@@ -78,6 +78,10 @@
         <source>Filter</source>
         <target>Filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-header" datatype="html">
+        <source>Header</source>
+        <target>Kopfzeile</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
         <target>Legende</target>
@@ -1349,6 +1353,42 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Feature-Informationen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
+        <source>Add Menu Item</source>
+        <target>Menüpunkt hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-advanced-settings" datatype="html">
+        <source>Advanced settings</source>
+        <target>Erweiterte Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-background-color" datatype="html">
+        <source>Background Color</source>
+        <target>Hintergrundfarbe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-css" datatype="html">
+        <source>Extra CSS</source>
+        <target>Zusätzliches CSS</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height" datatype="html">
+        <source>Header Height</source>
+        <target>Kopfzeilenhöhe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
+        <source>Layout settings</source>
+        <target>Layout-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-logo" datatype="html">
+        <source>Logo</source>
+        <target>Logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-menu-items" datatype="html">
+        <source>Menu Items</source>
+        <target>Menüpunkte</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-text-color" datatype="html">
+        <source>Text Color</source>
+        <target>Textfarbe</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>

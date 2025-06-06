@@ -43,7 +43,7 @@ export class MeasureComponentConfigComponent implements ConfigurationComponentMo
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {
-        this.componentConfigService.updateConfig<MeasureComponentConfigModel>(this.type, 'titleMeasureArea', values.titleMeasureArea);
+        this.componentConfigService.updateConfigForKey<MeasureComponentConfigModel>(this.type, 'titleMeasureArea', values.titleMeasureArea);
       });
   }
 

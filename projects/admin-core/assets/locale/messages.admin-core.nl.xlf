@@ -78,6 +78,10 @@
         <source>Filter</source>
         <target>Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-header" datatype="html">
+        <source>Header</source>
+        <target>Header</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
         <target>Legenda</target>
@@ -1348,6 +1352,42 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
+        <source>Add Menu Item</source>
+        <target>Menu item toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-advanced-settings" datatype="html">
+        <source>Advanced settings</source>
+        <target>Geavanceerde instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-background-color" datatype="html">
+        <source>Background Color</source>
+        <target>Achtergrondkleur</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-css" datatype="html">
+        <source>Extra CSS</source>
+        <target>Extra CSS</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height" datatype="html">
+        <source>Header Height</source>
+        <target>Headerhoogte</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
+        <source>Layout settings</source>
+        <target>Lay-out instellingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-logo" datatype="html">
+        <source>Logo</source>
+        <target>Logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-menu-items" datatype="html">
+        <source>Menu Items</source>
+        <target>Menu items</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-text-color" datatype="html">
+        <source>Text Color</source>
+        <target>Tekstkleur</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
