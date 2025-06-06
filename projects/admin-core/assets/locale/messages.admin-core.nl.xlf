@@ -235,7 +235,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
-        <target>Vinkvak</target>
+        <target>Vinkvakjes</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>

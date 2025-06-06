@@ -1,0 +1,31 @@
+.edit-filter-expansion-panel {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.edit-attribute-filters {
+  margin-bottom: 8px;
+}
+
+.edit-filter-wrapper {
+  margin-left: -24px;
+  margin-right: -24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.editable-slider-filter-title {
+  padding-top: 8px;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.editable-slider-filter-content {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.editable-checkbox-filter {
+  padding-top: 8px;
+  margin-left: 24px;
+  margin-right: 24px;
+}

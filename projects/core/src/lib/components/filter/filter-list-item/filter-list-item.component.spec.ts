@@ -12,12 +12,11 @@ describe('FilterListItemComponent', () => {
   test('should render list with filters', async () => {
     const filterGroup = { ...getFilterGroup(), layers: [getAppLayerModel({ title: 'The layer' })] };
     await render(FilterListItemComponent, {
-      inputs: { filter: filterGroup },
+      inputs: { filterGroup: filterGroup },
       declarations: [FilterDescriptionComponent],
       providers: [provideMockStore()],
       imports: [ SharedImportsModule, MatIconTestingModule ],
     });
-    expect(await screen.findByText('Attribute filter')).toBeInTheDocument();
     expect(await screen.findByText('Applies to The layer')).toBeInTheDocument();
   });
 

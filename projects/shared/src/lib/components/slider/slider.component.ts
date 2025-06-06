@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -32,12 +34,26 @@ export class SliderComponent implements ControlValueAccessor {
   @Input()
   public value: number | undefined | null;
 
+  @Input()
+  public set betweenValues(betweenValues: {lower: number; upper: number} | null) {
+    if (betweenValues) {
+      this.lowerValue = betweenValues.lower;
+      this.upperValue = betweenValues.upper;
+    }
+  }
+
   @Output()
   public valueChange = new EventEmitter<number>();
+
+  @Output()
+  public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
 
   public disabled = false;
   private onChange: any | null = null;
   private onTouched: any | null = null;
+
+  public lowerValue: number | null = null;
+  public upperValue: number | null = null;
 
   constructor(
     private ngZone: NgZone,
@@ -68,6 +84,43 @@ export class SliderComponent implements ControlValueAccessor {
         this.onChange(value);
       }
     });
+  }
+
+  public onLowerValueChange(value: number) {
+    this.ngZone.run(() => {
+      this.lowerValue = value;
+      this.betweenValuesChange.emit({ lower: this.lowerValue, upper: this.upperValue ?? 0 });
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
+  }
+
+  public onUpperValueChange(value: number) {
+    this.ngZone.run(() => {
+      this.upperValue = value;
+      this.betweenValuesChange.emit({ lower: this.lowerValue ?? 0, upper: this.upperValue });
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
+  }
+
+  public labelsOverlap(): boolean {
+    if (this.lowerValue === null || this.upperValue === null) {
+      return false;
+    }
+    const sliderElement: HTMLElement | null = document.getElementById("double_slider_for_filter");
+    const sliderWidthPx = sliderElement?.offsetWidth || 194;
+    const valueRange = this.max - this.min;
+    const distValue = this.upperValue - this.lowerValue;
+    const distPx = (distValue / valueRange) * sliderWidthPx;
+
+    const lowerLabelPx = this.displayWith(this.lowerValue).length * 8;
+    const upperLabelPx = this.displayWith(this.upperValue).length * 8;
+    const avgLabelPx = (lowerLabelPx + upperLabelPx) / 2;
+
+    return distPx < avgLabelPx + 16;
   }
 
 }

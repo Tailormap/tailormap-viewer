@@ -1,7 +1,20 @@
-<mat-slider [max]="max"
-            [min]="min"
-            [step]="step"
-            [discrete]="true"
-            [displayWith]="displayWith">
-  <input matSliderThumb [value]="value" (valueChange)="onValueChange($event)">
-</mat-slider>
+@if (upperValue !== null && lowerValue !== null) {
+  <mat-slider id="double_slider_for_filter"
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="true"
+              [displayWith]="displayWith"
+              [class.label-down]="labelsOverlap()">
+    <input matSliderStartThumb [value]="lowerValue" (valueChange)="onLowerValueChange($event)">
+    <input matSliderEndThumb [value]="upperValue" (valueChange)="onUpperValueChange($event)">
+  </mat-slider>
+} @else {
+  <mat-slider [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="true"
+              [displayWith]="displayWith">
+    <input matSliderThumb [value]="value" (valueChange)="onValueChange($event)">
+  </mat-slider>
+}
