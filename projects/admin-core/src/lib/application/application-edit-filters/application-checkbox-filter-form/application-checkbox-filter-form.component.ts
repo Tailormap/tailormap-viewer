@@ -29,6 +29,7 @@ export class ApplicationCheckboxFilterFormComponent {
       });
     }
     this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
   @Input()
