@@ -198,6 +198,22 @@
         <source>Filter application layers</source>
         <target>Filter applicatie lagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.alias" datatype="html">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
+        <source>Initially selected</source>
+        <target>Initieel geselecteerd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.selectable" datatype="html">
+        <source>Selectable</source>
+        <target>Selecteerbaar</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
+        <source>Value</source>
+        <target>Waarde</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target>De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
@@ -208,6 +224,14 @@
       <trans-unit id="admin-core.application.filters.all-filters" datatype="html">
         <source>All filters</source>
         <target>Alle filters</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean" datatype="html">
+        <source>Boolean</source>
+        <target>Boolean</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
+        <source>Checkbox</source>
+        <target>Vinkvak</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
@@ -221,13 +245,13 @@
         <source>Edit existing filter</source>
         <target>Bestaand filter bewerken</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on--attribute-layer" datatype="html">
-        <source> Filter for attribute &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; on layer &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
-        <target> Filter op attribuut &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; op laag &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
+        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
+        <target>filter voor attribuut &apos;<x id="PH" equiv-text="attribute"/>&apos; op laag &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source> Filter on layer &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
-        <target> Filter op laag &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </target>
+        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
+        <target> filter op laag &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
         <source>Filterable layers</source>
@@ -237,9 +261,53 @@
         <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
         <target> Filters voor <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.preset" datatype="html">
+        <source>Preset</source>
+        <target>Vooringesteld</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
         <source>Select a layer to filter</source>
         <target>Selecteer een laag om te filteren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider" datatype="html">
+        <source>Slider</source>
+        <target>Slider</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
+        <source>Initial Lower Value</source>
+        <target>Initiële onderwaarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-range" datatype="html">
+        <source>Initial range</source>
+        <target>Initiële bereik</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-upper-value" datatype="html">
+        <source>Initial Upper Value</source>
+        <target>Initiële bovenwaarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-value" datatype="html">
+        <source>Initial Value</source>
+        <target>Initiële waarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
+        <source>Maximum Value</source>
+        <target>Maximale waarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.minimum-value" datatype="html">
+        <source>Minimum Value</source>
+        <target>Minimale waarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
+        <source>Slider range</source>
+        <target>Slider bereik</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
+        <source>Use attribute range</source>
+        <target>Gebruik attribuutbereik</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.tool" datatype="html">
+        <source>Tool</source>
+        <target>Gereedschap</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -406,12 +474,16 @@
         <target>Verwijder filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/></target>
       </trans-unit>
       <trans-unit id="admin-core.applications.filters.delete-filter-message" datatype="html">
-        <source>Are you sure you want to delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/>? This action cannot be undone.</source>
-        <target>Weet u zeker dat u het filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <source> Are you sure you want to delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/>? This action cannot be undone.</source>
+        <target> Weet u zeker dat u het filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.applications.filters.filter-removed" datatype="html">
         <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> removed</source>
         <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> verwijderd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
+        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
+        <target state="new">Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
@@ -1049,14 +1121,6 @@
         <source>Disabled</source>
         <target>Uitgeschakeld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
-        <source>Autofill Username</source>
-        <target>Gebruikersnaam Invullen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
-        <source>Autofill Date/Time</source>
-        <target>Datum/Tijd Invullen</target>
-      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
         <target>E-mail</target>
@@ -1328,6 +1392,14 @@
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Laat de gebruiker ook eigen tekst invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Datum/Tijd Invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Gebruikersnaam Invullen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>

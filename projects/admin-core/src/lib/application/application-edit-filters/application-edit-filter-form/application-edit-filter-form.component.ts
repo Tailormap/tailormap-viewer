@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterGroupModel, FilterTypeEnum, UniqueValuesService,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -14,6 +15,7 @@ import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-laye
 import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -25,6 +27,7 @@ import { Store } from '@ngrx/store';
 export class ApplicationEditFilterFormComponent implements OnInit {
 
   private filterGroupId?: string;
+  private otherFilters: AttributeFilterModel[] = [];
 
   public filterData: InputFilterData = {
     condition: undefined,
@@ -32,8 +35,23 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
+  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel;
 
-  public uniqueValues$: Observable<string[]> | null = null;
+  public filterToolOptions = [{
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
+    value: FilterToolEnum.PRESET_STATIC,
+  }, {
+    label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
+    value: FilterToolEnum.CHECKBOX,
+  }, {
+    label: $localize`:@@admin-core.application.filters.slider:Slider`,
+    value: FilterToolEnum.SLIDER,
+  }];
+
+  public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
+  public uniqueValuesStrings$: Observable<string[]> | null = null;
+  private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
+  public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
 
   @Input()
   public newFilter: boolean = false;
@@ -51,12 +69,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }
     const attributeFilter = updateAttributeFilter?.filterGroup.filters.find(filterInGroup =>
       filterInGroup.id === updateAttributeFilter?.filterId);
+    this.otherFilters = updateAttributeFilter?.filterGroup.filters.filter(filterInGroup => filterInGroup.id !== updateAttributeFilter?.filterId) ?? [];
     this.filterData = {
       condition: attributeFilter?.condition,
       value: attributeFilter?.value,
       caseSensitive: attributeFilter?.caseSensitive,
       invertCondition: attributeFilter?.invertCondition,
     };
+    this.editFilterConfiguration = attributeFilter?.editConfiguration;
     this.initForm(attributeFilter, filterLayer);
   }
 
@@ -82,13 +102,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public filterForm = new FormGroup({
     id: new FormControl(''),
     layer: new FormControl<GeoServiceLayerInApplicationModel | null>(null),
-    tool: new FormControl<string>("PRESET_STATIC"),
+    tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -109,6 +130,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
+        const editFilterConfiguration = value.editFilterConfiguration
+          ? { ...value.editFilterConfiguration, condition: undefined } : undefined;
         const attributeFilter: AttributeFilterModel = {
           id: value.id ?? nanoid(),
           attribute: value.attribute ?? '',
@@ -118,13 +141,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           caseSensitive: value.caseSensitive ?? false,
           value: value.value ?? [],
           type: FilterTypeEnum.ATTRIBUTE,
+          editConfiguration: editFilterConfiguration ?? undefined,
         };
         const filterGroup: FilterGroupModel<AttributeFilterModel> = {
           id: this.filterGroupId ?? nanoid(),
           source: "PRESET",
           layerIds: [value.layer?.appLayerId ?? ''],
           type: FilterTypeEnum.ATTRIBUTE,
-          filters: [attributeFilter],
+          filters: [ ...this.otherFilters, attributeFilter ],
           operator: 'AND',
         };
         this.updateFilter.emit(filterGroup);
@@ -141,18 +165,23 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         value: [],
         caseSensitive: false,
         invertCondition: false,
+        editFilterConfiguration: null,
       }, { emitEvent: false });
     } else {
+      const editFilterConfiguration = attributeFilter.editConfiguration
+        ? { ...attributeFilter.editConfiguration, condition: attributeFilter.condition } : undefined;
       this.setUniqueValues(attributeFilter.attribute);
       this.filterForm.patchValue({
         id: attributeFilter.id,
         layer: layer ?? null,
+        tool: attributeFilter.editConfiguration?.filterTool ?? FilterToolEnum.PRESET_STATIC,
         attribute: attributeFilter.attribute,
         attributeType: attributeFilter.attributeType,
         condition: attributeFilter.condition,
         value: attributeFilter.value,
         caseSensitive: attributeFilter.caseSensitive,
         invertCondition: attributeFilter.invertCondition,
+        editFilterConfiguration: editFilterConfiguration,
       }, { emitEvent: false });
     }
   }
@@ -212,6 +241,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setUniqueValues(attributeName: string) {
+    this.loadingUniqueValuesSubject$.next(true);
     this.uniqueValues$ = combineLatest([
       this.store$.select(selectSelectedApplicationName),
       this.store$.select(selectApplicationSelectedFilterLayerId),
@@ -224,11 +254,66 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           applicationId: `app/${applicationName}`,
         }).pipe(
           map(response => {
-            return response.values.map(v => `${v}`) || [];
+            return response.values || [];
           }),
         );
       }),
     );
+    this.uniqueValuesStrings$ = this.uniqueValues$.pipe(
+      map(values => values.map(value => `${value}`)),
+      tap(() => this.loadingUniqueValuesSubject$.next(false)),
+    );
+
+  }
+
+  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {
+    let value: string[] = [];
+    if ($event.filterTool === FilterToolEnum.SLIDER) {
+      value = $event.initialValue?.toString()
+        ? [$event.initialValue.toString()]
+        : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+    } else if ($event.filterTool === FilterToolEnum.CHECKBOX) {
+      value = $event.attributeValuesSettings
+        .filter(setting => setting.initiallySelected)
+        .map(setting => setting.value);
+    }
+    const condition = $event.filterTool === FilterToolEnum.CHECKBOX
+      ? FilterConditionEnum.UNIQUE_VALUES_KEY
+      : $event.condition;
+    this.filterForm.patchValue({
+      condition: condition,
+      value: value,
+      editFilterConfiguration: $event,
+    }, { emitEvent: true });
+    this.filterForm.markAsDirty();
+  }
+
+  public getAttributeFilterInfo(): string {
+    const layer = this.filterForm.get('layer')?.value;
+    const attribute = this.filterForm.get('attribute')?.value;
+    const tool = this.filterForm.get('tool')?.value;
+    const toolLabel = this.filterToolOptions.find(option => option.value === tool)?.label;
+    if (!layer) {
+      return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
+    } else if (!attribute) {
+      const layerTitle = layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title;
+      return `${toolLabel} ` + $localize`:@@admin-core.application.filters.filter-on-layer:filter on layer '${layerTitle}'`;
+    } else {
+      const layerTitle = layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title;
+      return `${toolLabel} ` + $localize`:@@admin-core.application.filters.filter-on-attribute-layer:filter for attribute '${attribute}' on layer '${layerTitle}'`;
+    }
+  }
+
+  public resetFormOnToolChange() {
+    this.filterForm.patchValue({
+      attribute: '',
+      attributeType: null,
+      condition: null,
+      value: [],
+      caseSensitive: false,
+      invertCondition: false,
+      editFilterConfiguration: null,
+    }, { emitEvent: false });
   }
 
 }

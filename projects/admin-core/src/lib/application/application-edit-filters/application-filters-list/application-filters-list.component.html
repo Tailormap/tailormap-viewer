@@ -9,12 +9,16 @@
 </div>
 
 <div class="filter-list">
-  <mat-selection-list>
-    @for (filter of filters(); track filter) {
+  <mat-selection-list cdkDropList (cdkDropListDropped)="drop($event)">
+    @for (filter of filters(); track filter.filter.id) {
       <mat-list-item
-        [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/filter/' + filter.filter.id"
+        cdkDrag
+        (cdkDragStarted)="isDragging.set(true)"
+        (cdkDragEnded)="isDragging.set(false)"
+        [cdkDragDisabled]="!selectedLayer()"
+        [routerLink]="!isDragging() ? '/admin/applications/application/' + applicationId() + '/filters/filter/' + filter.filter.id : null"
         [class.selected]="filter.selected">
-        <div class="filter-label">{{ filter.filter.attribute + " " + getConditionLabel(filter.filter.condition) }}</div>
+        <div class="filter-label">{{ filter.filter.attribute + " " + getFilterLabel(filter.filter) }}</div>
       </mat-list-item>
     }
   </mat-selection-list>
