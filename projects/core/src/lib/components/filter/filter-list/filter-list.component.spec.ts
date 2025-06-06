@@ -15,7 +15,7 @@ describe('FilterListComponent', () => {
     const store = provideMockStore({ initialState: { filter: { filterGroups: [] } } });
     await render(FilterListComponent, {
       providers: [store],
-      imports: [SharedImportsModule, MatIconTestingModule],
+      imports: [ SharedImportsModule, MatIconTestingModule ],
     });
     expect(screen.queryByText('Attribute filter')).not.toBeInTheDocument();
   });
