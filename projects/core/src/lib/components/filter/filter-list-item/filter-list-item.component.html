@@ -1,10 +1,21 @@
 <mat-card appearance="outlined" *ngIf="filter">
-  <mat-card-title>
-    <ng-container *ngIf="isAttributeFilter(filter.type)" i18n="@@core.filter.attribute-filter">Attribute filter</ng-container>
-    <ng-container *ngIf="isSpatialFilter(filter.type)" i18n="@@core.filter.spatial-filter">Spatial filter</ng-container>
-  </mat-card-title>
   <mat-card-content>
-    <ng-container i18n="@@core.filter.applies-to">Applies to</ng-container> {{ getLayerList(filter.layers) }}
+    <div class="filter-group-info">
+      <div class="filter-group-layers">
+        <ng-container i18n="@@core.filter.applies-to">Applies to</ng-container> {{ getLayerList(filter.layers) }}
+      </div>
+      <div class="filter-group-type-icon">
+        @if (isAttributeFilter(filter.type)) {
+          <mat-icon svgIcon="components_attribute_list"
+                    tmTooltip="Attribute Filter"
+                    i18n-tmTooltip="@@core.filter.attribute-filter"></mat-icon>
+        } @else if (isSpatialFilter(filter.type)) {
+          <mat-icon svgIcon="map"
+                    tmTooltip="Spatial filter"
+                    i18n-tmTooltip="@@core.filter.spatial-filter"></mat-icon>
+        }
+      </div>
+    </div>
     <tm-filter-description [filterGroup]="filter"></tm-filter-description>
   </mat-card-content>
   @if (editableFilters.length > 0) {

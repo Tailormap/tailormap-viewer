@@ -46,9 +46,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.slider:Slider`,
     value: FilterToolEnum.SLIDER,
-  }, {
-    label: $localize`:@@admin-core.application.filters.boolean:Boolean`,
-    value: FilterToolEnum.BOOLEAN,
   }];
 
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
