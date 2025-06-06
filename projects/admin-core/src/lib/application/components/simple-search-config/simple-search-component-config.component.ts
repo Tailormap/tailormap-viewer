@@ -83,7 +83,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   }
 
   private saveConfig(municipalities: string[] = []) {
-    this.componentConfigService.updateConfig<SimpleSearchConfigModel>(this.type, 'municipalities', municipalities);
+    this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'municipalities', municipalities);
   }
 
 }

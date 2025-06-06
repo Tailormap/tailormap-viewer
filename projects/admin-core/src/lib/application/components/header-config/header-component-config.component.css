@@ -1,0 +1,40 @@
+.controls {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.control {
+  margin-left: 16px;
+}
+
+.control > strong {
+  display: block;
+  padding-bottom: 16px;
+}
+
+.menu-form {
+  overflow: hidden;
+}
+
+h2 {
+  margin: 16px 8px;
+}
+
+.menu-form-row {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.menu-form-row mat-form-field {
+  margin-top: 0;
+  margin-left: 8px;
+  flex: 1;
+}
+
+.add-menu-item-button {
+  margin-top: 8px;
+  margin-left: 8px;
+}
