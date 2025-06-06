@@ -6,7 +6,7 @@ import {
   AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, ComponentModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
@@ -360,6 +360,84 @@ const onUpdateApplicationFiltersConfig = (
   }));
 };
 
+const onCreateApplicationAttributeFilter = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilter>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroupIdx = application.settings?.filterGroups?.findIndex(filterGroup =>
+      payload.filterGroup.layerIds.length === filterGroup.layerIds.length
+      && payload.filterGroup.layerIds.every(layerId => filterGroup.layerIds.includes(layerId)));
+    if (filterGroupIdx === undefined || filterGroupIdx === -1) {
+      return {
+        settings: {
+          ...application.settings,
+          layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+          filterGroups: [ ...application.settings?.filterGroups ?? [], payload.filterGroup ],
+        },
+      };
+    }
+    const filterGroups = application.settings?.filterGroups || [];
+    const updatedFilterGroup = {
+      ...filterGroups[filterGroupIdx],
+      filters: [ ...filterGroups[filterGroupIdx].filters, ...payload.filterGroup.filters ],
+    };
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: [
+          ...filterGroups.slice(0, filterGroupIdx),
+          updatedFilterGroup,
+          ...filterGroups.slice(filterGroupIdx + 1),
+        ],
+      },
+    };
+  });
+};
+
+const onDeleteApplicationAttributeFilter = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilter>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.map(filterGroup => {
+      const updatedFilters = filterGroup.filters.filter(filter => filter.id !== payload.filterId);
+      if (updatedFilters.length === 0) {
+        return null;
+      }
+      return { ...filterGroup, filters: updatedFilters };
+    }).filter(filterGroup => filterGroup !== null) as FilterGroupModel<AttributeFilterModel>[];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
+    });
+};
+
+const onSetApplicationSelectedFilterLayerId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterLayerId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterLayerId: payload.filterLayerId,
+  };
+};
+
+const onSetApplicationSelectedFilterId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterId: payload.filterId,
+  };
+};
+
 const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
@@ -449,6 +527,10 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
+  on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationAttributeFilter),
+  on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
+  on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
+  on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),

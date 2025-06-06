@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { BaseFilterModel, AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';

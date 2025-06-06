@@ -6,7 +6,7 @@ import {
   hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayersCount,
 } from '../state/filter-component.selectors';
-import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
+import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
