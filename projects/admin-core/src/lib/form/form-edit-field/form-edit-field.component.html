@@ -25,6 +25,12 @@
       <div class="form-control">
         <mat-checkbox color="primary" formControlName="disabled" i18n="@@admin-core.common.disabled">Disabled</mat-checkbox>
       </div>
+      <div class="form-control" *ngIf="fieldForm.get('type')?.value === 'text'">
+        <mat-checkbox color="primary" formControlName="autoFillUser" i18n="@@admin-core.form.autoFillUser">Autofill Username</mat-checkbox>
+      </div>
+      <div class="form-control" *ngIf="fieldForm.get('type')?.value === 'date' || fieldForm.get('type')?.value === 'timestamp'">
+        <mat-checkbox color="primary" formControlName="autoFillDate" i18n="@@admin-core.form.autoFillDate">Autofill Date/Time</mat-checkbox>
+      </div>
     </div>
     @if(fieldForm.get('type')?.value === 'select') {
       <div class="form-control">

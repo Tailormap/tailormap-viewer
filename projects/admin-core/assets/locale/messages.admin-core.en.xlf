@@ -788,6 +788,12 @@
       <trans-unit id="admin-core.common.disabled" datatype="html">
         <source>Disabled</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
       </trans-unit>

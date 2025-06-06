@@ -1049,6 +1049,14 @@
         <source>Disabled</source>
         <target>Uitgeschakeld</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Gebruikersnaam Invullen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Datum/Tijd Invullen</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.email" datatype="html">
         <source>Email</source>
         <target>E-mail</target>

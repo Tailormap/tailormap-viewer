@@ -4,9 +4,11 @@ import * as ToolbarActions from './toolbar.actions';
 import { map, of, switchMap, take, tap } from 'rxjs';
 import { MapCursorHelper, MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
-import { isActiveToolbarTool, selectActiveTool, selectToolbarTool } from './toolbar.selectors';
-import { Injectable } from '@angular/core';
+import { isActiveToolbarTool, selectActiveTool, selectToolbarTool, selectTools } from './toolbar.selectors';
+import { DestroyRef, Injectable } from '@angular/core';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { withLatestFrom } from 'rxjs/operators';
 
 @Injectable()
 export class ToolbarEffects {
@@ -81,6 +83,20 @@ export class ToolbarEffects {
     private actions$: Actions,
     private store$: Store,
     private mapService: MapService,
-  ) {}
+    private destroyRef: DestroyRef,
+  ) {
+    this.mapService.getToolManager$()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(toolManager => toolManager.getToolsDisabled$()),
+        withLatestFrom(this.store$.select(selectTools), this.store$.select(selectActiveTool)),
+      )
+      .subscribe(([{ disabledTools, enabledTools }, allTools, activeTool ]) => {
+        const activeMapToolId = allTools.find(tool => tool.id === activeTool)?.mapToolId;
+        if (activeTool && activeMapToolId && disabledTools.includes(activeMapToolId) && !enabledTools.includes(activeMapToolId)) {
+          this.store$.dispatch(ToolbarActions.deactivateToolButtonOnly({ tool: activeTool }));
+        }
+      });
+  }
 
 }

@@ -242,6 +242,10 @@
         <source>On every segment</source>
         <target>Op elk segment</target>
       </trans-unit>
+      <trans-unit id="core.drawing.circle-radius" datatype="html">
+        <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target state="new">Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+      </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
         <target>Kleur</target>
@@ -333,6 +337,14 @@
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Ondoorzichtigheid</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-height" datatype="html">
+        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Hoogte (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-width" datatype="html">
+        <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Breedte (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

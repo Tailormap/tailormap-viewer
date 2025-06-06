@@ -176,7 +176,7 @@ export class SpatialFilterCrudService {
     }
     return this.store$.select(selectViewerId).pipe(
       concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layer))),
+        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId, layer))),
       ),
       take(1),
     );
