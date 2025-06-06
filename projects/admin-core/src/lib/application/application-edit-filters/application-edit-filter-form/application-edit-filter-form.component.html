@@ -1,0 +1,39 @@
+<form [formGroup]="filterForm">
+
+  <div class="attribute-filter-info">
+    @if (!filterForm.get('layer')?.value) {
+      <div i18n="@@admin-core.application.filters.select-layer">Select a layer to filter</div>
+    } @else if (!filterForm.get('attribute')?.value) {
+      <div i18n="@@admin-core.application.filters.filter-on-layer">
+        Filter on layer '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+      || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      </div>
+    } @else {
+      <div i18n="@@admin-core.application.filters.filter-on--attribute-layer">
+        Filter for attribute '{{ filterForm.get('attribute')?.value }}' on layer
+        '{{ filterForm.get('layer')?.value?.geoServiceLayer?.layerSettings?.title
+      || filterForm.get('layer')?.value?.geoServiceLayer?.title }}'
+      </div>
+    }
+  </div>
+
+  @if(newFilter) {
+    <div class="layers-and-attributes">
+      <tm-admin-application-filter-attribute-list [featureType]="featureType$ | async"
+                                    [loadingFeatureType]="loadingFeatureType$ | async"
+                                    (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>
+    </div>
+  }
+
+  @if (filterForm.get('attribute')?.value && filterForm.get('attributeType')?.value) {
+    @if (filterForm.get('tool')?.value === "PRESET_STATIC") {
+      <div class="attribute-filter-values">
+        <tm-attribute-filter
+          [attributeType]="filterForm.get('attributeType')!.value!"
+          [filter]="filterData"
+          [uniqueValues$]="uniqueValues$"
+          (filterChanged)="setFilterValues($event)"></tm-attribute-filter>
+      </div>
+    }
+  }
+</form>

@@ -158,6 +158,33 @@
       <trans-unit id="admin-core.application.filters" datatype="html">
         <source>Filters</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.all-filters" datatype="html">
+        <source>All filters</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
+        <source>Create filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-new-filter" datatype="html">
+        <source>Create new filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
+        <source>Edit existing filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-on--attribute-layer" datatype="html">
+        <source> Filter for attribute &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;attribute&apos;)?.value }}"/>&apos; on layer &apos;<x id="INTERPOLATION_1" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
+        <source> Filter on layer &apos;<x id="INTERPOLATION" equiv-text="{{ filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.layerSettings?.title || filterForm.get(&apos;layer&apos;)?.value?.geoServiceLayer?.title }}"/>&apos; </source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
+        <source>Filterable layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
+        <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
+        <source>Select a layer to filter</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
       </trans-unit>
@@ -277,6 +304,15 @@
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.applications.filters.delete-filter" datatype="html">
+        <source>Delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.applications.filters.delete-filter-message" datatype="html">
+        <source>Are you sure you want to delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.applications.filters.filter-removed" datatype="html">
+        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> removed</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

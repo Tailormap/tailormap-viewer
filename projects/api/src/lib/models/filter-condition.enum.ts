@@ -18,5 +18,4 @@ export enum FilterConditionEnum {
   BOOLEAN_TRUE_KEY = 'TRUE',
   BOOLEAN_FALSE_KEY = 'FALSE',
   NULL_KEY = 'NULL',
-  INTERSECTS = 'INTERSECTS',
 }

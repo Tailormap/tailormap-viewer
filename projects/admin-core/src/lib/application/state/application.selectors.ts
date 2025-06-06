@@ -3,10 +3,12 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
-import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
+import { AdminServerType, AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
+import { AttributeFilterModel, BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
+import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { GeoServiceLayerInApplicationModel } from '../models/geo-service-layer-in-application.model';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -24,6 +26,9 @@ export const selectDraftApplicationUpdated = createSelector(selectApplicationSta
 export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
+export const selectApplicationSelectedFilterLayerId = createSelector(selectApplicationState, state => state.applicationSelectedFilterLayerId);
+export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
+export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
 
 export const isLoadingApplicationServices = createSelector(
   selectApplicationServicesLoadStatus,
@@ -203,3 +208,64 @@ export const selectServiceLayerTreeForApplication = createSelector(
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
 
 export const selectFilterGroups = createSelector(selectDraftApplication, application => application?.settings?.filterGroups || []);
+
+export const selectFilterableLayersForApplication = createSelector(
+  selectAppLayerNodesForSelectedApplication,
+  selectGeoServiceLayers,
+  selectGeoServices,
+  selectFeatureTypes,
+  (appLayersNodes, geoServiceLayers, geoServices, featureTypes): GeoServiceLayerInApplicationModel[] => {
+    const geoServiceLayerMap = ApplicationTreeHelper.getLayerMap(geoServiceLayers);
+    return appLayersNodes
+      .filter(layer => ApplicationModelHelper.isLayerTreeNode(layer))
+      .map(layerNode => ({
+        geoServiceLayer: geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId)),
+        appLayerId: layerNode.id,
+      }))
+      .filter(({ geoServiceLayer }) => {
+        if (!geoServiceLayer) {
+          return false;
+        }
+        const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
+        const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
+          || (geoService?.settings?.serverType === AdminServerType.AUTO && geoService.resolvedServerType === AdminServerType.GEOSERVER);
+        if (!isGeoServer || !geoServiceLayer.layerSettings?.featureType) {
+          return false;
+        }
+        const featureTypeOfLayer = featureTypes.find(featureType => {
+          return featureType.featureSourceId === geoServiceLayer.layerSettings!.featureType!.featureSourceId.toString()
+            && featureType.name === geoServiceLayer.layerSettings!.featureType!.featureTypeName;
+        });
+        return !!featureTypeOfLayer;
+      })
+      .map(geoServiceLayerInApplication => ({
+        geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
+        appLayerId: geoServiceLayerInApplication.appLayerId,
+      }));
+  },
+);
+
+export const selectSelectedLayerForApplication = createSelector(
+  selectApplicationSelectedFilterLayerId,
+  selectFilterableLayersForApplication,
+  (selectedLayerId, filterableLayers) => {
+    return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
+  },
+);
+
+export const selectFiltersForApplication = createSelector(
+  selectFilterGroups,
+  selectSelectedLayerForApplication,
+  selectApplicationSelectedFilterId,
+  (filterGroups, selectedLayer, selectedFilterId) => {
+    if (selectedLayer) {
+      filterGroups = filterGroups.filter(group => group.layerIds.includes(selectedLayer.appLayerId));
+    }
+    return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
+      return acc.concat(group.filters.map(filter => ({
+        filter,
+        selected: filter.id === selectedFilterId,
+      })));
+    }, []);
+  },
+);

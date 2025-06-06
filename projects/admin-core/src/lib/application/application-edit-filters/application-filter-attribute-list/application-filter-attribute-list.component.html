@@ -1,0 +1,19 @@
+@if(loadingFeatureType) {
+  <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+}
+
+@if(featureType$ | async) {
+  <div class="form-group has-search flex">
+    <tm-admin-list-filter [formControl]="filter"
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter attributes"
+                          i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
+    <mat-selection-list>
+      @for (attribute of attributes$ | async; track attribute) {
+        <mat-list-item [class.selected]="attribute.selected" (click)="attributeClicked(attribute)">
+          <span class="detail">{{attribute.name}}</span>
+        </mat-list-item>
+      }
+    </mat-selection-list>
+  </div>
+}

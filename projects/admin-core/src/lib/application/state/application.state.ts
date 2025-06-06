@@ -18,6 +18,8 @@ export interface ApplicationState {
   applicationCatalogFilterTerm?: string;
   applicationLayerTreeFilterTerm?: string;
   applicationBaseLayerTreeFilterTerm?: string;
+  applicationSelectedFilterLayerId?: string;
+  applicationSelectedFilterId?: string;
 }
 
 export const initialApplicationState: ApplicationState = {

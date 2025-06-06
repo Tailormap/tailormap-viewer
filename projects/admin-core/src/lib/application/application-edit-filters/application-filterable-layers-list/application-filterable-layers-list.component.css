@@ -1,0 +1,4 @@
+.filterable-layer-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
