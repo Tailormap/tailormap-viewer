@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -108,7 +110,8 @@ export class SliderComponent implements ControlValueAccessor {
     if (this.lowerValue === null || this.upperValue === null) {
       return false;
     }
-    const sliderWidthPx = 194;
+    const sliderElement: HTMLElement | null = document.getElementById("double_slider_for_filter");
+    const sliderWidthPx = sliderElement?.offsetWidth || 194;
     const valueRange = this.max - this.min;
     const distValue = this.upperValue - this.lowerValue;
     const distPx = (distValue / valueRange) * sliderWidthPx;

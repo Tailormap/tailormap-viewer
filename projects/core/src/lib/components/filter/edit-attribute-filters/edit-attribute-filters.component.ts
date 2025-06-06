@@ -30,16 +30,16 @@ export class EditAttributeFiltersComponent {
   }
 
   public getCheckboxFilterConfiguration(filter: AttributeFilterModel): CheckboxFilterModel | null {
-    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX ? { ...filter.editConfiguration }: null;
-    if (editConfiguration) {
-      editConfiguration.attributeValuesSettings = editConfiguration.attributeValuesSettings.map(valueSettings => {
-        return {
-          ...valueSettings,
-          initiallySelected: filter.value.includes(valueSettings.value),
-        };
-      });
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX) {
+      return null;
     }
-    return editConfiguration;
+    return {
+      ...filter.editConfiguration,
+      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => ({
+        ...valueSettings,
+        initiallySelected: filter.value.includes(valueSettings.value),
+      })),
+    };
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
