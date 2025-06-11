@@ -4,7 +4,7 @@ import { MapStyleModel } from "../map-style.model";
 
 export interface ModifyEnableToolArguments {
   geometry: string;
-  style?: Partial<MapStyleModel>;
+  style?: MapStyleModel;
 }
 
 export interface ModifyToolModel extends ToolModel {
