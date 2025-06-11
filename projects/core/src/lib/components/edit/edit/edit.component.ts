@@ -25,7 +25,7 @@ export class EditComponent implements OnInit {
   public active$ = this.store$.select(selectEditActive);
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
-  public editGeometryType:GeometryType|null = null;
+  public editGeometryType: GeometryType | null = null;
 
   private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
@@ -66,13 +66,25 @@ export class EditComponent implements OnInit {
       )
       .subscribe(([[ active, editableLayers, userDetails ], selectedLayer ]) => {
         this.toggleTooltipDisabled(userDetails.isAuthenticated, editableLayers.length);
-        if (active && editableLayers.length === 1 && !selectedLayer) {
-          this.store$.dispatch(setSelectedEditLayer({ layer: editableLayers[0].id }));
+        if (active && editableLayers.length === 1 && (!selectedLayer || !editableLayers.some(layer => layer.id === selectedLayer))) {
+          this.layer.setValue(editableLayers[0].id);
         }
         if (active && editableLayers.length === 0) {
           this.toggle(true);
         }
       });
+  }
+
+  public isLine() {
+    return this.editGeometryType === 'linestring' || this.editGeometryType === 'multilinestring';
+  }
+
+  public isPoint() {
+    return this.editGeometryType === 'point' || this.editGeometryType === 'multipoint';
+  }
+
+  public isPolygon() {
+    return this.editGeometryType === 'polygon' || this.editGeometryType === 'multipolygon';
   }
 
   private toggleTooltipDisabled(isAuthenticated: boolean, editableLayerCount: number) {
@@ -108,6 +120,9 @@ export class EditComponent implements OnInit {
   }
 
   public createFeature(geometryType: string) {
+    if (!this.layer.value) {
+      return;
+    }
     // get layer attribute details for edit form
     this.applicationLayerService.getLayerDetails$(this.layer.value)
       .pipe(take(1))
@@ -128,4 +143,14 @@ export class EditComponent implements OnInit {
         }));
       });
   }
+
+  public createFeatureIfSingleGeometryType() {
+    if (this.isPoint()) {
+      this.createFeature('point');
+    }
+    if (this.isLine()) {
+      this.createFeature('linestring');
+    }
+  }
+
 }
