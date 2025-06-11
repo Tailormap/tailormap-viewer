@@ -22,6 +22,10 @@ const onSetSelectedLayer = (
 ): EditState => ({
   ...state,
   selectedLayer: payload.layer,
+  dialogVisible: false,
+  dialogCollapsed: false,
+  selectedFeature: null,
+  isCreateNewFeatureActive: false,
 });
 
 const onLoadFeatureInfo = (

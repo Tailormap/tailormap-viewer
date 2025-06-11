@@ -26,30 +26,36 @@
     </ng-container>
   </div>
 
-  <button [matMenuTriggerFor]="geometryTypeMenu"
-          [class.disabled]="layer.value === null"
-          tmTooltip="Add new feature"
-          i18n-tmTooltip="@@core.edit.add-new-feature"
-          class="map-control-button map-control-button--add-feature"
-          mat-flat-button>
-    <mat-icon svgIcon="new_object"></mat-icon>
-  </button>
-
-  <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
-    @if (editGeometryType === 'point' || editGeometryType === 'multipoint') {
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
-    } @else if (editGeometryType === 'linestring' || editGeometryType === 'multilinestring') {
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
-    } @else if (editGeometryType === 'polygon' || editGeometryType === 'multipolygon') {
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
-    } @else {
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('point') : null" i18n="@@core.common.point">Point</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('line') : null" i18n="@@core.common.line">Line</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('area') : null" i18n="@@core.common.polygon">Polygon</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('rectangle') : null" i18n="@@core.common.rectangle">Rectangle</button>
-      <button mat-menu-item (click)="layer.value !== null ? createFeature('square') : null" i18n="@@core.common.square">Square</button>
-    }
-  </mat-menu>
+  @if (!isLine() && !isPoint()) {
+    <button [matMenuTriggerFor]="geometryTypeMenu"
+            [class.disabled]="layer.value === null"
+            tmTooltip="Add new feature"
+            i18n-tmTooltip="@@core.edit.add-new-feature"
+            class="map-control-button map-control-button--add-feature"
+            mat-flat-button>
+      <mat-icon svgIcon="new_object"></mat-icon>
+    </button>
+    <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
+      @if (isPolygon()) {
+        <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
+        <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
+        <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
+      } @else {
+        <button mat-menu-item (click)="createFeature('point')" i18n="@@core.common.point">Point</button>
+        <button mat-menu-item (click)="createFeature('line')" i18n="@@core.common.line">Line</button>
+        <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
+        <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
+        <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
+      }
+    </mat-menu>
+  } @else {
+    <button [class.disabled]="layer.value === null"
+            tmTooltip="Add new feature"
+            i18n-tmTooltip="@@core.edit.add-new-feature"
+            class="map-control-button map-control-button--add-feature"
+            (click)="createFeatureIfSingleGeometryType()"
+            mat-flat-button>
+      <mat-icon svgIcon="new_object"></mat-icon>
+    </button>
+  }
 </div>
