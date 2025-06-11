@@ -21,7 +21,6 @@ import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model'
 import { EditFeatureService } from '../services/edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MapService } from '@tailormap-viewer/map';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 
