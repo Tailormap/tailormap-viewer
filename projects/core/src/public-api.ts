@@ -14,5 +14,6 @@ export * from './lib/components';
 export * from './lib/shared';
 export * from './lib/state';
 export * from './lib/services/component-registration.service';
+export * from './lib/services/feature-updated.service';
 export * from './lib/layout/layout.service';
 export * from './lib/map';
