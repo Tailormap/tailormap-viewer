@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
@@ -39,6 +39,9 @@ export class EditDialogComponent {
   public currentFeature$;
   public layerDetails$;
   public selectableFeature$;
+
+  public creatingSavingFeature = signal(false);
+  public removingFeature = signal(false);
 
   public panelWidth = 300;
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
@@ -129,6 +132,7 @@ export class EditDialogComponent {
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
+    this.creatingSavingFeature.set(true);
     this.store$.select(selectViewerId)
       .pipe(
         take(1),
@@ -148,6 +152,7 @@ export class EditDialogComponent {
           this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
           this.resetChanges();
         }
+        this.creatingSavingFeature.set(false);
       });
   }
 
@@ -156,7 +161,7 @@ export class EditDialogComponent {
     if (!updatedFeature) {
       return;
     }
-
+    this.creatingSavingFeature.set(true);
     this.store$.select(selectViewerId)
         .pipe(
             take(1),
@@ -176,10 +181,12 @@ export class EditDialogComponent {
             this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
             this.resetChanges();
           }
+          this.creatingSavingFeature.set(false);
         });
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
+    this.removingFeature.set(true);
     const featureId = currentFeature.feature.__fid;
     this.store$.select(selectViewerId)
       .pipe(
@@ -211,6 +218,7 @@ export class EditDialogComponent {
           this.featureUpdatedService.updatedFeature(layerId, featureId);
           this.closeDialog();
         }
+        this.removingFeature.set(false);
       });
   }
 
