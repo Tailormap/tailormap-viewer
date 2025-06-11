@@ -978,6 +978,22 @@
         <source>Location</source>
         <target>Ort</target>
       </trans-unit>
+      <trans-unit id="core.shared.close-panel" datatype="html">
+        <source>Close panel</source>
+        <target>Panel schließen</target>
+      </trans-unit>
+      <trans-unit id="core.shared.maximize-panel" datatype="html">
+        <source>Maximize panel</source>
+        <target>Panel maximieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.minimize-panel" datatype="html">
+        <source>Minimize panel</source>
+        <target>Panel minimieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.restore-panel-height" datatype="html">
+        <source>Restore panel height</source>
+        <target>Panelhöhe wiederherstellen</target>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoid</target>
