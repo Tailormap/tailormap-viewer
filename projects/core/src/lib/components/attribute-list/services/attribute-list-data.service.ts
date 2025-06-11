@@ -15,6 +15,7 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
+import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,23 +31,16 @@ export class AttributeListDataService implements OnDestroy {
     @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
     private store$: Store,
     private filterService: FilterService,
+    private featureUpdatedService: FeatureUpdatedService,
   ) {
-    this.filterService.getChangedFilters$()
-      .pipe(
-        takeUntil(this.destroyed),
-        withLatestFrom(this.store$.select(selectAttributeListTabs)),
-        map(([ filters, tabs ]) => {
-          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : filters.has(tab.layerId));
-        }),
-      )
-      .subscribe(tabs => {
-        tabs.forEach(tab => {
-          this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
-          // After filter is changed, reset the page index because the number of results may have changed
-          this.store$.dispatch(AttributeListActions.updatePage({ dataId: tab.selectedDataId, page: 1 }));
-          this.store$.dispatch(AttributeListActions.loadData({ tabId: tab.id }));
-        });
-      });
+    this.registerDataUpdateListener(
+      this.filterService.getChangedFilters$(),
+      (filters, layerId) => filters.has(layerId),
+    );
+    this.registerDataUpdateListener(
+      this.featureUpdatedService.featureUpdated$,
+      (updatedFeature, layerId) => layerId === updatedFeature.layerId,
+    );
   }
 
   public ngOnDestroy() {
@@ -154,6 +148,24 @@ export class AttributeListDataService implements OnDestroy {
       success: false,
       errorMessage: message || AttributeListDataService.DEFAULT_ERROR_MESSAGE,
     };
+  }
+
+  private registerDataUpdateListener<T>(source$: Observable<T>, shouldUpdateTab: (sourceResult: T, layerId: string) => boolean) {
+    source$
+      .pipe(
+        takeUntil(this.destroyed),
+        withLatestFrom(this.store$.select(selectAttributeListTabs)),
+        map(([ sourceResult, tabs ]) => {
+          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : shouldUpdateTab(sourceResult, tab.layerId));
+        }),
+      )
+      .subscribe(tabs => {
+        this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
+        tabs.forEach(tab => {
+          // After changes, reset the page index because the number of results may have changed
+          this.store$.dispatch(AttributeListActions.updatePage({ dataId: tab.selectedDataId, page: 1 }));
+        });
+      });
   }
 
 }
