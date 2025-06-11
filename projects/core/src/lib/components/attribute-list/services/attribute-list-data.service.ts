@@ -160,8 +160,8 @@ export class AttributeListDataService implements OnDestroy {
         }),
       )
       .subscribe(tabs => {
+        this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
         tabs.forEach(tab => {
-          this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
           // After changes, reset the page index because the number of results may have changed
           this.store$.dispatch(AttributeListActions.updatePage({ dataId: tab.selectedDataId, page: 1 }));
         });
