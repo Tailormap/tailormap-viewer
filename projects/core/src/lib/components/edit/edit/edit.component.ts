@@ -114,7 +114,7 @@ export class EditComponent implements OnInit {
         this.store$.dispatch(setEditActive({ active: editActive }));
         if (editActive) {
           this.store$.dispatch(hideFeatureInfoDialog());
-          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT }));
+          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT, preventMapToolActivation: true }));
         }
       });
   }

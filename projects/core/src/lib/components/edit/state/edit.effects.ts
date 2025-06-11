@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { setEditActive } from './edit.actions';
+import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 
 @Injectable()
 export class EditEffects {
