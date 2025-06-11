@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import {
-  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel,
-} from '@tailormap-viewer/api';
+import { AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs';
@@ -74,11 +72,11 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         this.updateSliderFilter.emit({
           filterTool: FilterToolEnum.SLIDER,
           condition: value.condition ?? FilterConditionEnum.NULL_KEY,
-          initialValue: value.initialValue ?? undefined,
+          initialValue: value.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialValue ?? undefined) : undefined,
           minimumValue: value.minimumValue ?? 0,
           maximumValue: value.maximumValue ?? 0,
-          initialLowerValue: value.initialLowerValue ?? undefined,
-          initialUpperValue: value.initialUpperValue ?? undefined,
+          initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue ?? undefined) : undefined,
+          initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue ?? undefined) : undefined,
         });
       });
   }
