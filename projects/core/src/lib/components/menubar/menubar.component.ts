@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-menubar',
@@ -8,8 +8,21 @@ import { ComponentModel } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class MenubarComponent {
+
+  private _config: ComponentModel[] = [];
+  public showMenubarLogo = true;
+
   @Input({ required: true })
-  public config: ComponentModel[] = [];
-  @Input()
-  public hasHeader = false;
+  public set config(config: ComponentModel[]) {
+    this._config = config;
+    this.checkHeaderLogo();
+  }
+  public get config(): ComponentModel[] {
+    return this._config;
+  }
+
+  public checkHeaderLogo() {
+    const headerConfig = this.config.find(c => c.type === BaseComponentTypeEnum.HEADER);
+    this.showMenubarLogo = !headerConfig?.config?.enabled || !((headerConfig.config as HeaderComponentConfigModel).logoFileId);
+  }
 }

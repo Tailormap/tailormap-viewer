@@ -1,6 +1,5 @@
 :host {
   /* Defaults for header component */
-  --header-component-height: 100px;
   --header-text-color: #000;
   --header-background-color: #FFF;
 }

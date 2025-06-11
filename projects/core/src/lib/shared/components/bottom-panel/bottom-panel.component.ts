@@ -12,6 +12,13 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 })
 export class BottomPanelComponent implements OnInit {
 
+  public tooltips = {
+    minimize: $localize `:@@core.shared.minimize-panel:Minimize panel`,
+    maximize: $localize `:@@core.shared.maximize-panel:Maximize panel`,
+    close: $localize `:@@core.shared.close-panel:Close panel`,
+    restore: $localize `:@@core.shared.restore-panel-height:Restore panel height`,
+  };
+
   @Input({ required: true })
   public isVisible$: Observable<boolean> = of(false);
 
@@ -75,8 +82,8 @@ export class BottomPanelComponent implements OnInit {
   }
 
   public getHeight() {
-    if (this.isMaximized) {
-      return '100vh';
+    if (this.isMaximized || this.isMinimized) {
+      return '';
     }
     return `${this.heightSubject.value}px`;
   }

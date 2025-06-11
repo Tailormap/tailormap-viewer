@@ -1,23 +1,35 @@
-<div class="container bottom-panel-container" role="tabpanel" *ngIf="isVisible$ | async">
-  <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
-  <div class="panel"
-       [ngStyle]="{ 'height': getHeight() }"
-       [class.panel--minimized]="isMinimized"
-       [class.panel--maximized]="isMaximized">
-    <mat-toolbar>
-      <span>{{title$ | async}}</span>
-      <span class="spacer"></span>
-      <button mat-icon-button class="size-18" (click)="onMinimizeClick();">
-        <mat-icon svgIcon="minimize"></mat-icon>
-      </button>
-      <button mat-icon-button class="size-18 maximize-btn" (click)="onMaximizeClick();">
-        <mat-icon [svgIcon]="isMaximized ? 'chevron_bottom' : 'chevron_top'"></mat-icon>
-      </button>
-      <button mat-icon-button class="size-18" (click)="onCloseClick();">
-        <mat-icon svgIcon="close"></mat-icon>
-      </button>
-    </mat-toolbar>
-    <div class="panel-content">
-      <ng-content></ng-content>
+@if (isVisible$ | async) {
+  <div class="container bottom-panel-container" role="tabpanel">
+    <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
+    <div class="panel"
+         [ngStyle]="{ 'height': getHeight() }"
+         [class.panel--minimized]="isMinimized"
+         [class.panel--maximized]="isMaximized">
+      <mat-toolbar>
+        <span>{{title$ | async}}</span>
+        <span class="spacer"></span>
+        <button mat-icon-button
+                class="size-18"
+                [tmTooltip]="isMinimized ? tooltips.restore : tooltips.minimize"
+                (click)="onMinimizeClick();">
+          <mat-icon [svgIcon]="isMinimized ? 'chevron_top' : 'chevron_bottom'"></mat-icon>
+        </button>
+        <button mat-icon-button
+                class="size-18 maximize-btn"
+                [tmTooltip]="isMaximized ? tooltips.restore : tooltips.maximize"
+                (click)="onMaximizeClick();">
+          <mat-icon [svgIcon]="isMaximized ? 'fullscreen_exit' : 'fullscreen'"></mat-icon>
+        </button>
+        <button mat-icon-button
+                class="size-18 close-button"
+                [tmTooltip]="tooltips.close"
+                (click)="onCloseClick();">
+          <mat-icon svgIcon="close"></mat-icon>
+        </button>
+      </mat-toolbar>
+      <div class="panel-content">
+        <ng-content></ng-content>
+      </div>
     </div>
-</div>
+  </div>
+}

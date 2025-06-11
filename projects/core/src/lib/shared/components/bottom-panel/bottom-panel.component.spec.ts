@@ -53,7 +53,6 @@ describe('BottomPanelComponent', () => {
     expect(screen.queryByRole('tabpanel')).toBeInTheDocument();
     const panel = screen.queryByRole('tabpanel')?.querySelector<HTMLDivElement>('.panel');
     expect(panel).toBeInTheDocument();
-    expect(panel).toHaveStyle('height: 100vh');
     expect(panel).toHaveClass('panel--maximized');
   });
 
