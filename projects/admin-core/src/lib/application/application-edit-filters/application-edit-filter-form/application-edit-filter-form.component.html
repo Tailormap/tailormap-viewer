@@ -20,7 +20,7 @@
 
     <div class="layers-and-attributes">
       <tm-admin-application-filter-attribute-list
-        [featureType]="featureType$ | async"
+        [featureTypes]="featureTypes$ | async"
         [loadingFeatureType]="loadingFeatureType$ | async"
         [filterTool]="filterForm.get('tool')?.value ?? null"
         (selectAttribute)="setSelectedAttribute($event)"></tm-admin-application-filter-attribute-list>

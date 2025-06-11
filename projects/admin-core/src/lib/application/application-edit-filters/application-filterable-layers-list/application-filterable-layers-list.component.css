@@ -1,4 +1,9 @@
 .filterable-layer-label {
   text-overflow: ellipsis;
   overflow: hidden;
+  flex: 1;
+}
+
+.filterable-layer-checkbox {
+  flex: 0 0 20px;
 }

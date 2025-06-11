@@ -2,7 +2,7 @@
   <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
 }
 
-@if(featureType$ | async) {
+@if(featureTypes$ | async) {
   <div class="form-group has-search flex">
     <tm-admin-list-filter [formControl]="filter"
                           [filterTerm]="filterTerm$ | async"

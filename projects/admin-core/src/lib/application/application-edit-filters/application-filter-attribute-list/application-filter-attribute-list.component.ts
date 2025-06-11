@@ -19,8 +19,8 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public loadingFeatureType: boolean | null = false;
 
   @Input({ required: true })
-  public set featureType(featureType: FeatureTypeModel | null) {
-    this.featureTypeSubject$.next(featureType);
+  public set featureTypes(featureTypes: FeatureTypeModel[] | null) {
+    this.featureTypesSubject$.next(featureTypes);
   }
 
   @Input({ required: true })
@@ -37,11 +37,11 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public filter = new FormControl('');
 
   private attributeFilter$ = new BehaviorSubject<string | null>(null);
-  private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
+  private featureTypesSubject$ = new BehaviorSubject<FeatureTypeModel[] | null>(null);
   private selectedSubject$ = new BehaviorSubject<string>('');
   private filterToolSubject$ = new BehaviorSubject<FilterToolEnum>(FilterToolEnum.PRESET_STATIC);
 
-  public featureType$ = this.featureTypeSubject$.asObservable();
+  public featureTypes$ = this.featureTypesSubject$.asObservable();
   public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
@@ -58,24 +58,32 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
         this.attributeFilter$.next(value);
       });
     this.attributes$ = combineLatest([
-      this.featureTypeSubject$.asObservable(),
+      this.featureTypesSubject$.asObservable(),
       this.selectedSubject$.asObservable(),
       this.attributeFilter$.asObservable().pipe(distinctUntilChanged()),
       this.filterToolSubject$.asObservable(),
     ])
       .pipe(
-        map(([ featureType, selectedAttribute, filterStr, filterTool ]) => {
-          if (!featureType) {
+        map(([ featureTypes, selectedAttribute, filterStr, filterTool ]) => {
+          if (!featureTypes || featureTypes.length === 0) {
             return [];
           }
-          const attributes = featureType.attributes
-            .filter(att => {
+          const attributeSets = featureTypes.map(ft =>
+            new Set((ft.attributes || []).map(attr => `${attr.name}::${attr.type}`))
+          );
+          const commonAttributeKeys = Array.from(
+            attributeSets.reduce((a, b) => new Set([...a].filter(x => b.has(x))))
+          );
+          const firstAttributes = featureTypes[0].attributes || [];
+          const attributes = firstAttributes
+            .filter(att => commonAttributeKeys.includes(`${att.name}::${att.type}`))
+            .filter((att: AttributeDescriptorModel) => {
               if (filterTool === FilterToolEnum.SLIDER) {
                 return AttributeTypeHelper.isNumericType(att.type);
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
-            .map(att => ({
+            .map((att: AttributeDescriptorModel) => ({
               ...att,
               selected: selectedAttribute === att.name,
             }));

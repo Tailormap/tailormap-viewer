@@ -64,7 +64,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
     this.updateAttributeFilter$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(updateAttributeFilter => {
-        this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: updateAttributeFilter?.filterGroup.layerIds[0] }));
+        this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: updateAttributeFilter?.filterGroup.layerIds[0] ?? '', selected: true }));
         this.store$.dispatch(setApplicationSelectedFilterId({ filterId: updateAttributeFilter?.filterId }));
       });
   }

@@ -26,7 +26,7 @@ export const selectDraftApplicationUpdated = createSelector(selectApplicationSta
 export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
-export const selectApplicationSelectedFilterLayerId = createSelector(selectApplicationState, state => state.applicationSelectedFilterLayerId);
+export const selectApplicationSelectedFilterLayerIds = createSelector(selectApplicationState, state => state.applicationSelectedFilterLayerIds);
 export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
 export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
 
@@ -245,21 +245,22 @@ export const selectFilterableLayersForApplication = createSelector(
   },
 );
 
-export const selectSelectedLayerForApplication = createSelector(
-  selectApplicationSelectedFilterLayerId,
+export const selectSelectedLayersForApplication = createSelector(
+  selectApplicationSelectedFilterLayerIds,
   selectFilterableLayersForApplication,
-  (selectedLayerId, filterableLayers) => {
-    return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
+  (selectedLayerIds, filterableLayers) => {
+    return filterableLayers.filter(layer => selectedLayerIds?.includes(layer.appLayerId));
   },
 );
 
 export const selectFiltersForApplication = createSelector(
   selectFilterGroups,
-  selectSelectedLayerForApplication,
+  selectSelectedLayersForApplication,
   selectApplicationSelectedFilterId,
-  (filterGroups, selectedLayer, selectedFilterId) => {
-    if (selectedLayer) {
-      filterGroups = filterGroups.filter(group => group.layerIds.includes(selectedLayer.appLayerId));
+  (filterGroups, selectedLayers, selectedFilterId) => {
+    if (selectedLayers.length > 0) {
+      filterGroups = filterGroups.filter(group => group.layerIds.length === selectedLayers.length
+        && group.layerIds.every(layerId => selectedLayers.some(selectedLayer => selectedLayer.appLayerId === layerId)));
     }
     return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
       return acc.concat(group.filters.map(filter => ({

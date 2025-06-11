@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
 import {
-  selectFilterGroups, selectFiltersForApplication, selectSelectedApplicationId, selectSelectedLayerForApplication,
+  selectFilterGroups, selectFiltersForApplication, selectSelectedApplicationId, selectSelectedLayersForApplication,
 } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
@@ -20,7 +20,7 @@ export class ApplicationFiltersListComponent implements OnDestroy {
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
-  public selectedLayer: Signal<GeoServiceLayerInApplicationModel | undefined> = this.store$.selectSignal(selectSelectedLayerForApplication);
+  public selectedLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectSelectedLayersForApplication);
   public filters: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = this.store$.selectSignal(selectFiltersForApplication);
 
   public isDragging = signal<boolean>(false);
@@ -66,6 +66,16 @@ export class ApplicationFiltersListComponent implements OnDestroy {
       return group;
     });
     this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups: newFilterGroups }));
+  }
+
+  public getSelectedLayersText(layers?: GeoServiceLayerInApplicationModel[]): string {
+    if (!layers || layers.length === 0) {
+      return '';
+    }
+    if (layers.length === 1) {
+      return $localize `:@@admin-core.application.filters.filters-for:Filters for ${layers[0].geoServiceLayer.title}`;
+    }
+    return $localize `:@@admin-core.application.filters.multi-layer-filter:Multi-layer filters for ` + layers.map(layer => layer.geoServiceLayer.title).join($localize `:@@admin-core.application.filters.and: and `);
   }
 
 }
