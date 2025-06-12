@@ -110,41 +110,41 @@ $app-theme: mat.m2-define-light-theme((
 @include mat.slide-toggle-density(-1);
 
 :root {
-  --mdc-typography-button-font-weight: 400;
-  --mdc-typography-button-letter-spacing: 0.0714285712;
-  --mdc-filled-button-label-text-tracking: 0.0714285712;
-  --mdc-outlined-button-label-text-tracking: 0.0714285712;
-  --mdc-outlined-text-field-label-text-tracking: 0.0714285712;
-  --mdc-protected-button-label-text-tracking: 0.0714285712;
-  --mdc-typography-body1-letter-spacing: 0.0714285712;
+  --mat-typography-button-font-weight: 400;
+  --mat-typography-button-letter-spacing: 0.0714285712;
+  --mat-button-filled-label-text-tracking: 0.0714285712;
+  --mat-button-outlined-label-text-tracking: 0.0714285712;
+  --mat-form-field-outlined-label-text-tracking: 0.0714285712;
+  --mat-button-protected-label-text-tracking: 0.0714285712;
+  --mat-typography-body1-letter-spacing: 0.0714285712;
   --mat-menu-item-label-text-tracking: 0.0714285712;
-  --mdc-typography-subtitle1-font-size: 14px;
-  --mdc-typography-body1-font-size: 14px;
+  --mat-typography-subtitle1-font-size: 14px;
+  --mat-typography-body1-font-size: 14px;
   --base-button-height: 36px;
 }
 
 .mat-mdc-tab-header {
-  --mat-tab-header-label-text-letter-spacing: 0.0714285712;
-  --mat-tab-header-label-text-tracking: 0.0714285712;
+  --mat-tab-label-text-letter-spacing: 0.0714285712;
+  --mat-tab-label-text-tracking: 0.0714285712;
 }
 
 .mat-mdc-raised-button {
-  --mdc-protected-button-label-text-tracking: 0.0714285712;
+  --mat-button-protected-label-text-tracking: 0.0714285712;
 }
 
 .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
-  font-size: var(--mdc-typography-body1-font-size);
+  font-size: var(--mat-typography-body1-font-size);
 }
 
 .mat-mdc-button-base.mdc-button,
 .mat-mdc-button-base.mdc-button--outlined,
 .mat-mdc-button-base.mdc-button--unelevated {
-  --mdc-filled-button-container-shape: 0;
+  --mat-button-filled-container-shape: 0;
   height: var(--base-button-height);
 }
 
 .mat-mdc-button-base.mdc-button--outlined {
-  --mat-outlined-button-ripple-color: var(--palette-accent-100);
+  --mat-button-outlined-ripple-color: var(--palette-accent-100);
 }
 
 .mat-mdc-button .mat-icon,
@@ -163,21 +163,21 @@ $app-theme: mat.m2-define-light-theme((
 .mat-mdc-raised-button.mat-primary,
 .mdc-button--unelevated.mat-primary,
 .mdc-button--unelevated.mat-accent {
-  --mdc-filled-button-label-text-color: var(--palette-primary-contrast-500);
-  --mdc-protected-button-label-text-color: var(--palette-primary-contrast-500);
+  --mat-button-filled-label-text-color: var(--palette-primary-contrast-500);
+  --mat-button-protected-label-text-color: var(--palette-primary-contrast-500);
 }
 
 .mdc-button--unelevated.mat-accent {
-  --mdc-filled-button-label-text-color: var(--palette-accent-contrast-500);
-  --mdc-protected-button-label-text-color: var(--palette-accent-contrast-500);
+  --mat-button-filled-label-text-color: var(--palette-accent-contrast-500);
+  --mat-button-protected-label-text-color: var(--palette-accent-contrast-500);
 }
 
 .mat-mdc-checkbox.mat-primary {
-  --mdc-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500);
+  --mat-checkbox-selected-checkmark-color: var(--palette-primary-contrast-500);
 }
 
 .mat-mdc-checkbox.mat-accent {
-  --mdc-checkbox-selected-checkmark-color: var(--palette-accent-contrast-500);
+  --mat-checkbox-selected-checkmark-color: var(--palette-accent-contrast-500);
 }
 
 .mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
@@ -187,17 +187,17 @@ $app-theme: mat.m2-define-light-theme((
 }
 
 .mat-mdc-dialog-container .mdc-dialog__content {
-  --mdc-dialog-supporting-text-font-size: 14px;
-  --mdc-dialog-supporting-text-line-height: 1.5em;
-  --mdc-dialog-supporting-text-size: 14px;
-  --mdc-dialog-supporting-text-weight: 500;
-  --mdc-dialog-supporting-text-tracking: 0;
+  --mat-dialog-supporting-text-font-size: 14px;
+  --mat-dialog-supporting-text-line-height: 1.5em;
+  --mat-dialog-supporting-text-size: 14px;
+  --mat-dialog-supporting-text-weight: 500;
+  --mat-dialog-supporting-text-tracking: 0;
 }
 
 .mat-mdc-dialog-container .mdc-dialog__title {
-  --mdc-dialog-subhead-line-height: 16px;
-  --mdc-dialog-subhead-size: 16px;
-  --mdc-dialog-subhead-weight: 600;
+  --mat-dialog-subhead-line-height: 16px;
+  --mat-dialog-subhead-size: 16px;
+  --mat-dialog-subhead-weight: 600;
   padding: 0;
   margin-bottom: 1.5em;
 }
@@ -215,22 +215,22 @@ $app-theme: mat.m2-define-light-theme((
 }
 
 .mat-mdc-icon-button.size-18 {
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
-  line-height: var(--mdc-icon-button-icon-size);
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
+  line-height: var(--mat-icon-button-icon-size);
   padding: 0;
 }
 
 .mat-mdc-icon-button.size-18 mat-icon {
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
   overflow: visible;
 }
 
 .mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target {
-  height: calc(var(--mdc-icon-button-icon-size) + 6px);
-  width: calc(var(--mdc-icon-button-icon-size) + 6px);
+  height: calc(var(--mat-icon-button-icon-size) + 6px);
+  width: calc(var(--mat-icon-button-icon-size) + 6px);
 }
 
 .mdc-button mat-icon {

@@ -203,8 +203,8 @@ button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
 .map-control-button.disabled,
 .map-control-button.mdc-button--unelevated.disabled {
   cursor: default;
-  color: var(--mdc-filled-button-disabled-label-text-color, rgba(0, 0, 0, 0.38));
-  background-color: var(--mdc-filled-button-disabled-container-color, rgba(0, 0, 0, 0.12));
+  color: var(--mat-button-filled-disabled-label-text-color, rgba(0, 0, 0, 0.38));
+  background-color: var(--mat-button-filled-disabled-container-color, rgba(0, 0, 0, 0.12));
 }
 
 .mat-mdc-button-base.button--active,
@@ -220,7 +220,7 @@ button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
 }
 
 .cdk-overlay-container .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: var(--snackbar-background-color);
+  --mat-snackbar-container-color: var(--snackbar-background-color);
   --mat-mdc-snack-bar-button-color: var(--palette-primary-contrast-500);
   background-color: var(--snackbar-background-color);
   color: #fff;
