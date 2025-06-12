@@ -23,6 +23,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -94,6 +95,7 @@ export class EditDialogComponent {
     this.currentFeature$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
+        this.store$.dispatch(hideFeatureInfoDialog());
         this.resetChanges();
       });
 
