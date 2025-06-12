@@ -229,6 +229,14 @@
         <source>All filters</source>
         <target>Alle filters</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.and" datatype="html">
+        <source> and </source>
+        <target> en </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.attribute" datatype="html">
+        <source> for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos;</source>
+        <target> voor attribuut &apos;<x id="PH" equiv-text="attribute"/>&apos;</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.boolean" datatype="html">
         <source>Boolean</source>
         <target>Boolean</target>
@@ -249,21 +257,33 @@
         <source>Edit existing filter</source>
         <target>Bestaand filter bewerken</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
-        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
-        <target>filter voor attribuut &apos;<x id="PH" equiv-text="attribute"/>&apos; op laag &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
-        <target> filter op laag &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</target>
+      <trans-unit id="admin-core.application.filters.filter-info" datatype="html">
+       <source><x id="PH" equiv-text="toolLabel"/> filter</source>
+       <target><x id="PH" equiv-text="toolLabel"/> filter</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
-        <source>Filterable layers</source>
-        <target>Filterbare lagen</target>
+       <source>Filterable layers</source>
+       <target>Filterbare lagen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
-        <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
-        <target> Filters voor <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
+       <source>Filters for <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></source>
+       <target>Filters voor <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.multi-layer-filter" datatype="html">
+       <source>Multi-layer filters for </source>
+       <target>Meerlaags filters voor </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.multi-layer-filter-info" datatype="html">
+       <source>Multi-layer <x id="PH" equiv-text="toolLabel"/> filter</source>
+       <target>Meerlaags <x id="PH" equiv-text="toolLabel"/> filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.on-layer" datatype="html">
+       <source> on layer </source>
+       <target> op laag </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.on-layers" datatype="html">
+       <source> on layers </source>
+       <target> op lagen </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
@@ -487,7 +507,7 @@
       </trans-unit>
       <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
         <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
-        <target state="new">Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
+        <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

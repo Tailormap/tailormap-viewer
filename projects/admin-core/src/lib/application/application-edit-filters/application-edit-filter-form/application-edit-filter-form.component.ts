@@ -212,16 +212,15 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
     if (featureTypeRequests.length > 0) {
       this.loadingFeatureTypeSubject$.next(true);
-      // Load all feature types in parallel and collect results as an array
       combineLatest(
         featureTypeRequests.map(ft =>
           this.featureSourceService.loadFeatureType$(
             ft.featureTypeName,
             `${ft.featureSourceId}`,
-          ).pipe(take(1))
-        )
+          ).pipe(take(1)),
+        ),
       )
-        .pipe(map(featureTypes => featureTypes.filter(ft => !!ft)),)
+        .pipe(map(featureTypes => featureTypes.filter(ft => !!ft)))
         .subscribe(featureTypes => {
         this.featureTypesSubject$.next(featureTypes);
         this.loadingFeatureTypeSubject$.next(false);
@@ -239,6 +238,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setFilterValues($event: OutputFilterData) {
+    console.log("value: ", $event.value);
     this.filterForm.patchValue({
       condition: $event.condition,
       value: $event.value,
@@ -256,13 +256,23 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     ]).pipe(
       take(1),
       switchMap(([ applicationName, selectedLayers ]) => {
-        return this.uniqueValuesService.getUniqueValues$({
-          attribute: attributeName,
-          layerId: selectedLayers ? selectedLayers[0] : '',
-          applicationId: `app/${applicationName}`,
-        }).pipe(
-          map(response => {
-            return response.values || [];
+        if (!selectedLayers || selectedLayers.length === 0) {
+          return [[]];
+        }
+        return combineLatest(
+          selectedLayers.map(layerId =>
+            this.uniqueValuesService.getUniqueValues$({
+              attribute: attributeName,
+              layerId,
+              applicationId: `app/${applicationName}`,
+            }).pipe(
+              map(response => response.values || []),
+            ),
+          ),
+        ).pipe(
+          map((allLayerValues: (string | number | boolean)[][]) => {
+            const allValues = allLayerValues.flat();
+            return Array.from(new Set(allValues));
           }),
         );
       }),
@@ -304,7 +314,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     if (!layers) {
       return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
     }
-    const layerTitles = layers.map(layer => layer.geoServiceLayer?.layerSettings?.title || layer.geoServiceLayer?.title).join($localize `:@@admin-core.common.and: and `);
+    const layerTitles = layers.map(layer => layer.geoServiceLayer?.layerSettings?.title
+      || layer.geoServiceLayer?.title).join($localize `:@@admin-core.application.filters.and: and `);
     const filterInfo = layers.length > 1
       ? $localize `:@@admin-core.application.filters.multi-layer-filter-info:Multi-layer ${toolLabel} filter`
       : $localize`:@@admin-core.application.filters.filter-info:${toolLabel} filter`;

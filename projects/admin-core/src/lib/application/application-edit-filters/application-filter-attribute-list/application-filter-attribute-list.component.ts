@@ -69,10 +69,10 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
             return [];
           }
           const attributeSets = featureTypes.map(ft =>
-            new Set((ft.attributes || []).map(attr => `${attr.name}::${attr.type}`))
+            new Set((ft.attributes || []).map(attr => `${attr.name}::${attr.type}`)),
           );
           const commonAttributeKeys = Array.from(
-            attributeSets.reduce((a, b) => new Set([...a].filter(x => b.has(x))))
+            attributeSets.reduce((a, b) => new Set([...a].filter(x => b.has(x)))),
           );
           const firstAttributes = featureTypes[0].attributes || [];
           const attributes = firstAttributes

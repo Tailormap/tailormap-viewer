@@ -151,7 +151,7 @@ export const deleteApplicationAttributeFilter = createAction(
 
 export const setApplicationSelectedFilterLayerId = createAction(
   `${applicationActionsPrefix} Set Application Selected Filter Layer Id`,
-  props<{ filterLayerId: string, selected: boolean }>(),
+  props<{ filterLayerId: string; selected: boolean }>(),
 );
 
 export const setApplicationSelectedFilterId = createAction(

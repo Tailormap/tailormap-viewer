@@ -75,7 +75,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
     if (layers.length === 1) {
       return $localize `:@@admin-core.application.filters.filters-for:Filters for ${layers[0].geoServiceLayer.title}`;
     }
-    return $localize `:@@admin-core.application.filters.multi-layer-filter:Multi-layer filters for ` + layers.map(layer => layer.geoServiceLayer.title).join($localize `:@@admin-core.application.filters.and: and `);
+    return $localize `:@@admin-core.application.filters.multi-layer-filter:Multi-layer filters for ` +
+      layers.map(layer => layer.geoServiceLayer.title).join($localize `:@@admin-core.application.filters.and: and `);
   }
 
 }
