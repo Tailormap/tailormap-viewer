@@ -267,7 +267,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
        <source>Filters for <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></source>
-       <target>Filters voor <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/></target>
+       <target>Filters voor <x id="PH" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.multi-layer-filter" datatype="html">
        <source>Multi-layer filters for </source>
