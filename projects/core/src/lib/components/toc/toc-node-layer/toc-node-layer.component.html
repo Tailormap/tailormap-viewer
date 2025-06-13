@@ -14,5 +14,13 @@
                 matListItemMeta>
       </mat-icon>
     }
+    @if (isLayerFiltered()) {
+      <mat-icon class="layer-filtered-icon"
+                svgIcon="components_filter"
+                tmTooltip="A filter is applied to this layer"
+                i18n-tmTooltip=":@@core.toc.filtered-layer"
+                matListItemMeta>
+      </mat-icon>
+    }
   </div>
 }

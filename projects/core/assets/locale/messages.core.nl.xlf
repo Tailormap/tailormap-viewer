@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="core.drawing.circle-radius" datatype="html">
         <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
-        <target state="new">Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+        <target>Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
@@ -515,7 +515,7 @@
         <target>Geldt voor</target>
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
-        <source>Attribute filter</source>
+        <source>Attribute Filter</source>
         <target>Attribuutfilter</target>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
@@ -1025,6 +1025,10 @@
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
         <target>Lagen filteren</target>
+      </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+        <target>Er is een filter toegepast op deze laag</target>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
