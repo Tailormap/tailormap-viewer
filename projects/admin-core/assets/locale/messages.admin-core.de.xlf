@@ -230,6 +230,14 @@
         <source>All filters</source>
         <target>Alle Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.and" datatype="html">
+        <source> and </source>
+        <target> und </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.attribute" datatype="html">
+      <source> for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos;</source>
+      <target> für Attribut &apos;<x id="PH" equiv-text="attribute"/>&apos;</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.boolean" datatype="html">
         <source>Boolean</source>
         <target>Boolean</target>
@@ -250,21 +258,33 @@
         <source>Edit existing filter</source>
         <target>Bestehenden Filter bearbeiten</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
-        <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
-        <target>Filter für Attribut &apos;<x id="PH" equiv-text="attribute"/>&apos; in Ebene &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-on-layer" datatype="html">
-        <source>filter on layer &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</source>
-        <target>Filter in Ebene &apos;<x id="PH" equiv-text="layerTitle"/>&apos;</target>
+      <trans-unit id="admin-core.application.filters.filter-info" datatype="html">
+        <source><x id="PH" equiv-text="toolLabel"/> filter</source>
+        <target><x id="PH" equiv-text="toolLabel"/> Filter</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
         <source>Filterable layers</source>
         <target>Filterbare Ebenen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
-        <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
-        <target> Filter für <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
+        <source>Filters for <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></source>
+        <target>Filter für <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.multi-layer-filter" datatype="html">
+        <source>Multi-layer filters for </source>
+        <target>Mehrschichtige Filter für </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.multi-layer-filter-info" datatype="html">
+        <source>Multi-layer <x id="PH" equiv-text="toolLabel"/> filter</source>
+        <target>Mehrschichtiger <x id="PH" equiv-text="toolLabel"/> Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.on-layer" datatype="html">
+        <source> on layer </source>
+        <target> auf Ebene </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.on-layers" datatype="html">
+        <source> on layers </source>
+        <target> auf Ebenen </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>

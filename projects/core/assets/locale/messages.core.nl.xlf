@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="core.drawing.circle-radius" datatype="html">
         <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
-        <target state="new">Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+        <target>Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
@@ -515,7 +515,7 @@
         <target>Geldt voor</target>
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
-        <source>Attribute filter</source>
+        <source>Attribute Filter</source>
         <target>Attribuutfilter</target>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
@@ -778,10 +778,6 @@
         <source>Select reference layer</source>
         <target>Selecteer referentielaag</target>
       </trans-unit>
-      <trans-unit id="core.filter.slider-and" datatype="html">
-        <source> and </source>
-        <target> en </target>
-      </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
         <target>Kleiner dan</target>
@@ -817,6 +813,10 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
         <target>Waarde</target>
+      </trans-unit>
+      <trans-unit id="core.filters.and" datatype="html">
+        <source> and </source>
+        <target> en </target>
       </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>

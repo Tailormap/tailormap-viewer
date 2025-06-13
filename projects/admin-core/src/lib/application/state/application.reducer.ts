@@ -422,11 +422,27 @@ const onSetApplicationSelectedFilterLayerId = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterLayerId>,
 ): ApplicationState => {
-  return {
-    ...state,
-    applicationSelectedFilterLayerId: payload.filterLayerId,
-  };
+  if (payload.selected) {
+    return {
+      ...state,
+      applicationSelectedFilterLayerIds: [ ...state.applicationSelectedFilterLayerIds ?? [], payload.filterLayerId ],
+    };
+  } else {
+    const layerIdx = state.applicationSelectedFilterLayerIds?.indexOf(payload.filterLayerId);
+    if (layerIdx === undefined || layerIdx === -1 || !state.applicationSelectedFilterLayerIds) {
+      return state;
+    }
+    return {
+      ...state,
+      applicationSelectedFilterLayerIds: [
+        ...state.applicationSelectedFilterLayerIds.slice(0, layerIdx),
+        ...state.applicationSelectedFilterLayerIds.slice(layerIdx + 1),
+      ],
+    };
+  }
 };
+
+
 
 const onSetApplicationSelectedFilterId = (
   state: ApplicationState,
