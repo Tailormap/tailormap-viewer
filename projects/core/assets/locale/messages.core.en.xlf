@@ -770,6 +770,9 @@
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
       </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+      </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>

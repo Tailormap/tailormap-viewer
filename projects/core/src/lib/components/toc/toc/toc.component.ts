@@ -16,6 +16,7 @@ import {
   select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
+import { selectFilteredLayerIds } from '../../../filter/state/filter.selectors';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -45,6 +46,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
+  public filteredLayerIds: Signal<string[]> = signal([]);
 
   constructor(
     private store$: Store,
@@ -98,6 +100,7 @@ export class TocComponent implements OnInit, OnDestroy {
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
+    this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
   }
 
   public getDropZoneConfig() {

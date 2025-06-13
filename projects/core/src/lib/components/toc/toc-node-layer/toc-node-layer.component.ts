@@ -26,6 +26,9 @@ export class TocNodeLayerComponent {
   @Input()
   public tiles3DLayerIds: string[] = [];
 
+  @Input()
+  public filteredLayerIds: string[] = [];
+
   public isLevel() {
     return this.node?.type === 'level';
   }
@@ -40,6 +43,10 @@ export class TocNodeLayerComponent {
 
   public isLayerHiddenIn3d() {
     return this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || '');
+  }
+
+  public isLayerFiltered() {
+    return this.filteredLayerIds.includes(this.node?.id || '');
   }
 
 }
