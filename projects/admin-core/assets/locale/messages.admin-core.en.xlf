@@ -234,7 +234,7 @@
         <source>Use attribute range</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
-        <source>Too many unique values, showing only the first 50.</source>
+        <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.tool" datatype="html">
         <source>Tool</source>

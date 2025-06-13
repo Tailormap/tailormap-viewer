@@ -310,8 +310,8 @@
         <target>Gebruik attribuutbereik</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
-        <source>Too many unique values, showing only the first 50.</source>
-        <target>Te veel unieke waardes, alleen de eerste 50 worden getoond.</target>
+        <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
+        <target state="new">Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.tool" datatype="html">
         <source>Tool</source>

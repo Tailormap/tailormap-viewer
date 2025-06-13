@@ -49,6 +49,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: FilterToolEnum.SLIDER,
   }];
 
+  private static readonly MAX_CHECKBOX_VALUES = 50;
+
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
   public uniqueValuesStrings$: Observable<string[]> | null = null;
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
@@ -256,9 +258,11 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           applicationId: `app/${applicationName}`,
         }).pipe(
           map(response => {
-            if (response.values.length > 50 && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
-              this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:Too many unique values, showing only the first 50.`);
-              return response.values.slice(0, 50);
+            if (response.values.length > ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES
+              && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
+              this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:
+              Too many unique values, showing only the first ${ ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES }.`);
+              return response.values.slice(0, ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES );
             }
             return response.values || [];
           }),
