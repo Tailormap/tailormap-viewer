@@ -275,14 +275,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           ),
         ).pipe(
           map((allLayerValues: (string | number | boolean)[][]) => {
-            const allValues =  Array.from(new Set(allLayerValues.flat()));
-            if (allLayerValues.length > ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES
+            const allValues= Array.from(new Set(allLayerValues.flat()));
+            if (allValues.length > ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES
               && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
               this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:
-              Too many unique values, showing only the first ${ ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES }.`);
-              return allLayerValues.slice(0, ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES );
+                Too many unique values, showing only the first ${ ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES }.`);
+              return allValues.slice(0, ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES );
             }
-            return allValues
+            return allValues;
           }),
         );
       }),
