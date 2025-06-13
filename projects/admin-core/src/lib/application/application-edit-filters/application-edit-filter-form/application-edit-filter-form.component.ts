@@ -16,6 +16,7 @@ import { FormHelper } from '../../../helpers/form.helper';
 import { selectApplicationSelectedFilterLayerId, selectSelectedApplicationName } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
+import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.service';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -97,6 +98,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     private destroyRef: DestroyRef,
     private store$: Store,
     private uniqueValuesService: UniqueValuesService,
+    private adminSnackbarService: AdminSnackbarService,
   ) { }
 
   public filterForm = new FormGroup({
@@ -254,6 +256,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           applicationId: `app/${applicationName}`,
         }).pipe(
           map(response => {
+            if (response.values.length > 50 && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
+              this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:Too many unique values, showing only the first 50.`);
+              return response.values.slice(0, 50);
+            }
             return response.values || [];
           }),
         );

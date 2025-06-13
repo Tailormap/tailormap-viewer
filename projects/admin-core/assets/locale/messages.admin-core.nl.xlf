@@ -309,6 +309,10 @@
         <source>Use attribute range</source>
         <target>Gebruik attribuutbereik</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
+        <source>Too many unique values, showing only the first 50.</source>
+        <target>Te veel unieke waardes, alleen de eerste 50 worden getoond.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.tool" datatype="html">
         <source>Tool</source>
         <target>Gereedschap</target>
@@ -487,7 +491,7 @@
       </trans-unit>
       <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
         <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
-        <target state="new">Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
+        <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> bijgewerkt</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
