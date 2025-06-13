@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { FilterService } from '../../../filter/services/filter.service';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
+import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -40,7 +41,8 @@ const setup = (
     getChangedFilters$: jest.fn(() => of(filters || new Map())),
     getFilterForLayer: jest.fn(() => undefined),
   } as unknown as FilterService;
-  const service = new AttributeListDataService(api, store, filterService);
+  const featureUpdatedService = new FeatureUpdatedService({ refreshLayer: of() } as any);
+  const service = new AttributeListDataService(api, store, filterService, featureUpdatedService);
   return {
     service,
     api,
@@ -80,6 +82,7 @@ describe('AttributeListDataService', () => {
       pageSize: 10,
       page: 0,
       total: 2,
+      template: null,
     };
     const { service, api } = setup(response, true);
     service.loadDataForTab$('1').subscribe(result => {

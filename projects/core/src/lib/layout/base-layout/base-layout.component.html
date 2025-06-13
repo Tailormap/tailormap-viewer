@@ -1,10 +1,9 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
-  @let hasHeaderComponent = layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER);
-  @if (hasHeaderComponent) { <tm-header></tm-header> }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
   <div class="viewer">
     <div class="menubar">
-      <tm-menubar [config]="layoutConfig.config" [hasHeader]="hasHeaderComponent"></tm-menubar>
+      <tm-menubar [config]="layoutConfig.config"></tm-menubar>
     </div>
     <div class="content">
       <div class="center">

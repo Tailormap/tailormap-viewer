@@ -330,6 +330,10 @@
         <source>Use attribute range</source>
         <target>Attributbereich verwenden</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
+        <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
+        <target state="new">Zu viele eindeutige Werte, es werden nur die ersten <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> angezeigt.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.tool" datatype="html">
         <source>Tool</source>
         <target>Werkzeug</target>

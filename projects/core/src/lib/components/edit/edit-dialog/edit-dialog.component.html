@@ -9,8 +9,10 @@
            (expandCollapseDialog)="expandCollapseDialog()"
            dialogTitle="Edit"
            i18n-dialogTitle="@@core.edit.edit">
-  <div class="edit-form" *ngIf="currentFeature$ | async as currentFeature">
-    <ng-container *ngIf="layerDetails$ | async as layerDetails">
+  @let currentFeature = currentFeature$ | async;
+  @let layerDetails = layerDetails$ | async;
+  @if (currentFeature && layerDetails) {
+    <div class="edit-form">
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
         <tm-edit-form [feature]="{ feature: currentFeature.feature, details: layerDetails.details, columnMetadata: currentFeature.columnMetadata }"
@@ -18,40 +20,55 @@
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"></tm-edit-form>
       </div>
       <div class="buttons">
-        <button (click)="save(layerDetails.layer.id, currentFeature)"
-                *ngIf="(isCreateFeature$ | async) === false"
-                [disabled]="!formValid"
-                color="primary"
-                i18n="@@core.common.save"
-                mat-flat-button>Save</button>
-        <button (click)="add(layerDetails.layer.id)"
-                *ngIf="isCreateFeature$ | async"
-                [disabled]="!formValid"
-                color="primary"
-                i18n="@@core.common.add"
-                mat-flat-button>Add</button>
-        <button (click)="delete(layerDetails.layer.id, currentFeature)"
-                *ngIf="(isCreateFeature$ | async) === false"
-                color="warn"
-                i18n="@@core.common.delete"
-                mat-stroked-button>Delete</button>
+        @if (isCreateFeature$ | async) {
+          <button (click)="add(layerDetails.layer.id)"
+                  [disabled]="!formValid || creatingSavingFeature()"
+                  color="primary"
+                  mat-flat-button>
+            @if (creatingSavingFeature()) {
+              <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+            } @else {
+              <ng-container i18n="@@core.common.add">Add</ng-container>
+            }
+          </button>
+        } @else {
+          <button (click)="save(layerDetails.layer.id, currentFeature)"
+                  [disabled]="!formValid || creatingSavingFeature()"
+                  color="primary"
+                  mat-flat-button>
+            @if (creatingSavingFeature()) {
+              <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+            } @else {
+              <ng-container i18n="@@core.common.save">Save</ng-container>
+            }
+          </button>
+          <button (click)="delete(layerDetails.layer.id, currentFeature)"
+                  color="warn"
+                  [disabled]="removingFeature()"
+                  mat-stroked-button>
+            @if (removingFeature()) {
+              <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+            } @else {
+              <ng-container i18n="@@core.common.delete">Delete</ng-container>
+            }
+          </button>
+        }
         <button (click)="closeDialog()"
                 i18n="@@core.common.close"
                 mat-flat-button>Close</button>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  }
 
-  <ng-container *ngIf="selectableFeature$ | async as selectableFeatures">
-    <ng-container *ngIf="selectableFeatures.length > 0">
-      <div class="content">
-        <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
-      </div>
-      <div class="buttons">
-        <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
-      </div>
-    </ng-container>
-  </ng-container>
+  @let selectableFeatures = selectableFeature$ | async;
+  @if (selectableFeatures && selectableFeatures.length > 0) {
+    <div class="content">
+      <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
+    </div>
+    <div class="buttons">
+      <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
+    </div>
+  }
 </tm-dialog>
 
 <tm-map-spinner [coordinates$]="editCoordinates$"

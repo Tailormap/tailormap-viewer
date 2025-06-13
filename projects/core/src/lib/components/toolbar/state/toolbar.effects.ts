@@ -31,7 +31,7 @@ export class ToolbarEffects {
       ofType(ToolbarActions.activateTool),
       concatLatestFrom(action => this.store$.select(selectToolbarTool(action.tool))),
       switchMap(([ action, tool ]) => {
-        if (!tool) {
+        if (!tool || action.preventMapToolActivation) {
           return of(null);
         }
         return this.mapService.getToolManager$()

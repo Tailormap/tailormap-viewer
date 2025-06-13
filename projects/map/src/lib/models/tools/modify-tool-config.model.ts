@@ -5,5 +5,5 @@ import { MapStyleModel } from '../map-style.model';
 
 export interface ModifyToolConfigModel extends ToolConfigModel {
   type: ToolTypeEnum.Modify;
-  style?: Partial<MapStyleModel>;
+  style?: MapStyleModel;
 }

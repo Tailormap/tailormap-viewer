@@ -16,7 +16,7 @@ export const deregisterTool = createAction(
 
 export const activateTool = createAction(
   `${toolbarActionsPrefix} Activate tool`,
-  props<{ tool: ToolbarComponentEnum; enableArguments?: Record<string, unknown> }>(),
+  props<{ tool: ToolbarComponentEnum; enableArguments?: Record<string, unknown>; preventMapToolActivation?: boolean }>(),
 );
 
 export const deactivateTool = createAction(
