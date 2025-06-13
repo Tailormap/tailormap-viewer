@@ -515,7 +515,7 @@
         <target>Geldt voor</target>
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
-        <source>Attribute Filter</source>
+        <source>Attribute filter</source>
         <target>Attribuutfilter</target>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
@@ -1029,6 +1029,7 @@
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
         <target>Er is een filter toegepast op deze laag</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
