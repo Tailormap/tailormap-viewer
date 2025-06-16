@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateBooleanFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -36,7 +36,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
-  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel;
+  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateBooleanFilterModel;
 
   public filterToolOptions = [{
     label: $localize`:@@admin-core.application.filters.preset:Preset`,
@@ -47,6 +47,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.slider:Slider`,
     value: FilterToolEnum.SLIDER,
+  }, {
+    label: $localize`:@@admin-core.application.filters.boolean:Boolean`,
+    value: FilterToolEnum.BOOLEAN,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -113,7 +116,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -276,7 +279,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   }
 
-  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel) {
+  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()

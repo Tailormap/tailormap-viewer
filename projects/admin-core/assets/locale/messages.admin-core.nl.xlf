@@ -233,6 +233,22 @@
         <source>Boolean</source>
         <target>Boolean</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean.alias1" datatype="html">
+        <source>Alias value 1</source>
+        <target>Alias waarde 1</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean.alias2" datatype="html">
+        <source>Alias value 2</source>
+        <target>Alias waarde 2</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean.value1" datatype="html">
+        <source>Value 1</source>
+        <target>Waarde 1</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean.value2" datatype="html">
+        <source>Value 2</source>
+        <target>Waarde 2</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
         <target>Vinkvakjes</target>
@@ -311,7 +327,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
-        <target state="new">Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>
+        <target>Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.tool" datatype="html">
         <source>Tool</source>
