@@ -280,6 +280,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel) {
+    console.log('setEditFilterConfiguration', $event);
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()

@@ -25,8 +25,8 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         },
         { emitEvent: true },
       );
-      this.booleanFilterForm.get('value1')?.disable();
-      this.booleanFilterForm.get('value2')?.disable();
+      this.booleanFeatureType = true;
+      this.booleanFilterForm.markAsDirty();
     } else {
       this.booleanFilterForm.patchValue(
         {
@@ -35,8 +35,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         },
         { emitEvent: false },
       );
-      this.booleanFilterForm.get('value1')?.enable();
-      this.booleanFilterForm.get('value2')?.enable();
+      this.booleanFeatureType = false;
     }
   }
 
@@ -53,6 +52,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   }
 
   public uniqueValues = input<(string | number | boolean)[] | null>(null);
+  public booleanFeatureType: boolean = true;
 
   @Output()
   public updateBooleanFilter = new EventEmitter<UpdateBooleanFilterModel>();
@@ -87,7 +87,11 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   }
 
   private isValidBooleanFilterForm(): boolean {
+
     const formValues = this.booleanFilterForm.getRawValue();
+    console.log("value 1 valid: ", (formValues.value1 === true || FormHelper.isValidValue(formValues.value1)));
+    console.log("value 2 valid: ", (formValues.value2 === false || FormHelper.isValidValue(formValues.value2)));
+    console.log("value 1 != value 2: ", formValues.value1 !== formValues.value2);
     return (formValues.value1 === true || FormHelper.isValidValue(formValues.value1))
       && (formValues.value2 === false || FormHelper.isValidValue(formValues.value2))
       && formValues.value1 !== formValues.value2;

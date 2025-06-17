@@ -4,7 +4,7 @@
     <div class="value-1-field">
       <mat-form-field appearance="outline">
         <mat-label i18n="@@admin-core.application.filters.boolean.value1">Value 1</mat-label>
-        <input type="text" matInput formControlName="value1" />
+        <input type="text" matInput formControlName="value1" [readonly]="booleanFeatureType" />
       </mat-form-field>
     </div>
 
@@ -20,7 +20,7 @@
     <div class="value-2-field">
       <mat-form-field appearance="outline">
         <mat-label i18n="@@admin-core.application.filters.boolean.value2">Value 2</mat-label>
-        <input type="text" matInput formControlName="value2" />
+        <input type="text" matInput formControlName="value2" [readonly]="booleanFeatureType" />
       </mat-form-field>
     </div>
 
