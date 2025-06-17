@@ -18,6 +18,7 @@ describe('LegendImageComponent', () => {
       title: 'Layer title',
       url: 'some-url',
       serverType: 'generic',
+      legendType: 'dynamic',
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
@@ -31,6 +32,7 @@ describe('LegendImageComponent', () => {
       title: 'Layer title',
       url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
       serverType: 'geoserver',
+      legendType: 'dynamic',
     });
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();

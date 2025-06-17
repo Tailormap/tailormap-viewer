@@ -19,6 +19,7 @@ export class LegendLayerComponent {
     return {
       url: legendInfo.url,
       serverType: legendInfo.layer.service?.serverType ?? 'generic',
+      legendType: legendInfo.layer.legendType ?? 'static',
       title: legendInfo.layer.title,
     };
   }
