@@ -1,5 +1,3 @@
-import { UrlHelper } from '../../helpers';
-
 export interface GeoServerLegendOptions {
   fontName?: string;
   fontStyle?: 'italic' | 'bold';
@@ -24,26 +22,6 @@ export interface GeoServerLegendOptions {
 }
 
 export class LegendHelper {
-
-  public static shouldAddVendorSpecificLegendOptions(url: string): boolean {
-    try {
-      // A legend image could be a fixed image without a Hi-DPI version. Only add options if the URL is a GetLegendGraphic request or a
-      // proxied legend (just assume that the proxied legend is a GetLegendGraphic request).
-      return LegendHelper.isGetLegendGraphicRequest(url) || new URL(url).pathname.endsWith('/proxy/legend');
-    } catch(e) {
-      return false;
-    }
-  }
-
-  public static isGetLegendGraphicRequest(url: string): boolean {
-    try {
-      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
-      return request?.toLowerCase() === 'getlegendgraphic';
-    } catch(e) {
-      return false;
-    }
-  }
-
   public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
     try {
       const u = new URL(url);

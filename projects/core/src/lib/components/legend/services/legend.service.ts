@@ -3,7 +3,7 @@ import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, sw
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { LegendHelper, TypesHelper } from '@tailormap-viewer/shared';
+import { TypesHelper } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class LegendService {
               let url = layer.legendImageUrl
                 ? layer.legendImageUrl
                 : layerManager.getLegendUrl(`${layer.id}`);
-              if (mapResolution && LegendHelper.shouldAddVendorSpecificLegendOptions(url)) {
+              if (mapResolution && layer.legendType === 'dynamic') {
                 try {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
