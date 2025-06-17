@@ -59,7 +59,7 @@ export class LegendImageComponent {
       scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith(".svg"),
       failedToLoadMessage: `${FAILED_TO_LOAD_MESSAGE} ${legend.title}`,
     };
-    if (LegendHelper.isGetLegendGraphicRequest(legend.url)) {
+    if (LegendHelper.shouldAddVendorSpecificLegendOptions(legend.url)) {
       if (legend.serverType === 'geoserver') {
         const legendOptions: GeoServerLegendOptions = {
           fontAntiAliasing: true,

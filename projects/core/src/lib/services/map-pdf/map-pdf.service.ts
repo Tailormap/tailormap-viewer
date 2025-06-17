@@ -159,7 +159,7 @@ export class MapPdfService {
     const legendURLCallback = (layer: ExtendedAppLayerModel, url: URL) => {
       legendDpiByLayer.set(layer, 90);
 
-      if (layer.service?.serverType === ServerType.GEOSERVER && LegendHelper.isGetLegendGraphicRequest(url.toString())) {
+      if (layer.service?.serverType === ServerType.GEOSERVER && LegendHelper.shouldAddVendorSpecificLegendOptions(url.toString())) {
         // Use LEGEND_OPTIONS vendor specific Geoserver parameter, see https://docs.geoserver.org/stable/en/user/services/wms/get_legend_graphic/index.html
         const dpi = 180;
         legendDpiByLayer.set(layer, dpi);

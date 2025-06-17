@@ -28,7 +28,7 @@ export class LegendService {
               let url = layer.legendImageUrl
                 ? layer.legendImageUrl
                 : layerManager.getLegendUrl(`${layer.id}`);
-              if (mapResolution && LegendHelper.isGetLegendGraphicRequest(url)) {
+              if (mapResolution && LegendHelper.shouldAddVendorSpecificLegendOptions(url)) {
                 try {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
