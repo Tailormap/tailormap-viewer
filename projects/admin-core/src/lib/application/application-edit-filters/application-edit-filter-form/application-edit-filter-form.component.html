@@ -59,13 +59,15 @@
       @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
         <div class="boolean-filter-form">
           <tm-admin-application-boolean-filter-form
-            [booleanFilterSettings]="editFilterConfiguration ?? null" (updateBooleanFilter)="setEditFilterConfiguration($event)"></tm-admin-application-boolean-filter-form>
+            [booleanFilterSettings]="editFilterConfiguration ?? null"
+            (updateBooleanFilter)="setEditFilterConfiguration($event)"></tm-admin-application-boolean-filter-form>
         </div>
       } @else {
         <div class="boolean-filter-form">
           <tm-admin-application-boolean-filter-form
             [attributeType]="filterForm.get('attributeType')!.value!"
-            [uniqueValues]="uniqueValues$ | async" (updateBooleanFilter)="setEditFilterConfiguration($event)"></tm-admin-application-boolean-filter-form>
+            [uniqueValues]="uniqueValues$ | async"
+            (updateBooleanFilter)="setEditFilterConfiguration($event)"></tm-admin-application-boolean-filter-form>
         </div>
       }
     }

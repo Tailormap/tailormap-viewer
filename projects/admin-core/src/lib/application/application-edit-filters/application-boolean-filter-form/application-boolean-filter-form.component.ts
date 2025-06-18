@@ -32,7 +32,6 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
       });
       this.booleanFeatureType = true;
-
     } else {
       this.booleanFilterForm.patchValue(
         {
@@ -54,6 +53,16 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         alias1: booleanFilterSettings.alias1 || '',
         alias2: booleanFilterSettings.alias2 || '',
       }, { emitEvent: false });
+      if ((booleanFilterSettings.value1 === undefined || booleanFilterSettings.value1 === null)
+        && (booleanFilterSettings.value2 === undefined || booleanFilterSettings.value2 === null)) {
+        this.booleanFilterForm.patchValue({
+          value1: true,
+          value2: false,
+        }, { emitEvent: true });
+        this.booleanFeatureType = true;
+      } else {
+        this.booleanFeatureType = false;
+      }
     }
   }
 
