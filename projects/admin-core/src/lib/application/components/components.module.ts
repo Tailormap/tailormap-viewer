@@ -12,6 +12,7 @@ import { FeatureInfoComponentConfigComponent } from './feature-info-config/featu
 import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
 import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
 import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
+import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SelectUploadModule } from '../../shared/components/select-upload/select
     FeatureInfoComponentConfigComponent,
     SimpleSearchComponentConfigComponent,
     HeaderComponentConfigComponent,
+    EditComponentConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,7 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FILTER, $localize `:@@admin-core.application.component-filter:Filter`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FEATURE_INFO, $localize `:@@admin-core.application.component-feature-info:Feature info`, FeatureInfoComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.ATTRIBUTE_LIST, $localize `:@@admin-core.application.component-attribute-list:Attribute list`, BaseComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, EditComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MEASURE, $localize `:@@admin-core.application.component-measure-tools:Measure tools`, MeasureComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_PICKER, $localize `:@@admin-core.application.component-coordinate-picker-tool:Coordinate picker tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);

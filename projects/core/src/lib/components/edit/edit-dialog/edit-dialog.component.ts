@@ -15,7 +15,9 @@ import {
   editNewlyCreatedFeature,
   expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
 } from '../state/edit.actions';
-import { FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
+import {
+  BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
@@ -24,6 +26,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -56,6 +59,7 @@ export class EditDialogComponent {
   public formValid: boolean = false;
 
   private clearCacheValuesAfterSave = new Set<string>();
+  private closeDialogAfterAddingFeature = false;
 
   constructor(
     private store$: Store,
@@ -105,6 +109,13 @@ export class EditDialogComponent {
     this.editMapToolService.createdGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
       this.geometryChanged(geometry, true);
     });
+    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
+      store$,
+      BaseComponentTypeEnum.EDIT,
+      config => {
+        this.closeDialogAfterAddingFeature = config.closeAfterAddFeature;
+      },
+    );
   }
 
   private resetChanges() {
@@ -169,7 +180,7 @@ export class EditDialogComponent {
             take(1),
             concatMap(viewerId => {
               if (!viewerId) {
-                return of(null);
+                return of({ success: false, feature: null });
               }
               return this.editFeatureService.createFeature$(viewerId, layerId, {
                 __fid: '',
@@ -177,13 +188,18 @@ export class EditDialogComponent {
               });
             }),
         )
-        .subscribe(feature => {
-          if (feature) {
-            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...feature, layerId } }));
-            this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
-            this.resetChanges();
-          }
+        .subscribe(result => {
           this.creatingSavingFeature.set(false);
+          if (!result.success) {
+            return;
+          }
+          this.featureUpdatedService.updatedFeature(layerId, result.feature?.__fid);
+          this.resetChanges();
+          if (this.closeDialogAfterAddingFeature || !result.feature) {
+            this.closeDialog();
+          } else {
+            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...result.feature, layerId } }));
+          }
         });
   }
 
