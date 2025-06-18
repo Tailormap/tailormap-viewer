@@ -177,7 +177,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     } else {
       const editFilterConfiguration = attributeFilter.editConfiguration
         ? { ...attributeFilter.editConfiguration, condition: attributeFilter.condition } : undefined;
-      this.setUniqueValues(attributeFilter.attribute);
+      if (attributeFilter.attributeType !== AttributeType.BOOLEAN) {
+        this.setUniqueValues(attributeFilter.attribute);
+      }
       this.filterForm.patchValue({
         id: attributeFilter.id,
         layer: layer ?? null,
@@ -234,7 +236,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       attributeType: $event.type,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
-    this.setUniqueValues($event.name);
+    if ($event.type !== AttributeType.BOOLEAN) {
+      this.setUniqueValues($event.name);
+    }
   }
 
   public setFilterValues($event: OutputFilterData) {

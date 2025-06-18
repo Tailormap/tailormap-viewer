@@ -30,8 +30,6 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
       this.updateBooleanFilter.emit({
         filterTool: FilterToolEnum.BOOLEAN,
         condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
-        value1: true,
-        value2: false,
       });
       this.booleanFeatureType = true;
 
@@ -62,9 +60,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   @Input()
   public set uniqueValues(uniqueValues: (string | number | boolean)[] | null) {
     if (uniqueValues) {
-      const uniqueValuesStrings = uniqueValues
-        .filter(value => typeof value !== "boolean")
-        .map(value => String(value));
+      const uniqueValuesStrings = uniqueValues.map(value => String(value));
       this.twoUniqueValues = uniqueValuesStrings.length === 2;
       if (this.twoUniqueValues) {
         this.booleanFilterForm.patchValue({
@@ -102,8 +98,8 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         this.updateBooleanFilter.emit({
           filterTool: FilterToolEnum.BOOLEAN,
           condition: condition,
-          value1: value.value1,
-          value2: value.value2,
+          value1: typeof value.value1 === 'string' ? value.value1 : undefined,
+          value2: typeof value.value2 === 'string' ? value.value2 : undefined,
           alias1: value.alias1 || undefined,
           alias2: value.alias2 || undefined,
         });

@@ -1,0 +1,8 @@
+.boolean-filter-content {
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
+.boolean-filter-content ::ng-deep button {
+  width: inherit;
+}

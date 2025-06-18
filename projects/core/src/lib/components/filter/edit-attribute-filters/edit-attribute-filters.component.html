@@ -25,6 +25,18 @@
           </div>
         </div>
       }
+      @if (getBooleanFilterConfiguration(filter); as booleanFilterConfig) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-boolean-filter-title">
+            {{ filter.attribute }}
+          </div>
+          <div class="editable-boolean-filter-content">
+            <tm-boolean-filter
+              [booleanFilterConfiguration]="booleanFilterConfig"
+              (valueChange)="updateBooleanFilterValue($event, filter)"></tm-boolean-filter>
+          </div>
+        </div>
+      }
     </div>
   }
 </mat-expansion-panel>

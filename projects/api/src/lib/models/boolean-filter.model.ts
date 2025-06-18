@@ -3,8 +3,8 @@ import { FilterToolEnum } from './filter-tool.enum';
 
 export interface BooleanFilterModel {
   filterTool: FilterToolEnum.BOOLEAN;
-  value1?: string | boolean;
-  value2?: string | boolean;
+  value1?: string;
+  value2?: string;
   alias1?: string;
   alias2?: string;
 }
@@ -12,8 +12,8 @@ export interface BooleanFilterModel {
 export interface UpdateBooleanFilterModel {
   filterTool: FilterToolEnum.BOOLEAN;
   condition?: FilterConditionEnum;
-  value1?: string | boolean;
-  value2?: string | boolean;
+  value1?: string;
+  value2?: string;
   alias1?: string;
   alias2?: string;
 }
