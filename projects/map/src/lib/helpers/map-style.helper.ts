@@ -140,11 +140,7 @@ export class MapStyleHelper {
     } else {
       const parser = new OL3Parser();
       parser.inject(LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
-      const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry)
-        ? fromCircle(geometry, 50)
-        : geometry,
-      );
-      const buffered = BufferOp.bufferOp(jstsGeom, buffer);
+      const buffered = BufferOp.bufferOp(geometry, buffer);
       bufferedGeometry = parser.write(buffered);
     }
     if (!bufferedGeometry) {
