@@ -15,7 +15,7 @@
   --vw: 1vw;
   --100vh: calc(100 * var(--vh));
   --100vw: calc(100 * var(--vw));
-  --header-component-height: 0;
+  --header-component-height: 0px;
 
   --dark-primary-text: rgb(0, 10, 30);
   --light-primary-text: rgb(255, 255, 255);
@@ -95,7 +95,7 @@
   --map-overlay-background-0_8: rgba(255, 255, 255, 0.8);
   --snackbar-background-color: #0c0524;
 
-  --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2));
+  --max-control-height: calc(var(--vh) * 100 - (var(--body-margin) * 2) - var(--header-component-height));
   --max-control-width: calc(var(--vw) * 100 - (var(--menubar-width) + var(--body-margin) * 2));
 
   --box-shadow-top: 0 1px 0 0 rgba(0, 0, 0, 0.05), 0 -3px 4px 0 rgba(0, 0, 0, 0.08);

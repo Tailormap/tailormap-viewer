@@ -1,5 +1,3 @@
-import { UrlHelper } from '../../helpers';
-
 export interface GeoServerLegendOptions {
   fontName?: string;
   fontStyle?: 'italic' | 'bold';
@@ -24,16 +22,6 @@ export interface GeoServerLegendOptions {
 }
 
 export class LegendHelper {
-
-  public static isGetLegendGraphicRequest(url: string): boolean {
-    try {
-      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
-      return request?.toLowerCase() === 'getlegendgraphic';
-    } catch(e) {
-      return false;
-    }
-  }
-
   public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
     try {
       const u = new URL(url);
