@@ -1,7 +1,7 @@
 import { MapStyleModel, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Geometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
+import { Geometry, Circle as CircleGeometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
@@ -128,24 +128,28 @@ export class MapStyleHelper {
     if (!geometry) {
       return [];
     }
-    const parser = new OL3Parser();
-    parser.inject(
-      Point,
-      LineString,
-      LinearRing,
-      Polygon,
-      MultiPoint,
-      MultiLineString,
-      MultiPolygon,
-      Circle,
-    );
-    const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry)
-      ? fromCircle(geometry, 50)
-      : geometry,
-    );
-    const buffered = BufferOp.bufferOp(jstsGeom, buffer);
-    const bufferedGeometry: Geometry = parser.write(buffered);
-
+    let bufferedGeometry: Geometry | undefined;
+    if (GeometryTypeHelper.isCircleGeometry(geometry) || GeometryTypeHelper.isPointGeometry(geometry)) {
+      const center = GeometryTypeHelper.isPointGeometry(geometry)
+        ? geometry.getCoordinates()
+        : geometry.getCenter();
+      const radius = GeometryTypeHelper.isCircleGeometry(geometry)
+        ? geometry.getRadius()
+        : 0;
+      bufferedGeometry = new CircleGeometry(center, radius + buffer);
+    } else {
+      const parser = new OL3Parser();
+      parser.inject(LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
+      const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry)
+        ? fromCircle(geometry, 50)
+        : geometry,
+      );
+      const buffered = BufferOp.bufferOp(jstsGeom, buffer);
+      bufferedGeometry = parser.write(buffered);
+    }
+    if (!bufferedGeometry) {
+      return [];
+    }
     const bufferStyle = new Style({
       geometry: bufferedGeometry,
     });
