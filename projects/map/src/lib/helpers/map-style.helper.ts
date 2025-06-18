@@ -16,7 +16,6 @@ import { LabelStyleHelper } from './style/label-style.helper';
 import { MeasureStyleHelper } from './style/measure-style.helper';
 import { OL3Parser } from 'jsts/org/locationtech/jts/io';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { fromCircle } from 'ol/geom/Polygon';
 import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
 
 export class MapStyleHelper {
