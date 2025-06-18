@@ -15,7 +15,7 @@
   --vw: 1vw;
   --100vh: calc(100 * var(--vh));
   --100vw: calc(100 * var(--vw));
-  --header-component-height: 0;
+  --header-component-height: 0px;
 
   --dark-primary-text: rgb(0, 10, 30);
   --light-primary-text: rgb(255, 255, 255);
