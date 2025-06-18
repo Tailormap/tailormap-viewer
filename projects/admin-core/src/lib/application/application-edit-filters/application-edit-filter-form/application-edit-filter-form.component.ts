@@ -276,11 +276,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       map(values => values.map(value => `${value}`)),
       tap(() => this.loadingUniqueValuesSubject$.next(false)),
     );
-
   }
 
   public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel) {
-    console.log('setEditFilterConfiguration', $event);
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()

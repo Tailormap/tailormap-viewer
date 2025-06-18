@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
-import { AttributeType, BooleanFilterModel, FilterConditionEnum, FilterToolEnum, UpdateBooleanFilterModel } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateBooleanFilterModel, UpdateSliderFilterModel,
+} from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
@@ -23,10 +25,16 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
           value1: true,
           value2: false,
         },
-        { emitEvent: true },
+        { emitEvent: false },
       );
+      this.updateBooleanFilter.emit({
+        filterTool: FilterToolEnum.BOOLEAN,
+        condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
+        value1: true,
+        value2: false,
+      });
       this.booleanFeatureType = true;
-      this.booleanFilterForm.markAsDirty();
+
     } else {
       this.booleanFilterForm.patchValue(
         {
@@ -40,8 +48,8 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   }
 
   @Input()
-  public set booleanFilterSettings(booleanFilterSettings: BooleanFilterModel | null) {
-    if (booleanFilterSettings) {
+  public set booleanFilterSettings(booleanFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel | null) {
+    if (booleanFilterSettings && booleanFilterSettings.filterTool === FilterToolEnum.BOOLEAN) {
       this.booleanFilterForm.patchValue({
         value1: booleanFilterSettings.value1,
         value2: booleanFilterSettings.value2,
@@ -51,8 +59,24 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
     }
   }
 
-  public uniqueValues = input<(string | number | boolean)[] | null>(null);
+  @Input()
+  public set uniqueValues(uniqueValues: (string | number | boolean)[] | null) {
+    if (uniqueValues) {
+      const uniqueValuesStrings = uniqueValues
+        .filter(value => typeof value !== "boolean")
+        .map(value => String(value));
+      this.twoUniqueValues = uniqueValuesStrings.length === 2;
+      if (this.twoUniqueValues) {
+        this.booleanFilterForm.patchValue({
+          value1: uniqueValuesStrings[0],
+          value2: uniqueValuesStrings[1],
+        }, { emitEvent: true });
+      }
+    }
+  }
+
   public booleanFeatureType: boolean = true;
+  public twoUniqueValues: boolean = true;
 
   @Output()
   public updateBooleanFilter = new EventEmitter<UpdateBooleanFilterModel>();
@@ -89,9 +113,6 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   private isValidBooleanFilterForm(): boolean {
 
     const formValues = this.booleanFilterForm.getRawValue();
-    console.log("value 1 valid: ", (formValues.value1 === true || FormHelper.isValidValue(formValues.value1)));
-    console.log("value 2 valid: ", (formValues.value2 === false || FormHelper.isValidValue(formValues.value2)));
-    console.log("value 1 != value 2: ", formValues.value1 !== formValues.value2);
     return (formValues.value1 === true || FormHelper.isValidValue(formValues.value1))
       && (formValues.value2 === false || FormHelper.isValidValue(formValues.value2))
       && formValues.value1 !== formValues.value2;
