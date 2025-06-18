@@ -59,14 +59,17 @@ export class EditFeatureService {
     );
   }
 
-  public createFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
+  public createFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<{ success: boolean; feature: FeatureModel | null }> {
     return this.api.createFeature$({ applicationId, layerId, feature }).pipe(
+      map(result => {
+        return { success: true, feature: result };
+      }),
       catchError((_e) => {
         this.showSnackbarMessage($localize `:@@core.edit.create-feature-failed:Create feature failed`, _e);
-        return of(null);
+        return of({ success: false, feature: null });
       }),
       tap(result => {
-        if (result) {
+        if (result.success) {
           this.showSnackbarMessage($localize `:@@core.edit.feature-created:Feature created`);
         }
       }),
