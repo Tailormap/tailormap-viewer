@@ -3,7 +3,7 @@
                         [drawSingleShape]="true"
                         [allowRemoveSelectedFeature]="true"
                         [allowModify]="true"
-                        [selectedFeature]="selectedFeatureForModifyTool"
+                        [selectedFeature]="selectedFeatureForModifyTool$ | async"
                         [selectionStyle]="selectedStyle"
                         (drawingAdded)="drawingAdded($event)"
                         (featureSelected)="onFeatureSelected($event)"

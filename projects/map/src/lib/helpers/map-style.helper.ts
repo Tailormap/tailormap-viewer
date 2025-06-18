@@ -1,7 +1,7 @@
 import { MapStyleModel, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Geometry, LineString, MultiPoint, Polygon } from 'ol/geom';
+import { Geometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
@@ -14,6 +14,10 @@ import { IconStyleHelper } from './style/icon-style.helper';
 import { SelectionStyleHelper } from './style/selection-style.helper';
 import { LabelStyleHelper } from './style/label-style.helper';
 import { MeasureStyleHelper } from './style/measure-style.helper';
+import { OL3Parser } from 'jsts/org/locationtech/jts/io';
+import { GeometryTypeHelper } from './geometry-type.helper';
+import { fromCircle } from 'ol/geom/Polygon';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
 
 export class MapStyleHelper {
 
@@ -81,7 +85,7 @@ export class MapStyleHelper {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
+      styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));
     }
     if (feature && (styleConfig.showSegmentSize || styleConfig.showTotalSize)) {
       styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize));
@@ -119,9 +123,31 @@ export class MapStyleHelper {
     });
   }
 
-  private static createBuffer(buffer: string, config: MapStyleModel) {
+  private static createBuffer(feature: Feature<Geometry>, buffer: number, config: MapStyleModel) {
+    const geometry = feature.getGeometry();
+    if (!geometry) {
+      return [];
+    }
+    const parser = new OL3Parser();
+    parser.inject(
+      Point,
+      LineString,
+      LinearRing,
+      Polygon,
+      MultiPoint,
+      MultiLineString,
+      MultiPolygon,
+      Circle,
+    );
+    const jstsGeom = parser.read(GeometryTypeHelper.isCircleGeometry(geometry)
+      ? fromCircle(geometry, 50)
+      : geometry,
+    );
+    const buffered = BufferOp.bufferOp(jstsGeom, buffer);
+    const bufferedGeometry: Geometry = parser.write(buffered);
+
     const bufferStyle = new Style({
-      geometry: FeatureHelper.fromWKT(buffer),
+      geometry: bufferedGeometry,
     });
     const fill = MapStyleHelper.createFill(config, UnitsHelper.getOpacity(config.fillOpacity, true));
     if (fill) {

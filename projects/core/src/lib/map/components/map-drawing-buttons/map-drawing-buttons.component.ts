@@ -221,6 +221,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
         this.featureSelected.emit(null);
         this.activeToolChanged.emit(this.activeTool);
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -236,6 +237,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       manager.disableTool(this.tool.id, true);
       manager.enableTool(this.selectTool.id, disableOtherTools);
       this.activeToolChanged.emit(this.activeTool);
+      this.cdr.detectChanges();
     });
   }
 

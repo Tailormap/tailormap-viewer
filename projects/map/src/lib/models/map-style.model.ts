@@ -24,7 +24,7 @@ export interface MapStyleModel {
   labelStyle?: Array<'bold'|'italic'>;
   labelRotation?: number;
   labelOutlineColor?: string;
-  buffer?: string;
+  buffer?: number;
   showTotalSize?: boolean;
   showSegmentSize?: boolean;
   showVertices?: boolean;

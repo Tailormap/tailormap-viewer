@@ -19,3 +19,8 @@ export const setSelectedLayers = createAction(
   `${filterComponentActionsPrefix} Set Selected Layers`,
   props<{ layers: string[] }>(),
 );
+
+export const setSelectedSpatialFilterFeatureId = createAction(
+  `${filterComponentActionsPrefix} Set Selected Spatial Filter Feature ID`,
+  props<{ featureId: string | null }>(),
+);
