@@ -24,7 +24,7 @@
     "@stardazed/zlib": "^1.0.1",
     "@tailormap-viewer/shared": "^12.0.0",
     "@tailormap-viewer/map": "^12.0.0",
-    "@tailormap-viewer/api": "^12.0.0",
+    "@tailormap-viewer/api": "^12.0.1",
     "jspdf": "^3.0.1",
     "luxon": "^3.5.0",
     "nanoid": "^5.1.4",
