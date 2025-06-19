@@ -292,6 +292,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.attributeValuesSettings
         .filter(setting => setting.initiallySelected)
         .map(setting => setting.value);
+    } else if ($event.filterTool === FilterToolEnum.BOOLEAN && $event.value1 !== undefined && $event.value2 !== undefined) {
+      value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
     }
     const condition = $event.filterTool === FilterToolEnum.CHECKBOX
       ? FilterConditionEnum.UNIQUE_VALUES_KEY

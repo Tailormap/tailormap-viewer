@@ -240,7 +240,11 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.boolean.alias2" datatype="html">
         <source>Alias value 2</source>
-        <target>Alias Wert 2</target
+        <target>Alias Wert 2</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.boolean.startWithValue2" datatype="html">
+        <source> Start with value 2 </source>
+        <target>Mit Wert 2 beginnen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.boolean.value1" datatype="html">
         <source>Value 1</source>

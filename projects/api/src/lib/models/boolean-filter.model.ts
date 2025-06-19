@@ -7,6 +7,7 @@ export interface BooleanFilterModel {
   value2?: string;
   alias1?: string;
   alias2?: string;
+  startWithValue2?: boolean;
 }
 
 export interface UpdateBooleanFilterModel {
@@ -16,4 +17,5 @@ export interface UpdateBooleanFilterModel {
   value2?: string;
   alias1?: string;
   alias2?: string;
+  startWithValue2?: boolean;
 }

@@ -1,5 +1,5 @@
 <div class="boolean-filter-content">
-  <mat-button-toggle-group value="true">
+  <mat-button-toggle-group [value]="booleanFilterConfiguration?.startWithValue2 ? 'false' : 'true'">
     <mat-button-toggle value="true" (change)="chooseValue(true)">{{ getLabel1() }}</mat-button-toggle>
     <mat-button-toggle value="false" (change)="chooseValue(false)">{{ getLabel2() }}</mat-button-toggle>
   </mat-button-toggle-group>

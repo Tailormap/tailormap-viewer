@@ -97,6 +97,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
     value2: new FormControl<string | boolean>(''),
     alias1: new FormControl<string>(''),
     alias2: new FormControl<string>(''),
+    startWithValue2: new FormControl<boolean>(false),
   });
 
   constructor(private destroyRef: DestroyRef) { }
@@ -116,15 +117,21 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
           value2: typeof value.value2 === 'string' ? value.value2 : undefined,
           alias1: value.alias1 || undefined,
           alias2: value.alias2 || undefined,
+          startWithValue2: value.startWithValue2,
         });
       });
   }
 
   private isValidBooleanFilterForm(): boolean {
-
     const formValues = this.booleanFilterForm.getRawValue();
     return (formValues.value1 === true || FormHelper.isValidValue(formValues.value1))
       && (formValues.value2 === false || FormHelper.isValidValue(formValues.value2))
       && formValues.value1 !== formValues.value2;
+  }
+
+  public startWithValue2Changed(startWithValue2: boolean): void {
+    if (this.booleanFeatureType) {
+      this.condition = startWithValue2 ? FilterConditionEnum.BOOLEAN_FALSE_KEY : FilterConditionEnum.BOOLEAN_TRUE_KEY;
+    }
   }
 }

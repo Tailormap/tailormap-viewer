@@ -35,5 +35,14 @@
       </div>
     </div>
 
+    <div class="start-with-value-2">
+      <mat-checkbox
+        formControlName="startWithValue2"
+        i18n="@@admin-core.application.filters.boolean.startWithValue2"
+        (change)="startWithValue2Changed($event.checked)">
+        Start with value 2
+      </mat-checkbox>
+    </div>
+
   </form>
 }
