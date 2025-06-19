@@ -1,7 +1,9 @@
 import { MapStyleModel, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Geometry, Circle as CircleGeometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon } from 'ol/geom';
+import {
+  Geometry, Circle as CircleGeometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon, Point,
+} from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
@@ -138,7 +140,7 @@ export class MapStyleHelper {
       bufferedGeometry = new CircleGeometry(center, radius + buffer);
     } else {
       const parser = new OL3Parser();
-      parser.inject(LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
+      parser.inject(Point, LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
       const buffered = BufferOp.bufferOp(parser.read(geometry), buffer);
       bufferedGeometry = parser.write(buffered);
     }
