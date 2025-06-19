@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+  import { Subject, takeUntil } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
@@ -140,6 +140,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;
+      this.olMap.getTargetElement().style.cursor = '';
     }
     this.listeners = [];
   }
