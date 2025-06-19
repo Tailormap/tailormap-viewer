@@ -139,7 +139,7 @@ export class MapStyleHelper {
     } else {
       const parser = new OL3Parser();
       parser.inject(LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
-      const buffered = BufferOp.bufferOp(geometry, buffer);
+      const buffered = BufferOp.bufferOp(parser.read(geometry), buffer);
       bufferedGeometry = parser.write(buffered);
     }
     if (!bufferedGeometry) {
