@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateBooleanFilterModel, UpdateSliderFilterModel,
+  AttributeType, AttributeTypeHelper, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateBooleanFilterModel,
+  UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -41,6 +42,9 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         { emitEvent: false },
       );
       this.booleanFeatureType = false;
+      this.condition = AttributeTypeHelper.isNumericType(attributeType)
+        ? FilterConditionEnum.NUMBER_EQUALS_KEY
+        : FilterConditionEnum.STRING_EQUALS_KEY;
     }
   }
 
@@ -53,6 +57,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         alias1: booleanFilterSettings.alias1 || '',
         alias2: booleanFilterSettings.alias2 || '',
       }, { emitEvent: false });
+      this.condition = booleanFilterSettings.condition || FilterConditionEnum.BOOLEAN_TRUE_KEY;
       if ((booleanFilterSettings.value1 === undefined || booleanFilterSettings.value1 === null)
         && (booleanFilterSettings.value2 === undefined || booleanFilterSettings.value2 === null)) {
         this.booleanFilterForm.patchValue({
@@ -82,6 +87,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
 
   public booleanFeatureType: boolean = true;
   public twoUniqueValues: boolean = true;
+  private condition: FilterConditionEnum = FilterConditionEnum.BOOLEAN_TRUE_KEY;
 
   @Output()
   public updateBooleanFilter = new EventEmitter<UpdateBooleanFilterModel>();
@@ -103,10 +109,9 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
         filter(() => this.isValidBooleanFilterForm()),
       )
       .subscribe(value => {
-        const condition = value.value1 === true ? FilterConditionEnum.BOOLEAN_TRUE_KEY : FilterConditionEnum.STRING_EQUALS_KEY;
         this.updateBooleanFilter.emit({
           filterTool: FilterToolEnum.BOOLEAN,
-          condition: condition,
+          condition: this.condition,
           value1: typeof value.value1 === 'string' ? value.value1 : undefined,
           value2: typeof value.value2 === 'string' ? value.value2 : undefined,
           alias1: value.alias1 || undefined,
