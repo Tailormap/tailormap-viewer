@@ -208,12 +208,14 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
         return;
       }
       const found = (this.interaction as any).getFeatureAtPixel_(e.pixel);
-      if (!found.feature && this.olMap.getTargetElement().style.cursor === 'move') {
+      if(timer) {
+        window.clearTimeout(timer);
+        timer = null;
+      }
+      if (!found.feature && this.olMap.getTargetElement().style.cursor !== '') {
         timer = window.setTimeout(() => {
           this.olMap.getTargetElement().style.cursor = '';
         }, 50);
-      } else if(timer) {
-        window.clearTimeout(timer);
       }
     });
   }
