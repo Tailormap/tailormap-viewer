@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, Input } from '@angular/core';
 import {
-  BaseComponentTypeEnum, FeatureInfoConfigModel,
+  BaseComponentTypeEnum, EditConfigModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -9,13 +9,13 @@ import { ConfigurationComponentModel } from '../configuration-component.model';
 import { debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'tm-admin-feature-info-component-config',
-  templateUrl: './feature-info-component-config.component.html',
-  styleUrls: ['./feature-info-component-config.component.css'],
+  selector: 'tm-admin-edit-component-config',
+  templateUrl: './edit-component-config.component.html',
+  styleUrls: ['./edit-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class FeatureInfoComponentConfigComponent implements ConfigurationComponentModel<FeatureInfoConfigModel> {
+export class EditComponentConfigComponent implements ConfigurationComponentModel<EditConfigModel> {
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -24,17 +24,17 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
   public label: string | undefined;
 
   @Input()
-  public set config(config: FeatureInfoConfigModel | undefined) {
+  public set config(config: EditConfigModel | undefined) {
     this._config = config;
     this.initForm(config);
   }
   public get config() {
     return this._config;
   }
-  private _config: FeatureInfoConfigModel | undefined;
+  private _config: EditConfigModel | undefined;
 
   public formGroup = new FormGroup({
-    defaultShowDropdown: new FormControl<boolean>(false),
+    closeAfterAddFeature: new FormControl<boolean>(false),
   });
 
   constructor(
@@ -51,12 +51,12 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
       });
   }
 
-  public initForm(config: FeatureInfoConfigModel | undefined) {
-    this.formGroup.patchValue({ defaultShowDropdown: config?.defaultShowDropdown ?? false }, { emitEvent: false });
+  public initForm(config: EditConfigModel | undefined) {
+    this.formGroup.patchValue({ closeAfterAddFeature: config?.closeAfterAddFeature ?? false }, { emitEvent: false });
   }
 
   private saveConfig() {
-    this.componentConfigService.updateConfigForKey<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
+    this.componentConfigService.updateConfigForKey<EditConfigModel>(this.type, 'closeAfterAddFeature', this.formGroup.value.closeAfterAddFeature);
   }
 
 }

@@ -1,0 +1,10 @@
+<tm-admin-base-component-config [type]="type"
+                                [label]="label"
+                                [config]="config"
+                                i18n-titleLabel="@@admin-core.components.edit-title"
+                                titleLabel="Edit">
+  <div [formGroup]="formGroup">
+    <mat-checkbox formControlName="closeAfterAddFeature"
+                  i18n="@@admin-core.components.edit-close-after-add-feature">Close window after adding new feature</mat-checkbox>
+  </div>
+</tm-admin-base-component-config>

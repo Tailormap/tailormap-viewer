@@ -7,6 +7,13 @@ declare module 'jsts/org/locationtech/jts/io' {
     constructor();
     public write(geometry: any): string;
   }
+
+  export class OL3Parser {
+    constructor();
+    public inject(...geometryFactory: any): void;
+    public read(geometry: any): any;
+    public write(geometry: any): any;
+  }
 }
 
 declare module 'jsts/org/locationtech/jts/operation/buffer' {

@@ -1,7 +1,9 @@
 import { MapStyleModel, OlMapStyleType } from '../models';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
-import { Geometry, LineString, MultiPoint, Polygon } from 'ol/geom';
+import {
+  Geometry, Circle as CircleGeometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon, Point,
+} from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
@@ -14,6 +16,9 @@ import { IconStyleHelper } from './style/icon-style.helper';
 import { SelectionStyleHelper } from './style/selection-style.helper';
 import { LabelStyleHelper } from './style/label-style.helper';
 import { MeasureStyleHelper } from './style/measure-style.helper';
+import { OL3Parser } from 'jsts/org/locationtech/jts/io';
+import { GeometryTypeHelper } from './geometry-type.helper';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
 
 export class MapStyleHelper {
 
@@ -81,7 +86,7 @@ export class MapStyleHelper {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
-      styles.push(...MapStyleHelper.createBuffer(styleConfig.buffer, styleConfig));
+      styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));
     }
     if (feature && (styleConfig.showSegmentSize || styleConfig.showTotalSize)) {
       styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize));
@@ -119,9 +124,31 @@ export class MapStyleHelper {
     });
   }
 
-  private static createBuffer(buffer: string, config: MapStyleModel) {
+  private static createBuffer(feature: Feature<Geometry>, buffer: number, config: MapStyleModel) {
+    const geometry = feature.getGeometry();
+    if (!geometry) {
+      return [];
+    }
+    let bufferedGeometry: Geometry | undefined;
+    if (GeometryTypeHelper.isCircleGeometry(geometry) || GeometryTypeHelper.isPointGeometry(geometry)) {
+      const center = GeometryTypeHelper.isPointGeometry(geometry)
+        ? geometry.getCoordinates()
+        : geometry.getCenter();
+      const radius = GeometryTypeHelper.isCircleGeometry(geometry)
+        ? geometry.getRadius()
+        : 0;
+      bufferedGeometry = new CircleGeometry(center, radius + buffer);
+    } else {
+      const parser = new OL3Parser();
+      parser.inject(Point, LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon);
+      const buffered = BufferOp.bufferOp(parser.read(geometry), buffer);
+      bufferedGeometry = parser.write(buffered);
+    }
+    if (!bufferedGeometry) {
+      return [];
+    }
     const bufferStyle = new Style({
-      geometry: FeatureHelper.fromWKT(buffer),
+      geometry: bufferedGeometry,
     });
     const fill = MapStyleHelper.createFill(config, UnitsHelper.getOpacity(config.fillOpacity, true));
     if (fill) {

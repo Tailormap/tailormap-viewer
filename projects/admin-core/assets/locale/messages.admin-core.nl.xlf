@@ -1369,6 +1369,14 @@
         <source>Coordinate link window title</source>
         <target>Coördinatenlinkvenster titel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
+        <source>Close window after adding new feature</source>
+        <target>Venster sluiten na toevoegen van nieuw object</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.edit-title" datatype="html">
+        <source>Edit</source>
+        <target>Objecten-editor</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.feature-info-defaultShowDropdown" datatype="html">
         <source>Use dropdown to select feature info layers by default</source>
         <target>Gebruik standaard een dropdown om objectinformatielagen te selecteren</target>

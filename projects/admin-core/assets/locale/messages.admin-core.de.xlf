@@ -68,7 +68,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-edit" datatype="html">
         <source>Edit</source>
-        <target>Bearbeiten</target>
+        <target>Objekteditor</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-feature-info" datatype="html">
         <source>Feature info</source>
@@ -1369,6 +1369,14 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
+        <source>Close window after adding new feature</source>
+        <target>Fenster nach dem Hinzufügen eines neuen Objekts schließen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.edit-title" datatype="html">
+        <source>Edit</source>
+        <target>Objekteditor</target>
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info-defaultShowDropdown" datatype="html">
         <source>Use dropdown to select feature info layers by default</source>

@@ -15,6 +15,7 @@ export interface AppLayerModel {
   minScale?: number;
   maxScale?: number;
   legendImageUrl?: string;
+  legendType?: 'static' | 'dynamic';
   tilingDisabled?: boolean;
   tilingGutter?: number;
   hiDpiDisabled?: boolean;

@@ -1026,6 +1026,10 @@
         <source>Filter layers</source>
         <target>Ebenen filtern</target>
       </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+        <target>Auf diese Ebene wird ein Filter angewendet</target>
+      </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
         <target>Legende</target>

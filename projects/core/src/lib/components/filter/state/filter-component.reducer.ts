@@ -38,11 +38,20 @@ const onSetSelectedLayers = (
   selectedLayers: payload.layers,
 });
 
+const onSetSelectedSpatialFilterFeatureId = (
+  state: FilterComponentState,
+  payload: ReturnType<typeof FilterComponentActions.setSelectedSpatialFilterFeatureId>,
+): FilterComponentState => ({
+  ...state,
+  selectedSpatialFilterFeatureId: payload.featureId,
+});
+
 const filterComponentReducerImpl = createReducer<FilterComponentState>(
   initialFilterComponentState,
   on(FilterComponentActions.createFilter, onCreateFilter),
   on(FilterComponentActions.setSelectedFilterGroup, onSetSelectedFilterGroup),
   on(FilterComponentActions.closeForm, onCloseForm),
   on(FilterComponentActions.setSelectedLayers, onSetSelectedLayers),
+  on(FilterComponentActions.setSelectedSpatialFilterFeatureId, onSetSelectedSpatialFilterFeatureId),
 );
 export const filterComponentReducer = (state: FilterComponentState | undefined, action: Action) => filterComponentReducerImpl(state, action);

@@ -56,3 +56,8 @@ export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
       .filter(group => group.filters.length > 0 && group.filters[0].baseLayerId);
     },
 );
+
+export const selectFilteredLayerIds = createSelector(
+  selectEnabledFilterGroups,
+  (groups): string[] => groups.flatMap(group => group.layerIds),
+);
