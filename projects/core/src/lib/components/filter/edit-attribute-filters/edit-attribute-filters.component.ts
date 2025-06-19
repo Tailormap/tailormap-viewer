@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { AttributeFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, CheckboxFilterModel, FilterToolEnum, SliderFilterModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
-import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-edit-attribute-filter',
@@ -80,12 +79,8 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public getConditionLabel(condition: FilterConditionEnum): string {
-    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
-  }
-
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
+    return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filters.and: and `)}`;
   }
 
 }

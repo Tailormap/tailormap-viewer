@@ -3,7 +3,7 @@ import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailorm
 import { Store } from '@ngrx/store';
 import { createApplicationAttributeFilter } from '../../state/application.actions';
 import {
-  selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication, selectSelectedApplicationId,
+  selectApplicationSelectedFilterLayerIds, selectFilterableLayersForApplication, selectSelectedApplicationId,
 } from '../../state/application.selectors';
 import { nanoid } from 'nanoid';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
@@ -22,23 +22,23 @@ export class ApplicationCreateFilterComponent {
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
-  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+  public selectedLayerIds: Signal<string[] | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerIds);
 
   public saveEnabled = signal(false);
 
   private newFilterId = signal<string>(nanoid());
   public newFilter: Signal<UpdateAttributeFilterModel | null> = computed(() => {
-    const selectedLayerId = this.selectedLayerId();
+    const selectedLayerIds = this.selectedLayerIds();
     const newFilterId = this.newFilterId();
     const filterableLayers = this.filterableLayers();
-    if (!selectedLayerId) {
+    if (!selectedLayerIds) {
       return null;
     }
     return {
       filterGroup: {
         id: nanoid(),
         source: "PRESET",
-        layerIds: [selectedLayerId ?? ''],
+        layerIds: selectedLayerIds ?? '',
         type: FilterTypeEnum.ATTRIBUTE,
         filters: [],
         operator: 'AND',

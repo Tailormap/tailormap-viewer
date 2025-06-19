@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { Store } from '@ngrx/store';
-import { selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication } from '../../state/application.selectors';
+import { selectApplicationSelectedFilterLayerIds, selectFilterableLayersForApplication } from '../../state/application.selectors';
 import { setApplicationSelectedFilterLayerId } from '../../state/application.actions';
 
 @Component({
@@ -16,29 +16,32 @@ import { setApplicationSelectedFilterLayerId } from '../../state/application.act
 export class ApplicationFilterableLayersListComponent implements OnDestroy {
 
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
-  public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
+  public selectedLayerIds: Signal<string[] | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerIds);
   public filterableLayersWithSelected = computed(() => {
     const filterableLayers = this.filterableLayers();
-    const selectedLayerId = this.selectedLayerId();
+    const selectedLayerIds = this.selectedLayerIds();
     return filterableLayers.map(layer => {
       return {
         ...layer,
-        isSelected: layer.appLayerId === selectedLayerId,
+        isSelected: selectedLayerIds?.includes(layer.appLayerId),
       };
     });
   });
 
   constructor(private store$: Store) { }
 
-  public setSelectedLayer(layer: GeoServiceLayerInApplicationModel) {
+  public setSelectedLayer(layer: GeoServiceLayerInApplicationModel, selected: boolean) {
     if (!layer) {
       return;
     }
-    this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: layer.appLayerId }));
+    this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: layer.appLayerId, selected: selected }));
   }
 
   public ngOnDestroy(): void {
-    this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: undefined }));
+    const layersIds = this.selectedLayerIds();
+    layersIds?.forEach(layerId => {
+      this.store$.dispatch(setApplicationSelectedFilterLayerId({ filterLayerId: layerId, selected: false }));
+    });
   }
 
 }
