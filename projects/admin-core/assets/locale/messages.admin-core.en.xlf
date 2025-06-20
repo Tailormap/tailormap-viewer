@@ -173,24 +173,6 @@
       <trans-unit id="admin-core.application.filters.all-filters" datatype="html">
         <source>All filters</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean" datatype="html">
-        <source>Boolean</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean.alias1" datatype="html">
-        <source>Alias value 1</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean.alias2" datatype="html">
-        <source>Alias value 2</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean.startWithValue2" datatype="html">
-        <source> Start with value 2 </source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean.value1" datatype="html">
-        <source>Value 1</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean.value2" datatype="html">
-        <source>Value 2</source>
-      </trans-unit>
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
       </trans-unit>
@@ -250,6 +232,21 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.switch" datatype="html">
         <source>Switch</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.alias1" datatype="html">
+        <source>Alias value 1</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.alias2" datatype="html">
+        <source>Alias value 2</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.startWithValue2" datatype="html">
+        <source> Start with value 2 </source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.value1" datatype="html">
+        <source>Value 1</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.value2" datatype="html">
+        <source>Value 2</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
