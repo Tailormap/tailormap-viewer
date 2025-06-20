@@ -70,6 +70,13 @@
             (updateSwitchFilter)="setEditFilterConfiguration($event)"></tm-admin-application-switch-filter-form>
         </div>
       }
+    } @else if (filterForm.get('tool')?.value === "DATE_PICKER") {
+      <div class="date-picker-filter-form">
+        <tm-admin-application-date-picker-filter-form
+          [attributeType]="filterForm.get('attributeType')!.value!"
+          [datePickerFilter]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          (updateDatePickerFilter)="setEditFilterConfiguration($event)"></tm-admin-application-date-picker-filter-form>
+      </div>
     }
   }
 </form>

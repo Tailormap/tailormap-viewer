@@ -1,0 +1,34 @@
+<form [formGroup]="datePickerFilterForm">
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@core.filter.condition">Condition</mat-label>
+    <mat-select i18n-aria-label="@@core.filter.select-condition"
+                aria-label="Select condition"
+                formControlName="condition"
+                panelClass="attribute-filter-condition-list-panel">
+      <mat-option *ngFor="let attr of filterConditions()" [value]="attr.condition">{{ attr.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  @if (isBetweenCondition()) {
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-from">Initial From</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="initialLowerDate" />
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-to">Initial To</mat-label>
+      <input matInput [matDatepicker]="dp2" formControlName="initialUpperDate" />
+      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+      <mat-datepicker #dp2></mat-datepicker>
+    </mat-form-field>
+  } @else {
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-date">Initial Date</mat-label>
+      <input matInput [matDatepicker]="dp3" formControlName="initialDate" />
+      <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+      <mat-datepicker #dp3></mat-datepicker>
+    </mat-form-field>
+  }
+</form>

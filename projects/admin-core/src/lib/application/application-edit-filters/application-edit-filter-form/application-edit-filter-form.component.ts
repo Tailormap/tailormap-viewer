@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateDatePickerFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -36,7 +36,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
-  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateSwitchFilterModel;
+  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel;
 
   public filterToolOptions = [{
     label: $localize`:@@admin-core.application.filters.preset:Preset`,
@@ -50,6 +50,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.switch:Switch`,
     value: FilterToolEnum.SWITCH,
+  }, {
+    label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
+    value: FilterToolEnum.DATE_PICKER,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -116,7 +119,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -282,7 +285,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     );
   }
 
-  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel) {
+  public setEditFilterConfiguration(
+    $event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel,
+  ) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()
