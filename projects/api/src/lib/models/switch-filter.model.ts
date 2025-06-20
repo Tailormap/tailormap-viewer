@@ -1,8 +1,8 @@
 import { FilterConditionEnum } from './filter-condition.enum';
 import { FilterToolEnum } from './filter-tool.enum';
 
-export interface BooleanFilterModel {
-  filterTool: FilterToolEnum.BOOLEAN;
+export interface SwitchFilterModel {
+  filterTool: FilterToolEnum.SWITCH;
   value1?: string;
   value2?: string;
   alias1?: string;
@@ -10,8 +10,8 @@ export interface BooleanFilterModel {
   startWithValue2?: boolean;
 }
 
-export interface UpdateBooleanFilterModel {
-  filterTool: FilterToolEnum.BOOLEAN;
+export interface UpdateSwitchFilterModel {
+  filterTool: FilterToolEnum.SWITCH;
   condition?: FilterConditionEnum;
   value1?: string;
   value2?: string;

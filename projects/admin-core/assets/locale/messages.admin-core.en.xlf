@@ -248,6 +248,9 @@
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch" datatype="html">
+        <source>Switch</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
       </trans-unit>

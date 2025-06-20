@@ -4,7 +4,7 @@ import { FilterTypeEnum } from './filter-type.enum';
 import { BaseFilterModel } from './base-filter.model';
 import { SliderFilterModel } from './slider-filter.model';
 import { CheckboxFilterModel } from './checkbox-filter.model';
-import { BooleanFilterModel } from './boolean-filter.model';
+import { SwitchFilterModel } from './switch-filter.model';
 
 export interface AttributeFilterModel extends BaseFilterModel {
   attribute: string;
@@ -14,5 +14,5 @@ export interface AttributeFilterModel extends BaseFilterModel {
   caseSensitive: boolean;
   value: string[];
   type: FilterTypeEnum.ATTRIBUTE;
-  editConfiguration?: SliderFilterModel | CheckboxFilterModel | BooleanFilterModel;
+  editConfiguration?: SliderFilterModel | CheckboxFilterModel | SwitchFilterModel;
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeType, AttributeTypeHelper, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateBooleanFilterModel,
+  AttributeType, AttributeTypeHelper, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel,
   UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -10,31 +10,31 @@ import { filter } from 'rxjs';
 import { FormHelper } from '../../../helpers/form.helper';
 
 @Component({
-  selector: 'tm-admin-application-boolean-filter-form',
-  templateUrl: './application-boolean-filter-form.component.html',
-  styleUrls: ['./application-boolean-filter-form.component.css'],
+  selector: 'tm-admin-application-switch-filter-form',
+  templateUrl: './application-switch-filter-form.component.html',
+  styleUrls: ['./application-switch-filter-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ApplicationBooleanFilterFormComponent implements OnInit {
+export class ApplicationSwitchFilterFormComponent implements OnInit {
 
   @Input()
   public set attributeType(attributeType: AttributeType) {
     if (attributeType === AttributeType.BOOLEAN) {
-      this.booleanFilterForm.patchValue(
+      this.switchFilterForm.patchValue(
         {
           value1: true,
           value2: false,
         },
         { emitEvent: false },
       );
-      this.updateBooleanFilter.emit({
-        filterTool: FilterToolEnum.BOOLEAN,
+      this.updateSwitchFilter.emit({
+        filterTool: FilterToolEnum.SWITCH,
         condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
       });
       this.booleanFeatureType = true;
     } else {
-      this.booleanFilterForm.patchValue(
+      this.switchFilterForm.patchValue(
         {
           value1: '',
           value2: '',
@@ -49,18 +49,18 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   }
 
   @Input()
-  public set booleanFilterSettings(booleanFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel | null) {
-    if (booleanFilterSettings && booleanFilterSettings.filterTool === FilterToolEnum.BOOLEAN) {
-      this.booleanFilterForm.patchValue({
-        value1: booleanFilterSettings.value1,
-        value2: booleanFilterSettings.value2,
-        alias1: booleanFilterSettings.alias1 || '',
-        alias2: booleanFilterSettings.alias2 || '',
+  public set switchFilterSettings(switchFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | null) {
+    if (switchFilterSettings && switchFilterSettings.filterTool === FilterToolEnum.SWITCH) {
+      this.switchFilterForm.patchValue({
+        value1: switchFilterSettings.value1,
+        value2: switchFilterSettings.value2,
+        alias1: switchFilterSettings.alias1 || '',
+        alias2: switchFilterSettings.alias2 || '',
       }, { emitEvent: false });
-      this.condition = booleanFilterSettings.condition || FilterConditionEnum.BOOLEAN_TRUE_KEY;
-      if ((booleanFilterSettings.value1 === undefined || booleanFilterSettings.value1 === null)
-        && (booleanFilterSettings.value2 === undefined || booleanFilterSettings.value2 === null)) {
-        this.booleanFilterForm.patchValue({
+      this.condition = switchFilterSettings.condition || FilterConditionEnum.BOOLEAN_TRUE_KEY;
+      if ((switchFilterSettings.value1 === undefined || switchFilterSettings.value1 === null)
+        && (switchFilterSettings.value2 === undefined || switchFilterSettings.value2 === null)) {
+        this.switchFilterForm.patchValue({
           value1: true,
           value2: false,
         }, { emitEvent: true });
@@ -77,7 +77,7 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
       const uniqueValuesStrings = uniqueValues.map(value => String(value));
       this.twoUniqueValues = uniqueValuesStrings.length === 2;
       if (this.twoUniqueValues) {
-        this.booleanFilterForm.patchValue({
+        this.switchFilterForm.patchValue({
           value1: uniqueValuesStrings[0],
           value2: uniqueValuesStrings[1],
         }, { emitEvent: true });
@@ -90,9 +90,9 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   private condition: FilterConditionEnum = FilterConditionEnum.BOOLEAN_TRUE_KEY;
 
   @Output()
-  public updateBooleanFilter = new EventEmitter<UpdateBooleanFilterModel>();
+  public updateSwitchFilter = new EventEmitter<UpdateSwitchFilterModel>();
 
-  public booleanFilterForm: FormGroup = new FormGroup({
+  public switchFilterForm: FormGroup = new FormGroup({
     value1: new FormControl<string | boolean>(''),
     value2: new FormControl<string | boolean>(''),
     alias1: new FormControl<string>(''),
@@ -103,15 +103,15 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
   constructor(private destroyRef: DestroyRef) { }
 
   public ngOnInit(): void {
-    this.booleanFilterForm.valueChanges
+    this.switchFilterForm.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(250),
-        filter(() => this.isValidBooleanFilterForm()),
+        filter(() => this.isValidSwitchFilterForm()),
       )
       .subscribe(value => {
-        this.updateBooleanFilter.emit({
-          filterTool: FilterToolEnum.BOOLEAN,
+        this.updateSwitchFilter.emit({
+          filterTool: FilterToolEnum.SWITCH,
           condition: this.condition,
           value1: typeof value.value1 === 'string' ? value.value1 : undefined,
           value2: typeof value.value2 === 'string' ? value.value2 : undefined,
@@ -122,8 +122,8 @@ export class ApplicationBooleanFilterFormComponent implements OnInit {
       });
   }
 
-  private isValidBooleanFilterForm(): boolean {
-    const formValues = this.booleanFilterForm.getRawValue();
+  private isValidSwitchFilterForm(): boolean {
+    const formValues = this.switchFilterForm.getRawValue();
     return (formValues.value1 === true || FormHelper.isValidValue(formValues.value1))
       && (formValues.value2 === false || FormHelper.isValidValue(formValues.value2))
       && formValues.value1 !== formValues.value2;

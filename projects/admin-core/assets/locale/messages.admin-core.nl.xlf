@@ -329,6 +329,10 @@
         <source>Use attribute range</source>
         <target>Gebruik attribuutbereik</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch" datatype="html">
+        <source>Switch</source>
+        <target>Schakelaar</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
         <target>Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>

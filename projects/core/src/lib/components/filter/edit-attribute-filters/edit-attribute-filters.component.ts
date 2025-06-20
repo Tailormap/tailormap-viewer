@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, BooleanFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel,
+  AttributeFilterModel, AttributeType, SwitchFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
@@ -44,8 +44,8 @@ export class EditAttributeFiltersComponent {
     };
   }
 
-  public getBooleanFilterConfiguration(filter: AttributeFilterModel): BooleanFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.BOOLEAN) {
+  public getSwitchFilterConfiguration(filter: AttributeFilterModel): SwitchFilterModel | null {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
       return null;
     }
     return filter.editConfiguration;
@@ -97,7 +97,7 @@ export class EditAttributeFiltersComponent {
     return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
-  public updateBooleanFilterValue(change: boolean, filter: AttributeFilterModel) {
+  public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
     if (filter.attributeType === AttributeType.BOOLEAN) {
       const condition = change ? FilterConditionEnum.BOOLEAN_TRUE_KEY : FilterConditionEnum.BOOLEAN_FALSE_KEY;
       const newFilter: AttributeFilterModel = {
@@ -107,7 +107,7 @@ export class EditAttributeFiltersComponent {
       if (this.filterGroupId()) {
         this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
       }
-    } else if (filter.editConfiguration?.filterTool === FilterToolEnum.BOOLEAN) {
+    } else if (filter.editConfiguration?.filterTool === FilterToolEnum.SWITCH) {
       const newValue = change ? filter.editConfiguration.value1 : filter.editConfiguration.value2;
       const newFilter: AttributeFilterModel = {
         ...filter,

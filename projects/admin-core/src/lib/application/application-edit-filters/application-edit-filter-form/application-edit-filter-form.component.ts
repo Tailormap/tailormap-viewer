@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateBooleanFilterModel,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -36,7 +36,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
-  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateBooleanFilterModel;
+  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateSwitchFilterModel;
 
   public filterToolOptions = [{
     label: $localize`:@@admin-core.application.filters.preset:Preset`,
@@ -48,8 +48,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.slider:Slider`,
     value: FilterToolEnum.SLIDER,
   }, {
-    label: $localize`:@@admin-core.application.filters.boolean:Boolean`,
-    value: FilterToolEnum.BOOLEAN,
+    label: $localize`:@@admin-core.application.filters.switch:Switch`,
+    value: FilterToolEnum.SWITCH,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -116,7 +116,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -282,7 +282,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     );
   }
 
-  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateBooleanFilterModel) {
+  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()
@@ -292,7 +292,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.attributeValuesSettings
         .filter(setting => setting.initiallySelected)
         .map(setting => setting.value);
-    } else if ($event.filterTool === FilterToolEnum.BOOLEAN && $event.value1 !== undefined && $event.value2 !== undefined) {
+    } else if ($event.filterTool === FilterToolEnum.SWITCH && $event.value1 !== undefined && $event.value2 !== undefined) {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
     }
     const condition = $event.filterTool === FilterToolEnum.CHECKBOX

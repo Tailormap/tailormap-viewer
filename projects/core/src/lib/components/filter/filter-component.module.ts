@@ -22,7 +22,7 @@ import {
 import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-attribute-filters.component';
 import { SliderFilterComponent } from './slider-filter/slider-filter.component';
 import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
-import { BooleanFilterComponent } from './boolean-filter/boolean-filter.component';
+import { SwitchFilterComponent } from './switch-filter/switch-filter.component';
 
 
 
@@ -41,7 +41,7 @@ import { BooleanFilterComponent } from './boolean-filter/boolean-filter.componen
     EditAttributeFiltersComponent,
     SliderFilterComponent,
     CheckboxFilterComponent,
-    BooleanFilterComponent,
+    SwitchFilterComponent,
   ],
   imports: [
     CommonModule,

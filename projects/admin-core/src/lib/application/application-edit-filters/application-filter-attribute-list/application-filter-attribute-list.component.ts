@@ -73,7 +73,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
               if (filterTool === FilterToolEnum.SLIDER) {
                 return AttributeTypeHelper.isNumericType(att.type);
               }
-              if (filterTool === FilterToolEnum.BOOLEAN) {
+              if (filterTool === FilterToolEnum.SWITCH) {
                 return !AttributeTypeHelper.isGeometryType(att.type)
                   && att.type !== AttributeType.DATE
                   && att.type !== AttributeType.TIMESTAMP;
