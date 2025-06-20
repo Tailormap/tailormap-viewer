@@ -186,7 +186,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public toggleNodeExpanded(node: FlatTreeModel<T, TypeDef>) {
-    // this.treeControl.toggle(node);
     this.nodeExpansionChangedSource.next({ expanded: node.expanded, node });
   }
 

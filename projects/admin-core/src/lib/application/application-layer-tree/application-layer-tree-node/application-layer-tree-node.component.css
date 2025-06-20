@@ -62,9 +62,9 @@
 }
 
 .tree-node__actions .mdc-icon-button mat-icon {
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
   overflow: visible;
   vertical-align: top;
 }
