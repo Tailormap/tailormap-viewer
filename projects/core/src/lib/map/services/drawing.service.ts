@@ -6,7 +6,7 @@ import {
   SelectToolConfigModel, SelectToolModel, ToolManagerModel,
   ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { BehaviorSubject, Subject, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
@@ -43,16 +43,17 @@ export class DrawingService {
   });
 
   private selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined;
+  private toolManager: ToolManagerModel | undefined;
 
   constructor(
     private mapService: MapService,
     private destroyRef: DestroyRef,
   ) {
-    this.mapService.getToolManager$()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        switchMap(toolManager => toolManager.getToolsDisabled$()),
-      )
+    const toolManager$ = this.mapService.getToolManager$()
+      .pipe(takeUntilDestroyed(this.destroyRef));
+    toolManager$.subscribe(toolManager => this.toolManager = toolManager);
+    toolManager$
+      .pipe(switchMap(toolManager => toolManager.getToolsDisabled$()))
       .subscribe(({ disabledTools, enabledTools }) => {
         if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.includes(this.drawingTool.id)) {
           // Drawing tool is disabled while drawing (probably because of other tool activation)
@@ -145,18 +146,16 @@ export class DrawingService {
   }
 
   public disableDrawingTools() {
-    this.withToolManager(manager => {
-      if (this.drawingTool) {
-        manager.disableTool(this.drawingTool.id);
-      }
-      if (this.selectTool) {
-        manager.disableTool(this.selectTool.id);
-      }
-      if (this.extTransformTool) {
-        manager.disableTool(this.extTransformTool.id, true);
-      }
-      this.activeDrawingTool = null;
-    });
+    if (this.drawingTool) {
+      this.toolManager?.disableTool(this.drawingTool.id);
+    }
+    if (this.selectTool) {
+      this.toolManager?.disableTool(this.selectTool.id);
+    }
+    if (this.extTransformTool) {
+      this.toolManager?.disableTool(this.extTransformTool.id, true);
+    }
+    this.activeDrawingTool = null;
   }
 
   public toggle(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
@@ -166,6 +165,7 @@ export class DrawingService {
   public setSelectedFeature(feature: FeatureModel | null) {
     this.selectedFeature = feature;
     this.isSelectedFeaturePointGeometry = feature?.geometry?.trim().startsWith('POINT') ?? false;
+    this.setSelectedFeatureInSelectTool(feature);
     this.enableModifyTool();
   }
 
@@ -174,62 +174,57 @@ export class DrawingService {
     this.enableModifyTool();
   }
 
-  private withToolManager(callback: (manager: ToolManagerModel) => void) {
-    this.mapService.getToolManager$().pipe(take(1)).subscribe(manager => {
-      callback(manager);
-    });
-  }
-
   private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
-    this.withToolManager(manager => {
-      if (!this.drawingTool || !this.selectTool) {
-        return;
+    if (!this.drawingTool || !this.selectTool) {
+      return;
+    }
+    if (this.activeDrawingTool === drawingFeatureType && !forceEnableDrawing) {
+      this.disableDrawing();
+      this.enableModifyTool();
+    } else {
+      // Enable drawing
+      this.activeDrawingTool = drawingFeatureType;
+      const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
+      this.toolManager?.enableTool(this.drawingTool.id, true, { type, style }, true);
+      this.toolManager?.disableTool(this.selectTool.id, true);
+      if (this.extTransformTool) {
+        this.toolManager?.disableTool(this.extTransformTool.id, true);
       }
-      if (this.activeDrawingTool === drawingFeatureType && !forceEnableDrawing) {
-        this.disableDrawing();
-        this.enableModifyTool();
-      } else {
-        // Enable drawing
-        this.activeDrawingTool = drawingFeatureType;
-        const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
-        manager.enableTool(this.drawingTool.id, true, { type, style }, true);
-        manager.disableTool(this.selectTool.id, true);
-        if (this.extTransformTool) {
-          manager.disableTool(this.extTransformTool.id, true);
-        }
-        this.featureSelected.next(null);
-        this.activeToolChanged.next(this.activeDrawingTool);
-      }
-    });
+      this.featureSelected.next(null);
+      this.activeToolChanged.next(this.activeDrawingTool);
+    }
   }
 
   private disableDrawing(disableOtherTools = true) {
-    this.withToolManager(manager => {
-      if (!this.drawingTool || !this.selectTool) {
-        return;
-      }
-      this.activeDrawingTool = null;
-      manager.disableTool(this.drawingTool.id, true);
-      manager.enableTool(this.selectTool.id, disableOtherTools);
-      this.activeToolChanged.next(this.activeDrawingTool);
-    });
+    if (!this.drawingTool || !this.selectTool) {
+      return;
+    }
+    this.activeDrawingTool = null;
+    this.toolManager?.disableTool(this.drawingTool.id, true);
+    this.toolManager?.enableTool(this.selectTool.id, disableOtherTools);
+    this.activeToolChanged.next(this.activeDrawingTool);
   }
 
   private enableModifyTool() {
     if (!this.extTransformTool) {
       return;
     }
-    this.withToolManager(manager => {
-      if (this.selectedFeature) {
-        const enableArgs: ExtTransformEnableToolArguments = {
-          feature: this.selectedFeature,
-          style: this.selectionStyle,
-        };
-        manager.enableTool(this.extTransformTool?.id || '', false, enableArgs, true);
-      } else {
-        manager.disableTool(this.extTransformTool?.id || '', true);
-      }
-    });
+    if (this.selectedFeature) {
+      const enableArgs: ExtTransformEnableToolArguments = {
+        feature: this.selectedFeature,
+        style: this.selectionStyle,
+      };
+      this.toolManager?.enableTool(this.extTransformTool?.id || '', false, enableArgs, true);
+    } else {
+      this.toolManager?.disableTool(this.extTransformTool?.id || '', true);
+    }
+  }
+
+  private setSelectedFeatureInSelectTool(feature: FeatureModel | null) {
+    if (!this.selectTool) {
+      return;
+    }
+    this.toolManager?.getTool<SelectToolModel>(this.selectTool.id)?.setSelectedFeature(feature);
   }
 
   private static drawingFeatureTypeToDrawingType(type: DrawingFeatureTypeEnum): DrawingType {

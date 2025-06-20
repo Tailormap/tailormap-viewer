@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId, selectSelectedLayersCount,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId,
 } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
@@ -15,7 +16,6 @@ import { SpatialFilterReferenceLayerService } from '../../../filter/services/spa
 import { filter } from 'rxjs/operators';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { FilterFeaturesService } from '../services/filter-features.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -39,8 +39,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public drawingLayerId = 'filter-drawing-layer';
   public availableLayers$: Observable<ExtendedAppLayerModel[]> = of([]);
 
-  private selectedFeatureId = new BehaviorSubject<string | null>(null);
-
   public currentGroup$: Observable<string | undefined> = of(undefined);
   public selectedLayersCount$: Observable<number> = of(0);
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
@@ -53,7 +51,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private removeFilterService: RemoveFilterService,
     private spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService,
-    private filterFeaturesService: FilterFeaturesService,
   ) {
   }
 
@@ -73,8 +70,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     this.mapService.renderFeatures$<FeatureModelAttributes>(
       this.drawingLayerId,
       combineLatest([
-        this.selectedFeatureId.asObservable(),
-        this.filterFeaturesService.getFilterFeatures$(),
+        this.store$.select(selectSelectedSpatialFilterFeatureId),
+        this.store$.select(selectFilterFeatures),
       ]).pipe(map(([ selectedFeatureId, features ] ) => {
         if (selectedFeatureId) {
           return features.filter(feature => feature.__fid !== selectedFeatureId);
@@ -110,7 +107,4 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onFeatureSelected(id: string | null) {
-    this.selectedFeatureId.next(id);
-  }
 }

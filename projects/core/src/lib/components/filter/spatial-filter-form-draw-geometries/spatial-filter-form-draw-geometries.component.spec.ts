@@ -7,6 +7,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { of } from 'rxjs';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -17,7 +18,7 @@ jest.mock('nanoid', () => ({
 }));
 
 const setup = async () => {
-  const store = { dispatch: jest.fn() };
+  const store = { dispatch: jest.fn(), select: jest.fn(() => of(null)) };
   const mapServiceMock = createMapServiceMock();
   const mockSpatialCrudService = { addGeometry: jest.fn(), removeGeometry: jest.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
