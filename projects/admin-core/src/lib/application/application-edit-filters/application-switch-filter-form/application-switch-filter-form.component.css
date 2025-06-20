@@ -1,0 +1,11 @@
+.value-1-config,
+.value-2-config {
+  display: flex;
+  flex-direction: row;
+  margin-top: 16px;
+}
+
+.alias-1-field,
+.alias-2-field {
+  margin-left: 8px;
+}

@@ -38,8 +38,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
         return $localize`:@@admin-core.application.filters.slider:Slider`;
       } else if (filterTool === FilterToolEnum.CHECKBOX) {
         return $localize`:@@admin-core.application.filters.checkbox:Checkbox`;
-      } else if (filterTool === FilterToolEnum.BOOLEAN) {
-        return $localize`:@@admin-core.application.filters.boolean:Boolean`;
+      } else if (filterTool === FilterToolEnum.SWITCH) {
+        return $localize`:@@admin-core.application.filters.switch:Switch`;
       }
     }
     return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === attributeFilter.condition)?.label || '';

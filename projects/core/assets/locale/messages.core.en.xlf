@@ -608,6 +608,12 @@
       <trans-unit id="core.filter.summary" datatype="html">
         <source>Summary</source>
       </trans-unit>
+      <trans-unit id="core.filter.switch-filter.false" datatype="html">
+        <source>False</source>
+      </trans-unit>
+      <trans-unit id="core.filter.switch-filter.true" datatype="html">
+        <source>True</source>
+      </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
       </trans-unit>
@@ -772,6 +778,7 @@
       </trans-unit>
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
