@@ -251,6 +251,9 @@
       <trans-unit id="admin-core.application.filters.switch.alias2" datatype="html">
         <source>Alias value 2</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.more-values" datatype="html">
+        <source>This Attribute has more than two unique values. Consider using a checkbox filter.</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.switch.startWithValue2" datatype="html">
         <source> Start with value 2 </source>
       </trans-unit>

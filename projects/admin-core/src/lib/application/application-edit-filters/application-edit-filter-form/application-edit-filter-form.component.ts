@@ -283,6 +283,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       map(values => values.map(value => `${value}`)),
       tap(() => this.loadingUniqueValuesSubject$.next(false)),
     );
+
   }
 
   public setEditFilterConfiguration(

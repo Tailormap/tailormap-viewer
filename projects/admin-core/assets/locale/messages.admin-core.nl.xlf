@@ -333,6 +333,10 @@
         <source>Alias value 2</source>
         <target>Alias waarde 2</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.more-values" datatype="html">
+        <source>This Attribute has more than two unique values. Consider using a checkbox filter.</source>
+        <target>Dit attribuut heeft meer dan twee unieke waarden. Je kan een vinkvakjes filter gebruiken.</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.switch.startWithValue2" datatype="html">
         <source> Start with value 2 </source>
         <target> Begin met waarde 2 </target>
