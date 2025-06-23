@@ -182,6 +182,18 @@
       <trans-unit id="admin-core.application.filters.create-new-filter" datatype="html">
         <source>Create new filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
+        <source>Date Picker</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
+        <source>Initial date</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-from" datatype="html">
+        <source>Initial lower date</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
+        <source>Initial upper date</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
       </trans-unit>

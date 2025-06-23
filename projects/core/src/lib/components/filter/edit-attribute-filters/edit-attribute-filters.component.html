@@ -37,6 +37,19 @@
           </div>
         </div>
       }
+      @if (getDatePickerFilterConfiguration(filter); as datePickerFilterConfig) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-date-picker-filter-title">
+            {{ filter.attribute + ' ' + getConditionLabel(filter.condition) }}
+          </div>
+          <div class="editable-date-picker-filter-content">
+            <tm-date-picker-filter
+              [datePickerFilterConfiguration]="datePickerFilterConfig"
+              (dateChange)="updateDateFilterValue($event, filter)"
+              (betweenDatesChange)="updateBetweenDateFilterValues($event, filter)"></tm-date-picker-filter>
+          </div>
+        </div>
+      }
     </div>
   }
 </mat-expansion-panel>

@@ -299,6 +299,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         .map(setting => setting.value);
     } else if ($event.filterTool === FilterToolEnum.SWITCH && $event.value1 !== undefined && $event.value2 !== undefined) {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
+    } else if ($event.filterTool === FilterToolEnum.DATE_PICKER) {
+      value = $event.initialDate
+        ? [$event.initialDate.toISODate() ?? '']
+        : [ $event.initialLowerDate?.toISODate() ?? '', $event.initialUpperDate?.toISODate() ?? '' ];
     }
     const condition = $event.filterTool === FilterToolEnum.CHECKBOX
       ? FilterConditionEnum.UNIQUE_VALUES_KEY

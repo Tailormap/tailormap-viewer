@@ -11,21 +11,21 @@
 
   @if (isBetweenCondition()) {
     <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-from">Initial From</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-from">Initial lower date</mat-label>
       <input matInput [matDatepicker]="dp" formControlName="initialLowerDate" />
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-to">Initial To</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-to">Initial upper date</mat-label>
       <input matInput [matDatepicker]="dp2" formControlName="initialUpperDate" />
       <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
       <mat-datepicker #dp2></mat-datepicker>
     </mat-form-field>
   } @else {
     <mat-form-field appearance="outline">
-      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-date">Initial Date</mat-label>
+      <mat-label i18n="@@admin-core.application.filters.date-picker.initial-date">Initial date</mat-label>
       <input matInput [matDatepicker]="dp3" formControlName="initialDate" />
       <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
       <mat-datepicker #dp3></mat-datepicker>
