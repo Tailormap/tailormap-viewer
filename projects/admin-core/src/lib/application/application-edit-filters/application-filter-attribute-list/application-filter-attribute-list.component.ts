@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
-import { AttributeTypeHelper, FilterToolEnum } from '@tailormap-viewer/api';
+import { AttributeTypeHelper, FilterToolEnum, AttributeType } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-filter-attribute-list',
@@ -72,6 +72,11 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
             .filter(att => {
               if (filterTool === FilterToolEnum.SLIDER) {
                 return AttributeTypeHelper.isNumericType(att.type);
+              }
+              if (filterTool === FilterToolEnum.SWITCH) {
+                return !AttributeTypeHelper.isGeometryType(att.type)
+                  && att.type !== AttributeType.DATE
+                  && att.type !== AttributeType.TIMESTAMP;
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
