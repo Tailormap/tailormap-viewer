@@ -2,3 +2,14 @@
   margin-top: 8px;
   margin-bottom: 18px;
 }
+
+.range-inputs {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.range-separator {
+  margin: 0 4px;
+  align-self: center;
+}
