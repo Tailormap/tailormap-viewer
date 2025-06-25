@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, SwitchFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
+  SliderFilterModel, SwitchFilterModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
@@ -94,7 +95,15 @@ export class EditAttributeFiltersComponent {
   }
 
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
+    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
+      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
+      return `${filter.attribute} ${filter.condition}`;
+    }
+    const formattedValues = filter.value.map(value => {
+      const num = Number(value);
+      return isNaN(num) ? value : num.toPrecision(5);
+    });
+    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {

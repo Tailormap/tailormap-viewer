@@ -45,7 +45,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
-    label: $localize`:@@admin-core.application.filters.slider:Slider`,
+    label: $localize`:@@admin-core.application.filters.numeric:Numeric`,
     value: FilterToolEnum.SLIDER,
   }, {
     label: $localize`:@@admin-core.application.filters.switch:Switch`,
