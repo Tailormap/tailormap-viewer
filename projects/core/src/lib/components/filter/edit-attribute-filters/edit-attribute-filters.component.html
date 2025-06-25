@@ -25,6 +25,18 @@
           </div>
         </div>
       }
+      @if (getSwitchFilterConfiguration(filter); as switchFilterConfig) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-switch-filter-title">
+            {{ filter.attribute }}
+          </div>
+          <div class="editable-switch-filter-content">
+            <tm-switch-filter
+              [switchFilterConfiguration]="switchFilterConfig"
+              (valueChange)="updateSwitchFilterValue($event, filter)"></tm-switch-filter>
+          </div>
+        </div>
+      }
     </div>
   }
 </mat-expansion-panel>

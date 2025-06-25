@@ -806,6 +806,14 @@
         <source>Summary</source>
         <target>Zusammenfassung</target>
       </trans-unit>
+      <trans-unit id="core.filter.switch-filter.false" datatype="html">
+        <source>False</source>
+        <target>Unwahr</target>
+      </trans-unit>
+      <trans-unit id="core.filter.switch-filter.true" datatype="html">
+        <source>True</source>
+        <target>Wahr</target>
+      </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
         <target>Bis</target>
@@ -1029,6 +1037,7 @@
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
         <target>Auf diese Ebene wird ein Filter angewendet</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>

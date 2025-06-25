@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { AttributeFilterModel, CheckboxFilterModel, FilterToolEnum, SliderFilterModel } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, AttributeType, SwitchFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel,
+} from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
 
@@ -39,6 +41,13 @@ export class EditAttributeFiltersComponent {
         initiallySelected: filter.value.includes(valueSettings.value),
       })),
     };
+  }
+
+  public getSwitchFilterConfiguration(filter: AttributeFilterModel): SwitchFilterModel | null {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
+      return null;
+    }
+    return filter.editConfiguration;
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
@@ -83,4 +92,25 @@ export class EditAttributeFiltersComponent {
     return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filters.and: and `)}`;
   }
 
+  public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
+    if (filter.attributeType === AttributeType.BOOLEAN) {
+      const condition = change ? FilterConditionEnum.BOOLEAN_TRUE_KEY : FilterConditionEnum.BOOLEAN_FALSE_KEY;
+      const newFilter: AttributeFilterModel = {
+        ...filter,
+        condition,
+      };
+      if (this.filterGroupId()) {
+        this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
+      }
+    } else if (filter.editConfiguration?.filterTool === FilterToolEnum.SWITCH) {
+      const newValue = change ? filter.editConfiguration.value1 : filter.editConfiguration.value2;
+      const newFilter: AttributeFilterModel = {
+        ...filter,
+        value: [newValue || ''],
+      };
+      if (this.filterGroupId()) {
+        this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
+      }
+    }
+  }
 }
