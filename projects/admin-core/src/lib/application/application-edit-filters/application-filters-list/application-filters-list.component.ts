@@ -35,7 +35,7 @@ export class ApplicationFiltersListComponent implements OnDestroy {
     if (attributeFilter.editConfiguration) {
       const filterTool = attributeFilter.editConfiguration.filterTool;
       if (filterTool === FilterToolEnum.SLIDER) {
-        return $localize`:@@admin-core.application.filters.slider:Slider`;
+        return $localize`:@@admin-core.application.filters.numeric:Numeric`;
       } else if (filterTool === FilterToolEnum.CHECKBOX) {
         return $localize`:@@admin-core.application.filters.checkbox:Checkbox`;
       } else if (filterTool === FilterToolEnum.SWITCH) {
