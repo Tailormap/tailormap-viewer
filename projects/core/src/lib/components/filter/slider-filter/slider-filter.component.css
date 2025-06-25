@@ -9,6 +9,10 @@
   gap: 8px;
 }
 
+.single-input {
+  display: flex;
+}
+
 .range-separator {
   margin: 0 4px;
   align-self: center;

@@ -42,6 +42,9 @@ export class SliderComponent implements ControlValueAccessor {
     }
   }
 
+  @Input()
+  public displayLabels = true;
+
   @Output()
   public valueChange = new EventEmitter<number>();
 

@@ -21,6 +21,8 @@ export class SliderFilterComponent implements OnInit {
   public initialUpperValue: number | null = null;
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
+  public static readonly MAX_PRECISION = 5;
+  public displayWith: ((value: number) => string) = (value: number) => value.toPrecision(SliderFilterComponent.MAX_PRECISION);
 
   @Input()
   public set sliderFilterConfiguration(config: SliderFilterModel) {
@@ -71,11 +73,14 @@ export class SliderFilterComponent implements OnInit {
   }
 
   public changeValue(value: number) {
-    this.viewerSliderFilterForm.patchValue({ filterValue: value }, { emitEvent: true });
+    this.viewerSliderFilterForm.patchValue({ filterValue: Number(value.toPrecision(SliderFilterComponent.MAX_PRECISION)) }, { emitEvent: true });
   }
 
   public changeBetweenValues($event: {lower: number; upper: number}) {
-    this.viewerSliderFilterForm.patchValue({ lowerValue: $event.lower, upperValue: $event.upper }, { emitEvent: true });
+    this.viewerSliderFilterForm.patchValue({
+      lowerValue: Number($event.lower.toPrecision(SliderFilterComponent.MAX_PRECISION)),
+      upperValue: Number($event.upper.toPrecision(SliderFilterComponent.MAX_PRECISION)),
+    }, { emitEvent: true });
   }
 
 }
