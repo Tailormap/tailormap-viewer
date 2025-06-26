@@ -198,6 +198,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',
       [DrawingFeatureTypeEnum.STAR]: 'star',
+      [DrawingFeatureTypeEnum.IMAGE]: 'point',
     };
     return dict[type];
   }

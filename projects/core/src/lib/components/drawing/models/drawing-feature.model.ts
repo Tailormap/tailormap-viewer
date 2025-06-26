@@ -23,6 +23,9 @@ export enum LabelStyleEnum {
 }
 
 export interface DrawingFeatureStyleModel {
+  // this is (must be) fully qualified url to a marker image
+  markerImage?: string;
+  description?: string;
   marker?: MarkerType;
   markerSize?: number;
   markerFillColor?: string;
