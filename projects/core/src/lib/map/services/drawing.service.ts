@@ -240,6 +240,7 @@ export class DrawingService {
       [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',
       [DrawingFeatureTypeEnum.STAR]: 'star',
+      [DrawingFeatureTypeEnum.IMAGE]: 'point',
     };
     return dict[type];
   }
