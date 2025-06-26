@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter,
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
+  UpdateDatePickerFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -27,7 +28,9 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private maximumUniqueValue: number | null = null;
 
   @Input()
-  public set sliderFilter(configuration: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel  | null) {
+  public set sliderFilter(
+    configuration: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+  ) {
     if (configuration && configuration.filterTool === FilterToolEnum.SLIDER) {
       this.sliderFilterForm.patchValue({
         condition: configuration.condition,

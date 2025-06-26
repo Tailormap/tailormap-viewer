@@ -242,6 +242,22 @@
         <source>Create new filter</source>
         <target>Neuen Filter erstellen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
+        <source>Date Picker</source>
+        <target>Datumsauswahl</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
+        <source>Initial date</source>
+        <target>Startdatum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-from" datatype="html">
+        <source>Initial lower date</source>
+        <target>Startdatum von</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
+        <source>Initial upper date</source>
+        <target>Startdatum bis</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
         <target>Bestehenden Filter bearbeiten</target>

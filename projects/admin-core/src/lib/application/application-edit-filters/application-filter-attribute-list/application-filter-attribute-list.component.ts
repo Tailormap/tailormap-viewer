@@ -78,6 +78,9 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
                   && att.type !== AttributeType.DATE
                   && att.type !== AttributeType.TIMESTAMP;
               }
+              if (filterTool === FilterToolEnum.DATE_PICKER) {
+                return att.type === AttributeType.DATE || att.type === AttributeType.TIMESTAMP;
+              }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
             .map(att => ({

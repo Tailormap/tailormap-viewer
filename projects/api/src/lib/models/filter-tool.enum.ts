@@ -3,4 +3,5 @@ export enum FilterToolEnum {
   CHECKBOX = 'CHECKBOX',
   SLIDER = 'SLIDER',
   SWITCH = 'SWITCH',
+  DATE_PICKER = 'DATE_PICKER',
 }
