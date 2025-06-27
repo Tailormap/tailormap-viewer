@@ -2,7 +2,7 @@ ARG VERSION=snapshot
 ARG API_VERSION=snapshot
 
 # Note when updating this version also update the version in the workflow files
-FROM node:22.16.0 AS builder
+FROM node:22.17.0 AS builder
 
 ARG BASE_HREF=/
 
