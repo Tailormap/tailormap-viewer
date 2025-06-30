@@ -86,4 +86,5 @@ export interface TailormapApiV1ServiceModel {
     start?: number;
   }): Observable<SearchResponseModel>;
 
+  getLatestUpload$(category: string): Observable<any>;
 }

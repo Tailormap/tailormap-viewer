@@ -13,7 +13,7 @@ import {
   getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
-import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -100,4 +100,39 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of({ start: 0, documents: [], maxScore: 0, total: 0 });
   }
 
+  public getLatestUpload$(category: string): Observable<any> {
+    switch (category) {
+      case 'drawing-style':
+        return of({
+          styles: [{
+            'type': 'IMAGE', 'style': {
+              'markerImage': 'https://snapshot.tailormap.nl/api/uploads/drawing-style-image/07d2f7aa-6eb1-442a-822d-896514a9bc0d/drinkwater.svg',
+              'description': 'Drinkwater',
+              'marker': 'circle',
+              'markerSize': 11,
+              'markerRotation': 0,
+              'markerFillColor': 'rgb(0, 136, 85)',
+              'markerStrokeColor': 'rgb(255, 255, 255)',
+              'markerStrokeWidth': 1,
+              'label': '',
+              'labelSize': 8,
+              'labelColor': 'rgb(0, 0, 0)',
+              'labelOutlineColor': 'rgb(255, 255, 255)',
+              'fillOpacity': 30,
+              'strokeColor': 'rgb(98, 54, 255)',
+              'strokeWidth': 3,
+              'strokeOpacity': 100,
+              'fillColor': 'rgb(98, 54, 255)',
+            },
+          }],
+        });
+      default:
+        // return a 404 error by default
+        return of(new HttpErrorResponse({
+          error: '{"message":"Not Found"}',
+          status: HttpStatusCode.NotFound,
+          statusText: 'Not Found',
+        }));
+    }
+  }
 }
