@@ -3,7 +3,7 @@ import { DrawingStylesService } from './drawing-styles.service';
 import { TAILORMAP_API_V1_SERVICE } from './tailormap-api-v1.service.injection-token';
 import { DrawingFeatureStyleModel } from '../../../../core/src/lib/components/drawing/models/drawing-feature.model';
 import { TailormapApiV1MockService } from './tailormap-api-v1-mock.service';
-import { of } from 'rxjs';
+import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 describe('DrawingStylesService', () => {
@@ -20,7 +20,7 @@ describe('DrawingStylesService', () => {
   });
 
   test('should return drawing styles from the mock service', (done) => {
-    service.getDrawingStyle$().subscribe((styles: DrawingFeatureStyleModel[]) => {
+    service.getDrawingStyles$().subscribe((styles: DrawingFeatureStyleModel[]) => {
       expect(Array.isArray(styles)).toBe(true);
       expect(styles.length).toBeGreaterThan(0);
       expect(styles[0]).toHaveProperty('type', 'IMAGE');
@@ -33,13 +33,13 @@ describe('DrawingStylesService', () => {
     const mockService = TestBed.inject(TAILORMAP_API_V1_SERVICE);
     jest.spyOn(mockService, 'getLatestUpload$')
       .mockReturnValue(
-        of(new HttpErrorResponse({
+        throwError(()=>new HttpErrorResponse({
           status: 404,
           statusText: 'Not Found',
         }),
       ));
 
-    service.getDrawingStyle$().subscribe((styles: DrawingFeatureStyleModel[]) => {
+    service.getDrawingStyles$().subscribe((styles: DrawingFeatureStyleModel[]) => {
       expect(styles).toEqual([]);
       done();
     });

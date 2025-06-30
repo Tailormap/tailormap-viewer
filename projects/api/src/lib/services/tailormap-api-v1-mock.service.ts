@@ -3,7 +3,7 @@ import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
   SearchResponseModel,
 } from '../models';
-import { delay, Observable, of } from 'rxjs';
+import { delay, Observable, of, throwError } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
@@ -128,8 +128,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         });
       default:
         // return a 404 error by default
-        return of(new HttpErrorResponse({
-          error: '{"message":"Not Found"}',
+        return throwError(() => new HttpErrorResponse({
           status: HttpStatusCode.NotFound,
           statusText: 'Not Found',
         }));
