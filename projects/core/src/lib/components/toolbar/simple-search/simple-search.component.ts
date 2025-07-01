@@ -1,4 +1,4 @@
-import { afterRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
@@ -45,7 +45,7 @@ export class SimpleSearchComponent implements OnInit {
     private mapService: MapService,
     private destroyRef: DestroyRef,
   ) {
-    afterRender(() => {
+    afterEveryRender(() => {
       // This is a bit of a hack, since we cannot define a header or something like that for an Autocomplete component
       // We manually move the search summary up to the panel itself, making the list scrollable, without the summary
       if (this.isPanelOpen) {
