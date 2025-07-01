@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
-  SliderFilterModel, SwitchFilterModel,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
+  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'tm-edit-attribute-filter',
@@ -50,6 +51,20 @@ export class EditAttributeFiltersComponent {
       return null;
     }
     return filter.editConfiguration;
+  }
+
+  public getDatePickerFilterConfiguration(filter: AttributeFilterModel): DatePickerFilterModel | null {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DATE_PICKER) {
+      return null;
+    }
+    const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
+    if (editConfiguration.initialDate) {
+      editConfiguration.initialDate = DateTime.fromISO(filter.value[0]);
+    } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
+      editConfiguration.initialLowerDate = DateTime.fromISO(filter.value[0]);
+      editConfiguration.initialUpperDate = DateTime.fromISO(filter.value[1]);
+    }
+    return editConfiguration;
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
@@ -127,4 +142,25 @@ export class EditAttributeFiltersComponent {
       }
     }
   }
+
+  public updateDateFilterValue($event: DateTime, filter: AttributeFilterModel) {
+    const newFilter: AttributeFilterModel = {
+      ...filter,
+      value: [$event.toISODate() ?? ''],
+    };
+    if (this.filterGroupId()) {
+      this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
+    }
+  }
+
+  public updateBetweenDateFilterValues($event: { lower: DateTime; upper: DateTime }, filter: AttributeFilterModel) {
+    const newFilter: AttributeFilterModel = {
+      ...filter,
+      value: [ $event.lower.toISODate() ?? '', $event.upper.toISODate() ?? '' ],
+    };
+    if (this.filterGroupId()) {
+      this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
+    }
+  }
+
 }

@@ -10,4 +10,5 @@ export enum DrawingFeatureTypeEnum {
   RECTANGLE_SPECIFIED_SIZE = 'RECTANGLE_SPECIFIED_SIZE',
   SQUARE = 'SQUARE',
   STAR = 'STAR',
+  IMAGE = 'IMAGE',
 }

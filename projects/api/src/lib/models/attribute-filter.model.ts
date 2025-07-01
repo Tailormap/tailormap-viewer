@@ -5,6 +5,7 @@ import { BaseFilterModel } from './base-filter.model';
 import { SliderFilterModel } from './slider-filter.model';
 import { CheckboxFilterModel } from './checkbox-filter.model';
 import { SwitchFilterModel } from './switch-filter.model';
+import { DatePickerFilterModel } from './date-picker-filter.model';
 
 export interface AttributeFilterModel extends BaseFilterModel {
   attribute: string;
@@ -14,5 +15,5 @@ export interface AttributeFilterModel extends BaseFilterModel {
   caseSensitive: boolean;
   value: string[];
   type: FilterTypeEnum.ATTRIBUTE;
-  editConfiguration?: SliderFilterModel | CheckboxFilterModel | SwitchFilterModel;
+  editConfiguration?: SliderFilterModel | CheckboxFilterModel | SwitchFilterModel | DatePickerFilterModel;
 }

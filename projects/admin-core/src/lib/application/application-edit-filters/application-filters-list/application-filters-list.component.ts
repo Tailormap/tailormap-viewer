@@ -40,6 +40,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
         return $localize`:@@admin-core.application.filters.checkbox:Checkbox`;
       } else if (filterTool === FilterToolEnum.SWITCH) {
         return $localize`:@@admin-core.application.filters.switch:Switch`;
+      } else if (filterTool === FilterToolEnum.DATE_PICKER) {
+        return $localize`:@@admin-core.application.filters.date-picker:Date Picker`;
       }
     }
     return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === attributeFilter.condition)?.label || '';

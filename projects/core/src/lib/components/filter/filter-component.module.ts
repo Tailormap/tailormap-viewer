@@ -23,6 +23,7 @@ import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-att
 import { SliderFilterComponent } from './slider-filter/slider-filter.component';
 import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
 import { SwitchFilterComponent } from './switch-filter/switch-filter.component';
+import { DatePickerFilterComponent } from './date-picker-filter/date-picker-filter.component';
 
 
 
@@ -42,6 +43,7 @@ import { SwitchFilterComponent } from './switch-filter/switch-filter.component';
     SliderFilterComponent,
     CheckboxFilterComponent,
     SwitchFilterComponent,
+    DatePickerFilterComponent,
   ],
   imports: [
     CommonModule,
