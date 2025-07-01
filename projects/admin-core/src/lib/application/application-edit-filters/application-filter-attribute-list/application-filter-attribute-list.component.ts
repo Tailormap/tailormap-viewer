@@ -27,23 +27,21 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public set filterTool(filterTool: FilterToolEnum | null) {
     if (filterTool) {
       this.filterToolSubject$.next(filterTool);
-      this.selectedSubject$.next('');
     }
   }
 
   @Output()
   public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
 
-  public filter = new FormControl('');
+  public filter = new FormControl<string | AttributeDescriptorModel>('');
   public selectedAttributeControl = new FormControl('');
 
   private attributeFilter$ = new BehaviorSubject<string | null>(null);
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
-  private selectedSubject$ = new BehaviorSubject<string>('');
   private filterToolSubject$ = new BehaviorSubject<FilterToolEnum>(FilterToolEnum.PRESET_STATIC);
 
   public featureType$ = this.featureTypeSubject$.asObservable();
-  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
+  public attributes$: Observable<Array<AttributeDescriptorModel>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
 
@@ -56,16 +54,16 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
     this.filter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
-        this.attributeFilter$.next(value);
+        const valueString = typeof value === 'string' ? value : '';
+        this.attributeFilter$.next(valueString);
       });
     this.attributes$ = combineLatest([
       this.featureTypeSubject$.asObservable(),
-      this.selectedSubject$.asObservable(),
       this.attributeFilter$.asObservable().pipe(distinctUntilChanged()),
       this.filterToolSubject$.asObservable(),
     ])
       .pipe(
-        map(([ featureType, selectedAttribute, filterStr, filterTool ]) => {
+        map(([ featureType, filterStr, filterTool ]) => {
           if (!featureType) {
             return [];
           }
@@ -83,11 +81,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
                 return att.type === AttributeType.DATE || att.type === AttributeType.TIMESTAMP;
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
-            })
-            .map(att => ({
-              ...att,
-              selected: selectedAttribute === att.name,
-            }));
+            });
           if (filterStr) {
             return FilterHelper.filterByTerm(attributes, filterStr, a => a.name);
           }
@@ -98,7 +92,10 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
 
   public attributeClicked(attribute: AttributeDescriptorModel) {
     this.selectAttribute.emit(attribute);
-    this.selectedSubject$.next(attribute.name);
+  }
+
+  public displayFn(attribute: AttributeDescriptorModel): string {
+    return attribute ? attribute.name : '';
   }
 
 }

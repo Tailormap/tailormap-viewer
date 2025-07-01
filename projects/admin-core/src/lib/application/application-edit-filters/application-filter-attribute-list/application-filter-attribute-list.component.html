@@ -14,11 +14,10 @@
         placeholder="Filter attributes"
         i18n-placeholder="@@admin-core.common.filter-attributes"
         [formControl]="filter"
-        [value]="filterTerm$ | async"
         [matAutocomplete]="auto"/>
-      <mat-autocomplete #auto="matAutocomplete">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         @for (attribute of attributes$ | async; track attribute) {
-          <mat-option [value]="attribute.name" (click)="attributeClicked(attribute)" class="attribute-option">
+          <mat-option [value]="attribute" (click)="attributeClicked(attribute)" class="attribute-option">
             {{ attribute.name }}
           </mat-option>
         }
