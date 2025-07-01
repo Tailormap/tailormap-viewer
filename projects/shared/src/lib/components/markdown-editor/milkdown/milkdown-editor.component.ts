@@ -5,7 +5,7 @@ import {
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/core';
-import type { ImageBlockFeatureConfig } from '@milkdown/crepe/src/feature/image-block';
+import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '../../snackbar-message';
 import { map } from 'rxjs/operators';
