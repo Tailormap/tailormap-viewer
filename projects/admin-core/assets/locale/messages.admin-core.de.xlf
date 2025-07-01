@@ -278,6 +278,10 @@
         <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
         <target> Filter für <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+        <target>Numerisch</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
         <target>Vorgabe</target>
@@ -306,6 +310,14 @@
         <source>Initial Value</source>
         <target>Anfangswert</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+        <target>Eingabefeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+        <target>Eingabemodus</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
         <source>Maximum Value</source>
         <target>Maximalwert</target>
@@ -317,6 +329,18 @@
       <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
         <source>Slider range</source>
         <target>Schiebereglerbereich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+        <target>Eingabemodus auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+        <target>Schieberegler</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
+        <target>Schieberegler und Eingabefeld</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>

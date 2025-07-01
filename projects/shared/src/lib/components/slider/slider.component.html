@@ -3,7 +3,7 @@
               [max]="max"
               [min]="min"
               [step]="step"
-              [discrete]="true"
+              [discrete]="displayLabels"
               [displayWith]="displayWith"
               [class.label-down]="labelsOverlap()">
     <input matSliderStartThumb [value]="lowerValue" (valueChange)="onLowerValueChange($event)">
@@ -13,7 +13,7 @@
   <mat-slider [max]="max"
               [min]="min"
               [step]="step"
-              [discrete]="true"
+              [discrete]="displayLabels"
               [displayWith]="displayWith">
     <input matSliderThumb [value]="value" (valueChange)="onValueChange($event)">
   </mat-slider>
