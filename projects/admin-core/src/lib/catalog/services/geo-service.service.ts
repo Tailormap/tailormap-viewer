@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApiResponseHelper,
@@ -34,15 +34,13 @@ export interface DeleteGeoServiceResponse {
   providedIn: 'root',
 })
 export class GeoServiceService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private catalogService = inject(CatalogService);
+  private applicationService = inject(ApplicationService);
+  private sseService = inject(AdminSseService);
 
-  constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private catalogService: CatalogService,
-    private applicationService: ApplicationService,
-    private sseService: AdminSseService,
-  ) { }
 
   public listenForGeoServiceChanges() {
     this.sseService.listenForEvents$<GeoServiceWithLayersModel>('GeoService')

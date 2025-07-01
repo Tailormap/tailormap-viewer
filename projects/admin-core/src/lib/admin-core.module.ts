@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -25,12 +25,12 @@ import { SearchIndexModule } from './search-index/search-index.module';
   ],
 })
 export class AdminCoreModule {
-  constructor(
-    matIconRegistry: MatIconRegistry,
-    domSanitizer: DomSanitizer,
-    iconService: IconService,
-    authenticatedUserService: AuthenticatedUserService,
-  ) {
+  constructor() {
+    const matIconRegistry = inject(MatIconRegistry);
+    const domSanitizer = inject(DomSanitizer);
+    const iconService = inject(IconService);
+    const authenticatedUserService = inject(AuthenticatedUserService);
+
     const adminIcons = [{
       folder: 'admin',
       icons: [

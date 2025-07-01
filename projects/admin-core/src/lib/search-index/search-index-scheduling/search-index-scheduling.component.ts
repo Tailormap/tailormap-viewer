@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchIndexModel, TaskSchedule } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,6 +13,8 @@ import { FormHelper } from '../../helpers/form.helper';
   standalone: false,
 })
 export class SearchIndexSchedulingComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public taskSchedule: TaskSchedule | undefined = undefined;
 
@@ -35,10 +37,6 @@ export class SearchIndexSchedulingComponent implements OnInit {
     { cronExpression: '0 0 18 ? * MON *', viewValue: $localize `:@@admin-core.search-index.schedule.every-week:Every week Monday at 18:00` },
     { cronExpression: '0 0 18 1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-month:Every first day of the month at 18:00` },
   ];
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) { }
 
   public scheduleForm = new FormGroup({
     cronExpression: new FormControl('', { nonNullable: true }),

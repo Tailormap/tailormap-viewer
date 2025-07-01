@@ -1,4 +1,4 @@
-import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
+import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal, inject } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
@@ -31,6 +31,13 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
   standalone: false,
 })
 export class TocComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private treeService = inject<TreeService<AppLayerModel>>(TreeService);
+  private treeDragDropService = inject(TreeDragDropService);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+  private ngZone = inject(NgZone);
+
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
@@ -47,15 +54,6 @@ export class TocComponent implements OnInit, OnDestroy {
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
   public filteredLayerIds: Signal<string[]> = signal([]);
-
-  constructor(
-    private store$: Store,
-    private treeService: TreeService<AppLayerModel>,
-    private treeDragDropService: TreeDragDropService,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-    private ngZone: NgZone,
-  ) {}
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);

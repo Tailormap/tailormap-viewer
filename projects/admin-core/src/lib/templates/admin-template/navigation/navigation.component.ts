@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Routes } from '../../../routes';
 import { Observable, of, take } from 'rxjs';
 import { ApplicationFeature, ApplicationFeatureSwitchService, SecurityModel } from '@tailormap-viewer/api';
@@ -25,6 +25,11 @@ interface ButtonProps {
   standalone: false,
 })
 export class NavigationComponent implements OnInit {
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+
 
   public userDetails$: Observable<SecurityModel | null> = of(null);
 
@@ -106,13 +111,6 @@ export class NavigationComponent implements OnInit {
       requireAdmin: true,
     },
   ];
-
-  constructor(
-    private router: Router,
-    private dialog: MatDialog,
-    private authenticatedUserService: AuthenticatedUserService,
-    private applicationFeatureSwitchService: ApplicationFeatureSwitchService,
-  ) {}
 
   public ngOnInit(): void {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();

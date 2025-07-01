@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarkdownEditorComponent, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
@@ -95,11 +95,11 @@ import { ProjectionAvailabilityComponent } from './projection-availability/proje
   ],
 })
 export class CatalogModule {
-  constructor(
-    geoServiceService: GeoServiceService,
-    featureSourceService: FeatureSourceService,
-    catalogService: CatalogService,
-  ) {
+  constructor() {
+    const geoServiceService = inject(GeoServiceService);
+    const featureSourceService = inject(FeatureSourceService);
+    const catalogService = inject(CatalogService);
+
     geoServiceService.listenForGeoServiceChanges();
     featureSourceService.listenForFeatureSourceChanges();
     catalogService.listenForCatalogChanges();

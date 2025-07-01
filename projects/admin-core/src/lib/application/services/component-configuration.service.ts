@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { updateApplicationComponentConfig } from '../state/application.actions';
@@ -10,11 +10,8 @@ import { ComponentConfigHelper } from '../helpers/component-config.helper';
   providedIn: 'root',
 })
 export class ComponentConfigurationService {
+  private store$ = inject(Store);
 
-  constructor(
-    private store$: Store,
-  ) {
-  }
 
   public updateConfigForKey<C extends ComponentBaseConfigModel>(
     type: string | undefined,

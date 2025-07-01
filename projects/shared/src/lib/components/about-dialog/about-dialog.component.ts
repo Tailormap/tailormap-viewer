@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, take, tap } from 'rxjs';
 import { VersionModel } from './version.model';
@@ -12,6 +12,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   standalone: false,
 })
 export class AboutDialogComponent {
+  private httpClient = inject(HttpClient);
+  public dialogRef = inject<MatDialogRef<AboutDialogComponent>>(MatDialogRef);
+
 
   public static VERSIONS_JSON_URL = '/version.json';
 
@@ -20,10 +23,7 @@ export class AboutDialogComponent {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(
-    private httpClient: HttpClient,
-    public dialogRef: MatDialogRef<AboutDialogComponent>,
-  ) {
+  constructor() {
     this.loadingSubject.next(true);
     this.version$ = this.httpClient.get<VersionModel>(AboutDialogComponent.VERSIONS_JSON_URL)
       .pipe(

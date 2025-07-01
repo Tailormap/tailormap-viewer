@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Optional, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
 
@@ -9,6 +9,8 @@ import { OverlayRef } from '../../services/overlay/overlay-ref';
   standalone: false,
 })
 export class IconPickerComponent {
+  private popper = inject(PopoverService);
+
 
   @ViewChild('iconPickerButton', { static: false, read: ElementRef })
   private iconPickerButton: ElementRef<HTMLButtonElement> | undefined;
@@ -34,8 +36,6 @@ export class IconPickerComponent {
   public pickerOpen = false;
 
   private popoverRef: OverlayRef | undefined;
-
-  constructor(private popper: PopoverService) {}
 
   public openPicker() {
     if (this.popoverRef) {

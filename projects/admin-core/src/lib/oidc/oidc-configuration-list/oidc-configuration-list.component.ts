@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -18,6 +18,8 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+
 
   public filter = new FormControl('');
   public filterTerm$ = this.store$.select(selectOIDCConfigurationListFilter);
@@ -26,10 +28,6 @@ export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
   public errorMessage$: Observable<string | undefined> = of(undefined);
 
   private destroyed = new Subject();
-
-  constructor(
-    private store$: Store,
-  ) {}
 
   public ngOnInit(): void {
     this.filter.valueChanges

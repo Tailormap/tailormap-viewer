@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { AdditionalPropertyModel, GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
@@ -15,6 +15,10 @@ import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration
   standalone: false,
 })
 export class GroupFormComponent implements OnInit, OnDestroy {
+  private adminFieldRegistryService = inject(AdminFieldRegistrationService);
+  private groupDetailsService = inject(GroupService);
+  private oidcConfigurationService = inject(OIDCConfigurationService);
+
 
   public groupForm = new FormGroup({
     name: new FormControl<string>('', {
@@ -62,11 +66,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   private groupSubject = new BehaviorSubject<GroupModel | null>(null);
   public additionalProperties: AdditionalPropertyModel[] = [];
 
-  constructor(
-    private adminFieldRegistryService: AdminFieldRegistrationService,
-    private groupDetailsService: GroupService,
-    private oidcConfigurationService: OIDCConfigurationService,
-  ) {
+  constructor() {
     this.groups$ = this.groupDetailsService.getGroups$();
   }
 

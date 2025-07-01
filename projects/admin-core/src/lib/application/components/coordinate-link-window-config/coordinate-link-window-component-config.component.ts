@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@angular/core';
 import { BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel } from '@tailormap-viewer/api';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,6 +24,9 @@ type UrlFormType = FormGroup<{
   standalone: false,
 })
 export class CoordinateLinkWindowComponentConfigComponent implements ConfigurationComponentModel<CoordinateLinkWindowConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -54,10 +57,7 @@ export class CoordinateLinkWindowComponentConfigComponent implements Configurati
     ...AdminProjectionsHelper.projections.map(p => ({ code: p.code, label: p.label })),
   ];
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(250))
       .subscribe(() => {

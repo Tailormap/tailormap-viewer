@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -21,6 +21,10 @@ import { take } from 'rxjs/operators';
   standalone: false,
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
+  private mapService = inject(MapService);
+  private featureInfoService = inject(FeatureInfoService);
+  private store$ = inject(Store);
+
 
   private destroyed = new Subject();
 
@@ -29,12 +33,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.feature-info.error-loading-feature-info:Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.feature-info.no-features-found:No features found`;
-
-  constructor(
-    private mapService: MapService,
-    private featureInfoService: FeatureInfoService,
-    private store$: Store,
-  ) { }
 
   public ngOnInit(): void {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })

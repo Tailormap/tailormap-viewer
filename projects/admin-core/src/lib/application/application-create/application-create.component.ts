@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Router } from '@angular/router';
@@ -13,6 +13,10 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
   standalone: false,
 })
 export class ApplicationCreateComponent implements OnDestroy {
+  private applicationService = inject(ApplicationService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
@@ -21,12 +25,6 @@ export class ApplicationCreateComponent implements OnDestroy {
   public applicationCreateModel: UpdateDraftApplicationModel | null = null;
 
   public formValid: boolean = true;
-
-  constructor(
-    private applicationService: ApplicationService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

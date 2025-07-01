@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
@@ -12,6 +12,8 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
   standalone: false,
 })
 export class DrawingObjectsListComponent {
+  private store$ = inject(Store);
+
 
   @Input()
   public drawingLayerId = '';
@@ -26,12 +28,6 @@ export class DrawingObjectsListComponent {
     return features.map(f => ({ ...f, selected: f.__fid === selectedFeature?.__fid }));
   }));
   public editingLabelForFeatureFid: string | null = null;
-
-  constructor(
-    private store$: Store,
-  ) {
-    // TODO: scroll to selected feature -- ViewportScroller or scrollIntoView() don't work somehow
-  }
 
   public selectFeature(fid: string) {
     this.store$.dispatch(setSelectedFeature({ fid }));

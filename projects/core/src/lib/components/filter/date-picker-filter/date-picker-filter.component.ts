@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
 import { DateTime } from 'luxon';
 import { DatePickerFilterModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -13,6 +13,8 @@ import { debounceTime } from 'rxjs/operators';
   standalone: false,
 })
 export class DatePickerFilterComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public isBetweenCondition: boolean = false;
 
@@ -37,8 +39,6 @@ export class DatePickerFilterComponent implements OnInit {
     lowerDate: new FormControl<DateTime | null>(null),
     upperDate: new FormControl<DateTime | null>(null),
   });
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public ngOnInit(): void {
     this.datePickerFilterForm.valueChanges

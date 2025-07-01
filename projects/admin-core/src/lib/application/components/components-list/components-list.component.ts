@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { ConfigurationComponentRegistryService } from '../../services/configuration-component-registry.service';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,10 @@ import { selectDisabledComponentsForSelectedApplication } from '../../state/appl
   standalone: false,
 })
 export class ComponentsListComponent implements OnInit, OnDestroy {
+  private configurationComponentRegistryService = inject(ConfigurationComponentRegistryService);
+  private store$ = inject(Store);
+  private cdr = inject(ChangeDetectorRef);
+
 
   public listOfComponents$: Observable<Array<{ type: string; label: string }>>;
 
@@ -22,11 +26,7 @@ export class ComponentsListComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public disabledComponents: Set<string> = new Set();
 
-  constructor(
-    private configurationComponentRegistryService: ConfigurationComponentRegistryService,
-    private store$: Store,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.listOfComponents$ = this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()
       .pipe(
         map((components) => {

@@ -3,13 +3,7 @@ import { Overlay, OverlayConfig, OverlayRef as CdkOverlayRef } from '@angular/cd
 import {
   ComponentPortal,
 } from '@angular/cdk/portal';
-import {
-  Injectable,
-  InjectionToken,
-  Injector,
-  TemplateRef,
-  Type,
-} from '@angular/core';
+import { Injectable, InjectionToken, Injector, TemplateRef, Type, inject } from '@angular/core';
 import { OverlayRef } from './overlay-ref';
 import { OverlayComponent } from './overlay/overlay.component';
 import { OverlayContent } from './overlay-content';
@@ -20,11 +14,9 @@ export const OVERLAY_DATA = new InjectionToken<any>('OverlayData');
   providedIn: 'root',
 })
 export class OverlayService {
+  private overlay = inject(Overlay);
+  private injector = inject(Injector);
 
-  constructor(
-    private overlay: Overlay,
-    private injector: Injector,
-  ) {}
 
   public open<R = any, T = any>(
     content: TemplateRef<any> | Type<any> | string,

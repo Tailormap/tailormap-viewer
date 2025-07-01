@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as OIDCConfigurationActions from './oidc-configuration.actions';
@@ -14,6 +14,10 @@ type ErrorResponse = { error: string };
 
 @Injectable()
 export class OIDCConfigurationEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadOIDCConfigurations$ = createEffect(() => {
     return this.actions$.pipe(
@@ -40,11 +44,5 @@ export class OIDCConfigurationEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

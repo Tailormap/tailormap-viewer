@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { catchError, combineLatest, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
@@ -14,15 +14,13 @@ import { selectSearchableLayers } from '../../../map/state/map.selectors';
   providedIn: 'root',
 })
 export class SimpleSearchService {
+  private httpClient = inject(HttpClient);
+  private store$ = inject(Store);
+  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+
 
   private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
   private static readonly MAX_RESULTS = 5;
-
-  constructor(
-    private httpClient: HttpClient,
-    private store$: Store,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {}
 
   public search$(projection: string, searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel[]> {
     return combineLatest([

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BookmarkService } from '../../bookmark/bookmark.service';
 import { ApplicationBookmarkFragments } from '../application-bookmark-fragments';
@@ -30,17 +30,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmentHandlerServiceModel {
+  private store$ = inject(Store);
+  private bookmarkService = inject(BookmarkService);
+  private snackbar = inject(MatSnackBar);
+
 
   private static PART_SEPARATOR = ';';
   private static SERVICE_LAYER_SEPARATOR = '/';
   private static LAYER_SEPARATOR = ',';
-
-  constructor(
-    private store$: Store,
-    private bookmarkService: BookmarkService,
-    private snackbar: MatSnackBar,
-  ) {
-  }
 
   public updateBookmarkOnMapChanges() {
   }

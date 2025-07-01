@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, inject } from '@angular/core';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
@@ -15,6 +15,9 @@ import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.sel
   standalone: false,
 })
 export class FeatureTypeFormComponent {
+  private featureSourceService = inject(FeatureSourceService);
+  private store$ = inject(Store);
+
 
   @Input()
   public set featureType(featureType: FeatureTypeModel | null) {
@@ -45,11 +48,6 @@ export class FeatureTypeFormComponent {
   public featureTypeSettings$: Observable<FeatureTypeSettingsModel> = of({});
 
   public featureSource$: Observable<ExtendedFeatureSourceModel | undefined> = of(undefined);
-
-  constructor(
-    private featureSourceService: FeatureSourceService,
-    private store$: Store,
-  ) { }
 
   public initFeatureTypeSettings(featureType: FeatureTypeModel | null) {
     if (featureType) {

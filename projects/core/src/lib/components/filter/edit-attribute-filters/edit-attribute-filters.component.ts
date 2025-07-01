@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
   SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum,
@@ -16,11 +16,11 @@ import { DateTime } from 'luxon';
   standalone: false,
 })
 export class EditAttributeFiltersComponent {
+  private store$ = inject(Store);
+
 
   public editableFilters = input<AttributeFilterModel[]>([]);
   public filterGroupId = input<string | null>(null);
-
-  constructor(private store$: Store) { }
 
   public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;

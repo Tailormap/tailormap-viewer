@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, ChangeDetectorRef, inject } from '@angular/core';
 import { AdminFieldModel } from '../../services/admin-field-registration.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,6 +12,9 @@ import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class AdminFieldsRendererComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
 
   private _data: AdditionalPropertyModel[] | null = null;
 
@@ -47,11 +50,6 @@ export class AdminFieldsRendererComponent implements OnInit {
   public changed = new EventEmitter<AdditionalPropertyModel[]>();
 
   public formGroup = new FormGroup({});
-
-  constructor(
-    private destroyRef: DestroyRef,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) { }
 
   public ngOnInit(): void {
     this.formGroup.valueChanges

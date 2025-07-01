@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ViewerResponseModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { catchError, map, Observable, of } from 'rxjs';
 
@@ -14,13 +14,10 @@ interface LoadViewerResponse {
   providedIn: 'root',
 })
 export class LoadViewerService {
+  private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+
 
   private static LOAD_VIEWER_ERROR = $localize `:@@core.common.error-loading-viewer:Could not find or load the requested viewer`;
-
-  constructor(
-    @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
-  ) {
-  }
 
   public loadViewer$(id?: string): Observable<LoadViewerResponse> {
     return this.apiService.getViewer$(id)

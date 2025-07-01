@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { RoutePropertyHelper } from '../../pages/helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
@@ -20,11 +20,11 @@ export class AdminTemplateComponent {
   public className$: Observable<string>;
   public pageTitle$: Observable<string>;
 
-  constructor(
-    route: ActivatedRoute,
-    router: Router,
-    destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const route = inject(ActivatedRoute);
+    const router = inject(Router);
+    const destroyRef = inject(DestroyRef);
+
     this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'templateCls')
       .pipe(takeUntilDestroyed(destroyRef));
     this.pageTitle$ = RoutePropertyHelper.getPropForRoute$(router, route, 'pageTitle')

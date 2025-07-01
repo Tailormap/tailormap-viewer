@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
@@ -6,15 +6,12 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
   providedIn: 'root',
 })
 export class DialogService {
+  private layoutService = inject(ViewerLayoutService);
+
 
   private dialogCount = 0;
   private dialogs: Array<{ id: string; left: number; right: number }> = [];
   private visibleStack: string[] = [];
-
-  constructor(
-    private layoutService: ViewerLayoutService,
-  ) {
-  }
 
   public registerDialog(left: number, right: number) {
     const id = `dialog-${++this.dialogCount}`;

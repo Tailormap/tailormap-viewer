@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
@@ -21,6 +21,8 @@ import { ProjectionAvailability } from '../../application/helpers/admin-projecti
   standalone: false,
 })
 export class LayerSettingsFormComponent implements OnInit {
+  private store$ = inject(Store);
+
 
   private destroyed = new Subject();
   private _layerSettings: LayerSettingsModel | null | undefined;
@@ -118,7 +120,9 @@ export class LayerSettingsFormComponent implements OnInit {
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
   });
 
-  constructor(groupDetailsService: GroupService, private store$: Store) {
+  constructor() {
+    const groupDetailsService = inject(GroupService);
+
     this.groups$ = groupDetailsService.getGroups$();
   }
 

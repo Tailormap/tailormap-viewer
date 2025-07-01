@@ -5,9 +5,9 @@
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/common": "^19.2.2",
-    "@angular/core": "^19.2.2",
-    "cesium": "^1.116.0",
+    "@angular/common": "^20.0.5",
+    "@angular/core": "^20.0.5",
+    "cesium": "^1.130.1",
     "ol": "^10.6.1",
     "ol-ext": "^4.0.33",
     "olcs": "^2.22.1",

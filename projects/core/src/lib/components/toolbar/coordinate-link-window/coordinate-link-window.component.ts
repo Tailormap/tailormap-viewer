@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
@@ -23,6 +23,10 @@ import { isActiveToolbarTool } from '../state/toolbar.selectors';
   standalone: false,
 })
 export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+
 
   public toolActive$: Observable<boolean>;
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
@@ -30,11 +34,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
 
   public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     const config$ = this.store$.select(selectComponentsConfigForType<CoordinateLinkWindowConfigModel>(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW))
       .pipe(map(config => config?.config));
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));

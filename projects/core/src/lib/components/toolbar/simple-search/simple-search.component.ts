@@ -1,4 +1,4 @@
-import { afterRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
@@ -22,6 +22,11 @@ type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' 
   standalone: false,
 })
 export class SimpleSearchComponent implements OnInit {
+  private store$ = inject(Store);
+  private searchService = inject(SimpleSearchService);
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+
 
   private static readonly SEARCH_DEBOUNCE_TIME = 1000;
 
@@ -39,13 +44,8 @@ export class SimpleSearchComponent implements OnInit {
   private config: SimpleSearchConfigModel | undefined;
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
 
-  constructor(
-    private store$: Store,
-    private searchService: SimpleSearchService,
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
-    afterRender(() => {
+  constructor() {
+    afterEveryRender(() => {
       // This is a bit of a hack, since we cannot define a header or something like that for an Autocomplete component
       // We manually move the search summary up to the panel itself, making the list scrollable, without the summary
       if (this.isPanelOpen) {

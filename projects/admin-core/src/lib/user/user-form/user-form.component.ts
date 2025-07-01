@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { AdditionalPropertyModel, GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
@@ -17,6 +17,10 @@ import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } fr
   standalone: false,
 })
 export class UserFormComponent implements OnInit, OnDestroy {
+  private groupDetailsService = inject(GroupService);
+  private userDetailsService = inject(UserService);
+  private adminFieldRegistryService = inject(AdminFieldRegistrationService);
+
 
   public userForm = new FormGroup({
     username: new FormControl<string>('', {
@@ -81,11 +85,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private _user: UserModel | null = null;
   public additionalProperties: AdditionalPropertyModel[] = [];
 
-  constructor(
-    private groupDetailsService: GroupService,
-    private userDetailsService: UserService,
-    private adminFieldRegistryService: AdminFieldRegistrationService,
-  ) {
+  constructor() {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
 

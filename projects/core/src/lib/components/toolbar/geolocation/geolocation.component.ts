@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MapService, CoordinateHelper } from '@tailormap-viewer/map';
 import { Subject, takeUntil, take } from 'rxjs';
 import { FeatureModel } from '@tailormap-viewer/api';
@@ -13,6 +13,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   standalone: false,
 })
 export class GeolocationComponent implements OnInit, OnDestroy {
+  private mapService = inject(MapService);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+
   private destroyed = new Subject();
   private featureGeom = new Subject<FeatureModel[]>();
 
@@ -24,12 +28,6 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
   public hasFix = false;
-
-  constructor(
-    private mapService: MapService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public ngOnInit(): void {
     this.mapService.renderFeatures$('geolocation-layer', this.featureGeom.asObservable(), f => {

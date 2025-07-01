@@ -5,13 +5,18 @@ import { map, of, switchMap, take, tap } from 'rxjs';
 import { MapCursorHelper, MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { isActiveToolbarTool, selectActiveTool, selectToolbarTool, selectTools } from './toolbar.selectors';
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withLatestFrom } from 'rxjs/operators';
 
 @Injectable()
 export class ToolbarEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+
 
   public toggleTool$ = createEffect(() => {
     return this.actions$.pipe(
@@ -79,12 +84,7 @@ export class ToolbarEffects {
     );
   }, { dispatch: false });
 
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.mapService.getToolManager$()
       .pipe(
         takeUntilDestroyed(this.destroyRef),

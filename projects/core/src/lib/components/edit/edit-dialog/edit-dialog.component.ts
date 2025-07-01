@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
@@ -36,6 +36,16 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
   standalone: false,
 })
 export class EditDialogComponent {
+  private store$ = inject(Store);
+  private editMapToolService = inject(EditMapToolService);
+  private applicationLayerService = inject(ApplicationLayerService);
+  private editFeatureService = inject(EditFeatureService);
+  private destroyRef = inject(DestroyRef);
+  private featureUpdatedService = inject(FeatureUpdatedService);
+  private confirmService = inject(ConfirmDialogService);
+  private uniqueValuesService = inject(UniqueValuesService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   public dialogOpen$;
   public dialogCollapsed$;
@@ -61,17 +71,9 @@ export class EditDialogComponent {
   private clearCacheValuesAfterSave = new Set<string>();
   private closeDialogAfterAddingFeature = false;
 
-  constructor(
-    private store$: Store,
-    private editMapToolService: EditMapToolService,
-    private applicationLayerService: ApplicationLayerService,
-    private editFeatureService: EditFeatureService,
-    private destroyRef: DestroyRef,
-    private featureUpdatedService: FeatureUpdatedService,
-    private confirmService: ConfirmDialogService,
-    private uniqueValuesService: UniqueValuesService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const store$ = this.store$;
+
     this.dialogOpen$ = this.store$.select(selectEditDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectEditDialogCollapsed);
     this.loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);

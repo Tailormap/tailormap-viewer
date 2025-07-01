@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { concatMap, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -20,6 +20,10 @@ import { selectMapSettings } from '../../../map/state/map.selectors';
   standalone: false,
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private clipboard = inject(Clipboard);
+
 
   public toolActive$: Observable<boolean>;
 
@@ -37,7 +41,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   private clickLocationSubject$ = this.clickLocationSubject.asObservable();
   private crs: string = '';
 
-  constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
+  constructor() {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
     this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
       if (!isActive) {

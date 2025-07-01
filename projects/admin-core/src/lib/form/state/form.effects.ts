@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as FormsActions from './form.actions';
@@ -13,6 +13,10 @@ import { selectDraftForm, selectDraftFormId, selectDraftFormLoadStatus, selectFo
 
 @Injectable()
 export class FormEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadForms$ = createEffect(() => {
     return this.actions$.pipe(
@@ -75,11 +79,5 @@ export class FormEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

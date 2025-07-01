@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as EditActions from './edit.actions';
 import { filter, map, switchMap } from 'rxjs';
@@ -12,6 +12,10 @@ import { setEditActive } from './edit.actions';
 
 @Injectable()
 export class EditEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private featureInfoService = inject(FeatureInfoService);
+
 
   public loadEditFeatures$ = createEffect(() => {
       return this.actions$.pipe(
@@ -41,11 +45,5 @@ export class EditEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private featureInfoService: FeatureInfoService,
-  ) {}
 
 }

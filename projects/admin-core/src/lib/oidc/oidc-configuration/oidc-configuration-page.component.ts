@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged, map, Observable } from 'rxjs';
 
@@ -10,12 +10,12 @@ import { distinctUntilChanged, map, Observable } from 'rxjs';
   standalone: false,
 })
 export class OIDCConfigurationPageComponent {
+  private route = inject(ActivatedRoute);
+
 
   public className$: Observable<string>;
 
-  constructor(
-    private route: ActivatedRoute,
-  ) {
+  constructor() {
     this.className$ = this.route.url
       .pipe(
         distinctUntilChanged(),

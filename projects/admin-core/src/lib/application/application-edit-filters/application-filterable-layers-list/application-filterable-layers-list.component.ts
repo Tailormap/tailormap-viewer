@@ -1,6 +1,4 @@
-import {
-  Component, ChangeDetectionStrategy, Signal, computed, OnDestroy,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, OnDestroy, inject } from '@angular/core';
 import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { Store } from '@ngrx/store';
 import { selectApplicationSelectedFilterLayerId, selectFilterableLayersForApplication } from '../../state/application.selectors';
@@ -14,6 +12,8 @@ import { setApplicationSelectedFilterLayerId } from '../../state/application.act
   standalone: false,
 })
 export class ApplicationFilterableLayersListComponent implements OnDestroy {
+  private store$ = inject(Store);
+
 
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public selectedLayerId: Signal<string | undefined> = this.store$.selectSignal(selectApplicationSelectedFilterLayerId);
@@ -27,8 +27,6 @@ export class ApplicationFilterableLayersListComponent implements OnDestroy {
       };
     });
   });
-
-  constructor(private store$: Store) { }
 
   public setSelectedLayer(layer: GeoServiceLayerInApplicationModel) {
     if (!layer) {

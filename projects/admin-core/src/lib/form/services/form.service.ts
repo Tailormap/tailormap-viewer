@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { catchError, concatMap, filter, map, of, switchMap, take, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectDraftForm, selectDraftFormLoadStatus } from '../state/form.selectors';
@@ -13,15 +13,12 @@ import { AdminSseService, EventType } from '../../shared/services/admin-sse.serv
   providedIn: 'root',
 })
 export class FormService {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
 
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-  ) {
-  }
 
   public listenForApplicationChanges() {
     this.sseService.listenForEvents$<FormModel>('Form')

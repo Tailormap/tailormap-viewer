@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
   ExtTransformToolModel, MapService,
@@ -14,6 +14,9 @@ import { ApplicationStyleService } from '../../services/application-style.servic
 
 @Injectable()
 export class DrawingService {
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+
 
   private activeDrawingTool: DrawingFeatureTypeEnum | null = null;
   private drawingTool: DrawingToolModel | null = null;
@@ -45,10 +48,7 @@ export class DrawingService {
   private selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined;
   private toolManager: ToolManagerModel | undefined;
 
-  constructor(
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     const toolManager$ = this.mapService.getToolManager$()
       .pipe(takeUntilDestroyed(this.destroyRef));
     toolManager$.subscribe(toolManager => this.toolManager = toolManager);

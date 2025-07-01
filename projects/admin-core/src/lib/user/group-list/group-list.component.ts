@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -12,12 +12,14 @@ import { GroupService } from '../services/group.service';
   standalone: false,
 })
 export class GroupListComponent {
+  private groupDetailsService = inject(GroupService);
+
 
   public filteredGroups$: Observable<Array<GroupModel & { selected: boolean }>>;
   public groupFilter: FormControl;
   public filterString$: Observable<string>;
 
-  constructor(private groupDetailsService: GroupService) {
+  constructor() {
     this.groupFilter = new FormControl('');
     this.filterString$ = this.groupFilter.valueChanges.pipe(startWith(''));
     this.filteredGroups$ = combineLatest([

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -65,6 +65,8 @@ const defaultColors: Array<string | undefined> = [
   standalone: false,
 })
 export class ColorPickerComponent implements OnInit, OnDestroy {
+  private popper = inject(PopoverService);
+
 
   @ViewChild('colorPickerButton', { static: false, read: ElementRef })
   private colorPickerButton: ElementRef<HTMLButtonElement> | null = null;
@@ -101,9 +103,6 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
   private popoverRef: OverlayRef | undefined;
 
   private preferredWindowWidth = 515;
-
-  constructor(private popper: PopoverService) {
-  }
 
   public ngOnInit(): void {
     const validators: ValidatorFn[] = [

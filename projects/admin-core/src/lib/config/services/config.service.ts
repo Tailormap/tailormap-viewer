@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ConfigModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
@@ -9,15 +9,12 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ConfigService {
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public static DEFAULT_APPLICATION_KEY = 'default-app';
 
   private configSubject = new BehaviorSubject(new Map<string, ConfigModel>());
-
-  constructor(
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {
-  }
 
   public getConfig$(key: string): Observable<ConfigModel | null> {
     return this.configSubject.asObservable()

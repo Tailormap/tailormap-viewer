@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, inject } from '@angular/core';
 import {
   AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
   UpdateDatePickerFilterModel,
@@ -14,6 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class ApplicationCheckboxFilterFormComponent {
+  private destroyRef = inject(DestroyRef);
+
 
   public attributeValuesSettings: AttributeValueSettings[] = [];
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
@@ -55,7 +57,7 @@ export class ApplicationCheckboxFilterFormComponent {
   @Output()
   public updateCheckboxFilter = new EventEmitter<CheckboxFilterModel>();
 
-  constructor(private destroyRef: DestroyRef) {
+  constructor() {
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {

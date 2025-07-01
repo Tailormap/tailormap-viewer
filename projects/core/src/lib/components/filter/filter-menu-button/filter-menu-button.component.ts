@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,8 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class FilterMenuButtonComponent {
+  private store$ = inject(Store);
+
   public componentType = BaseComponentTypeEnum.FILTER;
   public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.filter.filtering:Filtering`));
-  constructor(private store$: Store) {}
 }

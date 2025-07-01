@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
@@ -20,6 +20,14 @@ import { GroupService } from '../../user/services/group.service';
   standalone: false,
 })
 export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private oidcConfigurationService = inject(OIDCConfigurationService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private groupService = inject(GroupService);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -29,17 +37,6 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   public draftOIDCConfigurationPristine$: Observable<boolean> = of(false);
 
   public groups$: Observable<Array<GroupModel & { lastSeen: Date | null }>> = of([]);
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private oidcConfigurationService: OIDCConfigurationService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-    private groupService: GroupService,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.store$.select(selectOIDCConfigurationsLoadStatus).pipe(

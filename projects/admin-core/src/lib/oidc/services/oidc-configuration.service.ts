@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   OIDCConfigurationModel, TailormapAdminApiV1Service,
@@ -20,16 +20,13 @@ type OIDCConfigurationEditModel = Partial<OIDCConfigurationCreateModel>;
   providedIn: 'root',
 })
 export class OIDCConfigurationService implements OnDestroy {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+
 
   private destroyed = new Subject<null>();
-
-  public constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-  ) {
-  }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

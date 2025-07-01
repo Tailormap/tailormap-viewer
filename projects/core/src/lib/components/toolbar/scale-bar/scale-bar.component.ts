@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
 
@@ -10,6 +10,8 @@ import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } 
   standalone: false,
 })
 export class ScaleBarComponent implements OnInit, OnDestroy {
+  private mapService = inject(MapService);
+
 
   public scaleType: 'bar' | 'line' = 'bar';
 
@@ -17,10 +19,6 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
   public scaleTarget: ElementRef | undefined;
 
   private destroyed = new Subject();
-
-  constructor(
-    private mapService: MapService,
-  ) { }
 
   public ngOnInit(): void {
     this.mapService.createTool$<ScaleBarToolModel, ScaleBarToolConfigModel>({

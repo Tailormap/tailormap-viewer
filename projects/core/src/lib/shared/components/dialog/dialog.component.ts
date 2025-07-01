@@ -1,6 +1,4 @@
-import {
-  Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper } from '@tailormap-viewer/shared';
@@ -29,6 +27,8 @@ const DEFAULT_WIDTH = 300;
   standalone: false,
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
+  private dialogService = inject(DialogService);
+
 
   @Input()
   public open: boolean | null = false;
@@ -81,10 +81,6 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public actualWidth = DEFAULT_WIDTH;
   public dialogId = '';
-
-  constructor(
-    private dialogService: DialogService,
-  ) { }
 
   public ngOnInit(): void {
     this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());

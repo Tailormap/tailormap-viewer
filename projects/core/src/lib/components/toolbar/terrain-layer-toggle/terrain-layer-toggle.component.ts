@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
 import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
@@ -15,14 +15,14 @@ import { setSelectedTerrainNodeId } from '../../../map/state/map.actions';
   standalone: false,
 })
 export class TerrainLayerToggleComponent {
+  private store$ = inject(Store);
+
 
   public selectedTerrainNodeId$: Observable<string | undefined>;
   public terrainLayers$: Observable<SplitButtonOptionModel[]>;
   public initiallyCheckedLabels$: Observable<string>;
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.selectedTerrainNodeId$ = combineLatest([
       this.store$.select(selectInitiallySelectedTerrainNodes),
       this.store$.select(selectSelectedTerrainNodeId),

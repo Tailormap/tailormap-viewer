@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectPagingDataSelectedTab } from '../state/attribute-list.selectors';
 import { debounceTime, take, takeUntil, withLatestFrom } from 'rxjs/operators';
@@ -13,13 +13,13 @@ import { updatePage } from '../state/attribute-list.actions';
   standalone: false,
 })
 export class AttributeListPagingDialogComponent implements OnDestroy {
+  private store$ = inject(Store);
+
 
   private destroyed = new Subject();
   public formControl = new FormControl<number>(1, []);
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.store$.select(selectPagingDataSelectedTab)
       .pipe(take(1))
       .subscribe(pagingData => {

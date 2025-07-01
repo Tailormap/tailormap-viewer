@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
@@ -41,7 +41,9 @@ import { FeatureInfoTemplateRendererComponent } from './feature-info-template-re
   ],
 })
 export class FeatureInfoModule {
-  constructor(store$: Store) {
+  constructor() {
+    const store$ = inject(Store);
+
     ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
       store$,
       BaseComponentTypeEnum.FEATURE_INFO,

@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common';
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
@@ -12,6 +12,9 @@ import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/ap
   standalone: false,
 })
 export class LoginFormComponent {
+  private formBuilder = inject(FormBuilder);
+  private locationStrategy = inject(LocationStrategy);
+
 
   @Input()
   public login$: ((username: string, password: string) => Observable<UserResponseModel>) | null = null;
@@ -54,11 +57,6 @@ export class LoginFormComponent {
   private _loginConfiguration: LoginConfigurationModel | null = null;
 
   public hasSSOButtons: boolean = false;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private locationStrategy: LocationStrategy,
-  ) {}
 
   public login() {
     const username = this.loginForm.get('username')?.value;

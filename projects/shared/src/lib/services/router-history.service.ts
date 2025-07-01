@@ -1,5 +1,5 @@
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { BehaviorSubject, startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -7,15 +7,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class RouterHistoryService {
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+
 
   private previousUrl = new BehaviorSubject<string | null>(null);
   private currentUrl = new BehaviorSubject<string | null>(null);
   private historySize = 0;
 
-  constructor(
-    private router: Router,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const router = this.router;
+
     router.events
       .pipe(
         takeUntilDestroyed(this.destroyRef),

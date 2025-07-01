@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
@@ -18,12 +18,12 @@ export class SearchIndexPageComponent {
 
   public searchIndexPingResponse$: Observable<SearchIndexPingResponseModel>;
 
-  constructor(
-    route: ActivatedRoute,
-    router: Router,
-    destroyRef: DestroyRef,
-    adminApiService: TailormapAdminApiV1Service,
-  ) {
+  constructor() {
+    const route = inject(ActivatedRoute);
+    const router = inject(Router);
+    const destroyRef = inject(DestroyRef);
+    const adminApiService = inject(TailormapAdminApiV1Service);
+
     this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'className')
       .pipe(takeUntilDestroyed(destroyRef));
     this.searchIndexPingResponse$ = adminApiService.pingSearchIndexEngine$();

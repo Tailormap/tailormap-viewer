@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
   UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateDatePickerFilterModel,
@@ -26,6 +26,12 @@ import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.se
   standalone: false,
 })
 export class ApplicationEditFilterFormComponent implements OnInit {
+  private featureSourceService = inject(FeatureSourceService);
+  private destroyRef = inject(DestroyRef);
+  private store$ = inject(Store);
+  private uniqueValuesService = inject(UniqueValuesService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private filterGroupId?: string;
   private otherFilters: AttributeFilterModel[] = [];
@@ -100,14 +106,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
-
-  constructor(
-    private featureSourceService: FeatureSourceService,
-    private destroyRef: DestroyRef,
-    private store$: Store,
-    private uniqueValuesService: UniqueValuesService,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public filterForm = new FormGroup({
     id: new FormControl(''),

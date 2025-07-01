@@ -1,6 +1,6 @@
 import { combineLatest, from, take } from 'rxjs';
 import type { Ctx } from '@milkdown/ctx';
-import type { BlockEditFeatureConfig } from '@milkdown/crepe/lib/types/feature/block-edit';
+import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 
 export class MilkdownHelper {

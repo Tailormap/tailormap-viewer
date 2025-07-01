@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, DestroyRef, inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -18,6 +18,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   standalone: false,
 })
 export class ListFilterComponent implements OnInit, ControlValueAccessor {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public label: string = '';
@@ -38,10 +40,6 @@ export class ListFilterComponent implements OnInit, ControlValueAccessor {
   public disabled = false;
   private onChange: any | null = null;
   private onTouched: any | null = null;
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) { }
 
   public ngOnInit(): void {
     this.filterControl.valueChanges

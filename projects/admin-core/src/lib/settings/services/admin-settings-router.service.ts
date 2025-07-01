@@ -1,5 +1,5 @@
 import { Route, Router, RoutesRecognized } from '@angular/router';
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
@@ -19,14 +19,16 @@ import { filter } from 'rxjs';
   providedIn: 'root',
 })
 export class AdminSettingsRouterService {
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+
 
   private registeredRoutes: Array<{ label: string; route: Route }> = [];
   private hasRegisteredRoutes = false;
 
-  constructor(
-    private router: Router,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const router = this.router;
+
     router.events
       .pipe(
         takeUntilDestroyed(this.destroyRef),

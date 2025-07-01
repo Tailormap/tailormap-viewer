@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -21,6 +21,9 @@ import { APP_BASE_HREF } from '@angular/common';
   standalone: false,
 })
 export class ApplicationListComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private configService = inject(ConfigService);
+
 
   public filter = new FormControl('');
   public applications$: Observable<Array<ApplicationModel & { selected: boolean; defaultApplication: boolean }>> = of([]);
@@ -32,12 +35,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-    private configService: ConfigService,
-    @Inject(ENVIRONMENT_CONFIG) config: EnvironmentConfigModel,
-    @Inject(APP_BASE_HREF) baseHref: string,
-  ) {
+  constructor() {
+    const config = inject<EnvironmentConfigModel>(ENVIRONMENT_CONFIG);
+    const baseHref = inject(APP_BASE_HREF);
+
     const urlPrefix = config.viewerBaseUrl.startsWith('http') ? '' : baseHref;
     const viewerBaseUrl = config.viewerBaseUrl.startsWith('/') && urlPrefix.endsWith('/')
       ? config.viewerBaseUrl.substring(1)

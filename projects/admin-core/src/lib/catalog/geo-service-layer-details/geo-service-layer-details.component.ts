@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import {
   selectGeoServiceAndLayerByLayerId, selectGeoServiceLayersByGeoServiceId, selectGeoServiceLayerSettingsByLayerId,
@@ -25,6 +25,11 @@ import { AdminProjectionsHelper, ProjectionAvailability } from '../../applicatio
   standalone: false,
 })
 export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private geoServiceService = inject(GeoServiceService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   public geoServiceLayerSettings$: Observable<GeoServiceLayerSettingsModel | null> = of(null);
   private destroyed = new Subject();
@@ -39,13 +44,6 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   public isLeaf$: Observable<boolean | null> = of(true);
 
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private geoServiceService: GeoServiceService,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnInit(): void {
     const layerId$ = this.route.paramMap.pipe(

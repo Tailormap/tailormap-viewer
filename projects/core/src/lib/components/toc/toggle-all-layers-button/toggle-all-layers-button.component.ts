@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { selectSomeLayersVisible } from '../../../map/state/map.selectors';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -12,12 +12,10 @@ import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
   standalone: false,
 })
 export class ToggleAllLayersButtonComponent implements OnInit {
+  private store$ = inject(Store);
+
 
   public someLayersVisible$: Observable<boolean> = of(false);
-
-  constructor(
-    private store$: Store,
-  ) { }
 
   public ngOnInit(): void {
     this.someLayersVisible$ = this.store$.select(selectSomeLayersVisible);

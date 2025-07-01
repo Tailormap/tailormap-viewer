@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ShareViewerDialogComponent } from './share-viewer-dialog/share-viewer-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, take } from 'rxjs';
@@ -12,17 +12,17 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class ShareViewerComponent {
+  private dialog = inject(MatDialog);
+  private cdr = inject(ChangeDetectorRef);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+
 
   public toolActive = false;
   private dialogRef: MatDialogRef<ShareViewerDialogComponent, any> | undefined;
 
   public userIsAdmin$: Observable<boolean>;
 
-  constructor(
-    private dialog: MatDialog,
-    private cdr: ChangeDetectorRef,
-    private authenticatedUserService: AuthenticatedUserService,
-  ) {
+  constructor() {
     this.userIsAdmin$ = this.authenticatedUserService.isAdminUser$();
   }
 
