@@ -13,13 +13,17 @@
   border-top: 1px solid var(--border-color);
 }
 
-.editable-slider-filter-title {
+.editable-slider-filter-title,
+.editable-switch-filter-title,
+.editable-date-picker-filter-title {
   padding-top: 8px;
   margin-left: 24px;
   margin-right: 24px;
 }
 
-.editable-slider-filter-content {
+.editable-slider-filter-content,
+.editable-switch-filter-content,
+.editable-date-picker-filter-content {
   margin-left: 24px;
   margin-right: 24px;
 }

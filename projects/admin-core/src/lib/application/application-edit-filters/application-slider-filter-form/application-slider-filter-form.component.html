@@ -10,6 +10,16 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@admin-core.application.filters.slider.input-mode">Input mode</mat-label>
+    <mat-select i18n-aria-label="@@admin-core.application.filters.slider.select-input-mode"
+                aria-label="Select input mode"
+                formControlName="inputMode"
+                panelClass="wide-select-panel">
+      <mat-option *ngFor="let inputMode of inputModeOptions" [value]="inputMode.value">{{ inputMode.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   @if (isBetweenCondition()) {
     <div class="between-range-header">
       <strong i18n="@@admin-core.application.filters.slider.initial-range">Initial range</strong>

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/angular';
 import { FilterToolEnum } from '@tailormap-viewer/api';
 import { MatSliderModule } from '@angular/material/slider';
 import { SliderComponent } from '@tailormap-viewer/shared';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('SliderFilterComponent', () => {
 
@@ -15,7 +16,7 @@ describe('SliderFilterComponent', () => {
     };
 
     await render(SliderFilterComponent, {
-      imports: [MatSliderModule],
+      imports: [ MatSliderModule, ReactiveFormsModule ],
       declarations: [SliderComponent],
       inputs: { sliderFilterConfiguration },
     });
@@ -32,7 +33,7 @@ describe('SliderFilterComponent', () => {
     };
 
     await render(SliderFilterComponent, {
-      imports: [MatSliderModule],
+      imports: [ MatSliderModule, ReactiveFormsModule ],
       declarations: [SliderComponent],
       inputs: { sliderFilterConfiguration },
     });

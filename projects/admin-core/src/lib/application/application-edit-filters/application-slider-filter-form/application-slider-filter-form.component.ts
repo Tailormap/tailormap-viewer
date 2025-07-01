@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel } from '@tailormap-viewer/api';
+import {
+  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
+  SliderFilterInputModeEnum, UpdateDatePickerFilterModel,
+} from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs';
@@ -24,8 +27,21 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private minimumUniqueValue: number | null = null;
   private maximumUniqueValue: number | null = null;
 
+  public inputModeOptions = [{
+    value: SliderFilterInputModeEnum.SLIDER,
+    label: $localize`:@@admin-core.application.filters.slider.slider:Slider`,
+  }, {
+    value: SliderFilterInputModeEnum.INPUT_FIELD,
+    label: $localize`:@@admin-core.application.filters.slider.input-field:Input field`,
+  }, {
+    value: SliderFilterInputModeEnum.SLIDER_AND_INPUT_FIELD,
+    label: $localize`:@@admin-core.application.filters.slider.slider-input-field:Slider and input field`,
+  }];
+
   @Input()
-  public set sliderFilter(configuration: UpdateSliderFilterModel | CheckboxFilterModel | null) {
+  public set sliderFilter(
+    configuration: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+  ) {
     if (configuration && configuration.filterTool === FilterToolEnum.SLIDER) {
       this.sliderFilterForm.patchValue({
         condition: configuration.condition,
@@ -34,6 +50,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         maximumValue: configuration.maximumValue,
         initialLowerValue: configuration.initialLowerValue,
         initialUpperValue: configuration.initialUpperValue,
+        inputMode: configuration.inputMode ?? SliderFilterInputModeEnum.SLIDER,
       }, { emitEvent: false });
     }
   }
@@ -59,6 +76,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     maximumValue: new FormControl<number | null>(null),
     initialLowerValue: new FormControl<number | null>(null),
     initialUpperValue: new FormControl<number | null>(null),
+    inputMode: new FormControl<SliderFilterInputModeEnum>(SliderFilterInputModeEnum.SLIDER),
   });
 
   public ngOnInit(): void {
@@ -77,6 +95,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
           maximumValue: value.maximumValue ?? 0,
           initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue ?? undefined) : undefined,
           initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue ?? undefined) : undefined,
+          inputMode: value.inputMode ?? SliderFilterInputModeEnum.SLIDER,
         });
       });
   }

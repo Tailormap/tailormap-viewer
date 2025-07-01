@@ -44,6 +44,8 @@ import { ApplicationCreateFilterComponent } from './application-edit-filters/app
 import { ApplicationFilterAttributeListComponent } from './application-edit-filters/application-filter-attribute-list/application-filter-attribute-list.component';
 import { ApplicationSliderFilterFormComponent } from './application-edit-filters/application-slider-filter-form/application-slider-filter-form.component';
 import { ApplicationCheckboxFilterFormComponent } from './application-edit-filters/application-checkbox-filter-form/application-checkbox-filter-form.component';
+import { ApplicationSwitchFilterFormComponent } from './application-edit-filters/application-switch-filter-form/application-switch-filter-form.component';
+import { ApplicationDatePickerFilterFormComponent } from './application-edit-filters/application-date-picker-filter-form/application-date-picker-filter-form.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { ApplicationCheckboxFilterFormComponent } from './application-edit-filte
     ApplicationFilterAttributeListComponent,
     ApplicationSliderFilterFormComponent,
     ApplicationCheckboxFilterFormComponent,
+    ApplicationSwitchFilterFormComponent,
+    ApplicationDatePickerFilterFormComponent,
   ],
   imports: [
     CommonModule,
