@@ -9,11 +9,26 @@
   flex: 1;
 }
 
-mat-selection-list {
-  flex: 1;
-  overflow: auto;
+mat-form-field {
+  margin-top: 8px;
 }
 
 mat-spinner {
   margin-top: 16px;
+}
+
+.filter-attributes-header {
+  padding-left: 0;
+}
+
+.filter-form-field {
+  width: 100%;
+  margin-right: 16px;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+.attribute-option {
+  line-height: 20px;
+  font-size: 16px;
 }

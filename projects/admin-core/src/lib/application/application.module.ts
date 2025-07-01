@@ -46,6 +46,7 @@ import { ApplicationSliderFilterFormComponent } from './application-edit-filters
 import { ApplicationCheckboxFilterFormComponent } from './application-edit-filters/application-checkbox-filter-form/application-checkbox-filter-form.component';
 import { ApplicationSwitchFilterFormComponent } from './application-edit-filters/application-switch-filter-form/application-switch-filter-form.component';
 import { ApplicationDatePickerFilterFormComponent } from './application-edit-filters/application-date-picker-filter-form/application-date-picker-filter-form.component';
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,9 @@ import { ApplicationDatePickerFilterFormComponent } from './application-edit-fil
     CatalogModule,
     ComponentsModule,
     FormModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
   ],
     exports: [
         ApplicationListComponent,

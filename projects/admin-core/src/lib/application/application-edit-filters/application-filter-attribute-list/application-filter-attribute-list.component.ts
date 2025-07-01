@@ -35,6 +35,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
 
   public filter = new FormControl('');
+  public selectedAttributeControl = new FormControl('');
 
   private attributeFilter$ = new BehaviorSubject<string | null>(null);
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
