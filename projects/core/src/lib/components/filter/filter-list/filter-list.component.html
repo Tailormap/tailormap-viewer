@@ -1,2 +1,3 @@
-<tm-filter-list-item *ngFor="let filter of (filters$ | async)"
-                     [filter]="filter"></tm-filter-list-item>
+@for (filter of (filters$ | async); track filter.id) {
+  <tm-filter-list-item [filterGroup]="filter"></tm-filter-list-item>
+}

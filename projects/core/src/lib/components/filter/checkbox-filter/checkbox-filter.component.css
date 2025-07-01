@@ -1,0 +1,19 @@
+.checkbox-values-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-value-label {
+  height: min-content;
+}
+
+.checkbox-expansion-panel mat-expansion-panel-header {
+  padding-left: 0;
+}

@@ -16,11 +16,15 @@ export class ComponentConfigurationService {
   ) {
   }
 
-  public updateConfig<C extends ComponentBaseConfigModel>(
+  public updateConfigForKey<C extends ComponentBaseConfigModel>(
     type: string | undefined,
     key: keyof C,
     value: any,
   ) {
+    this.updateConfig<C>(type, { [key]: value } as Partial<C>); // Cast to Partial<C> to satisfy TypeScript, key is guaranteed to be a key of C
+  }
+
+  public updateConfig<C extends ComponentBaseConfigModel>(type: string | undefined, value: Partial<C>) {
     if (!type) {
       return;
     }
@@ -28,12 +32,13 @@ export class ComponentConfigurationService {
       .pipe(take(1))
       .subscribe(c => {
         const config = c?.config || ComponentConfigHelper.getBaseConfig(type);
-        if ((config as C)[key] === value) {
+        const keys = Object.keys(value) as (keyof C)[]; // Ensure keys are of type keyof C - no other way to make TS happy
+        if (keys.length === 0 || keys.every(k => value[k] === (config as C)[k])) {
           return;
         }
         this.store$.dispatch(updateApplicationComponentConfig({
           componentType: type,
-          config: { ...config, [key]: value },
+          config: { ...config, ...value },
         }));
       });
   }

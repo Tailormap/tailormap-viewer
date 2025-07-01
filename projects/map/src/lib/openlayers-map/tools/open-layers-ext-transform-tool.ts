@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+  import { Subject, takeUntil } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
@@ -76,6 +76,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     if (!isPoint) {
       this.enableTransformInteraction(layer, source);
     }
+    this.fixCursorBug();
     this.enableVertices(source);
     OpenLayersEventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
@@ -139,6 +140,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;
+      this.olMap.getTargetElement().style.cursor = '';
     }
     this.listeners = [];
   }
@@ -191,6 +193,32 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.interaction?.setStyle('rotate', rotateStyle);
     this.interaction?.setStyle('rotate0', rotateStyle);
     this.interaction?.set('rotate', true);
+  }
+
+  private fixCursorBug() {
+    let timer: number | null = null;
+    OpenLayersEventManager.onMouseMove$().pipe(takeUntil(this.destroyed)).subscribe(e => {
+      if (!this.interaction) {
+        return;
+      }
+      // There is a bug in ol-ext Transform interaction where the cursor does not reset to default when moving over the map after modifying a feature.
+      // We are using an internal ol-ext-transform method here to check if the cursor is over the feature that is being modified.
+      // Check if this still works in the future, as this is not part of the public API.
+      // Check below is to prevent errors when the interaction is not yet initialized or the method does not exist anymore.
+      if (!(this.interaction as any).getFeatureAtPixel_) {
+        return;
+      }
+      const found = (this.interaction as any).getFeatureAtPixel_(e.pixel);
+      if(timer) {
+        window.clearTimeout(timer);
+        timer = null;
+      }
+      if (!found.feature && this.olMap.getTargetElement().style.cursor !== '') {
+        timer = window.setTimeout(() => {
+          this.olMap.getTargetElement().style.cursor = '';
+        }, 50);
+      }
+    });
   }
 
 }

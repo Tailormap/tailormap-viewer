@@ -590,6 +590,10 @@
         <source>Switch to 2D to draw</source>
         <target>Wechseln Sie zum Zeichnen zu 2D</target>
       </trans-unit>
+      <trans-unit id="core.filter.edit-filters" datatype="html">
+        <source>Edit filters</source>
+        <target>Filter bearbeiten</target>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
         <target>endet mit</target>
@@ -773,6 +777,10 @@
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
         <target>Referenzlayer auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+        <target> und </target>
       </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
@@ -970,6 +978,22 @@
         <source>Location</source>
         <target>Ort</target>
       </trans-unit>
+      <trans-unit id="core.shared.close-panel" datatype="html">
+        <source>Close panel</source>
+        <target>Panel schließen</target>
+      </trans-unit>
+      <trans-unit id="core.shared.maximize-panel" datatype="html">
+        <source>Maximize panel</source>
+        <target>Panel maximieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.minimize-panel" datatype="html">
+        <source>Minimize panel</source>
+        <target>Panel minimieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.restore-panel-height" datatype="html">
+        <source>Restore panel height</source>
+        <target>Panelhöhe wiederherstellen</target>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoid</target>
@@ -1001,6 +1025,10 @@
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
         <target>Ebenen filtern</target>
+      </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+        <target>Auf diese Ebene wird ein Filter angewendet</target>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>

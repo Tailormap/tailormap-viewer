@@ -57,6 +57,25 @@ export class CssHelper {
     }
   }
 
+  public static getScopedCss(css: string, scope: string): string {
+    return css.replace(/([^{}]+)\s*{([^}]*)}/g, (match, selector, rules) => {
+      const trimmedSelector = selector.trim();
+      // Skip @rules
+      if (trimmedSelector.startsWith('@')) {
+        return match;
+      }
+      // Handle multiple selectors
+      const scopedSelectors = trimmedSelector.split(',').map((sel: string) => {
+        const cleanSelector = sel.trim();
+        if (cleanSelector.startsWith(':host')) {
+          return cleanSelector.replace(':host', scope);
+        }
+        return `${scope} ${cleanSelector}`;
+      }).join(', ');
+      return `${scopedSelectors} { ${rules} }`;
+    });
+  }
+
 }
 
 CssHelper.updateCssViewportUnits();

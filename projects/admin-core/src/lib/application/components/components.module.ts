@@ -10,6 +10,9 @@ import { MeasureComponentConfigComponent } from './measure-config/measure-compon
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
 import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
+import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
+import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
+import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 
 @NgModule({
   declarations: [
@@ -19,11 +22,14 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
     CoordinateLinkWindowComponentConfigComponent,
     FeatureInfoComponentConfigComponent,
     SimpleSearchComponentConfigComponent,
+    HeaderComponentConfigComponent,
+    EditComponentConfigComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     BaseComponentConfigComponent,
+    SelectUploadModule,
   ],
   exports: [
     ComponentsListComponent,
@@ -42,7 +48,7 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FILTER, $localize `:@@admin-core.application.component-filter:Filter`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FEATURE_INFO, $localize `:@@admin-core.application.component-feature-info:Feature info`, FeatureInfoComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.ATTRIBUTE_LIST, $localize `:@@admin-core.application.component-attribute-list:Attribute list`, BaseComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, EditComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MEASURE, $localize `:@@admin-core.application.component-measure-tools:Measure tools`, MeasureComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_PICKER, $localize `:@@admin-core.application.component-coordinate-picker-tool:Coordinate picker tool`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);
@@ -50,5 +56,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, $localize `:@@admin-core.application.component-coordinate-link-window:Coordinate Link Window`, CoordinateLinkWindowComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
   }
 }

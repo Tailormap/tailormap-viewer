@@ -5,6 +5,7 @@ export class BaseComponentConfigHelper {
   public static componentsDisabledByDefault = new Set<string>([
     BaseComponentTypeEnum.EDIT,
     BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
+    BaseComponentTypeEnum.HEADER,
   ]);
 
   public static addDefaultDisabledComponent(component: string) {

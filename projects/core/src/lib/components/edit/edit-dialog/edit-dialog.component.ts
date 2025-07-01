@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
@@ -15,14 +15,18 @@ import {
   editNewlyCreatedFeature,
   expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
 } from '../state/edit.actions';
-import { FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
+import {
+  BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MapService } from '@tailormap-viewer/map';
 import { EditMapToolService } from '../services/edit-map-tool.service';
+import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -40,6 +44,9 @@ export class EditDialogComponent {
   public layerDetails$;
   public selectableFeature$;
 
+  public creatingSavingFeature = signal(false);
+  public removingFeature = signal(false);
+
   public panelWidth = 300;
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
@@ -48,11 +55,11 @@ export class EditDialogComponent {
   public editCoordinates$;
 
   public updatedAttributes: FeatureModelAttributes | null = null;
-  private geometryEditedForLayer: string | null = null;
 
   public formValid: boolean = false;
 
   private clearCacheValuesAfterSave = new Set<string>();
+  private closeDialogAfterAddingFeature = false;
 
   constructor(
     private store$: Store,
@@ -60,7 +67,7 @@ export class EditDialogComponent {
     private applicationLayerService: ApplicationLayerService,
     private editFeatureService: EditFeatureService,
     private destroyRef: DestroyRef,
-    private mapService: MapService,
+    private featureUpdatedService: FeatureUpdatedService,
     private confirmService: ConfirmDialogService,
     private uniqueValuesService: UniqueValuesService,
     private cdr: ChangeDetectorRef,
@@ -92,6 +99,7 @@ export class EditDialogComponent {
     this.currentFeature$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
+        this.store$.dispatch(hideFeatureInfoDialog());
         this.resetChanges();
       });
 
@@ -101,16 +109,18 @@ export class EditDialogComponent {
     this.editMapToolService.createdGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
       this.geometryChanged(geometry, true);
     });
+    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
+      store$,
+      BaseComponentTypeEnum.EDIT,
+      config => {
+        this.closeDialogAfterAddingFeature = config.closeAfterAddFeature;
+      },
+    );
   }
 
   private resetChanges() {
     this.updatedAttributes = null;
     this.formValid = false;
-    if (this.geometryEditedForLayer) {
-      const refreshLayerId = this.geometryEditedForLayer;
-      this.mapService.refreshLayer(`${refreshLayerId}`);
-      this.geometryEditedForLayer = null;
-    }
     this.clearCacheValuesAfterSave = new Set();
   }
 
@@ -135,6 +145,7 @@ export class EditDialogComponent {
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
+    this.creatingSavingFeature.set(true);
     this.store$.select(selectViewerId)
       .pipe(
         take(1),
@@ -151,8 +162,10 @@ export class EditDialogComponent {
       .subscribe(feature => {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
+          this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
           this.resetChanges();
         }
+        this.creatingSavingFeature.set(false);
       });
   }
 
@@ -161,13 +174,13 @@ export class EditDialogComponent {
     if (!updatedFeature) {
       return;
     }
-
+    this.creatingSavingFeature.set(true);
     this.store$.select(selectViewerId)
         .pipe(
             take(1),
             concatMap(viewerId => {
               if (!viewerId) {
-                return of(null);
+                return of({ success: false, feature: null });
               }
               return this.editFeatureService.createFeature$(viewerId, layerId, {
                 __fid: '',
@@ -175,15 +188,24 @@ export class EditDialogComponent {
               });
             }),
         )
-        .subscribe(feature => {
-          if (feature) {
-            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...feature, layerId } }));
-            this.resetChanges();
+        .subscribe(result => {
+          this.creatingSavingFeature.set(false);
+          if (!result.success) {
+            return;
+          }
+          this.featureUpdatedService.updatedFeature(layerId, result.feature?.__fid);
+          this.resetChanges();
+          if (this.closeDialogAfterAddingFeature || !result.feature) {
+            this.closeDialog();
+          } else {
+            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...result.feature, layerId } }));
           }
         });
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
+    this.removingFeature.set(true);
+    const featureId = currentFeature.feature.__fid;
     this.store$.select(selectViewerId)
       .pipe(
         take(1),
@@ -202,7 +224,7 @@ export class EditDialogComponent {
                 return of(null);
               }
               return this.editFeatureService.deleteFeature$(viewerId, layerId, {
-                __fid: currentFeature.feature.__fid,
+                __fid: featureId,
                 attributes: currentFeature.feature.attributes,
               });
             }),
@@ -211,9 +233,10 @@ export class EditDialogComponent {
       )
       .subscribe(succes => {
         if (succes) {
+          this.featureUpdatedService.updatedFeature(layerId, featureId);
           this.closeDialog();
-          this.mapService.refreshLayer(layerId);
         }
+        this.removingFeature.set(false);
       });
   }
 
@@ -242,7 +265,6 @@ export class EditDialogComponent {
             this.cdr.detectChanges();
           }
           this.setAttributeUpdated(layerDetails.details.geometryAttribute, geometry);
-          this.geometryEditedForLayer = layerDetails.layer.id;
         }
       });
   }

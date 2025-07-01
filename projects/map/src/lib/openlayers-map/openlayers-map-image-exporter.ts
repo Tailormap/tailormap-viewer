@@ -28,7 +28,6 @@ export class OpenLayersMapImageExporter {
     httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ): Observable<string> {
     const viewResolution = olView.getResolution();
-
     if (!olSize || !viewResolution) {
       throw new Error('Map has no size or resolution');
     }
@@ -85,7 +84,6 @@ export class OpenLayersMapImageExporter {
     const imageExportOlMap = new OlMap({
       controls: [scaleLineControl],
       interactions: [],
-      target,
       pixelRatio: sizeRatio,
       view: new View({
         projection: olView.getProjection(),
@@ -152,12 +150,7 @@ export class OpenLayersMapImageExporter {
       }
     });
 
-    imageExportOlMap.setSize(imageExportOlSize);
-    imageExportOlMap.render();
-
-    // const imageExportExtent = imageExportOlMap.getView().calculateExtent(imageExportOlMap.getSize());
-    // console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, for final image size ${width} x ${height}, ` +
-    //   `pixelRatio ${sizeRatio.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
+    imageExportOlMap.setTarget(target);
 
     return renderedMapCanvasDataURL$.asObservable();
   }

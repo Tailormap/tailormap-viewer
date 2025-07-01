@@ -244,7 +244,7 @@
       </trans-unit>
       <trans-unit id="core.drawing.circle-radius" datatype="html">
         <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
-        <target state="new">Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+        <target>Straal van cirkel (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
@@ -590,6 +590,10 @@
         <source>Switch to 2D to draw</source>
         <target>Switch naar 2D om te tekenen</target>
       </trans-unit>
+      <trans-unit id="core.filter.edit-filters" datatype="html">
+        <source>Edit filters</source>
+        <target>Bewerk filters</target>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
         <target>eindigt met</target>
@@ -773,6 +777,10 @@
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
         <target>Selecteer referentielaag</target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+        <target> en </target>
       </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
@@ -970,6 +978,22 @@
         <source>Location</source>
         <target>Locatie</target>
       </trans-unit>
+      <trans-unit id="core.shared.close-panel" datatype="html">
+        <source>Close panel</source>
+        <target>Paneel sluiten</target>
+      </trans-unit>
+      <trans-unit id="core.shared.maximize-panel" datatype="html">
+        <source>Maximize panel</source>
+        <target>Paneel maximaliseren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.minimize-panel" datatype="html">
+        <source>Minimize panel</source>
+        <target>Paneel minimaliseren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.restore-panel-height" datatype="html">
+        <source>Restore panel height</source>
+        <target>Paneelhoogte herstellen</target>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoïde</target>
@@ -1001,6 +1025,10 @@
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
         <target>Lagen filteren</target>
+      </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+        <target>Er is een filter toegepast op deze laag</target>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>

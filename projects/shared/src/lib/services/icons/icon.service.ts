@@ -14,12 +14,12 @@ export class IconService {
   public icons: IconDefinition[] = [
     'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error', 'remove_all', 'remove',
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
-    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy',
+    'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy', 'menu',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
     'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'coordinates',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     'check', 'check_all', 'uncheck_all', 'edit', 'edit_square', 'info', 'reset', 'reorder', 'location_searching',
-    'visibility_off', 'visibility', 'my_location', 'key', 'settings', 'fullscreen', 'fullscreen_exit', 'show_position',
+    'visibility_off', 'visibility', 'my_location', 'key', 'settings', 'fullscreen', 'fullscreen_exit', 'show_position', 'map',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'diamond' ] },
     { folder: 'components', icons: [ 'attribute_list', 'legend', 'table_of_contents', 'drawing', 'print', 'filter', 'coordinate_link_window' ] },
     {

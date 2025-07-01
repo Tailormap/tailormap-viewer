@@ -1,7 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
-import {
-  BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel,
-} from '@tailormap-viewer/api';
+import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigurationComponentModel } from '../configuration-component.model';
@@ -75,7 +73,7 @@ export class BaseComponentConfigComponent implements ConfigurationComponentModel
   }
 
   private updateConfig(key: keyof ComponentBaseConfigModel, value: string | number | boolean | undefined | null) {
-    this.componentConfigService.updateConfig<MeasureComponentConfigModel>(this.type, key, value);
+    this.componentConfigService.updateConfigForKey<ComponentBaseConfigModel>(this.type, key, value);
   }
 
 }

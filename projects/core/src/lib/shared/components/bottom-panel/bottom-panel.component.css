@@ -21,15 +21,27 @@
   flex-flow: column nowrap;
   font-size: 15px;
   background-color: #fff;
-  max-height: calc(var(--vh) * 100);
+  max-height: calc(var(--100vh) - var(--header-component-height));
 }
 
 .panel--minimized {
-  height: auto !important;
+  height: auto;
+}
+
+.panel--maximized {
+  height: calc(var(--100vh) - var(--header-component-height));
 }
 
 .size-18 + .size-18 {
   margin-left: 12px;
+}
+
+button mat-icon ::ng-deep svg {
+  transition: transform 250ms ease-in-out;
+}
+
+.close-button:hover ::ng-deep svg {
+  transform: rotate(90deg);
 }
 
 .spacer {

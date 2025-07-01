@@ -10,6 +10,7 @@ export const getMapServiceMock = (
     enableTool: jest.fn(),
     disableTool: jest.fn(),
     getToolsDisabled$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
+    getTool: jest.fn(() => null),
   };
   const mapServiceMock = {
     render: jest.fn(),

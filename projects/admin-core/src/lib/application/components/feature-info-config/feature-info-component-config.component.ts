@@ -9,7 +9,7 @@ import { ConfigurationComponentModel } from '../configuration-component.model';
 import { debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'tm-admin-coordinate-link-window-config',
+  selector: 'tm-admin-feature-info-component-config',
   templateUrl: './feature-info-component-config.component.html',
   styleUrls: ['./feature-info-component-config.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +56,7 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
   }
 
   private saveConfig() {
-    this.componentConfigService.updateConfig<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
+    this.componentConfigService.updateConfigForKey<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
   }
 
 }
