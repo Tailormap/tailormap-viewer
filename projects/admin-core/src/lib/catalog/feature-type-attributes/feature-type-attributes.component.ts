@@ -1,6 +1,4 @@
-import {
-  Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
@@ -24,6 +22,8 @@ const attributeExtraColumns = ['sort'];
   standalone: false,
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
+  private destroyRef = inject(DestroyRef);
+
 
   public columnLabels = attributeColumnLabels;
   public columns = attributeColumns;
@@ -87,9 +87,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public dataAttributes: Array<AttributeDescriptorModel & { alias?: string }> = [];
   public geomAttributes: AttributeDescriptorModel[] = [];
 
-  constructor(
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {

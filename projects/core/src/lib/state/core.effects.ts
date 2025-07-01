@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
 import * as FilterActions from '../filter/state/filter.actions';
@@ -10,6 +10,11 @@ import { UrlHelper } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class CoreEffects {
+  private actions$ = inject(Actions);
+  private loadViewerService = inject(LoadViewerService);
+  private location = inject(Location);
+  private router = inject(Router);
+
 
   public loadViewer$ = createEffect(() => {
     return this.actions$.pipe(
@@ -48,12 +53,5 @@ export class CoreEffects {
       tap(paths => this.router.navigate(paths, { preserveFragment: true, skipLocationChange: true })),
     );
   }, { dispatch: false });
-
-  constructor(
-    private actions$: Actions,
-    private loadViewerService: LoadViewerService,
-    private location: Location,
-    private router: Router,
-  ) {}
 
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ColorHelper } from '@tailormap-viewer/shared';
 import {
@@ -15,13 +15,11 @@ import { DrawingHelper } from '../helpers/drawing.helper';
   standalone: false,
 })
 export class DrawingFeatureIconComponent {
+  private domSanitizer = inject(DomSanitizer);
+
 
   @Input()
   public feature: DrawingFeatureModel | null = null;
-
-  constructor(
-    private domSanitizer: DomSanitizer,
-  ) { }
 
   public getSvg() {
     if (!this.feature) {

@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
@@ -40,13 +40,13 @@ export interface MapExportOptions {
   providedIn: 'root',
 })
 export class MapService {
+  private ngZone = inject(NgZone);
+  private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
+
 
   private readonly map: OpenLayersMap;
 
-  constructor(
-    private ngZone: NgZone,
-    private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-  ) {
+  constructor() {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
 

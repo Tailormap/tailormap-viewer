@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, signal, inject } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationAttributeFilter } from '../../state/application.actions';
@@ -17,6 +17,8 @@ import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter
   standalone: false,
 })
 export class ApplicationCreateFilterComponent {
+  private store$ = inject(Store);
+
 
   private filterGroup: FilterGroupModel<AttributeFilterModel> | null = null;
 
@@ -47,8 +49,6 @@ export class ApplicationCreateFilterComponent {
       filterableLayers: filterableLayers,
     };
   });
-
-  constructor(private store$: Store) { }
 
   public save() {
     if (!this.filterGroup) {

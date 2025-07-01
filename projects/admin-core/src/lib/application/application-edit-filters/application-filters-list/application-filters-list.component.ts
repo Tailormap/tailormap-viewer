@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal, inject } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterToolEnum } from '@tailormap-viewer/api';
 import {
   selectFilterGroups, selectFiltersForApplication, selectSelectedApplicationId, selectSelectedLayerForApplication,
@@ -17,6 +17,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   standalone: false,
 })
 export class ApplicationFiltersListComponent implements OnDestroy {
+  private store$ = inject(Store);
+
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterGroups: Signal<FilterGroupModel<AttributeFilterModel>[]> = this.store$.selectSignal(selectFilterGroups);
@@ -24,8 +26,6 @@ export class ApplicationFiltersListComponent implements OnDestroy {
   public filters: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = this.store$.selectSignal(selectFiltersForApplication);
 
   public isDragging = signal<boolean>(false);
-
-  constructor(private store$: Store) {}
 
   public ngOnDestroy(): void {
     this.store$.dispatch(setApplicationSelectedFilterId({ filterId: undefined }));

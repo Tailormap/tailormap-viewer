@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { LoginConfigurationModel, UserResponseModel } from '../models';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
@@ -8,12 +8,9 @@ import { ExtendedUserResponseModel } from '../models/extended-user-response.mode
 
 @Injectable()
 export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1ServiceModel {
+  private httpClient = inject(HttpClient);
+  private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
 
-  constructor(
-    private httpClient: HttpClient,
-    private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-  ) {
-  }
 
   public getLoginConfiguration$(): Observable<LoginConfigurationModel> {
     return this.httpClient.get<LoginConfigurationModel>(

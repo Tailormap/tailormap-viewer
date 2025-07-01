@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -31,6 +31,13 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   ],
 })
 export class DrawingComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private menubarService = inject(MenubarService);
+  private confirmService = inject(ConfirmDialogService);
+  private drawingService = inject(DrawingService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
@@ -58,15 +65,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     DrawingFeatureTypeEnum.LINE,
     DrawingFeatureTypeEnum.STAR,
   ]);
-
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private menubarService: MenubarService,
-    private confirmService: ConfirmDialogService,
-    private drawingService: DrawingService,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output, inject } from '@angular/core';
 import {
   DropZoneOptions, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
@@ -33,6 +33,11 @@ export interface AddLayerEvent {
   standalone: false,
 })
 export class ApplicationCatalogTreeComponent implements OnInit {
+  private store$ = inject(Store);
+  private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
+  private ngZone = inject(NgZone);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
@@ -48,13 +53,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
 
   public catalogFilter = new FormControl('');
   public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
-
-  constructor(
-    private store$: Store,
-    private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
-    private ngZone: NgZone,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public ngOnInit(): void {
     if (this.applicationStateTree === 'terrainLayer') {

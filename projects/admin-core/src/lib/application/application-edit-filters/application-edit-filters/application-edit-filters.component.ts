@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
@@ -13,10 +13,10 @@ import { loadCatalog } from '../../../catalog/state/catalog.actions';
   standalone: false,
 })
 export class ApplicationEditFiltersComponent {
+  private store$ = inject(Store);
 
-  constructor(
-    private store$: Store,
-  ) {
+
+  constructor() {
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectDraftApplication } from '../state/application.selectors';
@@ -15,14 +15,12 @@ import { UpdateDraftApplicationModel } from '../models/update-draft-application.
   standalone: false,
 })
 export class ApplicationEditSettingsComponent implements OnInit {
+  private store$ = inject(Store);
+  private configService = inject(ConfigService);
+
 
   public application$: Observable<ApplicationModel | null> = of(null);
   public isDefaultApplication$: Observable<boolean> = of(false);
-
-  constructor(
-    private store$: Store,
-    private configService: ConfigService,
-  ) { }
 
   public ngOnInit(): void {
     this.application$ = this.store$.select(selectDraftApplication)

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ImageHelper } from '@tailormap-admin/admin-api';
 
 @Component({
@@ -9,6 +9,8 @@ import { ImageHelper } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class ImageUploadFieldComponent {
+  private cdr = inject(ChangeDetectorRef);
+
 
   public isImageSaved = false;
   public isImageRemoved = false;
@@ -26,10 +28,6 @@ export class ImageUploadFieldComponent {
 
   @Output()
   public imageChanged = new EventEmitter<{ image: string; fileName: string }>();
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-  ) {}
 
   public fileChangeEvent($event: Event) {
     this.imageError = null;

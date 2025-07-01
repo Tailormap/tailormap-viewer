@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -10,16 +10,16 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
   standalone: false,
 })
 export class ApplicationFolderNodeNameComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<ApplicationFolderNodeNameComponent, string | null>>(MatDialogRef);
+  public data = inject<{
+    currentName?: string;
+}>(MAT_DIALOG_DATA);
+
 
   public nameControl = new FormControl('', [
     Validators.required,
     Validators.minLength(1),
   ]);
-
-  constructor(
-    private dialogRef: MatDialogRef<ApplicationFolderNodeNameComponent, string | null>,
-    @Inject(MAT_DIALOG_DATA) public data: { currentName?: string },
-  ) {}
 
   public static openDialog$(matDialog: MatDialog, currentName?: string) {
     return matDialog.open<ApplicationFolderNodeNameComponent, { currentName?: string }, string | null>(ApplicationFolderNodeNameComponent, {

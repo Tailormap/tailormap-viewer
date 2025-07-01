@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, inject } from '@angular/core';
 import { selectSelectedApplicationId } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 
@@ -10,9 +10,9 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class ApplicationEditFiltersHomeComponent {
+  private store$ = inject(Store);
+
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
-
-  constructor(private store$: Store) { }
 
 }

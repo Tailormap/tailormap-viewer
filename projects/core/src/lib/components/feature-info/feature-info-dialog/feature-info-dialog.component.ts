@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   selectCurrentlySelectedFeature,
@@ -28,6 +28,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class FeatureInfoDialogComponent {
+  private store$ = inject(Store);
+  public breakpointObserver = inject(BreakpointObserver);
+  private destroyRef = inject(DestroyRef);
+
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
@@ -48,11 +52,7 @@ export class FeatureInfoDialogComponent {
   public attributesCollapsed = signal<boolean>(false);
   public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
-  constructor(
-    private store$: Store,
-    public breakpointObserver: BreakpointObserver,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);

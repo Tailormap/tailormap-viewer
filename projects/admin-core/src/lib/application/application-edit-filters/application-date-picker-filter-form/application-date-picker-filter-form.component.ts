@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, input, computed, Input, EventEmitter, Output, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, input, computed, Input, EventEmitter, Output, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateDatePickerFilterModel, UpdateSliderFilterModel,
@@ -17,6 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class ApplicationDatePickerFilterFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public attributeType = input<AttributeType>(AttributeType.INTEGER);
   public filterConditions = computed(() => {
@@ -40,8 +42,6 @@ export class ApplicationDatePickerFilterFormComponent implements OnInit {
 
   @Output()
   public updateDatePickerFilter = new EventEmitter<UpdateDatePickerFilterModel>();
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public datePickerFilterForm = new FormGroup({
     condition: new FormControl<FilterConditionEnum | null>(null),

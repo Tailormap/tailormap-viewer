@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, Signal, OnDestroy, signal, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, filter, map, Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -20,6 +20,13 @@ import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter
   standalone: false,
 })
 export class ApplicationEditFilterComponent implements OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private confirmDelete = inject(ConfirmDialogService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private router = inject(Router);
+
 
   public updateAttributeFilter$: Observable<UpdateAttributeFilterModel | null>;
 
@@ -28,14 +35,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public saveEnabled = signal(false);
 
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private confirmDelete: ConfirmDialogService,
-    private adminSnackbarService: AdminSnackbarService,
-    private router: Router,
-  ) {
+  constructor() {
     this.updateAttributeFilter$ = combineLatest([
       this.route.params.pipe(
         map(params => params['filterId']),

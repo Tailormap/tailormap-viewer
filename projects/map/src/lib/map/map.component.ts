@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, inject } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
 
@@ -9,15 +9,12 @@ import { OverlayHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
+  private el = inject(ElementRef);
+  private mapService = inject(MapService);
+
 
   public inIframe = window.self !== window.top;
   private overlayHelper: OverlayHelper | undefined;
-
-  constructor(
-    private el: ElementRef,
-    private mapService: MapService,
-  ) {
-  }
 
   public ngAfterViewInit() {
     const nativeEl: HTMLElement | undefined = this.el.nativeElement;

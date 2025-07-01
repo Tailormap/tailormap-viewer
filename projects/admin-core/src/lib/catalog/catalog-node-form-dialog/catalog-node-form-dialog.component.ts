@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogService } from '../services/catalog.service';
@@ -18,18 +18,16 @@ export interface CatalogNodeFormDialogData {
   standalone: false,
 })
 export class CatalogNodeFormDialogComponent {
+  public data = inject<CatalogNodeFormDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<CatalogNodeFormDialogComponent, CatalogNodeModel | null>>(MatDialogRef);
+  private catalogService = inject(CatalogService);
+
 
   public node: Omit<ExtendedCatalogNodeModel, 'id'> | null = null;
 
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: CatalogNodeFormDialogData,
-    private dialogRef: MatDialogRef<CatalogNodeFormDialogComponent, CatalogNodeModel | null>,
-    private catalogService: CatalogService,
-  ) {}
 
   public static open(
     dialog: MatDialog,
