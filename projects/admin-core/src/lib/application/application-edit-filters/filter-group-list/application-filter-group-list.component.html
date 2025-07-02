@@ -1,0 +1,26 @@
+<tm-admin-list-filter [formControl]="filter"
+                      [filterTerm]="filterTerm$ | async"
+                      label="Filter filter groups"
+                      i18n-label="@@admin-core.application.filter-filter-groups"></tm-admin-list-filter>
+<div class="filters">
+  @for (group of filterGroups(); track group.filterGroup.id) {
+    <mat-card class="filter-link"
+              mat-ripple
+              [class.selected]="group.isSelected"
+              [routerLink]="['/admin/applications/application/' + applicationId() + '/filters/filter/' + group.filterGroup.id ]">
+      @if (group.layers.length > 1) {
+        <strong>Multi-layer filter</strong>
+        <div class="filterable-layer-label">
+          @for (layer of group.layers; track layer.id) {
+            <div>{{ layer.layerTitle }}</div>
+          }
+        </div>
+      } @else if (group.layers.length === 1) {
+        <strong>Single-layer filter</strong>
+        <div class="filterable-layer-label">
+          {{ group.layers[0].layerTitle }}
+        </div>
+      }
+    </mat-card>
+  }
+</div>

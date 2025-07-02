@@ -1,0 +1,46 @@
+@let group = filterGroup();
+@if (group) {
+  <div class="edit-filter-group-wrapper">
+    <div class="filter-list">
+      <div class="filters-list-title">
+        <h3 i18n="@@admin-core.application.filters.attributes">Attributes</h3>
+        <button color="white"
+                mat-icon-button
+                class="size-24"
+                tmTooltip="Add attribute"
+                i18n-tmTooltip="@@admin-core.application.filters.add-attribute"
+                (click)="createFilter()">
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+      </div>
+
+      <div class="new-filter-button">
+
+      </div>
+      <tm-admin-application-filters-list></tm-admin-application-filters-list>
+    </div>
+    @if (showFilterForm()) {
+      <div class="application-edit-filter">
+        <div class="edit-filter-header">
+          @if (selectedFilter()) {
+          <h3 i18n="@@admin-core.application.filters.edit-filter">Edit filter</h3>
+          } @else {
+          <h3 i18n="@@admin-core.application.filters.create-filter">Create filter</h3>
+          }
+        </div>
+        <div class="edit-filter-content">
+          <tm-admin-application-edit-filter-form [newFilter]="isCreatingFilter()"
+                                                 [filter]="selectedFilter()?.filter"
+                                                 (validFormChanged)="validFormChanged($event)"
+                                                 (updateFilter)="updateFilter($event)"></tm-admin-application-edit-filter-form>
+          @if (isCreatingFilter()) {
+            <button color="primary" mat-flat-button (click)="saveFilter()" [disabled]="!saveEnabled()">
+              <span i18n="@@admin-core.common.save">Save</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
+

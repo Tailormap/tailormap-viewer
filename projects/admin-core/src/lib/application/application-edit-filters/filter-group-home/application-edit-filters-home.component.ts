@@ -10,9 +10,7 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class ApplicationEditFiltersHomeComponent {
-
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
-
   constructor(private store$: Store) { }
 
 }

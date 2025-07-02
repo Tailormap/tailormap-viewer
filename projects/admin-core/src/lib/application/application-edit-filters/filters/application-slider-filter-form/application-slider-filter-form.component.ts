@@ -6,7 +6,7 @@ import {
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs';
-import { FormHelper } from '../../../helpers/form.helper';
+import { FormHelper } from '../../../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-application-slider-filter-form',

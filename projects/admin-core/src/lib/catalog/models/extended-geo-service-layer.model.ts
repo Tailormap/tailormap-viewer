@@ -4,6 +4,7 @@ import { CatalogExtendedModel, CatalogExtendedTypeEnum } from './catalog-extende
 export interface ExtendedGeoServiceLayerModel extends GeoServiceLayerModel, CatalogExtendedModel {
   type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE;
   originalId: string;
+  layerTitle: string;
   catalogNodeId: string;
   serviceId: string;
   layerSettings?: LayerSettingsModel;

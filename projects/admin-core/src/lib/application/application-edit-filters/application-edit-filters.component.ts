@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
-import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
+import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { loadCatalog } from '../../../catalog/state/catalog.actions';
+import { loadCatalog } from '../../catalog/state/catalog.actions';
+import { selectSelectedApplicationId } from '../state/application.selectors';
 
 @Component({
   selector: 'tm-admin-application-edit-filters',
@@ -13,7 +14,7 @@ import { loadCatalog } from '../../../catalog/state/catalog.actions';
   standalone: false,
 })
 export class ApplicationEditFiltersComponent {
-
+  public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   constructor(
     private store$: Store,
   ) {

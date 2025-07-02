@@ -1,22 +1,18 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum, UpdateSliderFilterModel,
+  UpdateSwitchFilterModel,
 } from '@tailormap-viewer/api';
-import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
-import { FeatureSourceService } from '../../../catalog/services/feature-source.service';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, Observable, switchMap, take } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { nanoid } from 'nanoid';
-import { UpdateAttributeFilterModel } from '../../models/update-attribute-filter.model';
 import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
-import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
-import { FormHelper } from '../../../helpers/form.helper';
-import { selectApplicationSelectedFilterLayerIds, selectSelectedApplicationName } from '../../state/application.selectors';
-import { Store } from '@ngrx/store';
+import { FormHelper } from '../../../../helpers/form.helper';
 import { tap } from 'rxjs/operators';
-import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.service';
+import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
+import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -26,9 +22,6 @@ import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.se
   standalone: false,
 })
 export class ApplicationEditFilterFormComponent implements OnInit {
-
-  private filterGroupId?: string;
-  private otherFilters: AttributeFilterModel[] = [];
 
   public filterData: InputFilterData = {
     condition: undefined,
@@ -54,61 +47,42 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
 
+  public featureTypes$ = this.applicationEditFilterService.featureTypesForSelectedLayers$;
+  public loadingFeatureType$ = this.applicationEditFilterService.isLoadingFeaturesTypes$;
+
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
   public uniqueValuesStrings$: Observable<string[]> | null = null;
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
+  private _filter: AttributeFilterModel | null | undefined;
 
   @Input()
   public newFilter: boolean = false;
 
   @Input()
-  public set filter(updateAttributeFilter: UpdateAttributeFilterModel | null) {
-    this.filterGroupId = updateAttributeFilter?.filterGroup.id;
-    const appLayerIds = updateAttributeFilter?.filterGroup.layerIds;
-    let filterLayers = undefined;
-    if (updateAttributeFilter?.filterableLayers) {
-      filterLayers = updateAttributeFilter.filterableLayers.filter(layer => appLayerIds?.includes(layer.appLayerId));
-      if (filterLayers) {
-        this.setSelectedLayers(filterLayers);
-      }
-    }
-    const attributeFilter = updateAttributeFilter?.filterGroup.filters.find(filterInGroup =>
-      filterInGroup.id === updateAttributeFilter?.filterId);
-    this.otherFilters = updateAttributeFilter?.filterGroup.filters.filter(filterInGroup => filterInGroup.id !== updateAttributeFilter?.filterId) ?? [];
-    this.filterData = {
-      condition: attributeFilter?.condition,
-      value: attributeFilter?.value,
-      caseSensitive: attributeFilter?.caseSensitive,
-      invertCondition: attributeFilter?.invertCondition,
-    };
-    this.editFilterConfiguration = attributeFilter?.editConfiguration;
-    this.initForm(attributeFilter, filterLayers);
+  public set filter(updateFilter: AttributeFilterModel | null | undefined) {
+    this._filter = updateFilter;
+    this.initForm(updateFilter);
+  }
+  public get filter() {
+    return this._filter;
   }
 
-  private featureTypesSubject$ = new BehaviorSubject<FeatureTypeModel[] | null>(null);
-  public featureTypes$ = this.featureTypesSubject$.asObservable();
-
-  private loadingFeatureTypeSubject$ = new BehaviorSubject(false);
-  public loadingFeatureType$ = this.loadingFeatureTypeSubject$.asObservable();
-
   @Output()
-  public updateFilter = new EventEmitter<FilterGroupModel<AttributeFilterModel>>();
+  public updateFilter = new EventEmitter<AttributeFilterModel>();
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
 
   constructor(
-    private featureSourceService: FeatureSourceService,
+    private applicationEditFilterService: ApplicationEditFilterService,
     private destroyRef: DestroyRef,
-    private store$: Store,
-    private uniqueValuesService: UniqueValuesService,
     private adminSnackbarService: AdminSnackbarService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public filterForm = new FormGroup({
     id: new FormControl(''),
-    layers: new FormControl<GeoServiceLayerInApplicationModel[] | null>(null),
     tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
@@ -150,23 +124,20 @@ export class ApplicationEditFilterFormComponent implements OnInit {
           type: FilterTypeEnum.ATTRIBUTE,
           editConfiguration: editFilterConfiguration ?? undefined,
         };
-        const filterGroup: FilterGroupModel<AttributeFilterModel> = {
-          id: this.filterGroupId ?? nanoid(),
-          source: "PRESET",
-          layerIds: value.layers?.map(layer => layer.appLayerId) ?? [],
-          type: FilterTypeEnum.ATTRIBUTE,
-          filters: [ ...this.otherFilters, attributeFilter ],
-          operator: 'AND',
-        };
-        this.updateFilter.emit(filterGroup);
+        this.updateFilter.emit(attributeFilter);
       });
   }
 
-  private initForm(attributeFilter?: AttributeFilterModel, layers?: GeoServiceLayerInApplicationModel[]) {
+  private initForm(attributeFilter: AttributeFilterModel | null | undefined) {
+    this.filterData = {
+      condition: attributeFilter?.condition,
+      value: attributeFilter?.value,
+      caseSensitive: attributeFilter?.caseSensitive,
+      invertCondition: attributeFilter?.invertCondition,
+    };
     if (!attributeFilter) {
       this.filterForm.patchValue({
         id: nanoid(),
-        layers: layers ?? null,
         attribute: '',
         condition: null,
         value: [],
@@ -182,7 +153,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       }
       this.filterForm.patchValue({
         id: attributeFilter.id,
-        layers: layers ?? null,
         tool: attributeFilter.editConfiguration?.filterTool ?? FilterToolEnum.PRESET_STATIC,
         attribute: attributeFilter.attribute,
         attributeType: attributeFilter.attributeType,
@@ -193,13 +163,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         editFilterConfiguration: editFilterConfiguration,
       }, { emitEvent: false });
     }
+    this.cdr.detectChanges();
   }
 
   private isValidForm(): boolean {
     const formValues = this.filterForm.getRawValue();
     const filterValues = formValues.value;
     let validFilterValues = true;
-    if (filterValues && formValues.attributeType !== AttributeType.BOOLEAN) {
+    if (filterValues && formValues.attributeType !== AttributeType.BOOLEAN && formValues.condition !== FilterConditionEnum.NULL_KEY) {
       for (const filterValue of filterValues) {
         if (!FormHelper.isValidValue(filterValue)) {
           validFilterValues = false;
@@ -212,30 +183,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       && formValues.condition !== null
       && validFilterValues
       && this.filterForm.dirty;
-  }
-
-  public setSelectedLayers(filterLayers: GeoServiceLayerInApplicationModel[]) {
-    const featureTypeRequests = filterLayers
-      .map(layer => layer.geoServiceLayer?.layerSettings?.featureType)
-      .filter((featureType) => !!featureType);
-
-    if (featureTypeRequests.length > 0) {
-      this.loadingFeatureTypeSubject$.next(true);
-      combineLatest(
-        featureTypeRequests.map(ft =>
-          this.featureSourceService.loadFeatureType$(
-            ft.featureTypeName,
-            `${ft.featureSourceId}`,
-          ).pipe(take(1)),
-        ),
-      )
-        .pipe(map(featureTypes => featureTypes.filter(ft => !!ft)))
-        .subscribe(featureTypes => {
-        this.featureTypesSubject$.next(featureTypes);
-        this.loadingFeatureTypeSubject$.next(false);
-      });
-    }
-
   }
 
   public setSelectedAttribute($event: AttributeDescriptorModel) {
@@ -261,39 +208,19 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   public setUniqueValues(attributeName: string) {
     this.loadingUniqueValuesSubject$.next(true);
-    this.uniqueValues$ = combineLatest([
-      this.store$.select(selectSelectedApplicationName),
-      this.store$.select(selectApplicationSelectedFilterLayerIds),
-    ]).pipe(
-      take(1),
-      switchMap(([ applicationName, selectedLayers ]) => {
-        if (!selectedLayers || selectedLayers.length === 0) {
-          return [[]];
-        }
-        return combineLatest(
-          selectedLayers.map(layerId =>
-            this.uniqueValuesService.getUniqueValues$({
-              attribute: attributeName,
-              layerId,
-              applicationId: `app/${applicationName}`,
-            }).pipe(
-              map(response => response.values || []),
-            ),
-          ),
-        ).pipe(
-          map((allLayerValues: (string | number | boolean)[][]) => {
-            const allValues= Array.from(new Set(allLayerValues.flat()));
-            if (allValues.length > ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES
-              && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
-              this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:
+    this.uniqueValues$ = this.applicationEditFilterService.getUniqueValuesForAttribute$(attributeName)
+      .pipe(
+        map((allLayerValues: (string | number | boolean)[][]) => {
+          const allValues= Array.from(new Set(allLayerValues.flat()));
+          if (allValues.length > ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES
+            && this.filterForm.get('tool')?.value === FilterToolEnum.CHECKBOX) {
+            this.adminSnackbarService.showMessage($localize `:@@admin-core.application.filters.too-many-values:
                 Too many unique values, showing only the first ${ ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES }.`);
-              return allValues.slice(0, ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES );
-            }
-            return allValues;
-          }),
-        );
-      }),
-    );
+            return allValues.slice(0, ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES );
+          }
+          return allValues;
+        }),
+      );
     this.uniqueValuesStrings$ = this.uniqueValues$.pipe(
       map(values => values.map(value => `${value}`)),
       tap(() => this.loadingUniqueValuesSubject$.next(false)),
@@ -325,23 +252,24 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public getAttributeFilterInfo(): string {
-    const layers = this.filterForm.get('layers')?.value;
-    const attribute = this.filterForm.get('attribute')?.value;
-    const tool = this.filterForm.get('tool')?.value;
-    const toolLabel = this.filterToolOptions.find(option => option.value === tool)?.label;
-    if (!layers) {
-      return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
-    }
-    const layerTitles = layers.map(layer => layer.geoServiceLayer?.layerSettings?.title
-      || layer.geoServiceLayer?.title).join($localize `:@@admin-core.application.filters.and: and `);
-    const filterInfo = layers.length > 1
-      ? $localize `:@@admin-core.application.filters.multi-layer-filter-info:Multi-layer ${toolLabel} filter`
-      : $localize`:@@admin-core.application.filters.filter-info:${toolLabel} filter`;
-    const attributeText = attribute ? $localize`:@@admin-core.application.filters.attribute: for attribute '${attribute}'` : '';
-    const layersText = layers.length > 1
-      ? $localize `:@@admin-core.application.filters.on-layers: on layers `
-      : $localize `:@@admin-core.application.filters.on-layer: on layer `;
-    return filterInfo + attributeText + layersText + layerTitles;
+    return '';
+    // const layers = this.filterForm.get('layers')?.value;
+    // const attribute = this.filterForm.get('attribute')?.value;
+    // const tool = this.filterForm.get('tool')?.value;
+    // const toolLabel = this.filterToolOptions.find(option => option.value === tool)?.label;
+    // if (!layers) {
+    //   return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
+    // }
+    // const layerTitles = layers.map(layer => layer.geoServiceLayer?.layerSettings?.title
+    //   || layer.geoServiceLayer?.title).join($localize `:@@admin-core.application.filters.and: and `);
+    // const filterInfo = layers.length > 1
+    //   ? $localize `:@@admin-core.application.filters.multi-layer-filter-info:Multi-layer ${toolLabel} filter`
+    //   : $localize`:@@admin-core.application.filters.filter-info:${toolLabel} filter`;
+    // const attributeText = attribute ? $localize`:@@admin-core.application.filters.attribute: for attribute '${attribute}'` : '';
+    // const layersText = layers.length > 1
+    //   ? $localize `:@@admin-core.application.filters.on-layers: on layers `
+    //   : $localize `:@@admin-core.application.filters.on-layer: on layer `;
+    // return filterInfo + attributeText + layersText + layerTitles;
   }
 
   public resetFormOnToolChange() {

@@ -4,11 +4,13 @@ import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { AdminServerType, AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
-import { AttributeFilterModel, BaseComponentConfigHelper } from '@tailormap-viewer/api';
+import { AttributeFilterModel, BaseComponentConfigHelper, FilterGroupModel } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { GeoServiceLayerInApplicationModel } from '../models/geo-service-layer-in-application.model';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -26,7 +28,8 @@ export const selectDraftApplicationUpdated = createSelector(selectApplicationSta
 export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
-export const selectApplicationSelectedFilterLayerIds = createSelector(selectApplicationState, state => state.applicationSelectedFilterLayerIds);
+export const selectApplicationFilterGroupFilterTerm = createSelector(selectApplicationState, state => state.applicationFilterGroupFilterTerm);
+export const selectApplicationSelectedFilterGroupId = createSelector(selectApplicationState, state => state.applicationSelectedFilterGroupId);
 export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
 export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
 
@@ -245,28 +248,60 @@ export const selectFilterableLayersForApplication = createSelector(
   },
 );
 
-export const selectSelectedLayersForApplication = createSelector(
-  selectApplicationSelectedFilterLayerIds,
+export const selectFilterableFilterGroups = createSelector(
+  selectFilterGroups,
   selectFilterableLayersForApplication,
-  (selectedLayerIds, filterableLayers) => {
-    return filterableLayers.filter(layer => selectedLayerIds?.includes(layer.appLayerId));
+  selectApplicationSelectedFilterGroupId,
+  (filterGroups, filterableLayers, selectedFilterId): ExtendedFilterGroupModel[] => {
+    return filterGroups.map(filterGroup => {
+      return {
+        filterGroup,
+        isSelected: filterGroup.id === selectedFilterId,
+        layers: filterGroup.layerIds.map(layerId => {
+          const layer = filterableLayers.find(l => l.appLayerId === layerId);
+          return layer ? layer.geoServiceLayer : null;
+        }).filter((layer: ExtendedGeoServiceLayerModel | null): layer is ExtendedGeoServiceLayerModel => layer !== null),
+      };
+    });
   },
 );
 
-export const selectFiltersForApplication = createSelector(
+// export const selectSelectedLayerForApplication = createSelector(
+//   selectApplicationSelectedFilterLayerId,
+//   selectFilterableLayersForApplication,
+//   (selectedLayerId, filterableLayers) => {
+//     return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
+//   },
+// );
+
+export const selectSelectedFilterGroup = createSelector(
   selectFilterGroups,
-  selectSelectedLayersForApplication,
-  selectApplicationSelectedFilterId,
-  (filterGroups, selectedLayers, selectedFilterId) => {
-    if (selectedLayers.length > 0) {
-      filterGroups = filterGroups.filter(group => group.layerIds.length === selectedLayers.length
-        && group.layerIds.every(layerId => selectedLayers.some(selectedLayer => selectedLayer.appLayerId === layerId)));
-    }
-    return filterGroups.reduce<{ filter: AttributeFilterModel; selected: boolean }[]>((acc, group) => {
-      return acc.concat(group.filters.map(filter => ({
-        filter,
-        selected: filter.id === selectedFilterId,
-      })));
-    }, []);
+  selectApplicationSelectedFilterGroupId,
+  (filterGroups, selectedFilterGroupId) => {
+    return filterGroups.find(group => group.id === selectedFilterGroupId) || null;
   },
+);
+
+export const selectLayerIdsForSelectedFilterGroup = createSelector(
+  selectSelectedFilterGroup,
+  selectedGroup => selectedGroup?.layerIds ?? [],
+);
+
+export const selectFiltersForSelectedGroup = createSelector(
+  selectSelectedFilterGroup,
+  selectApplicationSelectedFilterId,
+  (selectedFilterGroup, selectedFilterId) => {
+    if (!selectedFilterGroup) {
+      return [];
+    }
+    return selectedFilterGroup.filters.map(filter => ({
+      filter,
+      selected: filter.id === selectedFilterId,
+    }));
+  },
+);
+
+export const selectSelectedFilterForSelectedGroup = createSelector(
+  selectFiltersForSelectedGroup,
+  filter => filter.find(f => f.selected) || null,
 );

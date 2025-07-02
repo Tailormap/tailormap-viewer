@@ -1,0 +1,25 @@
+.filter-link {
+  display: block;
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 8px;
+  margin-top: 6px;
+}
+
+.selected {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+}
+
+.filter-link:hover {
+  background-color: rgba(0, 0, 0, .04);
+}
+
+.filters {
+  padding: 2px;
+}
+
+.filterable-layer-label {
+  text-align: right;
+}

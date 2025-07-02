@@ -7,7 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
 import { filter } from 'rxjs';
-import { FormHelper } from '../../../helpers/form.helper';
+import { FormHelper } from '../../../../helpers/form.helper';
 
 @Component({
   selector: 'tm-admin-application-switch-filter-form',

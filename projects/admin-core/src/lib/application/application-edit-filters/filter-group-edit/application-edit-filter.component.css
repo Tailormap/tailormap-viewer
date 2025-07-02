@@ -1,0 +1,27 @@
+.application-edit-filter {
+  min-width: 400px;
+}
+
+
+.edit-filter-header h3 {
+  margin: 0;
+}
+
+.edit-filter-group-wrapper {
+  display: flex;
+  gap: 16px;
+}
+
+.filter-list {
+  max-width: 300px;
+}
+
+.filters-list-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filters-list-title h3 {
+  margin: 0;
+}

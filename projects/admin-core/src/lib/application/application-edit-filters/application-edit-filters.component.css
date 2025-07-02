@@ -15,3 +15,13 @@
   margin-right: 10px;
   max-width: 300px;
 }
+
+.filterable-layers-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filterable-layers-header h3 {
+  margin: 0;
+}
