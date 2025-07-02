@@ -206,6 +206,10 @@
         <source>Alias</source>
         <target>Alias</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+        <target>Kies attribuut</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>
@@ -261,6 +265,10 @@
         <source>Edit existing filter</source>
         <target>Bestaand filter bewerken</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
+        <source>Filter layers</source>
+        <target>Filter lagen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
         <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
         <target>filter voor attribuut &apos;<x id="PH" equiv-text="attribute"/>&apos; op laag &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</target>
@@ -277,6 +285,10 @@
         <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
         <target> Filters voor <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+        <target>Numeriek</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
         <target>Vooringesteld</target>
@@ -284,10 +296,6 @@
       <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
         <source>Select a layer to filter</source>
         <target>Selecteer een laag om te filteren</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.slider" datatype="html">
-        <source>Slider</source>
-        <target>Slider</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
         <source>Initial Lower Value</source>
@@ -305,6 +313,14 @@
         <source>Initial Value</source>
         <target>Initiële waarde</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+        <target>Invoerveld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+        <target>Invoermodus</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
         <source>Maximum Value</source>
         <target>Maximale waarde</target>
@@ -316,6 +332,18 @@
       <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
         <source>Slider range</source>
         <target>Slider bereik</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+        <target>Selecteer invoermodus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+        <target>Slider</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
+        <target>Slider en invoerveld</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>

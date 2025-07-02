@@ -1,9 +1,15 @@
-<mat-selection-list>
-  @for (layer of filterableLayersWithSelected(); track layer.appLayerId) {
-    <mat-list-item
-      [class.selected]="layer.isSelected"
-      (click)="setSelectedLayer(layer)">
-      <div class="filterable-layer-label">{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
-    </mat-list-item>
-  }
-</mat-selection-list>
+<div class="filterable-layers-wrapper">
+  <tm-admin-list-filter [formControl]="layerFilter"
+                        [filterTerm]="layerFilterSignal()"
+                        i18n-label="@@admin-core.application.filters.filter-layers"
+                        label="Filter layers"></tm-admin-list-filter>
+  <mat-selection-list>
+    @for (layer of filterableLayersWithSelected(); track layer.appLayerId) {
+      <mat-list-item
+        [class.selected]="layer.isSelected"
+        (click)="setSelectedLayer(layer)">
+        <div class="filterable-layer-label">{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
+      </mat-list-item>
+    }
+  </mat-selection-list>
+</div>

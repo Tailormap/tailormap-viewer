@@ -1,19 +1,16 @@
-:host,
-.flex {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
 .form-group {
   flex: 1;
 }
 
-mat-selection-list {
-  flex: 1;
-  overflow: auto;
+mat-form-field {
+  margin-top: 8px;
 }
 
 mat-spinner {
   margin-top: 16px;
+}
+
+.attribute-option {
+  line-height: 20px;
+  font-size: 16px;
 }
