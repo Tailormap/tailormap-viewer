@@ -206,6 +206,10 @@
         <source>Alias</source>
         <target>Alias</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+        <target>Kies attribuut</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>

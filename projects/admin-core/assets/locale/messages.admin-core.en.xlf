@@ -155,6 +155,9 @@
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
       </trans-unit>
