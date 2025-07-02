@@ -1,17 +1,59 @@
-<div class="form-field form-field__slider">
-  @if (initialLowerValue !== null && initialUpperValue !== null) {
-    <tm-slider
-      [min]="minValue"
-      [max]="maxValue"
-      [step]="stepValue"
-      [betweenValues]="{lower: initialLowerValue, upper: initialUpperValue}"
-      (betweenValuesChange)="changeBetweenValues($event)"></tm-slider>
-  } @else {
-    <tm-slider
-      [min]="minValue"
-      [max]="maxValue"
-      [step]="stepValue"
-      [value]="initialValue"
-      (valueChange)="changeValue($event)"></tm-slider>
-  }
-</div>
+<form [formGroup]="viewerSliderFilterForm">
+  <div class="form-field form-field__slider">
+    @if (betweenInput) {
+      @if (inputMode === "INPUT_FIELD" || inputMode === "SLIDER_AND_INPUT_FIELD") {
+        <div class="range-inputs">
+          <input
+            matInput
+            type="number"
+            formControlName="lowerValue"
+            [min]="minValue"
+            [max]="maxValue"
+            [value]="viewerSliderFilterForm.get('lowerValue')?.value"/>
+          <strong class="range-separator">-</strong>
+          <input
+            matInput
+            type="number"
+            formControlName="upperValue"
+            [min]="minValue"
+            [max]="maxValue"
+            [value]="viewerSliderFilterForm.get('upperValue')?.value"/>
+        </div>
+      }
+      @if (inputMode === "SLIDER" || inputMode === "SLIDER_AND_INPUT_FIELD"){
+        <tm-slider
+          [min]="minValue"
+          [max]="maxValue"
+          [step]="stepValue"
+          [betweenValues]="{lower: viewerSliderFilterForm.get('lowerValue')?.value ?? 0, upper: viewerSliderFilterForm.get('upperValue')?.value ?? 0}"
+          [displayWith]="displayWith"
+          [displayLabels]="inputMode === 'SLIDER'"
+          (betweenValuesChange)="changeBetweenValues($event)"></tm-slider>
+      }
+    } @else {
+      @if (inputMode === "INPUT_FIELD" || inputMode === "SLIDER_AND_INPUT_FIELD") {
+        <div class="single-input">
+          <input
+            matInput
+            type="number"
+            formControlName="filterValue"
+            [min]="minValue"
+            [max]="maxValue"
+            [value]="viewerSliderFilterForm.get('filterValue')?.value"/>
+        </div>
+
+      }
+      @if (inputMode === "SLIDER" || inputMode === "SLIDER_AND_INPUT_FIELD") {
+        <tm-slider
+          [min]="minValue"
+          [max]="maxValue"
+          [step]="stepValue"
+          [value]="viewerSliderFilterForm.get('filterValue')?.value"
+          [displayWith]="displayWith"
+          [displayLabels]="inputMode === 'SLIDER'"
+          (valueChange)="changeValue($event)"></tm-slider>
+      }
+    }
+  </div>
+</form>
+

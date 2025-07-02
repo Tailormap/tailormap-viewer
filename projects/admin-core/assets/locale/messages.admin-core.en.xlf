@@ -212,6 +212,9 @@
       <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
         <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
       </trans-unit>
@@ -233,6 +236,12 @@
       <trans-unit id="admin-core.application.filters.slider.initial-value" datatype="html">
         <source>Initial Value</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
         <source>Maximum Value</source>
       </trans-unit>
@@ -241,6 +250,15 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
         <source>Slider range</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
