@@ -34,7 +34,6 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
 
   public filter = new FormControl<string | AttributeDescriptorModel>('');
-  public selectedAttributeControl = new FormControl('');
 
   private attributeFilter$ = new BehaviorSubject<string | null>(null);
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
@@ -42,8 +41,6 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
 
   public featureType$ = this.featureTypeSubject$.asObservable();
   public attributes$: Observable<Array<AttributeDescriptorModel>> = of([]);
-
-  public filterTerm$ = this.attributeFilter$.asObservable();
 
   constructor(
     private destroyRef: DestroyRef,
