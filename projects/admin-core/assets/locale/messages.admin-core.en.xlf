@@ -197,6 +197,9 @@
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
+        <source>Filter Layers</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-on-attribute-layer" datatype="html">
         <source>filter for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos; on layer &apos;<x id="PH_1" equiv-text="layerTitle"/>&apos;</source>
       </trans-unit>
@@ -217,9 +220,6 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
         <source>Select a layer to filter</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.slider" datatype="html">
-        <source>Slider</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
         <source>Initial Lower Value</source>
