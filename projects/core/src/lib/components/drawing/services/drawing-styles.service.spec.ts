@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { DrawingStylesService } from './drawing-styles.service';
-import { TAILORMAP_API_V1_SERVICE } from './tailormap-api-v1.service.injection-token';
-import { DrawingFeatureStyleModel } from '../../../../core/src/lib/components/drawing/models/drawing-feature.model';
-import { TailormapApiV1MockService } from './tailormap-api-v1-mock.service';
+import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestScheduler } from 'rxjs/testing';
+import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 
 describe('DrawingStylesService', () => {
   let service: DrawingStylesService;
@@ -25,7 +24,7 @@ describe('DrawingStylesService', () => {
   });
 
   test('should return drawing styles from the mock service', (done) => {
-    service.getDrawingStyles$().subscribe((styles: DrawingFeatureStyleModel[]) => {
+    service.getDrawingStyles$().subscribe((styles: DrawingFeatureModelAttributes[]) => {
       expect(Array.isArray(styles)).toBe(true);
       expect(styles.length).toBeGreaterThan(0);
       expect(styles[0]).toHaveProperty('type', 'IMAGE');

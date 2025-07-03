@@ -11,4 +11,3 @@ export * from './tailormap-security-api-v1-mock.service';
 export * from './tailormap-api.constants';
 export * from './authenticated-user.service';
 export * from './application-feature-switch.service';
-export * from './drawing-styles.service';
