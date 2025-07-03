@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import {
   DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { map, Observable, shareReplay } from 'rxjs';
-import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE, UploadedImageHelper } from '@tailormap-viewer/api';
 import { TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { UploadedDrawingStylesResponse } from '../models/uploaded-drawing-styles.model';
 
@@ -14,7 +14,7 @@ export class DrawingStylesService {
   }
 
   public getDrawingStyles$(): Observable<DrawingFeatureModelAttributes[]> {
-    return this.apiService.getLatestUpload$<UploadedDrawingStylesResponse>('drawing-style')
+    return this.apiService.getLatestUpload$<UploadedDrawingStylesResponse>(UploadedImageHelper.DRAWING_STYLE_CATEGORY)
       .pipe(
         map(response => response.styles),
         shareReplay(1), // Cache the response for subsequent subscribers

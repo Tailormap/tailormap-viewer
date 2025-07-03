@@ -51,6 +51,7 @@
     "@tinyhttp/content-disposition": "^2.2.2",
     "cesium": "^1.116.0",
     "html2canvas": "^1.4.1",
+    "js-md5": "^0.8.3",
     "jspdf": "^3.0.1",
     "jsts": "^2.12.1",
     "luxon": "^3.5.0",

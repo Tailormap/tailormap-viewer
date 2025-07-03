@@ -12,6 +12,7 @@ import { ApplicationLayerService } from '../../../map/services/application-layer
 import { AttributeType, AuthenticatedUserService, GeometryType } from '@tailormap-viewer/api';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
+import { DrawingType } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-edit',
@@ -119,7 +120,7 @@ export class EditComponent implements OnInit {
       });
   }
 
-  public createFeature(geometryType: string) {
+  public createFeature(geometryType: DrawingType) {
     if (!this.layer.value) {
       return;
     }
@@ -149,7 +150,7 @@ export class EditComponent implements OnInit {
       this.createFeature('point');
     }
     if (this.isLine()) {
-      this.createFeature('linestring');
+      this.createFeature('line');
     }
   }
 
