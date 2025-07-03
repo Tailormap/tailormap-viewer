@@ -16,6 +16,7 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
+import { DrawingStylesService } from '../services/drawing-styles.service';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMock();
@@ -23,6 +24,9 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),
     deregisterComponent: jest.fn(),
+  };
+  const drawingStylesServiceMock = {
+    getDrawingStyles$: jest.fn(() => of([])),
   };
   const confirmServiceMock = {
     confirm$: jest.fn(() => of(true)),
@@ -36,6 +40,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
+      { provide: DrawingStylesService, useValue: drawingStylesServiceMock },
     ],
   });
   return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };

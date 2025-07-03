@@ -81,6 +81,15 @@
       }
     </div>
 
+    @if (drawingStyles$ | async; as drawingStyles) {
+      <div class="drawing-styles-list">
+        @for (style of drawingStyles; track style) {
+          Stijl: {{ style.style.description }}<br>
+        }
+      </div>
+    }
+
+
     @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {
       <div class="rectangle-size-inputs">
         <mat-form-field appearance="outline" class="rectangle-size-input__width">

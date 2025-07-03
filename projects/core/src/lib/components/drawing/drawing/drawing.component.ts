@@ -19,6 +19,7 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DrawingStylesService } from '../services/drawing-styles.service';
 
 @Component({
   selector: 'tm-drawing',
@@ -49,6 +50,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public mapUnits$ = this.mapService.getUnitsOfMeasure$();
 
+  public drawingStyles$ = this.drawingStylesService.getDrawingStyles$();
+
   private static toolsWithMeasure = new Set([
     DrawingFeatureTypeEnum.CIRCLE,
     DrawingFeatureTypeEnum.SQUARE,
@@ -66,6 +69,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmDialogService,
     private drawingService: DrawingService,
     private cdr: ChangeDetectorRef,
+    private drawingStylesService: DrawingStylesService,
   ) { }
 
   public ngOnInit() {
@@ -314,4 +318,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public drawCircle() {
     this.customCircleRadius = this._customCircleRadius;
   }
+
+  protected readonly JSON = JSON;
 }
