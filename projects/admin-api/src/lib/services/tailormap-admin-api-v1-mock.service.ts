@@ -211,6 +211,9 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public deleteUpload$(): Observable<boolean> {
     return of(true);
   }
+  public findUploadsByHash$(hashes: string[]): Observable<{ id: string; hash: string }[]> {
+    return of(hashes.map(hash => ({ id: hash, hash })));
+  }
 
   public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
     return of({ success: true, status: 'OK' });
