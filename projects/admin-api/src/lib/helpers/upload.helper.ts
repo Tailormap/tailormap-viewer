@@ -1,7 +1,9 @@
+import { UploadedImageHelper } from '@tailormap-viewer/api';
+
 export class UploadHelper {
 
   public static getUrlForFile(id: string, category: string, fileName: string = 't') {
-    return `/api/uploads/${category}/${id}/${fileName}`;
+    return UploadedImageHelper.getUrlForFile(id, category, fileName);
   }
 
   public static prepareBase64(image: string) {
