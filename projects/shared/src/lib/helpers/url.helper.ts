@@ -21,7 +21,7 @@ export class UrlHelper {
 
   public static getParamCaseInsensitive(url: URL, param: string): string | null {
     param = param.toLowerCase();
-    let result = null;
+    let result: string | null = null;
     url.searchParams.forEach((value, key) => {
       if(key.toLowerCase() === param) {
         result = value;

@@ -15,7 +15,7 @@ export class MeasureStyleHelper {
     showTotalSize?: boolean,
     showSegmentSize?: boolean,
   ) {
-    const styles = [];
+    const styles: Style[] = [];
     const geometry = feature.getGeometry();
     if (!geometry) {
       return [];

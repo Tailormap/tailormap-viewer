@@ -165,7 +165,7 @@ export class MapBookmarkHelper {
     fragment: LayerTreeOrderBookmarkFragment,
     layers: ExtendedLayerTreeNodeModel[],
   ): LayerOrderBookmarkContents {
-    const output = [];
+    const output: LayerOrderBookmarkContents = [];
     const outMap = new Map<string, { nodeId: string; children: string[] }>();
     const missingChildren = new Set(layers.map(a => a.id));
 

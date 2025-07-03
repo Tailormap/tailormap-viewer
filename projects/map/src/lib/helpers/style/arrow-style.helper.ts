@@ -19,7 +19,7 @@ export class ArrowStyleHelper {
     if (!geometry || !GeometryTypeHelper.isLineGeometry(geometry)) {
       return [];
     }
-    const arrows = [];
+    const arrows:Style[] = [];
     const flatCoords = geometry.getFlatCoordinates();
     let lastSegment: [ number[], number[] ] | [] = [];
     forEachSegments(flatCoords, 0, flatCoords.length, geometry.getStride(), (start, end) => {

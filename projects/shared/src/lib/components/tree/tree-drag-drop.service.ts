@@ -180,7 +180,7 @@ export class TreeDragDropService implements OnDestroy {
     const hasDropBeforeCls = element.classList.contains(this.beforeCls);
     const hasDropAfterCls = element.classList.contains(this.afterCls);
     const hasDropInsideCls = element.classList.contains(this.insideCls);
-    const removeCls = [];
+    const removeCls: string[] = [];
     if (hasDropBeforeCls && this.dragNodePosition !== 'before') {
       removeCls.push(this.beforeCls);
     }
