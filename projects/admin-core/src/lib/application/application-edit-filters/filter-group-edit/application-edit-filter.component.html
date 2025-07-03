@@ -13,10 +13,6 @@
           <mat-icon svgIcon="plus"></mat-icon>
         </button>
       </div>
-
-      <div class="new-filter-button">
-
-      </div>
       <tm-admin-application-filters-list></tm-admin-application-filters-list>
     </div>
     @if (showFilterForm()) {
@@ -29,7 +25,7 @@
           }
         </div>
         <div class="edit-filter-content">
-          <tm-admin-application-edit-filter-form [newFilter]="isCreatingFilter()"
+          <tm-admin-application-edit-filter-form [newFilter]="isEditingNewFilter()"
                                                  [filter]="selectedFilter()?.filter"
                                                  (validFormChanged)="validFormChanged($event)"
                                                  (updateFilter)="updateFilter($event)"></tm-admin-application-edit-filter-form>

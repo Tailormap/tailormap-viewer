@@ -25,6 +25,9 @@ export class ApplicationEditFilterComponent implements OnDestroy {
   public showFilterForm = computed(() => {
     return this.isCreatingFilter() || !!this.selectedFilter();
   });
+  public isEditingNewFilter = computed(() => {
+    return !this.selectedFilter() && this.isCreatingFilter();
+  });
 
   public saveEnabled = signal(false);
   private updatedFilter: AttributeFilterModel | undefined;
