@@ -45,7 +45,7 @@
     } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
       @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
         <tm-admin-application-checkbox-filter-form
-          [checkboxFilterSettings]="editFilterConfiguration ?? null"
+          [checkboxFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
           (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
       } @else {
         <tm-admin-application-checkbox-filter-form
@@ -57,7 +57,7 @@
       <div class="switch-filter-form">
         @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
           <tm-admin-application-switch-filter-form
-            [switchFilterSettings]="editFilterConfiguration ?? null"
+            [switchFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
             (updateSwitchFilter)="setEditFilterConfiguration($event)"></tm-admin-application-switch-filter-form>
         } @else {
           <tm-admin-application-switch-filter-form

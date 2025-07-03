@@ -29,7 +29,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     caseSensitive: undefined,
     invertCondition: undefined,
   };
-  public editFilterConfiguration?: CheckboxFilterModel | UpdateSliderFilterModel | UpdateSwitchFilterModel;
 
   public filterToolOptions = [{
     label: $localize`:@@admin-core.application.filters.preset:Preset`,

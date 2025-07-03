@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
-import { selectSelectedApplicationId } from '../../state/application.selectors';
+import { Component, ChangeDetectionStrategy, Signal, computed } from '@angular/core';
+import { selectFilterableLayersForApplication, selectSelectedApplicationId } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -11,6 +11,12 @@ import { Store } from '@ngrx/store';
 })
 export class ApplicationEditFiltersHomeComponent {
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
+  private filterableLayers = this.store$.selectSignal(selectFilterableLayersForApplication);
+  public noFilterableLayers = computed(() => {
+    const layers = this.filterableLayers();
+    return !layers || layers.length === 0;
+  });
+
   constructor(private store$: Store) { }
 
 }
