@@ -59,6 +59,7 @@ export interface TailormapAdminApiV1ServiceModel {
   getUploads$(category?: string): Observable<UploadModel[]>;
   createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel>;
   deleteUpload$(uploadId: string): Observable<boolean>;
+  findUploadsByHash$(hashes: string[]): Observable<{ id: string; hash: string }[]>;
 
   pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel>;
   getSearchIndexes$(): Observable<SearchIndexModel[]>;
