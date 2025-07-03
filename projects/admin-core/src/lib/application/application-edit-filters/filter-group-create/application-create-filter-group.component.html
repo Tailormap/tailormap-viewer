@@ -3,7 +3,15 @@
     <strong i18n="@@admin-core.application.filters.create-new-filter">Create new filter</strong>
   </div>
   <div class="create-filter-content">
-    Select the layers you want to filter by. You can select multiple layers.
+    <div class="create-filter-layer-info" >
+      <span i18n="@@admin-core.application.filters.create-filter-layer-info">
+        Select the layers you want to filter by. You can select one or multiple layers.
+      </span>
+    </div>
+    <tm-admin-list-filter [formControl]="layerFilter"
+                          [filterTerm]="layerFilterSignal()"
+                          i18n-label="@@admin-core.application.filters.filter-layers"
+                          label="Filter layers"></tm-admin-list-filter>
     <mat-selection-list (selectionChange)="onLayerSelectionChange($event)">
       @for (layer of layerList(); track layer.appLayerId) {
         <mat-list-option [value]="layer.appLayerId" [selected]="layer.selected">
