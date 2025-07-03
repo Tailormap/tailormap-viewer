@@ -5,9 +5,11 @@ import { DrawingFeatureStyleModel } from '../../../../core/src/lib/components/dr
 import { TailormapApiV1MockService } from './tailormap-api-v1-mock.service';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TestScheduler } from 'rxjs/testing';
 
 describe('DrawingStylesService', () => {
   let service: DrawingStylesService;
+  let scheduler: TestScheduler;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,6 +19,9 @@ describe('DrawingStylesService', () => {
       ],
     });
     service = TestBed.inject(DrawingStylesService);
+    scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
   });
 
   test('should return drawing styles from the mock service', (done) => {
@@ -29,18 +34,23 @@ describe('DrawingStylesService', () => {
     });
   });
 
-  test('should return an empty array if no latest style is available', (done) => {
-    const mockService = TestBed.inject(TAILORMAP_API_V1_SERVICE);
-    jest.spyOn(mockService, 'getLatestUpload$')
-      .mockReturnValue(
-        throwError(()=>new HttpErrorResponse({
-          status: 404,
-          statusText: 'Not Found',
-        }),
-      ));
+  test('should return error if no latest style is available', (done) => {
+    scheduler.run(({ expectObservable }) => {
+      const mockService = TestBed.inject(TAILORMAP_API_V1_SERVICE);
+      jest.spyOn(mockService, 'getLatestUpload$')
+        .mockReturnValue(
+          throwError(()=>new HttpErrorResponse({
+              status: 404,
+              statusText: 'Not Found',
+            }),
+          ));
 
-    service.getDrawingStyles$().subscribe((styles: DrawingFeatureStyleModel[]) => {
-      expect(styles).toEqual([]);
+      const expectedMarble = '#';
+      const expectedError = new HttpErrorResponse({
+        status: 404,
+        statusText: 'Not Found',
+      });
+      expectObservable(service.getDrawingStyles$()).toBe(expectedMarble, undefined, expectedError);
       done();
     });
   });
