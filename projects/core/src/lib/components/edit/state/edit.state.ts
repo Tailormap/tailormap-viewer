@@ -1,13 +1,14 @@
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../../feature-info/models/feature-info-column-metadata.model';
+import { DrawingType } from '@tailormap-viewer/map';
 
 export const editStateKey = 'edit';
 
 export interface EditState {
   isActive: boolean;
   isCreateNewFeatureActive: boolean;
-  newGeometryType: string | null;
+  newGeometryType: DrawingType | null;
   selectedLayer: string | null;
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
