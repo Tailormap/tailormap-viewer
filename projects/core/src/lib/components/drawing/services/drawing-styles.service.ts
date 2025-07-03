@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import {
   DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { map, Observable, shareReplay } from 'rxjs';
-import { TAILORMAP_API_V1_SERVICE } from '../../../../../../api/src/lib/services/tailormap-api-v1.service.injection-token';
-import { TailormapApiV1ServiceModel } from '../../../../../../api/src/lib/services/tailormap-api-v1.service.model';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { UploadedDrawingStylesResponse } from '../models/uploaded-drawing-styles.model';
 
 @Injectable({
