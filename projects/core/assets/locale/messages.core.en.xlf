@@ -387,7 +387,7 @@
         <source>Applies to</source>
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
-        <source>Attribute Filter</source>
+        <source>Attribute filter</source>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
         <source>Before</source>
@@ -584,6 +584,9 @@
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
       </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+      </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
       </trans-unit>
@@ -616,9 +619,6 @@
       </trans-unit>
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
-      </trans-unit>
-      <trans-unit id="core.filters.and" datatype="html">
-        <source> and </source>
       </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>

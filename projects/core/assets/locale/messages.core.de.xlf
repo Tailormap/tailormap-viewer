@@ -515,7 +515,7 @@
         <target>Gilt für</target>
       </trans-unit>
       <trans-unit id="core.filter.attribute-filter" datatype="html">
-        <source>Attribute Filter</source>
+        <source>Attribute filter</source>
         <target>Attributfilter</target>
       </trans-unit>
       <trans-unit id="core.filter.before" datatype="html">
@@ -778,6 +778,10 @@
         <source>Select reference layer</source>
         <target>Referenzlayer auswählen</target>
       </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+        <target> und </target>
+      </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
         <target>Kleiner als</target>
@@ -821,10 +825,6 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
         <target>Wert</target>
-      </trans-unit>
-      <trans-unit id="core.filters.and" datatype="html">
-        <source> and </source>
-        <target> und </target>
       </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>

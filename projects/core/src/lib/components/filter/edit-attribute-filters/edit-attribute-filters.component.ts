@@ -105,6 +105,10 @@ export class EditAttributeFiltersComponent {
     }
   }
 
+  public getConditionLabel(condition: FilterConditionEnum): string {
+    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
+  }
+
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
     if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
       && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {

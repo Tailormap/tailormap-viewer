@@ -1,10 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum, UpdateSliderFilterModel,
-  UpdateSwitchFilterModel,
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
-  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateDatePickerFilterModel,
-} from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
@@ -15,6 +9,10 @@ import { FormHelper } from '../../../../helpers/form.helper';
 import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
+import {
+  AttributeFilterModel, FilterToolEnum, AttributeType, FilterConditionEnum, UpdateSliderFilterModel, CheckboxFilterModel,
+  UpdateSwitchFilterModel, UpdateDatePickerFilterModel, FilterTypeEnum,
+} from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-filter-form',
@@ -260,27 +258,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       editFilterConfiguration: $event,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
-  }
-
-  public getAttributeFilterInfo(): string {
-    return '';
-    // const layers = this.filterForm.get('layers')?.value;
-    // const attribute = this.filterForm.get('attribute')?.value;
-    // const tool = this.filterForm.get('tool')?.value;
-    // const toolLabel = this.filterToolOptions.find(option => option.value === tool)?.label;
-    // if (!layers) {
-    //   return $localize`:@@admin-core.application.filters.select-layer:Select a layer to filter`;
-    // }
-    // const layerTitles = layers.map(layer => layer.geoServiceLayer?.layerSettings?.title
-    //   || layer.geoServiceLayer?.title).join($localize `:@@admin-core.application.filters.and: and `);
-    // const filterInfo = layers.length > 1
-    //   ? $localize `:@@admin-core.application.filters.multi-layer-filter-info:Multi-layer ${toolLabel} filter`
-    //   : $localize`:@@admin-core.application.filters.filter-info:${toolLabel} filter`;
-    // const attributeText = attribute ? $localize`:@@admin-core.application.filters.attribute: for attribute '${attribute}'` : '';
-    // const layersText = layers.length > 1
-    //   ? $localize `:@@admin-core.application.filters.on-layers: on layers `
-    //   : $localize `:@@admin-core.application.filters.on-layer: on layer `;
-    // return filterInfo + attributeText + layersText + layerTitles;
   }
 
   public resetFormOnToolChange() {

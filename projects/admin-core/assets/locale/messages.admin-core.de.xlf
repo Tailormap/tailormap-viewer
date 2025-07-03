@@ -198,6 +198,10 @@
         <source>Filter applications</source>
         <target>Anwendungen filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter-filter-groups" datatype="html">
+        <source>Filter filter groups</source>
+        <target>Filtergruppen filtern</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter-tree" datatype="html">
         <source>Filter application layers</source>
         <target>Anwendungsschichten filtern</target>
@@ -230,21 +234,13 @@
         <source>Filters</source>
         <target>Filter</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.all-filters" datatype="html">
-        <source>All filters</source>
-        <target>Alle Filter</target>
+      <trans-unit id="admin-core.application.filters.add-attribute" datatype="html">
+        <source>Add attribute</source>
+        <target>Attribut hinzufügen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.and" datatype="html">
-        <source> and </source>
-        <target> und </target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.attribute" datatype="html">
-      <source> for attribute &apos;<x id="PH" equiv-text="attribute"/>&apos;</source>
-      <target> für Attribut &apos;<x id="PH" equiv-text="attribute"/>&apos;</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.boolean" datatype="html">
-        <source>Boolean</source>
-        <target>Boolean</target>
+      <trans-unit id="admin-core.application.filters.attributes" datatype="html">
+        <source>Attributes</source>
+        <target>Attribute</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
@@ -274,53 +270,21 @@
         <source>Initial upper date</source>
         <target>Startdatum bis</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
-        <source>Edit existing filter</source>
-        <target>Bestehenden Filter bearbeiten</target>
+      <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
+        <source>Edit filter</source>
+        <target>Filter bearbeiten</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
-        <source>Filter Layers</source>
-        <target>Ebenen filtern</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.filter-info" datatype="html">
-        <source><x id="PH" equiv-text="toolLabel"/> filter</source>
-        <target><x id="PH" equiv-text="toolLabel"/> Filter</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.filterable-layers" datatype="html">
-        <source>Filterable layers</source>
-        <target>Filterbare Ebenen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
-        <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
-        <target> Filter für <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
+      <trans-unit id="admin-core.application.filters.filters" datatype="html">
+        <source>Filters</source>
+        <target>Filter</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.numeric" datatype="html">
         <source>Numeric</source>
         <target>Numerisch</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.multi-layer-filter" datatype="html">
-        <source>Multi-layer filters for </source>
-        <target>Mehrschichtige Filter für </target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.multi-layer-filter-info" datatype="html">
-        <source>Multi-layer <x id="PH" equiv-text="toolLabel"/> filter</source>
-        <target>Mehrschichtiger <x id="PH" equiv-text="toolLabel"/> Filter</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.on-layer" datatype="html">
-        <source> on layer </source>
-        <target> auf Ebene </target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.on-layers" datatype="html">
-        <source> on layers </source>
-        <target> auf Ebenen </target>
-      </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
         <target>Vorgabe</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
-        <source>Select a layer to filter</source>
-        <target>Wählen Sie eine Ebene zum Filtern aus</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
         <source>Initial Lower Value</source>
@@ -569,22 +533,6 @@
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
         <target>Geländeebene</target>
-      </trans-unit>
-      <trans-unit id="admin-core.applications.filters.delete-filter" datatype="html">
-        <source>Delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/></source>
-        <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> löschen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.applications.filters.delete-filter-message" datatype="html">
-        <source> Are you sure you want to delete filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/>? This action cannot be undone.</source>
-        <target> Sind Sie sicher, dass Sie den Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.applications.filters.filter-removed" datatype="html">
-        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> removed</source>
-        <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> entfernt</target>
-      </trans-unit>
-      <trans-unit id="admin-core.applications.filters.filter-updated" datatype="html">
-        <source>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> updated</source>
-        <target>Filter <x id="PH" equiv-text="this.getAttributeFilterLabel(attributeFilter)"/> aktualisiert</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
