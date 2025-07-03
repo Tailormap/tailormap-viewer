@@ -51,3 +51,4 @@ export * from './filter-tool.enum';
 export * from './slider-filter.model';
 export * from './checkbox-filter.model';
 export * from './switch-filter.model';
+export * from './date-picker-filter.model';

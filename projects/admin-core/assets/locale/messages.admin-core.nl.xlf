@@ -206,6 +206,10 @@
         <source>Alias</source>
         <target>Alias</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+        <target>Kies attribuut</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>
@@ -253,6 +257,22 @@
         <source>Create new filter</source>
         <target>Nieuw filter aanmaken</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
+        <source>Date Picker</source>
+        <target>Datumkiezer</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
+        <source>Initial date</source>
+        <target>Initiële datum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-from" datatype="html">
+        <source>Initial lower date</source>
+        <target>Initiële onderste datum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
+        <source>Initial upper date</source>
+        <target>Initiële bovenste datum</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
         <target>Bestaand filter bewerken</target>
@@ -285,6 +305,10 @@
        <source> on layers </source>
        <target> op lagen </target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+        <target>Numeriek</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.preset" datatype="html">
         <source>Preset</source>
         <target>Vooringesteld</target>
@@ -292,10 +316,6 @@
       <trans-unit id="admin-core.application.filters.select-layer" datatype="html">
         <source>Select a layer to filter</source>
         <target>Selecteer een laag om te filteren</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.slider" datatype="html">
-        <source>Slider</source>
-        <target>Slider</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
         <source>Initial Lower Value</source>
@@ -313,6 +333,14 @@
         <source>Initial Value</source>
         <target>Initiële waarde</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+        <target>Invoerveld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+        <target>Invoermodus</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
         <source>Maximum Value</source>
         <target>Maximale waarde</target>
@@ -324,6 +352,18 @@
       <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
         <source>Slider range</source>
         <target>Slider bereik</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+        <target>Selecteer invoermodus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+        <target>Slider</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
+        <target>Slider en invoerveld</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>

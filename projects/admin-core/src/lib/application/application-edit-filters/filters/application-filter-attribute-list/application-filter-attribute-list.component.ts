@@ -27,14 +27,13 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public set filterTool(filterTool: FilterToolEnum | null) {
     if (filterTool) {
       this.filterToolSubject$.next(filterTool);
-      this.selectedSubject$.next('');
     }
   }
 
   @Output()
   public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
 
-  public filter = new FormControl('');
+  public filter = new FormControl<string | AttributeDescriptorModel>('');
 
   private attributeFilter$ = new BehaviorSubject<string | null>(null);
   private featureTypesSubject$ = new BehaviorSubject<FeatureTypeModel[] | null>(null);
@@ -55,7 +54,8 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
     this.filter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
-        this.attributeFilter$.next(value);
+        const valueString = typeof value === 'string' ? value : '';
+        this.attributeFilter$.next(valueString);
       });
     this.attributes$ = combineLatest([
       this.featureTypesSubject$.asObservable(),
@@ -86,6 +86,9 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
                   && att.type !== AttributeType.DATE
                   && att.type !== AttributeType.TIMESTAMP;
               }
+              if (filterTool === FilterToolEnum.DATE_PICKER) {
+                return att.type === AttributeType.DATE || att.type === AttributeType.TIMESTAMP;
+              }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
             .map((att: AttributeDescriptorModel) => ({
@@ -102,7 +105,10 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
 
   public attributeClicked(attribute: AttributeDescriptorModel) {
     this.selectAttribute.emit(attribute);
-    this.selectedSubject$.next(attribute.name);
+  }
+
+  public displayFn(attribute: AttributeDescriptorModel): string {
+    return attribute ? attribute.name : '';
   }
 
 }

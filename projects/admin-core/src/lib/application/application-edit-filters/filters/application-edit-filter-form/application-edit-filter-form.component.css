@@ -1,9 +1,6 @@
 .layers-and-attributes {
   display: flex;
-  margin-top: 16px;
   overflow: hidden;
-  min-height: 100px;
-  max-height: 450px;
 }
 
 tm-admin-application-filter-attribute-list {
@@ -19,6 +16,7 @@ tm-admin-application-filter-attribute-list {
 }
 
 .attribute-filter-values,
-.slider-filter-form {
+.slider-filter-form,
+.date-picker-filter-form {
   margin-top: 16px;
 }

@@ -206,6 +206,10 @@
         <source>Alias</source>
         <target>Alias</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+        <target>Attribut auswählen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Anfangs ausgewählt</target>
@@ -254,9 +258,29 @@
         <source>Create new filter</source>
         <target>Neuen Filter erstellen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
+        <source>Date Picker</source>
+        <target>Datumsauswahl</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
+        <source>Initial date</source>
+        <target>Startdatum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-from" datatype="html">
+        <source>Initial lower date</source>
+        <target>Startdatum von</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
+        <source>Initial upper date</source>
+        <target>Startdatum bis</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-existing-filter" datatype="html">
         <source>Edit existing filter</source>
         <target>Bestehenden Filter bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
+        <source>Filter Layers</source>
+        <target>Ebenen filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filter-info" datatype="html">
         <source><x id="PH" equiv-text="toolLabel"/> filter</source>
@@ -267,8 +291,12 @@
         <target>Filterbare Ebenen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filters-for" datatype="html">
-        <source>Filters for <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></source>
-        <target>Filter für <x id="PH" equiv-text="layers[0].geoServiceLayer.title"/></target>
+        <source> Filters for <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </source>
+        <target> Filter für <x id="INTERPOLATION" equiv-text="{{ selectedLayer.geoServiceLayer.layerSettings?.title || selectedLayer.geoServiceLayer.title }}"/> </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+        <target>Numerisch</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.multi-layer-filter" datatype="html">
         <source>Multi-layer filters for </source>
@@ -294,10 +322,6 @@
         <source>Select a layer to filter</source>
         <target>Wählen Sie eine Ebene zum Filtern aus</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters.slider" datatype="html">
-        <source>Slider</source>
-        <target>Slider</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
         <source>Initial Lower Value</source>
         <target>Ursprünglicher unterer Wert</target>
@@ -314,6 +338,14 @@
         <source>Initial Value</source>
         <target>Anfangswert</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+        <target>Eingabefeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+        <target>Eingabemodus</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
         <source>Maximum Value</source>
         <target>Maximalwert</target>
@@ -325,6 +357,18 @@
       <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
         <source>Slider range</source>
         <target>Schiebereglerbereich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+        <target>Eingabemodus auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+        <target>Schieberegler</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
+        <target>Schieberegler und Eingabefeld</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>

@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Even
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum, UpdateSliderFilterModel,
   UpdateSwitchFilterModel,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
+  UniqueValuesService, UpdateSliderFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateDatePickerFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -37,11 +39,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
-    label: $localize`:@@admin-core.application.filters.slider:Slider`,
+    label: $localize`:@@admin-core.application.filters.numeric:Numeric`,
     value: FilterToolEnum.SLIDER,
   }, {
     label: $localize`:@@admin-core.application.filters.switch:Switch`,
     value: FilterToolEnum.SWITCH,
+  }, {
+    label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
+    value: FilterToolEnum.DATE_PICKER,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -89,7 +94,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -224,9 +229,12 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       map(values => values.map(value => `${value}`)),
       tap(() => this.loadingUniqueValuesSubject$.next(false)),
     );
+
   }
 
-  public setEditFilterConfiguration($event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel) {
+  public setEditFilterConfiguration(
+    $event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel,
+  ) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()
@@ -238,6 +246,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         .map(setting => setting.value);
     } else if ($event.filterTool === FilterToolEnum.SWITCH && $event.value1 !== undefined && $event.value2 !== undefined) {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
+    } else if ($event.filterTool === FilterToolEnum.DATE_PICKER) {
+      value = $event.initialDate
+        ? [$event.initialDate.toISODate() ?? '']
+        : [ $event.initialLowerDate?.toISODate() ?? '', $event.initialUpperDate?.toISODate() ?? '' ];
     }
     const condition = $event.filterTool === FilterToolEnum.CHECKBOX
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
