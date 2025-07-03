@@ -250,6 +250,10 @@
         <source>Create filter</source>
         <target>Filter erstellen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-filter-layer-info" datatype="html">
+        <source> Select the layers you want to filter by. You can select one or multiple layers. </source>
+        <target> Wählen Sie die Ebenen aus, nach denen Sie filtern möchten. Sie können eine oder mehrere Ebenen auswählen. </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-new-filter" datatype="html">
         <source>Create new filter</source>
         <target>Neuen Filter erstellen</target>
@@ -273,6 +277,10 @@
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
         <target>Filter bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
+        <source>Filter layers</source>
+        <target>Ebenen filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.filters" datatype="html">
         <source>Filters</source>

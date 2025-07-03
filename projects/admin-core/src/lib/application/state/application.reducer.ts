@@ -421,7 +421,7 @@ const onUpdateApplicationFilterConfigForSelectedGroup = (
   });
 };
 
-const onCreateApplicationAttributeFilter = (
+const onCreateApplicationAttributeFilterGroup = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilterGroup>,
 ): ApplicationState => {
@@ -592,7 +592,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
   on(ApplicationActions.updateApplicationFiltersConfigForSelectedGroup, onUpdateApplicationFiltersConfigForSelectedGroup),
   on(ApplicationActions.updateApplicationFilterConfigForSelectedGroup, onUpdateApplicationFilterConfigForSelectedGroup),
-  on(ApplicationActions.createApplicationAttributeFilterGroup, onCreateApplicationAttributeFilter),
+  on(ApplicationActions.createApplicationAttributeFilterGroup, onCreateApplicationAttributeFilterGroup),
   on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
   on(ApplicationActions.setApplicationSelectedFilterGroupId, onSetApplicationSelectedFilterGroupId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),

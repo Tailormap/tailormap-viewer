@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, Signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, OnInit, DestroyRef, signal, computed } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  selectApplicationFilterGroupFilterTerm, selectFilterableFilterGroups, selectSelectedApplicationId,
-} from '../../state/application.selectors';
+import { selectFilterableFilterGroups, selectSelectedApplicationId } from '../../state/application.selectors';
 import { FormControl } from '@angular/forms';
 import { ExtendedFilterGroupModel } from '../../models/extended-filter-group.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-application-filter-group-list',
@@ -13,15 +13,39 @@ import { ExtendedFilterGroupModel } from '../../models/extended-filter-group.mod
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ApplicationFilterGroupListComponent {
+export class ApplicationFilterGroupListComponent implements OnInit {
 
   public filterGroups: Signal<ExtendedFilterGroupModel[]> = this.store$.selectSignal(selectFilterableFilterGroups);
-
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
 
-  public filter = new FormControl('');
-  public filterTerm$ = this.store$.select(selectApplicationFilterGroupFilterTerm);
+  public layerFilter = new FormControl('');
+  public layerFilterSignal = signal<string>('');
 
-  constructor(private store$: Store) { }
+  public filteredFilterGroups = computed(() => {
+    const filterTerm = this.layerFilterSignal();
+    const filterGroups = this.filterGroups();
+    if (filterTerm) {
+      return FilterHelper.filterByTerm(filterGroups, filterTerm, filterGroup => {
+        const layerNames = filterGroup.layers.map(layer => layer.name);
+        return layerNames.join(' ');
+      });
+    }
+    return filterGroups;
+  });
+
+  constructor(
+    private store$: Store,
+    private destroyRef: DestroyRef,
+    ) { }
+
+  public ngOnInit() {
+    this.layerFilter.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(filterTerm => {
+        if (filterTerm !== null) {
+          this.layerFilterSignal.set(filterTerm);
+        }
+      });
+  }
 
 }

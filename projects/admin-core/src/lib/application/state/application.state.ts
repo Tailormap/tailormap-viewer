@@ -18,7 +18,6 @@ export interface ApplicationState {
   applicationCatalogFilterTerm?: string;
   applicationLayerTreeFilterTerm?: string;
   applicationBaseLayerTreeFilterTerm?: string;
-  applicationFilterGroupFilterTerm?: string | null;
   applicationSelectedFilterGroupId?: string;
   applicationSelectedFilterId?: string;
 }

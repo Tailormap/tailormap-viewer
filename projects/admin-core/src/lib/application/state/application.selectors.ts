@@ -28,7 +28,6 @@ export const selectDraftApplicationUpdated = createSelector(selectApplicationSta
 export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
-export const selectApplicationFilterGroupFilterTerm = createSelector(selectApplicationState, state => state.applicationFilterGroupFilterTerm);
 export const selectApplicationSelectedFilterGroupId = createSelector(selectApplicationState, state => state.applicationSelectedFilterGroupId);
 export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
 export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
@@ -265,14 +264,6 @@ export const selectFilterableFilterGroups = createSelector(
     });
   },
 );
-
-// export const selectSelectedLayerForApplication = createSelector(
-//   selectApplicationSelectedFilterLayerId,
-//   selectFilterableLayersForApplication,
-//   (selectedLayerId, filterableLayers) => {
-//     return filterableLayers.find(layer => layer.appLayerId === selectedLayerId);
-//   },
-// );
 
 export const selectSelectedFilterGroup = createSelector(
   selectFilterGroups,

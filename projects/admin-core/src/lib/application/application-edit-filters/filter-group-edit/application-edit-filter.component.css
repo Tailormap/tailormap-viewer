@@ -25,3 +25,7 @@
 .filters-list-title h3 {
   margin: 0;
 }
+
+.create-filter-button {
+  margin-top: 8px;
+}

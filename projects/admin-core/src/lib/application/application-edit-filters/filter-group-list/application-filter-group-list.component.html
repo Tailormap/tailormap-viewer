@@ -1,9 +1,9 @@
-<tm-admin-list-filter [formControl]="filter"
-                      [filterTerm]="filterTerm$ | async"
+<tm-admin-list-filter [formControl]="layerFilter"
+                      [filterTerm]="layerFilterSignal()"
                       label="Filter filter groups"
                       i18n-label="@@admin-core.application.filter-filter-groups"></tm-admin-list-filter>
 <div class="filters">
-  @for (group of filterGroups(); track group.filterGroup.id) {
+  @for (group of filteredFilterGroups(); track group.filterGroup.id) {
     <mat-card class="filter-link"
               mat-ripple
               [class.selected]="group.isSelected"
