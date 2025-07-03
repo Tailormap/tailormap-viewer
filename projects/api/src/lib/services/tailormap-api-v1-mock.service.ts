@@ -106,7 +106,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         return of({
           styles: [{
             'type': 'IMAGE', 'style': {
-              'markerImage': 'https://snapshot.tailormap.nl/api/uploads/drawing-style-image/07d2f7aa-6eb1-442a-822d-896514a9bc0d/drinkwater.svg',
+              'markerImage': '/uploads/drawing-style-image/07d2f7aa-6eb1-442a-822d-896514a9bc0d/drinkwater.svg',
               'description': 'Drinkwater',
               'marker': 'circle',
               'markerSize': 11,
