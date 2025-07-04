@@ -20,6 +20,13 @@
   padding: 2px;
 }
 
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+}
+
 .filterable-layer-label {
   text-align: right;
 }

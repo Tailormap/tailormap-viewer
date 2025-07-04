@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { ExtendedFilterGroupModel } from '../../models/extended-filter-group.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
+import { deleteApplicationAttributeFilterGroup } from '../../state/application.actions';
 
 @Component({
   selector: 'tm-admin-application-filter-group-list',
@@ -44,6 +45,11 @@ export class ApplicationFilterGroupListComponent implements OnInit {
       .subscribe(filterTerm => {
         this.layerFilterSignal.set(filterTerm || '');
       });
+  }
+
+  public removeFilterGroup($event: MouseEvent, id: string) {
+    $event.stopPropagation();
+    this.store$.dispatch(deleteApplicationAttributeFilterGroup({ filterGroupId: id }));
   }
 
 }

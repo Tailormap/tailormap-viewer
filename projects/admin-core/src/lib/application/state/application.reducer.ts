@@ -479,6 +479,22 @@ const onDeleteApplicationAttributeFilter = (
     });
 };
 
+const onDeleteApplicationAttributeFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.filter(fg => fg.id !== payload.filterGroupId) || [];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
+  });
+};
+
 const onSetApplicationSelectedFilterGroupId = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterGroupId>,
@@ -594,6 +610,7 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationFilterConfigForSelectedGroup, onUpdateApplicationFilterConfigForSelectedGroup),
   on(ApplicationActions.createApplicationAttributeFilterGroup, onCreateApplicationAttributeFilterGroup),
   on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
+  on(ApplicationActions.deleteApplicationAttributeFilterGroup, onDeleteApplicationAttributeFilterGroup),
   on(ApplicationActions.setApplicationSelectedFilterGroupId, onSetApplicationSelectedFilterGroupId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),

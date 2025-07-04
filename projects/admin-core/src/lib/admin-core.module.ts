@@ -38,6 +38,9 @@ export class AdminCoreModule {
         'feature_type', 'application', 'more', 'link_new_window', 'default_application', 'search-index',
         'logs', 'tasks', 'task_successful', 'task_failed', 'task_running', 'warning', 'terrain', 'unavailable',
       ],
+    }, {
+      folder: 'admin/filters',
+      icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle' ],
     }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
     authenticatedUserService.fetchUserDetails();

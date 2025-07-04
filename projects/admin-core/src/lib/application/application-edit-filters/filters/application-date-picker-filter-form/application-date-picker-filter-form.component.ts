@@ -31,9 +31,9 @@ export class ApplicationDatePickerFilterFormComponent implements OnInit {
     if (configuration && configuration.filterTool === FilterToolEnum.DATE_PICKER) {
       this.datePickerFilterForm.patchValue({
         condition: configuration.condition,
-        initialDate: configuration.initialDate,
-        initialLowerDate: configuration.initialLowerDate,
-        initialUpperDate: configuration.initialUpperDate,
+        initialDate: configuration.initialDate ? DateTime.fromISO(configuration.initialDate) : undefined,
+        initialLowerDate: configuration.initialLowerDate ? DateTime.fromISO(configuration.initialLowerDate) : undefined,
+        initialUpperDate: configuration.initialUpperDate ? DateTime.fromISO(configuration.initialUpperDate) : undefined,
       }, { emitEvent: false });
     }
   }
@@ -60,9 +60,9 @@ export class ApplicationDatePickerFilterFormComponent implements OnInit {
         this.updateDatePickerFilter.emit({
           filterTool: FilterToolEnum.DATE_PICKER,
           condition: value.condition ?? FilterConditionEnum.DATE_ON_KEY,
-          initialDate: value.initialDate ?? undefined,
-          initialLowerDate: value.initialLowerDate ?? undefined,
-          initialUpperDate: value.initialUpperDate ?? undefined,
+          initialDate: value.initialDate?.toISO() ?? undefined,
+          initialLowerDate: value.initialLowerDate?.toISO() ?? undefined,
+          initialUpperDate: value.initialUpperDate?.toISO() ?? undefined,
         });
       });
   }

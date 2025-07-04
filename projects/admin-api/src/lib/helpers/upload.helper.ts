@@ -1,5 +1,4 @@
-import { md5 } from "js-md5";
-import { Observable } from 'rxjs';
+import { from, map, Observable, switchMap } from 'rxjs';
 import { UploadedImageHelper } from '@tailormap-viewer/api';
 
 export class UploadHelper {
@@ -19,16 +18,21 @@ export class UploadHelper {
     return { image, mimeType };
   }
 
-  public static getMd5HashForFile$(file: File): Observable<string> {
-    return new Observable<string>(observer => {
-      file.arrayBuffer().then(buffer => {
-        observer.next(md5(buffer));
-        observer.complete();
-      }).catch(() => {
-        observer.error(new Error('Failed to read file for MD5 hash calculation'));
-        observer.complete();
-      });
-    });
+  public static arrayBufferToHex(buffer: ArrayBuffer): string {
+    return Array.from(new Uint8Array(buffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 
+  public static getSha1HashForArrayBuffer$(buffer: ArrayBuffer): Observable<string> {
+    return from(crypto.subtle.digest('SHA-1', buffer)).pipe(
+      map(hashBuffer => this.arrayBufferToHex(hashBuffer)),
+    );
+  }
+
+  public static getSha1HashForFile$(file: File): Observable<string> {
+    return from(file.arrayBuffer()).pipe(
+      switchMap(buffer => this.getSha1HashForArrayBuffer$(buffer)),
+    );
+  }
 }
