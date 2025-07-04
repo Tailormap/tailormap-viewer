@@ -3,6 +3,7 @@ import { FeatureInfoResponseModel } from '../../feature-info/models/feature-info
 import { FeatureModel } from '@tailormap-viewer/api';
 import { FeatureInfoColumnMetadataModel } from "../../feature-info/models/feature-info-column-metadata.model";
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
+import { DrawingType } from '@tailormap-viewer/map';
 
 const editActionsPrefix = '[Edit]';
 
@@ -13,7 +14,7 @@ export const setEditActive = createAction(
 
 export const setEditCreateNewFeatureActive = createAction(
   `${editActionsPrefix} Set Create New Feature Active`,
-  props<{ active: boolean; geometryType: string; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+  props<{ active: boolean; geometryType: DrawingType; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
 );
 
 export const setSelectedEditLayer = createAction(

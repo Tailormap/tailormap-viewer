@@ -190,4 +190,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     return queryParams;
   }
 
+  public getLatestUpload$(category: string): Observable<any> {
+    return this.httpClient.get<any>(`${TailormapApiConstants.BASE_URL}/uploads/${category}/latest`);
+  }
 }
