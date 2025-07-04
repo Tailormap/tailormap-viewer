@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
+        <source>Multi-layer filter</source>
+        <target>Mehr-Ebenen-Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
+        <source>Single-layer filter</source>
+        <target>Einzel-Ebenen-Filter</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
         <target>Anwendung hinzufügen</target>
@@ -493,6 +501,14 @@
       <trans-unit id="admin-core.application.remove" datatype="html">
         <source>Remove</source>
         <target>Entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.remove-attribute" datatype="html">
+        <source>Remove attribute</source>
+        <target>Attribut entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.remove-filter" datatype="html">
+        <source>Remove filter</source>
+        <target>Filter entfernen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.remove-image" datatype="html">
         <source>Remove the image</source>
