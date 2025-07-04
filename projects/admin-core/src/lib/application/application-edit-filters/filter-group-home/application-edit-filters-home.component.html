@@ -1,7 +1,6 @@
 <button mat-flat-button
         color="primary"
-        [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'"
-        [disabled]="noFilterableLayers()">
+        [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'">
   <mat-icon svgIcon="plus"></mat-icon>
   <span i18n="@@admin-core.application.filters.create-filter">Create filter</span>
 </button>

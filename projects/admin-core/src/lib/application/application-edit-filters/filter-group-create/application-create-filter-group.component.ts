@@ -52,10 +52,8 @@ export class ApplicationCreateFilterGroupComponent implements OnInit {
     this.layerFilter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(filterTerm => {
-        if (filterTerm !== null) {
-          this.layerFilterSignal.set(filterTerm);
-        }
-      });
+      this.layerFilterSignal.set(filterTerm || '');
+    });
   }
 
   public save() {
