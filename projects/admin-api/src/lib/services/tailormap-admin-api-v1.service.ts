@@ -322,7 +322,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  // md5 hashes are used to identify uploads
+  // sha1 hashes are used to identify uploads
   public findUploadsByHash$(category: string, hashes: string[]): Observable<{ id: string; hash: string }[]> {
     return this.httpClient.post<{ id: string; hash: string }[]>(`${TailormapAdminApiV1Service.BASE_URL}/uploads/find-by-hash/${category}`, hashes);
   }
