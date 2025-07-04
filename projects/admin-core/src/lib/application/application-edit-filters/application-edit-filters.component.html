@@ -2,14 +2,15 @@
   <div class="filterable-layers-list">
     <div class="filterable-layers-header">
       <h3 i18n="@@admin-core.application.filters.filters">Filters</h3>
-      <button color="white"
-              mat-icon-button
-              class="size-24"
-              tmTooltip="Create filter"
-              i18n-tmTooltip="@@admin-core.application.filters.create-filter"
-              [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'">
-        <mat-icon svgIcon="plus"></mat-icon>
-      </button>
+      <div class="create-filter-button-wrapper" [tmTooltip]="createFilterTooltip()">
+        <button color="white"
+                mat-icon-button
+                class="size-24"
+                [disabled]="noFilterableLayers()"
+                [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'">
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+      </div>
     </div>
     <tm-admin-application-filter-group-list></tm-admin-application-filter-group-list>
   </div>

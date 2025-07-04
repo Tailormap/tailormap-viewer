@@ -215,6 +215,9 @@
       <trans-unit id="admin-core.application.filters.filters" datatype="html">
         <source>Filters</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.no-filterable-layers" datatype="html">
+        <source>There are no filterable layers for this application</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.numeric" datatype="html">
         <source>Numeric</source>
       </trans-unit>

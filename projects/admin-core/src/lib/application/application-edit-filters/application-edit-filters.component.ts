@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadCatalog } from '../../catalog/state/catalog.actions';
-import { selectSelectedApplicationId } from '../state/application.selectors';
+import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
 
 @Component({
   selector: 'tm-admin-application-edit-filters',
@@ -15,6 +15,14 @@ import { selectSelectedApplicationId } from '../state/application.selectors';
 })
 export class ApplicationEditFiltersComponent {
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
+  public noFilterableLayers: Signal<boolean> = this.store$.selectSignal(selectNoFilterableLayersForSelectedApplication);
+  public createFilterTooltip = computed(() => {
+    if (this.noFilterableLayers()) {
+      return $localize `:@@admin-core.application.filters.no-filterable-layers:There are no filterable layers for this application`;
+    }
+    return $localize `:@@admin-core.application.filters.create-filter:Create filter`;
+  });
+
   constructor(
     private store$: Store,
   ) {

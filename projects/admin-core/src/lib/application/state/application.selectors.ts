@@ -296,3 +296,8 @@ export const selectSelectedFilterForSelectedGroup = createSelector(
   selectFiltersForSelectedGroup,
   filter => filter.find(f => f.selected) || null,
 );
+
+export const selectNoFilterableLayersForSelectedApplication = createSelector(
+  selectFilterableLayersForApplication,
+  filterableLayers => filterableLayers.length === 0,
+);

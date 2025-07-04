@@ -286,6 +286,10 @@
         <source>Filters</source>
         <target>Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.no-filterable-layers" datatype="html">
+        <source>There are no filterable layers for this application</source>
+        <target>Für diese Anwendung gibt es keine filterbaren Ebenen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.numeric" datatype="html">
         <source>Numeric</source>
         <target>Numerisch</target>

@@ -285,6 +285,10 @@
         <source>Filters</source>
         <target>Filters</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.no-filterable-layers" datatype="html">
+        <source>There are no filterable layers for this application</source>
+        <target>Er zijn geen filterbare lagen voor deze applicatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.numeric" datatype="html">
         <source>Numeric</source>
         <target>Numeriek</target>
