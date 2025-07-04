@@ -20,9 +20,9 @@ export class DatePickerFilterComponent implements OnInit {
   public set datePickerFilterConfiguration(config: DatePickerFilterModel) {
     this.isBetweenCondition = !config.initialDate;
     this.datePickerFilterForm.patchValue({
-      date: config.initialDate ?? null,
-      lowerDate: config.initialLowerDate ?? null,
-      upperDate: config.initialUpperDate ?? null,
+      date: config.initialDate ? DateTime.fromISO(config.initialDate) : null,
+      lowerDate: config.initialLowerDate ? DateTime.fromISO(config.initialLowerDate) : null,
+      upperDate: config.initialUpperDate ? DateTime.fromISO(config.initialUpperDate) : null,
     }, { emitEvent: false });
   }
 

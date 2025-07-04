@@ -360,9 +360,70 @@ const onUpdateApplicationFiltersConfig = (
   }));
 };
 
-const onCreateApplicationAttributeFilter = (
+const updateSelectedFilterGroup = (
   state: ApplicationState,
-  payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilter>,
+  updateGroupCallback: (filterGroup: FilterGroupModel<AttributeFilterModel>) => FilterGroupModel<AttributeFilterModel>,
+) => {
+  return updateApplication(state, application => {
+    if (!application.settings?.filterGroups) {
+      return {};
+    }
+    const filterGroupIdx = application.settings.filterGroups.findIndex(filterGroup => {
+      return filterGroup.id === state.applicationSelectedFilterGroupId;
+    });
+    if (typeof filterGroupIdx === 'undefined' || filterGroupIdx === -1) {
+      return {};
+    }
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: [
+          ...application.settings.filterGroups.slice(0, filterGroupIdx),
+          updateGroupCallback(application.settings.filterGroups[filterGroupIdx]),
+          ...application.settings.filterGroups.slice(filterGroupIdx + 1),
+        ],
+      },
+    };
+  });
+};
+
+const onUpdateApplicationFiltersConfigForSelectedGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationFiltersConfigForSelectedGroup>,
+): ApplicationState => {
+  return updateSelectedFilterGroup(state, filterGroup => ({
+    ...filterGroup,
+    filters: payload.filters,
+  }));
+};
+
+const onUpdateApplicationFilterConfigForSelectedGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationFilterConfigForSelectedGroup>,
+): ApplicationState => {
+  return updateSelectedFilterGroup(state, filterGroup => {
+    const filterIdx = filterGroup.filters.findIndex(filter => filter.id === payload.filter.id);
+    if (filterIdx === -1) {
+      return {
+        ...filterGroup,
+        filters: [ ...filterGroup.filters, payload.filter ],
+      };
+    }
+    return {
+      ...filterGroup,
+      filters: [
+        ...filterGroup.filters.slice(0, filterIdx),
+        payload.filter,
+        ...filterGroup.filters.slice(filterIdx + 1),
+      ],
+    };
+  });
+};
+
+const onCreateApplicationAttributeFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilterGroup>,
 ): ApplicationState => {
   return updateApplication(state, application => {
     const filterGroupIdx = application.settings?.filterGroups?.findIndex(filterGroup =>
@@ -418,15 +479,33 @@ const onDeleteApplicationAttributeFilter = (
     });
 };
 
-const onSetApplicationSelectedFilterLayerId = (
+const onDeleteApplicationAttributeFilterGroup = (
   state: ApplicationState,
-  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterLayerId>,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.filter(fg => fg.id !== payload.filterGroupId) || [];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
+  });
+};
+
+const onSetApplicationSelectedFilterGroupId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterGroupId>,
 ): ApplicationState => {
   return {
     ...state,
-    applicationSelectedFilterLayerId: payload.filterLayerId,
+    applicationSelectedFilterGroupId: payload.filterGroupId,
   };
 };
+
+
 
 const onSetApplicationSelectedFilterId = (
   state: ApplicationState,
@@ -527,9 +606,12 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
-  on(ApplicationActions.createApplicationAttributeFilter, onCreateApplicationAttributeFilter),
+  on(ApplicationActions.updateApplicationFiltersConfigForSelectedGroup, onUpdateApplicationFiltersConfigForSelectedGroup),
+  on(ApplicationActions.updateApplicationFilterConfigForSelectedGroup, onUpdateApplicationFilterConfigForSelectedGroup),
+  on(ApplicationActions.createApplicationAttributeFilterGroup, onCreateApplicationAttributeFilterGroup),
   on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
-  on(ApplicationActions.setApplicationSelectedFilterLayerId, onSetApplicationSelectedFilterLayerId),
+  on(ApplicationActions.deleteApplicationAttributeFilterGroup, onDeleteApplicationAttributeFilterGroup),
+  on(ApplicationActions.setApplicationSelectedFilterGroupId, onSetApplicationSelectedFilterGroupId),
   on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),

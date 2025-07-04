@@ -59,10 +59,10 @@ export class EditAttributeFiltersComponent {
     }
     const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
     if (editConfiguration.initialDate) {
-      editConfiguration.initialDate = DateTime.fromISO(filter.value[0]);
+      editConfiguration.initialDate = filter.value[0];
     } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
-      editConfiguration.initialLowerDate = DateTime.fromISO(filter.value[0]);
-      editConfiguration.initialUpperDate = DateTime.fromISO(filter.value[1]);
+      editConfiguration.initialLowerDate = filter.value[0];
+      editConfiguration.initialUpperDate = filter.value[1];
     }
     return editConfiguration;
   }
@@ -146,7 +146,7 @@ export class EditAttributeFiltersComponent {
   public updateDateFilterValue($event: DateTime, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
-      value: [$event.toISODate() ?? ''],
+      value: [$event.toISO() ?? ''],
     };
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
@@ -156,7 +156,7 @@ export class EditAttributeFiltersComponent {
   public updateBetweenDateFilterValues($event: { lower: DateTime; upper: DateTime }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
-      value: [ $event.lower.toISODate() ?? '', $event.upper.toISODate() ?? '' ],
+      value: [ $event.lower.toISO() ?? '', $event.upper.toISO() ?? '' ],
     };
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));

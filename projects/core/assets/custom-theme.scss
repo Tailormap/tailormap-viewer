@@ -214,7 +214,8 @@ $app-theme: mat.m2-define-light-theme((
   padding: 16px;
 }
 
-.mat-mdc-icon-button.size-18 {
+.mat-mdc-icon-button.size-18,
+.mat-mdc-icon-button.size-24 {
   --mdc-icon-button-icon-size: 18px;
   width: var(--mdc-icon-button-icon-size);
   height: var(--mdc-icon-button-icon-size);
@@ -222,15 +223,21 @@ $app-theme: mat.m2-define-light-theme((
   padding: 0;
 }
 
-.mat-mdc-icon-button.size-18 mat-icon {
+.mat-mdc-icon-button.size-18 mat-icon,
+.mat-mdc-icon-button.size-24 mat-icon {
   width: var(--mdc-icon-button-icon-size);
   height: var(--mdc-icon-button-icon-size);
   overflow: visible;
 }
 
-.mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target {
+.mat-mdc-icon-button.size-18 .mat-mdc-button-touch-target,
+.mat-mdc-icon-button.size-24 .mat-mdc-button-touch-target {
   height: calc(var(--mdc-icon-button-icon-size) + 6px);
   width: calc(var(--mdc-icon-button-icon-size) + 6px);
+}
+
+.mat-mdc-icon-button.size-24 {
+  --mdc-icon-button-icon-size: 24px;
 }
 
 .mdc-button mat-icon {
