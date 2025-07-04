@@ -29,7 +29,7 @@
                                                  [filter]="selectedFilter()?.filter"
                                                  (validFormChanged)="validFormChanged($event)"
                                                  (updateFilter)="updateFilter($event)"></tm-admin-application-edit-filter-form>
-          @if (isCreatingFilter()) {
+          @if (isEditingNewFilter()) {
             <button color="primary" mat-flat-button (click)="saveFilter()" [disabled]="!saveEnabled()" class="create-filter-button">
               <span i18n="@@admin-core.common.create">Create</span>
             </button>

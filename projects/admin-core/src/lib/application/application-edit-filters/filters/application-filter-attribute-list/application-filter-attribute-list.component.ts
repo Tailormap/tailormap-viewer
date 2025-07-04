@@ -21,6 +21,8 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   @Input({ required: true })
   public set featureTypes(featureTypes: FeatureTypeModel[] | null) {
     this.featureTypesSubject$.next(featureTypes);
+    this.filter.patchValue('', { emitEvent: false });
+    this.selectAttribute.emit(null);
   }
 
   @Input({ required: true })
@@ -31,7 +33,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   }
 
   @Output()
-  public selectAttribute = new EventEmitter<AttributeDescriptorModel>();
+  public selectAttribute = new EventEmitter<AttributeDescriptorModel | null>();
 
   public filter = new FormControl<string | AttributeDescriptorModel>('');
 

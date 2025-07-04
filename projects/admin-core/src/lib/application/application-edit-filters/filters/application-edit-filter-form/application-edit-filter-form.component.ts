@@ -141,6 +141,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       this.filterForm.patchValue({
         id: nanoid(),
         attribute: '',
+        attributeType: null,
         condition: null,
         value: [],
         caseSensitive: false,
@@ -187,7 +188,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       && this.filterForm.dirty;
   }
 
-  public setSelectedAttribute($event: AttributeDescriptorModel) {
+  public setSelectedAttribute($event: AttributeDescriptorModel | null) {
+    if (!$event) {
+      this.filterForm.patchValue({
+        attribute: '',
+        attributeType: null,
+      }, { emitEvent: true });
+      return;
+    }
     this.filterForm.patchValue({
       attribute: $event.name,
       attributeType: $event.type,
