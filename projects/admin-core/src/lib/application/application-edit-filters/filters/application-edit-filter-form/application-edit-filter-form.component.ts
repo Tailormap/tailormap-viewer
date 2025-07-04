@@ -254,8 +254,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
     } else if ($event.filterTool === FilterToolEnum.DATE_PICKER) {
       value = $event.initialDate
-        ? [$event.initialDate.toISODate() ?? '']
-        : [ $event.initialLowerDate?.toISODate() ?? '', $event.initialUpperDate?.toISODate() ?? '' ];
+        ? [$event.initialDate ?? '']
+        : [ $event.initialLowerDate ?? '', $event.initialUpperDate ?? '' ];
     }
     const condition = $event.filterTool === FilterToolEnum.CHECKBOX
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
