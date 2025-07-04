@@ -11,8 +11,6 @@ export class ImageHelper {
 
   public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600): Observable<ImageResult | null> {
 
-    UploadHelper.getSha1HashForFile$(file).subscribe(hash => { console.log('File SHA-1 Hash:', hash); });
-
     const errorMsg = ImageHelper.checkSizeAndType(file, maxSize);
     if (errorMsg.length > 0) {
       return of({ error: errorMsg.join('. ') });
