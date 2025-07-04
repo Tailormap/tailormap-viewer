@@ -159,6 +159,11 @@ export const deleteApplicationAttributeFilter = createAction(
   props<{ filterId: string }>(),
 );
 
+export const deleteApplicationAttributeFilterGroup = createAction(
+  `${applicationActionsPrefix} Delete Filter Group`,
+  props<{ filterGroupId: string }>(),
+);
+
 export const setApplicationSelectedFilterGroupId = createAction(
   `${applicationActionsPrefix} Set Application Selected Filter Group Id`,
   props<{ filterGroupId?: string }>(),

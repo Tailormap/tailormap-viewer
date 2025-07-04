@@ -1,4 +1,26 @@
 .filter-label {
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
+  padding: 0 8px;
+  flex: 1;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+.remove-filter {
+  margin-left: 8px;
+  cursor: pointer;
+  justify-self: flex-end;
+}
+
+mat-selection-list {
+  padding: 0;
+}
+
+mat-list-item {
+  min-width: 250px;
 }

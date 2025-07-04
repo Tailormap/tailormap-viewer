@@ -7,7 +7,29 @@
         (cdkDragEnded)="isDragging.set(false)"
         (click)="setSelectedFilterId(filter.filter.id)"
         [class.selected]="filter.selected">
-        <div class="filter-label">{{ filter.filter.attribute + " " + getFilterLabel(filter.filter) }}</div>
+        <div class="filter">
+          @if (filter.filter.editConfiguration?.filterTool === filterToolTypes.SLIDER) {
+            <mat-icon svgIcon="admin/filters_slider"></mat-icon>
+          } @else if (filter.filter.editConfiguration?.filterTool === filterToolTypes.CHECKBOX) {
+            <mat-icon svgIcon="admin/filters_checkbox"></mat-icon>
+          } @else if (filter.filter.editConfiguration?.filterTool === filterToolTypes.SWITCH) {
+            <mat-icon svgIcon="admin/filters_switch"></mat-icon>
+          } @else if (filter.filter.editConfiguration?.filterTool === filterToolTypes.DATE_PICKER) {
+            <mat-icon svgIcon="admin/filters_date_picker"></mat-icon>
+          } @else {
+            <mat-icon svgIcon="admin/filters_filter"></mat-icon>
+          }
+          <div class="filter-label">{{ filter.filter.attribute }}</div>
+          <button mat-icon-button
+                  class="remove-filter"
+                  color="warn"
+                  matTooltip="Remove attribute"
+                  i18n-matTooltip="@@admin-core.application.remove-attribute"
+                  (click)="removeFilter($event, filter.filter.id)"
+                  [disabled]="isDragging()">
+            <mat-icon svgIcon="close"></mat-icon>
+          </button>
+        </div>
       </mat-list-item>
     }
   </mat-selection-list>
