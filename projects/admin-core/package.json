@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-admin/admin-core",
-  "version": "12.0.3",
+  "version": "12.0.4-rc.1",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -18,9 +18,9 @@
     "@ngrx/operators": "^19.0.1",
     "@ngrx/store": "^19.0.1",
     "@ngrx/store-devtools": "^19.0.1",
-    "@tailormap-admin/admin-api": "^12.0.3",
-    "@tailormap-viewer/api": "^12.0.3",
-    "@tailormap-viewer/shared": "^12.0.3",
+    "@tailormap-admin/admin-api": "^12.0.4-rc.1",
+    "@tailormap-viewer/api": "^12.0.4-rc.1",
+    "@tailormap-viewer/shared": "^12.0.4-rc.1",
     "nanoid": "^5.1.4",
     "rxjs": "^7.8.2"
   },

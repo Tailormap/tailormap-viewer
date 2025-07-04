@@ -1,15 +1,14 @@
 {
   "name": "@tailormap-admin/admin-api",
-  "version": "12.0.3",
+  "version": "12.0.4-rc.1",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.2",
     "@angular/core": "^19.2.2",
-    "js-md5": "^0.8.3",
     "rxjs": "^7.8.2",
-    "@tailormap-viewer/api": "^12.0.3"
+    "@tailormap-viewer/api": "^12.0.4-rc.1"
   },
   "dependencies": {
     "tslib": "^2.4.0"
