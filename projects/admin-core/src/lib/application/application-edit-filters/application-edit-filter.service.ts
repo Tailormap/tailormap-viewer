@@ -5,7 +5,7 @@ import {
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap } from 'rxjs';
-import { UniqueValuesService } from '@tailormap-viewer/api';
+import { UniqueValuesAdminService } from '@tailormap-admin/admin-api';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationEditFilterService {
@@ -13,7 +13,7 @@ export class ApplicationEditFilterService {
   constructor(
     private store$: Store,
     private featureSourceService: FeatureSourceService,
-    private uniqueValuesService: UniqueValuesService,
+    private uniqueValuesAdminService: UniqueValuesAdminService,
   ) {}
 
   public layerIdsForSelectedGroup$ = this.store$.select(selectLayerIdsForSelectedFilterGroup);
@@ -62,7 +62,7 @@ export class ApplicationEditFilterService {
         }
         return forkJoin(
           selectedLayers.map(layer =>
-            this.uniqueValuesService.getUniqueValues$({
+            this.uniqueValuesAdminService.getUniqueValues$({
               attribute: attribute,
               layerId: layer.appLayerId,
               applicationId: `app/${applicationName}`,
