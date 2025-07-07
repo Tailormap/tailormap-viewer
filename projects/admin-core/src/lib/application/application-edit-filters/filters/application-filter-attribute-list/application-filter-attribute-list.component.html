@@ -1,0 +1,27 @@
+@if(loadingFeatureType) {
+  <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+}
+
+@if(featureTypes$ | async) {
+  <div class="form-group has-search flex">
+    <mat-form-field appearance="outline">
+      <mat-label
+        i18n="@@admin-core.application.filter.choose-attribute"
+        class="filter-attributes-panel-title">Choose attribute</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Filter attributes"
+        i18n-placeholder="@@admin-core.common.filter-attributes"
+        [formControl]="filter"
+        [matAutocomplete]="auto"/>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        @for (attribute of attributes$ | async; track attribute) {
+          <mat-option [value]="attribute" (click)="attributeClicked(attribute)" class="attribute-option">
+            {{ attribute.name }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+}

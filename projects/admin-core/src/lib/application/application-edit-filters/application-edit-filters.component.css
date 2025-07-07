@@ -1,0 +1,27 @@
+.edit-filters {
+  display: flex;
+}
+
+.edit-filter-form {
+  flex: 1;
+}
+
+.filters-list {
+  margin-left: 10px;
+  min-width: 100px;
+}
+
+.filterable-layers-list {
+  margin-right: 10px;
+  max-width: 300px;
+}
+
+.filterable-layers-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filterable-layers-header h3 {
+  margin: 0;
+}
