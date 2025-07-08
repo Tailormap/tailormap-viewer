@@ -419,15 +419,18 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   }
 
   public getUniqueValues$(params: {
-    applicationId: string;
-    layerId: string;
+    featureTypeId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel> {
-    return this.httpClient.post<UniqueValuesResponseModel>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/unique/${params.attribute}`,
-      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
-      { headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded') },
+    return this.httpClient.get<UniqueValuesResponseModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/unique-values/${params.featureTypeId}/${params.attribute}`,
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: params.filter
+          ? this.getQueryParams({ filter: params.filter })
+          : undefined,
+      },
     );
   }
 

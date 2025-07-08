@@ -3,9 +3,8 @@ import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
-export interface UniqueValueParams {
-  applicationId: string;
-  layerId: string;
+export interface UniqueValuesAdminParams {
+  featureTypeId: string;
   attribute: string;
   filter?: string;
 }
@@ -15,17 +14,16 @@ export interface UniqueValueParams {
 })
 export class UniqueValuesAdminService {
 
-  private currentApplicationId = '';
   private cachedResponses: Map<string, UniqueValuesResponseModel> = new Map();
 
   constructor(private adminApiService: TailormapAdminApiV1Service) { }
 
-  public getUniqueValues$(params: UniqueValueParams): Observable<UniqueValuesResponseModel> {
-    if (this.currentApplicationId !== params.applicationId) {
-      // Clear the cache if we change applications
-      this.cachedResponses = new Map();
-    }
-    this.currentApplicationId = params.applicationId;
+  public getUniqueValues$(params: UniqueValuesAdminParams): Observable<UniqueValuesResponseModel> {
+    // if (this.currentApplicationId !== params.applicationId) {
+    //   // Clear the cache if we change applications
+    //   this.cachedResponses = new Map();
+    // }
+    // this.currentApplicationId = params.applicationId;
     const key = this.createKey(params);
     const cachedResponse = this.cachedResponses.get(key);
     if (cachedResponse) {
@@ -42,8 +40,8 @@ export class UniqueValuesAdminService {
       );
   }
 
-  public createKey(params: UniqueValueParams): string {
-    const key = [ params.applicationId, params.layerId, params.attribute ];
+  public createKey(params: UniqueValuesAdminParams): string {
+    const key = [ params.featureTypeId, params.attribute ];
     if (params.filter) {
       key.push(params.filter);
     }

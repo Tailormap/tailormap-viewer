@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationName,
+  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup,
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap } from 'rxjs';
+import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable } from 'rxjs';
 import { UniqueValuesAdminService } from '@tailormap-admin/admin-api';
 
 @Injectable({ providedIn: 'root' })
@@ -50,22 +50,19 @@ export class ApplicationEditFilterService {
     tap(() => this.isLoadingFeaturesTypes.next(false)),
   );
 
-  public getUniqueValuesForAttribute$(attribute: string) {
-    return combineLatest([
-      this.store$.select(selectSelectedApplicationName),
-      this.layers$,
-    ]).pipe(
+  public getUniqueValuesForAttribute$(attribute: string):  Observable<(string | number | boolean)[][]> {
+    return this.featureTypesForSelectedLayers$.pipe(
       take(1),
-      switchMap(([ applicationName, selectedLayers ]) => {
-        if (!selectedLayers || selectedLayers.length === 0) {
-          return [[]];
+      switchMap(featureTypes => {
+        if (!featureTypes || featureTypes.length === 0) {
+          return [];
         }
         return forkJoin(
-          selectedLayers.map(layer =>
+          featureTypes.map(featureType =>
             this.uniqueValuesAdminService.getUniqueValues$({
+              featureTypeId: featureType.id,
               attribute: attribute,
-              layerId: layer.appLayerId,
-              applicationId: `app/${applicationName}`,
+              filter: '',
             }).pipe(
               take(1),
               map(response => response.values || []),
@@ -74,6 +71,31 @@ export class ApplicationEditFilterService {
         );
       }),
     );
+
+
+    // return combineLatest([
+    //   this.store$.select(selectSelectedApplicationName),
+    //   this.layers$,
+    // ]).pipe(
+    //   take(1),
+    //   switchMap(([ applicationName, selectedLayers ]) => {
+    //     if (!selectedLayers || selectedLayers.length === 0) {
+    //       return [[]];
+    //     }
+    //     return forkJoin(
+    //       selectedLayers.map(layer =>
+    //         this.uniqueValuesAdminService.getUniqueValues$({
+    //           attribute: attribute,
+    //           layerId: layer.appLayerId,
+    //           applicationId: `app/${applicationName}`,
+    //         }).pipe(
+    //           take(1),
+    //           map(response => response.values || []),
+    //         ),
+    //       ),
+    //     );
+    //   }),
+    // );
   }
 
 }

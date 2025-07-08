@@ -74,8 +74,7 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteTask$(uuid: string, type: string): Observable<boolean>;
 
   getUniqueValues$(params: {
-    applicationId: string;
-    layerId: string;
+    featureTypeId: string;
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
