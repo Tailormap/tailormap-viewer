@@ -23,6 +23,8 @@ import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
 import { get as getProjection } from 'ol/proj.js';
 import { PROJECTION_REQUIRED_FOR_3D } from '../models/3d-projection.const';
+import { LoadFunction as ImageLoadFunction } from 'ol/Image';
+import { LoadFunction as TileLoadFunction } from 'ol/Tile';
 
 export interface LayerProperties {
   id: string;
@@ -170,7 +172,7 @@ export class OlLayerHelper {
     const maxZoom = layer.maxZoom || 21;
     const tileSize = layer.tileSize || 256;
     const extent = layer.tileGridExtent
-      ? [ layer.tileGridExtent.minx,  layer.tileGridExtent.miny,  layer.tileGridExtent.maxx,  layer.tileGridExtent.maxy ]
+      ? [ layer.tileGridExtent.minx, layer.tileGridExtent.miny, layer.tileGridExtent.maxx, layer.tileGridExtent.maxy ]
       : extentFromProjection(projection);
 
     tileGrid = createXYZ({
@@ -242,7 +244,15 @@ export class OlLayerHelper {
     };
 
     if (layer.tilingDisabled) {
-      const source = new ImageWMS(sourceOptions);
+      const imageLoadFunction = !(ngZone && httpXsrfTokenExtractor) ? undefined : OlLayerHelper.getWmsPOSTImageLoadFunction(
+        ngZone,
+        httpXsrfTokenExtractor,
+        MAX_URL_LENGTH_BEFORE_POST,
+        ['CQL_FILTER']);
+      const source = new ImageWMS({
+        ...sourceOptions,
+        imageLoadFunction,
+      });
       source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
       return new ImageLayer({
         visible: layer.visible,
@@ -269,8 +279,14 @@ export class OlLayerHelper {
     }
   }
 
-  private static getWmsPOSTTileLoadFunction(ngZone: NgZone, httpXsrfTokenExtractor: HttpXsrfTokenExtractor, maxUrlLength: number, paramsToPutInBody: string[]) {
-    return (tile: ImageTile, src: string) => {
+  private static getWmsPOSTLoadFunction<T extends { getImage: () => HTMLImageElement }>(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+    onError?: (tileOrImage: T) => void,
+  ) {
+    return (tileOrImage: T, src: string) => {
       if (src.length > maxUrlLength) {
         ngZone.runOutsideAngular(() => {
           const url = new URL(src);
@@ -296,24 +312,55 @@ export class OlLayerHelper {
           }).then(response => {
             if (response.ok) {
               response.blob().then(blob => {
-                const image: HTMLImageElement = tile.getImage() as HTMLImageElement;
+                const image = tileOrImage.getImage();
                 const objectUrl = URL.createObjectURL(blob);
                 image.src = objectUrl;
                 image.onload = () => {
                   URL.revokeObjectURL(objectUrl);
                 };
               });
-            } else {
-              tile.setState(TileState.ERROR);
+            } else if (onError) {
+              onError(tileOrImage);
             }
           });
         });
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tile.getImage().src = src;
+        tileOrImage.getImage().src = src;
       }
     };
+  }
+
+  private static getWmsPOSTImageLoadFunction(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+  ) {
+    return OlLayerHelper.getWmsPOSTLoadFunction(
+      ngZone,
+      httpXsrfTokenExtractor,
+      maxUrlLength,
+      paramsToPutInBody,
+    ) as ImageLoadFunction;
+  }
+
+  private static getWmsPOSTTileLoadFunction(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+  ) {
+    return OlLayerHelper.getWmsPOSTLoadFunction(
+      ngZone,
+      httpXsrfTokenExtractor,
+      maxUrlLength,
+      paramsToPutInBody,
+      (tile) => {
+        (tile as ImageTile).setState(TileState.ERROR);
+      },
+    ) as unknown as TileLoadFunction;
   }
 
   public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
