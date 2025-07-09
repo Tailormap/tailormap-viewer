@@ -74,8 +74,8 @@ export class OlLayerHelper {
   public static createLayer(
     layer: LayerModel,
     projection: Projection,
-    ngZone?: NgZone,
-    httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isXyzLayer(layer)) {
       return OlLayerHelper.createXYZLayer(layer, projection);
@@ -220,8 +220,8 @@ export class OlLayerHelper {
   public static createWMSLayer(
     layer: WMSLayerModel,
     projection: Projection,
-    ngZone?: NgZone,
-    httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
     let serverType: ServerType | undefined;
     let hidpi = true;
@@ -244,7 +244,7 @@ export class OlLayerHelper {
     };
 
     if (layer.tilingDisabled) {
-      const imageLoadFunction = !(ngZone && httpXsrfTokenExtractor) ? undefined : OlLayerHelper.getWmsPOSTImageLoadFunction(
+      const imageLoadFunction = OlLayerHelper.getWmsPOSTImageLoadFunction(
         ngZone,
         httpXsrfTokenExtractor,
         MAX_URL_LENGTH_BEFORE_POST,
@@ -259,7 +259,7 @@ export class OlLayerHelper {
         source,
       });
     } else {
-      const tileLoadFunction = !(ngZone && httpXsrfTokenExtractor) ? null : OlLayerHelper.getWmsPOSTTileLoadFunction(
+      const tileLoadFunction = OlLayerHelper.getWmsPOSTTileLoadFunction(
         ngZone,
         httpXsrfTokenExtractor,
         MAX_URL_LENGTH_BEFORE_POST,
