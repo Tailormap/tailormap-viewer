@@ -235,7 +235,7 @@ export class LayerSettingsFormComponent implements OnInit {
       authorizationRules: this.layerSettings?.authorizationRules ?? [],
     };
     if (this.isWmsSettingsModel(this.layerSettings)) {
-      patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : true);
+      patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : false);
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {

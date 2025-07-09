@@ -241,7 +241,7 @@ export class OlLayerHelper {
       attributions: layer.attribution ? [layer.attribution] : undefined,
     };
 
-    if (layer.tilingDisabled) {
+    if (layer.tilingDisabled !== false) {
       const source = new ImageWMS(sourceOptions);
       source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
       return new ImageLayer({
