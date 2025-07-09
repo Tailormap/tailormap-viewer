@@ -87,6 +87,14 @@
   height: 34px;
 }
 
+.content ::ng-deep .mdc-list-item.mdc-list-item--with-two-lines {
+  height: 48px;
+}
+
+.content ::ng-deep .mdc-list-item.mdc-list-item--with-three-lines {
+  height: 64px;
+}
+
 .content ::ng-deep .mdc-list-item.selected {
   background-color: var(--primary-color-0_1);
   color: var(--primary-color);
