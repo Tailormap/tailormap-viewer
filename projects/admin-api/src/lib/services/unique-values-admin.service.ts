@@ -19,11 +19,6 @@ export class UniqueValuesAdminService {
   constructor(private adminApiService: TailormapAdminApiV1Service) { }
 
   public getUniqueValues$(params: UniqueValuesAdminParams): Observable<UniqueValuesResponseModel> {
-    // if (this.currentApplicationId !== params.applicationId) {
-    //   // Clear the cache if we change applications
-    //   this.cachedResponses = new Map();
-    // }
-    // this.currentApplicationId = params.applicationId;
     const key = this.createKey(params);
     const cachedResponse = this.cachedResponses.get(key);
     if (cachedResponse) {
@@ -48,10 +43,8 @@ export class UniqueValuesAdminService {
     return key.join('-');
   }
 
-  public clearCaches(cacheKeys: string[]) {
-    cacheKeys.forEach(key => {
-      this.cachedResponses.delete(key);
-    });
+  public clearCache() {
+    this.cachedResponses = new Map();
   }
 
 }

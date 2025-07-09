@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup,
+  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationId,
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable } from 'rxjs';
+import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable, distinctUntilChanged } from 'rxjs';
 import { UniqueValuesAdminService } from '@tailormap-admin/admin-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationEditFilterService {
@@ -14,7 +15,15 @@ export class ApplicationEditFilterService {
     private store$: Store,
     private featureSourceService: FeatureSourceService,
     private uniqueValuesAdminService: UniqueValuesAdminService,
-  ) {}
+    private destroyRef: DestroyRef,
+  ) {
+    this.store$.select(selectSelectedApplicationId).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      distinctUntilChanged(),
+    ).subscribe(() => {
+      this.uniqueValuesAdminService.clearCache();
+    });
+  }
 
   public layerIdsForSelectedGroup$ = this.store$.select(selectLayerIdsForSelectedFilterGroup);
 
@@ -72,30 +81,6 @@ export class ApplicationEditFilterService {
       }),
     );
 
-
-    // return combineLatest([
-    //   this.store$.select(selectSelectedApplicationName),
-    //   this.layers$,
-    // ]).pipe(
-    //   take(1),
-    //   switchMap(([ applicationName, selectedLayers ]) => {
-    //     if (!selectedLayers || selectedLayers.length === 0) {
-    //       return [[]];
-    //     }
-    //     return forkJoin(
-    //       selectedLayers.map(layer =>
-    //         this.uniqueValuesAdminService.getUniqueValues$({
-    //           attribute: attribute,
-    //           layerId: layer.appLayerId,
-    //           applicationId: `app/${applicationName}`,
-    //         }).pipe(
-    //           take(1),
-    //           map(response => response.values || []),
-    //         ),
-    //       ),
-    //     );
-    //   }),
-    // );
   }
 
 }

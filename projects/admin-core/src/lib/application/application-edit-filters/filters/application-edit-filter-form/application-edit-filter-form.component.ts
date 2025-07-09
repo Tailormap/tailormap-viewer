@@ -189,7 +189,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }
 
   public setSelectedAttribute($event: AttributeDescriptorModel | null) {
-    console.log("setSelectedAttribute", $event);
     if (!$event) {
       this.filterForm.patchValue({
         attribute: '',
