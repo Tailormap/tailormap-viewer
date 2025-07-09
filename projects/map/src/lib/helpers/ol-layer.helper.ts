@@ -15,7 +15,7 @@ import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
-import { ImageTile } from 'ol';
+import { ImageWrapper, Tile } from 'ol';
 import { NgZone } from '@angular/core';
 import { default as TileState } from 'ol/TileState';
 import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
@@ -23,8 +23,6 @@ import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
 import { get as getProjection } from 'ol/proj.js';
 import { PROJECTION_REQUIRED_FOR_3D } from '../models/3d-projection.const';
-import { LoadFunction as ImageLoadFunction } from 'ol/Image';
-import { LoadFunction as TileLoadFunction } from 'ol/Tile';
 
 export interface LayerProperties {
   id: string;
@@ -279,14 +277,14 @@ export class OlLayerHelper {
     }
   }
 
-  private static getWmsPOSTLoadFunction<T extends { getImage: () => HTMLImageElement }>(
+  private static getWmsPOSTLoadFunction(
     ngZone: NgZone,
     httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
     maxUrlLength: number,
     paramsToPutInBody: string[],
-    onError?: (tileOrImage: T) => void,
+    onError?: (tileOrImage: ImageWrapper | Tile) => void,
   ) {
-    return (tileOrImage: T, src: string) => {
+    return (tileOrImage: ImageWrapper, src: string) => {
       if (src.length > maxUrlLength) {
         ngZone.runOutsideAngular(() => {
           const url = new URL(src);
@@ -313,11 +311,13 @@ export class OlLayerHelper {
             if (response.ok) {
               response.blob().then(blob => {
                 const image = tileOrImage.getImage();
-                const objectUrl = URL.createObjectURL(blob);
-                image.src = objectUrl;
-                image.onload = () => {
-                  URL.revokeObjectURL(objectUrl);
-                };
+                if (image instanceof HTMLImageElement) {
+                  const objectUrl = URL.createObjectURL(blob);
+                  image.src = objectUrl;
+                  image.onload = () => {
+                    URL.revokeObjectURL(objectUrl);
+                  };
+                }
               });
             } else if (onError) {
               onError(tileOrImage);
@@ -343,7 +343,7 @@ export class OlLayerHelper {
       httpXsrfTokenExtractor,
       maxUrlLength,
       paramsToPutInBody,
-    ) as ImageLoadFunction;
+    );
   }
 
   private static getWmsPOSTTileLoadFunction(
@@ -358,9 +358,11 @@ export class OlLayerHelper {
       maxUrlLength,
       paramsToPutInBody,
       (tile) => {
-        (tile as ImageTile).setState(TileState.ERROR);
+        if (tile instanceof Tile) {
+          tile.setState(TileState.ERROR);
+        }
       },
-    ) as unknown as TileLoadFunction;
+    );
   }
 
   public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
