@@ -88,8 +88,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showPointSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.POINT
-      || this.type === DrawingFeatureTypeEnum.IMAGE;
+    return this.type === DrawingFeatureTypeEnum.POINT;
   }
 
   public showLabelSettings(): boolean {

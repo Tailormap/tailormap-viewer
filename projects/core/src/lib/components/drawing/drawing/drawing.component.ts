@@ -16,7 +16,7 @@ import {
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel, TailormapApiConstants } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DrawingStylesService } from '../services/drawing-styles.service';
@@ -253,6 +253,19 @@ export class DrawingComponent implements OnInit, OnDestroy {
     } else {
       this.style = DrawingHelper.getDefaultStyle();
     }
+  }
+
+  public getStyleIcon(markerImage: string) {
+    return TailormapApiConstants.BASE_URL + markerImage;
+  }
+
+  public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
+    DrawingHelper.updateDefaultStyle({
+      ...style.style,
+      label: '',
+    });
+    this.style = DrawingHelper.getDefaultStyle();
+    this.draw(style.type);
   }
 
   public SIZE_MIN = 10000;

@@ -1,5 +1,6 @@
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
+import { Options as IconOptions } from 'ol/style/Icon';
 
 export type MarkerType = 'circle' | 'square' | 'triangle' | 'diamond' | 'cross' | 'star' | 'arrow';
 
@@ -23,8 +24,9 @@ export enum LabelStyleEnum {
 }
 
 export interface DrawingFeatureStyleModel {
-  // this is (must be) fully qualified url to a marker image
-  markerImage?: string;
+  markerImage?: string; // this is the relative url after the API base path to a marker image
+  markerImageWidth?: number;
+  markerImageHeight?: number;
   description?: string;
   marker?: MarkerType;
   markerSize?: number;

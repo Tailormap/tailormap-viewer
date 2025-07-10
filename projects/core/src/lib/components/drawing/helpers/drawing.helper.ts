@@ -5,6 +5,7 @@ import {
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 export class DrawingHelper {
 
@@ -70,7 +71,7 @@ export class DrawingHelper {
       marker: 'circle',
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
-      markerSize: 5,
+      markerSize: 100, //5,
       markerStrokeWidth: 1,
       markerRotation: 0,
       fillOpacity: 30,
@@ -90,6 +91,9 @@ export class DrawingHelper {
     return {
       styleKey: 'drawing-style',
       zIndex: feature.attributes.zIndex || 0,
+      pointImage: style.markerImage ? TailormapApiConstants.BASE_URL + style.markerImage : undefined,
+      pointImageWidth: style.markerImageWidth,
+      pointImageHeight: style.markerImageHeight,
       pointType: feature.attributes.type === DrawingFeatureTypeEnum.LABEL
         ? 'label'
         : (feature.attributes.type === DrawingFeatureTypeEnum.POINT ? style.marker : undefined),

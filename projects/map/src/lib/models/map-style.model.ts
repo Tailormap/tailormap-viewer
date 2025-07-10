@@ -3,6 +3,9 @@ export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cros
 export interface MapStyleModel {
   styleKey?: string;
   zIndex?: number;
+  pointImage?: string;
+  pointImageWidth?: number;
+  pointImageHeight?: number;
   pointType?: MapStylePointType;
   pointFillColor?: string;
   pointStrokeColor?: string;

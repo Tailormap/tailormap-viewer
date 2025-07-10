@@ -84,7 +84,17 @@
     @if (drawingStyles$ | async; as drawingStyles) {
       <div class="drawing-styles-list">
         @for (style of drawingStyles; track style) {
-          Stijl: {{ style.style.description }}<br>
+          <button [class.button--active]="false"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="selectDrawingStyle(style)">
+            @if (style.style.markerImage) {
+              <mat-icon svgIcon="{{getStyleIcon(style.style.markerImage)}}"></mat-icon>
+            } @else {
+              <mat-icon svgIcon="tools_draw_default"></mat-icon>
+            }
+            {{ style.style.description }}
+          </button>
         }
       </div>
     }
