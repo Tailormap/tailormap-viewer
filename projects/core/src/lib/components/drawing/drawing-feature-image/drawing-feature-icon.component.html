@@ -1,9 +1,0 @@
-@if(feature) {
-  @if (feature.attributes.type === 'POINT') {
-    <mat-icon [style]="getMarkerStyle(feature.attributes)" [svgIcon]="getPointSvgIcon(feature.attributes)"></mat-icon>
-  } @else {
-    <mat-icon>
-      <span [innerHTML]="getSvg()"></span>
-    </mat-icon>
-  }
-}

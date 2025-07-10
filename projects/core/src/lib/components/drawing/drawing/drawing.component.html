@@ -88,11 +88,7 @@
                   mat-stroked-button
                   color="primary"
                   (click)="selectDrawingStyle(style)">
-            @if (style.style.markerImage) {
-              <mat-icon svgIcon="{{getStyleIcon(style.style.markerImage)}}"></mat-icon>
-            } @else {
-              <mat-icon svgIcon="tools_draw_default"></mat-icon>
-            }
+            <tm-drawing-style-icon [type]="style.type" [style]="style.style"></tm-drawing-style-icon>
             {{ style.style.description }}
           </button>
         }

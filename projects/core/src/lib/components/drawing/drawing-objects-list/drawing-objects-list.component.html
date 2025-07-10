@@ -13,7 +13,7 @@
            (dblclick)="selectFeatureAndEditLabel(feature.__fid)"
            [class.selected]="feature.selected">
         <div class="icon">
-          <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
+          <tm-drawing-style-icon [type]="feature.attributes.type" [style]="feature.attributes.style"></tm-drawing-style-icon>
         </div>
         <div class="counter">#{{index+1}}</div>
         <div class="label">
