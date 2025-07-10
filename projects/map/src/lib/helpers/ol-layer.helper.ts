@@ -241,7 +241,7 @@ export class OlLayerHelper {
       attributions: layer.attribution ? [layer.attribution] : undefined,
     };
 
-    if (layer.tilingDisabled) {
+    if (layer.tilingDisabled !== false) {
       const imageLoadFunction = OlLayerHelper.getWmsPOSTImageLoadFunction(
         ngZone,
         httpXsrfTokenExtractor,
