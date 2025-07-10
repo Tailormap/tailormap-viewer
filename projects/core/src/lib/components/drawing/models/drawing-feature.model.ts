@@ -1,6 +1,5 @@
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { Options as IconOptions } from 'ol/style/Icon';
 
 export type MarkerType = 'circle' | 'square' | 'triangle' | 'diamond' | 'cross' | 'star' | 'arrow';
 
