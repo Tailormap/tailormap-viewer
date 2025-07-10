@@ -331,6 +331,4 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public drawCircle() {
     this.customCircleRadius = this._customCircleRadius;
   }
-
-  protected readonly JSON = JSON;
 }
