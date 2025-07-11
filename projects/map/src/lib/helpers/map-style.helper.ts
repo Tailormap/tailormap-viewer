@@ -82,6 +82,7 @@ export class MapStyleHelper {
           src: styleConfig.pointImage,
           width: (styleConfig.pointImageWidth ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor,
           height: (styleConfig.pointImageHeight ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor,
+          rotation: (styleConfig.pointRotation ?? 0) * Math.PI / 180,
         }),
       }));
     } else if (styleConfig.pointType) {

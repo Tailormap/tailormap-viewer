@@ -87,6 +87,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  public showIconSettings() {
+    return this.type === DrawingFeatureTypeEnum.IMAGE;
+  }
+
   public showPointSettings(): boolean {
     return this.type === DrawingFeatureTypeEnum.POINT;
   }
@@ -277,5 +281,4 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.styleUpdated.emit(style);
     this.updatedProps.clear();
   }
-
 }
