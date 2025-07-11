@@ -44,6 +44,7 @@ export class AttributeFilterService {
                 return {
                   ...filter,
                   disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                  attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
                 };
               }),
             })),

@@ -22,7 +22,19 @@ export class FilterListItemComponent {
 
   @Input()
   public set filterGroup(filterGroup: ExtendedFilterGroupModel | null) {
-    this.filter = filterGroup;
+    if (!filterGroup) {
+      return;
+    }
+    this.filter = {
+      ...filterGroup,
+      filters: filterGroup?.filters.filter(f => {
+        if (FilterTypeHelper.isAttributeFilter(f) && f.attributeNotFound) {
+          console.error(`Filtered attribute '${f.attribute}' not found. Filter hidden and disabled.`);
+          return false;
+        }
+        return true;
+      }) ?? [],
+    };
     this.editableFilters = filterGroup?.filters.filter((f): f is AttributeFilterModel =>
       FilterTypeHelper.isAttributeFilter(f) && !!f.editConfiguration) ?? [];
   }
