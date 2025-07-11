@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationName,
+  selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationId,
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap } from 'rxjs';
-import { UniqueValuesService } from '@tailormap-viewer/api';
+import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable, distinctUntilChanged } from 'rxjs';
+import { UniqueValuesAdminService } from '@tailormap-admin/admin-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationEditFilterService {
@@ -13,8 +14,16 @@ export class ApplicationEditFilterService {
   constructor(
     private store$: Store,
     private featureSourceService: FeatureSourceService,
-    private uniqueValuesService: UniqueValuesService,
-  ) {}
+    private uniqueValuesAdminService: UniqueValuesAdminService,
+    private destroyRef: DestroyRef,
+  ) {
+    this.store$.select(selectSelectedApplicationId).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      distinctUntilChanged(),
+    ).subscribe(() => {
+      this.uniqueValuesAdminService.clearCache();
+    });
+  }
 
   public layerIdsForSelectedGroup$ = this.store$.select(selectLayerIdsForSelectedFilterGroup);
 
@@ -50,22 +59,19 @@ export class ApplicationEditFilterService {
     tap(() => this.isLoadingFeaturesTypes.next(false)),
   );
 
-  public getUniqueValuesForAttribute$(attribute: string) {
-    return combineLatest([
-      this.store$.select(selectSelectedApplicationName),
-      this.layers$,
-    ]).pipe(
+  public getUniqueValuesForAttribute$(attribute: string):  Observable<(string | number | boolean)[][]> {
+    return this.featureTypesForSelectedLayers$.pipe(
       take(1),
-      switchMap(([ applicationName, selectedLayers ]) => {
-        if (!selectedLayers || selectedLayers.length === 0) {
-          return [[]];
+      switchMap(featureTypes => {
+        if (!featureTypes || featureTypes.length === 0) {
+          return [];
         }
         return forkJoin(
-          selectedLayers.map(layer =>
-            this.uniqueValuesService.getUniqueValues$({
+          featureTypes.map(featureType =>
+            this.uniqueValuesAdminService.getUniqueValues$({
+              featureTypeId: featureType.id,
               attribute: attribute,
-              layerId: layer.appLayerId,
-              applicationId: `app/${applicationName}`,
+              filter: '',
             }).pipe(
               take(1),
               map(response => response.values || []),

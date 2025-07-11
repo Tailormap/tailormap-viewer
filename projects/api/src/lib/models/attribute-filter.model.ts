@@ -16,4 +16,5 @@ export interface AttributeFilterModel extends BaseFilterModel {
   value: string[];
   type: FilterTypeEnum.ATTRIBUTE;
   editConfiguration?: SliderFilterModel | CheckboxFilterModel | SwitchFilterModel | DatePickerFilterModel;
+  attributeNotFound?: boolean;
 }

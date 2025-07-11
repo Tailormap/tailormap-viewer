@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
@@ -9,7 +9,7 @@ import {
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
-import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
+import { ApiHelper, TailormapApiConstants, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -416,6 +416,33 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       map(response => response.status === 202),
       catchError(() => of(false)),
     );
+  }
+
+  public getUniqueValues$(params: {
+    featureTypeId: string;
+    attribute: string;
+    filter?: string;
+  }): Observable<UniqueValuesResponseModel> {
+    return this.httpClient.get<UniqueValuesResponseModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/unique-values/${params.featureTypeId}/${params.attribute}`,
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: params.filter
+          ? this.getQueryParams({ filter: params.filter })
+          : undefined,
+      },
+    );
+  }
+
+  private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {
+    let queryParams = new HttpParams();
+    Object.keys(params).forEach(key => {
+      const value = params[key];
+      if (typeof value !== 'undefined') {
+        queryParams = queryParams = queryParams.set(key, value);
+      }
+    });
+    return queryParams;
   }
 
 }
