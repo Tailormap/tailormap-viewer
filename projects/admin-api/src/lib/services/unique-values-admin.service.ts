@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { catchError, Observable, of, tap } from 'rxjs';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 
 export interface UniqueValuesAdminParams {
   featureTypeId: string;
