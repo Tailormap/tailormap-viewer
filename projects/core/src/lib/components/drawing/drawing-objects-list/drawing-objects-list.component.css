@@ -40,13 +40,22 @@ mat-panel-description {
   border: 2px solid var(--primary-color);
 }
 
-.row .label {
-  flex-grow: 1;
-  overflow: hidden;
+.row .icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
 }
 
 .row .counter {
   padding-right: 8px;
+}
+
+.row .label {
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .label input {

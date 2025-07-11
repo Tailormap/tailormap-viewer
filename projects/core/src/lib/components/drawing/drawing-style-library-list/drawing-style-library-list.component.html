@@ -1,0 +1,16 @@
+@let selectedStyle = selectedDrawingStyle();
+@if (drawingStyles$ | async; as drawingStyles) {
+  <mat-expansion-panel class="objects-list" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title i18n="@@core.drawing.style-library">Style library</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="drawing-styles-list">
+      @for (style of drawingStyles; track style; let idx = $index) {
+        <div class="selection-list-button" [class.selected]="selectedStyle === idx" mat-ripple (click)="selectDrawingStyle(idx, style)">
+          <tm-drawing-style-icon [type]="style.type" [featureStyle]="style.style"></tm-drawing-style-icon>
+          <span>{{ style.style.description }}</span>
+        </div>
+      }
+    </div>
+  </mat-expansion-panel>
+}

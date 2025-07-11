@@ -19,6 +19,7 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DrawingStylesService } from '../services/drawing-styles.service';
 
 @Component({
   selector: 'tm-drawing',
@@ -66,6 +67,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmDialogService,
     private drawingService: DrawingService,
     private cdr: ChangeDetectorRef,
+    private drawingStylesService: DrawingStylesService,
   ) { }
 
   public ngOnInit() {
@@ -100,9 +102,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
       .subscribe(([ style, feature ]) => {
         this.selectedDrawingStyle = style || feature?.attributes.type || null;
         this.selectedFeature = feature;
-        this.style = feature
-          ? feature.attributes.style
-          : DrawingHelper.getDefaultStyle();
+        if (feature?.attributes.style) {
+          this.style = feature.attributes.style;
+        }
         this.cdr.detectChanges();
       });
 
@@ -135,6 +137,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
+    this.style = DrawingHelper.getDefaultStyle();
+    this.drawingStylesService.setSelectedDrawingStyle(null);
     if (this.activeTool !== type) {
       this.drawingService.toggle(type, this.showMeasures());
     }
@@ -159,7 +163,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (!this.activeTool) {
       return;
     }
-    const feature = DrawingHelper.getFeature(this.activeTool, $event);
+    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style);
     if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
       const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
       if (rectangle) {
@@ -248,6 +252,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
       this.style = DrawingHelper.getDefaultStyle();
+    }
+  }
+
+  public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
+    this.style = {
+      ...DrawingHelper.getDefaultStyle(),
+      ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
+      label: '',
+    };
+    if (this.activeTool !== style.type) {
+      this.drawingService.toggle(style.type, this.showMeasures());
     }
   }
 

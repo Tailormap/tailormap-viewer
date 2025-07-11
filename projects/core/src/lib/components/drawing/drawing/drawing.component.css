@@ -75,3 +75,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+tm-drawing-style-library-list {
+  display: block;
+  margin-top: 16px;
+}
