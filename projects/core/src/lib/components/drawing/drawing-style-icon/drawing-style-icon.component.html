@@ -1,5 +1,5 @@
 
-@if (type === 'IMAGE' && style?.markerImage) {
+@if (type === 'IMAGE' && featureStyle?.markerImage) {
   <img [ngSrc]="getStyleMarkerImageUrl()" width="24" height="24" alt="" class="custom-marker-icon" />
 } @else if (type === 'POINT') {
   <mat-icon [style]="getMarkerStyle()" [svgIcon]="getPointSvgIcon()"></mat-icon>

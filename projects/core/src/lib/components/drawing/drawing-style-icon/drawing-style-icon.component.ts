@@ -19,17 +19,17 @@ export class DrawingStyleIconComponent {
   public type: DrawingFeatureTypeEnum | null = null;
 
   @Input()
-  public style: DrawingFeatureStyleModel | null = null;
+  public featureStyle: DrawingFeatureStyleModel | null = null;
 
   constructor(
     private domSanitizer: DomSanitizer,
   ) { }
 
   public getSvg() {
-    if (!this.type || !this.style) {
+    if (!this.type || !this.featureStyle) {
       return '';
     }
-    const svgContent = DrawingStyleIconComponent.createSvgContent(this.type, this.style );
+    const svgContent = DrawingStyleIconComponent.createSvgContent(this.type, this.featureStyle );
     const svgImage = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
     return this.domSanitizer.bypassSecurityTrustHtml(svgImage);
   }
@@ -87,18 +87,18 @@ export class DrawingStyleIconComponent {
 
   public getPointSvgIcon() {
     const markers = DrawingHelper.getAvailableMarkers();
-    const marker = markers.find(m => m.value === this.style?.marker);
+    const marker = markers.find(m => m.value === this.featureStyle?.marker);
     return marker?.icon || '';
   }
 
   public getMarkerStyle() {
-    return !this.style ? '' : [
-      `--stroke: ${DrawingStyleIconComponent.getRgbStyleForColor(this.style.markerStrokeColor)}`,
-      `--fill: ${DrawingStyleIconComponent.getRgbStyleForColor(this.style.markerFillColor)}`,
+    return !this.featureStyle ? '' : [
+      `--stroke: ${DrawingStyleIconComponent.getRgbStyleForColor(this.featureStyle.markerStrokeColor)}`,
+      `--fill: ${DrawingStyleIconComponent.getRgbStyleForColor(this.featureStyle.markerFillColor)}`,
     ].join(';');
   }
 
   public getStyleMarkerImageUrl() {
-    return TailormapApiConstants.BASE_URL + this.style?.markerImage;
+    return TailormapApiConstants.BASE_URL + this.featureStyle?.markerImage;
   }
 }

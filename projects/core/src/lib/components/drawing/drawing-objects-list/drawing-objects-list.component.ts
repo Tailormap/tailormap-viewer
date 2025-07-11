@@ -16,8 +16,8 @@ export class DrawingObjectsListComponent {
   @Input()
   public drawingLayerId = '';
 
-  @ViewChild('editLabel')
-  private editLabel: ElementRef | null = null;
+  @ViewChild('editDescription')
+  private editDescription: ElementRef | null = null;
 
   public features$: Observable<Array<DrawingFeatureModel & { selected: boolean }>> = combineLatest([
     this.store$.select(selectDrawingFeatures),
@@ -25,7 +25,7 @@ export class DrawingObjectsListComponent {
   ]).pipe(map(([ features, selectedFeature ]) => {
     return features.map(f => ({ ...f, selected: f.__fid === selectedFeature?.__fid }));
   }));
-  public editingLabelForFeatureFid: string | null = null;
+  public editingDescriptionForFeatureFid: string | null = null;
 
   constructor(
     private store$: Store,
@@ -37,27 +37,27 @@ export class DrawingObjectsListComponent {
     this.store$.dispatch(setSelectedFeature({ fid }));
   }
 
-  public stripMacros(label: string | undefined) {
-    return (label || '').replace(/\[[A-Z]+]/g, '');
+  public stripMacros(description: string | undefined) {
+    return (description || '').replace(/\[[A-Z]+]/g, '');
   }
 
-  public selectFeatureAndEditLabel(fid: string) {
+  public selectFeatureAndEditDescription(fid: string) {
     this.selectFeature(fid);
-    this.editingLabelForFeatureFid = fid;
+    this.editingDescriptionForFeatureFid = fid;
     setTimeout(() => {
-      this.editLabel?.nativeElement.focus();
+      this.editDescription?.nativeElement.focus();
     }, 0);
   }
 
-  public updateLabel() {
-    if (!this.editingLabelForFeatureFid || !this.editLabel) {
+  public updateDescription() {
+    if (!this.editingDescriptionForFeatureFid || !this.editDescription) {
       return;
     }
-    this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingLabelForFeatureFid, style: { label: this.editLabel.nativeElement.value } }));
-    this.editingLabelForFeatureFid = null;
+    this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingDescriptionForFeatureFid, style: { description: this.editDescription.nativeElement.value } }));
+    this.editingDescriptionForFeatureFid = null;
   }
 
-  public cancelLabelEdit() {
-    this.editingLabelForFeatureFid = null;
+  public cancelDescriptionEdit() {
+    this.editingDescriptionForFeatureFid = null;
   }
 }

@@ -11,6 +11,7 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
 import { DrawingStyleIconComponent } from './drawing-style-icon/drawing-style-icon.component';
+import { DrawingStyleLibraryListComponent } from './drawing-style-library-list/drawing-style-library-list.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { DrawingStyleIconComponent } from './drawing-style-icon/drawing-style-ic
     DrawingObjectsListComponent,
     DrawingStyleFormComponent,
     DrawingStyleIconComponent,
+    DrawingStyleLibraryListComponent,
   ],
   imports: [
     CommonModule,

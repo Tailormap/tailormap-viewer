@@ -37,10 +37,13 @@ export class DrawingHelper {
     StrokeTypeEnum.DOT,
   ];
 
-  public static getFeature(type: DrawingFeatureTypeEnum, drawingEvent: DrawingToolEvent): DrawingFeatureModel {
+  public static getFeature(type: DrawingFeatureTypeEnum, drawingEvent: DrawingToolEvent, style?: DrawingFeatureStyleModel): DrawingFeatureModel {
     const attributes: DrawingFeatureModelAttributes = {
       type,
-      style: DrawingHelper.getDefaultStyle(),
+      style: {
+        ...DrawingHelper.getDefaultStyle(),
+        ...style,
+      },
     };
     return {
       __fid: uuidv4(),
@@ -71,7 +74,7 @@ export class DrawingHelper {
       marker: 'circle',
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
-      markerSize: 100, //5,
+      markerSize: 5,
       markerStrokeWidth: 1,
       markerRotation: 0,
       fillOpacity: 30,

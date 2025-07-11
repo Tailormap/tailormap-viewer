@@ -81,20 +81,7 @@
       }
     </div>
 
-    @if (drawingStyles$ | async; as drawingStyles) {
-      <div class="drawing-styles-list">
-        @for (style of drawingStyles; track style) {
-          <button [class.button--active]="false"
-                  mat-stroked-button
-                  color="primary"
-                  (click)="selectDrawingStyle(style)">
-            <tm-drawing-style-icon [type]="style.type" [style]="style.style"></tm-drawing-style-icon>
-            {{ style.style.description }}
-          </button>
-        }
-      </div>
-    }
-
+    <tm-drawing-style-library-list (drawingStyleSelected)="selectDrawingStyle($event)"></tm-drawing-style-library-list>
 
     @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {
       <div class="rectangle-size-inputs">

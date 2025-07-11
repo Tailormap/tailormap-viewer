@@ -50,8 +50,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public mapUnits$ = this.mapService.getUnitsOfMeasure$();
 
-  public drawingStyles$ = this.drawingStylesService.getDrawingStyles$();
-
   private static toolsWithMeasure = new Set([
     DrawingFeatureTypeEnum.CIRCLE,
     DrawingFeatureTypeEnum.SQUARE,
@@ -104,9 +102,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
       .subscribe(([ style, feature ]) => {
         this.selectedDrawingStyle = style || feature?.attributes.type || null;
         this.selectedFeature = feature;
-        this.style = feature
-          ? feature.attributes.style
-          : DrawingHelper.getDefaultStyle();
+        if (feature?.attributes.style) {
+          this.style = feature.attributes.style;
+        }
         this.cdr.detectChanges();
       });
 
@@ -139,6 +137,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
+    this.style = DrawingHelper.getDefaultStyle();
+    this.drawingStylesService.setSelectedDrawingStyle(null);
     if (this.activeTool !== type) {
       this.drawingService.toggle(type, this.showMeasures());
     }
@@ -163,7 +163,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (!this.activeTool) {
       return;
     }
-    const feature = DrawingHelper.getFeature(this.activeTool, $event);
+    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style);
     if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
       const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
       if (rectangle) {
@@ -256,12 +256,15 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
-    DrawingHelper.updateDefaultStyle({
+    this.style = {
+      ...DrawingHelper.getDefaultStyle(),
       ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
       label: '',
-    });
-    this.style = DrawingHelper.getDefaultStyle();
-    this.draw(style.type);
+    };
+    if (this.activeTool !== style.type) {
+      this.drawingService.toggle(style.type, this.showMeasures());
+    }
   }
 
   public SIZE_MIN = 10000;
