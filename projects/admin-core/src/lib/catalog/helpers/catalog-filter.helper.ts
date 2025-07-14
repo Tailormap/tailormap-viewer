@@ -49,6 +49,7 @@ export class CatalogFilterHelper {
     featureTypes: ExtendedFeatureTypeModel[],
     crs: string | undefined,
     filterTerm: string | undefined,
+    include3dTiles: boolean = false,
   ) {
     if (!crs) {
       return CatalogTreeHelper.catalogToTree(catalogNodes, services, serviceLayers, [], [], featureTypes);
@@ -56,7 +57,7 @@ export class CatalogFilterHelper {
     const allLayersMap = new Map(serviceLayers.map(l => [ l.id, l ]));
     const filteredItems = CatalogFilterHelper.getFilteredItems(catalogNodes, services, serviceLayers, [], featureTypes, item => {
       if (ExtendedCatalogModelHelper.isGeoServiceLayerModel(item)) {
-        if (item.crs?.includes(crs)) {
+        if (item.crs?.includes(crs) || (include3dTiles && item.protocol === GeoServiceProtocolEnum.TILES3D)) {
           return true;
         }
         let parent = item.parentId ? allLayersMap.get(item.parentId) : null;
