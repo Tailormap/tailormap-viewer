@@ -10,8 +10,7 @@ import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
-  AttributeFilterModel, FilterToolEnum, AttributeType, FilterConditionEnum, UpdateSliderFilterModel, CheckboxFilterModel,
-  UpdateSwitchFilterModel, UpdateDatePickerFilterModel, FilterTypeEnum,
+  AttributeFilterModel, FilterToolEnum, AttributeType, FilterConditionEnum, FilterTypeEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -45,6 +44,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
     value: FilterToolEnum.DATE_PICKER,
+  }, {
+    label: $localize`:@@admin-core.application.filters.dropdown-list:Dropdown List`,
+    value: FilterToolEnum.DROPDOWN_LIST,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -92,7 +94,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<EditFilterConfigurationModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -238,9 +240,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   }
 
-  public setEditFilterConfiguration(
-    $event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel,
-  ) {
+  public setEditFilterConfiguration($event: EditFilterConfigurationModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
       value = $event.initialValue?.toString()
@@ -257,7 +257,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         ? [$event.initialDate ?? '']
         : [ $event.initialLowerDate ?? '', $event.initialUpperDate ?? '' ];
     }
-    const condition = $event.filterTool === FilterToolEnum.CHECKBOX
+    const condition = ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST)
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
       : $event.condition;
     this.filterForm.patchValue({

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
 import {
-  AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
-  UpdateDatePickerFilterModel,
+  AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -37,7 +36,7 @@ export class ApplicationCheckboxFilterFormComponent {
 
   @Input()
   public set checkboxFilterSettings(
-    checkboxFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+    checkboxFilterSettings: EditFilterConfigurationModel | null,
   ) {
     this.attributeValuesSettings = [];
     if (checkboxFilterSettings && checkboxFilterSettings.filterTool === FilterToolEnum.CHECKBOX) {
