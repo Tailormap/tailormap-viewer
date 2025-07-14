@@ -52,3 +52,5 @@ export * from './slider-filter.model';
 export * from './checkbox-filter.model';
 export * from './switch-filter.model';
 export * from './date-picker-filter.model';
+export * from './dropdown-list-filter.model';
+export * from './edit-filter-configuration.model';

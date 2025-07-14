@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, input, computed, Input, EventEmitter, Output, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateDatePickerFilterModel, UpdateSliderFilterModel,
-  UpdateSwitchFilterModel,
+  AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, UpdateDatePickerFilterModel,
 } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
@@ -26,7 +25,7 @@ export class ApplicationDatePickerFilterFormComponent implements OnInit {
 
   @Input()
   public set datePickerFilter(
-    configuration: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel  | UpdateDatePickerFilterModel | null,
+    configuration: EditFilterConfigurationModel | null,
   ) {
     if (configuration && configuration.filterTool === FilterToolEnum.DATE_PICKER) {
       this.datePickerFilterForm.patchValue({
