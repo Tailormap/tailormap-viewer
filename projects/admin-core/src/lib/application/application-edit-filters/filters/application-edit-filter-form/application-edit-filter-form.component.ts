@@ -246,7 +246,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.initialValue?.toString()
         ? [$event.initialValue.toString()]
         : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
-    } else if ($event.filterTool === FilterToolEnum.CHECKBOX) {
+    } else if ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST) {
       value = $event.attributeValuesSettings
         .filter(setting => setting.initiallySelected)
         .map(setting => setting.value);

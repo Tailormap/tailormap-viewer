@@ -1,7 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { DropdownListFilterModel, EditFilterConfigurationModel } from '@tailormap-viewer/api';
-import { BehaviorSubject, Observable, of, combineLatest, map } from 'rxjs';
+import {
+  ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, signal, WritableSignal,
+} from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { AttributeValueSettings, DropdownListFilterModel, EditFilterConfigurationModel, FilterToolEnum } from '@tailormap-viewer/api';
+import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
 
@@ -23,7 +25,12 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
   public loadingUniqueValues: boolean | null = false;
 
   @Input()
-  public dropdownListFilter: EditFilterConfigurationModel | null = null;
+  public set dropdownListFilterSettings(dropdownListFilter: EditFilterConfigurationModel | null) {
+    if (dropdownListFilter && dropdownListFilter.filterTool === FilterToolEnum.DROPDOWN_LIST) {
+      this.dropdownListFilter = dropdownListFilter;
+      this.attributeValuesSettings.set(dropdownListFilter.attributeValuesSettings);
+    }
+  }
 
   @Output()
   public updateDropdownListFilter = new EventEmitter<DropdownListFilterModel>();
@@ -33,6 +40,13 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
 
   private uniqueValuesSubject$ = new BehaviorSubject<string[] | null>(null);
   public filteredUniqueValues$: Observable<string[]> = of([]);
+
+  public attributeValuesSettings: WritableSignal<AttributeValueSettings[]> = signal([]);
+  public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
+
+  public aliasForm: FormGroup = new FormGroup({});
+
+  private dropdownListFilter: DropdownListFilterModel = { filterTool: FilterToolEnum.DROPDOWN_LIST, attributeValuesSettings: [] };
 
   constructor(private destroyRef: DestroyRef) { }
 
@@ -52,10 +66,51 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
       }
       return uniqueValues ? uniqueValues : [];
     }));
+
+    this.aliasForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(values => {
+        const updatedAliases = Object.keys(values)
+          .map(attributeValue => ({ value: attributeValue, alias: values[attributeValue] || undefined }));
+        updatedAliases.forEach(updatedAlias => {
+          this.changeAlias(updatedAlias.value, updatedAlias.alias);
+        });
+      });
   }
 
-  public valueClicked() {
-    return;
+  public valueClicked(value: string): void {
+    this.attributeValuesSettings.update(attributeValues => [
+      ...attributeValues,
+      { value: value, initiallySelected: false, selectable: true },
+    ]);
+    this.aliasForm.addControl(value, new FormControl<string>(''));
+    this.filter.patchValue('', { emitEvent: true });
+    this.dropdownListFilter.attributeValuesSettings = this.attributeValuesSettings();
+  }
+
+  public changeBooleanSetting(value: string, setting: 'initiallySelected' | 'selectable', checked: boolean) {
+    const attributeValueSettings = this.dropdownListFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (attributeValueSettings) {
+      const newAttributeValueSettings = setting === 'initiallySelected'
+        ? { ...attributeValueSettings, initiallySelected: checked }
+        : { ...attributeValueSettings, selectable: checked };
+      this.dropdownListFilter.attributeValuesSettings = this.dropdownListFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+      this.updateDropdownListFilter.emit(this.dropdownListFilter);
+    }
+  }
+
+  public changeAlias(value: string, alias: string | undefined): void {
+    if (!alias) {
+      return;
+    }
+    const attributeValueSettings = this.dropdownListFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (attributeValueSettings) {
+      const newAttributeValueSettings = { ...attributeValueSettings, alias: alias || undefined };
+      this.dropdownListFilter.attributeValuesSettings = this.dropdownListFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+      this.updateDropdownListFilter.emit(this.dropdownListFilter);
+    }
   }
 
 }

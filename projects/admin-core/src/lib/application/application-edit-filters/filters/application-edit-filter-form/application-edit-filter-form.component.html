@@ -71,7 +71,7 @@
     } @else if (filterForm.get('tool')?.value === "DROPDOWN_LIST") {
       <div class="dropdown-list-filter-form">
         <tm-admin-application-dropdown-list-filter-form
-          [dropdownListFilter]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [dropdownListFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
           [uniqueValues]="uniqueValuesStrings$ | async"
           [loadingUniqueValues]="loadingUniqueValues$ | async"
           (updateDropdownListFilter)="setEditFilterConfiguration($event)"></tm-admin-application-dropdown-list-filter-form>
