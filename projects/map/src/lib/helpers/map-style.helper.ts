@@ -76,12 +76,16 @@ export class MapStyleHelper {
       }));
     }
     const styles: Style[] = [baseStyle];
+    let symbolSizeForLabel = styleConfig.pointSize ?? MapStyleHelper.DEFAULT_SYMBOL_SIZE;
     if (styleConfig.pointImage) {
       const pointSizeFactor = (styleConfig.pointSize ?? 100) / 100;
+      const width = (styleConfig.pointImageWidth ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor;
+      const height = (styleConfig.pointImageHeight ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor;
+      symbolSizeForLabel = height / 2;
       styles.push(new Style({ image: new Icon({
           src: styleConfig.pointImage,
-          width: (styleConfig.pointImageWidth ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor,
-          height: (styleConfig.pointImageHeight ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor,
+          width,
+          height,
           rotation: (styleConfig.pointRotation ?? 0) * Math.PI / 180,
         }),
       }));
@@ -90,7 +94,7 @@ export class MapStyleHelper {
     }
     styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
-      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
+      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution));

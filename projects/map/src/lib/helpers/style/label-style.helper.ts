@@ -15,10 +15,10 @@ export class LabelStyleHelper {
 
   public static createLabelStyle(
     styleConfig: MapStyleModel,
+    symbolSize: number,
     defaultSymbolSize: number,
     feature?: Feature<Geometry>,
   ) {
-    const symbolSize = UnitsHelper.getNumberValue(styleConfig.pointSize, defaultSymbolSize);
     const geom = feature?.getGeometry();
     const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
     const labelSize = UnitsHelper.getNumberValue(styleConfig.labelSize, defaultSymbolSize);
