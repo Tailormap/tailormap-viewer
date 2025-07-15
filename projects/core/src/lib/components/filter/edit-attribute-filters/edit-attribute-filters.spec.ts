@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
-import { SliderFilterComponent } from '../slider-filter/slider-filter.component';
+import { SliderFilterComponent } from './slider-filter/slider-filter.component';
 import { FilterToolEnum } from '@tailormap-viewer/api';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedImportsModule, SliderComponent } from '@tailormap-viewer/shared';
