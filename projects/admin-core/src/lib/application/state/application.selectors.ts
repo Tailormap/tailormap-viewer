@@ -189,21 +189,15 @@ export const selectTerrainServiceLayerTreeForApplication = createSelector(
   },
 );
 
-export const selectTiles3DServiceLayerTreeForApplication = createSelector(
+export const selectServiceLayerTreeForApplication = createSelector(
+  selectDraftApplicationCrs,
   selectCatalog,
   selectGeoServices,
   selectGeoServiceLayers,
   selectFeatureTypes,
-  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
-    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILES3D);
-  },
-);
-
-export const selectServiceLayerTreeForApplication = createSelector(
-  selectBaseServiceLayerTreeForApplication,
-  selectTiles3DServiceLayerTreeForApplication,
-  (layers2D, tiles3dLayers) => {
-    return layers2D.concat(tiles3dLayers);
+  selectApplicationCatalogFilterTerm,
+  (draftApplicationCrs, catalog, services, layers, featureTypes, filterTerm): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs, filterTerm, true);
   },
 );
 
