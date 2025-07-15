@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { DrawingStylesService } from '../services/drawing-styles.service';
 import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 
@@ -26,5 +26,4 @@ export class DrawingStyleLibraryListComponent {
     this.drawingStylesService.setSelectedDrawingStyle(idx);
     this.drawingStyleSelected.emit(style);
   }
-
 }
