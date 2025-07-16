@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  selectDrawingFeaturesIncludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
+  selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
@@ -37,7 +37,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [DrawingStyleFormComponent],
     providers: [
-      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ] }),
+      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesForMapRendering, value: [] }, ...selectors ] }),
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },

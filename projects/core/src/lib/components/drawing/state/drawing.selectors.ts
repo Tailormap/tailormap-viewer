@@ -20,14 +20,18 @@ export const selectSelectedDrawingFeature = createSelector(
     return features.find(feature => feature.__fid === selectedFeature) || null;
   });
 
-export const selectDrawingFeaturesIncludingSelected = createSelector(
+export const selectDrawingFeaturesForMapRendering = createSelector(
   selectDrawingFeatures,
   selectSelectedDrawingFeatureId,
   (features, selectedFeature): DrawingFeatureModel[] => {
     // Marking a feature as selected shows a selection rectangle around the feature on the map.
     // We only do this for points/labels/images. For the other feature types (lines, polygons) the selection rectangle is added by the modify tool.
     const selectableFeatures = new Set([ DrawingFeatureTypeEnum.IMAGE, DrawingFeatureTypeEnum.POINT, DrawingFeatureTypeEnum.LABEL ]);
-    return features.map((feature, idx) => {
+    return features
+      .filter(feature => {
+        return feature.__fid !== selectedFeature || (feature.__fid === selectedFeature && selectableFeatures.has(feature.attributes.type));
+      })
+      .map((feature, idx) => {
       const selected = feature.__fid === selectedFeature && selectableFeatures.has(feature.attributes.type);
       return {
         ...feature,
