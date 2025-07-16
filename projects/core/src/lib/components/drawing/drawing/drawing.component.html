@@ -163,10 +163,10 @@
       }
     </div>
 
-    <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
-    @if (selectedDrawingStyle) {
+    <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
+    @if (selectedDrawingType) {
       <tm-drawing-style-form
-        [type]="selectedDrawingStyle"
+        [type]="selectedDrawingType"
         [style]="style"
         (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
     }

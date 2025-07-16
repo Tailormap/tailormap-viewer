@@ -6,7 +6,7 @@ const selectDrawingState = createFeatureSelector<DrawingState>(drawingStateKey);
 
 export const selectDrawingFeatures = createSelector(selectDrawingState, state => state.features);
 export const selectSelectedDrawingFeatureId = createSelector(selectDrawingState, state => state.selectedFeature);
-export const selectSelectedDrawingStyle = createSelector(selectDrawingState, state => state.selectedDrawingStyle);
+export const selectSelectedDrawingType = createSelector(selectDrawingState, state => state.selectedDrawingType);
 
 export const selectHasDrawingFeatures = createSelector(
   selectDrawingFeatures, features => features.length > 0,

@@ -42,7 +42,7 @@ export const removeAllDrawingFeatures = createAction(
   `${drawingActionsPrefix} Remove All Drawing Features`,
 );
 
-export const setSelectedDrawingStyle = createAction(
-  `${drawingActionsPrefix} Set Selected Drawing Style`,
+export const setSelectedDrawingType = createAction(
+  `${drawingActionsPrefix} Set Selected Drawing Type`,
   props<{ drawingType: DrawingFeatureTypeEnum | null }>(),
 );

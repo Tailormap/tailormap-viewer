@@ -6,11 +6,11 @@ export const drawingStateKey = 'drawing';
 export interface DrawingState {
   features: DrawingFeatureModel[];
   selectedFeature: string | null;
-  selectedDrawingStyle: DrawingFeatureTypeEnum | null;
+  selectedDrawingType: DrawingFeatureTypeEnum | null;
 }
 
 export const initialDrawingState: DrawingState = {
   features: [],
   selectedFeature: null,
-  selectedDrawingStyle: null,
+  selectedDrawingType: null,
 };

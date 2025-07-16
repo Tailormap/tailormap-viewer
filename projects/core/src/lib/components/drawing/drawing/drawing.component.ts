@@ -4,14 +4,14 @@ import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tai
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeatures, selectDrawingFeaturesExcludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature,
-  selectSelectedDrawingStyle,
+  selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
 import {
-  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingStyle, setSelectedFeature, updateDrawingFeatureStyle,
+  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingType, setSelectedFeature, updateDrawingFeatureStyle,
   updateSelectedDrawingFeatureGeometry,
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
@@ -38,7 +38,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public active$: Observable<boolean> = of(false);
   public selectedFeature: DrawingFeatureModel | null = null;
   public style: DrawingFeatureStyleModel = DrawingHelper.getDefaultStyle();
-  public selectedDrawingStyle: DrawingFeatureTypeEnum | null = null;
+  public selectedDrawingType: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
   public drawingTypes = DrawingFeatureTypeEnum;
@@ -95,15 +95,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
     ).pipe(takeUntil(this.destroyed)).subscribe();
 
     combineLatest([
-      this.store$.select(selectSelectedDrawingStyle),
+      this.store$.select(selectSelectedDrawingType),
       this.store$.select(selectSelectedDrawingFeature),
     ])
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([ style, feature ]) => {
-        this.selectedDrawingStyle = style || feature?.attributes.type || null;
+      .subscribe(([ type, feature ]) => {
+        console.log(`DrawingComponent: selected type: ${type}, selected feature type: ${feature?.attributes.type}`);
         this.selectedFeature = feature;
-        if (feature?.attributes.style) {
+        this.selectedDrawingType = type;
+        if (feature) {
           this.style = feature.attributes.style;
+          this.selectedDrawingType = feature.attributes.type;
         }
         this.cdr.detectChanges();
       });
@@ -157,6 +159,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public enableSelectAndModify() {
     this.drawingService.enableSelectAndModify();
+    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onDrawingAdded($event: DrawingToolEvent) {
@@ -184,11 +187,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public onActiveToolChanged($event: DrawingFeatureTypeEnum | null) {
     this.activeTool = $event;
-    this.store$.dispatch(setSelectedDrawingStyle({ drawingType: $event }));
+    this.store$.dispatch(setSelectedDrawingType({ drawingType: $event }));
   }
 
   public onFeatureSelected(feature: FeatureModel | null) {
     this.store$.dispatch(setSelectedFeature({ fid: feature?.__fid || null }));
+  }
+
+  public featureSelected(fid: string) {
+    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.drawingService.enableSelectAndModify(true);
+    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onFeatureGeometryModified(geometry: string) {

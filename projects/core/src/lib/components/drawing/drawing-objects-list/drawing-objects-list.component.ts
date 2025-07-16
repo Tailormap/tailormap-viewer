@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature, updateDrawingFeatureStyle } from '../state';
+import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingService } from '../../../map/services/drawing.service';
 
 @Component({
   selector: 'tm-drawing-objects-list',
@@ -15,6 +16,9 @@ export class DrawingObjectsListComponent {
 
   @Input()
   public drawingLayerId = '';
+
+  @Output()
+  public featureSelected = new EventEmitter<string>();
 
   @ViewChild('editDescription')
   private editDescription: ElementRef | null = null;
@@ -34,7 +38,7 @@ export class DrawingObjectsListComponent {
   }
 
   public selectFeature(fid: string) {
-    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.featureSelected.emit(fid);
   }
 
   public stripMacros(description: string | undefined) {

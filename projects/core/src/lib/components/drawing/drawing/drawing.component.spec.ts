@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  selectDrawingFeaturesIncludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingStyle,
+  selectDrawingFeaturesIncludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
@@ -67,7 +67,7 @@ describe('DrawingComponent', () => {
   test('removes all / selected features', async () => {
     const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
     const { confirmServiceMock } = await setup(true, [
-      { selector: selectSelectedDrawingStyle, value: null },
+      { selector: selectSelectedDrawingType, value: null },
       { selector: selectSelectedDrawingFeature, value: selectedFeature },
       { selector: selectHasDrawingFeatures, value: true },
     ]);
