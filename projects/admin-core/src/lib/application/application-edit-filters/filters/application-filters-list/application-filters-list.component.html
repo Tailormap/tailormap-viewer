@@ -16,6 +16,8 @@
             <mat-icon svgIcon="admin/filters_toggle"></mat-icon>
           } @else if (filter.filter.editConfiguration?.filterTool === filterToolTypes.DATE_PICKER) {
             <mat-icon svgIcon="admin/filters_date_picker"></mat-icon>
+          } @else if (filter.filter.editConfiguration?.filterTool === filterToolTypes.DROPDOWN_LIST) {
+            <mat-icon svgIcon="admin/filters_dropdown"></mat-icon>
           } @else {
             <mat-icon svgIcon="admin/filters_filter"></mat-icon>
           }

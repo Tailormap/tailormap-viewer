@@ -8,7 +8,8 @@ import { updateFilter } from '../../../filter/state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
-import { selectViewerId } from '@tailormap-viewer/core';
+import { selectViewerId } from '../../../state/core.selectors';
+
 
 @Component({
   selector: 'tm-edit-attribute-filter',
@@ -198,7 +199,7 @@ export class EditAttributeFiltersComponent {
         ).pipe(
           map((allLayerValues: string[][]) => Array.from(new Set(allLayerValues.flat()))),
         );
-      })
+      }),
     );
 
 
