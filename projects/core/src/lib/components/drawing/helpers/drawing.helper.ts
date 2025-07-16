@@ -109,6 +109,8 @@ export class DrawingHelper {
   public static getDefaultStyle(): DrawingFeatureStyleModel {
     const defaultStyle: DrawingFeatureStyleModel = {
       marker: 'circle',
+      markerImageWidth: 32,
+      markerImageHeight: 32,
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
       markerSize: 10,
@@ -118,6 +120,7 @@ export class DrawingHelper {
       fillColor: ApplicationStyleService.getPrimaryColor(),
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeOpacity: 100,
+      strokeType: StrokeTypeEnum.SOLID,
       strokeWidth: 3,
       label: '',
       labelSize: 12,

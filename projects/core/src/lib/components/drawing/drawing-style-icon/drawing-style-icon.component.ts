@@ -34,7 +34,11 @@ export class DrawingStyleIconComponent {
     return this.domSanitizer.bypassSecurityTrustHtml(svgImage);
   }
 
-  private static createSvgContent(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel) {
+  private static createSvgContent(type: DrawingFeatureTypeEnum, styleConfig: DrawingFeatureStyleModel) {
+    const style = {
+      ...DrawingHelper.getDefaultStyle(),
+      ...styleConfig,
+    };
     const svgStyle = DrawingStyleIconComponent.getSvgStyle(style);
     const dashArray = DrawingStyleIconComponent.getDashArray(style);
     switch(type) {
