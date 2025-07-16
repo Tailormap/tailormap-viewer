@@ -111,7 +111,7 @@ export class DrawingHelper {
       marker: 'circle',
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
-      markerSize: 5,
+      markerSize: 10,
       markerStrokeWidth: 1,
       markerRotation: 0,
       fillOpacity: 30,
