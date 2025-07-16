@@ -1,6 +1,7 @@
 import { DrawingState, drawingStateKey } from './drawing.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureTypeEnum } from '../../../map';
 
 const selectDrawingState = createFeatureSelector<DrawingState>(drawingStateKey);
 
@@ -23,28 +24,17 @@ export const selectDrawingFeaturesIncludingSelected = createSelector(
   selectDrawingFeatures,
   selectSelectedDrawingFeatureId,
   (features, selectedFeature): DrawingFeatureModel[] => {
+    // Marking a feature as selected shows a selection rectangle around the feature on the map.
+    // We only do this for points/labels/images. For the other feature types (lines, polygons) the selection rectangle is added by the modify tool.
+    const selectableFeatures = new Set([ DrawingFeatureTypeEnum.IMAGE, DrawingFeatureTypeEnum.POINT, DrawingFeatureTypeEnum.LABEL ]);
     return features.map((feature, idx) => {
+      const selected = feature.__fid === selectedFeature && selectableFeatures.has(feature.attributes.type);
       return {
         ...feature,
         attributes: {
           ...feature.attributes,
           zIndex: idx + 1,
-          selected: feature.__fid === selectedFeature,
-        },
-      };
-    });
-  });
-
-export const selectDrawingFeaturesExcludingSelected = createSelector(
-  selectDrawingFeatures,
-  selectSelectedDrawingFeatureId,
-  (features, selectedFeatureId): DrawingFeatureModel[] => {
-    return features.filter(feature => feature.__fid !== selectedFeatureId).map((feature, idx) => {
-      return {
-        ...feature,
-        attributes: {
-          ...feature.attributes,
-          zIndex: idx + 1,
+          selected,
         },
       };
     });
