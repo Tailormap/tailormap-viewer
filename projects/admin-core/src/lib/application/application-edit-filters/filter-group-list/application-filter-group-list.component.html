@@ -1,0 +1,35 @@
+<tm-admin-list-filter [formControl]="layerFilter"
+                      [filterTerm]="layerFilterSignal()"
+                      label="Filter filter groups"
+                      i18n-label="@@admin-core.application.filter-filter-groups"></tm-admin-list-filter>
+<div class="filters">
+  @for (group of filteredFilterGroups(); track group.filterGroup.id) {
+    <mat-card class="filter-link"
+              mat-ripple
+              [class.selected]="group.isSelected"
+              [routerLink]="['/admin/applications/application/' + applicationId() + '/filters/filter/' + group.filterGroup.id ]">
+      <div class="filter-header">
+        <strong>
+          @if (group.layers.length > 1) {
+            <ng-container i18n="@@admin-core.application-filter-multi-layer">Multi-layer filter</ng-container>
+          } @else {
+            <ng-container i18n="@@admin-core.application-filter-single-layer">Single-layer filter</ng-container>
+          }
+        </strong>
+        <button mat-icon-button
+                class="remove-filter size-24"
+                color="warn"
+                matTooltip="Remove filter"
+                i18n-matTooltip="@@admin-core.application.remove-filter"
+                (click)="removeFilterGroup($event, group.filterGroup.id)">
+          <mat-icon svgIcon="close"></mat-icon>
+        </button>
+      </div>
+      <div class="filterable-layer-label">
+        @for (layer of group.layers; track layer.id) {
+          <div>{{ layer.layerTitle }}</div>
+        }
+      </div>
+    </mat-card>
+  }
+</div>

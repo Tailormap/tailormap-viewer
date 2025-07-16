@@ -1,9 +1,0 @@
-<mat-selection-list>
-  @for (layer of filterableLayersWithSelected(); track layer.appLayerId) {
-    <mat-list-item
-      [class.selected]="layer.isSelected"
-      (click)="setSelectedLayer(layer)">
-      <div class="filterable-layer-label">{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
-    </mat-list-item>
-  }
-</mat-selection-list>

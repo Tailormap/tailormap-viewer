@@ -17,7 +17,7 @@ import { ApplicationEditLayersComponent } from './application/application-edit-l
 import { ApplicationEditBaseLayersComponent } from './application/application-edit-base-layers/application-edit-base-layers.component';
 import { ApplicationEditComponentsComponent } from './application/application-edit-components/application-edit-components.component';
 import { ApplicationEditStylingComponent } from './application/application-edit-styling/application-edit-styling.component';
-import { ApplicationEditFiltersComponent } from './application/application-edit-filters/application-edit-filters/application-edit-filters.component';
+import { ApplicationEditFiltersComponent } from './application/application-edit-filters/application-edit-filters.component';
 import { ApplicationEditTerrainLayersComponent } from './application/application-edit-terrain-layers/application-edit-terrain-layers.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { AdminHomePageComponent } from './pages/admin-home-page/admin-home-page.component';
@@ -44,13 +44,13 @@ import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
 import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
 import { TaskDetailsComponent } from './tasks/task-details/task-details.component';
 import { ApplicationEditFiltersHomeComponent,
-} from './application/application-edit-filters/application-edit-filters-home/application-edit-filters-home.component';
+} from './application/application-edit-filters/filter-group-home/application-edit-filters-home.component';
 import {
-  ApplicationCreateFilterComponent,
-} from './application/application-edit-filters/application-create-filter/application-create-filter.component';
+  ApplicationCreateFilterGroupComponent,
+} from './application/application-edit-filters/filter-group-create/application-create-filter-group.component';
 import {
   ApplicationEditFilterComponent,
-} from './application/application-edit-filters/application-edit-filter/application-edit-filter.component';
+} from './application/application-edit-filters/filter-group-edit/application-edit-filter.component';
 import { AdminAuthGuard } from './admin-auth.guard';
 
 export const adminRoutes: Routes = [
@@ -146,7 +146,7 @@ export const adminRoutes: Routes = [
                   },
                   {
                     path: AdminRoutes.APPLICATION_DETAILS_FILTERS_CREATE,
-                    component: ApplicationCreateFilterComponent,
+                    component: ApplicationCreateFilterGroupComponent,
                   },
                   {
                     path: AdminRoutes.APPLICATION_DETAILS_FILTERS_EDIT,

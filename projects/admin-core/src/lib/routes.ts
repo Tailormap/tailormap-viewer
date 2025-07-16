@@ -27,7 +27,7 @@ export class Routes {
   public static APPLICATION_DETAILS_STYLING = 'styling';
   public static APPLICATION_DETAILS_FILTERS = 'filters';
   public static APPLICATION_DETAILS_FILTERS_CREATE = 'create';
-  public static APPLICATION_DETAILS_FILTERS_EDIT = 'filter/:filterId';
+  public static APPLICATION_DETAILS_FILTERS_EDIT = 'filter/:filterGroupId';
 
   public static FORMS = 'forms';
   public static FORMS_CREATE = 'create';

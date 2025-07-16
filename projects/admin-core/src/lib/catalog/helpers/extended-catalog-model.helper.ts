@@ -68,6 +68,7 @@ export class ExtendedCatalogModelHelper {
         abstractText: layer.abstractText,
         serviceId: geoServiceId,
         originalId: layer.id,
+        layerTitle: layerSettings?.[layer.name]?.title ?? layer.title,
         catalogNodeId,
         children: layer.children // map children to point to ID instead of name
           ? layer.children.map<string>(id => `${geoServiceId}_${id}`)

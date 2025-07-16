@@ -104,4 +104,9 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for latestUpload$', () => {
+    service.getLatestUpload$('drawing-style').subscribe();
+    const req = httpController.expectOne({ url: '/api/uploads/drawing-style/latest', method: 'GET' });
+    req.flush(null);
+  });
 });

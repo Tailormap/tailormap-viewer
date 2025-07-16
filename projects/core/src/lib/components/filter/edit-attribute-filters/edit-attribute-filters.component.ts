@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, SwitchFilterModel, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterModel,
-  DatePickerFilterModel,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
+  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
@@ -59,10 +59,10 @@ export class EditAttributeFiltersComponent {
     }
     const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
     if (editConfiguration.initialDate) {
-      editConfiguration.initialDate = DateTime.fromISO(filter.value[0]);
+      editConfiguration.initialDate = filter.value[0];
     } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
-      editConfiguration.initialLowerDate = DateTime.fromISO(filter.value[0]);
-      editConfiguration.initialUpperDate = DateTime.fromISO(filter.value[1]);
+      editConfiguration.initialLowerDate = filter.value[0];
+      editConfiguration.initialUpperDate = filter.value[1];
     }
     return editConfiguration;
   }
@@ -110,7 +110,15 @@ export class EditAttributeFiltersComponent {
   }
 
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    return `${filter.attribute} ${filter.condition} ${filter.value.join($localize `:@@core.filter.slider-and: and `)}`;
+    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
+      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
+      return `${filter.attribute} ${filter.condition}`;
+    }
+    const formattedValues = filter.value.map(value => {
+      const num = Number(value);
+      return isNaN(num) ? value : num.toPrecision(5);
+    });
+    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
@@ -138,7 +146,7 @@ export class EditAttributeFiltersComponent {
   public updateDateFilterValue($event: DateTime, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
-      value: [$event.toISODate() ?? ''],
+      value: [$event.toISO() ?? ''],
     };
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
@@ -148,7 +156,7 @@ export class EditAttributeFiltersComponent {
   public updateBetweenDateFilterValues($event: { lower: DateTime; upper: DateTime }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
-      value: [ $event.lower.toISODate() ?? '', $event.upper.toISODate() ?? '' ],
+      value: [ $event.lower.toISO() ?? '', $event.upper.toISO() ?? '' ],
     };
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));

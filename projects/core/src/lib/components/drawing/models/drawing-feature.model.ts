@@ -57,4 +57,5 @@ export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {
   zIndex?: number;
 }
 
+
 export type DrawingFeatureModel = FeatureModel<DrawingFeatureModelAttributes>;

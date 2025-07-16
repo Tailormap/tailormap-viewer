@@ -34,18 +34,18 @@ import {
 import { FormModule } from "../form/form.module";
 import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 import { ApplicationEditTerrainLayersComponent } from './application-edit-terrain-layers/application-edit-terrain-layers.component';
-import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters/application-edit-filters.component';
-import { ApplicationFilterableLayersListComponent } from './application-edit-filters/application-filterable-layers-list/application-filterable-layers-list.component';
-import { ApplicationFiltersListComponent } from './application-edit-filters/application-filters-list/application-filters-list.component';
-import { ApplicationEditFilterFormComponent } from './application-edit-filters/application-edit-filter-form/application-edit-filter-form.component';
-import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/application-edit-filters-home/application-edit-filters-home.component';
-import { ApplicationEditFilterComponent } from './application-edit-filters/application-edit-filter/application-edit-filter.component';
-import { ApplicationCreateFilterComponent } from './application-edit-filters/application-create-filter/application-create-filter.component';
-import { ApplicationFilterAttributeListComponent } from './application-edit-filters/application-filter-attribute-list/application-filter-attribute-list.component';
-import { ApplicationSliderFilterFormComponent } from './application-edit-filters/application-slider-filter-form/application-slider-filter-form.component';
-import { ApplicationCheckboxFilterFormComponent } from './application-edit-filters/application-checkbox-filter-form/application-checkbox-filter-form.component';
-import { ApplicationSwitchFilterFormComponent } from './application-edit-filters/application-switch-filter-form/application-switch-filter-form.component';
-import { ApplicationDatePickerFilterFormComponent } from './application-edit-filters/application-date-picker-filter-form/application-date-picker-filter-form.component';
+import { ApplicationFilterGroupListComponent } from './application-edit-filters/filter-group-list/application-filter-group-list.component';
+import { ApplicationCreateFilterGroupComponent } from './application-edit-filters/filter-group-create/application-create-filter-group.component';
+import { ApplicationDatePickerFilterFormComponent } from './application-edit-filters/filters/application-date-picker-filter-form/application-date-picker-filter-form.component';
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters.component';
+import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/filter-group-home/application-edit-filters-home.component';
+import { ApplicationEditFilterComponent } from './application-edit-filters/filter-group-edit/application-edit-filter.component';
+import {
+  ApplicationCheckboxFilterFormComponent, ApplicationEditFilterFormComponent, ApplicationFilterAttributeListComponent,
+  ApplicationFiltersListComponent,
+  ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent,
+} from './application-edit-filters/filters';
 
 @NgModule({
   declarations: [
@@ -68,16 +68,16 @@ import { ApplicationDatePickerFilterFormComponent } from './application-edit-fil
     ApplicationCopyDialogComponent,
     ApplicationEditTerrainLayersComponent,
     ApplicationEditFiltersComponent,
-    ApplicationFilterableLayersListComponent,
-    ApplicationFiltersListComponent,
-    ApplicationEditFilterFormComponent,
+    ApplicationFilterGroupListComponent,
     ApplicationEditFiltersHomeComponent,
     ApplicationEditFilterComponent,
-    ApplicationCreateFilterComponent,
+    ApplicationCreateFilterGroupComponent,
     ApplicationFilterAttributeListComponent,
-    ApplicationSliderFilterFormComponent,
+    ApplicationFiltersListComponent,
     ApplicationCheckboxFilterFormComponent,
+    ApplicationSliderFilterFormComponent,
     ApplicationSwitchFilterFormComponent,
+    ApplicationEditFilterFormComponent,
     ApplicationDatePickerFilterFormComponent,
   ],
   imports: [
@@ -90,6 +90,9 @@ import { ApplicationDatePickerFilterFormComponent } from './application-edit-fil
     CatalogModule,
     ComponentsModule,
     FormModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
   ],
     exports: [
         ApplicationListComponent,
