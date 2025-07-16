@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
-import { DrawingService } from '../../../map/services/drawing.service';
 
 @Component({
   selector: 'tm-drawing-objects-list',
