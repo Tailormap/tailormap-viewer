@@ -45,7 +45,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
     value: FilterToolEnum.DATE_PICKER,
   }, {
-    label: $localize`:@@admin-core.application.filters.dropdown-list:Dropdown List`,
+    label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down List`,
     value: FilterToolEnum.DROPDOWN_LIST,
   }];
 

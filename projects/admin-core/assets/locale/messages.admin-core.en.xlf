@@ -167,6 +167,9 @@
       <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
         <source>Choose attribute</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
       </trans-unit>
@@ -211,6 +214,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
         <source>Initial upper date</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
+        <source>Drop-down List</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
@@ -916,6 +922,9 @@
       </trans-unit>
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-values" datatype="html">
+        <source>Filter values</source>
       </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
