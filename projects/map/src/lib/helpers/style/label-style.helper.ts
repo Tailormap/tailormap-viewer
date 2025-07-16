@@ -25,7 +25,7 @@ export class LabelStyleHelper {
     const scale = 1 + (labelSize / LabelStyleHelper.DEFAULT_FONT_SIZE);
     const offsetY = styleConfig.pointType === 'label'
       ? 0
-      : 14 + (symbolSize - defaultSymbolSize) + (scale * 2);
+      : (styleConfig.pointType || styleConfig.pointImage ? 14 + (symbolSize - defaultSymbolSize) + (scale * 2) : 0);
 
     const italic = (styleConfig.labelStyle || []).includes('italic');
     const bold = (styleConfig.labelStyle || []).includes('bold');
@@ -36,11 +36,11 @@ export class LabelStyleHelper {
       LabelStyleHelper.DEFAULT_FONT_FAMILY,
     ].filter(Boolean).join(' ');
 
-    const showSelectionRectangle = styleConfig.isSelected && !!styleConfig.pointType;
+    const showSelectionRectangle = styleConfig.isSelected && (!!styleConfig.pointType || !!styleConfig.pointImage);
     const DEFAULT_SELECTION_PADDING = 10;
     const paddingTop: number = styleConfig.pointType === 'label'
       ? DEFAULT_SELECTION_PADDING
-      : (styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
+      : (styleConfig.pointType || styleConfig.pointImage ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
 
     const baseLabelStyle = new Style({
       zIndex: styleConfig.zIndex,
