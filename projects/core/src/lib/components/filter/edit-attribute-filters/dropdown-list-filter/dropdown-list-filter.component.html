@@ -1,1 +1,36 @@
-<p>dropdown-list-filter works!</p>
+<div class="form-group has-search flex">
+  <mat-chip-set>
+    @for (value of selectedValuesSubject$ | async; track value) {
+      <mat-chip
+        [removable]="true"
+        (removed)="removeValue(value.value)"
+        class="attribute-chip">
+        {{ value.alias ?? value.value }}
+        <button matChipRemove>
+          <mat-icon svgIcon="close"></mat-icon>
+        </button>
+      </mat-chip>
+    }
+  </mat-chip-set>
+  <div class="choose-values">
+    <mat-form-field appearance="outline">
+      <mat-label
+        i18n="@@admin-core.application.filter.choose-value"
+        class="filter-attributes-panel-title">Choose value</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Filter values"
+        i18n-placeholder="@@admin-core.common.filter-values"
+        [formControl]="filter"
+        [matAutocomplete]="auto"/>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        @for (value of filteredUniqueValues$ | async; track value.value) {
+          <mat-option [value]="value" (click)="valueClicked(value)" class="attribute-option">
+            {{ value.alias ?? value.value }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</div>

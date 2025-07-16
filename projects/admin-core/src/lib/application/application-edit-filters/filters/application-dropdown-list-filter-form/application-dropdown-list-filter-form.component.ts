@@ -76,6 +76,8 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
           this.changeAlias(updatedAlias.value, updatedAlias.alias);
         });
       });
+
+    this.updateDropdownListFilter.emit(this.dropdownListFilter);
   }
 
   public valueClicked(value: string): void {

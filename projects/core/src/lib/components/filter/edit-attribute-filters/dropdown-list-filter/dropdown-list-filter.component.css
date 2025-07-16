@@ -1,0 +1,8 @@
+.choose-values {
+  margin-top: 8px;
+}
+
+.attribute-chip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
