@@ -26,7 +26,7 @@ export class IconStyleHelper {
         arrow: 'M3 14.275v-4.55h9.535V5.5L21 12l-8.465 6.5v-4.225H3z',
         diamond: 'M 12 21 L 5 12 L 12 3 l 7 9 Z',
         cross: 'M15 9.059h6.02v6H15V21H9v-5.941H3.02v-6H9V3h6v6.059Z',
-        star: 'M12 3.859l2.863 5.059 5.697 1.159-3.927 4.289.658 5.776L12 17.732l-5.29 2.41.656-5.776-3.925-4.289 5.695-1.16L12 3.86z'
+        star: 'M12 3.859l2.863 5.059 5.697 1.159-3.927 4.289.658 5.776L12 17.732l-5.29 2.41.656-5.776-3.925-4.289 5.695-1.16L12 3.86z',
       };
       const svgContent = `<path d="${paths[type]}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${svgStrokeWidth}" />`;
       return [new Style({ image: IconStyleHelper.getSvgIcon({ svgContent,  symbolSize,  rotation,  strokeWidth }) })];
@@ -66,7 +66,7 @@ export class IconStyleHelper {
     };
     return new RegularShape({
       fill: new Fill({ color: props.fillColor  }),
-      stroke: props.strokeWidth === 0 || !props.strokeColor ? undefined : new Stroke({ color: props.strokeColor, width: props.strokeWidth * 2}),
+      stroke: props.strokeWidth === 0 || !props.strokeColor ? undefined : new Stroke({ color: props.strokeColor, width: props.strokeWidth * 2 }),
       rotation: UnitsHelper.getRotationForDegrees(props.rotation),
       ...POINT_SHAPES[props.type],
     });

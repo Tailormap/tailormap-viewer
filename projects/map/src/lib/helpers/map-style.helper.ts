@@ -7,7 +7,7 @@ import {
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
-import { Style, Fill, Stroke, Circle, Icon } from 'ol/style';
+import { Style, Fill, Stroke, Circle } from 'ol/style';
 import { WKT } from 'ol/format';
 import { FillStyleHelper } from './style/fill-style.helper';
 import { ArrowStyleHelper } from './style/arrow-style.helper';
