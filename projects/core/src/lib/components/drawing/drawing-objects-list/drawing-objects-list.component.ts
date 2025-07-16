@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { afterRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable, tap } from 'rxjs';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
 
 @Component({
@@ -26,14 +26,21 @@ export class DrawingObjectsListComponent {
     this.store$.select(selectDrawingFeatures),
     this.store$.select(selectSelectedDrawingFeature),
   ]).pipe(map(([ features, selectedFeature ]) => {
+    this.selectedFeature = selectedFeature?.__fid ?? null;
     return features.map(f => ({ ...f, selected: f.__fid === selectedFeature?.__fid }));
   }));
+
   public editingDescriptionForFeatureFid: string | null = null;
+  private selectedFeature: string | null = null;
+  public isExpanded = signal<boolean>(false);
 
   constructor(
     private store$: Store,
+    private elRef: ElementRef,
   ) {
-    // TODO: scroll to selected feature -- ViewportScroller or scrollIntoView() don't work somehow
+    afterRender(() => {
+      this.scrollToSelectedFeature();
+    });
   }
 
   public selectFeature(fid: string) {
@@ -63,4 +70,12 @@ export class DrawingObjectsListComponent {
   public cancelDescriptionEdit() {
     this.editingDescriptionForFeatureFid = null;
   }
+
+  private scrollToSelectedFeature() {
+    if (!this.isExpanded() || !this.selectedFeature || !this.elRef || !this.elRef.nativeElement) {
+      return;
+    }
+    this.elRef.nativeElement.querySelector(`[data-feature-fid="${this.selectedFeature}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
 }

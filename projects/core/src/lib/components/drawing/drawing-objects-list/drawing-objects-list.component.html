@@ -1,13 +1,16 @@
-
 @let features = features$ | async;
 @if(features && features.length > 0 ) {
-  <mat-expansion-panel class="objects-list" [expanded]="false">
+  <mat-expansion-panel class="objects-list"
+                       [expanded]="isExpanded()"
+                       (opened)="isExpanded.set(true)"
+                       (closed)="isExpanded.set(false)">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@core.drawing.objects-list">Objects</mat-panel-title>
       <mat-panel-description>{{ features.length }}</mat-panel-description>
     </mat-expansion-panel-header>
     @for (feature of features; track feature.__fid; let index = $index) {
       <div class="row"
+           [attr.data-feature-fid]="feature.__fid"
            (click)="selectFeature(feature.__fid)"
            (dblclick)="selectFeatureAndEditDescription(feature.__fid)"
            [class.selected]="feature.selected">
