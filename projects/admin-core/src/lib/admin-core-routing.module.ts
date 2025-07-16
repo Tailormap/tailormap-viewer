@@ -61,7 +61,6 @@ export const adminRoutes: Routes = [
     children: [
       {
         path: AdminRoutes.CATALOG,
-        canActivate: [AdminAuthGuard],
         component: CatalogPageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.catalog-title:Catalog` },
         children: [
@@ -95,7 +94,6 @@ export const adminRoutes: Routes = [
       },
       {
         path: AdminRoutes.APPLICATION,
-        canActivate: [AdminAuthGuard],
         component: ApplicationPageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.applications-title:Applications` },
         children: [
@@ -165,13 +163,11 @@ export const adminRoutes: Routes = [
           component: SettingsHomePageComponent,
         }],
         path: AdminRoutes.SETTINGS,
-        canActivate: [AdminAuthGuard],
         data: { pageTitle: $localize `:@@admin-core.common.settings-title:Settings`, templateCls: 'content--no-padding' },
       },
       {
         component: LogsPageComponent,
         path: AdminRoutes.LOGS,
-        canActivate: [AdminAuthGuard],
         data: { pageTitle: $localize `:@@admin-core.common.logs-title:Logs`, templateCls: 'content--no-padding' },
       },
       {
@@ -190,7 +186,6 @@ export const adminRoutes: Routes = [
           data: { className: 'full-screen-settings' },
         }],
         path: AdminRoutes.FORMS,
-        canActivate: [AdminAuthGuard],
         data: { pageTitle: $localize `:@@admin-core.common.forms-title:Forms` },
       },
       {
@@ -209,18 +204,15 @@ export const adminRoutes: Routes = [
           data: { className: 'full-screen-settings' },
         }],
         path: AdminRoutes.SEARCH_INDEXES,
-        canActivate: [AdminAuthGuard],
         data: { pageTitle: $localize `:@@admin-core.common.search-indexes-title:Search Indexes` },
       },
       {
         path: AdminRoutes.ADMIN_HOME,
-        canActivate: [AdminAuthGuard],
         component: AdminHomePageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.tailormap-admin-title:Tailormap Admin` },
       },
       {
         path: AdminRoutes.USER,
-        canActivate: [AdminAuthGuard],
         component: UserAdminPageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.users-title:User Administration` },
         children: [
@@ -240,7 +232,6 @@ export const adminRoutes: Routes = [
       },
       {
         path: AdminRoutes.TASKS,
-        canActivate: [AdminAuthGuard],
         component: TasksPageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.tasks-title:Tasks` },
         children: [
@@ -256,7 +247,6 @@ export const adminRoutes: Routes = [
       },
       {
         path: AdminRoutes.GROUP,
-        canActivate: [AdminAuthGuard],
         component: GroupsPageComponent,
         data: { pageTitle: $localize `:@@admin-core.common.groups-title:Group Administration` },
         children: [
