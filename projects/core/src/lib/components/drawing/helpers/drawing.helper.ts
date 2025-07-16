@@ -48,7 +48,7 @@ export class DrawingHelper {
     const imageStyleModel: ImageDrawingFeatureStyleModel = { ...labelStyleModel, markerImage, markerImageWidth, markerImageHeight, markerSize, markerRotation };
 
     const { marker, markerFillColor, markerStrokeColor, markerStrokeWidth } = style;
-    const markerStyleModel: MarkerDrawingFeatureStyleModel = { ...labelStyleModel, marker, markerFillColor, markerStrokeColor, markerStrokeWidth };
+    const markerStyleModel: MarkerDrawingFeatureStyleModel = { ...labelStyleModel, marker, markerSize, markerRotation, markerFillColor, markerStrokeColor, markerStrokeWidth };
 
     const { strokeColor, strokeOpacity, strokeWidth, strokeType, arrowType, showTotalSize, showSegmentSize } = style;
     const lineStyleModel: LineDrawingFeatureStyleModel = { ...labelStyleModel, strokeColor, strokeOpacity, strokeWidth, strokeType, arrowType, showTotalSize, showSegmentSize };
