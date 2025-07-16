@@ -1,7 +1,5 @@
 @if (active$ | async) {
   <div class="drawing-form">
-
-    <div class="horizontal-line"></div>
     <div class="icon-button-list split-buttons">
       <div class="selected_feature_buttons">
         <button [class.button--active]="selectToolActive$ | async"
