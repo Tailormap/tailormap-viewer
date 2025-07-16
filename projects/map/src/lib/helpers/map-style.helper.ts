@@ -7,7 +7,7 @@ import {
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
-import { Style, Fill, Stroke, Circle } from 'ol/style';
+import { Style, Fill, Stroke, Circle, Icon } from 'ol/style';
 import { WKT } from 'ol/format';
 import { FillStyleHelper } from './style/fill-style.helper';
 import { ArrowStyleHelper } from './style/arrow-style.helper';
@@ -26,6 +26,7 @@ export class MapStyleHelper {
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
+  private static DEFAULT_MARKER_IMAGE_SIZE = 20;
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
@@ -75,14 +76,27 @@ export class MapStyleHelper {
       }));
     }
     const styles: Style[] = [baseStyle];
-    if (styleConfig.pointType) {
+    let symbolSizeForLabel = styleConfig.pointSize ?? MapStyleHelper.DEFAULT_SYMBOL_SIZE;
+    if (styleConfig.pointImage) {
+      const pointSizeFactor = (styleConfig.pointSize ?? 100) / 100;
+      const width = (styleConfig.pointImageWidth ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor;
+      const height = (styleConfig.pointImageHeight ?? this.DEFAULT_MARKER_IMAGE_SIZE) * pointSizeFactor;
+      symbolSizeForLabel = height / 2;
+      styles.push(new Style({ image: new Icon({
+          src: styleConfig.pointImage,
+          width,
+          height,
+          rotation: (styleConfig.pointRotation ?? 0) * Math.PI / 180,
+        }),
+      }));
+    } else if (styleConfig.pointType) {
       styles.push(...IconStyleHelper.createShape(styleConfig.pointType, styleConfig, MapStyleHelper.DEFAULT_COLOR, MapStyleHelper.DEFAULT_SYMBOL_SIZE));
     }
     styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
-      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
+      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
     }
-    if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
+    if (styleConfig.isSelected && typeof feature !== 'undefined') {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
