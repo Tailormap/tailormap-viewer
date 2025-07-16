@@ -73,6 +73,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(
       tap(visible => {
+        console.log('Drawing component visibility changed:', visible);
         if (!visible) {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
@@ -100,7 +101,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     ])
       .pipe(takeUntil(this.destroyed))
       .subscribe(([ type, feature ]) => {
-        console.log(`DrawingComponent: selected type: ${type}, selected feature type: ${feature?.attributes.type}`);
         this.selectedFeature = feature;
         this.selectedDrawingType = type;
         if (feature) {

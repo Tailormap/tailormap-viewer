@@ -27,6 +27,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   };
   const drawingStylesServiceMock = {
     getDrawingStyles$: jest.fn(() => of([])),
+    setSelectedDrawingStyle: jest.fn(() => undefined),
   };
   const confirmServiceMock = {
     confirm$: jest.fn(() => of(true)),
