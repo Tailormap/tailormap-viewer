@@ -2,14 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
     <body>
-    <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
-      <source>Multi-layer filter</source>
-      <target>Meerdere lagen filter</target>
-    </trans-unit>
-    <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
-      <source>Single-layer filter</source>
-      <target>Enkele laag filter</target>
-    </trans-unit>
+      <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
+        <source>Multi-layer filter</source>
+        <target>Meerdere lagen filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
+        <source>Single-layer filter</source>
+        <target>Enkele laag filter</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
         <target>Applicatie toevoegen</target>
@@ -222,6 +222,10 @@
         <source>Choose attribute</source>
         <target>Kies attribuut</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+        <target>Kies waarde</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>
@@ -280,6 +284,10 @@
       <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
         <source>Initial upper date</source>
         <target>Initiële bovenste datum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
+        <source>Drop-down List</source>
+        <target>Drop-down Lijst</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
@@ -1244,6 +1252,10 @@
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
         <target>Filteren...</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.filter-values" datatype="html">
+        <source>Filter values</source>
+        <target>Filter waardes</target>
       </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
