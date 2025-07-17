@@ -29,13 +29,13 @@ export class FilterListItemComponent {
       ...filterGroup,
       filters: filterGroup?.filters.filter(f => {
         if (FilterTypeHelper.isAttributeFilter(f) && f.attributeNotFound) {
-          console.error(`Filtered attribute '${f.attribute}' not found. Filter hidden and disabled.`);
+          console.error(`Attribute '${f.attribute}' not found. Filter hidden and disabled.`);
           return false;
         }
         return true;
       }) ?? [],
     };
-    this.editableFilters = filterGroup?.filters.filter((f): f is AttributeFilterModel =>
+    this.editableFilters = this.filter?.filters.filter((f): f is AttributeFilterModel =>
       FilterTypeHelper.isAttributeFilter(f) && !!f.editConfiguration) ?? [];
   }
 
