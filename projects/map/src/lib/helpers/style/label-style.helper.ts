@@ -18,6 +18,7 @@ export class LabelStyleHelper {
     symbolSize: number,
     defaultSymbolSize: number,
     feature?: Feature<Geometry>,
+    zIndex?: number,
   ) {
     const geom = feature?.getGeometry();
     const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
@@ -43,7 +44,7 @@ export class LabelStyleHelper {
       : (styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
 
     const baseLabelStyle = new Style({
-      zIndex: styleConfig.zIndex,
+      zIndex,
       text: new Text({
         placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : undefined,
         text: label,

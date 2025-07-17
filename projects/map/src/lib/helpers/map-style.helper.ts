@@ -6,9 +6,8 @@ import {
 } from 'ol/geom';
 import { default as RenderFeature } from 'ol/render/Feature';
 import { FeatureHelper } from './feature.helper';
-import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
+import { ColorHelper } from '@tailormap-viewer/shared';
 import { Style, Fill, Stroke, Circle } from 'ol/style';
-import { WKT } from 'ol/format';
 import { FillStyleHelper } from './style/fill-style.helper';
 import { ArrowStyleHelper } from './style/arrow-style.helper';
 import { UnitsHelper } from './style/units.helper';
@@ -20,10 +19,9 @@ import { OL3Parser } from 'jsts/org/locationtech/jts/io';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
 import { ImageStyleHelper } from './style/image-style.helper';
+import { StrokeStyleHelper } from './style/stroke-style.helper';
 
 export class MapStyleHelper {
-
-  private static wktParser = new WKT();
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
@@ -60,8 +58,9 @@ export class MapStyleHelper {
   }
 
   public static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
-    const baseStyle = new Style();
-    const stroke = MapStyleHelper.createStroke(styleConfig);
+    const baseZIndex = styleConfig.zIndex || 0;
+    const baseStyle = new Style({ zIndex: baseZIndex });
+    const stroke = StrokeStyleHelper.createStroke(styleConfig);
     if (stroke) {
       baseStyle.setStroke(stroke);
     }
@@ -84,9 +83,9 @@ export class MapStyleHelper {
     } else if (styleConfig.pointType) {
       styles.push(...IconStyleHelper.createShape(styleConfig.pointType, styleConfig, MapStyleHelper.DEFAULT_COLOR, MapStyleHelper.DEFAULT_SYMBOL_SIZE));
     }
-    styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
+    styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, stroke, baseZIndex));
     if (styleConfig.label) {
-      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
+      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature, baseZIndex));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution, undefined, styleConfig));
@@ -100,23 +99,13 @@ export class MapStyleHelper {
     if (styleConfig.showVertices) {
       styles.push(MapStyleHelper.getVertices(styleConfig.strokeColor || MapStyleHelper.DEFAULT_COLOR, styleConfig.strokeWidth ?? 1));
     }
+    if (styleConfig.secondaryStroke) {
+      styles.push(...StrokeStyleHelper.getAdditionalStroke(styleConfig, styleConfig.secondaryStroke, baseZIndex, feature, resolution));
+    }
+    if (styleConfig.tertiaryStroke) {
+      styles.push(...StrokeStyleHelper.getAdditionalStroke(styleConfig, styleConfig.tertiaryStroke, baseZIndex, feature, resolution));
+    }
     return styles;
-  }
-
-  private static createStroke(styleConfig: MapStyleModel, overrideOpacity?: number) {
-    if (!styleConfig.strokeColor) {
-      return null;
-    }
-    const dash = StyleHelper.getDashArray(styleConfig.strokeType, styleConfig.strokeWidth);
-    const stroke = new Stroke({
-      color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, overrideOpacity || styleConfig.strokeOpacity),
-      width: styleConfig.strokeWidth || 1,
-    });
-    if (dash.length > 0) {
-      stroke.setLineDash(dash);
-      stroke.setLineCap(styleConfig.strokeType === 'dot' ? 'round' : 'square');
-    }
-    return stroke;
   }
 
   private static createFill(styleConfig: MapStyleModel, overrideOpacity?: number) {
@@ -160,7 +149,7 @@ export class MapStyleHelper {
     if (fill) {
       bufferStyle.setFill(fill);
     }
-    const stroke = MapStyleHelper.createStroke(config, UnitsHelper.getOpacity(config.strokeOpacity, true));
+    const stroke = StrokeStyleHelper.createStroke(config, UnitsHelper.getOpacity(config.strokeOpacity, true));
     if (stroke) {
       bufferStyle.setStroke(stroke);
     }
