@@ -227,6 +227,9 @@
       <trans-unit id="core.drawing.halo" datatype="html">
         <source>Halo</source>
       </trans-unit>
+      <trans-unit id="core.drawing.icon" datatype="html">
+        <source>Icon</source>
+      </trans-unit>
       <trans-unit id="core.drawing.insert-area-label" datatype="html">
         <source>Insert area as label</source>
       </trans-unit>
@@ -286,6 +289,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.stroke-type" datatype="html">
         <source>Stroke type</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.style-library" datatype="html">
+        <source>Style library</source>
       </trans-unit>
       <trans-unit id="core.drawing.symbol" datatype="html">
         <source>Symbol</source>

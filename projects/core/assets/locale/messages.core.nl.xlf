@@ -302,6 +302,10 @@
         <source>Halo</source>
         <target>Halo</target>
       </trans-unit>
+      <trans-unit id="core.drawing.icon" datatype="html">
+        <source>Icon</source>
+        <target>Icoon</target>
+      </trans-unit>
       <trans-unit id="core.drawing.insert-area-label" datatype="html">
         <source>Insert area as label</source>
         <target>Gebied invoegen als label</target>
@@ -381,6 +385,10 @@
       <trans-unit id="core.drawing.stroke-type" datatype="html">
         <source>Stroke type</source>
         <target>Type streep</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.style-library" datatype="html">
+        <source>Style library</source>
+        <target>Stijlbibliotheek</target>
       </trans-unit>
       <trans-unit id="core.drawing.symbol" datatype="html">
         <source>Symbol</source>

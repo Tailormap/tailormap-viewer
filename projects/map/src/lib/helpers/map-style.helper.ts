@@ -19,6 +19,7 @@ import { MeasureStyleHelper } from './style/measure-style.helper';
 import { OL3Parser } from 'jsts/org/locationtech/jts/io';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
+import { ImageStyleHelper } from './style/image-style.helper';
 
 export class MapStyleHelper {
 
@@ -26,6 +27,7 @@ export class MapStyleHelper {
 
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
+
 
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
@@ -75,15 +77,19 @@ export class MapStyleHelper {
       }));
     }
     const styles: Style[] = [baseStyle];
-    if (styleConfig.pointType) {
+    let symbolSizeForLabel = styleConfig.pointSize ?? MapStyleHelper.DEFAULT_SYMBOL_SIZE;
+    if (styleConfig.pointImage) {
+      symbolSizeForLabel = ImageStyleHelper.getSymbolSizeForLabel(styleConfig);
+      styles.push(ImageStyleHelper.getPointImageStyle(styleConfig));
+    } else if (styleConfig.pointType) {
       styles.push(...IconStyleHelper.createShape(styleConfig.pointType, styleConfig, MapStyleHelper.DEFAULT_COLOR, MapStyleHelper.DEFAULT_SYMBOL_SIZE));
     }
     styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, baseStyle.getStroke()));
     if (styleConfig.label) {
-      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
+      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
-      styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution));
+      styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution, undefined, styleConfig));
     }
     if (typeof styleConfig.buffer !== 'undefined' && styleConfig.buffer && typeof feature !== 'undefined') {
       styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));

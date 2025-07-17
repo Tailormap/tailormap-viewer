@@ -7,6 +7,42 @@
 
 <div class="styling-form">
 
+  @if(showIconSettings()) {
+    <mat-expansion-panel class="image-settings settings-section" [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title i18n="@@core.drawing.icon">Icon</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.size">Size</label>
+        <span>{{style.markerSize}}%</span>
+      </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="150"
+                   [min]="50"
+                   [step]="25"
+                   (valueChange)="changeMarkerSize($event)"
+                   [value]="style.markerSize">
+        </tm-slider>
+      </div>
+
+      <div class="form-field form-field__columns">
+        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <span>{{style.markerRotation}}&deg;</span>
+      </div>
+      <div class="form-field form-field__slider">
+        <tm-slider [max]="360"
+                   [min]="0"
+                   [step]="1"
+                   (valueChange)="changeMarkerRotation($event)"
+                   [value]="style.markerRotation">
+        </tm-slider>
+      </div>
+
+    </mat-expansion-panel>
+
+  }
+
   @if(showPointSettings()) {
     <mat-expansion-panel class="point-settings settings-section" [expanded]="true">
       <mat-expansion-panel-header>
@@ -54,7 +90,7 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="20"
-                   [min]="1"
+                   [min]="5"
                    [step]="1"
                    (valueChange)="changeMarkerSize($event)"
                    [value]="style.markerSize">
