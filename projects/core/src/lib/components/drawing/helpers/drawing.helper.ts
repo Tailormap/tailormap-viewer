@@ -72,7 +72,12 @@ export class DrawingHelper {
     }
   }
 
-  public static getFeature(type: DrawingFeatureTypeEnum, drawingEvent: DrawingToolEvent, style?: DrawingFeatureStyleModel): DrawingFeatureModel {
+  public static getFeature(
+    type: DrawingFeatureTypeEnum,
+    drawingEvent: DrawingToolEvent,
+    style?: DrawingFeatureStyleModel,
+    featureAttributes?: Partial<DrawingFeatureModelAttributes>,
+  ): DrawingFeatureModel {
     const allStyleAttributes = {
       ...DrawingHelper.getDefaultStyle(),
       ...style,
@@ -81,6 +86,7 @@ export class DrawingHelper {
     const attributes: DrawingFeatureModelAttributes = {
       type,
       style: styleForType,
+      ...featureAttributes,
     };
     return {
       __fid: uuidv4(),

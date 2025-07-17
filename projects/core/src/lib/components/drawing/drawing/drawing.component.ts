@@ -38,6 +38,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public active$: Observable<boolean> = of(false);
   public selectedFeature: DrawingFeatureModel | null = null;
   public style: DrawingFeatureStyleModel = DrawingHelper.getDefaultStyle();
+  public lockedStyle = signal<boolean>(false);
   public selectedDrawingType: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
@@ -73,7 +74,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(
       tap(visible => {
-        console.log('Drawing component visibility changed:', visible);
         if (!visible) {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
@@ -106,6 +106,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
         if (feature) {
           this.style = feature.attributes.style;
           this.selectedDrawingType = feature.attributes.type;
+          this.lockedStyle.set(feature?.attributes.lockedStyle ?? false);
         }
         this.cdr.detectChanges();
       });
@@ -140,6 +141,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public draw(type: DrawingFeatureTypeEnum) {
     this.style = DrawingHelper.getDefaultStyle();
+    this.lockedStyle.set(false);
     this.drawingStylesService.setSelectedDrawingStyle(null);
     if (this.activeTool !== type) {
       this.drawingService.toggle(type, this.showMeasures());
@@ -166,7 +168,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (!this.activeTool) {
       return;
     }
-    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style);
+    const attributes: Partial<DrawingFeatureModelAttributes> = {};
+    if (this.lockedStyle()) {
+      attributes.lockedStyle = true;
+    }
+    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style, attributes);
     if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
       const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
       if (rectangle) {
@@ -271,6 +277,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
       label: '',
     };
+    this.lockedStyle.set(style.lockedStyle ?? false);
     if (this.activeTool !== style.type) {
       this.drawingService.toggle(style.type, this.showMeasures());
     }
