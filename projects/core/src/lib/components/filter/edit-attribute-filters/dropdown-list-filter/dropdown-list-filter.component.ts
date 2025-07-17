@@ -17,6 +17,10 @@ export class DropdownListFilterComponent implements OnInit {
   @Input()
   public set dropdownListFilterConfiguration(dropdownListFilter: DropdownListFilterModel | null) {
     this.alteredValuesSubject$.next(dropdownListFilter?.attributeValuesSettings || []);
+    const selectedValues = dropdownListFilter?.attributeValuesSettings
+      .filter(value => value.initiallySelected)
+      .map(value => ({ value: value.value, alias: value.alias })) || [];
+    this.selectedValuesSubject$.next(selectedValues);
   }
 
   @Input()
@@ -65,7 +69,7 @@ export class DropdownListFilterComponent implements OnInit {
             if (alteredValue) {
               return {
                 value: value,
-                alias: alteredValue.alias || '',
+                alias: alteredValue.alias,
               };
             }
             return { value: value };
