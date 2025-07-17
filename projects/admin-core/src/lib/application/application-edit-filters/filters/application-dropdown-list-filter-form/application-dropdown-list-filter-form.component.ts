@@ -88,6 +88,7 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
     this.aliasForm.addControl(value, new FormControl<string>(''));
     this.filter.patchValue('', { emitEvent: true });
     this.dropdownListFilter.attributeValuesSettings = this.attributeValuesSettings();
+    this.updateDropdownListFilter.emit(this.dropdownListFilter);
   }
 
   public changeBooleanSetting(value: string, setting: 'initiallySelected' | 'selectable', checked: boolean) {
