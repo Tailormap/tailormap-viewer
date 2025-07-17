@@ -44,6 +44,7 @@ export class CqlFilterHelper {
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
     const baseFilter: string[] = filterGroup.filters
+      .filter(f => !f.disabled)
       .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));

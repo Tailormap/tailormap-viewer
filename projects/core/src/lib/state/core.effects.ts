@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
 import * as FilterActions from '../filter/state/filter.actions';
-import { concatMap, map, tap, filter } from 'rxjs';
+import { concatMap, map, tap, filter, switchMap } from 'rxjs';
 import { LoadViewerService } from '../services/load-viewer.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { UrlHelper } from '@tailormap-viewer/shared';
+import { AttributeFilterService } from '../services/attribute-filter.service';
 
 @Injectable()
 export class CoreEffects {
+
+  private attributeFilterService = inject(AttributeFilterService);
 
   public loadViewer$ = createEffect(() => {
     return this.actions$.pipe(
@@ -35,6 +38,7 @@ export class CoreEffects {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewerSuccess),
       map(action => action.viewer.filterGroups || []),
+      switchMap(groups => this.attributeFilterService.disableFiltersForMissingAttributes$(groups)),
       concatMap(filterGroups => filterGroups.map(
           filterGroup => FilterActions.addFilterGroup({ filterGroup }))),
     );
