@@ -1,6 +1,6 @@
 export class StyleHelper {
 
-  private static readonly STROKE_NUMBER_REGEX = /(\d+( \d+)?)/;
+  private static readonly STROKE_NUMBER_REGEX = /^(\d+(\s+\d+)*)$/;
 
   public static getDashArray(strokeType?: 'solid' | 'dash' | 'dot' | string | number[], strokeWidth = 0): number[] {
     if (strokeType === 'dash') {
