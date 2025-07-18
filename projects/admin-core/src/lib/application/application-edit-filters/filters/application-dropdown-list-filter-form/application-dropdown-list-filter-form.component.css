@@ -6,9 +6,12 @@ mat-header-cell {
   font-weight: bold;
 }
 
-.mat-column-initially-selected,
 .mat-column-selectable {
-  flex: 0 0 95px;
+  flex: 0 0 120px;
+}
+
+.mat-column-initially-selected {
+  flex: 0 0 110px;
 }
 
 .mat-column-value {
@@ -16,7 +19,7 @@ mat-header-cell {
 }
 
 .mat-column-alias {
-  flex: 1 0 120px;
+  flex: 1 0 100px;
   padding-right: 0;
 }
 
