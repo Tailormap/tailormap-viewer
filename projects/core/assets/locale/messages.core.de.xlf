@@ -334,6 +334,10 @@
         <source>Line thickness</source>
         <target>Dicke der Linie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.locked-style" datatype="html">
+        <source>The style for this drawing object cannot be changed.</source>
+        <target>Der Stil für dieses Zeichenobjekt kann nicht geändert werden.</target>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
         <target>Objekte</target>

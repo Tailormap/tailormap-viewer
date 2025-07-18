@@ -80,3 +80,8 @@ tm-drawing-style-library-list {
   display: block;
   margin-top: 16px;
 }
+
+.locked-style {
+  color: var(--disabled-text-color);
+  margin-top: 8px;
+}

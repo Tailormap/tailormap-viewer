@@ -93,6 +93,7 @@ export type DrawingStyleTypeMap = {
 export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {
   type: DrawingFeatureTypeEnum;
   style: DrawingFeatureStyleModel;
+  lockedStyle?: boolean;
   selected?: boolean;
   zIndex?: number;
 }

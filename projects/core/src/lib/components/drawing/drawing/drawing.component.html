@@ -164,10 +164,14 @@
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
     @if (selectedDrawingType) {
-      <tm-drawing-style-form
-        [type]="selectedDrawingType"
-        [style]="style"
-        (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+      @if (lockedStyle()) {
+        <div class="locked-style" i18n="@@core.drawing.locked-style">The style for this drawing object cannot be changed.</div>
+      } @else {
+        <tm-drawing-style-form
+          [type]="selectedDrawingType"
+          [style]="style"
+          (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+      }
     }
   </div>
 }
