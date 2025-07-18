@@ -64,8 +64,22 @@
             </mat-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: columnLabels;"></mat-row>
+          <ng-container matColumnDef="remove">
+            <mat-header-cell *matHeaderCellDef>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <button
+                mat-icon-button
+                (click)="deleteAttributeValue(value.value)"
+                matTooltip="Remove"
+                i18n-matTooltip="@@admin-core.application.filter.remove">
+                <mat-icon svgIcon="close"></mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnLabels.concat('remove')"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnLabels.concat('remove')"></mat-row>
         </mat-table>
       </form>
     </div>

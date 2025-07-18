@@ -29,6 +29,9 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
     if (dropdownListFilter && dropdownListFilter.filterTool === FilterToolEnum.DROPDOWN_LIST) {
       this.dropdownListFilter = dropdownListFilter;
       this.attributeValuesSettings.set(dropdownListFilter.attributeValuesSettings);
+      for (const value of dropdownListFilter.attributeValuesSettings) {
+        this.aliasForm.addControl(value.value, new FormControl<string>(value.alias || ''));
+      }
     }
   }
 
@@ -40,6 +43,7 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
 
   private uniqueValuesSubject$ = new BehaviorSubject<string[] | null>(null);
   public filteredUniqueValues$: Observable<string[]> = of([]);
+  private selectedValuesSubject$ = new BehaviorSubject<string[]>([]);
 
   public attributeValuesSettings: WritableSignal<AttributeValueSettings[]> = signal([]);
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
@@ -60,11 +64,17 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
     this.filteredUniqueValues$ = combineLatest([
       this.filterSubject$.asObservable(),
       this.uniqueValuesSubject$.asObservable(),
-    ]).pipe(map(([ filter, uniqueValues ]) => {
-      if (filter && uniqueValues) {
-        return FilterHelper.filterByTerm(uniqueValues, filter, value => value);
+      this.selectedValuesSubject$.asObservable(),
+    ]).pipe(map(([ filter, uniqueValues, selectedValues ]) => {
+      if (!uniqueValues) {
+        return [];
       }
-      return uniqueValues ? uniqueValues : [];
+      const uniqueValuesWithoutSelected = uniqueValues.filter(value =>
+        !selectedValues.includes(value));
+      if (filter) {
+        return FilterHelper.filterByTerm(uniqueValuesWithoutSelected, filter, value => value);
+      }
+      return uniqueValuesWithoutSelected ? uniqueValuesWithoutSelected : [];
     }));
 
     this.aliasForm.valueChanges
@@ -85,6 +95,8 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
       ...attributeValues,
       { value: value, initiallySelected: false, selectable: true },
     ]);
+    const selectedValues = this.selectedValuesSubject$.getValue();
+    this.selectedValuesSubject$.next([ ...selectedValues, value ]);
     this.aliasForm.addControl(value, new FormControl<string>(''));
     this.filter.patchValue('', { emitEvent: true });
     this.dropdownListFilter.attributeValuesSettings = this.attributeValuesSettings();
@@ -115,5 +127,18 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
       this.updateDropdownListFilter.emit(this.dropdownListFilter);
     }
   }
+
+  public deleteAttributeValue(value: string): void {
+    this.attributeValuesSettings.update(attributeValues =>
+      attributeValues.filter(attribute => attribute.value !== value),
+    );
+    const selectedValues = this.selectedValuesSubject$.getValue();
+    const newSelectedValues = selectedValues.filter(v => v !== value);
+    this.selectedValuesSubject$.next(newSelectedValues);
+    this.aliasForm.removeControl(value);
+    this.dropdownListFilter.attributeValuesSettings = this.attributeValuesSettings();
+    this.updateDropdownListFilter.emit(this.dropdownListFilter);
+  }
+
 
 }
