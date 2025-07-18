@@ -77,6 +77,7 @@ export class DrawingHelper {
       strokeWidth: style.strokeWidth,
       strokeType: style.strokeType,
       arrowType: style.arrowType,
+      dashOffset: style.dashOffset,
       showTotalSize: style.showTotalSize,
       showSegmentSize: style.showSegmentSize,
       secondaryStroke: style.secondaryStroke,
