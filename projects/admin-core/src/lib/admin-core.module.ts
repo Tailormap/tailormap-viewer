@@ -40,7 +40,7 @@ export class AdminCoreModule {
       ],
     }, {
       folder: 'admin/filters',
-      icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle' ],
+      icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle', 'dropdown' ],
     }];
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
     authenticatedUserService.fetchUserDetails();

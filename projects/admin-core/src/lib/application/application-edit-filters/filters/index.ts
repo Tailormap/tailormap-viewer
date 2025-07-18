@@ -5,3 +5,4 @@ export * from './application-filters-list/application-filters-list.component';
 export * from './application-slider-filter-form/application-slider-filter-form.component';
 export * from './application-switch-filter-form/application-switch-filter-form.component';
 export * from './application-date-picker-filter-form/application-date-picker-filter-form.component';
+export * from './application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';

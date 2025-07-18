@@ -50,6 +50,19 @@
           </div>
         </div>
       }
+      @if (getDropdownListFilterConfiguration(filter); as dropdownListFilterConfig) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-dropdown-list-filter-title">
+            {{ filter.attribute }}
+          </div>
+          <div class="editable-dropdown-list-filter-content">
+            <tm-dropdown-list-filter
+              [dropdownListFilterConfiguration]="dropdownListFilterConfig"
+              [uniqueValues]="getUniqueValues$(filter.attribute) | async"
+              (valueSelected)="updateCheckboxFilterValue($event.value, $event.selected, filter)"></tm-dropdown-list-filter>
+          </div>
+        </div>
+      }
     </div>
   }
 </mat-expansion-panel>

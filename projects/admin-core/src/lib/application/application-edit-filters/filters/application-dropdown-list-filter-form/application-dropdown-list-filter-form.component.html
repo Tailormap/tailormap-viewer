@@ -1,0 +1,87 @@
+
+<div class="form-group has-search flex">
+  <div class="choose-values-to-alter">
+    <mat-form-field appearance="outline">
+      <mat-label
+        i18n="@@admin-core.application.filter.choose-value"
+        class="filter-attributes-panel-title">Choose value</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Filter values"
+        i18n-placeholder="@@admin-core.common.filter-values"
+        [formControl]="filter"
+        [matAutocomplete]="auto"/>
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (value of filteredUniqueValues$ | async; track value) {
+          <mat-option [value]="value" (click)="valueClicked(value)" class="attribute-option">
+            {{ value }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  @if (attributeValuesSettings().length > 0) {
+    <div class="dropdown-list-table">
+      <form [formGroup]="aliasForm">
+        <mat-table [dataSource]="attributeValuesSettings()">
+          <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef>
+              <div i18n="@@admin-core.application.filter.unique-value">Value</div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <div class="wrap-text">{{ value.value }}</div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="initially-selected">
+            <mat-header-cell *matHeaderCellDef>
+              <div i18n="@@admin-core.application.filter.initially-selected">Initially selected</div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <mat-checkbox (change)="changeBooleanSetting(value.value, 'initiallySelected', $event.checked)" [checked]="value.initiallySelected"></mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="selectable">
+            <mat-header-cell *matHeaderCellDef>
+              <div i18n="@@admin-core.application.filter.selectable">Selectable</div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <mat-checkbox (change)="changeBooleanSetting(value.value, 'selectable', $event.checked)" [checked]="value.selectable"></mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="alias">
+            <mat-header-cell *matHeaderCellDef>
+              <div i18n="@@admin-core.application.filter.alias">Alias</div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <mat-form-field>
+                <input matInput [formControlName]="value.value"/>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="remove">
+            <mat-header-cell *matHeaderCellDef>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let value">
+              <button
+                mat-icon-button
+                (click)="deleteAttributeValue(value.value)"
+                matTooltip="Remove"
+                i18n-matTooltip="@@admin-core.application.filter.remove">
+                <mat-icon svgIcon="close"></mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnLabels.concat('remove')"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnLabels.concat('remove')"></mat-row>
+        </mat-table>
+      </form>
+    </div>
+  }
+</div>

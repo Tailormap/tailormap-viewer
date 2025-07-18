@@ -46,6 +46,9 @@ import {
   ApplicationFiltersListComponent,
   ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent,
 } from './application-edit-filters/filters';
+import {
+  ApplicationDropdownListFilterFormComponent,
+} from './application-edit-filters/filters/application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +82,7 @@ import {
     ApplicationSwitchFilterFormComponent,
     ApplicationEditFilterFormComponent,
     ApplicationDatePickerFilterFormComponent,
+    ApplicationDropdownListFilterFormComponent,
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  AttributeType, AttributeTypeHelper, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel,
-  UpdateSliderFilterModel, UpdateDatePickerFilterModel,
+  AttributeType, AttributeTypeHelper, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -50,7 +49,7 @@ export class ApplicationSwitchFilterFormComponent implements OnInit {
 
   @Input()
   public set switchFilterSettings(
-    switchFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+    switchFilterSettings: EditFilterConfigurationModel | null,
   ) {
     if (switchFilterSettings && switchFilterSettings.filterTool === FilterToolEnum.SWITCH) {
       this.switchFilterForm.patchValue({

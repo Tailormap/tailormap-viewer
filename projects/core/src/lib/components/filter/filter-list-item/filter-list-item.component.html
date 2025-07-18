@@ -20,7 +20,10 @@
   </mat-card-content>
   @if (editableFilters.length > 0) {
     <div class="edit-attribute-filters">
-      <tm-edit-attribute-filter [editableFilters]="editableFilters" [filterGroupId]="filter.id"></tm-edit-attribute-filter>
+      <tm-edit-attribute-filter
+        [editableFilters]="editableFilters"
+        [filterGroupId]="filter.id"
+        [layerIds]="filter.layerIds"></tm-edit-attribute-filter>
     </div>
   }
   <mat-card-actions align="end">
