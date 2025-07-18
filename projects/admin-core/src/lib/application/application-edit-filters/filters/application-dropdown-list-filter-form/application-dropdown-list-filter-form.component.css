@@ -1,0 +1,36 @@
+.checkbox-filter-table {
+  width: 550px;
+}
+
+mat-header-cell {
+  font-weight: bold;
+}
+
+.mat-column-initially-selected,
+.mat-column-selectable {
+  flex: 0 0 95px;
+}
+
+.mat-column-value {
+  max-width: 120px;
+}
+
+.mat-column-alias {
+  flex: 1 0 120px;
+  padding-right: 0;
+}
+
+.mat-column-alias mat-form-field {
+  width: 100%;
+}
+
+.mat-column-remove {
+  flex: 0 0 30px;
+  padding-right: 8px;
+  padding-left: 0;
+}
+
+.wrap-text {
+  overflow: hidden;
+  text-overflow: clip;
+}
