@@ -42,12 +42,12 @@ export class StrokeStyleHelper {
     resolution?: number,
   ) {
     const strokeConfig: StrokeStyleModel = {
-      strokeColor: additionalStrokeModel.strokeColor || styleConfig.strokeColor,
-      strokeWidth: additionalStrokeModel.strokeWidth || (styleConfig.strokeWidth ?? 1),
-      strokeOpacity: additionalStrokeModel.strokeOpacity || styleConfig.strokeOpacity,
-      strokeType: additionalStrokeModel.strokeType || styleConfig.strokeType,
-      arrowType: additionalStrokeModel.arrowType || styleConfig.arrowType,
-      dashOffset: additionalStrokeModel.dashOffset || styleConfig.dashOffset,
+      strokeColor: additionalStrokeModel.strokeColor ?? styleConfig.strokeColor,
+      strokeWidth: additionalStrokeModel.strokeWidth ?? (styleConfig.strokeWidth ?? 1),
+      strokeOpacity: additionalStrokeModel.strokeOpacity ?? styleConfig.strokeOpacity,
+      strokeType: additionalStrokeModel.strokeType ?? styleConfig.strokeType,
+      arrowType: additionalStrokeModel.arrowType ?? styleConfig.arrowType,
+      dashOffset: additionalStrokeModel.dashOffset ?? styleConfig.dashOffset,
     };
     const secondaryStroke = StrokeStyleHelper.createStroke(strokeConfig);
     if (secondaryStroke) {
@@ -81,7 +81,7 @@ export class StrokeStyleHelper {
         if (i > 0) {
           const dx = coords[i][0] - coords[i - 1][0];
           const dy = coords[i][1] - coords[i - 1][1];
-          const length = Math.sqrt(dx * dx + dy * dy);
+          const length = StrokeStyleHelper.calculateLength(dx, dy);
           if (length > 0) {
             normal[0] += -dy / length;
             normal[1] += dx / length;
