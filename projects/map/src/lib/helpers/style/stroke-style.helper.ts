@@ -90,7 +90,7 @@ export class StrokeStyleHelper {
         if (i < coords.length - 1) {
           const dx = coords[i + 1][0] - coords[i][0];
           const dy = coords[i + 1][1] - coords[i][1];
-          const length = Math.sqrt(dx * dx + dy * dy);
+          const length = StrokeStyleHelper.calculateLength(dx, dy);
           if (length > 0) {
             normal[0] += -dy / length;
             normal[1] += dx / length;
@@ -109,6 +109,10 @@ export class StrokeStyleHelper {
       }
       return new LineString(offsetCoords);
     };
+  }
+
+  private static calculateLength(dx: number, dy: number): number {
+    return Math.sqrt(dx * dx + dy * dy);
   }
 
 }
