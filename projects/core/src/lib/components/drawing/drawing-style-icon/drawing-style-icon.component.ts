@@ -101,6 +101,9 @@ export class DrawingStyleIconComponent {
     if (style.strokeType === StrokeTypeEnum.DOT) {
       return [ 1, Math.max(4, style.strokeWidth) + 4 ].join(' ');
     }
+    if (Array.isArray(style.strokeType)) {
+      return style.strokeType.join(' ');
+    }
     return '0';
   }
 

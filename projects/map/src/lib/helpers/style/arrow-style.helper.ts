@@ -1,4 +1,4 @@
-import { MapStyleModel } from '../../models';
+import { StrokeStyleModel } from '../../models';
 import { Feature } from 'ol';
 import { Geometry, Point } from 'ol/geom';
 import { Fill, RegularShape, Stroke, Style } from 'ol/style';
@@ -7,7 +7,7 @@ import { forEach as forEachSegments } from 'ol/geom/flat/segments';
 
 export class ArrowStyleHelper {
 
-  public static createArrowStyles(styleConfig: MapStyleModel, feature?: Feature<Geometry>, strokeStyle?: Stroke | null): Style[] {
+  public static createArrowStyles(styleConfig: StrokeStyleModel, feature?: Feature<Geometry>, strokeStyle?: Stroke | null, zIndex?: number): Style[] {
     if (!feature
       || !strokeStyle
       || !styleConfig.arrowType
@@ -26,23 +26,21 @@ export class ArrowStyleHelper {
       if (lastSegment.length === 0
         && (styleConfig.arrowType === 'start' || styleConfig.arrowType === 'both')) {
         arrows.push(ArrowStyleHelper.createArrow({
-          zIndex: styleConfig.zIndex,
+          zIndex,
           arrowStart: end,
           arrowEnd: start,
           strokeStyle,
-          styleConfig,
         }));
       }
       if (styleConfig.arrowType === 'along') {
         const x = (start[0] + end[0]) / 2;
         const y = (start[1] + end[1]) / 2;
         arrows.push(ArrowStyleHelper.createArrow({
-          zIndex: styleConfig.zIndex,
+          zIndex,
           arrowStart: start,
           arrowEnd: end,
           strokeStyle,
           pointCoordinates: [ x, y ],
-          styleConfig,
         }));
       }
       lastSegment = [[...start], [...end]];
@@ -54,11 +52,10 @@ export class ArrowStyleHelper {
         || styleConfig.arrowType === 'along'
       )) {
       arrows.push(ArrowStyleHelper.createArrow({
-        zIndex: styleConfig.zIndex,
+        zIndex,
         arrowStart: lastSegment[0],
         arrowEnd: lastSegment[1],
         strokeStyle,
-        styleConfig,
       }));
     }
     return arrows;
@@ -70,7 +67,6 @@ export class ArrowStyleHelper {
     arrowEnd: number[];
     strokeStyle: Stroke;
     pointCoordinates?: number[];
-    styleConfig: MapStyleModel;
   }): Style {
     const dx = args.arrowEnd[0] - args.arrowStart[0];
     const dy = args.arrowEnd[1] - args.arrowStart[1];

@@ -41,20 +41,55 @@ export class DrawingHelper {
   ];
 
   private static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
-    const { description, label, labelSize, labelColor, labelStyle, labelRotation, labelOutlineColor } = style;
-    const labelStyleModel: LabelDrawingFeatureStyleModel = { description, label, labelSize, labelColor, labelStyle, labelRotation, labelOutlineColor };
+    const labelStyleModel: LabelDrawingFeatureStyleModel = {
+      description: style.description,
+      label: style.label,
+      labelSize: style.labelSize,
+      labelColor: style.labelColor,
+      labelStyle: style.labelStyle,
+      labelRotation: style.labelRotation,
+      labelOutlineColor: style.labelOutlineColor,
+    };
 
-    const { markerImage, markerImageWidth, markerImageHeight, markerSize, markerRotation } = style;
-    const imageStyleModel: ImageDrawingFeatureStyleModel = { ...labelStyleModel, markerImage, markerImageWidth, markerImageHeight, markerSize, markerRotation };
+    const imageStyleModel: ImageDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      markerImage: style.markerImage,
+      markerImageWidth: style.markerImageWidth,
+      markerImageHeight: style.markerImageHeight,
+      markerSize: style.markerSize,
+      markerRotation: style.markerRotation,
+    };
 
-    const { marker, markerFillColor, markerStrokeColor, markerStrokeWidth } = style;
-    const markerStyleModel: MarkerDrawingFeatureStyleModel = { ...labelStyleModel, marker, markerSize, markerRotation, markerFillColor, markerStrokeColor, markerStrokeWidth };
+    const markerStyleModel: MarkerDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      marker: style.marker,
+      markerSize: style.markerSize,
+      markerRotation: style.markerRotation,
+      markerFillColor: style.markerFillColor,
+      markerStrokeColor: style.markerStrokeColor,
+      markerStrokeWidth: style.markerStrokeWidth,
+    };
 
-    const { strokeColor, strokeOpacity, strokeWidth, strokeType, arrowType, showTotalSize, showSegmentSize } = style;
-    const lineStyleModel: LineDrawingFeatureStyleModel = { ...labelStyleModel, strokeColor, strokeOpacity, strokeWidth, strokeType, arrowType, showTotalSize, showSegmentSize };
+    const lineStyleModel: LineDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      strokeColor: style.strokeColor,
+      strokeOpacity: style.strokeOpacity,
+      strokeWidth: style.strokeWidth,
+      strokeType: style.strokeType,
+      arrowType: style.arrowType,
+      dashOffset: style.dashOffset,
+      showTotalSize: style.showTotalSize,
+      showSegmentSize: style.showSegmentSize,
+      secondaryStroke: style.secondaryStroke,
+      tertiaryStroke: style.tertiaryStroke,
+    };
 
-    const { fillOpacity, fillColor, stripedFill } = style;
-    const polygonStyleModel: PolygonDrawingFeatureStyleModel = { ...lineStyleModel, fillOpacity, fillColor, stripedFill };
+    const polygonStyleModel: PolygonDrawingFeatureStyleModel = {
+      ...lineStyleModel,
+      fillOpacity: style.fillOpacity,
+      fillColor: style.fillColor,
+      stripedFill: style.stripedFill,
+    };
 
     switch (type) {
       case DrawingFeatureTypeEnum.IMAGE: return imageStyleModel;
@@ -160,6 +195,7 @@ export class DrawingHelper {
       strokeWidth: style.strokeWidth,
       strokeOpacity: style.strokeOpacity,
       strokeType: style.strokeType,
+      dashOffset: style.dashOffset,
       arrowType: style.arrowType,
       fillColor: style.fillColor,
       fillOpacity: style.fillOpacity,
@@ -177,6 +213,8 @@ export class DrawingHelper {
       labelOutlineColor: style.labelOutlineColor,
       showSegmentSize: style.showSegmentSize,
       showTotalSize: style.showTotalSize,
+      secondaryStroke: style.secondaryStroke,
+      tertiaryStroke: style.tertiaryStroke,
     };
   }
 

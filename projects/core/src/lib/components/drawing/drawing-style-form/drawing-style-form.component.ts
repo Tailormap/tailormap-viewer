@@ -26,7 +26,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.labelControl.patchValue(this.style.label || '', {
       emitEvent: false,
     });
-    this.strokeTypeControl.patchValue(this.style.strokeType || StrokeTypeEnum.SOLID, {
+    const strokeType = Array.isArray(this.style.strokeType)
+      ? this.style.strokeType.join(' ')
+      : this.style.strokeType || StrokeTypeEnum.SOLID;
+    this.strokeTypeControl.patchValue(strokeType, {
       emitEvent: false,
     });
     this.arrowTypeControl.patchValue(this.style.arrowType || ArrowTypeEnum.NONE, {
@@ -48,7 +51,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public labelControl = new FormControl('', {
     nonNullable: true,
   });
-  public strokeTypeControl = new FormControl<StrokeTypeEnum>(StrokeTypeEnum.SOLID, {
+  public strokeTypeControl = new FormControl<StrokeTypeEnum | string>(StrokeTypeEnum.SOLID, {
     nonNullable: true,
   });
   public arrowTypeControl = new FormControl<ArrowTypeEnum>(ArrowTypeEnum.NONE, {
@@ -61,7 +64,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public labelStyleValues = { bold: LabelStyleEnum.BOLD, italic: LabelStyleEnum.ITALIC };
 
   private debounce: number | undefined;
-  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[]> = new Map();
+  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[] | number[]> = new Map();
   private destroyed = new Subject();
 
   public iconColor = ApplicationStyleService.getPrimaryColor();
@@ -76,7 +79,14 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
       .subscribe((val: string) => this.change('label', val));
     this.strokeTypeControl.valueChanges
       .pipe(takeUntil(this.destroyed), debounceTime(250))
-      .subscribe((val: StrokeTypeEnum) => this.change('strokeType', val));
+      .subscribe((val: StrokeTypeEnum | string) => {
+        const strokeArray = StyleHelper.getDashArrayFromString(val);
+        if (strokeArray.length > 0) {
+          this.change('strokeType', strokeArray);
+        } else {
+          this.change('strokeType', val);
+        }
+      });
     this.arrowTypeControl.valueChanges
       .pipe(takeUntil(this.destroyed), debounceTime(250))
       .subscribe((val: ArrowTypeEnum) => this.change('arrowType', val));
@@ -169,7 +179,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('strokeOpacity', $event);
   }
 
-  public getDashArray(strokeType: StrokeTypeEnum) {
+  public getDashArray(strokeType: StrokeTypeEnum | string) {
     return StyleHelper.getDashArray(strokeType, 0).join(' ');
   }
 
@@ -265,7 +275,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[]) {
+  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[] | number[]) {
     this.updatedProps.set(key, value);
     if (this.debounce) {
       window.clearTimeout(this.debounce);

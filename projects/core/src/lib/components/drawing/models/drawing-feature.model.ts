@@ -22,6 +22,16 @@ export enum LabelStyleEnum {
   BOLD = 'BOLD',
 }
 
+export interface LineStyleModel {
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWidth?: number;
+  strokeType?: StrokeTypeEnum | number[];
+  dashOffset?: number;
+  arrowType?: ArrowTypeEnum;
+  strokeOffset?: number;
+}
+
 export interface CommonDrawingFeatureStyleModel {
   description?: string;
 }
@@ -52,12 +62,9 @@ export interface MarkerDrawingFeatureStyleModel extends LabelDrawingFeatureStyle
   markerRotation?: number;
 }
 
-export interface LineDrawingFeatureStyleModel extends LabelDrawingFeatureStyleModel  {
-  strokeColor?: string;
-  strokeOpacity?: number;
-  strokeWidth?: number;
-  strokeType?: StrokeTypeEnum;
-  arrowType?: ArrowTypeEnum;
+export interface LineDrawingFeatureStyleModel extends LabelDrawingFeatureStyleModel, LineStyleModel  {
+  secondaryStroke?: LineStyleModel;
+  tertiaryStroke?: LineStyleModel;
   showTotalSize?: boolean;
   showSegmentSize?: boolean;
 }
