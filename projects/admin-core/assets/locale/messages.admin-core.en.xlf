@@ -173,6 +173,9 @@
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.remove" datatype="html">
+        <source>Remove</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.selectable" datatype="html">
         <source>Selectable</source>
       </trans-unit>

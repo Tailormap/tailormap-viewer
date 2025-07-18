@@ -230,6 +230,10 @@
         <source>Initially selected</source>
         <target>Anfangs ausgewählt</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.remove" datatype="html">
+        <source>Remove</source>
+        <target>Entfernen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.selectable" datatype="html">
         <source>Selectable</source>
         <target>Auswählbar</target>
