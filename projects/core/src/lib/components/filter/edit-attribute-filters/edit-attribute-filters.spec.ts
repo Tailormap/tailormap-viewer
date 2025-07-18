@@ -1,11 +1,12 @@
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
 import { SliderFilterComponent } from './slider-filter/slider-filter.component';
-import { FilterToolEnum } from '@tailormap-viewer/api';
+import { FilterToolEnum, UniqueValuesService } from '@tailormap-viewer/api';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedImportsModule, SliderComponent } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import userEvent from '@testing-library/user-event';
+import { of } from 'rxjs';
 
 
 const setup = async () => {
@@ -22,10 +23,17 @@ const setup = async () => {
   const attributeFilter = { ...filterGroup.filters[0], editConfiguration: sliderFilterConfiguration };
   const filterGroupId = filterGroup.id;
 
+  const uniqueValuesService = {
+    getUniqueValues$: jest.fn(() => of({ values: [] })),
+  };
+
   await render(EditAttributeFiltersComponent, {
     imports: [SharedImportsModule],
     declarations: [ SliderFilterComponent, SliderComponent ],
-    providers: [provideMockStore()],
+    providers: [
+      provideMockStore(),
+      { provide: UniqueValuesService, useValue: uniqueValuesService },
+    ],
     inputs: { editableFilters: [attributeFilter], filterGroupId },
   });
 };
