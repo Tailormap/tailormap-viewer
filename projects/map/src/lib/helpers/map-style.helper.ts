@@ -26,7 +26,6 @@ export class MapStyleHelper {
   private static DEFAULT_COLOR = '#cc0000';
   private static DEFAULT_SYMBOL_SIZE = 5;
 
-
   private static DEFAULT_STYLE = MapStyleHelper.mapStyleModelToOlStyle({
     styleKey: 'DEFAULT_STYLE',
     zIndex: 0,

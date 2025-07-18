@@ -8,6 +8,7 @@ export interface StrokeStyleModel {
   arrowType?: 'none' | 'start' | 'end' | 'both' | 'along';
   strokeOffset?: number;
   dashOffset?: number;
+  patternSrc?: string;
 }
 
 export interface MapStyleModel extends StrokeStyleModel {

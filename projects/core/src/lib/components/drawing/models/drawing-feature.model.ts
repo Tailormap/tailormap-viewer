@@ -28,6 +28,7 @@ export interface LineStyleModel {
   strokeWidth?: number;
   strokeType?: StrokeTypeEnum | number[];
   dashOffset?: number;
+  patternSrc?: string;
   arrowType?: ArrowTypeEnum;
   strokeOffset?: number;
 }

@@ -6,6 +6,7 @@ import { Geometry, LineString } from 'ol/geom';
 import { ArrowStyleHelper } from './arrow-style.helper';
 import { FeatureLike } from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
+import { ColorLike, PatternDescriptor } from 'ol/colorlike';
 
 export class StrokeStyleHelper {
 
@@ -16,8 +17,11 @@ export class StrokeStyleHelper {
     const dash = typeof styleConfig.strokeType === 'string'
       ? StyleHelper.getDashArray(styleConfig.strokeType, styleConfig.strokeWidth)
       : styleConfig.strokeType ?? [];
+    const color: any = styleConfig.patternSrc
+      ? { src: styleConfig.patternSrc }
+      : ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, overrideOpacity || styleConfig.strokeOpacity);
     const stroke = new Stroke({
-      color: ColorHelper.getRgbStyleForColor(styleConfig.strokeColor, overrideOpacity || styleConfig.strokeOpacity),
+      color,
       width: styleConfig.strokeWidth || 1,
     });
     if (dash.length > 0) {
@@ -48,6 +52,7 @@ export class StrokeStyleHelper {
       strokeType: additionalStrokeModel.strokeType ?? styleConfig.strokeType,
       arrowType: additionalStrokeModel.arrowType ?? styleConfig.arrowType,
       dashOffset: additionalStrokeModel.dashOffset ?? styleConfig.dashOffset,
+      patternSrc: additionalStrokeModel.patternSrc ?? styleConfig.patternSrc,
     };
     const secondaryStroke = StrokeStyleHelper.createStroke(strokeConfig);
     if (secondaryStroke) {
