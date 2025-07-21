@@ -6,9 +6,12 @@ mat-header-cell {
   font-weight: bold;
 }
 
-.mat-column-initially-selected,
 .mat-column-selectable {
   flex: 0 0 120px;
+}
+
+.mat-column-initially-selected {
+  flex: 0 0 110px;
 }
 
 .mat-column-value {
@@ -16,7 +19,7 @@ mat-header-cell {
 }
 
 .mat-column-alias {
-  flex: 1 0 150px;
+  flex: 1 0 100px;
 }
 
 .mat-column-alias mat-form-field {
@@ -26,4 +29,26 @@ mat-header-cell {
 .wrap-text {
   overflow: hidden;
   text-overflow: clip;
+}
+
+.add-value-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.add-value-button {
+  align-self: stretch;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+.mat-column-remove {
+  flex: 0 0 30px;
+  padding-right: 8px;
+  padding-left: 0;
 }
