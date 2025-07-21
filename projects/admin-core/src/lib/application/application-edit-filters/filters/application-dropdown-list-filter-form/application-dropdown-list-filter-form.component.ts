@@ -44,8 +44,8 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
   private uniqueValuesSubject$ = new BehaviorSubject<string[] | null>(null);
   public filteredUniqueValues$: Observable<string[]> = of([]);
   private selectedValuesSubject$ = new BehaviorSubject<string[]>([]);
-
   public attributeValuesSettings: WritableSignal<AttributeValueSettings[]> = signal([]);
+
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
 
   public aliasForm: FormGroup = new FormGroup({});
@@ -65,23 +65,26 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
       this.filterSubject$.asObservable(),
       this.uniqueValuesSubject$.asObservable(),
       this.selectedValuesSubject$.asObservable(),
-    ]).pipe(map(([ filter, uniqueValues, selectedValues ]) => {
-      if (!uniqueValues) {
-        return [];
-      }
-      const uniqueValuesWithoutSelected = uniqueValues.filter(value =>
-        !selectedValues.includes(value));
-      if (filter) {
-        return FilterHelper.filterByTerm(uniqueValuesWithoutSelected, filter, value => value);
-      }
-      return uniqueValuesWithoutSelected ? uniqueValuesWithoutSelected : [];
-    }));
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map(([ filter, uniqueValues, selectedValues ]) => {
+        if (!uniqueValues) {
+          return [];
+        }
+        const uniqueValuesWithoutSelected = uniqueValues.filter(value =>
+          !selectedValues.includes(value));
+        if (filter) {
+          return FilterHelper.filterByTerm(uniqueValuesWithoutSelected, filter, value => value);
+        }
+        return uniqueValuesWithoutSelected ? uniqueValuesWithoutSelected : [];
+      }),
+    );
 
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(values => {
-        const updatedAliases = Object.keys(values)
-          .map(attributeValue => ({ value: attributeValue, alias: values[attributeValue] || undefined }));
+      .subscribe(formValues => {
+        const updatedAliases = Object.keys(formValues)
+          .map(attributeValue => ({ value: attributeValue, alias: formValues[attributeValue] || undefined }));
         updatedAliases.forEach(updatedAlias => {
           this.changeAlias(updatedAlias.value, updatedAlias.alias);
         });
@@ -115,7 +118,7 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
     }
   }
 
-  public changeAlias(value: string, alias: string | undefined): void {
+  private changeAlias(value: string, alias: string | undefined): void {
     if (!alias) {
       return;
     }
