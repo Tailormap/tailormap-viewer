@@ -1,3 +1,7 @@
+mat-expansion-panel ::ng-deep .mat-expansion-panel-body {
+  padding: 0 8px 16px;
+}
+
 .drawing-styles-list {
   display: flex;
   flex-wrap: wrap;
@@ -30,4 +34,6 @@
   padding-left: 8px;
   user-select: none;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
