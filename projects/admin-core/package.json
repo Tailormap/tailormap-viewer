@@ -18,7 +18,7 @@
     "@ngrx/operators": "^19.0.1",
     "@ngrx/store": "^19.0.1",
     "@ngrx/store-devtools": "^19.0.1",
-    "@tailormap-admin/admin-api": "^12.0.4-rc.1",
+    "@tailormap-admin/admin-api": "^12.0.4-rc.2",
     "@tailormap-viewer/api": "^12.0.4-rc.2",
     "@tailormap-viewer/shared": "^12.0.4-rc.2",
     "nanoid": "^5.1.4",
