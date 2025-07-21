@@ -1,30 +1,32 @@
-
 @let features = features$ | async;
 @if(features && features.length > 0 ) {
-
-  <mat-expansion-panel class="objects-list" [expanded]="false">
+  <mat-expansion-panel class="objects-list"
+                       [expanded]="isExpanded()"
+                       (opened)="isExpanded.set(true)"
+                       (closed)="isExpanded.set(false)">
     <mat-expansion-panel-header>
       <mat-panel-title i18n="@@core.drawing.objects-list">Objects</mat-panel-title>
       <mat-panel-description>{{ features.length }}</mat-panel-description>
     </mat-expansion-panel-header>
     @for (feature of features; track feature.__fid; let index = $index) {
       <div class="row"
+           [attr.data-feature-fid]="feature.__fid"
            (click)="selectFeature(feature.__fid)"
-           (dblclick)="selectFeatureAndEditLabel(feature.__fid)"
+           (dblclick)="selectFeatureAndEditDescription(feature.__fid)"
            [class.selected]="feature.selected">
         <div class="icon">
-          <tm-drawing-feature-icon [feature]="feature"></tm-drawing-feature-icon>
+          <tm-drawing-style-icon [type]="feature.attributes.type" [featureStyle]="feature.attributes.style"></tm-drawing-style-icon>
         </div>
         <div class="counter">#{{index+1}}</div>
         <div class="label">
-          @if(editingLabelForFeatureFid === feature.__fid) {
-            <input #editLabel
-                   [value]="feature.attributes.style.label"
-                   (keyup.escape)="cancelLabelEdit()"
-                   (keyup.enter)="updateLabel()"
-                   (blur)="updateLabel()"/>
+          @if(editingDescriptionForFeatureFid === feature.__fid) {
+            <input #editDescription
+                   [value]="feature.attributes.style.description ?? ''"
+                   (keyup.escape)="cancelDescriptionEdit()"
+                   (keyup.enter)="updateDescription()"
+                   (blur)="updateDescription()"/>
           } @else {
-            <div>{{ stripMacros(feature.attributes.style.label) }}</div>
+            <div>{{ stripMacros(feature.attributes.style.description) }}</div>
           }
         </div>
       </div>

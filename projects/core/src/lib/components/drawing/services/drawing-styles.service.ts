@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import {
   DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { map, Observable, shareReplay } from 'rxjs';
@@ -10,6 +10,9 @@ import { UploadedDrawingStylesResponse } from '../models/uploaded-drawing-styles
   providedIn: 'root',
 })
 export class DrawingStylesService {
+
+  public selectedDrawingStyle = signal<number | null>(null);
+
   constructor(@Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel) {
   }
 
@@ -20,4 +23,9 @@ export class DrawingStylesService {
         shareReplay(1), // Cache the response for subsequent subscribers
       );
   }
+
+  public setSelectedDrawingStyle(idx: number | null) {
+    this.selectedDrawingStyle.set(idx);
+  }
+
 }

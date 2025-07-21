@@ -15,10 +15,11 @@ export class LabelStyleHelper {
 
   public static createLabelStyle(
     styleConfig: MapStyleModel,
+    symbolSize: number,
     defaultSymbolSize: number,
     feature?: Feature<Geometry>,
+    zIndex?: number,
   ) {
-    const symbolSize = UnitsHelper.getNumberValue(styleConfig.pointSize, defaultSymbolSize);
     const geom = feature?.getGeometry();
     const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
     const labelSize = UnitsHelper.getNumberValue(styleConfig.labelSize, defaultSymbolSize);
@@ -43,7 +44,7 @@ export class LabelStyleHelper {
       : (styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
 
     const baseLabelStyle = new Style({
-      zIndex: styleConfig.zIndex,
+      zIndex,
       text: new Text({
         placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : undefined,
         text: label,

@@ -3,15 +3,15 @@ import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
-  selectDrawingFeatures, selectDrawingFeaturesExcludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature,
-  selectSelectedDrawingStyle,
+  selectDrawingFeatures, selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature,
+  selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
 import {
-  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingStyle, setSelectedFeature, updateDrawingFeatureStyle,
+  addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingType, setSelectedFeature, updateDrawingFeatureStyle,
   updateSelectedDrawingFeatureGeometry,
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
@@ -19,6 +19,7 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DrawingStylesService } from '../services/drawing-styles.service';
 
 @Component({
   selector: 'tm-drawing',
@@ -37,7 +38,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public active$: Observable<boolean> = of(false);
   public selectedFeature: DrawingFeatureModel | null = null;
   public style: DrawingFeatureStyleModel = DrawingHelper.getDefaultStyle();
-  public selectedDrawingStyle: DrawingFeatureTypeEnum | null = null;
+  public lockedStyle = signal<boolean>(false);
+  public selectedDrawingType: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
   public drawingTypes = DrawingFeatureTypeEnum;
@@ -66,6 +68,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmDialogService,
     private drawingService: DrawingService,
     private cdr: ChangeDetectorRef,
+    private drawingStylesService: DrawingStylesService,
   ) { }
 
   public ngOnInit() {
@@ -88,21 +91,23 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
     this.mapService.renderFeatures$<DrawingFeatureModelAttributes>(
       this.drawingLayerId,
-      this.store$.select(selectDrawingFeaturesExcludingSelected),
+      this.store$.select(selectDrawingFeaturesForMapRendering),
       DrawingHelper.applyDrawingStyle,
     ).pipe(takeUntil(this.destroyed)).subscribe();
 
     combineLatest([
-      this.store$.select(selectSelectedDrawingStyle),
+      this.store$.select(selectSelectedDrawingType),
       this.store$.select(selectSelectedDrawingFeature),
     ])
       .pipe(takeUntil(this.destroyed))
-      .subscribe(([ style, feature ]) => {
-        this.selectedDrawingStyle = style || feature?.attributes.type || null;
+      .subscribe(([ type, feature ]) => {
         this.selectedFeature = feature;
-        this.style = feature
-          ? feature.attributes.style
-          : DrawingHelper.getDefaultStyle();
+        this.selectedDrawingType = type;
+        if (feature) {
+          this.style = feature.attributes.style;
+          this.selectedDrawingType = feature.attributes.type;
+          this.lockedStyle.set(feature?.attributes.lockedStyle ?? false);
+        }
         this.cdr.detectChanges();
       });
 
@@ -135,6 +140,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
+    this.style = DrawingHelper.getDefaultStyle();
+    this.lockedStyle.set(false);
+    this.drawingStylesService.setSelectedDrawingStyle(null);
     if (this.activeTool !== type) {
       this.drawingService.toggle(type, this.showMeasures());
     }
@@ -153,13 +161,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public enableSelectAndModify() {
     this.drawingService.enableSelectAndModify();
+    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onDrawingAdded($event: DrawingToolEvent) {
     if (!this.activeTool) {
       return;
     }
-    const feature = DrawingHelper.getFeature(this.activeTool, $event);
+    const attributes: Partial<DrawingFeatureModelAttributes> = {};
+    if (this.lockedStyle()) {
+      attributes.lockedStyle = true;
+    }
+    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style, attributes);
     if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
       const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
       if (rectangle) {
@@ -180,11 +193,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public onActiveToolChanged($event: DrawingFeatureTypeEnum | null) {
     this.activeTool = $event;
-    this.store$.dispatch(setSelectedDrawingStyle({ drawingType: $event }));
+    this.store$.dispatch(setSelectedDrawingType({ drawingType: $event }));
   }
 
   public onFeatureSelected(feature: FeatureModel | null) {
     this.store$.dispatch(setSelectedFeature({ fid: feature?.__fid || null }));
+  }
+
+  public featureSelected(fid: string) {
+    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.drawingService.enableSelectAndModify(true);
+    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onFeatureGeometryModified(geometry: string) {
@@ -248,6 +267,19 @@ export class DrawingComponent implements OnInit, OnDestroy {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
       this.style = DrawingHelper.getDefaultStyle();
+    }
+  }
+
+  public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
+    this.style = {
+      ...DrawingHelper.getDefaultStyle(),
+      ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
+      label: '',
+    };
+    this.lockedStyle.set(style.lockedStyle ?? false);
+    if (this.activeTool !== style.type) {
+      this.drawingService.toggle(style.type, this.showMeasures());
     }
   }
 
