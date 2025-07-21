@@ -20,12 +20,13 @@ export class IconStyleHelper {
     const strokeColor = styleConfig.pointStrokeColor || defaultColor;
     const strokeWidth = UnitsHelper.getNumberValue(styleConfig.pointStrokeWidth, 1);
     const rotation = styleConfig.pointRotation;
-    if (type === 'cross' || type === 'arrow' || type === 'diamond') {
+    if (type === 'cross' || type === 'arrow' || type === 'diamond' || type === 'star') {
       const svgStrokeWidth = 1 + (strokeWidth / 10);
       const paths = {
-        arrow: 'M0 6.75v-3.5h5.297V0L10 5l-4.703 5V6.75H0Z',
-        diamond: 'm5 0 3.5 4.997L5 10 1.5 4.997 5 0Z',
-        cross: 'M7.026 3V.015h-4V3H.005v4h3.021v3.006h4V7h2.969V3H7.026Z',
+        arrow: 'M3 14.275v-4.55h9.535V5.5L21 12l-8.465 6.5v-4.225H3z',
+        diamond: 'M 12 21 L 5 12 L 12 3 l 7 9 Z',
+        cross: 'M15 9.059h6.02v6H15V21H9v-5.941H3.02v-6H9V3h6v6.059Z',
+        star: 'M12 3.859l2.863 5.059 5.697 1.159-3.927 4.289.658 5.776L12 17.732l-5.29 2.41.656-5.776-3.925-4.289 5.695-1.16L12 3.86z',
       };
       const svgContent = `<path d="${paths[type]}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${svgStrokeWidth}" />`;
       return [new Style({ image: IconStyleHelper.getSvgIcon({ svgContent,  symbolSize,  rotation,  strokeWidth }) })];
@@ -40,7 +41,7 @@ export class IconStyleHelper {
         '</defs>',
         '<path d="m5 4.021 2.366 4.997H2.634L5 4.021Z" fill="url(#gradient1)"/>',
       ].join('');
-      const viewDirectionIcon = IconStyleHelper.getSvgIcon({ svgContent,  symbolSize: symbolSize * 3,  rotation,  strokeWidth });
+      const viewDirectionIcon = IconStyleHelper.getSvgIcon({ svgContent,  symbolSize: symbolSize * 3,  rotation,  strokeWidth }, 10);
       viewDirectionIcon.setAnchor([ 0.5, 0.175 ]);
       return [
         new Style({ image: IconStyleHelper.getRegularShape({ type: 'circle', fillColor, strokeColor, symbolSize, rotation, strokeWidth }) }),
@@ -59,15 +60,13 @@ export class IconStyleHelper {
     type: 'circle' | 'star' | 'square' | 'triangle' | 'diamond';
   }) {
     const POINT_SHAPES: Record<string, RegularShapeOptions> = {
-      circle: { points: Infinity, radius: props.symbolSize },
-      star: { points: 5, radius: props.symbolSize, radius2: props.symbolSize * .4, angle: 0 },
+      circle: { points: Infinity, radius: props.symbolSize * 0.7 },
       square: { points: 4, radius: props.symbolSize, angle: Math.PI / 4 },
       triangle: { points: 3, radius: props.symbolSize, angle: 0 },
-      diamond: { points: 4, radius: props.symbolSize, angle: Math.PI / 2 },
     };
     return new RegularShape({
       fill: new Fill({ color: props.fillColor  }),
-      stroke: props.strokeWidth === 0 || !props.strokeColor ? undefined : new Stroke({ color: props.strokeColor, width: props.strokeWidth }),
+      stroke: props.strokeWidth === 0 || !props.strokeColor ? undefined : new Stroke({ color: props.strokeColor, width: props.strokeWidth * 2 }),
       rotation: UnitsHelper.getRotationForDegrees(props.rotation),
       ...POINT_SHAPES[props.type],
     });
@@ -79,10 +78,10 @@ export class IconStyleHelper {
     strokeWidth: number;
     rotation?: number;
     shrinkFactor?: number;
-  }) {
+  }, viewBox= 24) {
     const svgStrokeWidth = 1 + (props.strokeWidth / 10);
     const icon = [
-      `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">`,
+      `<svg width="10" height="10" viewBox="0 0 ${viewBox} ${viewBox}" xmlns="http://www.w3.org/2000/svg">`,
       props.svgContent,
       '</svg>',
     ].join('');

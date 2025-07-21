@@ -302,6 +302,10 @@
         <source>Halo</source>
         <target>Halo</target>
       </trans-unit>
+      <trans-unit id="core.drawing.icon" datatype="html">
+        <source>Icon</source>
+        <target>Icon</target>
+      </trans-unit>
       <trans-unit id="core.drawing.insert-area-label" datatype="html">
         <source>Insert area as label</source>
         <target>Bereich als Beschriftung einfügen</target>
@@ -329,6 +333,10 @@
       <trans-unit id="core.drawing.line-thickness" datatype="html">
         <source>Line thickness</source>
         <target>Dicke der Linie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.locked-style" datatype="html">
+        <source>The style for this drawing object cannot be changed.</source>
+        <target>Der Stil für dieses Zeichenobjekt kann nicht geändert werden.</target>
       </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
@@ -381,6 +389,10 @@
       <trans-unit id="core.drawing.stroke-type" datatype="html">
         <source>Stroke type</source>
         <target>Strichart</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.style-library" datatype="html">
+        <source>Style library</source>
+        <target>Stilbibliothek</target>
       </trans-unit>
       <trans-unit id="core.drawing.symbol" datatype="html">
         <source>Symbol</source>

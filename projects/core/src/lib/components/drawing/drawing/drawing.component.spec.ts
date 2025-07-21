@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  selectDrawingFeaturesIncludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingStyle,
+  selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DrawingFeatureModel } from '../models/drawing-feature.model';
@@ -16,6 +16,7 @@ import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
+import { DrawingStylesService } from '../services/drawing-styles.service';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMock();
@@ -23,6 +24,10 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),
     deregisterComponent: jest.fn(),
+  };
+  const drawingStylesServiceMock = {
+    getDrawingStyles$: jest.fn(() => of([])),
+    setSelectedDrawingStyle: jest.fn(() => undefined),
   };
   const confirmServiceMock = {
     confirm$: jest.fn(() => of(true)),
@@ -32,10 +37,11 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [DrawingStyleFormComponent],
     providers: [
-      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ] }),
+      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesForMapRendering, value: [] }, ...selectors ] }),
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
+      { provide: DrawingStylesService, useValue: drawingStylesServiceMock },
     ],
   });
   return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };
@@ -62,7 +68,7 @@ describe('DrawingComponent', () => {
   test('removes all / selected features', async () => {
     const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
     const { confirmServiceMock } = await setup(true, [
-      { selector: selectSelectedDrawingStyle, value: null },
+      { selector: selectSelectedDrawingType, value: null },
       { selector: selectSelectedDrawingFeature, value: selectedFeature },
       { selector: selectHasDrawingFeatures, value: true },
     ]);

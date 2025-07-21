@@ -1,10 +1,14 @@
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import {
-  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelStyleEnum, MarkerType, StrokeTypeEnum,
+  ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, DrawingStyleTypeMap,
+  ImageDrawingFeatureStyleModel,
+  LabelDrawingFeatureStyleModel, LabelStyleEnum, LineDrawingFeatureStyleModel, MarkerDrawingFeatureStyleModel,
+  MarkerType, PolygonDrawingFeatureStyleModel, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 export class DrawingHelper {
 
@@ -36,10 +40,88 @@ export class DrawingHelper {
     StrokeTypeEnum.DOT,
   ];
 
-  public static getFeature(type: DrawingFeatureTypeEnum, drawingEvent: DrawingToolEvent): DrawingFeatureModel {
+  private static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
+    const labelStyleModel: LabelDrawingFeatureStyleModel = {
+      description: style.description,
+      label: style.label,
+      labelSize: style.labelSize,
+      labelColor: style.labelColor,
+      labelStyle: style.labelStyle,
+      labelRotation: style.labelRotation,
+      labelOutlineColor: style.labelOutlineColor,
+    };
+
+    const imageStyleModel: ImageDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      markerImage: style.markerImage,
+      markerImageWidth: style.markerImageWidth,
+      markerImageHeight: style.markerImageHeight,
+      markerSize: style.markerSize,
+      markerRotation: style.markerRotation,
+    };
+
+    const markerStyleModel: MarkerDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      marker: style.marker,
+      markerSize: style.markerSize,
+      markerRotation: style.markerRotation,
+      markerFillColor: style.markerFillColor,
+      markerStrokeColor: style.markerStrokeColor,
+      markerStrokeWidth: style.markerStrokeWidth,
+    };
+
+    const lineStyleModel: LineDrawingFeatureStyleModel = {
+      ...labelStyleModel,
+      strokeColor: style.strokeColor,
+      strokeOpacity: style.strokeOpacity,
+      strokeWidth: style.strokeWidth,
+      strokeType: style.strokeType,
+      arrowType: style.arrowType,
+      dashOffset: style.dashOffset,
+      showTotalSize: style.showTotalSize,
+      showSegmentSize: style.showSegmentSize,
+      secondaryStroke: style.secondaryStroke,
+      tertiaryStroke: style.tertiaryStroke,
+    };
+
+    const polygonStyleModel: PolygonDrawingFeatureStyleModel = {
+      ...lineStyleModel,
+      fillOpacity: style.fillOpacity,
+      fillColor: style.fillColor,
+      stripedFill: style.stripedFill,
+    };
+
+    switch (type) {
+      case DrawingFeatureTypeEnum.IMAGE: return imageStyleModel;
+      case DrawingFeatureTypeEnum.POINT: return markerStyleModel;
+      case DrawingFeatureTypeEnum.LINE: return lineStyleModel;
+      case DrawingFeatureTypeEnum.LABEL: return labelStyleModel;
+      case DrawingFeatureTypeEnum.POLYGON: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.SQUARE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.RECTANGLE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.ELLIPSE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.CIRCLE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.STAR: return polygonStyleModel;
+    }
+  }
+
+  public static getFeature(
+    type: DrawingFeatureTypeEnum,
+    drawingEvent: DrawingToolEvent,
+    style?: DrawingFeatureStyleModel,
+    featureAttributes?: Partial<DrawingFeatureModelAttributes>,
+  ): DrawingFeatureModel {
+    const allStyleAttributes = {
+      ...DrawingHelper.getDefaultStyle(),
+      ...style,
+    };
+    const styleForType = DrawingHelper.retainStyleAttributesForType(type, allStyleAttributes);
     const attributes: DrawingFeatureModelAttributes = {
       type,
-      style: DrawingHelper.getDefaultStyle(),
+      style: styleForType,
+      ...featureAttributes,
     };
     return {
       __fid: uuidv4(),
@@ -68,19 +150,23 @@ export class DrawingHelper {
   public static getDefaultStyle(): DrawingFeatureStyleModel {
     const defaultStyle: DrawingFeatureStyleModel = {
       marker: 'circle',
+      markerImageWidth: 32,
+      markerImageHeight: 32,
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
-      markerSize: 5,
+      markerSize: 10,
       markerStrokeWidth: 1,
       markerRotation: 0,
       fillOpacity: 30,
       fillColor: ApplicationStyleService.getPrimaryColor(),
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeOpacity: 100,
+      strokeType: StrokeTypeEnum.SOLID,
       strokeWidth: 3,
       label: '',
       labelSize: 12,
       labelColor: 'rgb(0, 0, 0)',
+      labelOutlineColor: 'white',
     };
     return { ...defaultStyle, ...DrawingHelper.updatedDefaultStyle };
   }
@@ -90,6 +176,9 @@ export class DrawingHelper {
     return {
       styleKey: 'drawing-style',
       zIndex: feature.attributes.zIndex || 0,
+      pointImage: style.markerImage ? TailormapApiConstants.BASE_URL + style.markerImage : undefined,
+      pointImageWidth: style.markerImageWidth,
+      pointImageHeight: style.markerImageHeight,
       pointType: feature.attributes.type === DrawingFeatureTypeEnum.LABEL
         ? 'label'
         : (feature.attributes.type === DrawingFeatureTypeEnum.POINT ? style.marker : undefined),
@@ -106,6 +195,7 @@ export class DrawingHelper {
       strokeWidth: style.strokeWidth,
       strokeOpacity: style.strokeOpacity,
       strokeType: style.strokeType,
+      dashOffset: style.dashOffset,
       arrowType: style.arrowType,
       fillColor: style.fillColor,
       fillOpacity: style.fillOpacity,
@@ -123,6 +213,8 @@ export class DrawingHelper {
       labelOutlineColor: style.labelOutlineColor,
       showSegmentSize: style.showSegmentSize,
       showTotalSize: style.showTotalSize,
+      secondaryStroke: style.secondaryStroke,
+      tertiaryStroke: style.tertiaryStroke,
     };
   }
 
