@@ -161,6 +161,9 @@
       <trans-unit id="admin-core.application.filter-tree" datatype="html">
         <source>Filter application layers</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
+        <source>Add new value</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
       </trans-unit>
@@ -169,6 +172,12 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.new-value" datatype="html">
+        <source>New value</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.remove" datatype="html">
+        <source>Remove</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.selectable" datatype="html">
         <source>Selectable</source>
