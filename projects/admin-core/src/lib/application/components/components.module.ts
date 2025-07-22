@@ -13,6 +13,7 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
 import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
 import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
+import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { EditComponentConfigComponent } from './edit-config/edit-component-confi
     SimpleSearchComponentConfigComponent,
     HeaderComponentConfigComponent,
     EditComponentConfigComponent,
+    GeolocationConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -57,5 +59,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
   }
 }

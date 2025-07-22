@@ -1,9 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import { GeolocationComponent } from './geolocation.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state/core.selectors';
 
 describe('GeolocationComponent', () => {
   test('renders and properly zooms to coordinates', async () => {
@@ -28,7 +30,15 @@ describe('GeolocationComponent', () => {
     Object.defineProperty(global.navigator, 'geolocation', { value: { watchPosition } });
 
     await render(GeolocationComponent, {
-      providers: [mapService.provider],
+      providers: [
+        mapService.provider,
+        provideMockStore({
+          selectors: [
+            { selector: selectComponentsConfig, value: [] },
+            { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          ],
+        }),
+      ],
       imports: [ MatIconTestingModule, SharedModule ],
     });
     const zoomToLocationBtn = screen.getByLabelText('Zoom to location');

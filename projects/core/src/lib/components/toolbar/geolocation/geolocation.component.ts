@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapService, CoordinateHelper } from '@tailormap-viewer/map';
-import { Subject, takeUntil, take } from 'rxjs';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
+import { Subject, take, takeUntil } from 'rxjs';
+import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-geolocation',
@@ -20,16 +22,27 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private activeWatchTimeout = -1;
 
   private static GEOLOCATION_TIMEOUT_MS = 12 * 1000;
+  private static MAX_ZOOM = 19;
 
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
   public hasFix = false;
+  private noTimeout = false;
 
   constructor(
+    private store$: Store,
     private mapService: MapService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+    ComponentConfigHelper.useInitialConfigForComponent<GeolocationConfigModel>(
+      store$,
+      BaseComponentTypeEnum.GEOLOCATION,
+      config => {
+        this.noTimeout = config.noTimeout ?? false;
+      },
+    );
+  }
 
   public ngOnInit(): void {
     this.mapService.renderFeatures$('geolocation-layer', this.featureGeom.asObservable(), f => {
@@ -82,8 +95,10 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
           if (!this.hasFix) {
             this.hasFix = true;
-            this.mapService.zoomTo(circleWkt, projectionCode);
-            this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
+            this.mapService.zoomTo(circleWkt, projectionCode, GeolocationComponent.MAX_ZOOM);
+            if (!this.noTimeout) {
+              this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
+            }
             this.cdr.detectChanges();
           }
       });

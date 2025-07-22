@@ -86,6 +86,10 @@
         <source>Filter</source>
         <target>Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-geolocation" datatype="html">
+        <source>Geolocation</source>
+        <target>Geolocatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-header" datatype="html">
         <source>Header</source>
         <target>Header</target>
@@ -1444,6 +1448,10 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Leave geolocation on the map until the button is clicked again.</source>
+        <target>Laat geolocatie op de kaart staan totdat de knop opnieuw wordt ingedrukt.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
