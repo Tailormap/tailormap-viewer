@@ -280,7 +280,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     if (this.debounce) {
       window.clearTimeout(this.debounce);
     }
-    this.debounce = window.setTimeout(() => this.saveStyle(), 25);
+    this.debounce = window.setTimeout(() => this.saveStyle(), 10);
   }
 
   private saveStyle() {

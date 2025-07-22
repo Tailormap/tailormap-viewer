@@ -28,6 +28,12 @@ export class SliderComponent implements ControlValueAccessor {
   @Input()
   public step = 1;
 
+  /**
+   * Make sure to add a proper debouncing, especially before expensive tasks like dispatching rxjs actions.
+   */
+  @Input()
+  public changeValueWhileSliding: boolean = false;
+
   @Input()
   public displayWith: ((value: number) => string) = (value: number) => value.toString();
 
@@ -124,6 +130,25 @@ export class SliderComponent implements ControlValueAccessor {
     const avgLabelPx = (lowerLabelPx + upperLabelPx) / 2;
 
     return distPx < avgLabelPx + 16;
+  }
+
+  public onInput(event: Event, changeFunction = (v: number) => this.onValueChange(v)): void {
+    if (!this.changeValueWhileSliding) {
+      return;
+    }
+    const input = event.target as HTMLInputElement;
+    const value = parseFloat(input.value);
+    if (!isNaN(value)) {
+      changeFunction(value);
+    }
+  }
+
+  public onLowerInput($event: Event) {
+    this.onInput($event, (value) => this.onLowerValueChange(value));
+  }
+
+  public onUpperInput($event: Event) {
+    this.onInput($event, (value) => this.onUpperValueChange(value));
   }
 
 }
