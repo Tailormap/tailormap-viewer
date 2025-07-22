@@ -2,14 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="nl" datatype="plaintext" original="ng2.template">
     <body>
-    <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
-      <source>Multi-layer filter</source>
-      <target>Meerdere lagen filter</target>
-    </trans-unit>
-    <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
-      <source>Single-layer filter</source>
-      <target>Enkele laag filter</target>
-    </trans-unit>
+      <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
+        <source>Multi-layer filter</source>
+        <target>Meerdere lagen filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
+        <source>Single-layer filter</source>
+        <target>Enkele laag filter</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
         <target>Applicatie toevoegen</target>
@@ -214,6 +214,10 @@
         <source>Filter application layers</source>
         <target>Filter applicatie lagen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
+        <source>Add new value</source>
+        <target>Voeg nieuwe waarde toe</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
         <target>Alias</target>
@@ -225,6 +229,14 @@
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.new-value" datatype="html">
+        <source>New value</source>
+        <target>Nieuwe waarde</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.remove" datatype="html">
+        <source>Remove</source>
+        <target>Verwijder</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.selectable" datatype="html">
         <source>Selectable</source>
