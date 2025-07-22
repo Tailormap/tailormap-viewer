@@ -54,3 +54,4 @@ export * from './switch-filter.model';
 export * from './date-picker-filter.model';
 export * from './dropdown-list-filter.model';
 export * from './edit-filter-configuration.model';
+export * from './unique-values-response.model';
