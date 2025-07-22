@@ -1450,8 +1450,8 @@
         <target>Objectinformatie</target>
       </trans-unit>
       <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Leave geolocation on the map until the button is clicked again.</source>
-        <target>Laat geolocatie op de kaart staan totdat de knop opnieuw wordt ingedrukt.</target>
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

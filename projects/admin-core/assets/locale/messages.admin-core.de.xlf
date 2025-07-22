@@ -1451,8 +1451,8 @@
         <target>Feature-Informationen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Leave geolocation on the map until the button is clicked again.</source>
-        <target>Die Geolokalisierung bleibt auf der Karte, bis der Button erneut geklickt wird.</target>
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

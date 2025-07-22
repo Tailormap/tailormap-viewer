@@ -1068,7 +1068,7 @@
         <source>Feature info</source>
       </trans-unit>
       <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Leave geolocation on the map until the button is clicked again.</source>
+        <source>Show location on the map until the button is toggled off.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
