@@ -101,6 +101,7 @@ export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {
   type: DrawingFeatureTypeEnum;
   style: DrawingFeatureStyleModel;
   lockedStyle?: boolean;
+  rectangleSize?: { width: number; height: number };
   selected?: boolean;
   zIndex?: number;
 }

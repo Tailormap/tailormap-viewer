@@ -278,6 +278,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
       label: '',
     };
     this.lockedStyle.set(style.lockedStyle ?? false);
+    if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
+      this.customRectangleWidth = style.rectangleSize.width;
+      this.customRectangleHeight = style.rectangleSize.height;
+    }
+
     if (this.activeTool !== style.type) {
       this.drawingService.toggle(style.type, this.showMeasures());
     }
