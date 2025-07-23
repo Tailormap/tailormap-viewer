@@ -486,7 +486,7 @@
         <source>Update feature failed</source>
         <target>Objektaktualisierung fehlgeschlagen</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.edit-feature-tooltip" datatype="html">
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
       </trans-unit>
@@ -502,17 +502,9 @@
         <source>No features found</source>
         <target>Keine Objekte gefunden</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.not-editable-tooltip" datatype="html">
-        <source>This layer is not editable</source>
-        <target>Diese Ebene ist nicht bearbeitbar</target>
-      </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
         <target>Objektinformationen</target>
-      </trans-unit>
-      <trans-unit id="core.feature-info.require-login-tooltip" datatype="html">
-        <source>You must be logged in to edit</source>
-        <target>Du musst angemeldet sein, um zu bearbeiten</target>
       </trans-unit>
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>

@@ -1445,6 +1445,10 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
+        <source>Show button to edit the feature</source>
+        <target>Toon knop om het object te bewerken</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
         <target>Menu item toevoegen</target>

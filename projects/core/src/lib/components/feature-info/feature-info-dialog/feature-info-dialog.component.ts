@@ -22,7 +22,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   loadEditFeatures, setEditActive, setSelectedEditFeature, setSelectedEditLayer, showEditDialog,
 } from '../../edit/state/edit.actions';
-import { AuthenticatedUserService } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -40,7 +41,7 @@ export class FeatureInfoDialogComponent {
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
-  public isEditButtonDisabled$: Observable<boolean>;
+  public isEditPossible$: Observable<boolean>;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
@@ -48,11 +49,7 @@ export class FeatureInfoDialogComponent {
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
-  private defaultEditTooltip = $localize `:@@core.feature-info.edit-feature-tooltip:Edit feature`;
-  private notLoggedInEditTooltip = $localize `:@@core.feature-info.require-login-tooltip:You must be logged in to edit`;
-  private notEditableEditTooltip = $localize `:@@core.feature-info.not-editable-tooltip:This layer is not editable`;
-
-  public editTooltip = this.defaultEditTooltip;
+  public showEditButtonConfig: boolean = true;
 
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
@@ -79,9 +76,17 @@ export class FeatureInfoDialogComponent {
       return null;
     }));
 
+    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
+      store$,
+      BaseComponentTypeEnum.FEATURE_INFO,
+      config => {
+        this.showEditButtonConfig = config.showEditButton ?? true;
+      },
+    );
+
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
-    this.isEditButtonDisabled$ = combineLatest([
+    this.isEditPossible$ = combineLatest([
       this.authenticatedUserService.getUserDetails$(),
       this.currentFeature$,
     ]).pipe(
@@ -89,23 +94,9 @@ export class FeatureInfoDialogComponent {
       map(([ userDetails, feature ]) => {
         const isAuthenticated = userDetails.isAuthenticated;
         const isLayerEditable = feature?.layer?.editable ?? false;
-        return !isAuthenticated || !isLayerEditable;
+        return isAuthenticated && isLayerEditable;
       }),
     );
-    combineLatest([
-      this.authenticatedUserService.getUserDetails$(),
-      this.currentFeature$,
-    ]).pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe(([ userDetails, feature ]) => {
-      if (!userDetails.isAuthenticated) {
-        this.editTooltip = this.notLoggedInEditTooltip;
-      } else if (feature && feature.layer && feature.layer.editable) {
-        this.editTooltip = this.defaultEditTooltip;
-      } else {
-        this.editTooltip = this.notEditableEditTooltip;
-      }
-    });
 
     combineLatest([
       this.store$.select(selectFeatureInfoLayerListCollapsed),

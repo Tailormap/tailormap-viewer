@@ -49,13 +49,16 @@
           <div class="buttons">
             <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
             <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
-            <div class="edit-feature-button" [tmTooltip]="editTooltip">
-              <button mat-icon-button
-                      [disabled]="isEditButtonDisabled$ | async"
-                      (click)="editFeature()">
-                <mat-icon svgIcon="edit"></mat-icon>
-              </button>
-            </div>
+            @if (showEditButtonConfig && (isEditPossible$ | async)) {
+              <div class="edit-feature-button">
+                <button mat-icon-button
+                        tmTooltip="Edit feature"
+                        i18n-tmTooltip="@@core.feature-info.edit-feature"
+                        (click)="editFeature()">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                </button>
+              </div>
+            }
           </div>
         </div>
       }
