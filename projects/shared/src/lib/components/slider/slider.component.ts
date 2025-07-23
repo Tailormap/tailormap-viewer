@@ -136,10 +136,11 @@ export class SliderComponent implements ControlValueAccessor {
     if (!this.changeValueWhileSliding) {
       return;
     }
-    const input = event.target as HTMLInputElement;
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      changeFunction(value);
+    if (event.target instanceof HTMLInputElement) {
+      const value = parseFloat(event.target.value);
+      if (!isNaN(value)) {
+        changeFunction(value);
+      }
     }
   }
 
