@@ -18,9 +18,10 @@
         <span>{{style.markerSize}}%</span>
       </div>
       <div class="form-field form-field__slider">
-        <tm-slider [max]="150"
+        <tm-slider [max]="200"
                    [min]="50"
                    [step]="25"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeMarkerSize($event)"
                    [value]="style.markerSize">
         </tm-slider>
@@ -34,6 +35,7 @@
         <tm-slider [max]="360"
                    [min]="0"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeMarkerRotation($event)"
                    [value]="style.markerRotation">
         </tm-slider>
@@ -78,6 +80,7 @@
         <tm-slider [max]="10"
                    [min]="1"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeMarkerStrokeWidth($event)"
                    [value]="style.markerStrokeWidth">
         </tm-slider>
@@ -92,6 +95,7 @@
         <tm-slider [max]="20"
                    [min]="5"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeMarkerSize($event)"
                    [value]="style.markerSize">
         </tm-slider>
@@ -106,6 +110,7 @@
         <tm-slider [max]="360"
                    [min]="0"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeMarkerRotation($event)"
                    [value]="style.markerRotation">
         </tm-slider>
@@ -178,6 +183,7 @@
         <tm-slider [max]="30"
                    [min]="1"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeLabelSize($event)"
                    [value]="style.labelSize">
         </tm-slider>
@@ -205,6 +211,7 @@
         <tm-slider [max]="360"
                    [min]="0"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeLabelRotation($event)"
                    [value]="style.labelRotation">
         </tm-slider>
@@ -231,6 +238,7 @@
         <tm-slider [max]="20"
                    [min]="1"
                    [step]="1"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeStrokeWidth($event)"
                    [value]="style.strokeWidth">
         </tm-slider>
@@ -246,6 +254,7 @@
                    [min]="0"
                    [step]="1"
                    [displayWith]="formatThumb"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeStrokeOpacity($event)"
                    [value]="style.strokeOpacity">
         </tm-slider>
@@ -317,6 +326,7 @@
                    [step]="1"
                    [displayWith]="formatThumb"
                    [value]="style.fillOpacity"
+                   [changeValueWhileSliding]="true"
                    (valueChange)="changeFillOpacity($event)">
         </tm-slider>
       </div>
