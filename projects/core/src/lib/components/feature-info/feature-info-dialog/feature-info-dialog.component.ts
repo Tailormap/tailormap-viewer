@@ -5,7 +5,7 @@ import {
   selectFeatureInfoDialogCollapsed,
   selectFeatureInfoDialogVisible, selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers,
   selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
+  selectIsPrevButtonDisabled, selectMapCoordinates, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { map, Observable, combineLatest, take } from 'rxjs';
 import {
@@ -19,6 +19,10 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  loadEditFeatures, setEditActive, setSelectedEditFeature, setSelectedEditLayer, showEditDialog,
+} from '../../edit/state/edit.actions';
+import { AuthenticatedUserService } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -36,12 +40,19 @@ export class FeatureInfoDialogComponent {
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
+  public isEditButtonDisabled$: Observable<boolean>;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
 
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
+
+  private defaultEditTooltip = $localize `:@@core.feature-info.edit-feature-tooltip:Edit feature`;
+  private notLoggedInEditTooltip = $localize `:@@core.feature-info.require-login-tooltip:You must be logged in to edit`;
+  private notEditableEditTooltip = $localize `:@@core.feature-info.not-editable-tooltip:This layer is not editable`;
+
+  public editTooltip = this.defaultEditTooltip;
 
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
@@ -52,6 +63,7 @@ export class FeatureInfoDialogComponent {
     private store$: Store,
     public breakpointObserver: BreakpointObserver,
     private destroyRef: DestroyRef,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
@@ -66,8 +78,35 @@ export class FeatureInfoDialogComponent {
       }
       return null;
     }));
+
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
+    this.isEditButtonDisabled$ = combineLatest([
+      this.authenticatedUserService.getUserDetails$(),
+      this.currentFeature$,
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map(([ userDetails, feature ]) => {
+        const isAuthenticated = userDetails.isAuthenticated;
+        const isLayerEditable = feature?.layer?.editable ?? false;
+        return !isAuthenticated || !isLayerEditable;
+      }),
+    );
+    combineLatest([
+      this.authenticatedUserService.getUserDetails$(),
+      this.currentFeature$,
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(([ userDetails, feature ]) => {
+      if (!userDetails.isAuthenticated) {
+        this.editTooltip = this.notLoggedInEditTooltip;
+      } else if (feature && feature.layer && feature.layer.editable) {
+        this.editTooltip = this.defaultEditTooltip;
+      } else {
+        this.editTooltip = this.notEditableEditTooltip;
+      }
+    });
+
     combineLatest([
       this.store$.select(selectFeatureInfoLayerListCollapsed),
       this.breakpointObserver.observe('(max-width: 600px)'),
@@ -124,4 +163,20 @@ export class FeatureInfoDialogComponent {
     this.attributesCollapsed.set(!this.attributesCollapsed());
   }
 
+  public editFeature() {
+    this.store$.dispatch(setEditActive({ active: true }));
+    this.store$.select(selectMapCoordinates).pipe(take(1)).subscribe(coordinates => {
+      if (coordinates) {
+        this.store$.dispatch(loadEditFeatures({ coordinates }));
+      }
+    });
+    this.currentFeature$.pipe(take(1)).subscribe(feature => {
+      if (feature) {
+        this.store$.dispatch(setSelectedEditLayer({ layer: feature.layer.id }));
+        this.store$.dispatch(setSelectedEditFeature({ fid: feature.__fid }));
+      }
+    });
+    this.store$.dispatch(hideFeatureInfoDialog());
+    this.store$.dispatch(showEditDialog());
+  }
 }

@@ -365,6 +365,9 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature-tooltip" datatype="html">
+        <source>Edit feature</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
       </trans-unit>
@@ -374,8 +377,14 @@
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.not-editable-tooltip" datatype="html">
+        <source>This layer is not editable</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.require-login-tooltip" datatype="html">
+        <source>You must be logged in to edit</source>
       </trans-unit>
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>

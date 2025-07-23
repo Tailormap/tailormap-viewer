@@ -486,6 +486,10 @@
         <source>Update feature failed</source>
         <target>Object bijwerken mislukt</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature-tooltip" datatype="html">
+        <source>Edit feature</source>
+        <target>Object bewerken</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
         <target>Er is iets misgegaan bij het ophalen van de objectinformatie, probeer het opnieuw</target>
@@ -498,9 +502,17 @@
         <source>No features found</source>
         <target>Geen objecten gevonden</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.not-editable-tooltip" datatype="html">
+        <source>This layer is not editable</source>
+        <target>Deze laag is niet bewerkbaar</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
         <target>Objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.require-login-tooltip" datatype="html">
+        <source>You must be logged in to edit</source>
+        <target>Je moet ingelogd zijn om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
