@@ -271,6 +271,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
+    this.store$.dispatch(setSelectedFeature({ fid: null }));
     this.style = {
       ...DrawingHelper.getDefaultStyle(),
       ...style.style,
