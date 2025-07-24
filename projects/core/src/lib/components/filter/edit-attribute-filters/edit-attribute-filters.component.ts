@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum,
+  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
+import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
+import { selectViewerId } from '../../../state/core.selectors';
+
 
 @Component({
   selector: 'tm-edit-attribute-filter',
@@ -19,8 +22,12 @@ export class EditAttributeFiltersComponent {
 
   public editableFilters = input<AttributeFilterModel[]>([]);
   public filterGroupId = input<string | null>(null);
+  public layerIds = input<string[]>([]);
 
-  constructor(private store$: Store) { }
+  constructor(
+    private store$: Store,
+    private uniqueValuesService: UniqueValuesService,
+  ) { }
 
   public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
@@ -65,6 +72,13 @@ export class EditAttributeFiltersComponent {
       editConfiguration.initialUpperDate = filter.value[1];
     }
     return editConfiguration;
+  }
+
+  public getDropdownListFilterConfiguration(filter: AttributeFilterModel): DropdownListFilterModel | null {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
+      return null;
+    }
+    return filter.editConfiguration;
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
@@ -161,6 +175,34 @@ export class EditAttributeFiltersComponent {
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
     }
+  }
+
+  public getUniqueValues$(attribute: string): Observable<string[]> {
+    const layerIds = this.layerIds();
+    return this.store$.select(selectViewerId).pipe(
+      take(1),
+      switchMap(viewerId => {
+        if (!layerIds || layerIds.length === 0 || !viewerId) {
+          return [];
+        }
+        return forkJoin(
+          layerIds.map(layerId =>
+            this.uniqueValuesService.getUniqueValues$({
+              attribute: attribute,
+              layerId: layerId,
+              applicationId: viewerId,
+            }).pipe(
+              take(1),
+              map(response => response.values.map(v => `${v}`) || []),
+            ),
+          ),
+        ).pipe(
+          map((allLayerValues: string[][]) => Array.from(new Set(allLayerValues.flat()))),
+        );
+      }),
+    );
+
+
   }
 
 }
