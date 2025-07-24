@@ -1,30 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  selectCurrentFeatureForEdit,
   selectCurrentlySelectedFeature,
   selectFeatureInfoDialogCollapsed,
   selectFeatureInfoDialogVisible, selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers,
   selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled, selectMapCoordinates, selectSelectedFeatureInfoLayer,
+  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { map, Observable, combineLatest, take, first, switchMap } from 'rxjs';
+import { map, Observable, combineLatest, take } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
-import { CssHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { CssHelper } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  loadEditFeatures, setEditActive, setSelectedEditFeature, setSelectedEditLayer, showEditDialog,
-} from '../../edit/state/edit.actions';
+import { setEditActive, setLoadedEditFeature } from '../../edit/state/edit.actions';
 import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
-import { selectEditLoadStatus } from '../../edit/state/edit.selectors';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -157,22 +155,16 @@ export class FeatureInfoDialogComponent {
 
   public editFeature() {
     this.store$.dispatch(setEditActive({ active: true }));
-    this.store$.select(selectMapCoordinates).pipe(take(1)).subscribe(coordinates => {
-      if (coordinates) {
-        this.store$.dispatch(loadEditFeatures({ coordinates }));
-      }
-    });
-    this.store$.select(selectEditLoadStatus).pipe(
-      first(status => status === LoadingStateEnum.LOADED),
-      switchMap(() => this.currentFeature$.pipe(take(1))),
-    ).subscribe(feature => {
-      if (feature) {
-        this.store$.dispatch(hideFeatureInfoDialog());
-        this.store$.dispatch(setSelectedEditLayer({ layer: feature.layer.id }));
-        this.store$.dispatch(setSelectedEditFeature({ fid: feature.__fid }));
-        this.store$.dispatch(showEditDialog());
-      }
-    });
+    this.store$.select(selectCurrentFeatureForEdit)
+      .pipe(take(1))
+      .subscribe(featureWithMetadata => {
+        if (featureWithMetadata) {
+          this.store$.dispatch(setLoadedEditFeature({
+            feature: featureWithMetadata.feature,
+            columnMetadata: featureWithMetadata.columnMetadata,
+          }));
+        }
+      });
 
   }
 }
