@@ -7,13 +7,13 @@ import {
   selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectMapCoordinates, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { map, Observable, combineLatest, take } from 'rxjs';
+import { map, Observable, combineLatest, take, first, switchMap } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
 import { FeatureInfoModel } from '../models/feature-info.model';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { CssHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
@@ -24,6 +24,7 @@ import {
 } from '../../edit/state/edit.actions';
 import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { selectEditLoadStatus } from '../../edit/state/edit.selectors';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -161,13 +162,17 @@ export class FeatureInfoDialogComponent {
         this.store$.dispatch(loadEditFeatures({ coordinates }));
       }
     });
-    this.currentFeature$.pipe(take(1)).subscribe(feature => {
+    this.store$.select(selectEditLoadStatus).pipe(
+      first(status => status === LoadingStateEnum.LOADED),
+      switchMap(() => this.currentFeature$.pipe(take(1))),
+    ).subscribe(feature => {
       if (feature) {
+        this.store$.dispatch(hideFeatureInfoDialog());
         this.store$.dispatch(setSelectedEditLayer({ layer: feature.layer.id }));
         this.store$.dispatch(setSelectedEditFeature({ fid: feature.__fid }));
+        this.store$.dispatch(showEditDialog());
       }
     });
-    this.store$.dispatch(hideFeatureInfoDialog());
-    this.store$.dispatch(showEditDialog());
+
   }
 }
