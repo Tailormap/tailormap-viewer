@@ -236,11 +236,11 @@ export class MapService {
       this.map.setCenterAndZoom(center, zoom);
   }
 
-  public zoomTo(geometry: string, projectionCode: string) {
+  public zoomTo(geometry: string, projectionCode: string, maxZoom?: number) {
     this.getProjectionCode$()
       .pipe(take(1))
       .subscribe(mapProjection => {
-        this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection));
+        this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection), maxZoom);
       });
   }
 

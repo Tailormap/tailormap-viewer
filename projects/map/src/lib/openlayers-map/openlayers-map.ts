@@ -217,16 +217,16 @@ export class OpenLayersMap implements MapViewerModel {
     this.zoomToExtent(totalExtent);
   }
 
-  public zoomToGeometry(geom?: Geometry) {
+  public zoomToGeometry(geom?: Geometry, maxZoom?: number) {
     if (!geom) {
       return;
     }
-    this.zoomToExtent(geom.getExtent());
+    this.zoomToExtent(geom.getExtent(), maxZoom);
   }
 
-  private zoomToExtent(extent: Extent) {
+  private zoomToExtent(extent: Extent, maxZoom?: number) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding });
+      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
     });
   }
 

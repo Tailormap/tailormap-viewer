@@ -65,6 +65,9 @@
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-geolocation" datatype="html">
+        <source>Geolocation</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-header" datatype="html">
         <source>Header</source>
       </trans-unit>
@@ -1072,6 +1075,9 @@
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
