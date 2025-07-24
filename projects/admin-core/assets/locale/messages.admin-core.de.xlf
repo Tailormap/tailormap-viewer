@@ -283,7 +283,7 @@
         <target>Neuen Filter erstellen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
-        <source>Date Picker</source>
+        <source>Date picker</source>
         <target>Datumsauswahl</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
@@ -299,7 +299,7 @@
         <target>Startdatum bis</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
-        <source>Drop-down List</source>
+        <source>Drop-down list</source>
         <target>Dropdown-Liste</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">

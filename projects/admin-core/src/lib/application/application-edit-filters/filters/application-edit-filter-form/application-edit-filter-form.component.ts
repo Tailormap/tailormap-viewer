@@ -42,10 +42,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.switch:Switch`,
     value: FilterToolEnum.SWITCH,
   }, {
-    label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
+    label: $localize`:@@admin-core.application.filters.date-picker:Date picker`,
     value: FilterToolEnum.DATE_PICKER,
   }, {
-    label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down List`,
+    label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
   }];
 

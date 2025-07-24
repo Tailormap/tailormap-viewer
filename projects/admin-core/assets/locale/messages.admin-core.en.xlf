@@ -213,7 +213,7 @@
         <source>Create new filter</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
-        <source>Date Picker</source>
+        <source>Date picker</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
         <source>Initial date</source>
@@ -225,7 +225,7 @@
         <source>Initial upper date</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
-        <source>Drop-down List</source>
+        <source>Drop-down list</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>

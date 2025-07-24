@@ -282,7 +282,7 @@
         <target>Nieuw filter aanmaken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
-        <source>Date Picker</source>
+        <source>Date picker</source>
         <target>Datumkiezer</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
@@ -298,8 +298,8 @@
         <target>Initiële bovenste datum</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
-        <source>Drop-down List</source>
-        <target>Drop-down Lijst</target>
+        <source>Drop-down list</source>
+        <target>Drop-downlijst</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
