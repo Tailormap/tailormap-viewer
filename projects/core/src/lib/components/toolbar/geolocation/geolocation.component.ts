@@ -22,7 +22,8 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private activeWatchTimeout = -1;
 
   private static GEOLOCATION_TIMEOUT_MS = 12 * 1000;
-  private static MAX_ZOOM = 19;
+  private static MAX_ZOOM_EPSG_28992 = 19;
+  private static MAX_ZOOM_DEFAULT = 18;
 
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
@@ -95,7 +96,10 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
           if (!this.hasFix) {
             this.hasFix = true;
-            this.mapService.zoomTo(circleWkt, projectionCode, GeolocationComponent.MAX_ZOOM);
+            const maxZoom = projectionCode === 'EPSG:28992'
+              ? GeolocationComponent.MAX_ZOOM_EPSG_28992
+              : GeolocationComponent.MAX_ZOOM_DEFAULT;
+            this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
             if (!this.noTimeout) {
               this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
             }
