@@ -151,6 +151,12 @@ export class GeoServiceFormComponent implements OnInit {
     }
   }
 
+  public isAccessFromAnyoneDenied() {
+    const formHasAuthentication = this.formHasAuthentication();
+    const proxyEnabled = this.geoServiceForm.getRawValue().useProxy;
+    return formHasAuthentication && proxyEnabled;
+  }
+
   public getServerTypeDescription(serverType: AdminServerType) {
     switch(serverType) {
       case AdminServerType.AUTO:

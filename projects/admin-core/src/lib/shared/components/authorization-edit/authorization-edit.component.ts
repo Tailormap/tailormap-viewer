@@ -42,6 +42,14 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
   @Input()
   public selfType = '';
 
+  public _accessFromAnyoneDenied = false;
+
+  @Input()
+  public set accessFromAnyoneDenied(denied: boolean) {
+    this._accessFromAnyoneDenied = denied;
+    this.updateValue(this.value, false);
+  }
+
   @Input()
   public set groups(value: GroupModel[]) {
       this._groups = value;
@@ -95,7 +103,7 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
       this.destroyed.complete();
   }
 
-  private static chipForRules(rules: AuthorizationRuleGroup[]): 'inherit' | 'anonymous' | 'loggedIn' | 'specificGroups' {
+  private static chipForRules(rules: AuthorizationRuleGroup[], accessFromAnyoneDenied: boolean): 'inherit' | 'anonymous' | 'loggedIn' | 'specificGroups' {
       if (rules.length === 0) {
           return 'inherit';
       }
@@ -104,7 +112,7 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
       const loggedInGroup = rules.find(a => a.groupName === AuthorizationGroups.AUTHENTICATED);
 
       if (anonymousGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
-          return 'anonymous';
+          return accessFromAnyoneDenied ? 'loggedIn' : 'anonymous';
       } else if (loggedInGroup?.decisions?.['read'] === AuthorizationRuleDecision.ALLOW) {
           return 'loggedIn';
       } else {
@@ -123,7 +131,7 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
           this._onChange(value);
       }
 
-      let newChip = AuthorizationEditComponent.chipForRules(this.value);
+      let newChip = AuthorizationEditComponent.chipForRules(this.value, this._accessFromAnyoneDenied);
       // The 'inherit' chip value is lightly ambiguous, because in the case where we just selected "Specific groups",
       // it's possible no groups have been selected yet.
       if (this._parentAuthorizations !== null && newChip === 'inherit' && this.selectedChip === 'specificGroups') {
@@ -137,7 +145,7 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
       }
 
       if (this._parentAuthorizations !== null) {
-          this.parentChip = AuthorizationEditComponent.chipForRules(this._parentAuthorizations);
+          this.parentChip = AuthorizationEditComponent.chipForRules(this._parentAuthorizations, false);
 
           if (this.parentChip === 'specificGroups' && this.selectedChip === 'inherit') {
               this.selectedChip = 'specificGroups';

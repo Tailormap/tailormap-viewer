@@ -4,7 +4,7 @@
     <mat-chip-listbox [value]="selectedChip" (change)="changeAuthenticationType($event.value)">
       <mat-chip-option value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">
         <ng-container i18n="@@admin-core.authorizations.inherit-from">Inherit from</ng-container> {{parentType}} (<ng-container i18n="@@admin-core.authorizations.inherit-from-hint">{parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</ng-container>)</mat-chip-option>
-      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-anyone" value="anonymous" *ngIf="parentChip === undefined">Anyone</mat-chip-option>
+      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-anyone" value="anonymous" *ngIf="!_accessFromAnyoneDenied && parentChip === undefined">Anyone</mat-chip-option>
       <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-logged-in" value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
       <mat-chip-option value="specificGroups">
         <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups">Specific groups</ng-container>&nbsp;
