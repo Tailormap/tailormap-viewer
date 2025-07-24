@@ -51,13 +51,11 @@ import {
 import {
   ApplicationEditFilterComponent,
 } from './application/application-edit-filters/filter-group-edit/application-edit-filter.component';
-import { AdminAuthGuard } from './admin-auth.guard';
 
 export const adminRoutes: Routes = [
   {
     path: '',
     component: AdminTemplateComponent,
-    canActivate: [AdminAuthGuard],
     children: [
       {
         path: AdminRoutes.CATALOG,
@@ -175,8 +173,7 @@ export const adminRoutes: Routes = [
         children: [{
           path: '',
           component: FormHomeComponent,
-        },
-        {
+        }, {
           path: AdminRoutes.FORMS_CREATE,
           component: FormCreateComponent,
         },
@@ -193,8 +190,7 @@ export const adminRoutes: Routes = [
         children: [{
           path: '',
           component: SearchIndexHomeComponent,
-        },
-        {
+        }, {
           path: AdminRoutes.SEARCH_INDEXES_CREATE,
           component: SearchIndexCreateComponent,
         },
