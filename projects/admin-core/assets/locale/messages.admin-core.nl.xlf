@@ -637,6 +637,10 @@
         <source>Read</source>
         <target>Lezen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
+        <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
+        <target>Omdat deze service beveiligd is en geproxied wordt, is deze niet toegankelijk zonder in te loggen. Dit is een beveiligingsmaatregel om te voorkomen dat onbedoeld gevoelige lagen voor iedereen geopenbaard worden.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
         <target>Feature source toevoegen</target>

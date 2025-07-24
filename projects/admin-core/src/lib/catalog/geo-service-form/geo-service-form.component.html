@@ -63,5 +63,9 @@
       </mat-select>
     </mat-form-field>
   }
-  <tm-admin-authorization-edit class="authorization-edit" formControlName="authorizationRules" [groups]="(groups$ | async) ?? []"></tm-admin-authorization-edit>
+  @if (isAccessFromAnyoneDenied()) {
+    <p i18n="@@admin-core.catalog.access-restriction-hint">Because this service requires authentication and is proxied, this service is not
+      accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</p>
+  }
+  <tm-admin-authorization-edit class="authorization-edit" [accessFromAnyoneDenied]="isAccessFromAnyoneDenied()" formControlName="authorizationRules" [groups]="(groups$ | async) ?? []"></tm-admin-authorization-edit>
 </form>
