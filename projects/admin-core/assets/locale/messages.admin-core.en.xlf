@@ -65,6 +65,9 @@
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-geolocation" datatype="html">
+        <source>Geolocation</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-header" datatype="html">
         <source>Header</source>
       </trans-unit>
@@ -170,6 +173,9 @@
       <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
         <source>Choose attribute</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
       </trans-unit>
@@ -210,7 +216,7 @@
         <source>Create new filter</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
-        <source>Date Picker</source>
+        <source>Date picker</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
         <source>Initial date</source>
@@ -220,6 +226,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
         <source>Initial upper date</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
+        <source>Drop-down list</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
@@ -469,6 +478,9 @@
       </trans-unit>
       <trans-unit id="admin-core.authorizations.read" datatype="html">
         <source>Read</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
+        <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
@@ -926,6 +938,9 @@
       <trans-unit id="admin-core.common.filter-dots" datatype="html">
         <source>Filter...</source>
       </trans-unit>
+      <trans-unit id="admin-core.common.filter-values" datatype="html">
+        <source>Filter values</source>
+      </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
       </trans-unit>
@@ -1063,6 +1078,9 @@
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>

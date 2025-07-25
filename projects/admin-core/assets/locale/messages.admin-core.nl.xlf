@@ -86,6 +86,10 @@
         <source>Filter</source>
         <target>Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-geolocation" datatype="html">
+        <source>Geolocation</source>
+        <target>Geolocatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-header" datatype="html">
         <source>Header</source>
         <target>Header</target>
@@ -226,6 +230,10 @@
         <source>Choose attribute</source>
         <target>Kies attribuut</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+        <target>Kies waarde</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Initieel geselecteerd</target>
@@ -278,7 +286,7 @@
         <target>Nieuw filter aanmaken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
-        <source>Date Picker</source>
+        <source>Date picker</source>
         <target>Datumkiezer</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
@@ -292,6 +300,10 @@
       <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
         <source>Initial upper date</source>
         <target>Initiële bovenste datum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
+        <source>Drop-down list</source>
+        <target>Drop-downlijst</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
         <source>Edit filter</source>
@@ -624,6 +636,10 @@
       <trans-unit id="admin-core.authorizations.read" datatype="html">
         <source>Read</source>
         <target>Lezen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
+        <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
+        <target>Omdat deze service beveiligd is en geproxied wordt, is deze niet toegankelijk zonder in te loggen. Dit is een beveiligingsmaatregel om te voorkomen dat onbedoeld gevoelige lagen voor iedereen geopenbaard worden.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
@@ -1257,6 +1273,10 @@
         <source>Filter...</source>
         <target>Filteren...</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.filter-values" datatype="html">
+        <source>Filter values</source>
+        <target>Filter waardes</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
         <target>Formulieren</target>
@@ -1444,6 +1464,10 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Objectinformatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>

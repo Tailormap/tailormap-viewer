@@ -71,10 +71,13 @@ export class DrawingObjectsListComponent {
     this.editingDescriptionForFeatureFid = null;
   }
 
+  private srcolledToFeature: string | null = null;
+
   private scrollToSelectedFeature() {
-    if (!this.isExpanded() || !this.selectedFeature || !this.elRef || !this.elRef.nativeElement) {
+    if (!this.isExpanded() || !this.selectedFeature || !this.elRef || !this.elRef.nativeElement || this.srcolledToFeature === this.selectedFeature) {
       return;
     }
+    this.srcolledToFeature = this.selectedFeature;
     this.elRef.nativeElement.querySelector(`[data-feature-fid="${this.selectedFeature}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
