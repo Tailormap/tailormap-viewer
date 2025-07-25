@@ -1473,6 +1473,10 @@
         <source>Show location on the map until the button is toggled off.</source>
         <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
+        <source>Show button to edit the feature</source>
+        <target>Toon knop om het object te bewerken</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
         <target>Menu item toevoegen</target>

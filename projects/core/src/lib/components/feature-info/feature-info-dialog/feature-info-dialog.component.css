@@ -133,3 +133,8 @@ tm-feature-info-layer-dropdown {
 .buttons button + button {
   margin-left: 14px;
 }
+
+.edit-feature-button {
+  flex: 0 0 36px;
+  margin-left: 14px;
+}

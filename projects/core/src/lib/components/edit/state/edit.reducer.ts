@@ -106,6 +106,22 @@ const onSetSelectedEditFeature = (
   isCreateNewFeatureActive: false,
 });
 
+const onSetLoadedEditFeature = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.setLoadedEditFeature>,
+): EditState => {
+  return {
+    ...state,
+    features: [payload.feature],
+    columnMetadata: payload.columnMetadata,
+    loadStatus: LoadingStateEnum.LOADED,
+    selectedFeature: payload.feature.__fid,
+    dialogVisible: true,
+    dialogCollapsed: false,
+    selectedLayer: payload.feature.layerId,
+  };
+};
+
 const onShowEditDialog = (state: EditState): EditState => ({
   ...state,
   dialogVisible: true,
@@ -165,6 +181,7 @@ const editReducerImpl = createReducer<EditState>(
   on(EditActions.loadEditFeaturesSuccess, onLoadEditFeaturesSuccess),
   on(EditActions.loadEditFeaturesFailed, onLoadEditFeaturesFailed),
   on(EditActions.setSelectedEditFeature, onSetSelectedEditFeature),
+  on(EditActions.setLoadedEditFeature, onSetLoadedEditFeature),
   on(EditActions.showEditDialog, onShowEditDialog),
   on(EditActions.hideEditDialog, onHideEditDialog),
   on(EditActions.expandCollapseEditDialog, onExpandCollapseEditDialog),

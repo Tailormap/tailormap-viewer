@@ -486,6 +486,10 @@
         <source>Update feature failed</source>
         <target>Object bijwerken mislukt</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
+        <source>Edit feature</source>
+        <target>Object bewerken</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
         <target>Er is iets misgegaan bij het ophalen van de objectinformatie, probeer het opnieuw</target>
