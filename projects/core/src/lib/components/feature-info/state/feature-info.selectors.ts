@@ -152,8 +152,9 @@ export const selectCurrentFeatureForEdit = createSelector(
         ...feature,
         attributes: newAttributes,
       };
+      const filteredMetadata = featureInfoMetadata.filter(m => m.layerId === feature.layerId);
       const newColumnMetadata = [
-        ...featureInfoMetadata,
+        ...filteredMetadata,
         {
           layerId: feature.layerId,
           key: 'geom',
