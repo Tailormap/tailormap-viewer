@@ -1,3 +1,8 @@
+.dropdown-list-filter-hint {
+  margin-top: 8px;
+  max-width: 550px;
+}
+
 .dropdown-list-table {
   width: 550px;
 }

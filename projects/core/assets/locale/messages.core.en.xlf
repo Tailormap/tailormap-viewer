@@ -413,6 +413,9 @@
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
       </trans-unit>
+      <trans-unit id="core.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+      </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
       </trans-unit>
