@@ -66,7 +66,7 @@ describe('DrawingComponent', () => {
   });
 
   test('removes all / selected features', async () => {
-    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
+    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getUpdatedDefaultStyle() } };
     const { confirmServiceMock } = await setup(true, [
       { selector: selectSelectedDrawingType, value: null },
       { selector: selectSelectedDrawingFeature, value: selectedFeature },
