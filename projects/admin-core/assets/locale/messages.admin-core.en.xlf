@@ -122,6 +122,9 @@
       <trans-unit id="admin-core.application.delete-application-message" datatype="html">
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.dropdown-list-filter.hint" datatype="html">
+        <source> All unique values will be displayed in the dropdown list, unless altered below. </source>
+      </trans-unit>
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
       </trans-unit>
@@ -174,7 +177,7 @@
         <source>Choose attribute</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
-        <source>Choose value</source>
+        <source>Choose value to alter</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>

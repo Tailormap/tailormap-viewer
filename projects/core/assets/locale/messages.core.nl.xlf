@@ -554,6 +554,10 @@
         <source>Case sensitive</source>
         <target>Hoofdlettergevoelig</target>
       </trans-unit>
+      <trans-unit id="core.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+        <target>Waarde kiezen</target>
+      </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
         <target>Waardes kiezen</target>
