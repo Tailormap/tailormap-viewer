@@ -147,7 +147,12 @@ export const selectCurrentFeatureForEdit = createSelector(
     }
     const feature = features.find(f => f.__fid === selectedLayer.selectedFeatureId);
     if (feature && featureInfoMetadata) {
-      const newAttributes = { ...feature.attributes, geom: feature.geometry };
+      const geometryAttributeName = featureInfoMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.key;
+      if (!geometryAttributeName) {
+        return null;
+      }
+      const newAttributes = { ...feature.attributes };
+      newAttributes[geometryAttributeName] = feature.geometry;
       const newFeature: FeatureInfoFeatureModel = {
         ...feature,
         attributes: newAttributes,
@@ -157,7 +162,7 @@ export const selectCurrentFeatureForEdit = createSelector(
         ...filteredMetadata,
         {
           layerId: feature.layerId,
-          key: 'geom',
+          key: geometryAttributeName,
           type: AttributeType.GEOMETRY,
         },
       ];
