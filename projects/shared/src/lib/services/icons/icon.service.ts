@@ -21,7 +21,9 @@ export class IconService {
     'check', 'check_all', 'uncheck_all', 'edit', 'edit_square', 'info', 'reset', 'reorder', 'location_searching',
     'visibility_off', 'visibility', 'my_location', 'key', 'settings', 'fullscreen', 'fullscreen_exit', 'show_position', 'map',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'diamond' ] },
-    { folder: 'components', icons: [ 'attribute_list', 'legend', 'table_of_contents', 'drawing', 'print', 'filter', 'coordinate_link_window' ] },
+    { folder: 'components', icons: [
+      'attribute_list', 'legend', 'table_of_contents', 'drawing', 'print', 'filter', 'coordinate_link_window', 'info_menu_button',
+      ] },
     {
       folder: 'tools',
       icons: [

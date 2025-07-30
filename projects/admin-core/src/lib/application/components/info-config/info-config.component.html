@@ -1,0 +1,8 @@
+<tm-admin-base-component-config [type]="type"
+                                [label]="label"
+                                [config]="config">
+  <div [formGroup]="formGroup">
+    <mat-checkbox formControlName="openOnStartup"
+                  i18n="@@admin-core.components.info-open-on-startup">Open info component on start-up</mat-checkbox>
+  </div>
+</tm-admin-base-component-config>

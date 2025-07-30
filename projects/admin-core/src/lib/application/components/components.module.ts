@@ -14,6 +14,7 @@ import { HeaderComponentConfigComponent } from './header-config/header-component
 import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
+import { InfoConfigComponent } from './info-config/info-config.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { GeolocationConfigComponent } from './geolocation-config/geolocation-con
     HeaderComponentConfigComponent,
     EditComponentConfigComponent,
     GeolocationConfigComponent,
+    InfoConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -60,5 +62,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.INFO, $localize `:@@admin-core.application.component-info:Info`, InfoConfigComponent);
   }
 }

@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MenubarModule } from '../menubar';
 import { InfoComponent } from './info/info.component';
+import { InfoMenuButtonComponent } from './info-menu-button/info-menu-button.component';
 
 @NgModule({
   declarations: [
-    InfoComponent
+    InfoComponent,
+    InfoMenuButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -14,6 +16,7 @@ import { InfoComponent } from './info/info.component';
     MenubarModule,
   ],
   exports: [
+    InfoComponent,
   ],
 })
 export class InfoModule { }
