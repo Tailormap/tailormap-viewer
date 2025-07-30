@@ -52,6 +52,9 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public dragHandleSelector?: string;
 
+  @Input()
+  public extendedDropzone?: boolean;
+
   @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
   private treeElement: CdkVirtualScrollViewport | undefined;
 
@@ -64,6 +67,8 @@ export class TreeComponent implements OnInit, OnDestroy {
   private checkedRadioNode: FlatTreeModel | undefined;
 
   private destroyed = new Subject();
+
+  public extendedDropzoneClass: string = TreeDragDropService.EXTENDED_DROPZONE_CLASS;
 
   constructor(
     private treeService: TreeService,
