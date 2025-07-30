@@ -550,6 +550,10 @@
         <source>Case sensitive</source>
         <target>Unterscheidung zwischen Groß- und Kleinschreibung</target>
       </trans-unit>
+      <trans-unit id="core.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+        <target>Wert auswählen</target>
+      </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
         <target>Werte auswählen</target>
