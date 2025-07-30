@@ -365,6 +365,9 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
+        <source>Edit feature</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
       </trans-unit>

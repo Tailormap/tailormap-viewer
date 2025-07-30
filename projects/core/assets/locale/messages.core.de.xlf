@@ -486,6 +486,10 @@
         <source>Update feature failed</source>
         <target>Objektaktualisierung fehlgeschlagen</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
+        <source>Edit feature</source>
+        <target>Objekt bearbeiten</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
         <target>Beim Abrufen der Objektinformationen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut</target>

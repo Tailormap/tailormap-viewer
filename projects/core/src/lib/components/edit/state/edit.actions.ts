@@ -42,6 +42,11 @@ export const setSelectedEditFeature = createAction(
     props<{ fid: string | null }>(),
 );
 
+export const setLoadedEditFeature = createAction(
+  `${editActionsPrefix} Set Loaded Edit Feature`,
+  props<{ feature: FeatureInfoFeatureModel; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+);
+
 export const showEditDialog = createAction(`${editActionsPrefix} Show Edit Dialog`);
 export const hideEditDialog = createAction(`${editActionsPrefix} Hide Edit Dialog`);
 export const expandCollapseEditDialog = createAction(`${editActionsPrefix} Expand/Collapse Edit Dialog`);

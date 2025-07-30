@@ -4,8 +4,9 @@ import { ArrayHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { selectLayersWithServices } from '../../../map/state/map.selectors';
-import { AttributeTypeHelper } from '@tailormap-viewer/api';
+import { AttributeType, AttributeTypeHelper } from '@tailormap-viewer/api';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
+import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -133,5 +134,35 @@ export const selectFeatureInfoLayerListItems = createSelector(
       selected: l.id === selectedLayerId,
       disabled: FeatureInfoHelper.isLayerDisabled(l),
     }));
+  },
+);
+
+export const selectCurrentFeatureForEdit = createSelector(
+  selectFeatureInfoFeatures,
+  selectSelectedFeatureInfoLayer,
+  selectFeatureInfoMetadata,
+  (features, selectedLayer, featureInfoMetadata) => {
+    if (!selectedLayer || !selectedLayer.selectedFeatureId) {
+      return null;
+    }
+    const feature = features.find(f => f.__fid === selectedLayer.selectedFeatureId);
+    if (feature && featureInfoMetadata) {
+      const filteredMetadata = featureInfoMetadata.filter(m => m.layerId === feature.layerId);
+      const geometryAttributeName = filteredMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.key;
+      if (!geometryAttributeName) {
+        return null;
+      }
+      const newAttributes = { ...feature.attributes };
+      newAttributes[geometryAttributeName] = feature.geometry;
+      const newFeature: FeatureInfoFeatureModel = {
+        ...feature,
+        attributes: newAttributes,
+      };
+      return {
+        feature: newFeature,
+        columnMetadata: filteredMetadata,
+      };
+    }
+    return null;
   },
 );
