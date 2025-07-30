@@ -147,7 +147,8 @@ export const selectCurrentFeatureForEdit = createSelector(
     }
     const feature = features.find(f => f.__fid === selectedLayer.selectedFeatureId);
     if (feature && featureInfoMetadata) {
-      const geometryAttributeName = featureInfoMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.key;
+      const filteredMetadata = featureInfoMetadata.filter(m => m.layerId === feature.layerId);
+      const geometryAttributeName = filteredMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.key;
       if (!geometryAttributeName) {
         return null;
       }
@@ -157,18 +158,9 @@ export const selectCurrentFeatureForEdit = createSelector(
         ...feature,
         attributes: newAttributes,
       };
-      const filteredMetadata = featureInfoMetadata.filter(m => m.layerId === feature.layerId);
-      const newColumnMetadata = [
-        ...filteredMetadata,
-        {
-          layerId: feature.layerId,
-          key: geometryAttributeName,
-          type: AttributeType.GEOMETRY,
-        },
-      ];
       return {
         feature: newFeature,
-        columnMetadata: newColumnMetadata,
+        columnMetadata: filteredMetadata,
       };
     }
     return null;
