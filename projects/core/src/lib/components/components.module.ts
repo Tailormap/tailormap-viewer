@@ -13,6 +13,7 @@ import { FilterComponentModule } from './filter/filter-component.module';
 import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 import { HeaderModule } from './header';
+import { InfoModule } from './info';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { HeaderModule } from './header';
     EditComponentModule,
     HeaderModule,
     RegisteredComponentsModule,
+    InfoModule,
   ],
 })
 export class ComponentsModule {}
