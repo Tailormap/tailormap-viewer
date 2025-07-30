@@ -140,6 +140,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   private static defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
+    description: undefined,
     secondaryStroke: undefined,
     tertiaryStroke: undefined,
     dashOffset: 0,
@@ -291,9 +292,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
       label: '',
     };
     this.lockedStyle.set(style.lockedStyle ?? false);
+
     if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
-      this.customRectangleWidth = style.rectangleSize.width;
-      this.customRectangleHeight = style.rectangleSize.height;
+      // Do not use setters here, those will call resetBeforeDrawing()
+      this._customRectangleWidth = style.rectangleSize.width;
+      this._customRectangleHeight = style.rectangleSize.height;
     }
 
     if (this.activeTool !== style.type) {
