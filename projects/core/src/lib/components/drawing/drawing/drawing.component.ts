@@ -37,7 +37,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public drawingLayerId = 'drawing-layer';
   public active$: Observable<boolean> = of(false);
   public selectedFeature: DrawingFeatureModel | null = null;
-  public style: DrawingFeatureStyleModel = DrawingHelper.getDefaultStyle();
+  public style: DrawingFeatureStyleModel = DrawingHelper.getUpdatedDefaultStyle();
   public lockedStyle = signal<boolean>(false);
   public selectedDrawingType: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
@@ -139,10 +139,23 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  public draw(type: DrawingFeatureTypeEnum) {
-    this.style = DrawingHelper.getDefaultStyle();
+  private static defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
+    description: undefined,
+    secondaryStroke: undefined,
+    tertiaryStroke: undefined,
+    dashOffset: 0,
+    strokeOffset: 0,
+  };
+
+  private resetBeforeDrawing() {
+    DrawingHelper.updateDefaultStyle(DrawingComponent.defaultNonUserEditableStyle);
+    this.style = DrawingHelper.getUpdatedDefaultStyle();
     this.lockedStyle.set(false);
     this.drawingStylesService.setSelectedDrawingStyle(null);
+  }
+
+  public draw(type: DrawingFeatureTypeEnum) {
+    this.resetBeforeDrawing();
     if (this.activeTool !== type) {
       this.drawingService.toggle(type, this.showMeasures());
     }
@@ -266,7 +279,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this.selectedFeature) {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
-      this.style = DrawingHelper.getDefaultStyle();
+      this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: style.label };
     }
   }
 
@@ -279,9 +292,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
       label: '',
     };
     this.lockedStyle.set(style.lockedStyle ?? false);
+
     if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
-      this.customRectangleWidth = style.rectangleSize.width;
-      this.customRectangleHeight = style.rectangleSize.height;
+      // Do not use setters here, those will call resetBeforeDrawing()
+      this._customRectangleWidth = style.rectangleSize.width;
+      this._customRectangleHeight = style.rectangleSize.height;
     }
 
     if (this.activeTool !== style.type) {
@@ -311,6 +326,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawRectangle() {
+    this.resetBeforeDrawing();
     if (this.customRectangleWidth !== null && this.customRectangleWidth >= this.SIZE_MAX && this.customRectangleWidth <= this.SIZE_MIN
       && this.customRectangleHeight !== null && this.customRectangleHeight >= this.SIZE_MAX && this.customRectangleHeight <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE) {
@@ -350,6 +366,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawCircle() {
+    this.resetBeforeDrawing();
     this.customCircleRadius = this._customCircleRadius;
   }
 }
