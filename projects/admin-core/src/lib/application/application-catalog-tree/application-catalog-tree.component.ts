@@ -92,6 +92,8 @@ export class ApplicationCatalogTreeComponent implements OnInit {
       expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
       getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
       nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
+      getExtendedDropzoneElement: () => document.querySelector('.application-tree .extended-dropzone'),
+      getRootNodeId: () => this.applicationTreeService?.getRootNodeId() || null,
     }];
   }
 

@@ -254,4 +254,8 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     return this.nodesMap.get(nodeId);
   }
 
+  public getRootNodeId(): string | null {
+    return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
+  }
+
 }

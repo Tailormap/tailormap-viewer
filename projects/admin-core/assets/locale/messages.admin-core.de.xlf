@@ -162,6 +162,10 @@
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
         <target>Möchten Sie die Anwendung <x id="PH" equiv-text="title"/> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.dropdown-list-filter.hint" datatype="html">
+        <source> All unique values will be displayed in the dropdown list, unless altered below. </source>
+        <target> Alle eindeutigen Werte werden in der Dropdown-Liste angezeigt, sofern sie unten nicht geändert werden. </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
         <target>Bearbeiten von<x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
@@ -231,8 +235,8 @@
         <target>Attribut auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
-        <source>Choose value</source>
-        <target>Wert wählen</target>
+        <source>Choose value to alter</source>
+        <target>zu ändernden Wert auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
@@ -1469,6 +1473,10 @@
       <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
         <source>Show location on the map until the button is toggled off.</source>
         <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
+        <source>Show button to edit the feature</source>
+        <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

@@ -4,7 +4,13 @@
                                 i18n-titleLabel="@@admin-core.components.feature-info-title"
                                 titleLabel="Feature info">
   <div class="url-form" [formGroup]="formGroup">
-    <mat-checkbox formControlName="defaultShowDropdown"
-                  i18n="@@admin-core.components.feature-info-defaultShowDropdown">Use dropdown to select feature info layers by default</mat-checkbox>
+    <div class="show-dropdown-option">
+      <mat-checkbox formControlName="defaultShowDropdown"
+                    i18n="@@admin-core.components.feature-info-defaultShowDropdown">Use dropdown to select feature info layers by default</mat-checkbox>
+    </div>
+    <div class="show-edit-button-option">
+      <mat-checkbox formControlName="showEditButton"
+                    i18n="@@admin-core.components.feature-info.show-edit-button">Show button to edit the feature</mat-checkbox>
+    </div>
   </div>
 </tm-admin-base-component-config>
