@@ -39,7 +39,7 @@ export class DrawingHelper {
     StrokeTypeEnum.DOT,
   ];
 
-  private static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
+  public static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
     const labelStyleModel: LabelDrawingFeatureStyleModel = {
       description: style.description,
       label: style.label,

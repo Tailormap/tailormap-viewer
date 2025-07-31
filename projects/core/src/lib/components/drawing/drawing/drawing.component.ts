@@ -9,7 +9,9 @@ import {
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
-import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import {
+  DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelDrawingFeatureStyleModel,
+} from '../models/drawing-feature.model';
 import {
   addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingType, setSelectedFeature, updateDrawingFeatureStyle,
   updateSelectedDrawingFeatureGeometry,
@@ -280,6 +282,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
       this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: style.label };
+    }
+  }
+
+  public featureLabelStyleUpdates(labelStyle: LabelDrawingFeatureStyleModel) {
+    DrawingHelper.updateDefaultStyle({
+      ...labelStyle,
+      label: '',
+    });
+    if (this.selectedFeature) {
+      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style: { ...this.style, ...labelStyle } }));
+    } else {
+      this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: labelStyle.label };
     }
   }
 
