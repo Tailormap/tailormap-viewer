@@ -30,8 +30,15 @@ const DEFAULT_WIDTH = 300;
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
+  public _open = false;
+
   @Input()
-  public open: boolean | null = false;
+  public set open(open: boolean | null) {
+    this._open = open ?? false;
+    console.log("open: ", open, this.dialogId);
+    // this.updateActualWidth();
+    // this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
+  };
 
   @Input()
   public dialogTitle = '';
@@ -66,6 +73,9 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   public toggleFullscreenDialog = new EventEmitter<boolean>();
 
+  @Output()
+  public dialogRegistered = new EventEmitter<string>();
+
   public fullscreen = false;
 
   @HostBinding('class')
@@ -88,6 +98,10 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit(): void {
     this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());
+    console.log("Dialog ID: ", this.dialogId);
+    if (this.dialogId) {
+      this.dialogRegistered.emit(this.dialogId);
+    }
   }
 
   public ngOnDestroy(): void {
@@ -95,6 +109,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    console.log("onChanges: ", this.dialogId);
     this.updateActualWidth();
     if (
       changes['hidden']?.currentValue !== changes['hidden']?.previousValue ||
@@ -112,7 +127,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getHidden() {
-    return !this.open || this.hidden;
+    return !this._open || this.hidden;
   }
 
   private getLeft() {
