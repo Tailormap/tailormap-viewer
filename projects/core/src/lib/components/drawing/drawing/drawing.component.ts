@@ -279,7 +279,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this.selectedFeature) {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
-      this.style = DrawingHelper.getUpdatedDefaultStyle();
+      this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: style.label };
     }
   }
 

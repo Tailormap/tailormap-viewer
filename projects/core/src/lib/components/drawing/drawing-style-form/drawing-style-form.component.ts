@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum } from '../models/drawing-feature.model';
+import {
+  ArrowTypeEnum, DrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum,
+} from '../models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { FormControl } from '@angular/forms';
@@ -19,6 +21,9 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
 export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   private _style: DrawingFeatureStyleModel = {};
+
+  @Input()
+  public onlyLabelSettings: boolean = false;
 
   @Input()
   public set style (style: DrawingFeatureStyleModel) {
@@ -64,7 +69,8 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public labelStyleValues = { bold: LabelStyleEnum.BOLD, italic: LabelStyleEnum.ITALIC };
 
   private debounce: number | undefined;
-  private updatedProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[] | number[]> = new Map();
+  private updatedStyleProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[] | number[]> = new Map();
+
   private destroyed = new Subject();
 
   public iconColor = ApplicationStyleService.getPrimaryColor();
@@ -98,11 +104,11 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showIconSettings() {
-    return this.type === DrawingFeatureTypeEnum.IMAGE;
+    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.IMAGE;
   }
 
   public showPointSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.POINT;
+    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.POINT;
   }
 
   public showLabelSettings(): boolean {
@@ -126,22 +132,22 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public showLineSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.LINE || this.showPolygonSettings();
+    return !this.onlyLabelSettings && (this.type === DrawingFeatureTypeEnum.LINE || this.showPolygonSettings());
   }
 
   public showPolygonSettings(): boolean {
-    return this.type === DrawingFeatureTypeEnum.CIRCLE
+    return !this.onlyLabelSettings && (this.type === DrawingFeatureTypeEnum.CIRCLE
       || this.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS
       || this.type === DrawingFeatureTypeEnum.POLYGON
       || this.type === DrawingFeatureTypeEnum.RECTANGLE
       || this.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
       || this.type === DrawingFeatureTypeEnum.SQUARE
       || this.type === DrawingFeatureTypeEnum.STAR
-      || this.type === DrawingFeatureTypeEnum.ELLIPSE;
+      || this.type === DrawingFeatureTypeEnum.ELLIPSE);
   }
 
   public showArrowSetting(): boolean {
-    return this.type === DrawingFeatureTypeEnum.LINE;
+    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.LINE;
   }
 
   public formatThumb(value: number) {
@@ -276,19 +282,19 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[] | number[]) {
-    this.updatedProps.set(key, value);
+    this.updatedStyleProps.set(key, value);
     if (this.debounce) {
       window.clearTimeout(this.debounce);
     }
-    this.debounce = window.setTimeout(() => this.saveStyle(), 10);
+    this.debounce = window.setTimeout(() => this.emitUpdatedStyle(), 10);
   }
 
-  private saveStyle() {
+  private emitUpdatedStyle() {
     let style = { ...this.style };
-    this.updatedProps.forEach((value, key) => {
+    this.updatedStyleProps.forEach((value, key) => {
       style = { ...style, [key]: value };
     });
     this.styleUpdated.emit(style);
-    this.updatedProps.clear();
+    this.updatedStyleProps.clear();
   }
 }
