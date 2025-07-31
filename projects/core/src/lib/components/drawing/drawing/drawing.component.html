@@ -168,7 +168,8 @@
         [type]="selectedDrawingType"
         [style]="style"
         [onlyLabelSettings]="lockedStyle()"
-        (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+        (styleUpdated)="featureStyleUpdates($event)"
+        (labelStyleUpdated)="featureLabelStyleUpdates($event)"></tm-drawing-style-form>
       @if (lockedStyle()) {
         <div class="locked-style" i18n="@@core.drawing.locked-style">The style for this drawing object cannot be changed.</div>
       }
