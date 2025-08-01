@@ -30,7 +30,6 @@ export class DialogService {
   }
 
   public dialogChanged(id: string, left: number, right: number) {
-    console.log("dialogChanged: ", id, left, right);
     this.dialogs = this.dialogs.map(dialog => {
       if (dialog.id === id) {
         return { ...dialog, left, right };
@@ -53,7 +52,6 @@ export class DialogService {
   }
 
   private updateStyle() {
-    console.log("dialog left: ", Math.max(...this.dialogs.map(d => d.left)));
     const maxDialogLeftWidth = this.dialogs.length === 0
       ? 0
       : Math.max(...this.dialogs.map(d => d.left));

@@ -1,9 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from "@tailormap-viewer/api";
 import { InfoMenuButtonComponent } from "../info-menu-button/info-menu-button.component";
 import { ComponentConfigHelper } from "../../../shared/helpers/component-config.helper";
 import { Store } from "@ngrx/store";
 import { MenubarService } from '../../menubar';
+import { MarkdownHelper } from '@tailormap-viewer/shared';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'tm-info',
@@ -15,16 +18,24 @@ import { MenubarService } from '../../menubar';
 export class InfoComponent implements OnInit {
 
   private openOnStartup = false;
+  public template = signal<SafeHtml | null>(null);
 
   constructor(
     private store$: Store,
-      private menubarService: MenubarService,
+    private sanitizer: DomSanitizer,
+    private menubarService: MenubarService,
   ) {
     ComponentConfigHelper.useInitialConfigForComponent<InfoComponentConfigModel>(
       store$,
       BaseComponentTypeEnum.INFO,
       config => {
         this.openOnStartup = config.openOnStartup ?? false;
+        MarkdownHelper.getSafeHtmlForMarkdown$(config.templateContent ?? '', this.sanitizer)
+          .pipe(take(1))
+          .subscribe(html => {
+            console.log(html);
+            this.template.set(html);
+          })
       },
     );
   }

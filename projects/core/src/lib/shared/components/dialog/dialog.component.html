@@ -1,4 +1,4 @@
-<div *ngIf="_open"
+<div *ngIf="open"
      [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? actualWidth + 'px' : (-1 * actualWidth) + 'px' }}"
      class="dialog mat-elevation-z4"
      (keyup.escape)="toggleFullscreen(false)"
