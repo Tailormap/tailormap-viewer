@@ -179,7 +179,8 @@
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
-            ]
+            ],
+            "prettyNestedTags": true
           }
         },
         "lint": {
