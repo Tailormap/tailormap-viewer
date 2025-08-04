@@ -91,7 +91,7 @@
       @if (loadingUniqueValues) {
         <mat-spinner mode="indeterminate" diameter="20"></mat-spinner>
       }
-      @for (uniqueValue of uniqueValues; track trackByIndex(i, uniqueValue); let i = $index) {
+      @for (uniqueValue of uniqueValues; track trackByIndex(i); let i = $index) {
         <mat-checkbox [checked]="uniqueValue.selected" (change)="toggleUniqueValue(uniqueValue.value)">{{uniqueValue.value}}</mat-checkbox>
       }
     </div>
