@@ -1,22 +1,28 @@
-<ng-template #buttonWithMenuTrigger>
-  <button *ngIf="menuTrigger"
-          mat-icon-button
-          (click)="handleClick()"
-          [matMenuTriggerFor]="menuTrigger"
-          [tmTooltip]="tooltip || ''"
-          matTooltipPosition="right"
-          [class.button--active]="(active$ | async) ?? false">
-    <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>
-    <ng-content></ng-content>
-  </button>
-</ng-template>
-<ng-container *ngIf="!menuTrigger; else: buttonWithMenuTrigger">
+
+@if (!menuTrigger) {
   <button mat-icon-button
-          (click)="handleClick()"
-          [tmTooltip]="tooltip || ''"
-          matTooltipPosition="right"
-          [class.button--active]="(active$ | async) ?? false">
-    <mat-icon *ngIf="icon" [svgIcon]="icon"></mat-icon>
+    (click)="handleClick()"
+    [tmTooltip]="tooltip || ''"
+    matTooltipPosition="right"
+    [class.button--active]="(active$ | async) ?? false">
+    @if (icon) {
+      <mat-icon [svgIcon]="icon"></mat-icon>
+    }
     <ng-content></ng-content>
   </button>
-</ng-container>
+} @else {
+  @if (menuTrigger) {
+    <button
+      mat-icon-button
+      (click)="handleClick()"
+      [matMenuTriggerFor]="menuTrigger"
+      [tmTooltip]="tooltip || ''"
+      matTooltipPosition="right"
+      [class.button--active]="(active$ | async) ?? false">
+      @if (icon) {
+        <mat-icon [svgIcon]="icon"></mat-icon>
+      }
+      <ng-content></ng-content>
+    </button>
+  }
+}

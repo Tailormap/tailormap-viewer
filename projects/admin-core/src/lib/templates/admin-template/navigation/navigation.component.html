@@ -1,74 +1,82 @@
 <ng-template #menuButton let-buttonPropsInput>
-  <ng-container *ngIf="getButtonProps(buttonPropsInput) as buttonProps">
+  @if (getButtonProps(buttonPropsInput); as buttonProps) {
     @if (!buttonProps.checkEnabled$ || (buttonProps.checkEnabled$ | async)) {
       <button mat-flat-button
-              class="menu-button"
-              [routerLink]="buttonProps.link"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{exact: buttonProps.matchExact}"
-              [tmTooltip]="buttonProps.label"
-              [class.has-submenu]="buttonProps.subMenu"
-              matTooltipPosition="right">
-        <mat-icon *ngIf="buttonProps.icon" [svgIcon]="buttonProps.icon"></mat-icon>
-        <span *ngIf="buttonProps.label" class="menu-button-label">{{ buttonProps.label }}</span>
+        class="menu-button"
+        [routerLink]="buttonProps.link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: buttonProps.matchExact}"
+        [tmTooltip]="buttonProps.label"
+        [class.has-submenu]="buttonProps.subMenu"
+        matTooltipPosition="right">
+        @if (buttonProps.icon) {
+          <mat-icon [svgIcon]="buttonProps.icon"></mat-icon>
+        }
+        @if (buttonProps.label) {
+          <span class="menu-button-label">{{ buttonProps.label }}</span>
+        }
       </button>
-      <div *ngIf="buttonProps.subMenu" class="submenu">
-        <ng-container *ngFor="let subMenu of buttonProps.subMenu">
-          <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: subMenu}"></ng-container>
-        </ng-container>
-      </div>
+      @if (buttonProps.subMenu) {
+        <div class="submenu">
+          @for (subMenu of buttonProps.subMenu; track subMenu) {
+            <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: subMenu}"></ng-container>
+          }
+        </div>
+      }
     }
-  </ng-container>
+  }
 </ng-template>
 
-<div class="navigation-bar" *ngIf="userDetails$ | async as userDetails">
-
-
-
-
-  @for(menu of buttons; track menu.link) {
-    @if (isAdmin(userDetails) || !menu.requireAdmin) {
-      <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+@if (userDetails$ | async; as userDetails) {
+  <div class="navigation-bar">
+    @for(menu of buttons; track menu.link) {
+      @if (isAdmin(userDetails) || !menu.requireAdmin) {
+        <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+      }
     }
-  }
-  <div class="divider"></div>
-  @for(menu of bottomButtons; track menu.link) {
-    @if (isAdmin(userDetails) || !menu.requireAdmin) {
-      <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+    <div class="divider"></div>
+    @for(menu of bottomButtons; track menu.link) {
+      @if (isAdmin(userDetails) || !menu.requireAdmin) {
+        <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
+      }
     }
-  }
-  <ng-container *ngIf="userDetails.isAuthenticated && userDetails.username">
-    <button mat-flat-button
-            class="menu-button"
-            [matMenuTriggerFor]="userMenu"
-            [tmTooltip]="userDetails.username"
-            matTooltipPosition="right">
-      <mat-icon svgIcon="user"></mat-icon>
-      <span class="menu-button-label">{{userDetails.username}}</span>
-    </button>
-    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
-      <button mat-menu-item (click)="showAbout()">
-        <span i18n="@@admin-core.common.about">About</span>
+    @if (userDetails.isAuthenticated && userDetails.username) {
+      <button mat-flat-button
+        class="menu-button"
+        [matMenuTriggerFor]="userMenu"
+        [tmTooltip]="userDetails.username"
+        matTooltipPosition="right">
+        <mat-icon svgIcon="user"></mat-icon>
+        <span class="menu-button-label">{{userDetails.username}}</span>
       </button>
-      <tm-language-toggle></tm-language-toggle>
-      <button mat-menu-item routerLink="/">
-        <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
+      <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above">
+        <button mat-menu-item (click)="showAbout()">
+          <span i18n="@@admin-core.common.about">About</span>
+        </button>
+        <tm-language-toggle></tm-language-toggle>
+        <button mat-menu-item routerLink="/">
+          <span i18n="@@admin-core.common.go-to-viewer">Go to viewer</span>
+        </button>
+        @if (userDetails.isAuthenticated && userDetails.username) {
+          <button mat-menu-item (click)="logout()">
+            <span i18n="@@admin-core.common.logout">Logout</span>
+          </button>
+        }
+      </mat-menu>
+    }
+    @if (!userDetails.isAuthenticated || !userDetails.username) {
+      <tm-language-toggle class="menu-button"></tm-language-toggle>
+    }
+    @if (!userDetails.isAuthenticated || !userDetails.username) {
+      <button mat-flat-button
+        class="menu-button"
+        (click)="login()"
+        tmTooltip="Login"
+        i18n-tmTooltip="@@admin-core.common.login"
+        matTooltipPosition="right">
+        <mat-icon svgIcon="login"></mat-icon>
+        <span class="menu-button-label" i18n="@@admin-core.common.login">Login</span>
       </button>
-      <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
-        <span i18n="@@admin-core.common.logout">Logout</span>
-      </button>
-    </mat-menu>
-  </ng-container>
-  <tm-language-toggle *ngIf="!userDetails.isAuthenticated || !userDetails.username" class="menu-button"></tm-language-toggle>
-  <button mat-flat-button
-          *ngIf="!userDetails.isAuthenticated || !userDetails.username"
-          class="menu-button"
-          (click)="login()"
-          tmTooltip="Login"
-          i18n-tmTooltip="@@admin-core.common.login"
-          matTooltipPosition="right">
-    <mat-icon svgIcon="login"></mat-icon>
-    <span class="menu-button-label" i18n="@@admin-core.common.login">Login</span>
-  </button>
-
-</div>
+    }
+  </div>
+}

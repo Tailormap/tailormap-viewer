@@ -1,16 +1,20 @@
 <h2 mat-dialog-title>
-  <ng-container *ngIf="!data.geoService" i18n="@@admin-core.catalog.create-new-service">Create new service</ng-container>
-  <ng-container *ngIf="data.geoService" i18n="@@admin-core.catalog.edit-service">Edit {{data.geoService.title}}</ng-container>
+  @if (!data.geoService) {
+    <ng-container i18n="@@admin-core.catalog.create-new-service">Create new service</ng-container>
+  }
+  @if (data.geoService) {
+    <ng-container i18n="@@admin-core.catalog.edit-service">Edit {{data.geoService.title}}</ng-container>
+  }
 </h2>
 <mat-dialog-content>
   <tm-admin-geo-service-form [geoService]="data.geoService"
-                             (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
-  <ng-container *ngIf="data.geoService">
+  (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
+  @if (data.geoService) {
     <h3 i18n="@@admin-core.catalog.default-layer-settings">Default layer settings</h3>
     <tm-admin-layer-settings-form [layerSettings]="data.geoService.settings?.defaultLayerSettings"
-                                  [protocol]="data.geoService.protocol"
-                                  (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
-  </ng-container>
+      [protocol]="data.geoService.protocol"
+    (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-flat-button (click)="cancel()" i18n="@@admin-core.common.cancel">Cancel</button>

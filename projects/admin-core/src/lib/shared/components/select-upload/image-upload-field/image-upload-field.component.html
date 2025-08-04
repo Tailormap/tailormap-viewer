@@ -1,20 +1,25 @@
 <div class="form-field">
-  <tm-error-message *ngIf="imageError" [message]="imageError" [friendlyError]="true"></tm-error-message>
+  @if (imageError) {
+    <tm-error-message [message]="imageError" [friendlyError]="true"></tm-error-message>
+  }
   <div class="img-space">
-    <img *ngIf="currentImage" [src]="currentImage" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
+    @if (currentImage) {
+      <img [src]="currentImage" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
+    }
     <div class="upload-wrapper" [class.upload-complete]="isImageSaved">
       <input type="file"
-             accept="image/*"
-             (change)="fileChangeEvent($event)"
-             class="fileInputProfile">
-      <button mat-stroked-button
-              *ngIf="isImageSaved || currentImage"
-              color="warn"
-              tmTooltip="Remove the image"
-              i18n-tmTooltip="@@admin-core.application.remove-image"
-              (click)="clearImage()">
-        <mat-icon svgIcon="trash_filled"></mat-icon>
-      </button>
+        accept="image/*"
+        (change)="fileChangeEvent($event)"
+        class="fileInputProfile">
+      @if (isImageSaved || currentImage) {
+        <button mat-stroked-button
+          color="warn"
+          tmTooltip="Remove the image"
+          i18n-tmTooltip="@@admin-core.application.remove-image"
+          (click)="clearImage()">
+          <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+      }
     </div>
   </div>
 </div>

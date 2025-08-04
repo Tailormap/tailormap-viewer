@@ -1,7 +1,7 @@
 <ng-template #strokeTypeImage let-strokeType>
   <svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">
     <line x1="10" y1="5" x2="90" y2="5" stroke-width="1" stroke-linecap="round"
-          [attr.stroke-dasharray]="getDashArray(strokeType)"></line>
+    [attr.stroke-dasharray]="getDashArray(strokeType)"></line>
   </svg>
 </ng-template>
 
@@ -19,11 +19,11 @@
       </div>
       <div class="form-field form-field__slider">
         <tm-slider [max]="200"
-                   [min]="50"
-                   [step]="25"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeMarkerSize($event)"
-                   [value]="style.markerSize">
+          [min]="50"
+          [step]="25"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeMarkerSize($event)"
+          [value]="style.markerSize">
         </tm-slider>
       </div>
 
@@ -33,11 +33,11 @@
       </div>
       <div class="form-field form-field__slider">
         <tm-slider [max]="360"
-                   [min]="0"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeMarkerRotation($event)"
-                   [value]="style.markerRotation">
+          [min]="0"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeMarkerRotation($event)"
+          [value]="style.markerRotation">
         </tm-slider>
       </div>
 
@@ -54,21 +54,21 @@
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.symbol">Symbol</label>
         <tm-icon-picker [icons]="getMarkers()"
-                        [selectedIcon]="getSelectedMarker()"
-                        [iconColor]="iconColor"
-                        (iconChange)="changeMarker($event)"></tm-icon-picker>
+          [selectedIcon]="getSelectedMarker()"
+          [iconColor]="iconColor"
+        (iconChange)="changeMarker($event)"></tm-icon-picker>
       </div>
 
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.fill-color">Fill color</label>
         <tm-color-picker [color]="style.markerFillColor"
-                         (colorChange)="changeMarkerFill($event)"></tm-color-picker>
+        (colorChange)="changeMarkerFill($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.line-color">Line color</label>
         <tm-color-picker [color]="style.markerStrokeColor"
-                         (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
+        (colorChange)="changeMarkerStroke($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns">
@@ -78,11 +78,11 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="10"
-                   [min]="1"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeMarkerStrokeWidth($event)"
-                   [value]="style.markerStrokeWidth">
+          [min]="1"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeMarkerStrokeWidth($event)"
+          [value]="style.markerStrokeWidth">
         </tm-slider>
       </div>
 
@@ -93,11 +93,11 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="20"
-                   [min]="5"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeMarkerSize($event)"
-                   [value]="style.markerSize">
+          [min]="5"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeMarkerSize($event)"
+          [value]="style.markerSize">
         </tm-slider>
       </div>
 
@@ -108,11 +108,11 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="360"
-                   [min]="0"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeMarkerRotation($event)"
-                   [value]="style.markerRotation">
+          [min]="0"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeMarkerRotation($event)"
+          [value]="style.markerRotation">
         </tm-slider>
       </div>
     </mat-expansion-panel>
@@ -135,25 +135,25 @@
         <div matSuffix>
           @if (showInsertCoordinates()) {
             <button mat-icon-button
-                    tmTooltip="Insert coordinates as label"
-                    i18n-tmTooltip="@@core.drawing.insert-coordinates-label"
-                    (click)="insertCoordinates()">
+              tmTooltip="Insert coordinates as label"
+              i18n-tmTooltip="@@core.drawing.insert-coordinates-label"
+              (click)="insertCoordinates()">
               <mat-icon svgIcon="coordinates"></mat-icon>
             </button>
           }
           @if (isLineType()) {
             <button mat-icon-button
-                    tmTooltip="Insert length as label"
-                    i18n-tmTooltip="@@core.drawing.insert-length-label"
-                    (click)="insertLength()">
+              tmTooltip="Insert length as label"
+              i18n-tmTooltip="@@core.drawing.insert-length-label"
+              (click)="insertLength()">
               <mat-icon svgIcon="tools_measure_length_outline"></mat-icon>
             </button>
           }
           @if (showInsertArea()) {
             <button mat-icon-button
-                    tmTooltip="Insert area as label"
-                    i18n-tmTooltip="@@core.drawing.insert-area-label"
-                    (click)="insertArea()">
+              tmTooltip="Insert area as label"
+              i18n-tmTooltip="@@core.drawing.insert-area-label"
+              (click)="insertArea()">
               <mat-icon svgIcon="tools_measure_area_outline"></mat-icon>
             </button>
           }
@@ -164,11 +164,11 @@
         <label i18n="@@core.drawing.format">Format</label>
         <mat-button-toggle-group multiple="true">
           <mat-button-toggle (click)="toggleStyle(labelStyleValues.bold)"
-                             [checked]="hasLabelStyle(labelStyleValues.bold)">
+            [checked]="hasLabelStyle(labelStyleValues.bold)">
             <mat-icon svgIcon="style_bold"></mat-icon>
           </mat-button-toggle>
           <mat-button-toggle (click)="toggleStyle(labelStyleValues.italic)"
-                             [checked]="hasLabelStyle(labelStyleValues.italic)">
+            [checked]="hasLabelStyle(labelStyleValues.italic)">
             <mat-icon svgIcon="style_italic"></mat-icon>
           </mat-button-toggle>
         </mat-button-toggle-group>
@@ -181,25 +181,25 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="30"
-                   [min]="1"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeLabelSize($event)"
-                   [value]="style.labelSize">
+          [min]="1"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeLabelSize($event)"
+          [value]="style.labelSize">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.color">Color</label>
         <tm-color-picker [color]="style.labelColor"
-                         (colorChange)="changeLabelColor($event)"></tm-color-picker>
+        (colorChange)="changeLabelColor($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.halo">Halo</label>
         <tm-color-picker [color]="style.labelOutlineColor"
-                         [allowEmptyColor]="true"
-                         (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
+          [allowEmptyColor]="true"
+        (colorChange)="changeLabelOutlineColor($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns">
@@ -209,11 +209,11 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="360"
-                   [min]="0"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeLabelRotation($event)"
-                   [value]="style.labelRotation">
+          [min]="0"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeLabelRotation($event)"
+          [value]="style.labelRotation">
         </tm-slider>
       </div>
     </mat-expansion-panel>
@@ -226,7 +226,7 @@
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.color">Color</label>
         <tm-color-picker [color]="style.strokeColor"
-                         (colorChange)="changeStrokeColor($event)"></tm-color-picker>
+        (colorChange)="changeStrokeColor($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns">
@@ -236,11 +236,11 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="20"
-                   [min]="1"
-                   [step]="1"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeStrokeWidth($event)"
-                   [value]="style.strokeWidth">
+          [min]="1"
+          [step]="1"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeStrokeWidth($event)"
+          [value]="style.strokeWidth">
         </tm-slider>
       </div>
 
@@ -251,49 +251,53 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="100"
-                   [min]="0"
-                   [step]="1"
-                   [displayWith]="formatThumb"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeStrokeOpacity($event)"
-                   [value]="style.strokeOpacity">
+          [min]="0"
+          [step]="1"
+          [displayWith]="formatThumb"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeStrokeOpacity($event)"
+          [value]="style.strokeOpacity">
         </tm-slider>
       </div>
 
       <mat-form-field appearance="outline" color="primary">
         <mat-label i18n="@@core.drawing.stroke-type">Stroke type</mat-label>
         <mat-select [formControl]="strokeTypeControl"
-                    panelClass="select-line-style"
-                    class="select-line-style">
+          panelClass="select-line-style"
+          class="select-line-style">
           <mat-select-trigger>
             <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: style.strokeType }"></ng-container>
           </mat-select-trigger>
-          <mat-option *ngFor="let strokeTypeValue of strokeTypeValues" [value]="strokeTypeValue">
-            <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" color="primary" *ngIf="showArrowSetting()">
-        <label i18n="@@core.drawing.arrow">Arrow</label>
-        <mat-select [formControl]="arrowTypeControl">
-          @for (arrowTypeValue of arrowTypeValues; track arrowTypeValue.value) {
-            <mat-option [value]="arrowTypeValue.value">
-              {{arrowTypeValue.label}}
+          @for (strokeTypeValue of strokeTypeValues; track strokeTypeValue) {
+            <mat-option [value]="strokeTypeValue">
+              <ng-container *ngTemplateOutlet="strokeTypeImage; context: { $implicit: strokeTypeValue }"></ng-container>
             </mat-option>
           }
         </mat-select>
       </mat-form-field>
+
+      @if (showArrowSetting()) {
+        <mat-form-field appearance="outline" color="primary">
+          <label i18n="@@core.drawing.arrow">Arrow</label>
+          <mat-select [formControl]="arrowTypeControl">
+            @for (arrowTypeValue of arrowTypeValues; track arrowTypeValue.value) {
+              <mat-option [value]="arrowTypeValue.value">
+                {{arrowTypeValue.label}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
       @if (isLineType()) {
         <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
           <mat-checkbox labelPosition="before" i18n="@@core.drawing.show-length-along-line"
-                        [checked]="style.showSegmentSize ?? false"
-                        (change)="toggleSegmentSize($event)">Show length along line</mat-checkbox>
+            [checked]="style.showSegmentSize ?? false"
+          (change)="toggleSegmentSize($event)">Show length along line</mat-checkbox>
         </div>
         <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
           <mat-checkbox labelPosition="before" i18n="@@core.drawing.show-total-line-length"
-                        [checked]="style.showTotalSize ?? false"
-                        (change)="toggleTotalSize($event)">Show total length of the line</mat-checkbox>
+            [checked]="style.showTotalSize ?? false"
+          (change)="toggleTotalSize($event)">Show total length of the line</mat-checkbox>
         </div>
       }
     </mat-expansion-panel>
@@ -306,13 +310,13 @@
       <div class="form-field form-field__columns">
         <label i18n="@@core.drawing.color">Color</label>
         <tm-color-picker [color]="style.fillColor"
-                         (colorChange)="changeFillColor($event)"></tm-color-picker>
+        (colorChange)="changeFillColor($event)"></tm-color-picker>
       </div>
 
       <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
         <mat-checkbox labelPosition="before" i18n="@@core.drawing.striped-fill"
-                      [checked]="style.stripedFill ?? false"
-                      (change)="changeStripedFill($event)">Striped fill</mat-checkbox>
+          [checked]="style.stripedFill ?? false"
+        (change)="changeStripedFill($event)">Striped fill</mat-checkbox>
       </div>
 
       <div class="form-field form-field__columns">
@@ -322,24 +326,24 @@
 
       <div class="form-field form-field__slider">
         <tm-slider [max]="100"
-                   [min]="0"
-                   [step]="1"
-                   [displayWith]="formatThumb"
-                   [value]="style.fillOpacity"
-                   [changeValueWhileSliding]="true"
-                   (valueChange)="changeFillOpacity($event)">
+          [min]="0"
+          [step]="1"
+          [displayWith]="formatThumb"
+          [value]="style.fillOpacity"
+          [changeValueWhileSliding]="true"
+          (valueChange)="changeFillOpacity($event)">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
         <mat-checkbox labelPosition="before" i18n="@@core.drawing.show-side-length"
-                      [checked]="style.showSegmentSize ?? false"
-                      (change)="toggleSegmentSize($event)">Show length along sides</mat-checkbox>
+          [checked]="style.showSegmentSize ?? false"
+        (change)="toggleSegmentSize($event)">Show length along sides</mat-checkbox>
       </div>
       <div class="form-field form-field__columns form-field__columns--right-aligned checkbox-field">
         <mat-checkbox labelPosition="before" i18n="@@core.drawing.show-area-size"
-                      [checked]="style.showTotalSize ?? false"
-                      (change)="toggleTotalSize($event)">Show area size</mat-checkbox>
+          [checked]="style.showTotalSize ?? false"
+        (change)="toggleTotalSize($event)">Show area size</mat-checkbox>
       </div>
 
     </mat-expansion-panel>

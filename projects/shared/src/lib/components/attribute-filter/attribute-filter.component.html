@@ -4,65 +4,97 @@
     <mat-form-field appearance="outline">
       <mat-label i18n="@@core.filter.condition">Condition</mat-label>
       <mat-select i18n-aria-label="@@core.filter.select-condition"
-                  aria-label="Select condition"
-                  formControlName="condition"
-                  panelClass="attribute-filter-condition-list-panel">
-        <mat-option *ngFor="let attr of filteredConditions" [value]="attr.condition">{{attr.label}}</mat-option>
+        aria-label="Select condition"
+        formControlName="condition"
+        panelClass="attribute-filter-condition-list-panel">
+        @for (attr of filteredConditions; track attr) {
+          <mat-option [value]="attr.condition">{{attr.label}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   }
 
-  <mat-form-field appearance="outline" *ngIf="showValueInput()">
-    <mat-label>
-      <ng-container *ngIf="!showValueBetweenInput()" i18n="@@core.filter.value">Value</ng-container>
-      <ng-container *ngIf="showValueBetweenInput()" i18n="@@core.filter.from">From</ng-container>
-    </mat-label>
-    <input type="text" matInput formControlName="value" />
-  </mat-form-field>
+  @if (showValueInput()) {
+    <mat-form-field appearance="outline">
+      <mat-label>
+        @if (!showValueBetweenInput()) {
+          <ng-container i18n="@@core.filter.value">Value</ng-container>
+        }
+        @if (showValueBetweenInput()) {
+          <ng-container i18n="@@core.filter.from">From</ng-container>
+        }
+      </mat-label>
+      <input type="text" matInput formControlName="value" />
+    </mat-form-field>
+  }
 
-  <mat-form-field appearance="outline" *ngIf="showValueBetweenInput()">
-    <mat-label i18n="@@core.filter.until">Until</mat-label>
-    <input type="text" matInput formControlName="value2" />
-  </mat-form-field>
+  @if (showValueBetweenInput()) {
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@core.filter.until">Until</mat-label>
+      <input type="text" matInput formControlName="value2" />
+    </mat-form-field>
+  }
 
-  <mat-form-field appearance="outline" *ngIf="showDateInput()">
-    <mat-label>
-      <ng-container *ngIf="!showDateUntilInput()" i18n="@@core.filter.value">Value</ng-container>
-      <ng-container *ngIf="showDateUntilInput()" i18n="@@core.filter.from">From</ng-container>
-    </mat-label>
-    <input matInput [matDatepicker]="dp" formControlName="value" />
-    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-    <mat-datepicker #dp></mat-datepicker>
-  </mat-form-field>
+  @if (showDateInput()) {
+    <mat-form-field appearance="outline">
+      <mat-label>
+        @if (!showDateUntilInput()) {
+          <ng-container i18n="@@core.filter.value">Value</ng-container>
+        }
+        @if (showDateUntilInput()) {
+          <ng-container i18n="@@core.filter.from">From</ng-container>
+        }
+      </mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="value" />
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp></mat-datepicker>
+    </mat-form-field>
+  }
 
-  <mat-form-field appearance="outline" *ngIf="showDateUntilInput()">
-    <mat-label i18n="@@core.filter.until">Until</mat-label>
-    <input matInput [matDatepicker]="dp2" formControlName="value2" />
-    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
-    <mat-datepicker #dp2></mat-datepicker>
-  </mat-form-field>
+  @if (showDateUntilInput()) {
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@core.filter.until">Until</mat-label>
+      <input matInput [matDatepicker]="dp2" formControlName="value2" />
+      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+      <mat-datepicker #dp2></mat-datepicker>
+    </mat-form-field>
+  }
 
-  <div *ngIf="showCaseSensitiveInput()" class="checkbox-margin">
-    <mat-checkbox i18n="@@core.filter.case-sensitive" formControlName="caseSensitive">Case sensitive</mat-checkbox>
-  </div>
+  @if (showCaseSensitiveInput()) {
+    <div class="checkbox-margin">
+      <mat-checkbox i18n="@@core.filter.case-sensitive" formControlName="caseSensitive">Case sensitive</mat-checkbox>
+    </div>
+  }
 
-  <div *ngIf="showInvertConditionInput()">
-    <mat-checkbox i18n="@@core.filter.invert-condition" formControlName="invertCondition">Invert condition</mat-checkbox>
-  </div>
+  @if (showInvertConditionInput()) {
+    <div>
+      <mat-checkbox i18n="@@core.filter.invert-condition" formControlName="invertCondition">Invert condition</mat-checkbox>
+    </div>
+  }
 
-  <mat-checkbox *ngIf="!loadingUniqueValues && showUniqueValuesInput()"
-                [checked]="allUniqueValuesSelected"
-                [indeterminate]="someUniqueValuesSelected"
-                (change)="toggleAllUniqueValues()">
-    <span *ngIf="allUniqueValuesSelected" i18n="@@core.filter.deselect-all-values">Deselect all values</span>
-    <span *ngIf="!allUniqueValuesSelected" i18n="@@core.filter.select-all-values">Select all values</span>
-  </mat-checkbox>
+  @if (!loadingUniqueValues && showUniqueValuesInput()) {
+    <mat-checkbox
+      [checked]="allUniqueValuesSelected"
+      [indeterminate]="someUniqueValuesSelected"
+      (change)="toggleAllUniqueValues()">
+      @if (allUniqueValuesSelected) {
+        <span i18n="@@core.filter.deselect-all-values">Deselect all values</span>
+      }
+      @if (!allUniqueValuesSelected) {
+        <span i18n="@@core.filter.select-all-values">Select all values</span>
+      }
+    </mat-checkbox>
+  }
 
-  <div class="unique-values-list" *ngIf="showUniqueValuesInput()">
-    <mat-spinner mode="indeterminate" diameter="20" *ngIf="loadingUniqueValues"></mat-spinner>
-    <ng-container *ngFor="let uniqueValue of uniqueValues; let i = index; trackBy: trackByIndex">
-      <mat-checkbox [checked]="uniqueValue.selected" (change)="toggleUniqueValue(uniqueValue.value)">{{uniqueValue.value}}</mat-checkbox>
-    </ng-container>
-  </div>
+  @if (showUniqueValuesInput()) {
+    <div class="unique-values-list">
+      @if (loadingUniqueValues) {
+        <mat-spinner mode="indeterminate" diameter="20"></mat-spinner>
+      }
+      @for (uniqueValue of uniqueValues; track trackByIndex(i, uniqueValue); let i = $index) {
+        <mat-checkbox [checked]="uniqueValue.selected" (change)="toggleUniqueValue(uniqueValue.value)">{{uniqueValue.value}}</mat-checkbox>
+      }
+    </div>
+  }
 
 </div>

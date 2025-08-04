@@ -1,14 +1,13 @@
-<ng-container *ngIf="featureSource$ | async as featureSource">
+@if (featureSource$ | async; as featureSource) {
   <h2 class="page-details-title" i18n="@@admin-core.catalog.edit-feature-source">Edit {{ featureSource.title }}</h2>
   <tm-admin-feature-source-form [featureSource]="featureSource"
-                                (changed)="updateFeatureSource($event)"></tm-admin-feature-source-form>
-
+  (changed)="updateFeatureSource($event)"></tm-admin-feature-source-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedFeatureSource" (save)="save(featureSource)"></tm-admin-save-button>
     <tm-admin-save-button i18n-label="@@admin-core.catalog.refresh-feature-source"
-                          label="Refresh feature source"
-                          [saving$]="refreshing$"
-                          (save)="refresh(featureSource.id)"></tm-admin-save-button>
+      label="Refresh feature source"
+      [saving$]="refreshing$"
+    (save)="refresh(featureSource.id)"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="deleteFeatureSource(featureSource)" i18n="@@admin-core.common.delete">Delete</button>
   </div>
-</ng-container>
+}
