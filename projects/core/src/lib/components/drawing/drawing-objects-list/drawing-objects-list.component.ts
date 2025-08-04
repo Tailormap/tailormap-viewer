@@ -1,4 +1,4 @@
-import { afterRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
@@ -38,7 +38,7 @@ export class DrawingObjectsListComponent {
     private store$: Store,
     private elRef: ElementRef,
   ) {
-    afterRender(() => {
+    afterEveryRender(() => {
       this.scrollToSelectedFeature();
     });
   }
