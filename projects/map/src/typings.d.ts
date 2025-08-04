@@ -33,6 +33,10 @@ declare module 'jsts/org/locationtech/jts/geom' {
 declare const Cesium;
 declare const CESIUM_BASE_URL;
 
+declare module 'olcs' {
+  export default OLCesium;
+}
+
 type OlExtTransformEventKey = 'change' | 'select' | 'rotatestart' | 'rotating' | 'rotateend' |
   'translatestart' | 'translating' | 'translateend' |
   'scalestart' | 'scaling' | 'scaleend';
