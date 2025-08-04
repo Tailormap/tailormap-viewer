@@ -78,7 +78,7 @@
     "@angular/localize": "^20.1.4",
     "@bufbuild/buf": "^1.49.0",
     "@bufbuild/protoc-gen-es": "^2.2.3",
-    "@stylistic/eslint-plugin-ts": "^2.6.1",
+    "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.17",
     "@tailormap-viewer/tools": "^0.0.19",
     "@testing-library/angular": "^17.4.0",
