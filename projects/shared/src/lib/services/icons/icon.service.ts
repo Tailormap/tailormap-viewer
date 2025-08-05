@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ICON_SERVICE_ICON_LOCATION } from './icon-service.injection-token';
@@ -10,6 +10,9 @@ type IconDefinition = string | { folder: string; icons: string[] };
   providedIn: 'root',
 })
 export class IconService {
+  private iconLocation = inject(ICON_SERVICE_ICON_LOCATION);
+  private baseHref = inject(APP_BASE_HREF);
+
 
   public icons: IconDefinition[] = [
     'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error', 'remove_all', 'remove',
@@ -33,11 +36,6 @@ export class IconService {
     { folder: 'style', icons: [ 'bold', 'italic' ] },
     { folder: 'languages', icons: [ 'gb', 'nl', 'de' ] },
   ];
-
-  constructor(
-    @Inject(ICON_SERVICE_ICON_LOCATION) private iconLocation: string,
-    @Inject(APP_BASE_HREF) private baseHref: string,
-  ) {}
 
   public getUrl() {
     const separator = this.baseHref[this.baseHref.length - 1] === '/' ? '' : '/';

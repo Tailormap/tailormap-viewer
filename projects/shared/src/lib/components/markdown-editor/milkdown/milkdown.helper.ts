@@ -38,7 +38,7 @@ export class MilkdownHelper {
 
   public static getBlockEditConfiguration(templatePicklistConfig?: TemplatePicklistConfig): BlockEditFeatureConfig {
     return {
-      // @ts-ignore TS2353: Object literal may only specify known properties, and 'slashMenuTextGroupLabel' does not exist in type etc...
+      // @ts-expect-error TS2353: Object literal may only specify known properties, and 'slashMenuTextGroupLabel' does not exist in type etc...
       slashMenuTextGroupLabel: $localize `:@@shared.markdown-editor.textgroup:Text`,
       slashMenuTextLabel: $localize `:@@shared.markdown-editor.text:Text`,
       slashMenuH1Label: $localize `:@@shared.markdown-editor.h1:H1`,

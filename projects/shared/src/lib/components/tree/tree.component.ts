@@ -1,6 +1,4 @@
-import {
-  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -16,6 +14,11 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   standalone: false,
 })
 export class TreeComponent implements OnInit, OnDestroy {
+  private treeService = inject(TreeService);
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+  private treeDragDropService = inject(TreeDragDropService, { optional: true });
+
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
@@ -69,13 +72,6 @@ export class TreeComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public extendedDropzoneClass: string = TreeDragDropService.EXTENDED_DROPZONE_CLASS;
-
-  constructor(
-    private treeService: TreeService,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-    @Optional() private treeDragDropService: TreeDragDropService,
-  ) { }
 
   public ngOnInit(): void {
     this.treeService.selectedNode$

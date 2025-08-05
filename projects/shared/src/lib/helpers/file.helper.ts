@@ -20,7 +20,7 @@ export class FileHelper {
     }
     try {
       return parse(contentDispositionHeader).parameters['filename'] as string || defaultName;
-    } catch(_ignored) {
+    } catch (_ignored) {
       return defaultName;
     }
   }
