@@ -100,7 +100,7 @@ export class TreeComponent implements OnInit, OnDestroy {
           if (!el || !this.getDropZones) {
             return;
           }
-          this.treeDragDropService.dataSourceChanged(this.getDropZones(el));
+          this.treeDragDropService?.dataSourceChanged(this.getDropZones(el));
         });
     }
   }
@@ -191,7 +191,7 @@ export class TreeComponent implements OnInit, OnDestroy {
       return;
     }
     this.ngZone.runOutsideAngular(() => {
-      this.treeDragDropService.handleDragStart(event, node, dropZoneConfig);
+      this.treeDragDropService?.handleDragStart(event, node, dropZoneConfig);
     });
   }
 

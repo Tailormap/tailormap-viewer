@@ -29,6 +29,7 @@ export class ApplicationMapService implements OnDestroy {
   private mapService = inject(MapService);
   private httpClient = inject(HttpClient);
   private bookmarkService = inject(BookmarkService);
+  private _applicationRefreshService = inject(ApplicationLayerRefreshService);
   private localeId = inject(LOCALE_ID);
 
   private destroyed = new Subject();

@@ -33,7 +33,7 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
 })
 export class FeatureInfoDialogComponent {
   private store$ = inject(Store);
-  breakpointObserver = inject(BreakpointObserver);
+  public breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
 

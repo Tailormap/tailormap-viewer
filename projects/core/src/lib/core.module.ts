@@ -96,7 +96,9 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   ],
 })
 export class CoreModule {
-  constructor() {
+  //eslint-disable-next-line @angular-eslint/prefer-inject
+  constructor( _appStyleService: ApplicationStyleService,
+               _routerHistoryService: RouterHistoryService) {
     const matIconRegistry = inject(MatIconRegistry);
     const domSanitizer = inject(DomSanitizer);
     const iconService = inject(IconService);

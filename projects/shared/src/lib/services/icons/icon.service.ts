@@ -10,9 +10,8 @@ type IconDefinition = string | { folder: string; icons: string[] };
   providedIn: 'root',
 })
 export class IconService {
-  private iconLocation = inject(ICON_SERVICE_ICON_LOCATION);
+  private iconLocation = inject(ICON_SERVICE_ICON_LOCATION) as string;
   private baseHref = inject(APP_BASE_HREF);
-
 
   public icons: IconDefinition[] = [
     'draw_polygon', 'draw_line', 'draw_point', 'split', 'new_object', 'merge', 'error', 'remove_all', 'remove',

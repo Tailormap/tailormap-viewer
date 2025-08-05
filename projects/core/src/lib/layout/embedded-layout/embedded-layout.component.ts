@@ -10,7 +10,6 @@ import { LayoutService } from '../layout.service';
   standalone: false,
 })
 export class EmbeddedLayoutComponent {
-  layoutService = inject(LayoutService);
-
+  public layoutService = inject(LayoutService);
   public componentTypes = BaseComponentTypeEnum;
 }

@@ -23,7 +23,7 @@ import { SpatialFilterReferenceLayerService } from './services/spatial-filter-re
   ],
 })
 export class FilterModule {
-  //eslint-disable-next-line @typescript-eslint/prefer-inject
+  //eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(_spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService) {
     // constructor is used to initialize the service
   }
