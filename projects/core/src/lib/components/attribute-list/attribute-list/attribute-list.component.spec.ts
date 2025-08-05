@@ -47,6 +47,10 @@ const getStore = (
         ...layers.map(l => getLayerTreeNode({ id: `lyr_${l.id}`, appLayerId: l.id })),
       ] : []).map(l => ({ ...l, initialChildren: l.childrenIds || [] })),
     },
+    [coreStateKey]: {
+      loadStatus: 'INITIAL',
+      viewer: {}, // <-- Ensure viewer is always present
+    },
     [filterStateKey]: {
       ...initialFilterState,
     },
