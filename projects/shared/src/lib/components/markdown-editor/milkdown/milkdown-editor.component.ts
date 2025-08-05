@@ -41,8 +41,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private destroyRef: DestroyRef,
     private mdEditorService: MarkdownEditorService,
-  ) {
-  }
+  ) { }
 
   public ngOnInit() {
     if (!this.editorEl) {
@@ -65,6 +64,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             defaultValue: this.mdEditorService.getCurrentContent() || '',
             features: {
               [crepeModule.Crepe.Feature.CodeMirror]: false,
+              [crepeModule.Crepe.Feature.Latex]: false,
             },
             featureConfigs: {
               [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,

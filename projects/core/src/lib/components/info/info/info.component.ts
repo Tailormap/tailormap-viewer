@@ -35,7 +35,7 @@ export class InfoComponent implements OnInit {
           .subscribe(html => {
             console.log(html);
             this.template.set(html);
-          })
+          });
       },
     );
   }

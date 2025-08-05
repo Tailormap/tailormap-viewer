@@ -5,7 +5,7 @@ import { ComponentConfigRendererComponent } from './component-config-renderer/co
 import { ComponentsListComponent } from './components-list/components-list.component';
 import { ConfigurationComponentRegistryService } from '../services/configuration-component-registry.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import {MarkdownEditorComponent, SharedModule} from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent, SharedModule } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';

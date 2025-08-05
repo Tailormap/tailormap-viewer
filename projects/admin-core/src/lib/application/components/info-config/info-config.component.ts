@@ -5,7 +5,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Observable } from 'rxjs';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ImageUploadResult, TailormapAdminUploadService } from '@tailormap-admin/admin-api';
-import { TemplatePicklistConfig } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-admin-info-config',
@@ -38,8 +37,6 @@ export class InfoConfigComponent {
   public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => {
     return this.uploadService.uploadImage$(file);
   };
-
-  public templatePicklistConfig = signal<TemplatePicklistConfig | undefined>(undefined);
 
   public formGroup = new FormGroup({
     openOnStartup: new FormControl<boolean>(false),

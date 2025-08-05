@@ -6,9 +6,10 @@
                   i18n="@@admin-core.components.info-open-on-startup">Open info component on start-up</mat-checkbox>
   </div>
   @defer {
-    <tm-markdown-editor [content]="templateContent()"
-                        [uploadService$]="uploadImage$"
-                        (contentChanged)="templateChanged($event)"
-                        [templatePicklistConfig]="templatePicklistConfig()"></tm-markdown-editor>
+    <div class="info-markdown-editor">
+      <tm-markdown-editor [content]="templateContent()"
+                          [uploadService$]="uploadImage$"
+                          (contentChanged)="templateChanged($event)"></tm-markdown-editor>
+    </div>
   }
 </tm-admin-base-component-config>
