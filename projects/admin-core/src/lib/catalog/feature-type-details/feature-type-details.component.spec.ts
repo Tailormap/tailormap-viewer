@@ -41,6 +41,7 @@ const setup = async () => {
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     featureTypesIds: ['ft_1'],
+    featureTypeOriginalIds: [],
     catalogNodeId: 'node-1',
     type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
   };
@@ -71,10 +72,8 @@ const setup = async () => {
 };
 
 describe('FeatureTypeDetailsComponent', () => {
-
   test('should render', async () => {
     await setup();
     expect(await screen.findByText('Details for feature type some table')).toBeInTheDocument();
   });
-
 });
