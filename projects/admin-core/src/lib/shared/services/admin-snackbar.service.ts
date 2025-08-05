@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 
@@ -6,11 +6,8 @@ import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
   providedIn: 'root',
 })
 export class AdminSnackbarService {
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private snackBar: MatSnackBar,
-  ) {
-  }
 
   public showMessage(msg?: string) {
     return SnackBarMessageComponent.open$(this.snackBar, {

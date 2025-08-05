@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject } from '@angular/core';
 import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -16,6 +16,10 @@ import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
   standalone: false,
 })
 export class CatalogBaseTreeComponent implements OnDestroy {
+  private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
+  private store$ = inject(Store);
+  private ngZone = inject(NgZone);
+
 
   public isLoading$: Observable<boolean> = of(false);
   public errorMessage$: Observable<string | null> = of(null);
@@ -30,11 +34,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   @Input()
   public scrollToItem?: string | null;
 
-  constructor(
-    private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
-    private store$: Store,
-    private ngZone: NgZone,
-  ) {
+  constructor() {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)
       .pipe(map(loadStatus => loadStatus === LoadingStateEnum.LOADING));
     this.errorMessage$ = this.store$.select(selectCatalogLoadError)

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AppLayerSettingsModel, AttributeDescriptorModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 
@@ -20,6 +20,9 @@ interface ApplicationLayerAttributeSettingsResult {
   standalone: false,
 })
 export class ApplicationLayerAttributeSettingsComponent {
+  private dialogRef = inject<MatDialogRef<ApplicationLayerAttributeSettingsResult>>(MatDialogRef);
+  private data = inject<ApplicationLayerAttributeSettingsData>(MAT_DIALOG_DATA);
+
 
   private hideAttributes: string[] | null | undefined;
   private readOnlyAttributes: string[] | null | undefined;
@@ -29,10 +32,7 @@ export class ApplicationLayerAttributeSettingsComponent {
   public catalogFeatureTypeSettings: FeatureTypeSettingsModel;
   public featureType: FeatureTypeModel | null = null;
 
-  constructor(
-    private dialogRef: MatDialogRef<ApplicationLayerAttributeSettingsResult>,
-    @Inject(MAT_DIALOG_DATA) private data: ApplicationLayerAttributeSettingsData,
-  ) {
+  constructor() {
     const hiddenAttributes = new Set(this.data.featureType.settings.hideAttributes || []);
     this.catalogFeatureTypeSettings = this.data.featureType.settings;
     this.attributes = this.data.featureType.attributes

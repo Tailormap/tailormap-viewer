@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import {
   GroupModel, TailormapAdminApiV1Service,
@@ -16,17 +16,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class GroupService {
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private store$ = inject(Store);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+  private destroyRef = inject(DestroyRef);
+
 
   private selectedGroup: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   public selectedGroup$: Observable<string | null> = this.selectedGroup.asObservable();
-
-  public constructor(
-    private adminApiService: TailormapAdminApiV1Service,
-    private store$: Store,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public listenForGroupChanges() {
     this.sseService.listenForEvents$<GroupModel>('Group')

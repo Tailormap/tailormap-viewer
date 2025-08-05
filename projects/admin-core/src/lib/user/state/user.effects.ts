@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as UserActions from './user.actions';
@@ -12,6 +12,10 @@ import { selectGroupsLoadStatus, selectUsersLoadStatus } from './user.selectors'
 
 @Injectable()
 export class UserEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadUsers$ = createEffect(() => {
     return this.actions$.pipe(
@@ -58,11 +62,5 @@ export class UserEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

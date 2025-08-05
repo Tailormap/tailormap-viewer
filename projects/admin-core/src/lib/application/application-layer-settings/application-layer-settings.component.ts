@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {
   AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
@@ -43,6 +43,12 @@ type FeatureSourceAndType = {
   standalone: false,
 })
 export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private dialog = inject(MatDialog);
+  private featureSourceService = inject(FeatureSourceService);
+  private formService = inject(FormService);
+  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+
 
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
@@ -117,13 +123,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
 
-  constructor(
-    private store$: Store,
-    private dialog: MatDialog,
-    private featureSourceService: FeatureSourceService,
-    private formService: FormService,
-    private applicationFeatureSwitchService: ApplicationFeatureSwitchService,
-  ) {
+  constructor() {
     this.searchIndexEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.SEARCH_INDEX);
   }
 

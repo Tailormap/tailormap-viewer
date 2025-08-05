@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
@@ -14,6 +14,8 @@ import { AttributeTypeHelper, FilterToolEnum, AttributeType } from '@tailormap-v
   standalone: false,
 })
 export class ApplicationFilterAttributeListComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
@@ -46,11 +48,6 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

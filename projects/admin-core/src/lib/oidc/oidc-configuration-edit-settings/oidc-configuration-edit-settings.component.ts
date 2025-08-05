@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, Observable, of } from 'rxjs';
 import { selectDraftOIDCConfiguration } from '../state/oidc-configuration.selectors';
@@ -13,12 +13,10 @@ import { updateDraftOIDCConfiguration } from '../state/oidc-configuration.action
   standalone: false,
 })
 export class OIDCConfigurationEditSettingsComponent implements OnInit {
+  private store$ = inject(Store);
+
 
   public oidcConfiguration$: Observable<OIDCConfigurationModel | undefined | null> = of(null);
-
-  constructor(
-    private store$: Store,
-  ) { }
 
   public ngOnInit(): void {
     this.oidcConfiguration$ = this.store$.select(selectDraftOIDCConfiguration)

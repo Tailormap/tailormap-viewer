@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UploadInUseItem, UploadRemoveServiceModel } from '../../shared/components/select-upload/models/upload-remove-service.model';
 import { map, take } from 'rxjs';
 import { ApplicationService } from './application.service';
@@ -8,11 +8,8 @@ import { Routes } from '../../routes';
   providedIn: 'root',
 })
 export class ApplicationImageRemoveService implements UploadRemoveServiceModel {
+  private applicationService = inject(ApplicationService);
 
-  constructor(
-    private applicationService: ApplicationService,
-  ) {
-  }
 
   public isImageInUse$(imageId: string) {
     return this.applicationService.getApplications$()

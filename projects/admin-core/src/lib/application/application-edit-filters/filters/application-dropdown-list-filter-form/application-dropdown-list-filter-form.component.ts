@@ -1,6 +1,4 @@
-import {
-  ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, signal, WritableSignal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, signal, WritableSignal, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AttributeValueSettings, DropdownListFilterModel, EditFilterConfigurationModel, FilterToolEnum } from '@tailormap-viewer/api';
 import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
@@ -15,6 +13,8 @@ import { FilterHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class ApplicationDropdownListFilterFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
@@ -51,8 +51,6 @@ export class ApplicationDropdownListFilterFormComponent implements OnInit {
   public aliasForm: FormGroup = new FormGroup({});
 
   private dropdownListFilter: DropdownListFilterModel = { filterTool: FilterToolEnum.DROPDOWN_LIST, attributeValuesSettings: [] };
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public ngOnInit(): void {
     this.filter.valueChanges
