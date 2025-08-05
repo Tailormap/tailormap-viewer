@@ -1,4 +1,3 @@
-/* eslint-disable rxjs/finnish */
 import { Map as OlMap } from 'ol';
 import { Projection } from 'ol/proj';
 import { View } from 'ol';

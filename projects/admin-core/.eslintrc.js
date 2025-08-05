@@ -20,7 +20,6 @@ module.exports = {
         "tsconfigRootDir": __dirname
       },
       "rules": {
-        "rxjs/finnish": 0,
         "no-restricted-imports": ["error", getInvalidImportsRule("@tailormap-admin/admin-core", false, true)]
       }
     },

@@ -12,7 +12,6 @@
         "*.ts"
       ],
       "plugins": [
-        "rxjs",
         "import",
         "@stylistic"
       ],
@@ -144,25 +143,6 @@
           "error",
           180
         ],
-        "rxjs/no-cyclic-action": "off",
-        "rxjs/finnish": [
-          "error",
-          {
-            "functions": true,
-            "methods": true,
-            "names": {
-              "^(canActivate|canActivateChild|canDeactivate|canLoad|intercept|resolve|validate)$": false
-            },
-            "parameters": true,
-            "properties": true,
-            "strict": false,
-            "types": {
-              "^EventEmitter$": false,
-              "^Subject": false
-            },
-            "variables": true
-          }
-        ],
         "@stylistic/member-delimiter-style": [
           "error",
           {
@@ -189,7 +169,6 @@
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "rxjs/finnish": "off",
         "@stylistic/ban-ts-comment": "off",
         "@stylistic/no-empty-function": "off"
       }

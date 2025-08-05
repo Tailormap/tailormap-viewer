@@ -166,7 +166,6 @@ export class PrintService implements OnDestroy {
     if (DEBUG_PRINT_EXTENT) {
       validLayers.add('print-preview-layer');
     }
-    // eslint-disable-next-line rxjs/finnish
     return layer => validLayers.has(layer.get('id'));
   }
 
