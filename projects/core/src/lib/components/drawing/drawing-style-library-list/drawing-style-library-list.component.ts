@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject } from '@angular/core';
 import { DrawingStylesService } from '../services/drawing-styles.service';
 import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 
@@ -10,17 +10,14 @@ import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
   standalone: false,
 })
 export class DrawingStyleLibraryListComponent {
+  private drawingStylesService = inject(DrawingStylesService);
+
 
   public selectedDrawingStyle = this.drawingStylesService.selectedDrawingStyle;
   public drawingStyles$ = this.drawingStylesService.getDrawingStyles$();
 
   @Output()
   public drawingStyleSelected = new EventEmitter<DrawingFeatureModelAttributes>();
-
-  constructor(
-    private drawingStylesService: DrawingStylesService,
-  ) {
-  }
 
   public selectDrawingStyle(idx: number, style: DrawingFeatureModelAttributes) {
     this.drawingStylesService.setSelectedDrawingStyle(idx);

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
 import { SliderFilterInputModeEnum, SliderFilterModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,6 +12,8 @@ import { debounceTime } from 'rxjs';
   standalone: false,
 })
 export class SliderFilterComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public minValue: number = 0;
   public maxValue: number = 100;
@@ -42,8 +44,6 @@ export class SliderFilterComponent implements OnInit {
 
   @Output()
   public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public viewerSliderFilterForm = new FormGroup({
     filterValue: new FormControl<number | null>(null),

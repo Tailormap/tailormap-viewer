@@ -27,7 +27,6 @@ import { MapSpinnerComponent } from './components/map-spinner/map-spinner.compon
   ],
 })
 export class ApplicationMapModule {
-  constructor(_applicationMapService: ApplicationMapService) {
-    // constructor is used to initialize the service
-  }
+  //eslint-disable-next-line @typescript-eslint/prefer-inject
+  constructor(_applicationMapService: ApplicationMapService) { /* constructor is used to initialize the service */ }
 }

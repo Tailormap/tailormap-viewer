@@ -11,6 +11,11 @@ import { AttributeFilterService } from '../services/attribute-filter.service';
 
 @Injectable()
 export class CoreEffects {
+  private actions$ = inject(Actions);
+  private loadViewerService = inject(LoadViewerService);
+  private location = inject(Location);
+  private router = inject(Router);
+
 
   private attributeFilterService = inject(AttributeFilterService);
 
@@ -52,12 +57,5 @@ export class CoreEffects {
       tap(paths => this.router.navigate(paths, { preserveFragment: true, skipLocationChange: true })),
     );
   }, { dispatch: false });
-
-  constructor(
-    private actions$: Actions,
-    private loadViewerService: LoadViewerService,
-    private location: Location,
-    private router: Router,
-  ) {}
 
 }

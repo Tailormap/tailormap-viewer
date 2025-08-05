@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
@@ -20,6 +20,11 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private popoverService = inject(PopoverService);
+  private attributeListStateService = inject(AttributeListStateService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -27,14 +32,6 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
-
-  constructor(
-    private store$: Store,
-    private popoverService: PopoverService,
-    private attributeListStateService: AttributeListStateService,
-    private simpleAttributeFilterService: SimpleAttributeFilterService,
-  ) {
-  }
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);

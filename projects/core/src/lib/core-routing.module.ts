@@ -22,5 +22,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
 })
 export class CoreRoutingModule {
+  //eslint-disable-next-line @typescript-eslint/prefer-inject
   constructor(_navigationErrorRouter: NavigationErrorRouterService) {}
 }

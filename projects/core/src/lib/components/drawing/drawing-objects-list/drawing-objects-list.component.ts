@@ -1,4 +1,4 @@
-import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
@@ -12,6 +12,8 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
   standalone: false,
 })
 export class DrawingObjectsListComponent {
+  private store$ = inject(Store);
+  private elRef = inject(ElementRef);
 
   @Input()
   public drawingLayerId = '';
@@ -34,10 +36,7 @@ export class DrawingObjectsListComponent {
   private selectedFeature: string | null = null;
   public isExpanded = signal<boolean>(false);
 
-  constructor(
-    private store$: Store,
-    private elRef: ElementRef,
-  ) {
+  constructor() {
     afterEveryRender(() => {
       this.scrollToSelectedFeature();
     });

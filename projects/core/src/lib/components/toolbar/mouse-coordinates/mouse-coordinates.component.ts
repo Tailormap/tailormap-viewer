@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MapService, MousePositionToolConfigModel, MousePositionToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
 import { concatMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 
@@ -10,14 +10,12 @@ import { concatMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
   standalone: false,
 })
 export class MouseCoordinatesComponent implements OnInit, OnDestroy {
+  private mapService = inject(MapService);
+
 
   private destroyed = new Subject();
   public coordinates$: Observable<string[]> = of([]);
   private overCoordinatesElement = false;
-
-  constructor(
-    private mapService: MapService,
-  ) { }
 
   public ngOnInit(): void {
     this.coordinates$ = this.mapService.createTool$<MousePositionToolModel, MousePositionToolConfigModel>({

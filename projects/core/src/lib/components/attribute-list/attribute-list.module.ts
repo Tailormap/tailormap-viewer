@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button/attribute-list-menu-button.component';
@@ -48,6 +48,7 @@ import { CoreSharedModule } from '../../shared';
 export class AttributeListModule {
   public constructor(
     // Service is instantiated here, watches changes to visible layers to create tabs
+    //eslint-disable-next-line @typescript-eslint/prefer-inject
     public attributeListManagerService: AttributeListManagerService,
   ) {}
 }
