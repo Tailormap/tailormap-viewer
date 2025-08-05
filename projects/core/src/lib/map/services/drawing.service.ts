@@ -236,6 +236,7 @@ export class DrawingService {
       [DrawingFeatureTypeEnum.CIRCLE]: 'circle',
       [DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS]: 'point',
       [DrawingFeatureTypeEnum.SQUARE]: 'square',
+      [DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH]: 'point',
       [DrawingFeatureTypeEnum.RECTANGLE]: 'rectangle',
       [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',

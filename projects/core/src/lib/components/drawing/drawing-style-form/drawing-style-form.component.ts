@@ -147,6 +147,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
       || this.type === DrawingFeatureTypeEnum.RECTANGLE
       || this.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
       || this.type === DrawingFeatureTypeEnum.SQUARE
+      || this.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH
       || this.type === DrawingFeatureTypeEnum.STAR
       || this.type === DrawingFeatureTypeEnum.ELLIPSE);
   }
