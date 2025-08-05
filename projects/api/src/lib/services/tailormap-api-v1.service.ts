@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
@@ -14,10 +14,7 @@ import { TailormapApiConstants } from './tailormap-api.constants';
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
-  constructor(
-    private httpClient: HttpClient,
-  ) {
-  }
+  private httpClient = inject( HttpClient);
 
   public getVersion$(): Observable<VersionResponseModel> {
     return this.httpClient.get<VersionResponseModel>(
