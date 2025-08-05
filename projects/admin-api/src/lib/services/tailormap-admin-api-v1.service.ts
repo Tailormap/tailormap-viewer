@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { catchError, map, Observable, of } from 'rxjs';
@@ -18,13 +18,10 @@ type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSour
   providedIn: 'root',
 })
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
+  private httpClient = inject(HttpClient);
+
 
   public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
-
-  constructor(
-    private httpClient: HttpClient,
-  ) {
-  }
 
   public getCatalog$(): Observable<CatalogNodeModel[]> {
     return this.httpClient.get<{ nodes: CatalogNodeModel[] }>(`${TailormapAdminApiV1Service.BASE_URL}/catalogs/main`)
