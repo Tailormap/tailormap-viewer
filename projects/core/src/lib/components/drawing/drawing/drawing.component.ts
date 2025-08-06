@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -139,6 +139,20 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.DRAWING);
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  @HostListener('window:keydown.delete', ['$event'])
+  public onDeleteKey(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    const isInput = target && (
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.isContentEditable
+    );
+    if (!isInput && this.selectedFeature) {
+      event.preventDefault();
+      this.removeSelectedFeature();
+    }
   }
 
   private static defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
