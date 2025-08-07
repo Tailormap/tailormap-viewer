@@ -33,7 +33,6 @@ export class InfoComponent implements OnInit {
         MarkdownHelper.getSafeHtmlForMarkdown$(config.templateContent ?? '', this.sanitizer)
           .pipe(take(1))
           .subscribe(html => {
-            console.log(html);
             this.template.set(html);
           });
       },
