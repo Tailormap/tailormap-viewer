@@ -66,9 +66,6 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   public toggleFullscreenDialog = new EventEmitter<boolean>();
 
-  @Output()
-  public dialogRegistered = new EventEmitter<string>();
-
   public fullscreen = false;
 
   @HostBinding('class')
@@ -91,9 +88,6 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit(): void {
     this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());
-    if (this.dialogId) {
-      this.dialogRegistered.emit(this.dialogId);
-    }
   }
 
   public ngOnDestroy(): void {

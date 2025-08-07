@@ -2,7 +2,6 @@
            [width]="panelWidth"
            [widthMargin]="panelWidthMargin"
            (closeDialog)="closeDialog()"
-           (dialogRegistered)="onDialogRegistered($event)"
            [dialogTitle]="(activeComponent$ | async)?.dialogTitle || ''">
   <ng-content></ng-content>
 </tm-dialog>
