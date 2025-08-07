@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, map, distinctUntilChanged } from 'rxjs';
@@ -15,6 +15,8 @@ import { FormOptionsModel } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class FormFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   private _form: FormModel | null = null;
 
@@ -32,11 +34,6 @@ export class FormFormComponent implements OnInit {
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public formForm = new FormGroup({
     name: new FormControl('', {

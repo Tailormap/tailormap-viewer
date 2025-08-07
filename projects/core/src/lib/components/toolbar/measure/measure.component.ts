@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { DrawingToolConfigModel, DrawingToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,10 @@ import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-v
   standalone: false,
 })
 export class MeasureComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   private destroyed = new Subject();
   public toolActive: 'length' | 'area' | null = null;
@@ -26,11 +30,7 @@ export class MeasureComponent implements OnInit, OnDestroy {
   private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
   public tooltips$: Observable<{ length: string; area: string }>;
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.tooltips$ = this.store$.select(selectComponentsConfigForType<MeasureComponentConfigModel>(BaseComponentTypeEnum.MEASURE))
       .pipe(
         map(config => {

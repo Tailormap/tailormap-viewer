@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { BaseComponentTypeEnum, GeolocationConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,9 @@ import { ComponentConfigurationService } from '../../services/component-configur
   standalone: false,
 })
 export class GeolocationConfigComponent implements ConfigurationComponentModel<GeolocationConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -35,10 +38,7 @@ export class GeolocationConfigComponent implements ConfigurationComponentModel<G
     noTimeout: new FormControl<boolean>(false),
   });
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(250))
       .subscribe(() => {

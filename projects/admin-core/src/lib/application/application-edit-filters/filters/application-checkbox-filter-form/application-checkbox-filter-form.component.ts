@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal, inject } from '@angular/core';
 import {
   AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
@@ -13,6 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class ApplicationCheckboxFilterFormComponent {
+  private destroyRef = inject(DestroyRef);
+
 
   public attributeValuesSettings = signal<AttributeValueSettings[]>([]);
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
@@ -57,7 +59,7 @@ export class ApplicationCheckboxFilterFormComponent {
   @Output()
   public updateCheckboxFilter = new EventEmitter<CheckboxFilterModel>();
 
-  constructor(private destroyRef: DestroyRef) {
+  constructor() {
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {

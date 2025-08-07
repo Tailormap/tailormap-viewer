@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { StoreModule } from '@ngrx/store';
@@ -42,7 +42,9 @@ import { SearchIndexSchedulingComponent } from './search-index-scheduling/search
   ],
 })
 export class SearchIndexModule {
-  constructor(searchIndexService: SearchIndexService) {
+  constructor() {
+    const searchIndexService = inject(SearchIndexService);
+
     searchIndexService.listenForSearchIndexChanges();
   }
 }

@@ -1,17 +1,17 @@
 <div class="edit-application-tree"
-     [class.has-catalog-tree-visible]="catalogTreeOpened"
-     [class.has-selected-layer]="selectedLayerNode$ | async">
+  [class.has-catalog-tree-visible]="catalogTreeOpened"
+  [class.has-selected-layer]="selectedLayerNode$ | async">
   <div class="application-catalog">
     <div class="catalog-tree-wrapper">
       <div class="tree-title" i18n="@@admin-core.catalog.catalog">Catalog</div>
       <div class="catalog-tree">
         <tm-admin-application-catalog-tree [applicationTreeService]="applicationTreeService"
-                                           [selectedLayerId$]="selectedCatalogItem$"
-                                           [applicationStateTree]="applicationStateTree"
-                                           (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
+          [selectedLayerId$]="selectedCatalogItem$"
+          [applicationStateTree]="applicationStateTree"
+        (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
       </div>
       <div class="tree-hint"
-        i18n="@@admin-core.application.filtered-layers">The catalog above shows only layers matching the application projection ({{draftApplicationCrs$ | async}})</div>
+      i18n="@@admin-core.application.filtered-layers">The catalog above shows only layers matching the application projection ({{draftApplicationCrs$ | async}})</div>
     </div>
     <button mat-icon-button (click)="toggleCatalogTree()" class="toggle-tree-icon">
       <mat-icon [svgIcon]="catalogTreeOpened ? 'chevron_left' : 'chevron_right'"></mat-icon>
@@ -19,27 +19,26 @@
   </div>
   <div class="application-tree">
     <div class="tree-title" i18n="@@admin-core.application.application">Application</div>
-    <ng-template #applicationTree>
-      <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
-                                       [someExpanded]="someExpanded$ | async"
-                                       [filterTerm]="filterTerm$ | async"
-                                       [applicationStateTree]="applicationStateTree"
-                                       [useRadioInputs]="useRadioInputs"
-                                       (filterChanged)="filterChanged($event)"
-                                       (nodePositionChanged)="nodePositionChanged($event)"
-                                       (visibilityChanged)="visibilityChanged($event)"
-                                       (nodeExpandedToggled)="nodeExpandedToggled($event)"
-                                       (addSubFolder)="addSubFolder($event)"
-                                       (renameFolder)="renameFolder($event)"
-                                       (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>
-    </ng-template>
-    <ng-container *ngIf="loadingServices$ | async; else: applicationTree">
+    @if (loadingServices$ | async) {
       <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
-    </ng-container>
+    } @else {
+      <tm-admin-application-layer-tree [treeNodes$]="treeNodes$"
+        [someExpanded]="someExpanded$ | async"
+        [filterTerm]="filterTerm$ | async"
+        [applicationStateTree]="applicationStateTree"
+        [useRadioInputs]="useRadioInputs"
+        (filterChanged)="filterChanged($event)"
+        (nodePositionChanged)="nodePositionChanged($event)"
+        (visibilityChanged)="visibilityChanged($event)"
+        (nodeExpandedToggled)="nodeExpandedToggled($event)"
+        (addSubFolder)="addSubFolder($event)"
+        (renameFolder)="renameFolder($event)"
+      (removeNode)="removeNode($event)"></tm-admin-application-layer-tree>
+    }
   </div>
   <div class="application-layer-settings">
     <tm-admin-application-layer-settings [node]="selectedLayerNode$ | async"
-                                         [serviceLayer]="selectedServiceLayer$ | async"
-                                         (layerSettingsChange)="layerSettingsChanged($event)"></tm-admin-application-layer-settings>
+      [serviceLayer]="selectedServiceLayer$ | async"
+    (layerSettingsChange)="layerSettingsChanged($event)"></tm-admin-application-layer-settings>
   </div>
 </div>

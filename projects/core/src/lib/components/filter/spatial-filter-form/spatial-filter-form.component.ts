@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
@@ -25,6 +25,11 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   standalone: false,
 })
 export class SpatialFilterFormComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private removeFilterService = inject(RemoveFilterService);
+  private spatialFilterReferenceLayerService = inject(SpatialFilterReferenceLayerService);
+
 
   private DEFAULT_STYLE = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style', {
     pointType: undefined,
@@ -45,14 +50,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
   public in3dView$: Observable<boolean> = of(false);
-
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private removeFilterService: RemoveFilterService,
-    private spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);

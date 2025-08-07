@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as SearchIndexActions from './search-index.actions';
@@ -10,6 +10,10 @@ import { selectSearchIndexesLoadStatus } from './search-index.selectors';
 
 @Injectable()
 export class SearchIndexEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadSearchIndexes$ = createEffect(() => {
     return this.actions$.pipe(
@@ -33,11 +37,5 @@ export class SearchIndexEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

@@ -1,25 +1,33 @@
 <h2>
-  <span *ngIf="!data.currentName" i18n="@@admin-core.application.create-folder">Create folder</span>
-  <span *ngIf="data.currentName" i18n="@@admin-core.application.change-folder-name">Change folder name</span>
+  @if (!data.currentName) {
+    <span i18n="@@admin-core.application.create-folder">Create folder</span>
+  }
+  @if (data.currentName) {
+    <span i18n="@@admin-core.application.change-folder-name">Change folder name</span>
+  }
 </h2>
 <mat-dialog-content>
   <mat-form-field>
     <mat-label i18n="@@admin-core.application.folder-name">Folder name</mat-label>
     <input matInput
-           type="text"
-           tmAutoFocus
-           [formControl]="nameControl" />
+      type="text"
+      tmAutoFocus
+      [formControl]="nameControl" />
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-flat-button
-          (click)="onCancel()"
-          i18n="@@admin-core.common.cancel">Cancel</button>
+    (click)="onCancel()"
+  i18n="@@admin-core.common.cancel">Cancel</button>
   <button mat-flat-button
-          [disabled]="nameControl.invalid || nameControl.pristine"
-          (click)="onCreate()"
-          color="primary">
-    <span *ngIf="!data.currentName" i18n="@@admin-core.common.create">Create</span>
-    <span *ngIf="data.currentName" i18n="@@admin-core.common.save">Save</span>
+    [disabled]="nameControl.invalid || nameControl.pristine"
+    (click)="onCreate()"
+    color="primary">
+    @if (!data.currentName) {
+      <span i18n="@@admin-core.common.create">Create</span>
+    }
+    @if (data.currentName) {
+      <span i18n="@@admin-core.common.save">Save</span>
+    }
   </button>
 </mat-dialog-actions>

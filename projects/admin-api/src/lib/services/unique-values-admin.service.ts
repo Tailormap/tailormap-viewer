@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
@@ -13,10 +13,10 @@ export interface UniqueValuesAdminParams {
   providedIn: 'root',
 })
 export class UniqueValuesAdminService {
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   private cachedResponses: Map<string, UniqueValuesResponseModel> = new Map();
-
-  constructor(private adminApiService: TailormapAdminApiV1Service) { }
 
   public getUniqueValues$(params: UniqueValuesAdminParams): Observable<UniqueValuesResponseModel> {
     const key = this.createKey(params);

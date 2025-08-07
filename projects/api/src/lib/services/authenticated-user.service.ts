@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, take, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from './tailormap-security-api-v1.service.injection-token';
@@ -14,11 +14,7 @@ export class AuthenticatedUserService {
 
   private authenticatedUserSubject = new BehaviorSubject<SecurityModel>({ isAuthenticated: false });
   private authenticatedUser$ = this.authenticatedUserSubject.asObservable();
-
-  constructor(
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-  ) {
-  }
+  private api = inject<TailormapSecurityApiV1ServiceModel>(TAILORMAP_SECURITY_API_V1_SERVICE);
 
   public fetchUserDetails() {
     this.api.getUser$()

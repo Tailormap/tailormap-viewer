@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -12,14 +12,13 @@ import { UserService } from '../services/user.service';
   standalone: false,
 })
 export class UserListComponent {
+  private userDetailsService = inject(UserService);
 
   public filteredUsers$: Observable<Array<UserModel & { selected: boolean }>>;
   public userFilter: FormControl;
   public filterString$: Observable<string>;
 
-  constructor(
-    private userDetailsService: UserService,
-  ) {
+  constructor() {
     this.userFilter = new FormControl('');
     this.filterString$ = this.userFilter.valueChanges.pipe(startWith(''));
 

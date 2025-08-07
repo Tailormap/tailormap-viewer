@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { loadData } from '../state/attribute-list.actions';
 import { selectAttributeListTab } from '../state/attribute-list.selectors';
@@ -12,6 +12,8 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class AttributeListTabComponent {
+  private store$ = inject(Store);
+
 
   @Input()
   public set id (id: string | undefined) {
@@ -26,10 +28,6 @@ export class AttributeListTabComponent {
   }
 
   private _id = '';
-
-  constructor(
-    private store$: Store,
-  ) {}
 
   private loadDataIfNeeded(id: string) {
     this.store$.select(selectAttributeListTab(id))

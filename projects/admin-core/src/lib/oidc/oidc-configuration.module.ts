@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { oidcConfigurationStateKey } from './state/oidc-configuration.state';
 import { oidcConfigurationReducer } from './state/oidc-configuration.reducer';
@@ -43,10 +43,10 @@ import { Routes as AdminRoutes } from '../routes';
   ],
 })
 export class OIDCConfigurationModule {
-  constructor(
-    oidcConfigurationService: OIDCConfigurationService,
-    adminSettingsRouterService: AdminSettingsRouterService,
-  ) {
+  constructor() {
+    const oidcConfigurationService = inject(OIDCConfigurationService);
+    const adminSettingsRouterService = inject(AdminSettingsRouterService);
+
     oidcConfigurationService.listenForOIDCConfigurationChanges();
     adminSettingsRouterService.registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single sign-on`, {
       path: AdminRoutes.OIDC_CONFIGURATION,

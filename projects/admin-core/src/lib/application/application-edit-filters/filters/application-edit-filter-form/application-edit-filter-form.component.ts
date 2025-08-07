@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
@@ -21,6 +21,11 @@ import {
   standalone: false,
 })
 export class ApplicationEditFilterFormComponent implements OnInit {
+  private applicationEditFilterService = inject(ApplicationEditFilterService);
+  private destroyRef = inject(DestroyRef);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   public filterData: InputFilterData = {
     condition: undefined,
@@ -77,13 +82,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
-
-  constructor(
-    private applicationEditFilterService: ApplicationEditFilterService,
-    private destroyRef: DestroyRef,
-    private adminSnackbarService: AdminSnackbarService,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public filterForm = new FormGroup({
     id: new FormControl(''),

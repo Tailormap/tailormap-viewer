@@ -1,18 +1,16 @@
 import { Store } from '@ngrx/store';
 import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import { AttributeFilterModel, DescribeAppLayerService, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttributeFilterService {
+  private store$ = inject(Store);
+  private describeAppLayerService = inject(DescribeAppLayerService);
 
-  constructor(
-    private store$: Store,
-    private describeAppLayerService: DescribeAppLayerService,
-  ) { }
 
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(

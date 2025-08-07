@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmDialogComponent, ConfirmDialogData } from './confirm-dialog.component';
@@ -8,8 +8,7 @@ import { CssHelper } from '../../helpers';
   providedIn: 'root',
 })
 export class ConfirmDialogService {
-
-  constructor(public dialog: MatDialog) {}
+  public dialog = inject(MatDialog);
 
   public dialogRef: MatDialogRef<ConfirmDialogComponent> | undefined;
 

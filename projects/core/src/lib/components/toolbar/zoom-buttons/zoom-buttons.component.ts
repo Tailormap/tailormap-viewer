@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MapViewDetailsModel, MapService } from '@tailormap-viewer/map';
 import { Observable, of } from 'rxjs';
 
@@ -10,12 +10,12 @@ import { Observable, of } from 'rxjs';
   standalone: false,
 })
 export class ZoomButtonsComponent {
+  private mapService = inject(MapService);
+
 
   public resolution$: Observable<MapViewDetailsModel | null> = of(null);
 
-  constructor(
-    private mapService: MapService,
-  ) {
+  constructor() {
     this.resolution$ = this.mapService.getMapViewDetails$();
   }
 

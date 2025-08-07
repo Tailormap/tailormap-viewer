@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { ExtentHelper, MapService, MapViewDetailsModel, OpenlayersExtent } from '@tailormap-viewer/map';
 import { CssHelper } from '@tailormap-viewer/shared';
@@ -8,6 +8,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class ViewerLayoutService {
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+
 
   private defaultTopHeight = CssHelper.getCssVariableValueNumeric('--map-control-size') + CssHelper.getCssVariableValueNumeric('--body-margin');
   private extraPadding = 10;
@@ -17,10 +20,7 @@ export class ViewerLayoutService {
   private paddingTopSubject = new BehaviorSubject<number>(this.defaultTopHeight);
   private paddingBottomSubject = new BehaviorSubject<number>(0);
 
-  constructor(
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     combineLatest([
       this.paddingTopSubject.asObservable(),
       this.paddingRightSubject.asObservable(),

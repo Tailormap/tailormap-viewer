@@ -1,22 +1,26 @@
 @if (node) {
   <div class="toc-node-details-panel"
-       #detailsPanel
-       [style.height]="panelHeight$ | async">
+    #detailsPanel
+    [style.height]="panelHeight$ | async">
     <tm-panel-resize orientation="horizontal" (positionChanged)="panelResized($event)"></tm-panel-resize>
     <div class="toc-node-details-panel-header">
       <h2 i18n="@@core.toc.details-for">Details for {{node.layer?.title || node.name}}</h2>
       <button mat-icon-button
-              class="close-button"
-              tmTooltip="Close details"
-              i18n-tmTooltip="@@core.toc.close-details"
-              (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
-    </div>
-    <div class="toc-node-details-panel-content">
-      <div *ngIf="(node.layer?.description || node.description) as description" class="toc-node-details-panel-section">
-        <h3 i18n="@@core.toc.description">Description</h3>
-        <div class="toc-node-description" [innerHTML]="description | htmlify"></div>
+        class="close-button"
+        tmTooltip="Close details"
+        i18n-tmTooltip="@@core.toc.close-details"
+        (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
       </div>
-      <tm-layer-details *ngIf="node.appLayerId" [layerId]="node.appLayerId" [is3dLayer]="node.is3dLayer"></tm-layer-details>
+      <div class="toc-node-details-panel-content">
+        @if ((node.layer?.description || node.description); as description) {
+          <div class="toc-node-details-panel-section">
+            <h3 i18n="@@core.toc.description">Description</h3>
+            <div class="toc-node-description" [innerHTML]="description | htmlify"></div>
+          </div>
+        }
+        @if (node.appLayerId) {
+          <tm-layer-details [layerId]="node.appLayerId" [is3dLayer]="node.is3dLayer"></tm-layer-details>
+        }
+      </div>
     </div>
-  </div>
-}
+  }

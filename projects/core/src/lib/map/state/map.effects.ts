@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MapActions from './map.actions';
 import { combineLatest, catchError, concatMap, map, of, take } from 'rxjs';
@@ -11,6 +11,10 @@ import { ApplicationBookmarkFragments } from '../../services/application-bookmar
 
 @Injectable()
 export class MapEffects {
+  private actions$ = inject(Actions);
+  private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private bookmarkService = inject(BookmarkService);
+
 
   private static LOAD_MAP_ERROR = $localize `:@@core.common.error-loading-map:Could not load map settings`;
 
@@ -48,11 +52,5 @@ export class MapEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
-    private bookmarkService: BookmarkService,
-  ) {}
 
 }

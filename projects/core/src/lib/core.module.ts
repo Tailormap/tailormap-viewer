@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer, Inject } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -96,16 +96,16 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   ],
 })
 export class CoreModule {
-  constructor(
-    matIconRegistry: MatIconRegistry,
-    domSanitizer: DomSanitizer,
-    iconService: IconService,
-    authenticatedUserService: AuthenticatedUserService,
-    adminAuthService: UserLoginCheckService,
-    @Inject(APP_BASE_HREF) baseHref: string,
-    _appStyleService: ApplicationStyleService,
-    _routerHistoryService: RouterHistoryService,
-  ) {
+  //eslint-disable-next-line @angular-eslint/prefer-inject
+  constructor( _appStyleService: ApplicationStyleService,
+               _routerHistoryService: RouterHistoryService) {
+    const matIconRegistry = inject(MatIconRegistry);
+    const domSanitizer = inject(DomSanitizer);
+    const iconService = inject(IconService);
+    const authenticatedUserService = inject(AuthenticatedUserService);
+    const adminAuthService = inject(UserLoginCheckService);
+    const baseHref = inject(APP_BASE_HREF);
+
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     authenticatedUserService.fetchUserDetails();
     adminAuthService.pingUserLoggedIn();

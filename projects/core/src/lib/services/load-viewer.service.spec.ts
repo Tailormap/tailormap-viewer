@@ -1,6 +1,7 @@
-import { ViewerResponseModel, getViewerResponseData, getComponentModel, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { ViewerResponseModel, getViewerResponseData, getComponentModel, TailormapApiV1ServiceModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { Observable, of } from 'rxjs';
 import { LoadViewerService } from './load-viewer.service';
+import { TestBed } from '@angular/core/testing';
 
 const getErrorObservable = <T>() => {
   return new Observable<T>(observer => {
@@ -20,7 +21,13 @@ export const getMockApiService = (overrides?: Partial<TailormapApiV1ServiceModel
 describe('LoadViewerService', () => {
 
   test('test working flow', done => {
-    const service = new LoadViewerService(getMockApiService());
+    TestBed.configureTestingModule({
+      providers: [
+        LoadViewerService,
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+      ],
+    });
+    const service = TestBed.inject(LoadViewerService);
     service.loadViewer$().subscribe(result => {
       expect(result.success).toEqual(true);
       expect(result.error).toBeUndefined();
@@ -33,9 +40,15 @@ describe('LoadViewerService', () => {
   });
 
   test('test load application error', done => {
-    const service = new LoadViewerService(getMockApiService({
-      getViewer$: () => getErrorObservable<ViewerResponseModel>(),
-    }));
+    TestBed.configureTestingModule({
+      providers: [
+        LoadViewerService,
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService({
+            getViewer$: () => getErrorObservable<ViewerResponseModel>(),
+          }) },
+      ],
+    });
+    const service = TestBed.inject(LoadViewerService);
     service.loadViewer$().subscribe(result => {
       expect(result.success).toEqual(false);
       expect(result.error).toEqual('Could not find or load the requested viewer');

@@ -2,7 +2,7 @@ import { map, Observable, combineLatest } from 'rxjs';
 import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentModel } from '@tailormap-viewer/api';
 import { selectComponentsConfig } from '../state/core.selectors';
 import { Store } from '@ngrx/store';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { selectIn3dView } from '../map/state/map.selectors';
 import { setComponentEnabled } from '../state/core.actions';
 
@@ -15,6 +15,8 @@ export interface LayoutConfig {
   providedIn: 'root',
 })
 export class LayoutService {
+  private store$ = inject(Store);
+
 
   public componentsConfig$: Observable<LayoutConfig>;
 
@@ -31,7 +33,9 @@ export class LayoutService {
     BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
   ];
 
-  constructor(private store$: Store) {
+  constructor() {
+    const store$ = this.store$;
+
     this.componentsConfig$ = combineLatest([
       store$.select(selectComponentsConfig),
       store$.select(selectIn3dView),
