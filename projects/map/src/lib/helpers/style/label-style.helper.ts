@@ -24,7 +24,8 @@ export class LabelStyleHelper {
     const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
     const labelSize = UnitsHelper.getNumberValue(styleConfig.labelSize, defaultSymbolSize);
     const scale = 1 + (labelSize / LabelStyleHelper.DEFAULT_FONT_SIZE);
-    const offsetY = styleConfig.pointType === 'label'
+    const isPolygonLabel = [ "Polygon", "MultiPolygon", "Circle" ].includes(geom?.getType() || '');
+    const offsetY = (isPolygonLabel || styleConfig.pointType === 'label')
       ? 0
       : 14 + (symbolSize - defaultSymbolSize) + (scale * 2);
 

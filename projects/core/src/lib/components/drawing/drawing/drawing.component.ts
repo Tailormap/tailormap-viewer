@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -139,6 +139,20 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
+  @HostListener('window:keydown.delete', ['$event'])
+  public onDeleteKey(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    const isInput = target && (
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.isContentEditable
+    );
+    if (!isInput && this.selectedFeature) {
+      event.preventDefault();
+      this.removeSelectedFeature();
+    }
+  }
+
   private static defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
     description: undefined,
     secondaryStroke: undefined,
@@ -186,8 +200,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
       attributes.lockedStyle = true;
     }
     const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style, attributes);
-    if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleHeight != null && feature.geometry) {
-      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleHeight);
+    if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleLength != null && feature.geometry) {
+      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleLength);
       if (rectangle) {
         feature.geometry = rectangle;
       }
@@ -196,6 +210,12 @@ export class DrawingComponent implements OnInit, OnDestroy {
       const circle = FeatureHelper.createCircleAtPoint(feature.geometry, this.customCircleRadius);
       if (circle) {
         feature.geometry = circle;
+      }
+    }
+    if (this.activeTool === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && this.customSquareLength != null && feature.geometry) {
+      const square = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customSquareLength, this.customSquareLength);
+      if (square) {
+        feature.geometry = square;
       }
     }
     this.store$.dispatch(addFeature({
@@ -308,8 +328,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
       // Do not use setters here, those will call resetBeforeDrawing()
       this._customRectangleWidth = style.rectangleSize.width;
-      this._customRectangleHeight = style.rectangleSize.height;
+      this._customRectangleLength = style.rectangleSize.height;
     }
+    if (style.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && style.circleRadius) {
+      // Do not use setters here, those will call resetBeforeDrawing()
+      this._customCircleRadius = style.circleRadius;
+    }
+    if (style.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && style.squareLength) {
+      // Do not use setters here, those will call resetBeforeDrawing()
+      this._customSquareLength = style.squareLength;
+    }
+
 
     if (this.activeTool !== style.type) {
       this.drawingService.toggle(style.type, this.showMeasures());
@@ -328,19 +357,19 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.drawRectangle();
   }
 
-  private _customRectangleHeight: number | null = null;
-  public get customRectangleHeight(): number | null {
-    return this._customRectangleHeight;
+  private _customRectangleLength: number | null = null;
+  public get customRectangleLength(): number | null {
+    return this._customRectangleLength;
   }
-  public set customRectangleHeight(value: number | null) {
-    this._customRectangleHeight = value;
+  public set customRectangleLength(value: number | null) {
+    this._customRectangleLength = value;
     this.drawRectangle();
   }
 
   public drawRectangle() {
     this.resetBeforeDrawing();
     if (this.customRectangleWidth !== null && this.customRectangleWidth >= this.SIZE_MAX && this.customRectangleWidth <= this.SIZE_MIN
-      && this.customRectangleHeight !== null && this.customRectangleHeight >= this.SIZE_MAX && this.customRectangleHeight <= this.SIZE_MIN) {
+      && this.customRectangleLength !== null && this.customRectangleLength >= this.SIZE_MAX && this.customRectangleLength <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE);
       }
@@ -353,7 +382,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public clearRectangleSize() {
     this.customRectangleWidth = null;
-    this.customRectangleHeight = null;
+    this.customRectangleLength = null;
   }
 
   private _customCircleRadius: number | null = null;
@@ -381,4 +410,31 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.resetBeforeDrawing();
     this.customCircleRadius = this._customCircleRadius;
   }
+
+  private _customSquareLength: number | null = null;
+  public get customSquareLength(): number | null {
+    return this._customSquareLength;
+  }
+  public set customSquareLength(value: number | null) {
+    this._customSquareLength = value;
+    if (this._customSquareLength !== null && this._customSquareLength >= this.SIZE_MAX && this._customSquareLength <= this.SIZE_MIN) {
+      if (this.activeTool !== DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH) {
+        this.drawingService.toggle(DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH);
+      }
+    } else {
+      if(this.activeTool !== DrawingFeatureTypeEnum.SQUARE) {
+        this.drawingService.toggle(DrawingFeatureTypeEnum.SQUARE, this.showMeasures());
+      }
+    }
+  }
+
+  public clearSquareLength() {
+    this.customSquareLength = null;
+  }
+
+  public drawSquare() {
+    this.resetBeforeDrawing();
+    this.customSquareLength = this._customSquareLength;
+  }
+
 }

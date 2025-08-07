@@ -89,6 +89,7 @@ export type DrawingStyleTypeMap = {
   [DrawingFeatureTypeEnum.LABEL]: LabelDrawingFeatureStyleModel;
   [DrawingFeatureTypeEnum.POLYGON]: PolygonDrawingFeatureStyleModel;
   [DrawingFeatureTypeEnum.SQUARE]: PolygonDrawingFeatureStyleModel;
+  [DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH]: PolygonDrawingFeatureStyleModel;
   [DrawingFeatureTypeEnum.RECTANGLE]: PolygonDrawingFeatureStyleModel;
   [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: PolygonDrawingFeatureStyleModel;
   [DrawingFeatureTypeEnum.ELLIPSE]: PolygonDrawingFeatureStyleModel;
@@ -102,6 +103,8 @@ export interface DrawingFeatureModelAttributes extends FeatureModelAttributes {
   style: DrawingFeatureStyleModel;
   lockedStyle?: boolean;
   rectangleSize?: { width: number; height: number };
+  circleRadius?: number;
+  squareLength?: number;
   selected?: boolean;
   zIndex?: number;
 }

@@ -76,7 +76,7 @@
               tmTooltip="Draw square"
               mat-stroked-button
               color="primary"
-              (click)="draw(drawingTypes.SQUARE)">
+              (click)="drawSquare()">
         <mat-icon svgIcon="tools_draw_square"></mat-icon>
       </button>
       <button [class.button--active]="activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE'"
@@ -126,8 +126,6 @@
       }
     </div>
 
-    <tm-drawing-style-library-list (drawingStyleSelected)="selectDrawingStyle($event)"></tm-drawing-style-library-list>
-
     @if(activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE') {
       <div class="rectangle-size-inputs">
         <mat-form-field appearance="outline" class="rectangle-size-input__width">
@@ -139,15 +137,27 @@
                  [max]="SIZE_MIN">
         </mat-form-field>
         <mat-form-field appearance="outline" class="rectangle-size-input__height">
-          <mat-label i18n="@@core.drawing.rectangle-height">Height ({{mapUnits$ | async}})</mat-label>
+          <mat-label i18n="@@core.drawing.rectangle-length">Length ({{mapUnits$ | async}})</mat-label>
           <input matInput
                  type="number"
-                 [(ngModel)]="customRectangleHeight"
+                 [(ngModel)]="customRectangleLength"
                  [min]="SIZE_MAX"
                  [max]="SIZE_MIN">
         </mat-form-field>
         <button mat-icon-button (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
       </div>
+    }
+
+    @if(activeTool === 'SQUARE' || activeTool === 'SQUARE_SPECIFIED_LENGTH') {
+      <mat-form-field appearance="outline" class="circle-input__radius">
+        <mat-label i18n="@@core.drawing.square-length">Side length ({{mapUnits$ | async}})</mat-label>
+        <input matInput
+               type="number"
+               [(ngModel)]="customSquareLength"
+               [min]="SIZE_MAX"
+               [max]="SIZE_MIN">
+        <button mat-icon-button matSuffix (click)="clearSquareLength()"><mat-icon svgIcon="close"></mat-icon></button>
+      </mat-form-field>
     }
 
     @if (activeTool === 'CIRCLE' || activeTool === 'CIRCLE_SPECIFIED_RADIUS') {
@@ -161,6 +171,9 @@
         <button mat-icon-button matSuffix (click)="clearCircleRadius()"><mat-icon svgIcon="close"></mat-icon></button>
       </mat-form-field>
     }
+
+    <tm-drawing-style-library-list (drawingStyleSelected)="selectDrawingStyle($event)"></tm-drawing-style-library-list>
+
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
     @if (selectedDrawingType) {
