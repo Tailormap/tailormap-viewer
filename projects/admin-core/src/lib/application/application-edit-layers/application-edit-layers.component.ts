@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
@@ -37,6 +37,8 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
   standalone: false,
 })
 export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  public applicationTreeService = inject<TreeService<AppTreeNodeModel>>(TreeService);
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -74,11 +76,6 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public selectedCatalogItem$ = this.selectedCatalogItemSubject.asObservable();
 
   public filterTerm$: Observable<string | undefined> = of('');
-
-  constructor(
-    private store$: Store,
-    public applicationTreeService: TreeService<AppTreeNodeModel>,
-  ) {}
 
   public ngOnInit(): void {
     this.setDataSources();

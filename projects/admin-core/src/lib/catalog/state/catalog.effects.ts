@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as CatalogActions from './catalog.actions';
@@ -16,6 +16,10 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class CatalogEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadCatalog$ = createEffect(() => {
     return this.actions$.pipe(
@@ -143,11 +147,5 @@ export class CatalogEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

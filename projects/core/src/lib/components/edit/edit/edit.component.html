@@ -1,61 +1,65 @@
-<div class="edit-container map-control-button-container"
-     *ngIf="editableLayers$ | async as editableLayers"
-     [class.edit-container--is-active]="active$ | async"
-     (keyup.escape)="toggle(true)">
-
-  <button mat-flat-button
-          class="map-control-button"
-          [class.disabled]="disabled"
-          [class.toggle-button--active]="active$ | async"
-          [tmTooltip]="tooltip"
-          (click)="!disabled ? toggle() : null">
-    <mat-icon svgIcon="edit"></mat-icon>
-  </button>
-
-  <div class="edit-wrapper"
-       *ngIf="active$ | async">
-    <ng-container>
-      <mat-form-field *ngIf="editableLayers.length > 0" appearance="outline" color="primary">
-        <mat-label i18n="@@core.edit.select-layer">Select layer to edit</mat-label>
-        <mat-select [formControl]="layer" tmAutoFocus>
-          <mat-option *ngFor="let layer of editableLayers" [value]="layer.id">
-            {{layer.title || layer.layerName}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </ng-container>
+@if (editableLayers$ | async; as editableLayers) {
+  <div class="edit-container map-control-button-container"
+    [class.edit-container--is-active]="active$ | async"
+    (keyup.escape)="toggle(true)">
+    <button mat-flat-button
+      class="map-control-button"
+      [class.disabled]="disabled"
+      [class.toggle-button--active]="active$ | async"
+      [tmTooltip]="tooltip"
+      (click)="!disabled ? toggle() : null">
+      <mat-icon svgIcon="edit"></mat-icon>
+    </button>
+    @if (active$ | async) {
+      <div class="edit-wrapper"
+        >
+        <ng-container>
+          @if (editableLayers.length > 0) {
+            <mat-form-field appearance="outline" color="primary">
+              <mat-label i18n="@@core.edit.select-layer">Select layer to edit</mat-label>
+              <mat-select [formControl]="layer" tmAutoFocus>
+                @for (layer of editableLayers; track layer) {
+                  <mat-option [value]="layer.id">
+                    {{layer.title || layer.layerName}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </ng-container>
+      </div>
+    }
+    @if (!isLine() && !isPoint()) {
+      <button [matMenuTriggerFor]="geometryTypeMenu"
+        [class.disabled]="layer.value === null"
+        tmTooltip="Add new feature"
+        i18n-tmTooltip="@@core.edit.add-new-feature"
+        class="map-control-button map-control-button--add-feature"
+        mat-flat-button>
+        <mat-icon svgIcon="new_object"></mat-icon>
+      </button>
+      <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
+        @if (isPolygon()) {
+          <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
+          <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
+          <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
+        } @else {
+          <button mat-menu-item (click)="createFeature('point')" i18n="@@core.common.point">Point</button>
+          <button mat-menu-item (click)="createFeature('line')" i18n="@@core.common.line">Line</button>
+          <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
+          <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
+          <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
+        }
+      </mat-menu>
+    } @else {
+      <button [class.disabled]="layer.value === null"
+        tmTooltip="Add new feature"
+        i18n-tmTooltip="@@core.edit.add-new-feature"
+        class="map-control-button map-control-button--add-feature"
+        (click)="createFeatureIfSingleGeometryType()"
+        mat-flat-button>
+        <mat-icon svgIcon="new_object"></mat-icon>
+      </button>
+    }
   </div>
-
-  @if (!isLine() && !isPoint()) {
-    <button [matMenuTriggerFor]="geometryTypeMenu"
-            [class.disabled]="layer.value === null"
-            tmTooltip="Add new feature"
-            i18n-tmTooltip="@@core.edit.add-new-feature"
-            class="map-control-button map-control-button--add-feature"
-            mat-flat-button>
-      <mat-icon svgIcon="new_object"></mat-icon>
-    </button>
-    <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
-      @if (isPolygon()) {
-        <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
-        <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
-        <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
-      } @else {
-        <button mat-menu-item (click)="createFeature('point')" i18n="@@core.common.point">Point</button>
-        <button mat-menu-item (click)="createFeature('line')" i18n="@@core.common.line">Line</button>
-        <button mat-menu-item (click)="createFeature('area')" i18n="@@core.common.polygon">Polygon</button>
-        <button mat-menu-item (click)="createFeature('rectangle')" i18n="@@core.common.rectangle">Rectangle</button>
-        <button mat-menu-item (click)="createFeature('square')" i18n="@@core.common.square">Square</button>
-      }
-    </mat-menu>
-  } @else {
-    <button [class.disabled]="layer.value === null"
-            tmTooltip="Add new feature"
-            i18n-tmTooltip="@@core.edit.add-new-feature"
-            class="map-control-button map-control-button--add-feature"
-            (click)="createFeatureIfSingleGeometryType()"
-            mat-flat-button>
-      <mat-icon svgIcon="new_object"></mat-icon>
-    </button>
-  }
-</div>
+}

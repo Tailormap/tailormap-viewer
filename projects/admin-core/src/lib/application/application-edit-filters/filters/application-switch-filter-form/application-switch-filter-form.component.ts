@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   AttributeType, AttributeTypeHelper, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
@@ -16,6 +16,8 @@ import { FormHelper } from '../../../../helpers/form.helper';
   standalone: false,
 })
 export class ApplicationSwitchFilterFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public set attributeType(attributeType: AttributeType) {
@@ -100,8 +102,6 @@ export class ApplicationSwitchFilterFormComponent implements OnInit {
     alias2: new FormControl<string>(''),
     startWithValue2: new FormControl<boolean>(false),
   });
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public ngOnInit(): void {
     this.switchFilterForm.valueChanges

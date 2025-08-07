@@ -1,23 +1,28 @@
 <h2 i18n="@@admin-core.oidc.identity-providers">Identity providers</h2>
-<ng-container *ngIf="oidcConfigurationsLoadStatus$ | async as oidcConfigurationsLoadStatus">
-  <mat-spinner *ngIf="oidcConfigurationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
-  <ng-container *ngIf="errorMessage$ | async as message">
+@if (oidcConfigurationsLoadStatus$ | async; as oidcConfigurationsLoadStatus) {
+  @if (oidcConfigurationsLoadStatus === 'LOADING') {
+    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+  }
+  @if (errorMessage$ | async; as message) {
     <tm-error-message [message]="message"></tm-error-message>
     <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
-  </ng-container>
-  <div *ngIf="oidcConfigurationsLoadStatus === 'LOADED'"
-       class="form-group has-search">
-    <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
-                          label="Filter identity providers"
-                          i18n-label="@@admin-core.oidc.filter-identity-providers"></tm-admin-list-filter>
-    <mat-selection-list>
-      <mat-list-item *ngFor="let oidcConfiguration of oidcConfigurations$ | async"
-                     [class.selected]="oidcConfiguration.selected"
-                     [routerLink]="['/admin/settings/oidc-configurations/oidc-configuration', oidcConfiguration.id]">
-        <span class="detail">{{oidcConfiguration.name}}</span>
-      </mat-list-item>
-    </mat-selection-list>
-
-  </div>
-</ng-container>
+  }
+  @if (oidcConfigurationsLoadStatus === 'LOADED') {
+    <div
+      class="form-group has-search">
+      <tm-admin-list-filter [formControl]="filter"
+        [filterTerm]="filterTerm$ | async"
+        label="Filter identity providers"
+      i18n-label="@@admin-core.oidc.filter-identity-providers"></tm-admin-list-filter>
+      <mat-selection-list>
+        @for (oidcConfiguration of oidcConfigurations$ | async; track oidcConfiguration) {
+          <mat-list-item
+            [class.selected]="oidcConfiguration.selected"
+            [routerLink]="['/admin/settings/oidc-configurations/oidc-configuration', oidcConfiguration.id]">
+            <span class="detail">{{oidcConfiguration.name}}</span>
+          </mat-list-item>
+        }
+      </mat-selection-list>
+    </div>
+  }
+}

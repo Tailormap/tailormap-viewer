@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import { combineLatest, debounceTime, filter, map, skip, Subject, takeUntil } from 'rxjs';
@@ -17,20 +17,20 @@ import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-ha
   providedIn: 'root',
 })
 export class ApplicationBookmarkService implements OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private bookmarkService = inject(BookmarkService);
+  private readableVisibilityBookmarkHandler = inject(ReadableVisibilityBookmarkHandlerService);
+
 
   private destroyed = new Subject();
   private lastLocationBookmark: string | undefined;
   private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private bookmarkService: BookmarkService,
-    private readableVisibilityBookmarkHandler: ReadableVisibilityBookmarkHandlerService,
-  ) {
+  constructor() {
     let initialRun = true;
     this.route.fragment
       .pipe(takeUntil(this.destroyed))

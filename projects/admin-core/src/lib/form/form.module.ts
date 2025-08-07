@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormListComponent } from './form-list/form-list.component';
 import { FormHomeComponent } from './form-home/form-home.component';
@@ -48,7 +48,9 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
   ],
 })
 export class FormModule {
-  constructor(formService: FormService) {
+  constructor() {
+    const formService = inject(FormService);
+
     formService.listenForApplicationChanges();
   }
 }

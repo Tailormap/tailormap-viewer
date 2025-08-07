@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, DestroyRef, inject } from '@angular/core';
 import { AttributeValueSettings, DropdownListFilterModel } from '@tailormap-viewer/api';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
@@ -13,6 +13,8 @@ import { FilterHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class DropdownListFilterComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public set dropdownListFilterConfiguration(dropdownListFilter: DropdownListFilterModel | null) {
@@ -39,8 +41,6 @@ export class DropdownListFilterComponent implements OnInit {
 
   private alteredUniqueValues$: Observable<{ value: string; alias?: string }[]> = of([]);
   public filteredUniqueValues$: Observable<{ value: string; alias?: string }[]> = of([]);
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public ngOnInit(): void {
     this.filter.valueChanges

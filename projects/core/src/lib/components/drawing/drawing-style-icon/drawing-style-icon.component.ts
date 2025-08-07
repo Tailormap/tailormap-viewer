@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ColorHelper } from '@tailormap-viewer/shared';
 import { DrawingFeatureStyleModel, StrokeTypeEnum } from '../models/drawing-feature.model';
@@ -14,16 +14,14 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class DrawingStyleIconComponent {
+  private domSanitizer = inject(DomSanitizer);
+
 
   @Input()
   public type: DrawingFeatureTypeEnum | null = null;
 
   @Input()
   public featureStyle: DrawingFeatureStyleModel | null = null;
-
-  constructor(
-    private domSanitizer: DomSanitizer,
-  ) { }
 
   public getSvg() {
     if (!this.type || !this.featureStyle) {

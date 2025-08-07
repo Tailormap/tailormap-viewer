@@ -1,21 +1,27 @@
 <mat-toolbar>
 
   <div class="buttons">
-    <button *ngIf="hasFilters$ | async" mat-flat-button color="primary" (click)="clearFilter()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
+    @if (hasFilters$ | async) {
+      <button mat-flat-button color="primary" (click)="clearFilter()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
+    }
     <tm-attribute-list-export-button></tm-attribute-list-export-button>
-    <mat-spinner *ngIf="loadingData$ | async" color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+    @if (loadingData$ | async) {
+      <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+    }
   </div>
 
-  <div class="paging" *ngIf="pagingData$ | async as pagingData">
-    <mat-paginator [pageSize]="pagingData.pageSize"
-                   [pageIndex]="pagingData.pageIndex - 1"
-                   [length]="pagingData.totalCount || 0"
-                   [hidePageSize]="true"
-                   [disabled]="loadingData$ | async"
-                   [showFirstLastButtons]="true"
-                   (click)="showJumpToPage($event)"
-                   (page)="onPageChange($event)">
-    </mat-paginator>
-  </div>
+  @if (pagingData$ | async; as pagingData) {
+    <div class="paging">
+      <mat-paginator [pageSize]="pagingData.pageSize"
+        [pageIndex]="pagingData.pageIndex - 1"
+        [length]="pagingData.totalCount || 0"
+        [hidePageSize]="true"
+        [disabled]="loadingData$ | async"
+        [showFirstLastButtons]="true"
+        (click)="showJumpToPage($event)"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  }
 
 </mat-toolbar>

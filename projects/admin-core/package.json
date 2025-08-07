@@ -5,19 +5,19 @@
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/animations": "^19.2.2",
-    "@angular/cdk": "^19.2.3",
-    "@angular/common": "^19.2.2",
-    "@angular/core": "^19.2.2",
-    "@angular/forms": "^19.2.2",
-    "@angular/material": "^19.2.3",
-    "@angular/material-luxon-adapter": "^19.2.3",
-    "@angular/platform-browser": "^19.2.2",
-    "@angular/router": "^19.2.2",
-    "@ngrx/effects": "^19.0.1",
-    "@ngrx/operators": "^19.0.1",
-    "@ngrx/store": "^19.0.1",
-    "@ngrx/store-devtools": "^19.0.1",
+    "@angular/animations": "^20.1.4",
+    "@angular/cdk": "^20.1.4",
+    "@angular/common": "^20.1.4",
+    "@angular/core": "^20.1.4",
+    "@angular/forms": "^20.1.4",
+    "@angular/material": "^20.1.4",
+    "@angular/material-luxon-adapter": "^20.1.4",
+    "@angular/platform-browser": "^20.1.4",
+    "@angular/router": "^20.1.4",
+    "@ngrx/effects": "^20.0.0",
+    "@ngrx/operators": "^20.0.0",
+    "@ngrx/store": "^20.0.0",
+    "@ngrx/store-devtools": "^20.0.0",
     "@tailormap-admin/admin-api": "^12.1.0-rc.1",
     "@tailormap-viewer/api": "^12.1.0-rc.1",
     "@tailormap-viewer/shared": "^12.1.0-rc.1",
@@ -25,6 +25,6 @@
     "rxjs": "^7.8.2"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.8.1"
   }
 }

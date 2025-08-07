@@ -131,7 +131,7 @@ export class OpenLayersWmsGetFeatureInfoHelper {
         ];
         return err.filter(Boolean).join(" - ");
       }
-    } catch(e) {
+    } catch (e) {
       return "Unknown error";
     }
     return "Unknown error";

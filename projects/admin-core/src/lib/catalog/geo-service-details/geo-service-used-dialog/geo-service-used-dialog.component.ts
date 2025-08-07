@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApplicationModel, GeoServiceModel } from '@tailormap-admin/admin-api';
 
@@ -10,11 +10,10 @@ import { ApplicationModel, GeoServiceModel } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class GeoServiceUsedDialogComponent {
-
-  constructor(
-    private dialogRef: MatDialogRef<GeoServiceUsedDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { applications: ApplicationModel[]; service: GeoServiceModel },
-  ) { }
+  public data = inject<{
+    applications: ApplicationModel[]; service: GeoServiceModel;
+  }>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<GeoServiceUsedDialogComponent>>(MatDialogRef);
 
   public onConfirm() {
     this.dialogRef.close(true);

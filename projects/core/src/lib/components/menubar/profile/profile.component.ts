@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { combineLatest, map, Observable, Subject } from 'rxjs';
@@ -16,6 +16,11 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class ProfileComponent implements OnDestroy {
+  private store$ = inject(Store);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
@@ -25,12 +30,7 @@ export class ProfileComponent implements OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-    private router: Router,
-    private dialog: MatDialog,
-    private authenticatedUserService: AuthenticatedUserService,
-  ) {
+  constructor() {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();
     this.userIsAdmin$ = this.authenticatedUserService.isAdminUser$();
     this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);

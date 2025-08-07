@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { Store } from '@ngrx/store';
@@ -25,6 +25,13 @@ type ServiceAndLayerFullName = ServiceAndLayer & { fullLayerName: string };
   standalone: false,
 })
 export class CatalogShortcutButtonsComponent {
+  private store$ = inject(Store);
+  private geoServiceService = inject(GeoServiceService);
+  private featureSourceService = inject(FeatureSourceService);
+  private dialog = inject(MatDialog);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public set geoServiceId(geoServiceId: string | null) {
@@ -50,14 +57,7 @@ export class CatalogShortcutButtonsComponent {
   public geoServiceLayer$: Observable<ServiceAndLayerFullName | null>;
   public hasShortcuts$: Observable<boolean>;
 
-  constructor(
-    private store$: Store,
-    private geoServiceService: GeoServiceService,
-    private featureSourceService: FeatureSourceService,
-    private dialog: MatDialog,
-    private adminSnackbarService: AdminSnackbarService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.featureType$ = this.featureTypeIdSubject.asObservable()
       .pipe(switchMap(featureTypeId => featureTypeId
         ? this.store$.select(selectFeatureTypeById(featureTypeId))

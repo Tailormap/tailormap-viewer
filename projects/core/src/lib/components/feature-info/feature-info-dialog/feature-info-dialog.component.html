@@ -1,14 +1,14 @@
 <tm-dialog [open]="dialogOpen$ | async"
-           [openFromRight]="true"
-           [widthMargin]="panelWidthMargin"
-           [width]="expandedList() ? panelWidth : panelWidthCollapsed"
-           class="feature-info-dialog"
-           (closeDialog)="closeDialog()"
-           [allowCollapse]="true"
-           [collapsed]="dialogCollapsed$ | async"
-           (expandCollapseDialog)="expandCollapseDialog()"
-           dialogTitle="Object Information"
-           i18n-dialogTitle="@@core.feature-info.object-information">
+  [openFromRight]="true"
+  [widthMargin]="panelWidthMargin"
+  [width]="expandedList() ? panelWidth : panelWidthCollapsed"
+  class="feature-info-dialog"
+  (closeDialog)="closeDialog()"
+  [allowCollapse]="true"
+  [collapsed]="dialogCollapsed$ | async"
+  (expandCollapseDialog)="expandCollapseDialog()"
+  dialogTitle="Object Information"
+  i18n-dialogTitle="@@core.feature-info.object-information">
   @if (expandedList()) {
     <div class="layer-list-wrapper">
       <div class="toggle"><button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_right"></mat-icon></button></div>
@@ -41,10 +41,12 @@
             <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="toggleIcon()"></mat-icon></div>
           }
           <div class="content attributes-list">
-            <div *ngFor="let att of feature.sortedAttributes" class="row">
-              <strong>{{att.label}}</strong>
-              <div [innerHTML]="att.attributeValue | htmlify"></div>
-            </div>
+            @for (att of feature.sortedAttributes; track att) {
+              <div class="row">
+                <strong>{{att.label}}</strong>
+                <div [innerHTML]="att.attributeValue | htmlify"></div>
+              </div>
+            }
           </div>
           <div class="buttons">
             <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
@@ -52,9 +54,9 @@
             @if (showEditButtonConfig && (isEditPossible$ | async)) {
               <div class="edit-feature-button">
                 <button mat-icon-button
-                        tmTooltip="Edit feature"
-                        i18n-tmTooltip="@@core.feature-info.edit-feature"
-                        (click)="editFeature()">
+                  tmTooltip="Edit feature"
+                  i18n-tmTooltip="@@core.feature-info.edit-feature"
+                  (click)="editFeature()">
                   <mat-icon svgIcon="edit"></mat-icon>
                 </button>
               </div>

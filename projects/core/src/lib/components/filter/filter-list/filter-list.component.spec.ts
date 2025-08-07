@@ -12,12 +12,27 @@ import { FilterDescriptionComponent } from '../../../filter/filter-description/f
 describe('FilterListComponent', () => {
 
   test('should render empty list', async () => {
-    const store = provideMockStore({ initialState: { filter: { filterGroups: [] } } });
     await render(FilterListComponent, {
-      providers: [store],
       imports: [ SharedImportsModule, MatIconTestingModule ],
+      declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
+      providers: [
+        provideMockStore({
+          initialState: {
+            filter: {
+              filterGroups: [],
+            },
+          },
+          selectors: [
+            {
+              selector: selectFilterGroupsWithLayers,
+              value: [],
+            },
+          ],
+        }),
+      ],
     });
     expect(screen.queryByText('Attribute filter')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('filter-list-item')).toBeNull();
   });
 
   test('should render list with filters', async () => {

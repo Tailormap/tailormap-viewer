@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -34,6 +34,14 @@ import { DrawingStylesService } from '../services/drawing-styles.service';
   ],
 })
 export class DrawingComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private menubarService = inject(MenubarService);
+  private confirmService = inject(ConfirmDialogService);
+  private drawingService = inject(DrawingService);
+  private cdr = inject(ChangeDetectorRef);
+  private drawingStylesService = inject(DrawingStylesService);
+
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
@@ -62,16 +70,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     DrawingFeatureTypeEnum.LINE,
     DrawingFeatureTypeEnum.STAR,
   ]);
-
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private menubarService: MenubarService,
-    private confirmService: ConfirmDialogService,
-    private drawingService: DrawingService,
-    private cdr: ChangeDetectorRef,
-    private drawingStylesService: DrawingStylesService,
-  ) { }
 
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(

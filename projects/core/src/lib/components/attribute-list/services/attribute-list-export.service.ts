@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
@@ -24,7 +24,10 @@ export enum SupportedExportFormats {
   providedIn: 'root',
 })
 export class AttributeListExportService {
-
+  private store$ = inject(Store);
+  private snackBar = inject(MatSnackBar);
+  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private dateLocale = inject(MAT_DATE_LOCALE);
   private static CSV_FORMATS = [ 'csv', 'text/csv' ];
   private static XLSX_FORMATS = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'excel2007' ];
   private static SHAPE_FORMATS = [ 'application/vnd.shp', 'application/x-zipped-shp', 'SHAPE-ZIP' ];
@@ -33,14 +36,6 @@ export class AttributeListExportService {
   private static DXF_FORMATS = ['DXF-ZIP'];
 
   private cachedFormats: Map<string, string[]> = new Map();
-
-  constructor(
-    private store$: Store,
-    private snackBar: MatSnackBar,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-    @Inject(MAT_DATE_LOCALE) private dateLocale: string,
-  ) {
-  }
 
   public getExportFormats$(layerId: string): Observable<SupportedExportFormats[]> {
     return this.getExportCapabilities$(layerId).pipe(
@@ -107,7 +102,7 @@ export class AttributeListExportService {
         if (!response || !response.body) {
           return;
         }
-        const date = DateTime.now().setLocale(this.dateLocale).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
+        const date = DateTime.now().setLocale((this.dateLocale as string)).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
         const defaultFilename = [ $localize `:@@core.attribute-list.export:Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
         const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
         FileHelper.saveAsFile(response.body, fileName);

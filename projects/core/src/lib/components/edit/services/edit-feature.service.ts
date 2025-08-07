@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
@@ -9,12 +9,9 @@ import { HttpStatusCode } from '@angular/common/http';
   providedIn: 'root',
 })
 export class EditFeatureService {
+  private snackBar = inject(MatSnackBar);
+  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
 
-  constructor(
-    private snackBar: MatSnackBar,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {
-  }
 
   private showSnackbarMessage(msg: string, e?: ErrorResponseModel | any) {
     if (e && e.error && e.error.message) {

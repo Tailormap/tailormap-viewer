@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectAttributeListPanelTitle, selectAttributeListVisible } from '../state/attribute-list.selectors';
@@ -11,13 +11,11 @@ import { setAttributeListVisibility } from '../state/attribute-list.actions';
   standalone: false,
 })
 export class AttributeListMenuButtonComponent implements OnInit {
+  private store$ = inject(Store);
+
 
   public visible$: Observable<boolean> = of(false);
   public title$: Observable<string> = of('');
-
-  constructor(
-    private store$: Store,
-  ) { }
 
   public ngOnInit(): void {
     this.visible$ = this.store$.select(selectAttributeListVisible);

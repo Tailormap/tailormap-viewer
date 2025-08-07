@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, computed, signal, OnInit, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, signal, OnInit, DestroyRef, inject } from '@angular/core';
 import { AttributeFilterModel, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createApplicationAttributeFilterGroup } from '../../state/application.actions';
@@ -20,6 +20,9 @@ import { FilterHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class ApplicationCreateFilterGroupComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
@@ -42,11 +45,6 @@ export class ApplicationCreateFilterGroupComponent implements OnInit {
     return layersWithSelected;
   });
   public saveEnabled = computed(() => this.selectedLayers().length > 0);
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    ) { }
 
   public ngOnInit(): void {
     this.layerFilter.valueChanges

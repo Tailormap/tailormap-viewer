@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
 import { selectAttributeListData, selectAttributeListTabs } from '../state/attribute-list.selectors';
@@ -5,12 +6,14 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
   AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TailormapApiV1ServiceModel,
+  TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { FilterService } from '../../../filter/services/filter.service';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { MapService } from '@tailormap-viewer/map';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -18,10 +21,9 @@ const setup = (
   filters?: Map<string, string | null>,
 ) => {
   const api = {
-    getFeatures$: jest.fn(() => {
-      return of(features);
-    }),
-  } as unknown as TailormapApiV1ServiceModel;
+    getFeatures$: jest.fn(() => of(features)),
+  } as TailormapApiV1ServiceModel;
+
   const tabs: AttributeListTabModel[] = [
     { id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', loadingData: false, initialDataLoaded: false },
     { id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', loadingData: false, initialDataLoaded: false },
@@ -37,12 +39,26 @@ const setup = (
       { selector: selectViewerId, value: '1' },
     ],
   }) as Store;
+
   const filterService = {
     getChangedFilters$: jest.fn(() => of(filters || new Map())),
     getFilterForLayer: jest.fn(() => undefined),
-  } as unknown as FilterService;
-  const featureUpdatedService = new FeatureUpdatedService({ refreshLayer: of() } as any);
-  const service = new AttributeListDataService(api, store, filterService, featureUpdatedService);
+  };
+
+  const mapServiceMock = { refreshLayer: jest.fn() };
+
+  TestBed.configureTestingModule({
+    providers: [
+      { provide: TAILORMAP_API_V1_SERVICE, useValue: api },
+      { provide: Store, useValue: store },
+      { provide: FilterService, useValue: filterService },
+      { provide: MapService, useValue: mapServiceMock },
+      FeatureUpdatedService,
+      AttributeListDataService,
+    ],
+  });
+
+  const service = TestBed.inject(AttributeListDataService);
   return {
     service,
     api,
@@ -54,7 +70,7 @@ const setup = (
 describe('AttributeListDataService', () => {
 
   it('creates service', () => {
-    const { service, filterService, store } = setup();
+    const { service, filterService } = setup();
     expect(service).not.toBeUndefined();
     expect(filterService.getChangedFilters$).toHaveBeenCalled();
   });

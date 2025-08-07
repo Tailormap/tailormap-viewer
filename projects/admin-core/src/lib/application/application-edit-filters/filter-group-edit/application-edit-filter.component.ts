@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, OnDestroy, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, OnDestroy, computed, signal, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,10 @@ import {
   standalone: false,
 })
 export class ApplicationEditFilterComponent implements OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public filterGroup = this.store$.selectSignal(selectSelectedFilterGroup);
   public selectedFilter = this.store$.selectSignal(selectSelectedFilterForSelectedGroup);
@@ -32,11 +36,7 @@ export class ApplicationEditFilterComponent implements OnDestroy {
   public saveEnabled = signal(false);
   private updatedFilter: AttributeFilterModel | undefined;
 
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.route.params
       .pipe(
         map(params => params['filterGroupId']),

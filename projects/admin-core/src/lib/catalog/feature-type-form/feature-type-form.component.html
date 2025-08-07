@@ -1,12 +1,14 @@
-<ng-container *ngIf="featureType">
+@if (featureType) {
   <ng-template #title><ng-container i18n="@@admin-core.catalog.feature-type-details">Details for feature type {{ featureType.title }}</ng-container></ng-template>
-  <h2 *ngIf="dialogLayout" mat-dialog-title><ng-container *ngTemplateOutlet="title"></ng-container></h2>
-  <h2 *ngIf="!dialogLayout" class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
-
+  @if (dialogLayout) {
+    <h2 mat-dialog-title><ng-container *ngTemplateOutlet="title"></ng-container></h2>
+  }
+  @if (!dialogLayout) {
+    <h2 class="page-details-title"><ng-container *ngTemplateOutlet="title"></ng-container></h2>
+  }
   @if (!featureType.defaultGeometryAttribute) {
     <tm-error-message i18n="@@admin-core.catalog.feature-type-no-default-geom-warning" [show]="true" [friendlyError]="true">This feature type does not have a geometry attribute.</tm-error-message>
   }
-
   @if(featureSource$ | async; as featureSource) {
     @if (featureSource.protocol !== 'JDBC') {
       <tm-error-message i18n="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [show]="true" [friendlyError]="true">This feature type is not editable because editing is only supported for JDBC feature sources.</tm-error-message>
@@ -14,7 +16,6 @@
       @if (!featureType.primaryKeyAttribute) {
         <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">This feature type does not have a primary key.</tm-error-message>
       }
-
       @if(featureType.writeable) {
         @if (featureType.defaultGeometryAttribute) {
           <tm-info-message i18n="@@admin-core.catalog.feature-type-editable-info">This feature type appears to be
@@ -28,35 +29,40 @@
       }
     }
   }
-
   <ng-template #content>
     <div i18n="@@admin-core.catalog.technical-name">Technical name: {{ featureType.name }}</div>
     @defer {
-      <tm-admin-feature-type-template [attributes]="featureType.attributes"
-                                      [featureTypeSettings]="featureTypeSettings$ | async"
-                                      (templateUpdated)="templateUpdated($event)"></tm-admin-feature-type-template>
-    }
-    <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
-                                      [primaryKeyAttributeName]="featureType.primaryKeyAttribute"
-                                      [featureTypeSettings]="featureTypeSettings$ | async"
-                                      [showFullSettings]="true"
-                                      (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
-                                      (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
-                                      (attributeOrderChanged)="attributeOrderChanged($event)"
-                                      (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
-  </ng-template>
-  <mat-dialog-content *ngIf="dialogLayout"><ng-container *ngTemplateOutlet="content"></ng-container></mat-dialog-content>
-  <ng-container *ngIf="!dialogLayout"><ng-container *ngTemplateOutlet="content"></ng-container></ng-container>
-
-  <ng-template #saveButton>
-    <tm-admin-save-button [saving$]="saving$"
-                          [disabled]="!saveEnabled"
-                          (save)="save(featureType)"></tm-admin-save-button>
-  </ng-template>
-  <mat-dialog-actions *ngIf="dialogLayout" align="end">
+    <tm-admin-feature-type-template [attributes]="featureType.attributes"
+      [featureTypeSettings]="featureTypeSettings$ | async"
+    (templateUpdated)="templateUpdated($event)"></tm-admin-feature-type-template>
+  }
+  <tm-admin-feature-type-attributes [attributes]="featureType.attributes"
+    [primaryKeyAttributeName]="featureType.primaryKeyAttribute"
+    [featureTypeSettings]="featureTypeSettings$ | async"
+    [showFullSettings]="true"
+    (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
+    (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
+    (attributeOrderChanged)="attributeOrderChanged($event)"
+  (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
+</ng-template>
+@if (dialogLayout) {
+  <mat-dialog-content><ng-container *ngTemplateOutlet="content"></ng-container></mat-dialog-content>
+}
+@if (!dialogLayout) {
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+}
+<ng-template #saveButton>
+  <tm-admin-save-button [saving$]="saving$"
+    [disabled]="!saveEnabled"
+  (save)="save(featureType)"></tm-admin-save-button>
+</ng-template>
+@if (dialogLayout) {
+  <mat-dialog-actions align="end">
     <button mat-flat-button (click)="closeDialog()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>
     <ng-container *ngTemplateOutlet="saveButton"></ng-container>
   </mat-dialog-actions>
-  <div *ngIf="!dialogLayout" class="page-details-actions"><ng-container *ngTemplateOutlet="saveButton"></ng-container></div>
-
-</ng-container>
+}
+@if (!dialogLayout) {
+  <div class="page-details-actions"><ng-container *ngTemplateOutlet="saveButton"></ng-container></div>
+}
+}

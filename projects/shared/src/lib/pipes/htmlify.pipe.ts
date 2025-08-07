@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HtmlifyHelper } from '../helpers/htmlify.helper';
 
@@ -7,8 +7,7 @@ import { HtmlifyHelper } from '../helpers/htmlify.helper';
   standalone: false,
 })
 export class HtmlifyPipe implements PipeTransform {
-
-  public constructor(private sanitizer: DomSanitizer) {}
+  private sanitizer = inject(DomSanitizer);
 
   public transform(value: string | null): SafeHtml | null {
     if (typeof value === 'string') {

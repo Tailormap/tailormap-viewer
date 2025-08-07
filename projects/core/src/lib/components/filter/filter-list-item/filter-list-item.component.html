@@ -1,44 +1,47 @@
-<mat-card appearance="outlined" *ngIf="filter">
-  <mat-card-content>
-    <div class="filter-group-info">
-      <div class="filter-group-layers">
-        <ng-container i18n="@@core.filter.applies-to">Applies to</ng-container> {{ getLayerList(filter.layers) }}
+@if (filter) {
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <div class="filter-group-info">
+        <div class="filter-group-layers">
+          <ng-container i18n="@@core.filter.applies-to">Applies to</ng-container> {{ getLayerList(filter.layers) }}
+        </div>
+        <div class="filter-group-type-icon">
+          @if (isAttributeFilter(filter.type)) {
+            <mat-icon svgIcon="components_attribute_list"
+              tmTooltip="Attribute filter"
+            i18n-tmTooltip="@@core.filter.attribute-filter"></mat-icon>
+          } @else if (isSpatialFilter(filter.type)) {
+            <mat-icon svgIcon="map"
+              tmTooltip="Spatial filter"
+            i18n-tmTooltip="@@core.filter.spatial-filter"></mat-icon>
+          }
+        </div>
       </div>
-      <div class="filter-group-type-icon">
-        @if (isAttributeFilter(filter.type)) {
-          <mat-icon svgIcon="components_attribute_list"
-                    tmTooltip="Attribute filter"
-                    i18n-tmTooltip="@@core.filter.attribute-filter"></mat-icon>
-        } @else if (isSpatialFilter(filter.type)) {
-          <mat-icon svgIcon="map"
-                    tmTooltip="Spatial filter"
-                    i18n-tmTooltip="@@core.filter.spatial-filter"></mat-icon>
-        }
-      </div>
-    </div>
-    <tm-filter-description [filterGroup]="filter"></tm-filter-description>
-  </mat-card-content>
-  @if (editableFilters.length > 0) {
-    <div class="edit-attribute-filters">
-      <tm-edit-attribute-filter
-        [editableFilters]="editableFilters"
-        [filterGroupId]="filter.id"
+      <tm-filter-description [filterGroup]="filter"></tm-filter-description>
+    </mat-card-content>
+    @if (editableFilters.length > 0) {
+      <div class="edit-attribute-filters">
+        <tm-edit-attribute-filter
+          [editableFilters]="editableFilters"
+          [filterGroupId]="filter.id"
         [layerIds]="filter.layerIds"></tm-edit-attribute-filter>
-    </div>
-  }
-  <mat-card-actions align="end">
-    <mat-checkbox [checked]="!filter.disabled"
-                  (click)="toggleDisabled(filter.id)"
-                  i18n="@@core.common.enabled">Enabled</mat-checkbox>
-    <div class="spacer"></div>
-    <button mat-icon-button
-            color="primary"
-            *ngIf="isSpatialFilter(filter.type)"
-            (click)="editFilter(filter)"><mat-icon svgIcon="edit"></mat-icon></button>
-    @if (!(filter.source === "PRESET")) {
-      <button mat-icon-button
-              color="warn"
-              (click)="removeFilter(filter.id)"><mat-icon svgIcon="remove"></mat-icon></button>
+      </div>
     }
-  </mat-card-actions>
-</mat-card>
+    <mat-card-actions align="end">
+      <mat-checkbox [checked]="!filter.disabled"
+        (click)="toggleDisabled(filter.id)"
+      i18n="@@core.common.enabled">Enabled</mat-checkbox>
+      <div class="spacer"></div>
+      @if (isSpatialFilter(filter.type)) {
+        <button mat-icon-button
+          color="primary"
+          (click)="editFilter(filter)"><mat-icon svgIcon="edit"></mat-icon></button>
+        }
+        @if (!(filter.source === "PRESET")) {
+          <button mat-icon-button
+            color="warn"
+            (click)="removeFilter(filter.id)"><mat-icon svgIcon="remove"></mat-icon></button>
+          }
+        </mat-card-actions>
+      </mat-card>
+    }

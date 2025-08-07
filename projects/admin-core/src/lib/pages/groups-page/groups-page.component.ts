@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
@@ -15,11 +15,11 @@ export class GroupsPageComponent {
 
   public className$: Observable<string>;
 
-  constructor(
-    route: ActivatedRoute,
-    router: Router,
-    destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const route = inject(ActivatedRoute);
+    const router = inject(Router);
+    const destroyRef = inject(DestroyRef);
+
     this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'className')
       .pipe(takeUntilDestroyed(destroyRef));
   }

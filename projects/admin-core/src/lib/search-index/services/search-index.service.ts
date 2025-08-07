@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { SearchIndexModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
@@ -13,14 +13,12 @@ import { selectDraftSearchIndex } from '../state/search-index.selectors';
   providedIn: 'root',
 })
 export class SearchIndexService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+  private destroyRef = inject(DestroyRef);
 
-  public constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public listenForSearchIndexChanges() {
     this.sseService.listenForEvents$<SearchIndexModel>('SearchIndex')

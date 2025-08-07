@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal, inject } from '@angular/core';
 import { map, Observable, combineLatest, take } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
@@ -24,6 +24,12 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
   standalone: false,
 })
 export class Switch3dComponent {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private menubarService = inject(MenubarService);
+  private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
+
 
   private componentsPreventingSwitching = [
     BaseComponentTypeEnum.PRINT,
@@ -46,13 +52,7 @@ export class Switch3dComponent {
     }
   });
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private menubarService: MenubarService,
-    private snackBar: MatSnackBar,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.allowSwitch$ = combineLatest([
       this.menubarService.getActiveComponent$().pipe(
         map(
@@ -65,7 +65,7 @@ export class Switch3dComponent {
         ),
       ),
     ]).pipe(
-      takeUntilDestroyed(destroyRef),
+      takeUntilDestroyed(this.destroyRef),
       map(([ componentBoolean, toolBoolean ]) => componentBoolean && toolBoolean),
     );
   }

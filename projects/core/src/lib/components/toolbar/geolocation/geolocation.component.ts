@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
 import { Subject, take, takeUntil } from 'rxjs';
 import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
@@ -15,6 +15,11 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
   standalone: false,
 })
 export class GeolocationComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+
   private destroyed = new Subject();
   private featureGeom = new Subject<FeatureModel[]>();
 
@@ -30,12 +35,9 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   public hasFix = false;
   private noTimeout = false;
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const store$ = this.store$;
+
     ComponentConfigHelper.useInitialConfigForComponent<GeolocationConfigModel>(
       store$,
       BaseComponentTypeEnum.GEOLOCATION,

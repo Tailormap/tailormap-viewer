@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   AttributeType, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel, SliderFilterInputModeEnum, EditFilterConfigurationModel,
@@ -16,6 +16,8 @@ import { FormHelper } from '../../../../helpers/form.helper';
   standalone: false,
 })
 export class ApplicationSliderFilterFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public attributeType = input<AttributeType>(AttributeType.INTEGER);
   public filterConditions = computed(() => {
@@ -65,8 +67,6 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
 
   @Output()
   public updateSliderFilter = new EventEmitter<UpdateSliderFilterModel>();
-
-  constructor(private destroyRef: DestroyRef) { }
 
   public sliderFilterForm = new FormGroup({
     condition: new FormControl<FilterConditionEnum | null>(null),
