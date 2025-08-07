@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, take } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -20,18 +20,15 @@ import { loadCatalog } from '../../catalog/state/catalog.actions';
   standalone: false,
 })
 export class FormListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public filter = new FormControl('');
   public filterValue$ = this.store$.select(selectFormsListFilter);
   public forms$: Observable<FormList> = of([]);
   public formsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

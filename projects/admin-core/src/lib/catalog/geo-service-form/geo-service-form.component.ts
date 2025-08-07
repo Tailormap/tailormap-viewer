@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
@@ -74,7 +74,9 @@ export class GeoServiceFormComponent implements OnInit {
   });
 
   public groups$: Observable<GroupModel[]>;
-  constructor(groupDetailsService: GroupService) {
+  constructor() {
+      const groupDetailsService = inject(GroupService);
+
       this.groups$ = groupDetailsService.getGroups$();
   }
 

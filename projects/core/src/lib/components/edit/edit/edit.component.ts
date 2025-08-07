@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
 import { combineLatest, of, take } from 'rxjs';
@@ -22,6 +22,11 @@ import { DrawingType } from '@tailormap-viewer/map';
   standalone: false,
 })
 export class EditComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private applicationLayerService = inject(ApplicationLayerService);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+
 
   public active$ = this.store$.select(selectEditActive);
   public editableLayers$ = this.store$.select(selectEditableLayers);
@@ -34,13 +39,6 @@ export class EditComponent implements OnInit {
 
   public tooltip = this.defaultTooltip;
   public disabled = false;
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private applicationLayerService: ApplicationLayerService,
-    private authenticatedUserService: AuthenticatedUserService,
-  ) { }
 
   public ngOnInit(): void {
     this.store$.select(selectSelectedEditLayer)

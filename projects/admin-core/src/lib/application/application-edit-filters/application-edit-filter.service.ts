@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationId,
@@ -10,13 +10,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationEditFilterService {
+  private store$ = inject(Store);
+  private featureSourceService = inject(FeatureSourceService);
+  private uniqueValuesAdminService = inject(UniqueValuesAdminService);
+  private destroyRef = inject(DestroyRef);
 
-  constructor(
-    private store$: Store,
-    private featureSourceService: FeatureSourceService,
-    private uniqueValuesAdminService: UniqueValuesAdminService,
-    private destroyRef: DestroyRef,
-  ) {
+
+  constructor() {
     this.store$.select(selectSelectedApplicationId).pipe(
       takeUntilDestroyed(this.destroyRef),
       distinctUntilChanged(),

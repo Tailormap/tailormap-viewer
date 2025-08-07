@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
 import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
@@ -14,11 +14,10 @@ import { ExtendedCatalogModelHelper } from '../../helpers/extended-catalog-model
   standalone: false,
 })
 export class CatalogItemsInFolderDialogComponent {
-
-  constructor(
-    private dialogRef: MatDialogRef<CatalogItemsInFolderDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { node: ExtendedCatalogNodeModel; items: Array<ExtendedGeoServiceModel | ExtendedFeatureTypeModel> },
-  ) { }
+  public data = inject<{
+    node: ExtendedCatalogNodeModel; items: Array<ExtendedGeoServiceModel | ExtendedFeatureTypeModel>;
+  }>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<CatalogItemsInFolderDialogComponent>>(MatDialogRef);
 
   public onConfirm() {
     this.dialogRef.close(true);

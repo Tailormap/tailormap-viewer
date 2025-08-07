@@ -2,16 +2,18 @@
 <div class="userlist-wrapper form-group has-search">
 
   <tm-admin-list-filter class="userlist-filter"
-                        [formControl]="userFilter"
-                        [filterTerm]="filterString$ | async"
-                        label="Filter users"
-                        i18n-label="@@admin-core.users.filter-users"></tm-admin-list-filter>
+    [formControl]="userFilter"
+    [filterTerm]="filterString$ | async"
+    label="Filter users"
+  i18n-label="@@admin-core.users.filter-users"></tm-admin-list-filter>
   <mat-selection-list class="userlist">
-    <mat-list-item *ngFor="let user of filteredUsers$ | async"
-                   [class.selected]="user.selected"
-                   [routerLink]="['/admin/users/user', user.username]">
-      <span class="userdetail">{{user.username}}</span>
-    </mat-list-item>
+    @for (user of filteredUsers$ | async; track user) {
+      <mat-list-item
+        [class.selected]="user.selected"
+        [routerLink]="['/admin/users/user', user.username]">
+        <span class="userdetail">{{user.username}}</span>
+      </mat-list-item>
+    }
   </mat-selection-list>
 
 </div>

@@ -21,7 +21,9 @@
           </mat-select>
         }
         @if (field.hint) {
-          <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
+          @if (field.hint) {
+            <mat-hint>{{field.hint}}</mat-hint>
+          }
         }
       </mat-form-field>
     }

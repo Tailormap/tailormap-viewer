@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
+import { isActiveToolbarTool, selectActiveTool } from '../state/toolbar.selectors';
 import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -21,6 +21,7 @@ describe('StreetviewComponent', () => {
         provideMockStore({
           selectors: [
             { selector: isActiveToolbarTool(ToolbarComponentEnum.STREETVIEW), value: true },
+            { selector: selectActiveTool, value: ToolbarComponentEnum.STREETVIEW },
           ],
         }),
       ],

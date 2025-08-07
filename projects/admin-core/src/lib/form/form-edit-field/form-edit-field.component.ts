@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormFieldModel } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -20,6 +20,10 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
   standalone: false,
 })
 export class FormEditFieldComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input({ required: true })
   public set featureType(featureType: FeatureTypeModel | null) {
@@ -32,13 +36,6 @@ export class FormEditFieldComponent implements OnInit {
   private _featureType: FeatureTypeModel | null = null;
 
   public field: FormFieldModel | null = null;
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
 
   public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
 

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { applicationStateKey } from './state/application.state';
 import { applicationReducer } from './state/application.reducer';
@@ -103,7 +103,9 @@ import {
     ],
 })
 export class ApplicationModule {
-  constructor(applicationService: ApplicationService) {
+  constructor() {
+    const applicationService = inject(ApplicationService);
+
     applicationService.listenForApplicationChanges();
   }
 }

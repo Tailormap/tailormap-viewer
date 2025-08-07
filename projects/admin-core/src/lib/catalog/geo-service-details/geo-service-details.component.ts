@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
@@ -22,6 +22,14 @@ import { FormHelper } from '../../helpers/form.helper';
   standalone: false,
 })
 export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private geoServiceService = inject(GeoServiceService);
+  private confirmDialog = inject(ConfirmDialogService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   public geoService$: Observable<GeoServiceModel | null> = of(null);
   private destroyed = new Subject();
@@ -33,16 +41,6 @@ export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
 
   private refreshingSubject = new BehaviorSubject(false);
   public refreshing$ = this.refreshingSubject.asObservable();
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private geoServiceService: GeoServiceService,
-    private confirmDialog: ConfirmDialogService,
-    private dialog: MatDialog,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnInit(): void {
     this.geoService$ = this.route.paramMap.pipe(

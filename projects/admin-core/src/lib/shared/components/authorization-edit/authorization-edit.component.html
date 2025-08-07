@@ -2,67 +2,81 @@
   <div>
     <mat-label i18n="@@admin-core.authorizations.allow-access-from">Allow access from:</mat-label>
     <mat-chip-listbox [value]="selectedChip" (change)="changeAuthenticationType($event.value)">
-      <mat-chip-option value="inherit" *ngIf="parentChip !== undefined && parentChip !== 'specificGroups'">
-        <ng-container i18n="@@admin-core.authorizations.inherit-from">Inherit from</ng-container> {{parentType}} (<ng-container i18n="@@admin-core.authorizations.inherit-from-hint">{parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</ng-container>)</mat-chip-option>
-      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-anyone" value="anonymous" *ngIf="!_accessFromAnyoneDenied && parentChip === undefined">Anyone</mat-chip-option>
-      <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-logged-in" value="loggedIn" *ngIf="parentChip !== 'specificGroups'">Logged in</mat-chip-option>
-      <mat-chip-option value="specificGroups">
-        <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups">Specific groups</ng-container>&nbsp;
-        <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups-select">{parentChip, select, specificGroups {(inherited)}}</ng-container>
-      </mat-chip-option>
-    </mat-chip-listbox>
+      @if (parentChip !== undefined && parentChip !== 'specificGroups') {
+        <mat-chip-option value="inherit">
+          <ng-container i18n="@@admin-core.authorizations.inherit-from">Inherit from</ng-container> {{parentType}} (<ng-container i18n="@@admin-core.authorizations.inherit-from-hint">{parentChip, select, anonymous {Anyone} loggedIn {Logged in} specificGroups {Specific groups}}</ng-container>)</mat-chip-option>
+        }
+        @if (!_accessFromAnyoneDenied && parentChip === undefined) {
+          <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-anyone" value="anonymous">Anyone</mat-chip-option>
+        }
+        @if (parentChip !== 'specificGroups') {
+          <mat-chip-option i18n="@@admin-core.authorizations.inherit-from-logged-in" value="loggedIn">Logged in</mat-chip-option>
+        }
+        <mat-chip-option value="specificGroups">
+          <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups">Specific groups</ng-container>&nbsp;
+          <ng-container i18n="@@admin-core.authorizations.inherit-from-specific-groups-select">{parentChip, select, specificGroups {(inherited)}}</ng-container>
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+
+    @if (selectedChip === 'specificGroups') {
+      <table mat-table [dataSource]="decisions">
+        <ng-container matColumnDef="groupName">
+          <th mat-header-cell i18n="@@admin-core.authorizations.access" *matHeaderCellDef>Access</th>
+          <td mat-cell *matCellDef="let rule">{{rule.groupName}} @if (rule.overridden) {
+            <small i18n="@@admin-core.authorizations.overridden">(overridden)</small>
+          }</td>
+          <td mat-footer-cell *matFooterCellDef>
+            <mat-form-field>
+              <mat-label i18n="@@admin-core.authorizations.group-name">Group name</mat-label>
+              <mat-select (selectionChange)="addRule($event.value)" [compareWith]="compareValues">
+                @for (group of groupList; track group) {
+                  <mat-option [value]="group.name" [disabled]="group.used">
+                    {{group.name}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="header">
+          <td class="subheader" mat-cell *matCellDef="let rule" colspan="3">{{rule.headerText}}</td>
+        </ng-container>
+        <ng-container matColumnDef="read">
+          <th mat-header-cell i18n="@@admin-core.authorizations.read" *matHeaderCellDef>Read</th>
+          <td mat-cell *matCellDef="let rule">
+            <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="button">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let rule">
+            @if (!rule.inherited && !rule.overridden) {
+              <button mat-icon-button color="warn" aria-label="Delete group rules" (click)="deleteRule(rule.groupName)">
+                <mat-icon svgIcon="trash_filled"></mat-icon>
+              </button>
+            }
+            @if (rule.overridden) {
+              <button mat-icon-button aria-label="Reset to inherited value" title="Reset to inherited value" (click)="deleteRule(rule.groupName)">
+                <mat-icon svgIcon="reset"></mat-icon>
+              </button>
+            }
+            @if (rule.inherited) {
+              <button mat-icon-button disabled style="visibility: hidden">
+                <mat-icon svgIcon="reset"></mat-icon>
+              </button>
+            }
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['groupName', 'read', 'button']"></tr>
+        <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']; when: isNormalRow"></tr>
+        <tr mat-row *matRowDef="let rule; columns: ['header']; when: isHeaderRow"></tr>
+        <tr mat-footer-row *matFooterRowDef="['groupName', 'read', 'button']" [hidden]="!canAddRule"></tr>
+      </table>
+    }
   </div>
-
-  <table mat-table *ngIf="selectedChip === 'specificGroups'" [dataSource]="decisions">
-    <ng-container matColumnDef="groupName">
-      <th mat-header-cell i18n="@@admin-core.authorizations.access" *matHeaderCellDef>Access</th>
-      <td mat-cell *matCellDef="let rule">{{rule.groupName}} <small *ngIf="rule.overridden" i18n="@@admin-core.authorizations.overridden">(overridden)</small></td>
-      <td mat-footer-cell *matFooterCellDef>
-        <mat-form-field>
-          <mat-label i18n="@@admin-core.authorizations.group-name">Group name</mat-label>
-          <mat-select (selectionChange)="addRule($event.value)" [compareWith]="compareValues">
-            <mat-option *ngFor="let group of groupList" [value]="group.name" [disabled]="group.used">
-              {{group.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="header">
-      <td class="subheader" mat-cell *matCellDef="let rule" colspan="3">{{rule.headerText}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="read">
-      <th mat-header-cell i18n="@@admin-core.authorizations.read" *matHeaderCellDef>Read</th>
-      <td mat-cell *matCellDef="let rule">
-        <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-        <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="button">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let rule">
-        <button mat-icon-button color="warn" aria-label="Delete group rules" (click)="deleteRule(rule.groupName)" *ngIf="!rule.inherited && !rule.overridden">
-          <mat-icon svgIcon="trash_filled"></mat-icon>
-        </button>
-        <button mat-icon-button aria-label="Reset to inherited value" title="Reset to inherited value" (click)="deleteRule(rule.groupName)" *ngIf="rule.overridden">
-          <mat-icon svgIcon="reset"></mat-icon>
-        </button>
-        <button mat-icon-button disabled style="visibility: hidden" *ngIf="rule.inherited">
-          <mat-icon svgIcon="reset"></mat-icon>
-        </button>
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="['groupName', 'read', 'button']"></tr>
-    <tr mat-row *matRowDef="let rule; columns: ['groupName', 'read', 'button']; when: isNormalRow"></tr>
-    <tr mat-row *matRowDef="let rule; columns: ['header']; when: isHeaderRow"></tr>
-    <tr mat-footer-row *matFooterRowDef="['groupName', 'read', 'button']" [hidden]="!canAddRule"></tr>
-  </table>
-</div>

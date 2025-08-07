@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
 } from 'rxjs';
@@ -19,6 +19,9 @@ import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class AttributeListExportButtonComponent implements OnDestroy {
+  private store$ = inject(Store);
+  private exportService = inject(AttributeListExportService);
+
 
   private destroyed = new Subject();
 
@@ -31,10 +34,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
   private isExportingSubject = new BehaviorSubject(false);
   public isExporting$ = this.isExportingSubject.asObservable();
 
-  constructor(
-    private store$: Store,
-    private exportService: AttributeListExportService,
-  ) {
+  constructor() {
     combineLatest([
       this.store$.select(selectLayers),
       this.store$.select(selectSelectedTabLayerId),

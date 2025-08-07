@@ -1,3 +1,7 @@
-<div class="legend-list" *ngIf="visible$ | async">
-  <tm-legend-layer *ngFor="let legendInfo of layers$ | async; trackBy: trackById" [legendInfo]="legendInfo"></tm-legend-layer>
-</div>
+@if (visible$ | async) {
+  <div class="legend-list">
+    @for (legendInfo of layers$ | async; track trackById($index, legendInfo)) {
+      <tm-legend-layer [legendInfo]="legendInfo"></tm-legend-layer>
+    }
+  </div>
+}

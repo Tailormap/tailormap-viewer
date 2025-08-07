@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
+import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
@@ -25,17 +25,17 @@ import { ApplicationLayerRefreshService } from './application-layer-refresh.serv
    providedIn: 'root',
 })
 export class ApplicationMapService implements OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private httpClient = inject(HttpClient);
+  private bookmarkService = inject(BookmarkService);
+  private _applicationRefreshService = inject(ApplicationLayerRefreshService);
+  private localeId = inject(LOCALE_ID);
+
   private destroyed = new Subject();
   private capabilities: Map<string, string> = new Map();
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private httpClient: HttpClient,
-    private bookmarkService: BookmarkService,
-    _applicationRefreshService: ApplicationLayerRefreshService,
-    @Inject(LOCALE_ID) private localeId: string,
-  ) {
+  constructor() {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
       .pipe(

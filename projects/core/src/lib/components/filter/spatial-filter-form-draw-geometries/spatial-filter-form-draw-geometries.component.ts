@@ -19,6 +19,8 @@ import { setSelectedSpatialFilterFeatureId } from '../state/filter-component.act
   standalone: false,
 })
 export class SpatialFilterFormDrawGeometriesComponent {
+  private store$ = inject(Store);
+
 
   private filterCrudService = inject(SpatialFilterCrudService);
 
@@ -40,8 +42,6 @@ export class SpatialFilterFormDrawGeometriesComponent {
     DrawingFeatureTypeEnum.POLYGON,
     DrawingFeatureTypeEnum.CIRCLE,
   ];
-
-  constructor(private store$: Store) {}
 
   public drawingAdded($event: DrawingToolEvent) {
     const id = nanoid();

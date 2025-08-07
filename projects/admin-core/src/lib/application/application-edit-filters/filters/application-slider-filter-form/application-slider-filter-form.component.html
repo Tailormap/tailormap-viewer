@@ -3,20 +3,24 @@
   <mat-form-field appearance="outline">
     <mat-label i18n="@@core.filter.condition">Condition</mat-label>
     <mat-select i18n-aria-label="@@core.filter.select-condition"
-                aria-label="Select condition"
-                formControlName="condition"
-                panelClass="attribute-filter-condition-list-panel">
-      <mat-option *ngFor="let attr of filterConditions()" [value]="attr.condition">{{ attr.label }}</mat-option>
+      aria-label="Select condition"
+      formControlName="condition"
+      panelClass="attribute-filter-condition-list-panel">
+      @for (attr of filterConditions(); track attr) {
+        <mat-option [value]="attr.condition">{{ attr.label }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label i18n="@@admin-core.application.filters.slider.input-mode">Input mode</mat-label>
     <mat-select i18n-aria-label="@@admin-core.application.filters.slider.select-input-mode"
-                aria-label="Select input mode"
-                formControlName="inputMode"
-                panelClass="wide-select-panel">
-      <mat-option *ngFor="let inputMode of inputModeOptions" [value]="inputMode.value">{{ inputMode.label }}</mat-option>
+      aria-label="Select input mode"
+      formControlName="inputMode"
+      panelClass="wide-select-panel">
+      @for (inputMode of inputModeOptions; track inputMode) {
+        <mat-option [value]="inputMode.value">{{ inputMode.label }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -24,9 +28,9 @@
     <div class="between-range-header">
       <strong i18n="@@admin-core.application.filters.slider.initial-range">Initial range</strong>
       <button i18n="@@admin-core.application.filters.slider.use-attribute-range"
-              mat-stroked-button
-              color="accent"
-              (click)="setBetweenRangeToAttributeRange()">Use attribute range</button>
+        mat-stroked-button
+        color="accent"
+      (click)="setBetweenRangeToAttributeRange()">Use attribute range</button>
     </div>
 
     <mat-form-field appearance="outline">
@@ -48,9 +52,9 @@
   <div class="range-header">
     <strong i18n="@@admin-core.application.filters.slider.range">Slider range</strong>
     <button i18n="@@admin-core.application.filters.slider.use-attribute-range"
-            mat-stroked-button
-            color="accent"
-            (click)="setRangeToAttributeRange()">Use attribute range</button>
+      mat-stroked-button
+      color="accent"
+    (click)="setRangeToAttributeRange()">Use attribute range</button>
   </div>
 
   <mat-form-field appearance="outline">
