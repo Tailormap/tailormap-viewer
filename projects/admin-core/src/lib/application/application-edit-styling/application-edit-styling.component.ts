@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PopoverPositionEnum } from '@tailormap-viewer/shared';
@@ -20,6 +20,8 @@ import { ApplicationImageRemoveService } from '../services/application-image-rem
   standalone: false,
 })
 export class ApplicationEditStylingComponent {
+  private store$ = inject(Store);
+
 
   public stylingConfig$: Observable<ViewerStylingModel | undefined> = new BehaviorSubject<ViewerStylingModel>({});
 
@@ -27,9 +29,7 @@ export class ApplicationEditStylingComponent {
   public dropdownPosition = PopoverPositionEnum.BOTTOM_LEFT_DOWN;
   public appLogoCategory = UploadCategoryEnum.APPLICATION_LOGO;
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.stylingConfig$ = this.store$.select(selectStylingConfig);
   }
 

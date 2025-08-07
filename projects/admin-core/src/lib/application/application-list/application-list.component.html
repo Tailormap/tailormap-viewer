@@ -1,40 +1,47 @@
 <h2 i18n="@@admin-core.application.applications">Applications</h2>
-<ng-container *ngIf="applicationsLoadStatus$ | async as applicationsLoadStatus">
-  <mat-spinner *ngIf="applicationsLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
-  <ng-container *ngIf="errorMessage$ | async as message">
+@if (applicationsLoadStatus$ | async; as applicationsLoadStatus) {
+  @if (applicationsLoadStatus === 'LOADING') {
+    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+  }
+  @if (errorMessage$ | async; as message) {
     <tm-error-message [message]="message"></tm-error-message>
     <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
-  </ng-container>
-  <div *ngIf="applicationsLoadStatus === 'LOADED'"
-       class="form-group has-search">
-    <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
-                          label="Filter applications"
-                          i18n-label="@@admin-core.application.filter-applications"></tm-admin-list-filter>
-    <mat-selection-list>
-      <mat-list-item *ngFor="let application of applications$ | async"
-                     [class.selected]="application.selected"
-                     [routerLink]="['/admin/applications/application', application.id]">
-        <span class="detail">{{application.title || application.name}}</span>
-        <mat-icon *ngIf="application.defaultApplication"
-                  matListItemMeta
-                  color="primary"
-                  tmTooltip="Default application"
-                  class="list-icon"
-                  i18n-tmTooltip="@@admin-core.application.default-application"
-                  svgIcon="admin_default_application"></mat-icon>
-        <a (click)="stopPropagation($event)"
-           class="icon-link"
-           [href]="viewerBaseUrl + application.name"
-           target="new"
-           tmTooltip="Open application"
-           matTooltipPosition="right"
-           i18n-tmTooltip="@@admin-core.application.open-application"
-           matListItemMeta>
-          <mat-icon class="list-icon" svgIcon="admin_link_new_window"></mat-icon>
-        </a>
-      </mat-list-item>
-    </mat-selection-list>
-
-  </div>
-</ng-container>
+  }
+  @if (applicationsLoadStatus === 'LOADED') {
+    <div
+      class="form-group has-search">
+      <tm-admin-list-filter [formControl]="filter"
+        [filterTerm]="filterTerm$ | async"
+        label="Filter applications"
+      i18n-label="@@admin-core.application.filter-applications"></tm-admin-list-filter>
+      <mat-selection-list>
+        @for (application of applications$ | async; track application) {
+          <mat-list-item
+            [class.selected]="application.selected"
+            [routerLink]="['/admin/applications/application', application.id]">
+            <span class="detail">{{application.title || application.name}}</span>
+            @if (application.defaultApplication) {
+              <mat-icon
+                matListItemMeta
+                color="primary"
+                tmTooltip="Default application"
+                class="list-icon"
+                i18n-tmTooltip="@@admin-core.application.default-application"
+              svgIcon="admin_default_application"></mat-icon>
+            }
+            <a (click)="stopPropagation($event)"
+              class="icon-link"
+              [href]="viewerBaseUrl + application.name"
+              target="new"
+              tmTooltip="Open application"
+              matTooltipPosition="right"
+              i18n-tmTooltip="@@admin-core.application.open-application"
+              matListItemMeta>
+              <mat-icon class="list-icon" svgIcon="admin_link_new_window"></mat-icon>
+            </a>
+          </mat-list-item>
+        }
+      </mat-selection-list>
+    </div>
+  }
+}

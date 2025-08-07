@@ -1,11 +1,8 @@
-import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/core';
-import type { ImageBlockFeatureConfig } from '@milkdown/crepe/src/feature/image-block';
+import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '../../snackbar-message';
 import { map } from 'rxjs/operators';
@@ -23,6 +20,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [MatSnackBarModule],
 })
 export class MilkdownEditorComponent implements OnInit, OnDestroy {
+  private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
+  private mdEditorService = inject(MarkdownEditorService);
+
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLDivElement> | undefined;
@@ -36,12 +37,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   private milkdownEditor: MilkdownEditor | undefined;
 
   private currentContent: string | null | undefined;
-
-  constructor(
-    private snackBar: MatSnackBar,
-    private destroyRef: DestroyRef,
-    private mdEditorService: MarkdownEditorService,
-  ) { }
 
   public ngOnInit() {
     if (!this.editorEl) {

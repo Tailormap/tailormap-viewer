@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, signal, inject } from '@angular/core';
 import { selectFeatureInfoLayerListItems } from '../state/feature-info.selectors';
 import { Store } from '@ngrx/store';
 import { setSelectedFeatureInfoLayer } from '../state/feature-info.actions';
@@ -14,14 +14,14 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
   standalone: false,
 })
 export class FeatureInfoLayerDropdownComponent {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public layers = signal<FeatureInfoLayerListItemModel[]>([]);
   public layerSelector = new FormControl<string | null>(null);
 
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.store$.select(selectFeatureInfoLayerListItems)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(layers => {

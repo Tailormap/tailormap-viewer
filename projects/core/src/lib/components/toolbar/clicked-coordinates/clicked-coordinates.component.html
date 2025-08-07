@@ -1,13 +1,13 @@
 <div [class.clicked-coordinates-container--is-active]="toolActive$ | async"
-     class="clicked-coordinates-container map-control-button-container"
-     (keyup.escape)="toggle()">
+  class="clicked-coordinates-container map-control-button-container"
+  (keyup.escape)="toggle()">
 
   <button (click)="toggle()"
-          [class.toggle-button--active]="toolActive$ | async"
-          class="map-control-button toggle-button"
-          i18n-tmTooltip="@@core.toolbar.coordinate-picker"
-          mat-flat-button
-          tmTooltip="Coordinate picker">
+    [class.toggle-button--active]="toolActive$ | async"
+    class="map-control-button toggle-button"
+    i18n-tmTooltip="@@core.toolbar.coordinate-picker"
+    mat-flat-button
+    tmTooltip="Coordinate picker">
     <mat-icon svgIcon="tools_push_pin"></mat-icon>
   </button>
 
@@ -30,29 +30,31 @@
 
         <div class="clicked-coordinates-buttons">
           <button mat-flat-button
-                  (click)="copy()"
-                  [disabled]="coordinatesForm.invalid"
-                  i18n-tmTooltip="@@core.toolbar.coordinate-picker-copy"
-                  tmTooltip="Copy"
-                  class="map-control-button toggle-button--active">
+            (click)="copy()"
+            [disabled]="coordinatesForm.invalid"
+            i18n-tmTooltip="@@core.toolbar.coordinate-picker-copy"
+            tmTooltip="Copy"
+            class="map-control-button toggle-button--active">
             <mat-icon svgIcon="copy"></mat-icon>
           </button>
 
           <button mat-flat-button
-                  (click)="goTo()"
-                  [disabled]="coordinatesForm.invalid"
-                  i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
-                  tmTooltip="Zoom To"
-                  class="map-control-button toggle-button--active">
+            (click)="goTo()"
+            [disabled]="coordinatesForm.invalid"
+            i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
+            tmTooltip="Zoom To"
+            class="map-control-button toggle-button--active">
             <mat-icon svgIcon="show_position"></mat-icon>
           </button>
         </div>
       </form>
 
-      <tm-error-message *ngIf="coordinatesForm.dirty && coordinatesForm.invalid"
-                        i18n="@@core.toolbar.coordinate-picker-invalid-input"
-                        [message]="'Your input is invalid for the current application bounds'"
-                        [friendlyError]="true"></tm-error-message>
+      @if (coordinatesForm.dirty && coordinatesForm.invalid) {
+        <tm-error-message
+          i18n="@@core.toolbar.coordinate-picker-invalid-input"
+          [message]="'Your input is invalid for the current application bounds'"
+        [friendlyError]="true"></tm-error-message>
+      }
     </div>
   }
 

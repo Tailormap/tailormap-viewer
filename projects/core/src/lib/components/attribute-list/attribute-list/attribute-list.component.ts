@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -25,6 +25,10 @@ import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-view
   standalone: false,
 })
 export class AttributeListComponent implements OnInit, OnDestroy {
+  private store$ = inject<Store<AttributeListState>>(Store);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+
 
   public isVisible$: Observable<boolean>;
 
@@ -35,11 +39,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public hasLayersWithAttributes$: Observable<boolean>;
   public title$: Observable<string> = of('');
 
-  constructor(
-    private store$: Store<AttributeListState>,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-  ) {
+  constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.title$ = this.store$.select(selectAttributeListPanelTitle);
     this.store$.select(selectAttributeListTabs)

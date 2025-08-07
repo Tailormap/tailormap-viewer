@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import {
   BaseComponentTypeEnum, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel, HeaderMenuItemModel,
 } from '@tailormap-viewer/api';
@@ -29,6 +29,9 @@ type MenuItemType = FormGroup<{
   ],
 })
 export class HeaderComponentConfigComponent implements ConfigurationComponentModel<HeaderComponentConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -55,10 +58,7 @@ export class HeaderComponentConfigComponent implements ConfigurationComponentMod
   public readonly HEADER_LOGO_CATEGORY = HEADER_LOGO_CATEGORY;
   public dropdownPosition = PopoverPositionEnum.BOTTOM_LEFT_DOWN;
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.heightControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(height => {

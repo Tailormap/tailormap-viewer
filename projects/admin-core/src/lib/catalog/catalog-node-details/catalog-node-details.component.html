@@ -1,13 +1,13 @@
-<ng-container *ngIf="node$ | async as node">
+@if (node$ | async; as node) {
   <h2 class="page-details-title" i18n="@@admin-core.catalog.edit-node">Edit {{ node.title }}</h2>
   <div class="page-details-actions">
     <tm-admin-catalog-create-buttons [node]="node"></tm-admin-catalog-create-buttons>
   </div>
   <tm-admin-catalog-node-form [node]="node"
-                              [parentNode]="node.parentId"
-                              (changed)="updateNode($event)"></tm-admin-catalog-node-form>
+    [parentNode]="node.parentId"
+  (changed)="updateNode($event)"></tm-admin-catalog-node-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedNode" (save)="save(node.id)"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="deleteNode(node)" i18n="@@admin-core.common.delete">Delete</button>
   </div>
-</ng-container>
+}

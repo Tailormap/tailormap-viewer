@@ -1,4 +1,4 @@
-import { Inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import {
   DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { map, Observable, shareReplay } from 'rxjs';
@@ -10,11 +10,10 @@ import { UploadedDrawingStylesResponse } from '../models/uploaded-drawing-styles
   providedIn: 'root',
 })
 export class DrawingStylesService {
+  private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+
 
   public selectedDrawingStyle = signal<number | null>(null);
-
-  constructor(@Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel) {
-  }
 
   public getDrawingStyles$(): Observable<DrawingFeatureModelAttributes[]> {
     return this.apiService.getLatestUpload$<UploadedDrawingStylesResponse>(UploadedImageHelper.DRAWING_STYLE_CATEGORY)

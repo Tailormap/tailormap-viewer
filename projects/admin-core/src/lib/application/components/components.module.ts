@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseComponentConfigComponent } from './base-component-config/base-component-config.component';
 import { ComponentConfigRendererComponent } from './component-config-renderer/component-config-renderer.component';
@@ -42,9 +42,9 @@ import { InfoConfigComponent } from './info-config/info-config.component';
   ],
 })
 export class ComponentsModule {
-  constructor(
-    configurationComponentService: ConfigurationComponentRegistryService,
-  ) {
+  constructor() {
+    const configurationComponentService = inject(ConfigurationComponentRegistryService);
+
     /* eslint-disable max-len */
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TOC, $localize `:@@admin-core.application.component-table-of-contents:Table of contents`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.LEGEND, $localize `:@@admin-core.application.component-legend:Legend`, BaseComponentConfigComponent);

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, computed, inject } from '@angular/core';
 import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
 
@@ -10,6 +10,8 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class ApplicationEditFiltersHomeComponent {
+  private store$ = inject(Store);
+
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public noFilterableLayers: Signal<boolean> = this.store$.selectSignal(selectNoFilterableLayersForSelectedApplication);
   public noFilterableLayersTooltip = computed(() => {
@@ -18,7 +20,5 @@ export class ApplicationEditFiltersHomeComponent {
     }
     return null;
   });
-
-  constructor(private store$: Store) { }
 
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, ViewContainerRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, ViewContainerRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent } from '../select-upload-dialog/select-upload-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,10 @@ import { UploadHelper } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class SelectUploadComponent {
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
+  private viewContainerRef = inject(ViewContainerRef);
+
 
   @Input()
   public category: UploadCategoryEnum | string = '';
@@ -23,13 +27,6 @@ export class SelectUploadComponent {
 
   @Output()
   public fileSelected = new EventEmitter<string | null>();
-
-  constructor(
-    private dialog: MatDialog,
-    private destroyRef: DestroyRef,
-    private viewContainerRef: ViewContainerRef,
-  ) {
-  }
 
   public selectFile() {
     SelectUploadDialogComponent.open(

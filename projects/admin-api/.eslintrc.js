@@ -13,8 +13,8 @@ module.exports = {
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.lib.json",
-          "tsconfig.spec.json"
+          "tsconfig.(app|lib|spec).json",
+          "projects/admin-api/tsconfig.(app|lib|spec).json"
         ],
         "createDefaultProgram": true,
         "tsconfigRootDir": __dirname

@@ -78,6 +78,12 @@ describe('FeatureInfoDialogComponent', () => {
   });
 
   test('updates feature info when state changes', async () => {
+    // Silence the console wanings for:
+    // NG0956: The configured tracking expression (track by identity) caused re-creation of the entire collection of size 3.
+    //   This is an expensive operation requiring destruction and subsequent creation of DOM nodes, directives, components etc.
+    //   Please review the "track expression" and make sure that it uniquely identifies items in a collection.
+    //   Find more at https://angular.dev/errors/NG0956
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
     await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     const store = TestBed.inject(MockStore);

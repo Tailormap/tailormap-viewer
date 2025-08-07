@@ -10,12 +10,12 @@
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.description">Description</mat-label>
     <textarea matInput
-              placeholder="Description"
-              i18n-placeholder="@@admin-core.common.description"
-              formControlName="description"
-              [cdkTextareaAutosize]="true"
-              cdkAutosizeMinRows="4"
-              cdkAutosizeMaxRows="10"></textarea>
+      placeholder="Description"
+      i18n-placeholder="@@admin-core.common.description"
+      formControlName="description"
+      [cdkTextareaAutosize]="true"
+      cdkAutosizeMinRows="4"
+    cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
@@ -33,36 +33,36 @@
       <div class="form-control">
         <strong i18n="@@admin-core.catalog.connect-feature-source">Connected feature source and type</strong>
         <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
-                                        [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
-                                        [layerName]="layerName"
-                                        (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
+          [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
+          [layerName]="layerName"
+        (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
       </div>
     }
     @if (isXYZ) {
-    <div class="form-control">
-      <strong i18n="@@admin-core.catalog.xyz-tile-grid-options">XYZ tile grid options</strong>
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.catalog.max-zoom-level">Maximum zoom level</mat-label>
-        <input matInput type="number" formControlName="maxZoom" autocomplete="off" />
-        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{21}}</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.catalog.min-zoom-level">Minimum zoom level</mat-label>
-        <input matInput type="number" formControlName="minZoom" autocomplete="off" />
-        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{0}}</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label i18n="@@admin-core.catalog.tileSize">Tile size</mat-label>
-        <input matInput type="number" formControlName="tileSize" autocomplete="off" />
-        <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{256}}</mat-hint>
-      </mat-form-field>
-      <div class="bounds-control">
-        <tm-admin-bounds-form-field formControlName="tileGridExtent"
-                                    i18n-label="@@admin-core.catalog.xyz-tile-grid-extent"
-                                    [projection]="xyzProjection$ | async"
-                                    label="XYZ tile grid extent"></tm-admin-bounds-form-field>
+      <div class="form-control">
+        <strong i18n="@@admin-core.catalog.xyz-tile-grid-options">XYZ tile grid options</strong>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.catalog.max-zoom-level">Maximum zoom level</mat-label>
+          <input matInput type="number" formControlName="maxZoom" autocomplete="off" />
+          <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{21}}</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.catalog.min-zoom-level">Minimum zoom level</mat-label>
+          <input matInput type="number" formControlName="minZoom" autocomplete="off" />
+          <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{0}}</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.catalog.tileSize">Tile size</mat-label>
+          <input matInput type="number" formControlName="tileSize" autocomplete="off" />
+          <mat-hint i18n="@@admin-core.catalog.default-hint">Default: {{256}}</mat-hint>
+        </mat-form-field>
+        <div class="bounds-control">
+          <tm-admin-bounds-form-field formControlName="tileGridExtent"
+            i18n-label="@@admin-core.catalog.xyz-tile-grid-extent"
+            [projection]="xyzProjection$ | async"
+          label="XYZ tile grid extent"></tm-admin-bounds-form-field>
+        </div>
       </div>
-    </div>
     }
     @if (isWMS || isWMTS || isXYZ) {
       <div class="toggle-control">
@@ -83,9 +83,11 @@
         <mat-label i18n="@@admin-core.catalog.hi-dpi-substitute-layer">High-DPI substitute layer</mat-label>
         <mat-select formControlName="hiDpiSubstituteLayer" panelClass="wide-select">
           <mat-option [value]="null"></mat-option>
-          <mat-option *ngFor="let layer of layers$ | async" [value]="layer.name" [tmTooltip]="layer.title">
-            {{ layer.name }} ({{layer.title}})
-          </mat-option>
+          @for (layer of layers$ | async; track layer) {
+            <mat-option [value]="layer.name" [tmTooltip]="layer.title">
+              {{ layer.name }} ({{layer.title}})
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     }
@@ -120,11 +122,12 @@
       <tm-admin-projection-availability [projectionAvailability]="projectionAvailability"></tm-admin-projection-availability>
     </div>
   }
-  <tm-admin-authorization-edit class="authorization-edit"
-                               formControlName="authorizationRules"
-                               *ngIf="isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length"
-                               [groups]="(groups$ | async) ?? []"
-                               [parentAuthorizations]="geoServiceAuthorizations$ | async"
-                               parentType="GeoService"
-                               selfType="Layer"></tm-admin-authorization-edit>
+  @if (isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length) {
+    <tm-admin-authorization-edit class="authorization-edit"
+      formControlName="authorizationRules"
+      [groups]="(groups$ | async) ?? []"
+      [parentAuthorizations]="geoServiceAuthorizations$ | async"
+      parentType="GeoService"
+    selfType="Layer"></tm-admin-authorization-edit>
+  }
 </form>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { LayoutService } from '../layout.service';
 
@@ -10,6 +10,6 @@ import { LayoutService } from '../layout.service';
   standalone: false,
 })
 export class BaseLayoutComponent {
+  public layoutService = inject(LayoutService);
   public componentTypes = BaseComponentTypeEnum;
-  constructor(public layoutService: LayoutService) {}
 }

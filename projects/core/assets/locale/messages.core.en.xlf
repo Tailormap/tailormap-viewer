@@ -260,8 +260,8 @@
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
       </trans-unit>
-      <trans-unit id="core.drawing.rectangle-height" datatype="html">
-        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+      <trans-unit id="core.drawing.rectangle-length" datatype="html">
+        <source>Length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-width" datatype="html">
         <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
@@ -286,6 +286,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.square-length" datatype="html">
+        <source>Side length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.striped-fill" datatype="html">
         <source>Striped fill</source>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
@@ -18,6 +18,9 @@ export interface ApplicationCopyDialogData {
   standalone: false,
 })
 export class ApplicationCopyDialogComponent {
+  public data = inject<ApplicationCopyDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<ApplicationCopyDialogComponent, ApplicationModel | null>>(MatDialogRef);
+  private applicationService = inject(ApplicationService);
 
   public application: ApplicationModel;
   public valid = signal(false);
@@ -26,17 +29,13 @@ export class ApplicationCopyDialogComponent {
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ApplicationCopyDialogData,
-    private dialogRef: MatDialogRef<ApplicationCopyDialogComponent, ApplicationModel | null>,
-    private applicationService: ApplicationService,
-  ) {
+  constructor() {
     const copyLabel = $localize `:@@admin-core.common.copy:Copy`;
     this.application = {
       id: nanoid(),
-      name: `${data.application.name}-${copyLabel.toLowerCase()}`,
-      title: `${data.application.title} ${copyLabel}`,
-      crs: data.application.crs,
+      name: `${this.data.application.name}-${copyLabel.toLowerCase()}`,
+      title: `${this.data.application.title} ${copyLabel}`,
+      crs: this.data.application.crs,
       authorizationRules: [],
       initialExtent: null,
       maxExtent: null,

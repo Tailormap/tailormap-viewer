@@ -3,9 +3,11 @@
     <mat-label i18n="@@admin-core.catalog.feature-source">Feature Source</mat-label>
     <mat-select formControlName="featureSourceId">
       <mat-option [value]="null" i18n="@@admin-core.catalog.no-feature-source">No feature source</mat-option>
-      <mat-option *ngFor="let featureSource of featureSources$ | async" [value]="featureSource.id">
-        {{ featureSource.title }}
-      </mat-option>
+      @for (featureSource of featureSources$ | async; track featureSource) {
+        <mat-option [value]="featureSource.id">
+          {{ featureSource.title }}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 
@@ -13,9 +15,11 @@
     <mat-label i18n="@@admin-core.catalog.feature-type">Feature type</mat-label>
     <mat-select formControlName="featureTypeName">
       <mat-option [value]="null" i18n="@@admin-core.catalog.no-feature-type">No feature type</mat-option>
-      <mat-option *ngFor="let featureType of featureTypes$ | async" [value]="featureType.name">
-        {{ featureType.title || featureType.name }}
-      </mat-option>
+      @for (featureType of featureTypes$ | async; track featureType) {
+        <mat-option [value]="featureType.name">
+          {{ featureType.title || featureType.name }}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </ng-container>

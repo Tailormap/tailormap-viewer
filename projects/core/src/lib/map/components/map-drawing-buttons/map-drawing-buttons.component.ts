@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
@@ -19,6 +19,9 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   standalone: false,
 })
 export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
+  private mapService = inject(MapService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   private static getDefaultStyle = (): Partial<MapStyleModel> => ({
     pointType: 'circle',
@@ -83,12 +86,6 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   public activeTool: DrawingFeatureTypeEnum | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
-
-  constructor(
-    private mapService: MapService,
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
 
   private withToolManager(
     callback: (manager: ToolManagerModel) => void,
@@ -194,6 +191,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       [DrawingFeatureTypeEnum.CIRCLE]: 'circle',
       [DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS]: 'point',
       [DrawingFeatureTypeEnum.SQUARE]: 'square',
+      [DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH]: 'point',
       [DrawingFeatureTypeEnum.RECTANGLE]: 'rectangle',
       [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',

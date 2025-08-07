@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   BehaviorSubject, combineLatest, finalize, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
@@ -43,6 +43,12 @@ const DEFAULT_PDF_OPTIONS: PrintPdfOptions = {
   standalone: false,
 })
 export class PrintComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+  private applicationMapService = inject(ApplicationMapService);
+  private printService = inject(PrintService);
+
 
   private busySubject = new BehaviorSubject(false);
   public busy$ = this.busySubject.asObservable();
@@ -72,13 +78,7 @@ export class PrintComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-    private applicationMapService: ApplicationMapService,
-    private printService: PrintService,
-  ) {
+  constructor() {
     this.hasDrawing$ = this.store$.select(selectHasDrawingFeatures)
       .pipe(takeUntil(this.destroyed));
     this.hasVisibleLayers$ = combineLatest([ this.store$.select(selectOrderedVisibleBackgroundLayers), this.applicationMapService.selectOrderedVisibleLayersWithFilters$() ])

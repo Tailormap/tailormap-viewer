@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@angular/core';
 import {
   BaseComponentTypeEnum, FeatureInfoConfigModel,
 } from '@tailormap-viewer/api';
@@ -16,6 +16,9 @@ import { debounceTime } from 'rxjs';
   standalone: false,
 })
 export class FeatureInfoComponentConfigComponent implements ConfigurationComponentModel<FeatureInfoConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -38,10 +41,7 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
     showEditButton: new FormControl<boolean>(true),
   });
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(250))
       .subscribe(() => {

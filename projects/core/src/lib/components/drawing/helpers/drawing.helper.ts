@@ -97,6 +97,7 @@ export class DrawingHelper {
       case DrawingFeatureTypeEnum.LABEL: return labelStyleModel;
       case DrawingFeatureTypeEnum.POLYGON: return polygonStyleModel;
       case DrawingFeatureTypeEnum.SQUARE: return polygonStyleModel;
+      case DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH: return polygonStyleModel;
       case DrawingFeatureTypeEnum.RECTANGLE: return polygonStyleModel;
       case DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE: return polygonStyleModel;
       case DrawingFeatureTypeEnum.ELLIPSE: return polygonStyleModel;

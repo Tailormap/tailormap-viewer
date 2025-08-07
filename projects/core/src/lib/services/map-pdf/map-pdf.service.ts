@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { concatMap, forkJoin, from, map, Observable, of, tap, take } from 'rxjs';
 import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
@@ -39,18 +39,16 @@ export interface MapPdfPrintOptions {
   providedIn: 'root',
 })
 export class MapPdfService {
+  private mapService = inject(MapService);
+  private locale = inject(LOCALE_ID);
+  private httpClient = inject(HttpClient);
+  private iconService = inject(IconService);
+  private legendService = inject(LegendService);
+
 
   private readonly defaultMargin = 8;
   private readonly titleSize = 12;
   private readonly defaultFontSize = 8;
-
-  constructor(
-    private mapService: MapService,
-    @Inject(LOCALE_ID) private locale: string,
-    private httpClient: HttpClient,
-    private iconService: IconService,
-    private legendService: LegendService,
-  ) { }
 
   public create$(options: {
     printOptions: MapPdfPrintOptions;

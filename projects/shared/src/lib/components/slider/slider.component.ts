@@ -1,6 +1,4 @@
-import {
-  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -18,6 +16,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   standalone: false,
 })
 export class SliderComponent implements ControlValueAccessor {
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input()
   public min = 0;
@@ -63,11 +64,6 @@ export class SliderComponent implements ControlValueAccessor {
 
   public lowerValue: number | null = null;
   public upperValue: number | null = null;
-
-  constructor(
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public writeValue(obj: number | undefined | null): void {
     this.value = obj;

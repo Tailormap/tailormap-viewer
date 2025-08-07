@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, inject } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
@@ -22,6 +22,9 @@ interface EditFormInput {
   standalone: false,
 })
 export class EditFormComponent implements OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+
 
   private _feature: EditFormInput | undefined;
 
@@ -49,10 +52,7 @@ export class EditFormComponent implements OnDestroy {
 
   public layerId: string = '';
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private authenticatedUserService: AuthenticatedUserService,
-  ) {
+  constructor() {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();
   }
 

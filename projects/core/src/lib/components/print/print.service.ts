@@ -1,4 +1,4 @@
-import {  Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
+import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { ExtentHelper, LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import {
   catchError, combineLatest, concatMap, forkJoin, map, Observable, of, pipe, Subject, take, takeUntil, UnaryFunction,
@@ -51,6 +51,14 @@ const DEBUG_PRINT_EXTENT = false;
   providedIn: 'root',
 })
 export class PrintService implements OnDestroy {
+  private store$ = inject(Store);
+  private viewerLayoutService = inject(ViewerLayoutService);
+  private applicationMapService = inject(ApplicationMapService);
+  private mapPdfService = inject(MapPdfService);
+  private snackBar = inject(MatSnackBar);
+  private mapService = inject(MapService);
+  private locale = inject(LOCALE_ID);
+
 
   private destroyed = new Subject();
   private cancelled$ = new Subject();
@@ -60,16 +68,6 @@ export class PrintService implements OnDestroy {
       .replace(/[ :,]/g, '_');
     return `map-${dateTime}.${extension}`;
   };
-
-  constructor(
-    private store$: Store,
-    private viewerLayoutService: ViewerLayoutService,
-    private applicationMapService: ApplicationMapService,
-    private mapPdfService: MapPdfService,
-    private snackBar: MatSnackBar,
-    private mapService: MapService,
-    @Inject(LOCALE_ID) private locale: string,
-  ) {}
 
   public ngOnDestroy() {
     this.destroyed.next(null);
@@ -168,7 +166,6 @@ export class PrintService implements OnDestroy {
     if (DEBUG_PRINT_EXTENT) {
       validLayers.add('print-preview-layer');
     }
-    // eslint-disable-next-line rxjs/finnish
     return layer => validLayers.has(layer.get('id'));
   }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {
   ArrowTypeEnum, DrawingFeatureStyleModel, LabelDrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
@@ -19,6 +19,7 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
   standalone: false,
 })
 export class DrawingStyleFormComponent implements OnInit, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
 
   private _style: DrawingFeatureStyleModel = {};
 
@@ -79,10 +80,6 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public iconColor = ApplicationStyleService.getPrimaryColor();
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public ngOnInit(): void {
     this.labelControl.valueChanges
@@ -147,6 +144,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
       || this.type === DrawingFeatureTypeEnum.RECTANGLE
       || this.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
       || this.type === DrawingFeatureTypeEnum.SQUARE
+      || this.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH
       || this.type === DrawingFeatureTypeEnum.STAR
       || this.type === DrawingFeatureTypeEnum.ELLIPSE);
   }

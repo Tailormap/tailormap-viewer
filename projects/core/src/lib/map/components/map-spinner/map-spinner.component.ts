@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, inject } from '@angular/core';
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 
@@ -10,6 +10,8 @@ import { MapService } from '@tailormap-viewer/map';
   standalone: false,
 })
 export class MapSpinnerComponent implements OnInit {
+  private mapService = inject(MapService);
+
 
   @Input({ required: true })
   public loading$: Observable<boolean> | undefined;
@@ -18,10 +20,6 @@ export class MapSpinnerComponent implements OnInit {
   public coordinates$: Observable<[number, number] | undefined> | undefined;
 
   public spinnerStyle$: Observable<{ display: string } | { top: string; left: string }> | undefined;
-
-  constructor(
-    private mapService: MapService,
-  ) { }
 
   public ngOnInit(): void {
     if (!this.loading$ || !this.coordinates$) {

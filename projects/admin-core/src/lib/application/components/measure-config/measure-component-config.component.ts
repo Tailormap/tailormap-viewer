@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,6 +13,9 @@ import { ConfigurationComponentModel } from '../configuration-component.model';
   standalone: false,
 })
 export class MeasureComponentConfigComponent implements ConfigurationComponentModel<MeasureComponentConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -36,10 +39,7 @@ export class MeasureComponentConfigComponent implements ConfigurationComponentMo
     titleMeasureArea: new FormControl<string>(''),
   });
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {

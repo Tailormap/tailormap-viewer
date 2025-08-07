@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { concatMap, Observable, Subject, takeUntil, tap } from 'rxjs';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
@@ -19,12 +19,15 @@ import { FeatureModel } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class StreetviewComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+
   public toolActive$: Observable<boolean>;
   private destroyed = new Subject();
   private mapCRS = '';
   private streetviewLocation = new Subject<FeatureModel[]>();
 
-  constructor(private store$: Store, private mapService: MapService) {
+  constructor() {
     this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.STREETVIEW));
     this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
       if (!isActive) {

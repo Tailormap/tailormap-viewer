@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, OnDestroy } from '@angular/core';
+import { DestroyRef, Injectable, OnDestroy, inject } from '@angular/core';
 import {
   DrawingToolConfigModel,
   DrawingToolEvent,
@@ -28,6 +28,12 @@ import { ApplicationLayerService } from '../../../map/services/application-layer
   providedIn: 'root',
 })
 export class EditMapToolService implements OnDestroy {
+  private mapService = inject(MapService);
+  private store$ = inject(Store);
+  private snackBar = inject(MatSnackBar);
+  private applicationLayerService = inject(ApplicationLayerService);
+  private destroyRef = inject(DestroyRef);
+
 
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.edit.error-getting-features:Something went wrong while getting editable features, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.edit.no-features-found:No editable features found`;
@@ -42,13 +48,7 @@ export class EditMapToolService implements OnDestroy {
   private editedGeometrySubject = new BehaviorSubject<string | null>(null);
   public editedGeometry$ = this.editedGeometrySubject.asObservable();
 
-  constructor(
-    private mapService: MapService,
-    private store$: Store,
-    private snackBar: MatSnackBar,
-    private applicationLayerService: ApplicationLayerService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
 
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick })
       .pipe(
