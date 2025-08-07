@@ -29,6 +29,10 @@
         <source>Color is required</source>
         <target>Kleur is vereist</target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopi&euml;ren</target>
+      </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
         <target>Sluiten</target>

@@ -217,4 +217,10 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     return err.message;
   }
 
+  public copyToClipboard() {
+    if (!this.color) {
+      return;
+    }
+    navigator.clipboard.writeText(this.color!).then(() => {});
+  }
 }
