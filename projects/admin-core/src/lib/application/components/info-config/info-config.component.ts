@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, signal, inject } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,10 @@ import { ImageUploadResult, TailormapAdminUploadService } from '@tailormap-admin
   standalone: false,
 })
 export class InfoConfigComponent {
+
+  private componentConfigService = inject(ComponentConfigurationService);
+  private uploadService = inject(TailormapAdminUploadService);
+  private destroyRef = inject(DestroyRef);
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -42,13 +46,12 @@ export class InfoConfigComponent {
     openOnStartup: new FormControl<boolean>(false),
   });
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-    private uploadService: TailormapAdminUploadService,
-  ) {
+  constructor() {
     this.formGroup.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(250))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        debounceTime(250),
+      )
       .subscribe(() => {
         if (!this.formGroup.valid) {
           return;

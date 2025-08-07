@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from "@tailormap-viewer/api";
 import { InfoMenuButtonComponent } from "../info-menu-button/info-menu-button.component";
 import { ComponentConfigHelper } from "../../../shared/helpers/component-config.helper";
@@ -17,16 +17,16 @@ import { take } from 'rxjs';
 })
 export class InfoComponent implements OnInit {
 
+  private store$ = inject(Store);
+  private menubarService = inject(MenubarService);
+  private sanitizer = inject(DomSanitizer);
+
   private openOnStartup = false;
   public template = signal<SafeHtml | null>(null);
 
-  constructor(
-    private store$: Store,
-    private sanitizer: DomSanitizer,
-    private menubarService: MenubarService,
-  ) {
+  constructor() {
     ComponentConfigHelper.useInitialConfigForComponent<InfoComponentConfigModel>(
-      store$,
+      this.store$,
       BaseComponentTypeEnum.INFO,
       config => {
         this.openOnStartup = config.openOnStartup ?? false;
