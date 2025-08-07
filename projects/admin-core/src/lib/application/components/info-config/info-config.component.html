@@ -9,6 +9,7 @@
     <div class="info-markdown-editor">
       <tm-markdown-editor [content]="templateContent()"
                           [uploadService$]="uploadImage$"
+                          [useInfoPanelWidth]="true"
                           (contentChanged)="templateChanged($event)"></tm-markdown-editor>
     </div>
   }

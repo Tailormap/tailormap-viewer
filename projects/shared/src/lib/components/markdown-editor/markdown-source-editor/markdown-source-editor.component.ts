@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild,
+  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,6 +20,9 @@ import { AsyncPipe } from '@angular/common';
   imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize, AsyncPipe ],
 })
 export class MarkdownSourceEditorComponent implements OnInit {
+
+  @Input()
+  public useInfoPanelWidth = false;
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
