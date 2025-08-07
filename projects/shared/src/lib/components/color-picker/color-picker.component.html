@@ -47,6 +47,14 @@
             {{ getInvalidColorMessage() }}
           </mat-error>
         }
+        <div matSuffix>
+          <button mat-icon-button
+                  tmTooltip="Copy"
+                  i18n-tmTooltip="@@shared.color-picker.copy"
+                  (click)="copyToClipboard()">
+            <mat-icon svgIcon="copy"></mat-icon>
+          </button>
+        </div>
       </mat-form-field>
 
     </div>
