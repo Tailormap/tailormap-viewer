@@ -94,6 +94,10 @@
         <source>Header</source>
         <target>Kopfzeile</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-info" datatype="html">
+        <source>Info</source>
+        <target>Info</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
         <target>Legende</target>
@@ -1509,6 +1513,10 @@
       <trans-unit id="admin-core.components.header-text-color" datatype="html">
         <source>Text Color</source>
         <target>Textfarbe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.info-open-on-startup" datatype="html">
+        <source>Open info component on start-up</source>
+        <target>Infokomponente beim Start öffnen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>

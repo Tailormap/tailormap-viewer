@@ -632,6 +632,9 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
       </trans-unit>
+      <trans-unit id="core.info.info" datatype="html">
+        <source>Info</source>
+      </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>
