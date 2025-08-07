@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  selectCurrentFeatureForEdit,
   selectCurrentlySelectedFeature,
   selectFeatureInfoDialogCollapsed,
   selectFeatureInfoDialogVisible, selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers,
@@ -19,6 +20,9 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { setEditActive, setLoadedEditFeature } from '../../edit/state/edit.actions';
+import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -36,12 +40,15 @@ export class FeatureInfoDialogComponent {
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
+  public isEditPossible$: Observable<boolean>;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
 
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
+
+  public showEditButtonConfig: boolean = true;
 
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
@@ -52,6 +59,7 @@ export class FeatureInfoDialogComponent {
     private store$: Store,
     public breakpointObserver: BreakpointObserver,
     private destroyRef: DestroyRef,
+    private authenticatedUserService: AuthenticatedUserService,
   ) {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
@@ -66,8 +74,29 @@ export class FeatureInfoDialogComponent {
       }
       return null;
     }));
+
+    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
+      store$,
+      BaseComponentTypeEnum.FEATURE_INFO,
+      config => {
+        this.showEditButtonConfig = config.showEditButton ?? true;
+      },
+    );
+
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
+    this.isEditPossible$ = combineLatest([
+      this.authenticatedUserService.getUserDetails$(),
+      this.currentFeature$,
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map(([ userDetails, feature ]) => {
+        const isAuthenticated = userDetails.isAuthenticated;
+        const isLayerEditable = feature?.layer?.editable ?? false;
+        return isAuthenticated && isLayerEditable;
+      }),
+    );
+
     combineLatest([
       this.store$.select(selectFeatureInfoLayerListCollapsed),
       this.breakpointObserver.observe('(max-width: 600px)'),
@@ -124,4 +153,18 @@ export class FeatureInfoDialogComponent {
     this.attributesCollapsed.set(!this.attributesCollapsed());
   }
 
+  public editFeature() {
+    this.store$.dispatch(setEditActive({ active: true }));
+    this.store$.select(selectCurrentFeatureForEdit)
+      .pipe(take(1))
+      .subscribe(featureWithMetadata => {
+        if (featureWithMetadata) {
+          this.store$.dispatch(setLoadedEditFeature({
+            feature: featureWithMetadata.feature,
+            columnMetadata: featureWithMetadata.columnMetadata,
+          }));
+        }
+      });
+
+  }
 }

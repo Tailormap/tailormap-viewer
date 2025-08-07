@@ -1478,6 +1478,10 @@
         <source>Show location on the map until the button is toggled off.</source>
         <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
+        <source>Show button to edit the feature</source>
+        <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
         <target>Menüpunkt hinzufügen</target>

@@ -1,9 +1,8 @@
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import {
   ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, DrawingStyleTypeMap,
-  ImageDrawingFeatureStyleModel,
-  LabelDrawingFeatureStyleModel, LabelStyleEnum, LineDrawingFeatureStyleModel, MarkerDrawingFeatureStyleModel,
-  MarkerType, PolygonDrawingFeatureStyleModel, StrokeTypeEnum,
+  ImageDrawingFeatureStyleModel, LabelDrawingFeatureStyleModel, LabelStyleEnum, LineDrawingFeatureStyleModel,
+  MarkerDrawingFeatureStyleModel, MarkerType, PolygonDrawingFeatureStyleModel, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,7 +39,7 @@ export class DrawingHelper {
     StrokeTypeEnum.DOT,
   ];
 
-  private static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
+  public static retainStyleAttributesForType<T extends DrawingFeatureTypeEnum>(type: DrawingFeatureTypeEnum, style: DrawingFeatureStyleModel): DrawingStyleTypeMap[T] {
     const labelStyleModel: LabelDrawingFeatureStyleModel = {
       description: style.description,
       label: style.label,
@@ -114,7 +113,7 @@ export class DrawingHelper {
     featureAttributes?: Partial<DrawingFeatureModelAttributes>,
   ): DrawingFeatureModel {
     const allStyleAttributes = {
-      ...DrawingHelper.getDefaultStyle(),
+      ...DrawingHelper.getUpdatedDefaultStyle(),
       ...style,
     };
     const styleForType = DrawingHelper.retainStyleAttributesForType(type, allStyleAttributes);
@@ -148,27 +147,43 @@ export class DrawingHelper {
   }
 
   public static getDefaultStyle(): DrawingFeatureStyleModel {
-    const defaultStyle: DrawingFeatureStyleModel = {
-      marker: 'circle',
+    return {
+      description: '',
+      markerImage: undefined,
       markerImageWidth: 32,
       markerImageHeight: 32,
+      markerRotation: 0,
+      markerSize: 10,
+      marker: 'circle',
       markerFillColor: ApplicationStyleService.getPrimaryColor(),
       markerStrokeColor: ApplicationStyleService.getPrimaryColor(),
-      markerSize: 10,
       markerStrokeWidth: 1,
-      markerRotation: 0,
+      secondaryStroke: undefined,
+      tertiaryStroke: undefined,
       fillOpacity: 30,
       fillColor: ApplicationStyleService.getPrimaryColor(),
+      stripedFill: false,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeOpacity: 100,
-      strokeType: StrokeTypeEnum.SOLID,
       strokeWidth: 3,
+      strokeType: StrokeTypeEnum.SOLID,
+      dashOffset: 0,
+      arrowType: ArrowTypeEnum.NONE,
+      strokeOffset: 0,
       label: '',
       labelSize: 12,
       labelColor: 'rgb(0, 0, 0)',
+      labelStyle: [],
+      labelRotation: 0,
       labelOutlineColor: 'white',
     };
-    return { ...defaultStyle, ...DrawingHelper.updatedDefaultStyle };
+  }
+
+  public static getUpdatedDefaultStyle(): DrawingFeatureStyleModel {
+    return {
+      ...DrawingHelper.getDefaultStyle(),
+      ...DrawingHelper.updatedDefaultStyle,
+    };
   }
 
   public static applyDrawingStyle(feature: DrawingFeatureModel): MapStyleModel {

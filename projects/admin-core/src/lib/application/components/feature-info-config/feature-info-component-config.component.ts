@@ -35,6 +35,7 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
 
   public formGroup = new FormGroup({
     defaultShowDropdown: new FormControl<boolean>(false),
+    showEditButton: new FormControl<boolean>(true),
   });
 
   constructor(
@@ -52,11 +53,15 @@ export class FeatureInfoComponentConfigComponent implements ConfigurationCompone
   }
 
   public initForm(config: FeatureInfoConfigModel | undefined) {
-    this.formGroup.patchValue({ defaultShowDropdown: config?.defaultShowDropdown ?? false }, { emitEvent: false });
+    this.formGroup.patchValue({
+      defaultShowDropdown: config?.defaultShowDropdown ?? false,
+      showEditButton: config?.showEditButton ?? true,
+    }, { emitEvent: false });
   }
 
   private saveConfig() {
     this.componentConfigService.updateConfigForKey<FeatureInfoConfigModel>(this.type, 'defaultShowDropdown', this.formGroup.value.defaultShowDropdown);
+    this.componentConfigService.updateConfigForKey<FeatureInfoConfigModel>(this.type, 'showEditButton', this.formGroup.value.showEditButton);
   }
 
 }
