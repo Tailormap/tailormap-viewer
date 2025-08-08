@@ -22,6 +22,7 @@ export class InfoComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
 
   private openOnStartup = false;
+  private dialogTitle = $localize `:@@core.info.info:Info`;
   public template = signal<SafeHtml | null>(null);
 
   constructor() {
@@ -30,6 +31,7 @@ export class InfoComponent implements OnInit {
       BaseComponentTypeEnum.INFO,
       config => {
         this.openOnStartup = config.openOnStartup ?? false;
+        this.dialogTitle = config.title ?? this.dialogTitle;
         MarkdownHelper.getSafeHtmlForMarkdown$(config.templateContent ?? '', this.sanitizer)
           .pipe(take(1))
           .subscribe(html => {
@@ -42,7 +44,7 @@ export class InfoComponent implements OnInit {
   public ngOnInit(): void {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.INFO, component: InfoMenuButtonComponent });
     if (this.openOnStartup) {
-      this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.INFO, $localize `:@@core.info.info:Info`);
+      this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.INFO, this.dialogTitle);
     }
   }
 
