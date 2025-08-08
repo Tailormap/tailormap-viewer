@@ -4,6 +4,7 @@
 .markdown-wrap .milkdown .editor {
   --crepe-font-title: var(--font-family);
   --crepe-font-default: var(--font-family);
+  border: 1px solid #ccc;
 }
 
 .markdown-wrap .milkdown milkdown-slash-menu {
