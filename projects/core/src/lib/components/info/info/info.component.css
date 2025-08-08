@@ -4,5 +4,5 @@
   padding: 14px;
   white-space: wrap;
   overflow-wrap: break-word;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
