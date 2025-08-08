@@ -9,12 +9,12 @@
       <div class="center">
         <div class="left">
           <tm-menubar-panel>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.DRAWING)) { <tm-drawing></tm-drawing> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.PRINT)) { <tm-print></tm-print> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
-            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
             <tm-registered-components-renderer [config]="layoutConfig.config" area="panel"></tm-registered-components-renderer>
           </tm-menubar-panel>
         </div>
