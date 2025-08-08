@@ -9,6 +9,7 @@
       <div class="center">
         <div class="left">
           <tm-menubar-panel>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.DRAWING)) { <tm-drawing></tm-drawing> }

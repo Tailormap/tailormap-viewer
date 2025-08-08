@@ -41,6 +41,9 @@ export class MarkdownEditorComponent implements OnInit {
   @Input()
   public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
 
+  @Input()
+  public useInfoPanelWidth = false;
+
   @Output()
   public contentChanged = new EventEmitter<string>();
 

@@ -59,6 +59,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             defaultValue: this.mdEditorService.getCurrentContent() || '',
             features: {
               [crepeModule.Crepe.Feature.CodeMirror]: false,
+              [crepeModule.Crepe.Feature.Latex]: false,
             },
             featureConfigs: {
               [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,

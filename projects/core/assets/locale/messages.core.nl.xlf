@@ -850,6 +850,10 @@
         <source>Value</source>
         <target>Waarde</target>
       </trans-unit>
+      <trans-unit id="core.info.info" datatype="html">
+        <source>Info</source>
+        <target>Info</target>
+      </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
         <target>Legenda</target>

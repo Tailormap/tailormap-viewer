@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/
 import { MenubarService } from '../menubar.service';
 import { Observable } from 'rxjs';
 import { CssHelper } from '@tailormap-viewer/shared';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-menubar-panel',
@@ -21,8 +22,9 @@ export class MenubarPanelComponent implements OnDestroy {
 
   constructor() {
     const menubarService = this.menubarService;
-
-    this.activeComponent$ = this.menubarService.getActiveComponent$();
+    this.activeComponent$ = this.menubarService.getActiveComponent$().pipe(
+      debounceTime(0),
+    );
     this.panelWidth = menubarService.panelWidth;
   }
 

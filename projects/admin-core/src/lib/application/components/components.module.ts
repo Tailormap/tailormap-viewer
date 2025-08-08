@@ -5,7 +5,7 @@ import { ComponentConfigRendererComponent } from './component-config-renderer/co
 import { ComponentsListComponent } from './components-list/components-list.component';
 import { ConfigurationComponentRegistryService } from '../services/configuration-component-registry.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent, SharedModule } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
@@ -14,6 +14,7 @@ import { HeaderComponentConfigComponent } from './header-config/header-component
 import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
+import { InfoConfigComponent } from './info-config/info-config.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +27,15 @@ import { GeolocationConfigComponent } from './geolocation-config/geolocation-con
     HeaderComponentConfigComponent,
     EditComponentConfigComponent,
     GeolocationConfigComponent,
+    InfoConfigComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    BaseComponentConfigComponent,
-    SelectUploadModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        BaseComponentConfigComponent,
+        SelectUploadModule,
+        MarkdownEditorComponent,
+    ],
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
@@ -60,5 +63,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.INFO, $localize `:@@admin-core.application.component-info:Info`, InfoConfigComponent);
   }
 }

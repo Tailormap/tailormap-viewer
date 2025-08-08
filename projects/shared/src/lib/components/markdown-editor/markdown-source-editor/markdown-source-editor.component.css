@@ -28,3 +28,10 @@
   max-height: 200px;
 }
 
+.info-panel-width {
+  max-width: 300px;
+  padding: 14px;
+  white-space: wrap;
+  overflow-wrap: break-word;
+}
+
