@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { MenubarService } from '../../menubar';
 import { MarkdownHelper } from '@tailormap-viewer/shared';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'tm-info',
@@ -21,11 +21,15 @@ export class InfoComponent implements OnInit {
   private menubarService = inject(MenubarService);
   private sanitizer = inject(DomSanitizer);
 
+  public visible$: Observable<boolean>;
+
   private openOnStartup = false;
   private dialogTitle = $localize `:@@core.info.info:Info`;
   public template = signal<SafeHtml | null>(null);
 
   constructor() {
+    this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.INFO);
+
     ComponentConfigHelper.useInitialConfigForComponent<InfoComponentConfigModel>(
       this.store$,
       BaseComponentTypeEnum.INFO,
