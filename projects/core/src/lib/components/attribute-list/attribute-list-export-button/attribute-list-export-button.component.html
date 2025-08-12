@@ -1,13 +1,14 @@
-@if (showExportButton$ | async) {
+
+@if (isExporting$ | async) {
   <button mat-stroked-button
-          [matMenuTriggerFor]="exportMenu"
-          [disabled]="isExporting$ | async">
-    @if (isExporting$ | async) {
-      <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
-    } @else {
-      <span i18n="@@core.attribute-list.export">Export</span>
-      <mat-icon svgIcon="drop_down"></mat-icon>
-    }
+          [disabled]="true">
+    <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+  </button>
+} @else if (showExportButton$ | async) {
+  <button mat-stroked-button
+          [matMenuTriggerFor]="exportMenu">
+    <span i18n="@@core.attribute-list.export">Export</span>
+    <mat-icon svgIcon="drop_down"></mat-icon>
   </button>
 }
 
