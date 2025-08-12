@@ -2,14 +2,11 @@
   <button mat-stroked-button
           [matMenuTriggerFor]="exportMenu"
           [disabled]="isExporting$ | async">
-    <ng-template #exportLabel>
-      <span i18n="@@core.attribute-list.export">Export</span>
-      <mat-icon svgIcon="drop_down"></mat-icon>
-    </ng-template>
     @if (isExporting$ | async) {
       <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
     } @else {
-      exportLabel
+      <span i18n="@@core.attribute-list.export">Export</span>
+      <mat-icon svgIcon="drop_down"></mat-icon>
     }
   </button>
 }
