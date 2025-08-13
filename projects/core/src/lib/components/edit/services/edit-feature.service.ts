@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { HttpStatusCode } from '@angular/common/http';
 })
 export class EditFeatureService {
   private snackBar = inject(MatSnackBar);
-  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
 
   private showSnackbarMessage(msg: string, e?: ErrorResponseModel | any) {

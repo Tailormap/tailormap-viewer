@@ -10,7 +10,7 @@ type IconDefinition = string | { folder: string; icons: string[] };
   providedIn: 'root',
 })
 export class IconService {
-  private iconLocation = inject(ICON_SERVICE_ICON_LOCATION) as string;
+  private iconLocation = inject(ICON_SERVICE_ICON_LOCATION);
   private baseHref = inject(APP_BASE_HREF);
 
   public icons: IconDefinition[] = [

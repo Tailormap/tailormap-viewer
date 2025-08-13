@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import {
-  TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
+  TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -26,7 +26,7 @@ export enum SupportedExportFormats {
 export class AttributeListExportService {
   private store$ = inject(Store);
   private snackBar = inject(MatSnackBar);
-  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
   private dateLocale = inject(MAT_DATE_LOCALE);
   private static CSV_FORMATS = [ 'csv', 'text/csv' ];
   private static XLSX_FORMATS = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'excel2007' ];

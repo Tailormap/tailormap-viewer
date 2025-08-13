@@ -198,6 +198,7 @@ button.toggle-button--active.mat-mdc-button-base.mdc-button--unelevated,
   height: calc(var(--map-control-size) - 16px);
   margin: 0;
   font-size: 1rem;
+  min-height: auto;
 }
 
 .map-control-button.disabled,

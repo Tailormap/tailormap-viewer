@@ -7,7 +7,7 @@ import { AttributeListDataService } from '../services/attribute-list-data.servic
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
 
@@ -17,7 +17,7 @@ export class AttributeListEffects {
   private store$ = inject(Store);
   private attributeListDataService = inject(AttributeListDataService);
   private mapService = inject(MapService);
-  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
 
   public loadDataForTab$ = createEffect(() => {

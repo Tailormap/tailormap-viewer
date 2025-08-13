@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
-  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel,
+  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class LoginComponent implements OnInit {
   private store$ = inject(Store);
   private router = inject(Router);
-  private api = inject<TailormapSecurityApiV1ServiceModel>(TAILORMAP_SECURITY_API_V1_SERVICE);
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private dialog = inject(MatDialog);
 

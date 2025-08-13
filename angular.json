@@ -97,7 +97,13 @@
               "color-convert",
               "lodash.debounce",
               "lodash.throttle",
-              "extend"
+              "extend",
+              "protobufjs",
+              "urijs",
+              "mersenne-twister",
+              "bitmap-sdf",
+              "grapheme-splitter",
+              "nosleep.js"
             ],
             "i18nMissingTranslation": "error",
             "browser": "projects/app/src/main.ts"

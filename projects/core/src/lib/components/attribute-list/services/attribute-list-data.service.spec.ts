@@ -22,7 +22,7 @@ const setup = (
 ) => {
   const api = {
     getFeatures$: jest.fn(() => of(features)),
-  } as TailormapApiV1ServiceModel;
+  } as unknown as TailormapApiV1ServiceModel;
 
   const tabs: AttributeListTabModel[] = [
     { id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', loadingData: false, initialDataLoaded: false },
