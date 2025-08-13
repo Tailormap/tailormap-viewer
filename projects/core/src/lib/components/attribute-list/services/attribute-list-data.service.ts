@@ -6,7 +6,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import {
-  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, AttributeTypeHelper,
+  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -21,7 +21,7 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
   providedIn: 'root',
 })
 export class AttributeListDataService implements OnDestroy {
-  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
   private store$ = inject(Store);
   private filterService = inject(FilterService);
   private featureUpdatedService = inject(FeatureUpdatedService);

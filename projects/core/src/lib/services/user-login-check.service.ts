@@ -2,14 +2,14 @@ import { Router } from '@angular/router';
 import { interval, switchMap, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel } from '@tailormap-viewer/api';
+import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserLoginCheckService {
-  private api = inject<TailormapSecurityApiV1ServiceModel>(TAILORMAP_SECURITY_API_V1_SERVICE);
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
   private destroyRef = inject(DestroyRef);
   private dialogService = inject(ConfirmDialogService);
   private router = inject(Router);

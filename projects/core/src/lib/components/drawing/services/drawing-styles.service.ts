@@ -3,14 +3,13 @@ import {
   DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
 import { map, Observable, shareReplay } from 'rxjs';
 import { TAILORMAP_API_V1_SERVICE, UploadedImageHelper } from '@tailormap-viewer/api';
-import { TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { UploadedDrawingStylesResponse } from '../models/uploaded-drawing-styles.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DrawingStylesService {
-  private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private apiService = inject(TAILORMAP_API_V1_SERVICE);
 
 
   public selectedDrawingStyle = signal<number | null>(null);

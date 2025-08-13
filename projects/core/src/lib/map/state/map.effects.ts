@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MapActions from './map.actions';
 import { combineLatest, catchError, concatMap, map, of, take } from 'rxjs';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
@@ -12,7 +12,7 @@ import { ApplicationBookmarkFragments } from '../../services/application-bookmar
 @Injectable()
 export class MapEffects {
   private actions$ = inject(Actions);
-  private apiService = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private apiService = inject(TAILORMAP_API_V1_SERVICE);
   private bookmarkService = inject(BookmarkService);
 
 
