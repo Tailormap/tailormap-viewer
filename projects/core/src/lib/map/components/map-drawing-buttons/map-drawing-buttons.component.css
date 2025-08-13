@@ -12,6 +12,7 @@
 
 .icon-button-list .mat-mdc-outlined-button mat-icon {
   margin: 0;
+  min-height: auto;
 }
 
 .icon-button-list .mat-mdc-outlined-button:last-of-type {
