@@ -1,1 +1,3 @@
-<div class="template" [innerHTML]="template()"></div>
+@if (visible$ | async) {
+  <div class="template" [innerHTML]="template()"></div>
+}
