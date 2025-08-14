@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { TaskDetailsComponent } from './task-details.component';
-import { getTaskDetails, getTasks } from '@tailormap-admin/admin-api';
+import { getTaskDetails, getTasks, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { initialTasksState, TasksState, tasksStateKey } from '../state/tasks.state';
 import { createMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -35,6 +35,7 @@ const setup = async () => {
       { provide: TaskMonitoringService, useValue: taskService },
       provideHttpClient(),
       provideHttpClientTesting(),
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: {} },
     ],
   });
   return mockStore;

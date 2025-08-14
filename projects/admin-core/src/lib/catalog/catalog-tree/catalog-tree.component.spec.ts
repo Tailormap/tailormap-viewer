@@ -3,7 +3,7 @@ import { CatalogTreeComponent } from './catalog-tree.component';
 import { createMockStore } from '@ngrx/store/testing';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
-import { CatalogNodeModel, getCatalogTree } from '@tailormap-admin/admin-api';
+import { CatalogNodeModel, getCatalogTree, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
@@ -30,6 +30,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       { provide: Store, useValue: mockStore },
       provideHttpClient(),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: {} },
     ],
   });
   const updateMockStore = (updatedState: Partial<CatalogState> = {}) => {

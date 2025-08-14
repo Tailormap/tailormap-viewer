@@ -3,7 +3,7 @@ import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { TailormapAdminApiV1Service, getGeoService, AdminServerType } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, getGeoService, AdminServerType } from '@tailormap-admin/admin-api';
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
@@ -42,7 +42,7 @@ const setup = async () => {
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

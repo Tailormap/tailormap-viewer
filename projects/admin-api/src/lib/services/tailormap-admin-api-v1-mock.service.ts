@@ -6,6 +6,8 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  FeatureSourceSummaryWithFeatureTypesModel,
+  GeoServiceSummaryWithLayersModel,
 } from '../models';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -59,6 +61,10 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     })).pipe(delay(this.delay));
   }
 
+  public getGeoServiceSummaries$(): Observable<GeoServiceSummaryWithLayersModel[]> {
+    return of([]).pipe(delay(this.delay));
+  }
+
   public getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel> {
     return of(mockData.getFeatureSource({
       id: params.id,
@@ -98,6 +104,17 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
 
   public updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel> {
     return of({ ...mockData.getFeatureType(params.featureType) }).pipe(delay(this.delay));
+  }
+
+  public getFeatureSourceSummaries$(): Observable<FeatureSourceSummaryWithFeatureTypesModel[]> {
+    return of([]).pipe(delay(this.delay));
+  }
+
+  public getFeatureType$(params: { id: string }): Observable<FeatureTypeModel> {
+    return of(mockData.getFeatureType({
+      id: params.id,
+      title: 'Feature Type ' + params.id,
+    })).pipe(delay(this.delay));
   }
 
   public getGroups$(): Observable<GroupModel[]> {
@@ -246,6 +263,12 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   }
   public deleteTask$(): Observable<boolean> {
     return of(true);
+  }
+  public startTask$(_uuid: string, _type: string): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
+  }
+  public stopTask$(_uuid: string, _type: string): Observable<boolean> {
+    return of(true).pipe(delay(this.delay));
   }
 
   public getUniqueValues$(): Observable<UniqueValuesResponseModel> {

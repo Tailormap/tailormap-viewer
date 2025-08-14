@@ -1,5 +1,5 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { SearchIndexModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { SearchIndexModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
@@ -14,7 +14,7 @@ import { selectDraftSearchIndex } from '../state/search-index.selectors';
 })
 export class SearchIndexService {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
   private destroyRef = inject(DestroyRef);

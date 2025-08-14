@@ -1,8 +1,6 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  OIDCConfigurationModel, TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { OIDCConfigurationModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
@@ -21,7 +19,7 @@ type OIDCConfigurationEditModel = Partial<OIDCConfigurationCreateModel>;
 })
 export class OIDCConfigurationService implements OnDestroy {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
 

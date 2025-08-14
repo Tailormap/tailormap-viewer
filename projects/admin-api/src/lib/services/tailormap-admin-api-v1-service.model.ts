@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel,
 } from '../models';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -14,6 +14,7 @@ export interface TailormapAdminApiV1ServiceModel {
   updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'>; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel>;
   deleteGeoService$(params: { id: string }): Observable<boolean>;
   refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
+  getGeoServiceSummaries$(): Observable<GeoServiceSummaryWithLayersModel[]>;
   getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
   createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel>;
   updateFeatureSource$(params: {
@@ -23,10 +24,13 @@ export interface TailormapAdminApiV1ServiceModel {
   }): Observable<FeatureSourceModel>;
   deleteFeatureSource$(params: { id: string }): Observable<boolean>;
   refreshFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
+  getFeatureSourceSummaries$(): Observable<FeatureSourceSummaryWithFeatureTypesModel[]>;
   updateFeatureType$(params: {
     id: string;
     featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'>;
   }): Observable<FeatureTypeModel>;
+  getFeatureType$(params: { id: string }): Observable<FeatureTypeModel>;
+  updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel>;
   getGroups$(): Observable<GroupModel[]>;
   getGroup$(name: string): Observable<GroupModel>;
   createGroup$(params: { group: GroupModel }): Observable<GroupModel>;
@@ -72,6 +76,8 @@ export interface TailormapAdminApiV1ServiceModel {
   getTasks$(): Observable<TaskModel[]>;
   getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel>;
   deleteTask$(uuid: string, type: string): Observable<boolean>;
+  startTask$(uuid: string, type: string): Observable<boolean>;
+  stopTask$(uuid: string, type: string): Observable<boolean>;
 
   getUniqueValues$(params: {
     featureTypeId: string;

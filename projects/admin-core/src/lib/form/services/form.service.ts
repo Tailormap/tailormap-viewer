@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { addForm, deleteForm, loadDraftForm, updateForm } from '../state/form.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { FormModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ import { AdminSseService, EventType } from '../../shared/services/admin-sse.serv
 export class FormService {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
 

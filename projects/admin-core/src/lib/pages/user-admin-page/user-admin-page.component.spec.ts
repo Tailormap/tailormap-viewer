@@ -10,6 +10,7 @@ import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-us
 import { provideHttpClient } from '@angular/common/http';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 
 const setup = async () => {
   await render(UserAdminPageComponent, {
@@ -20,6 +21,7 @@ const setup = async () => {
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       provideHttpClient(),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: {} },
     ],
   });
 };

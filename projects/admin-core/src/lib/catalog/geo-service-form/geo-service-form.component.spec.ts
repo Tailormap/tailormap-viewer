@@ -6,7 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { AdminServerType, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { AdminServerType, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
@@ -20,7 +20,7 @@ describe('GeoServiceFormComponent', () => {
       declarations: [ PasswordFieldComponent, AuthorizationEditComponent ],
       on: { changed: changedFn },
       providers: [
-        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: { getGroups$: jest.fn(() => of(null)) } },
         provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],

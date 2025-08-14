@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApiResponseHelper, ApplicationModel, CatalogItemKindEnum, CatalogModelHelper, GeoServiceModel, GeoServiceProtocolEnum,
-  GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
+  GeoServiceSettingsModel, GeoServiceWithLayersModel, TAILORMAP_ADMIN_API_V1_SERVICE,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
 import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, updateGeoService } from '../state/catalog.actions';
@@ -30,7 +30,7 @@ export interface DeleteGeoServiceResponse {
 })
 export class GeoServiceService {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private catalogService = inject(CatalogService);
   private applicationService = inject(ApplicationService);

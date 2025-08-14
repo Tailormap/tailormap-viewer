@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UploadHelper } from '@tailormap-admin/admin-api';
@@ -59,7 +59,7 @@ export class SelectUploadDialogComponent implements OnInit {
   private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);
   public data = inject<SelectUploadData>(MAT_DIALOG_DATA);
   private uploadRemoveService = inject<UploadRemoveServiceModel>(UPLOAD_REMOVE_SERVICE);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private dialog = inject(MatDialog);
   private confirmDialogService = inject(ConfirmDialogService);
   private adminSnackbarService = inject(AdminSnackbarService);

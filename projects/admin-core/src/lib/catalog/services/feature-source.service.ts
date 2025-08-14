@@ -2,8 +2,7 @@ import { Store } from '@ngrx/store';
 import { Injectable, inject } from '@angular/core';
 import {
   ApiResponseHelper,
-  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel,
-  TailormapAdminApiV1Service,
+  CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel, TAILORMAP_ADMIN_API_V1_SERVICE,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
@@ -29,7 +28,7 @@ import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 })
 export class FeatureSourceService {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private catalogService = inject(CatalogService);
   private sseService = inject(AdminSseService);

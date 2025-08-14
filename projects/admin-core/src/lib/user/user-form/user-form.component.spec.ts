@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import userEvent from '@testing-library/user-event';
@@ -23,7 +23,7 @@ const setup = async (isValidPassword: boolean) => {
     declarations: [PasswordFieldComponent],
     on: { userUpdated },
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
+      { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],

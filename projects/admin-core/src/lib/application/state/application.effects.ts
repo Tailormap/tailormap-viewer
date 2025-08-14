@@ -3,10 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as ApplicationActions from './application.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
-import {
-  ApiResponseHelper,
-  TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectApplicationsLoadStatus } from './application.selectors';
@@ -15,7 +12,7 @@ import { selectApplicationsLoadStatus } from './application.selectors';
 export class ApplicationEffects {
   private actions$ = inject(Actions);
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public loadApplication$ = createEffect(() => {

@@ -3,9 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as CatalogActions from './catalog.actions';
 import { map, catchError, of, filter, switchMap, tap, forkJoin } from 'rxjs';
-import {
-  ApiResponseHelper, TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import {
   selectCatalogLoadStatus, selectDraftFeatureSource, selectDraftFeatureSourceId, selectDraftFeatureSourceLoadStatus, selectDraftGeoService,
@@ -18,7 +16,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 export class CatalogEffects {
   private actions$ = inject(Actions);
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public loadCatalog$ = createEffect(() => {

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap, take, tap } from 'rxjs';
-import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import * as TasksActions from './tasks.actions';
 import { selectTaskDetailsLoadStatus, selectTasksLoadStatus } from './tasks.selectors';
@@ -12,7 +12,7 @@ import { loadTaskDetailsStart, loadTasksStart } from './tasks.actions';
 export class TasksEffects {
   private actions$ = inject(Actions);
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public loadTasks$ = createEffect(() => {

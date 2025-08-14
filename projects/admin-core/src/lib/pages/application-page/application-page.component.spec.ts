@@ -8,6 +8,8 @@ import { ApplicationListComponent } from '../../application/application-list/app
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
+import { of } from 'rxjs';
 const initialState = {
   //eslint-disable-next-line @typescript-eslint/naming-convention
   'admin-application': {
@@ -23,6 +25,7 @@ describe('ApplicationPageComponent', () => {
       declarations: [ApplicationListComponent],
       providers: [
         provideMockStore({ initialState }),
+        { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useValue: {} },
         provideHttpClient(),
         { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: '' } },
         { provide: APP_BASE_HREF, useValue: '' },

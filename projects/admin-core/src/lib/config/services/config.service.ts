@@ -1,7 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  ConfigModel, TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { ConfigModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -9,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ConfigService {
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public static DEFAULT_APPLICATION_KEY = 'default-app';

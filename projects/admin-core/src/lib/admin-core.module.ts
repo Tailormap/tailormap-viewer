@@ -11,6 +11,7 @@ import { AdminCoreRoutingModule } from './admin-core-routing.module';
 import { SettingsModule } from './settings/settings.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { SearchIndexModule } from './search-index/search-index.module';
+import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 @NgModule({
   imports: [
@@ -22,6 +23,9 @@ import { SearchIndexModule } from './search-index/search-index.module';
     SettingsModule,
     SearchIndexModule,
     OIDCConfigurationModule,
+  ],
+  providers: [
+    { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service },
   ],
 })
 export class AdminCoreModule {

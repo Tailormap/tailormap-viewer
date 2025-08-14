@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import { catchError, concatMap, Observable, of, take } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 import { ImageHelper } from '../helpers/image.helper';
 import { UploadHelper } from '../helpers/upload.helper';
 import { Injectable, inject } from '@angular/core';
 import { UploadCategoryEnum } from '../models';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from './tailormap-admin-api-v1.service.injection-token';
 
 export interface ImageUploadResult {
   url?: string;
@@ -16,7 +16,7 @@ export interface ImageUploadResult {
   providedIn: 'root',
 })
 export class TailormapAdminUploadService {
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public uploadImage$(file: File): Observable<ImageUploadResult | null> {

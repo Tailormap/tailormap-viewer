@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CatalogItemKindEnum, CatalogNodeModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { CatalogItemKindEnum, CatalogNodeModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { catchError, combineLatest, concatMap, map, of, Subject, switchMap, take, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
@@ -20,7 +20,7 @@ import { DebounceHelper } from '@tailormap-viewer/shared';
 })
 export class CatalogService implements OnDestroy {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
 

@@ -3,9 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import * as OIDCConfigurationActions from './oidc-configuration.actions';
 import { map, catchError, of, filter, switchMap, tap } from 'rxjs';
-import {
-  OIDCConfigurationModel, TailormapAdminApiV1Service,
-} from '@tailormap-admin/admin-api';
+import { OIDCConfigurationModel, TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectOIDCConfigurationsLoadStatus } from './oidc-configuration.selectors';
@@ -16,7 +14,7 @@ type ErrorResponse = { error: string };
 export class OIDCConfigurationEffects {
   private actions$ = inject(Actions);
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   public loadOIDCConfigurations$ = createEffect(() => {

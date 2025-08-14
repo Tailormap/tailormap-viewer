@@ -3,14 +3,14 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, first, interval, map, of } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
 import { deleteTaskSuccess, loadTaskDetails } from '../state/tasks.actions';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
 @Injectable()
 export class TaskMonitoringService {
   private store$ = inject(Store);
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
   private adminSnackbarService = inject(AdminSnackbarService);
   private destroyRef = inject(DestroyRef);
 

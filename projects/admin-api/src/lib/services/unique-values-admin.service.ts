@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { catchError, Observable, of, tap } from 'rxjs';
-import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
+import { TAILORMAP_ADMIN_API_V1_SERVICE } from './tailormap-admin-api-v1.service.injection-token';
 
 export interface UniqueValuesAdminParams {
   featureTypeId: string;
@@ -13,7 +13,7 @@ export interface UniqueValuesAdminParams {
   providedIn: 'root',
 })
 export class UniqueValuesAdminService {
-  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminApiService = inject(TAILORMAP_ADMIN_API_V1_SERVICE);
 
 
   private cachedResponses: Map<string, UniqueValuesResponseModel> = new Map();
