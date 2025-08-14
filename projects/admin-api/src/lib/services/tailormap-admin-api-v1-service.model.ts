@@ -30,7 +30,6 @@ export interface TailormapAdminApiV1ServiceModel {
     featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'>;
   }): Observable<FeatureTypeModel>;
   getFeatureType$(params: { id: string }): Observable<FeatureTypeModel>;
-  updateFeatureType$(params: { id: string; featureType: Pick<Partial<FeatureTypeModel>, 'title' | 'comment' | 'settings'> }): Observable<FeatureTypeModel>;
   getGroups$(): Observable<GroupModel[]>;
   getGroup$(name: string): Observable<GroupModel>;
   createGroup$(params: { group: GroupModel }): Observable<GroupModel>;
