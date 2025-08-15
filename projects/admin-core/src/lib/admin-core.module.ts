@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, ModuleWithProviders } from '@angular/core';
 import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -24,11 +24,14 @@ import { TAILORMAP_ADMIN_API_V1_SERVICE, TailormapAdminApiV1Service } from '@tai
     SearchIndexModule,
     OIDCConfigurationModule,
   ],
-  providers: [
-    { provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service },
-  ],
 })
 export class AdminCoreModule {
+  public static forRoot(): ModuleWithProviders<AdminCoreModule> {
+    return {
+      ngModule: AdminCoreModule,
+      providers: [{ provide: TAILORMAP_ADMIN_API_V1_SERVICE, useClass: TailormapAdminApiV1Service }],
+    };
+  }
   constructor() {
     const matIconRegistry = inject(MatIconRegistry);
     const domSanitizer = inject(DomSanitizer);

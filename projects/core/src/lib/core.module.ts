@@ -33,6 +33,9 @@ import { LoginFormComponent } from './pages/login/login-form/login-form.componen
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
+// This is just for the forRoot import - the rest of the module will be lazy loaded using routes
+// eslint-disable-next-line no-restricted-imports
+import { AdminCoreModule } from '@tailormap-admin/admin-core';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -77,6 +80,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     ComponentsModule,
     LayoutModule,
     RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
+    AdminCoreModule.forRoot(),
   ],
   exports: [
     ViewerAppComponent,

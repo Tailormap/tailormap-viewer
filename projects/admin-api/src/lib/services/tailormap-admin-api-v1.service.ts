@@ -14,9 +14,7 @@ import { ApiHelper, TailormapApiConstants, UniqueValuesResponseModel } from '@ta
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
   private httpClient = inject(HttpClient);
 
