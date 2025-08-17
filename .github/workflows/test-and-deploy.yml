@@ -224,8 +224,6 @@ jobs:
       - uses: actions/checkout@v5
 
       - uses: actions/dependency-review-action@v4
-        # skip the jsts license check which fails on EDL-1.0, see https://github.com/actions/dependency-review-action/issues/575
         with:
           deny-licenses: GPL-2.0+, AGPL-3.0+
           comment-summary-in-pr: on-failure
-          allow-dependencies-licenses: 'pkg:npm/jsts@2.12.1'
