@@ -89,11 +89,11 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         this.updateSliderFilter.emit({
           filterTool: FilterToolEnum.SLIDER,
           condition: value.condition ?? FilterConditionEnum.NULL_KEY,
-          initialValue: value.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialValue ?? undefined) : undefined,
+          initialValue: value.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialValue) : undefined,
           minimumValue: value.minimumValue ?? 0,
           maximumValue: value.maximumValue ?? 0,
-          initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue ?? undefined) : undefined,
-          initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue ?? undefined) : undefined,
+          initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue) : undefined,
+          initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue) : undefined,
           inputMode: value.inputMode ?? SliderFilterInputModeEnum.SLIDER,
         });
       });
@@ -102,8 +102,8 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private isValidSliderForm(): boolean {
     const formValues = this.sliderFilterForm.getRawValue();
     return !!formValues.condition
-      && (FormHelper.isValidNumberValue(formValues.initialValue) ||
-        (FormHelper.isValidNumberValue(formValues.initialLowerValue) && FormHelper.isValidNumberValue(formValues.initialUpperValue)))
+      && (formValues.initialValue !== undefined ||
+        (formValues.initialLowerValue !== undefined && formValues.initialUpperValue !==  undefined))
       && FormHelper.isValidNumberValue(formValues.minimumValue)
       && FormHelper.isValidNumberValue(formValues.maximumValue);
   }

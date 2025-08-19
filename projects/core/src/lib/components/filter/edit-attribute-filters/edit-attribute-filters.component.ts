@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  SwitchFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { updateFilter } from '../../../filter/state/filter.actions';
@@ -27,14 +28,17 @@ export class EditAttributeFiltersComponent {
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
 
-  public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
+  public getSliderFilterConfiguration(filter: AttributeFilterModel): UpdateSliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
     if (editConfiguration && editConfiguration.initialValue !== null) {
       editConfiguration.initialValue = Number(filter.value[0]);
     } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
       editConfiguration.initialLowerValue = Number(filter.value[0]);
       editConfiguration.initialUpperValue = Number(filter.value[1]);
+    } else if (editConfiguration) {
+      editConfiguration.condition = filter.condition;
     }
+    console.debug("edit config: ", editConfiguration);
     return editConfiguration;
   }
 
@@ -79,7 +83,7 @@ export class EditAttributeFiltersComponent {
     return filter.editConfiguration;
   }
 
-  public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
+  public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [`${$event}`],
@@ -89,7 +93,7 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateBetweenSliderFilterValues($event: { lower: number; upper: number }, filter: AttributeFilterModel) {
+  public updateBetweenSliderFilterValues($event: { lower: number | null; upper: number | null }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [ `${$event.lower}`, `${$event.upper}` ],

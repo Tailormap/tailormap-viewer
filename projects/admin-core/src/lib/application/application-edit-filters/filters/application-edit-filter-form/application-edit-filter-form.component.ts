@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output,
+} from '@angular/core';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
@@ -10,7 +12,7 @@ import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
-  AttributeFilterModel, FilterToolEnum, AttributeType, FilterConditionEnum, FilterTypeEnum, EditFilterConfigurationModel,
+  AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -35,9 +37,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   public filterToolOptions = [{
-    label: $localize`:@@admin-core.application.filters.preset:Preset`,
-    value: FilterToolEnum.PRESET_STATIC,
-  }, {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
@@ -52,6 +51,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
+  }, {
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
+    value: FilterToolEnum.PRESET_STATIC,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -241,9 +243,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public setEditFilterConfiguration($event: EditFilterConfigurationModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
-      value = $event.initialValue?.toString()
-        ? [$event.initialValue.toString()]
-        : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+      if (!$event.initialValue && !$event.initialLowerValue && !$event.initialUpperValue) {
+        value = [];
+      } else {
+        value = $event.initialValue?.toString()
+          ? [$event.initialValue.toString()]
+          : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+      }
     } else if ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST) {
       value = $event.attributeValuesSettings
         .filter(setting => setting.initiallySelected)
