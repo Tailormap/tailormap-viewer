@@ -30,9 +30,9 @@ export class EditAttributeFiltersComponent {
 
   public getSliderFilterConfiguration(filter: AttributeFilterModel): UpdateSliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
-    if (editConfiguration && editConfiguration.initialValue !== null) {
+    if (editConfiguration && filter.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 1) {
       editConfiguration.initialValue = Number(filter.value[0]);
-    } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
+    } else if (editConfiguration && filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 2) {
       editConfiguration.initialLowerValue = Number(filter.value[0]);
       editConfiguration.initialUpperValue = Number(filter.value[1]);
     } else if (editConfiguration) {
