@@ -38,7 +38,6 @@ export class EditAttributeFiltersComponent {
     } else if (editConfiguration) {
       editConfiguration.condition = filter.condition;
     }
-    console.debug("edit config: ", editConfiguration);
     return editConfiguration;
   }
 
@@ -203,8 +202,10 @@ export class EditAttributeFiltersComponent {
         );
       }),
     );
+  }
 
-
+  public isSliderFilterDisabled(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER && filter.value.length === 0;
   }
 
 }
