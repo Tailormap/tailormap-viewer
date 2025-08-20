@@ -174,6 +174,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   private isValidForm(): boolean {
     const formValues = this.filterForm.getRawValue();
     const filterValues = formValues.value;
+    console.debug("Filter values: ", filterValues);
     let validFilterValues = true;
     if (filterValues && formValues.attributeType !== AttributeType.BOOLEAN && formValues.condition !== FilterConditionEnum.NULL_KEY) {
       for (const filterValue of filterValues) {
@@ -243,7 +244,11 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public setEditFilterConfiguration($event: EditFilterConfigurationModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
-      if (!$event.initialValue && !$event.initialLowerValue && !$event.initialUpperValue) {
+      if (
+        ($event.initialValue === undefined || $event.initialValue === null)
+        && ($event.initialLowerValue === undefined || $event.initialLowerValue === null)
+        && ($event.initialUpperValue === undefined || $event.initialUpperValue === null)
+      ) {
         value = [];
       } else {
         value = $event.initialValue?.toString()

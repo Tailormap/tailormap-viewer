@@ -72,10 +72,10 @@ export class SliderFilterComponent implements OnInit {
 
     this.viewerSliderFilterForm.patchValue({
       filterValue: this.initialValue,
-      lowerValue: this.initialUpperValue
+      lowerValue: this.initialUpperValue !== null
         ? this.initialLowerValue ?? this.minValue
         : this.initialLowerValue,
-      upperValue: this.initialLowerValue
+      upperValue: this.initialLowerValue !== null
         ? this.initialUpperValue ?? this.maxValue
         : this.initialUpperValue,
     }, { emitEvent: false });
