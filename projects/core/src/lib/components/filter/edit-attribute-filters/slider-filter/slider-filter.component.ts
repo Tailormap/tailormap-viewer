@@ -60,7 +60,11 @@ export class SliderFilterComponent implements OnInit {
       )
       .subscribe(value => {
         if (this.betweenInput) {
-          this.betweenValuesChange.emit({ lower: value.lowerValue ?? null, upper: value.upperValue ?? null });
+          this.betweenValuesChange.emit({ lower: value.lowerValue ?? this.minValue, upper: value.upperValue ?? this.maxValue });
+          this.viewerSliderFilterForm.patchValue({
+            lowerValue: value.lowerValue ?? this.minValue,
+            upperValue: value.upperValue ?? this.maxValue,
+          }, { emitEvent: false });
         } else {
           this.valueChange.emit(value.filterValue ?? null);
         }
@@ -68,8 +72,12 @@ export class SliderFilterComponent implements OnInit {
 
     this.viewerSliderFilterForm.patchValue({
       filterValue: this.initialValue,
-      lowerValue: this.initialLowerValue,
-      upperValue: this.initialUpperValue,
+      lowerValue: this.initialUpperValue
+        ? this.initialLowerValue ?? this.minValue
+        : this.initialLowerValue,
+      upperValue: this.initialLowerValue
+        ? this.initialUpperValue ?? this.maxValue
+        : this.initialUpperValue,
     }, { emitEvent: false });
   }
 
