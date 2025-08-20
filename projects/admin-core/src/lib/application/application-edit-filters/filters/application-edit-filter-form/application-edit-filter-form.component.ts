@@ -37,6 +37,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   public filterToolOptions = [{
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
+    value: FilterToolEnum.PRESET_STATIC,
+  }, {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
@@ -51,9 +54,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
-  }, {
-    label: $localize`:@@admin-core.application.filters.preset:Preset`,
-    value: FilterToolEnum.PRESET_STATIC,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -174,7 +174,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   private isValidForm(): boolean {
     const formValues = this.filterForm.getRawValue();
     const filterValues = formValues.value;
-    console.debug("Filter values: ", filterValues);
     let validFilterValues = true;
     if (filterValues && formValues.attributeType !== AttributeType.BOOLEAN && formValues.condition !== FilterConditionEnum.NULL_KEY) {
       for (const filterValue of filterValues) {
