@@ -2,8 +2,8 @@ import * as DrawingActions from './drawing.actions';
 import { DrawingState, initialDrawingState } from './drawing.state';
 import { drawingReducer } from './drawing.reducer';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
-import { DrawingHelper } from '../helpers/drawing.helper';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
+import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 
 const feature: DrawingFeatureModel = {
   __fid: '1',

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DrawingStylesService } from './drawing-styles.service';
-import { DrawingFeatureModelAttributes } from '../models/drawing-feature.model';
+import { DrawingFeatureModelAttributes } from '../../../map/models/drawing-feature.model';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestScheduler } from 'rxjs/testing';

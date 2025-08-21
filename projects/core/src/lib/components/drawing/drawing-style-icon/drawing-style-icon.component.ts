@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ColorHelper } from '@tailormap-viewer/shared';
-import { DrawingFeatureStyleModel, StrokeTypeEnum } from '../models/drawing-feature.model';
+import { DrawingFeatureStyleModel, StrokeTypeEnum } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models';
-import { DrawingHelper } from '../helpers/drawing.helper';
+import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 @Component({

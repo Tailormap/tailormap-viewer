@@ -1,4 +1,4 @@
-import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
+import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import {
   ArrowTypeEnum, DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, DrawingStyleTypeMap,
   ImageDrawingFeatureStyleModel, LabelDrawingFeatureStyleModel, LabelStyleEnum, LineDrawingFeatureStyleModel,
@@ -6,7 +6,7 @@ import {
 } from '../models/drawing-feature.model';
 import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
-import { ApplicationStyleService } from '../../../services/application-style.service';
+import { ApplicationStyleService } from '../../services/application-style.service';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 export class DrawingHelper {

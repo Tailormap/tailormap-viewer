@@ -7,9 +7,9 @@ import {
   selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { DrawingHelper } from '../helpers/drawing.helper';
+import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
 import { ConfirmDialogService, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
