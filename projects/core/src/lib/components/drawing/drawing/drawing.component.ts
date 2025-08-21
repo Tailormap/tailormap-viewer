@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject, HostListener,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, HostListener,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
