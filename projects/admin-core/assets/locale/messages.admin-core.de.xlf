@@ -242,6 +242,10 @@
         <source>Choose value to alter</source>
         <target>zu ändernden Wert auswählen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.contains" datatype="html">
+        <source>contains</source>
+        <target>enthält</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
         <target>Anfangs ausgewählt</target>
@@ -261,6 +265,10 @@
       <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
         <source>Value</source>
         <target>Wert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
+        <source> Use as partial value </source>
+        <target state="new"> Use as partial value </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
@@ -1474,13 +1482,13 @@
         <source>Feature info</source>
         <target>Feature-Informationen</target>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
         <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

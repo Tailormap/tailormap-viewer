@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { CheckboxFilterModel } from '@tailormap-viewer/api';
+import { AttributeValueSettings, CheckboxFilterModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-checkbox-filter',
@@ -17,12 +17,14 @@ export class CheckboxFilterComponent {
   public checkboxFilterConfiguration: CheckboxFilterModel | null = null;
 
   @Output()
-  public valueChecked = new EventEmitter<{ value: string; checked: boolean }>();
+  public valueChecked = new EventEmitter<{ value: string; checked: boolean; substringFilter: boolean }>();
 
   constructor() { }
 
-  public checkValue(value: string, checked: boolean) {
-    this.valueChecked.emit({ value, checked });
+  public checkValue(value: AttributeValueSettings, checked: boolean) {
+    console.debug("checkboxFilterConfiguration", this.checkboxFilterConfiguration);
+    console.debug("checkValue", value, checked);
+    this.valueChecked.emit({ value: value.value, checked, substringFilter: value.substringFilter ?? false });
   }
 
 }

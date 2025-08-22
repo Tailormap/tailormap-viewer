@@ -4,7 +4,7 @@
     @for (value of checkboxFilterConfiguration?.attributeValuesSettings; track value) {
       @if (value.selectable) {
         <div class="checkbox-value">
-          <mat-checkbox [checked]="value.initiallySelected" (change)="checkValue(value.value, $event.checked)"></mat-checkbox>
+          <mat-checkbox [checked]="value.initiallySelected" (change)="checkValue(value, $event.checked)"></mat-checkbox>
           <span class="checkbox-value-label">{{ value.alias || value.value }}</span>
         </div>
       }
