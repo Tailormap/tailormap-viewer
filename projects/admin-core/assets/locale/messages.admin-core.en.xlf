@@ -212,6 +212,9 @@
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
       </trans-unit>
@@ -316,9 +319,6 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -1085,11 +1085,11 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

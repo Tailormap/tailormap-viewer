@@ -281,6 +281,10 @@
         <source>Checkbox</source>
         <target>Vinkvakjes</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+        <target>Kies filter gereedschap</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
         <target>Filter aanmaken</target>
@@ -420,10 +424,6 @@
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
         <target>Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
-        <target>Gereedschap</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -1473,13 +1473,13 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
         <target>Toon knop om het object te bewerken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>
