@@ -133,6 +133,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.drawingService.featureSelected$
       .pipe(takeUntil(this.destroyed))
       .subscribe(feature => this.onFeatureSelected(feature));
+    this.drawingService.predefinedStyleSelected$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(() => this.store$.dispatch(setSelectedFeature({ fid: null })));
   }
 
   public ngOnDestroy() {

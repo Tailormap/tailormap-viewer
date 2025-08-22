@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../services/application-style.service';
-import { DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
 import { DrawingHelper } from '../helpers/drawing.helper';
 
 @Injectable()
@@ -30,6 +30,7 @@ export class DrawingService {
   private activeToolChanged = new Subject<DrawingFeatureTypeEnum | null>();
   private selectToolActive = new BehaviorSubject<boolean>(false);
   private drawingResetCalled = new Subject();
+  private predefinedStyleSelected = new Subject<DrawingFeatureStyleModel>();
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
@@ -37,6 +38,7 @@ export class DrawingService {
   public activeToolChanged$ = this.activeToolChanged.asObservable();
   public selectToolActive$ = this.selectToolActive.asObservable();
   public drawingResetCalled$ = this.drawingResetCalled.asObservable();
+  public predefinedStyleSelected$ = this.predefinedStyleSelected.asObservable();
 
   private selectedFeature: FeatureModel | null = null;
   public isSelectedFeaturePointGeometry = false;
@@ -198,6 +200,30 @@ export class DrawingService {
     this.style.set(DrawingHelper.getUpdatedDefaultStyle());
     this.lockedStyle.set(false);
     this.drawingResetCalled.next(null);
+  }
+
+  public setPredefinedStyle(style: DrawingFeatureModelAttributes) {
+    this.predefinedStyleSelected.next(style.style);
+    this.style.set({
+      ...DrawingHelper.getDefaultStyle(),
+      ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
+      label: '',
+    });
+    this.lockedStyle.set(style.lockedStyle ?? false);
+    if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
+      this.customRectangleWidth.set(style.rectangleSize.width);
+      this.customRectangleLength.set(style.rectangleSize.height);
+    }
+    if (style.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && style.circleRadius) {
+      this.customCircleRadius.set(style.circleRadius);
+    }
+    if (style.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && style.squareLength) {
+      this.customSquareLength.set(style.squareLength);
+    }
+    if (this.getActiveTool() !== style.type) {
+      this.toggle(style.type);
+    }
   }
 
   private applyFixedSize(geometry: string): string {
