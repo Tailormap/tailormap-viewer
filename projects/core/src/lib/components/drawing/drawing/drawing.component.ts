@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, HostListener,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, HostListener, ViewContainerRef, viewChild, effect,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -23,6 +23,8 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
+
 
 @Component({
   selector: 'tm-drawing',
@@ -40,8 +42,10 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private menubarService = inject(MenubarService);
   private confirmService = inject(ConfirmDialogService);
   private drawingService = inject(DrawingService);
+  private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
   private cdr = inject(ChangeDetectorRef);
 
+  private componentsContainer = viewChild('additionalDrawingComponentsContainer', { read: ViewContainerRef });
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
@@ -73,6 +77,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
     DrawingFeatureTypeEnum.LINE,
     DrawingFeatureTypeEnum.STAR,
   ]);
+
+  constructor() {
+    effect(() => {
+      const components = this.drawingFeatureRegistrationService.registeredAdditionalDrawingFeatures();
+      const container = this.componentsContainer();
+      if (!container) {
+        return;
+      }
+      container.clear();
+      components.forEach(component => container.createComponent(component.component));
+    });
+  }
 
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(

@@ -1,21 +1,26 @@
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ColorHelper } from '@tailormap-viewer/shared';
-import { DrawingFeatureStyleModel, StrokeTypeEnum } from '../../../map/models/drawing-feature.model';
-import { DrawingFeatureTypeEnum } from '../../../map/models';
-import { DrawingHelper } from '../../../map/helpers/drawing.helper';
+import { DrawingFeatureStyleModel, StrokeTypeEnum } from '../../models/drawing-feature.model';
+import { DrawingFeatureTypeEnum } from '../../models';
+import { DrawingHelper } from '../../helpers/drawing.helper';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { NgOptimizedImage } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'tm-drawing-style-icon',
   templateUrl: './drawing-style-icon.component.html',
   styleUrls: ['./drawing-style-icon.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  standalone: true,
+  imports: [
+    NgOptimizedImage,
+    MatIcon,
+  ],
 })
 export class DrawingStyleIconComponent {
   private domSanitizer = inject(DomSanitizer);
-
 
   @Input()
   public type: DrawingFeatureTypeEnum | null = null;

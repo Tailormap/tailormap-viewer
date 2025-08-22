@@ -172,8 +172,7 @@
       </mat-form-field>
     }
 
-    <tm-drawing-style-library-list></tm-drawing-style-library-list>
-
+    <ng-template #additionalDrawingComponentsContainer></ng-template>
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
     @if (selectedDrawingType) {
