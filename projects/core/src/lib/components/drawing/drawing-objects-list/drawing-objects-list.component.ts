@@ -2,7 +2,7 @@ import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, Event
 import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 
 @Component({
   selector: 'tm-drawing-objects-list',

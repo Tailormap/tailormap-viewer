@@ -10,8 +10,7 @@ import { drawingReducer } from './state/drawing.reducer';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
-import { DrawingStyleIconComponent } from './drawing-style-icon/drawing-style-icon.component';
-import { DrawingStyleLibraryListComponent } from './drawing-style-library-list/drawing-style-library-list.component';
+import { DrawingStyleIconComponent } from '../../map';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,6 @@ import { DrawingStyleLibraryListComponent } from './drawing-style-library-list/d
     DrawingMenuButtonComponent,
     DrawingObjectsListComponent,
     DrawingStyleFormComponent,
-    DrawingStyleIconComponent,
-    DrawingStyleLibraryListComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +26,7 @@ import { DrawingStyleLibraryListComponent } from './drawing-style-library-list/d
     StoreModule.forFeature(drawingStateKey, drawingReducer),
     ApplicationMapModule,
     NgOptimizedImage,
+    DrawingStyleIconComponent,
   ],
   exports: [
     DrawingComponent,

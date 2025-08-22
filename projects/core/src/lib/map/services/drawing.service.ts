@@ -1,7 +1,7 @@
-import { DestroyRef, Injectable, inject } from '@angular/core';
+import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
-  ExtTransformToolModel, MapService,
+  ExtTransformToolModel, FeatureHelper, MapService,
   MapStyleModel,
   SelectToolConfigModel, SelectToolModel, ToolManagerModel,
   ToolTypeEnum,
@@ -11,12 +11,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
 import { FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../services/application-style.service';
+import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import { DrawingHelper } from '../helpers/drawing.helper';
 
 @Injectable()
 export class DrawingService {
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
-
 
   private activeDrawingTool: DrawingFeatureTypeEnum | null = null;
   private drawingTool: DrawingToolModel | null = null;
@@ -28,15 +29,30 @@ export class DrawingService {
   private featureGeometryModified = new Subject<string>();
   private activeToolChanged = new Subject<DrawingFeatureTypeEnum | null>();
   private selectToolActive = new BehaviorSubject<boolean>(false);
+  private drawingResetCalled = new Subject();
+  private predefinedStyleSelected = new Subject<DrawingFeatureStyleModel>();
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
   public featureGeometryModified$ = this.featureGeometryModified.asObservable();
   public activeToolChanged$ = this.activeToolChanged.asObservable();
   public selectToolActive$ = this.selectToolActive.asObservable();
+  public drawingResetCalled$ = this.drawingResetCalled.asObservable();
+  public predefinedStyleSelected$ = this.predefinedStyleSelected.asObservable();
 
   private selectedFeature: FeatureModel | null = null;
   public isSelectedFeaturePointGeometry = false;
+
+  public SIZE_MIN = 10000;
+  public SIZE_MAX = 1;
+  public customRectangleWidth = signal<number | null>(null);
+  public customRectangleLength = signal<number | null>(null);
+  public customSquareLength = signal<number | null>(null);
+  public customCircleRadius = signal<number | null>(null);
+
+  public lockedStyle = signal<boolean>(false);
+  public style = signal<DrawingFeatureStyleModel>(DrawingHelper.getUpdatedDefaultStyle());
+  public showMeasures = signal<boolean>(false);
 
   private static getDefaultStyle = (): Partial<MapStyleModel> => ({
     pointType: 'circle',
@@ -90,7 +106,10 @@ export class DrawingService {
       )
       .subscribe(drawEvent => {
         if (drawEvent && drawEvent.type === 'end' && this.activeDrawingTool) {
-          this.drawingAdded.next(drawEvent);
+          this.drawingAdded.next({
+            ...drawEvent,
+            geometry: this.applyFixedSize(drawEvent.geometry),
+          });
           if (opts.drawSingleShape) {
             const activeTool = this.activeDrawingTool;
             setTimeout(() => {
@@ -158,8 +177,8 @@ export class DrawingService {
     this.activeDrawingTool = null;
   }
 
-  public toggle(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
-    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, showMeasures, forceEnableDrawing);
+  public toggle(type: DrawingFeatureTypeEnum, forceEnableDrawing?: boolean) {
+    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, forceEnableDrawing);
   }
 
   public setSelectedFeature(feature: FeatureModel | null) {
@@ -173,8 +192,67 @@ export class DrawingService {
     this.disableDrawing(disableOtherTools);
     this.enableModifyTool();
   }
+  public getActiveTool() {
+    return this.activeDrawingTool;
+  }
 
-  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
+  public resetBeforeDrawing() {
+    this.style.set(DrawingHelper.getUpdatedDefaultStyle());
+    this.lockedStyle.set(false);
+    this.drawingResetCalled.next(null);
+  }
+
+  public setPredefinedStyle(style: DrawingFeatureModelAttributes) {
+    this.predefinedStyleSelected.next(style.style);
+    this.style.set({
+      ...DrawingHelper.getDefaultStyle(),
+      ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
+      label: '',
+    });
+    this.lockedStyle.set(style.lockedStyle ?? false);
+    if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
+      this.customRectangleWidth.set(style.rectangleSize.width);
+      this.customRectangleLength.set(style.rectangleSize.height);
+    }
+    if (style.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && style.circleRadius) {
+      this.customCircleRadius.set(style.circleRadius);
+    }
+    if (style.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && style.squareLength) {
+      this.customSquareLength.set(style.squareLength);
+    }
+    if (this.getActiveTool() !== style.type) {
+      this.toggle(style.type);
+    }
+  }
+
+  private applyFixedSize(geometry: string): string {
+    const customRectangleWidth = this.customRectangleWidth();
+    const customRectangleLength = this.customRectangleLength();
+    if (this.activeDrawingTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && customRectangleWidth != null && customRectangleLength != null && geometry) {
+      const rectangle = FeatureHelper.createRectangleAtPoint(geometry, customRectangleWidth, customRectangleLength);
+      if (rectangle) {
+        return rectangle;
+      }
+    }
+    const customCircleRadius = this.customCircleRadius();
+    if (this.activeDrawingTool === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && customCircleRadius != null && geometry) {
+      const circle = FeatureHelper.createCircleAtPoint(geometry, customCircleRadius);
+      if (circle) {
+        return circle;
+      }
+    }
+    const customSquareLength = this.customSquareLength();
+    if (this.activeDrawingTool === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && customSquareLength != null && geometry) {
+      const square = FeatureHelper.createRectangleAtPoint(geometry, customSquareLength, customSquareLength);
+      if (square) {
+        return square;
+      }
+    }
+    return geometry;
+  }
+
+  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, forceEnableDrawing?: boolean) {
     if (!this.drawingTool || !this.selectTool) {
       return;
     }
@@ -184,7 +262,7 @@ export class DrawingService {
     } else {
       // Enable drawing
       this.activeDrawingTool = drawingFeatureType;
-      const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
+      const style: MapStyleModel = this.showMeasures() ? { showTotalSize: true, showSegmentSize: true } : {};
       this.toolManager?.enableTool(this.drawingTool.id, true, { type, style }, true);
       this.toolManager?.disableTool(this.selectTool.id, true);
       if (this.extTransformTool) {

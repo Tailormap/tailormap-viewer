@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, signal, inject, HostListener } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, HostListener, ViewContainerRef, viewChild, effect,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
 import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
@@ -6,12 +8,12 @@ import {
   selectDrawingFeatures, selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature,
   selectSelectedDrawingType,
 } from '../state/drawing.selectors';
-import { DrawingHelper } from '../helpers/drawing.helper';
+import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 import { MenubarService } from '../../menubar';
 import { DrawingMenuButtonComponent } from '../drawing-menu-button/drawing-menu-button.component';
 import {
   DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel, LabelDrawingFeatureStyleModel,
-} from '../models/drawing-feature.model';
+} from '../../../map/models/drawing-feature.model';
 import {
   addFeature, removeAllDrawingFeatures, removeDrawingFeature, setSelectedDrawingType, setSelectedFeature, updateDrawingFeatureStyle,
   updateSelectedDrawingFeatureGeometry,
@@ -21,7 +23,8 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { DrawingStylesService } from '../services/drawing-styles.service';
+import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
+
 
 @Component({
   selector: 'tm-drawing',
@@ -39,16 +42,17 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private menubarService = inject(MenubarService);
   private confirmService = inject(ConfirmDialogService);
   private drawingService = inject(DrawingService);
+  private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
   private cdr = inject(ChangeDetectorRef);
-  private drawingStylesService = inject(DrawingStylesService);
 
+  private componentsContainer = viewChild('additionalDrawingComponentsContainer', { read: ViewContainerRef });
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
   public active$: Observable<boolean> = of(false);
   public selectedFeature: DrawingFeatureModel | null = null;
-  public style: DrawingFeatureStyleModel = DrawingHelper.getUpdatedDefaultStyle();
-  public lockedStyle = signal<boolean>(false);
+  public style = this.drawingService.style.asReadonly();
+  public lockedStyle = this.drawingService.lockedStyle.asReadonly();
   public selectedDrawingType: DrawingFeatureTypeEnum | null = null;
   public hasFeatures$: Observable<boolean> = of(false);
 
@@ -57,9 +61,12 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectToolActive$ = this.drawingService.selectToolActive$;
 
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
-  public showMeasures = signal<boolean>(false);
+  public showMeasures = this.drawingService.showMeasures.asReadonly();
 
   public mapUnits$ = this.mapService.getUnitsOfMeasure$();
+
+  public SIZE_MAX = this.drawingService.SIZE_MAX;
+  public SIZE_MIN = this.drawingService.SIZE_MIN;
 
   private static toolsWithMeasure = new Set([
     DrawingFeatureTypeEnum.CIRCLE,
@@ -70,6 +77,18 @@ export class DrawingComponent implements OnInit, OnDestroy {
     DrawingFeatureTypeEnum.LINE,
     DrawingFeatureTypeEnum.STAR,
   ]);
+
+  constructor() {
+    effect(() => {
+      const components = this.drawingFeatureRegistrationService.registeredAdditionalDrawingFeatures();
+      const container = this.componentsContainer();
+      if (!container) {
+        return;
+      }
+      container.clear();
+      components.forEach(component => container.createComponent(component.component));
+    });
+  }
 
   public ngOnInit() {
     this.active$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.DRAWING).pipe(
@@ -104,9 +123,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
         this.selectedFeature = feature;
         this.selectedDrawingType = type;
         if (feature) {
-          this.style = feature.attributes.style;
+          this.drawingService.style.set(feature.attributes.style);
           this.selectedDrawingType = feature.attributes.type;
-          this.lockedStyle.set(feature?.attributes.lockedStyle ?? false);
+          this.drawingService.lockedStyle.set(feature?.attributes.lockedStyle ?? false);
         }
         this.cdr.detectChanges();
       });
@@ -130,6 +149,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.drawingService.featureSelected$
       .pipe(takeUntil(this.destroyed))
       .subscribe(feature => this.onFeatureSelected(feature));
+    this.drawingService.predefinedStyleSelected$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(() => this.store$.dispatch(setSelectedFeature({ fid: null })));
   }
 
   public ngOnDestroy() {
@@ -153,25 +175,22 @@ export class DrawingComponent implements OnInit, OnDestroy {
     }
   }
 
-  private static defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
-    description: undefined,
-    secondaryStroke: undefined,
-    tertiaryStroke: undefined,
-    dashOffset: 0,
-    strokeOffset: 0,
-  };
-
   private resetBeforeDrawing() {
-    DrawingHelper.updateDefaultStyle(DrawingComponent.defaultNonUserEditableStyle);
-    this.style = DrawingHelper.getUpdatedDefaultStyle();
-    this.lockedStyle.set(false);
-    this.drawingStylesService.setSelectedDrawingStyle(null);
+    const defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
+      description: undefined,
+      secondaryStroke: undefined,
+      tertiaryStroke: undefined,
+      dashOffset: 0,
+      strokeOffset: 0,
+    };
+    DrawingHelper.updateDefaultStyle(defaultNonUserEditableStyle);
+    this.drawingService.resetBeforeDrawing();
   }
 
   public draw(type: DrawingFeatureTypeEnum) {
     this.resetBeforeDrawing();
     if (this.activeTool !== type) {
-      this.drawingService.toggle(type, this.showMeasures());
+      this.drawingService.toggle(type);
     }
   }
 
@@ -180,15 +199,14 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public toggleMeasuring($event: MatCheckboxChange) {
-    this.showMeasures.set($event.checked);
+    this.drawingService.showMeasures.set($event.checked);
     if (this.activeTool) {
-      this.drawingService.toggle(this.activeTool, $event.checked, true);
+      this.drawingService.toggle(this.activeTool, true);
     }
   }
 
   public enableSelectAndModify() {
     this.drawingService.enableSelectAndModify();
-    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onDrawingAdded($event: DrawingToolEvent) {
@@ -196,28 +214,10 @@ export class DrawingComponent implements OnInit, OnDestroy {
       return;
     }
     const attributes: Partial<DrawingFeatureModelAttributes> = {};
-    if (this.lockedStyle()) {
+    if (this.drawingService.lockedStyle()) {
       attributes.lockedStyle = true;
     }
-    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.style, attributes);
-    if (this.activeTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && this.customRectangleWidth != null && this.customRectangleLength != null && feature.geometry) {
-      const rectangle = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customRectangleWidth, this.customRectangleLength);
-      if (rectangle) {
-        feature.geometry = rectangle;
-      }
-    }
-    if (this.activeTool === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && this.customCircleRadius != null && feature.geometry) {
-      const circle = FeatureHelper.createCircleAtPoint(feature.geometry, this.customCircleRadius);
-      if (circle) {
-        feature.geometry = circle;
-      }
-    }
-    if (this.activeTool === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && this.customSquareLength != null && feature.geometry) {
-      const square = FeatureHelper.createRectangleAtPoint(feature.geometry, this.customSquareLength, this.customSquareLength);
-      if (square) {
-        feature.geometry = square;
-      }
-    }
+    const feature = DrawingHelper.getFeature(this.activeTool, $event, this.drawingService.style(), attributes);
     this.store$.dispatch(addFeature({
       feature,
       selectFeature: true,
@@ -236,7 +236,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public featureSelected(fid: string) {
     this.store$.dispatch(setSelectedFeature({ fid }));
     this.drawingService.enableSelectAndModify(true);
-    this.drawingStylesService.setSelectedDrawingStyle(null);
   }
 
   public onFeatureGeometryModified(geometry: string) {
@@ -299,7 +298,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     if (this.selectedFeature) {
       this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style }));
     } else {
-      this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: style.label };
+      this.drawingService.style.set({ ...DrawingHelper.getUpdatedDefaultStyle(), label: style.label });
     }
   }
 
@@ -309,132 +308,102 @@ export class DrawingComponent implements OnInit, OnDestroy {
       label: '',
     });
     if (this.selectedFeature) {
-      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style: { ...this.style, ...labelStyle } }));
+      this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.selectedFeature.__fid, style: { ...this.drawingService.style(), ...labelStyle } }));
     } else {
-      this.style = { ...DrawingHelper.getUpdatedDefaultStyle(), label: labelStyle.label };
+      this.drawingService.style.set({ ...DrawingHelper.getUpdatedDefaultStyle(), label: labelStyle.label });
     }
   }
 
-  public selectDrawingStyle(style: DrawingFeatureModelAttributes) {
-    this.store$.dispatch(setSelectedFeature({ fid: null }));
-    this.style = {
-      ...DrawingHelper.getDefaultStyle(),
-      ...style.style,
-      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
-      label: '',
-    };
-    this.lockedStyle.set(style.lockedStyle ?? false);
-
-    if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
-      // Do not use setters here, those will call resetBeforeDrawing()
-      this._customRectangleWidth = style.rectangleSize.width;
-      this._customRectangleLength = style.rectangleSize.height;
-    }
-    if (style.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && style.circleRadius) {
-      // Do not use setters here, those will call resetBeforeDrawing()
-      this._customCircleRadius = style.circleRadius;
-    }
-    if (style.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && style.squareLength) {
-      // Do not use setters here, those will call resetBeforeDrawing()
-      this._customSquareLength = style.squareLength;
-    }
-
-
-    if (this.activeTool !== style.type) {
-      this.drawingService.toggle(style.type, this.showMeasures());
-    }
-  }
-
-  public SIZE_MIN = 10000;
-  public SIZE_MAX = 1;
-
-  private _customRectangleWidth: number | null = null;
   public get customRectangleWidth(): number | null {
-    return this._customRectangleWidth;
+    return this.drawingService.customRectangleWidth();
   }
   public set customRectangleWidth(value: number | null) {
-    this._customRectangleWidth = value;
+    this.drawingService.customRectangleWidth.set(value);
     this.drawRectangle();
   }
 
-  private _customRectangleLength: number | null = null;
   public get customRectangleLength(): number | null {
-    return this._customRectangleLength;
+    return this.drawingService.customRectangleLength();
   }
   public set customRectangleLength(value: number | null) {
-    this._customRectangleLength = value;
+    this.drawingService.customRectangleLength.set(value);
     this.drawRectangle();
   }
 
   public drawRectangle() {
     this.resetBeforeDrawing();
-    if (this.customRectangleWidth !== null && this.customRectangleWidth >= this.SIZE_MAX && this.customRectangleWidth <= this.SIZE_MIN
-      && this.customRectangleLength !== null && this.customRectangleLength >= this.SIZE_MAX && this.customRectangleLength <= this.SIZE_MIN) {
+    const customRectangleWidth = this.drawingService.customRectangleWidth();
+    const customRectangleLength = this.drawingService.customRectangleLength();
+    if (customRectangleWidth !== null && customRectangleWidth >= this.SIZE_MAX && customRectangleWidth <= this.SIZE_MIN
+      && customRectangleLength !== null && customRectangleLength >= this.SIZE_MAX && customRectangleLength <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE);
       }
     } else {
       if (this.activeTool !== DrawingFeatureTypeEnum.RECTANGLE) {
-        this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE, this.showMeasures());
+        this.drawingService.toggle(DrawingFeatureTypeEnum.RECTANGLE);
       }
     }
   }
 
   public clearRectangleSize() {
-    this.customRectangleWidth = null;
-    this.customRectangleLength = null;
+    this.drawingService.customRectangleWidth.set(null);
+    this.drawingService.customRectangleLength.set(null);
+    this.drawRectangle();
   }
 
-  private _customCircleRadius: number | null = null;
   public get customCircleRadius(): number | null {
-    return this._customCircleRadius;
+    return this.drawingService.customCircleRadius();
   }
   public set customCircleRadius(value: number | null) {
-    this._customCircleRadius = value;
-    if (this._customCircleRadius !== null && this._customCircleRadius >= this.SIZE_MAX && this._customCircleRadius <= this.SIZE_MIN) {
+    this.drawingService.customCircleRadius.set(value);
+    this.drawCircle();
+  }
+
+  public drawCircle() {
+    this.resetBeforeDrawing();
+    const customCircleRadius = this.drawingService.customCircleRadius();
+    if (customCircleRadius !== null && customCircleRadius >= this.SIZE_MAX && customCircleRadius <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS);
       }
     } else {
       if(this.activeTool !== DrawingFeatureTypeEnum.CIRCLE) {
-        this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE, this.showMeasures());
+        this.drawingService.toggle(DrawingFeatureTypeEnum.CIRCLE);
       }
     }
   }
 
   public clearCircleRadius() {
-    this.customCircleRadius = null;
+    this.drawingService.customCircleRadius.set(null);
+    this.drawCircle();
   }
 
-  public drawCircle() {
-    this.resetBeforeDrawing();
-    this.customCircleRadius = this._customCircleRadius;
-  }
-
-  private _customSquareLength: number | null = null;
   public get customSquareLength(): number | null {
-    return this._customSquareLength;
+    return this.drawingService.customSquareLength();
   }
   public set customSquareLength(value: number | null) {
-    this._customSquareLength = value;
-    if (this._customSquareLength !== null && this._customSquareLength >= this.SIZE_MAX && this._customSquareLength <= this.SIZE_MIN) {
+    this.drawingService.customSquareLength.set(value);
+    this.drawSquare();
+  }
+
+  public drawSquare() {
+    this.resetBeforeDrawing();
+    const customSquareLength = this.drawingService.customSquareLength();
+    if (customSquareLength !== null && customSquareLength >= this.SIZE_MAX && customSquareLength <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH) {
         this.drawingService.toggle(DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH);
       }
     } else {
       if(this.activeTool !== DrawingFeatureTypeEnum.SQUARE) {
-        this.drawingService.toggle(DrawingFeatureTypeEnum.SQUARE, this.showMeasures());
+        this.drawingService.toggle(DrawingFeatureTypeEnum.SQUARE);
       }
     }
   }
 
   public clearSquareLength() {
-    this.customSquareLength = null;
-  }
-
-  public drawSquare() {
-    this.resetBeforeDrawing();
-    this.customSquareLength = this._customSquareLength;
+    this.drawingService.customSquareLength.set(null);
+    this.drawSquare();
   }
 
 }
