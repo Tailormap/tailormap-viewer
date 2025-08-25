@@ -290,6 +290,10 @@
         <source>Checkbox</source>
         <target>Kontrollkästchen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+        <target>Filterwerkzeug auswählen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
         <target>Filter erstellen</target>
@@ -429,10 +433,6 @@
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
         <target>Zu viele eindeutige Werte, es werden nur die ersten <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> angezeigt.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
-        <target>Werkzeug</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>

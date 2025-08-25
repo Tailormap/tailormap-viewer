@@ -172,14 +172,13 @@
       </mat-form-field>
     }
 
-    <tm-drawing-style-library-list (drawingStyleSelected)="selectDrawingStyle($event)"></tm-drawing-style-library-list>
-
+    <ng-template #additionalDrawingComponentsContainer></ng-template>
 
     <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
     @if (selectedDrawingType) {
       <tm-drawing-style-form
         [type]="selectedDrawingType"
-        [style]="style"
+        [style]="style()"
         [onlyLabelSettings]="lockedStyle()"
         (styleUpdated)="featureStyleUpdates($event)"
         (labelStyleUpdated)="featureLabelStyleUpdates($event)"></tm-drawing-style-form>
