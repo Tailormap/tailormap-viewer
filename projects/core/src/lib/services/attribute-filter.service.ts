@@ -64,7 +64,7 @@ export class AttributeFilterService {
           const substringFilters: AttributeFilterModel[] = [];
           if (filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX) {
             substringFilters.push(...filter.editConfiguration.attributeValuesSettings
-              .filter(value => value.substringFilter)
+              .filter(value => value.useAsLikeSubstringFilter)
               .map(value => ({
                 attribute: filter.attribute,
                 attributeType: filter.attributeType,

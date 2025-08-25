@@ -101,7 +101,7 @@ export class ApplicationCheckboxFilterFormComponent {
     const value = this.newValueControl.value;
     const useAsPartialValue = this.useAsPartialValueControl.value;
     if (!value || this.attributeValuesSettings().some(setting =>
-      setting.value === value && setting.substringFilter === useAsPartialValue)) {
+      setting.value === value && setting.useAsLikeSubstringFilter === useAsPartialValue)) {
       return;
     }
     const currentSettings = this.attributeValuesSettings();
@@ -109,7 +109,7 @@ export class ApplicationCheckboxFilterFormComponent {
       value: value,
       initiallySelected: true,
       selectable: true,
-      substringFilter: useAsPartialValue ?? false,
+      useAsLikeSubstringFilter: useAsPartialValue ?? false,
     };
     const updatedSettings = [ ...currentSettings, newSetting ];
     this.attributeValuesSettings.set(updatedSettings);
