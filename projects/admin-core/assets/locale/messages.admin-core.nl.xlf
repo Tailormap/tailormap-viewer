@@ -226,9 +226,9 @@
         <source>Filter application layers</source>
         <target>Filter applicatie lagen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
-        <source>Add new value</source>
-        <target>Voeg nieuwe waarde toe</target>
+      <trans-unit id="admin-core.application.filter.add" datatype="html">
+        <source>Add</source>
+        <target>Voeg toe</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
@@ -267,8 +267,8 @@
         <target>Waarde</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
-        <source> Use as partial value </source>
-        <target state="new"> Use as partial value </target>
+        <source> Look for values containing this value </source>
+        <target> Zoek naar waardes die deze waarde bevatten </target>
       </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
