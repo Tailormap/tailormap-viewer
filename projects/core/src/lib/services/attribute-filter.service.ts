@@ -75,7 +75,7 @@ export class AttributeFilterService {
                 value: [value.value],
                 type: filter.type,
                 id: `${filter.id}-substring-${value.value}`,
-                generatedSubstringFilter: true,
+                generatedByFilterId: filter.id,
               })));
           }
           return substringFilters;

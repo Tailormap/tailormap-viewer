@@ -22,8 +22,6 @@ export class CheckboxFilterComponent {
   constructor() { }
 
   public checkValue(value: AttributeValueSettings, checked: boolean) {
-    console.debug("checkboxFilterConfiguration", this.checkboxFilterConfiguration);
-    console.debug("checkValue", value, checked);
     this.valueChecked.emit({ value: value.value, checked, substringFilter: value.substringFilter ?? false });
   }
 

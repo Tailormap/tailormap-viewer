@@ -44,8 +44,19 @@ export class CqlFilterHelper {
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
     const baseFilter: string[] = filterGroup.filters
-      .filter(f => !f.disabled)
-      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
+      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId))
+      .map(f => {
+        const generatedFilters = filterGroup.filters.filter(
+          filterInGroup => FilterTypeHelper.isAttributeFilter(filterInGroup) && filterInGroup.generatedByFilterId === f.id && !filterInGroup.disabled,
+        );
+        const cqlQueries = [
+          CqlFilterHelper.convertFilterToQuery(f, layerId),
+          ...generatedFilters.map(gf => CqlFilterHelper.convertFilterToQuery(gf, layerId)),
+        ].filter(TypesHelper.isDefined);
+        return cqlQueries.length > 1
+          ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
+          : cqlQueries[0];
+      })
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);

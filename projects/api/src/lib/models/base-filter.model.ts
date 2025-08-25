@@ -4,5 +4,4 @@ export interface BaseFilterModel {
   id: string;
   type: FilterTypeEnum;
   disabled?: boolean;
-  generatedSubstringFilter?: boolean;
 }
