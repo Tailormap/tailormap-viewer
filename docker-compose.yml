@@ -3,6 +3,7 @@ name: tailormap
 volumes:
   db:
   solr-data:
+  prometheus-data:
 
 services:
   tailormap:
@@ -114,3 +115,50 @@ services:
     command:
       # this script should be in the path for the current (solr) user
       - solr-exporter
+
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3.5.0
+    profiles:
+      - prometheus
+    environment:
+      TZ: Europe/Amsterdam
+      # Prometheus scrape/configuration file is created on startup from this environment variable
+      PROM_CONFIG: |-
+        global:
+          scrape_interval: '1m'
+        scrape_configs:
+          - job_name: 'tailormap-api'
+            scheme: 'http'
+            static_configs:
+              - targets:
+                  - 'tailormap:8080'
+            metrics_path: '/api/actuator/prometheus'
+            metric_relabel_configs:
+              - source_labels: [__name__]
+                regex: '^tailormap_.*'
+                action: keep
+      # see: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
+      # and  https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects
+      # keep data for 1 year or 1GB by default
+      CMD: >-
+        --config.file=/etc/prometheus/prometheus.yml
+        --web.enable-admin-api
+        --storage.tsdb.retention.time=${TSDB_RETENTION_TIME:-1y}
+        --storage.tsdb.retention.size=${TSDB_RETENTION_SIZE:-1GB}
+    entrypoint: /bin/sh -c 'echo "$$DYNAMIC_CONFIG" > /etc/prometheus/prometheus.yml && /bin/prometheus $$CMD'
+    volumes:
+      - prometheus-data:/prometheus
+    labels:
+      traefik.enable: false
+    # uncomment the following line when running on localhost
+    # extra_hosts:
+    #   - "tailormap:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: 'wget --server-response --spider http://localhost:9090/query?query=up || exit 1'
+      start_period: 60s
+      interval: 15s
+      timeout: 5s
+      retries: 3
