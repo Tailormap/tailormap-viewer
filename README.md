@@ -11,7 +11,8 @@ run:
 docker compose up -d
 ```
 
-This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration and a Solr container for full text search indexing. The port (and other options) can
+This runs Tailormap on http://localhost:8080/ together with a PostgreSQL container to store configuration and Prometheus
+and Solr containers for full text search indexing. The port (and other options) can
 be changed by copying `.env.template` to `.env` and changing the variables (or use the `--env-file <file>` argument). Tailormap will only
 accept connections from the loopback interface, unless you set `SERVER_ADDRESS=0.0.0.0` in the env-file.
 

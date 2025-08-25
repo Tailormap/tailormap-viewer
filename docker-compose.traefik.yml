@@ -32,3 +32,7 @@ services:
   solr-metrics:
     labels:
       - "traefik.enable=false"
+
+  prometheus:
+    labels:
+      - "traefik.enable=false"
