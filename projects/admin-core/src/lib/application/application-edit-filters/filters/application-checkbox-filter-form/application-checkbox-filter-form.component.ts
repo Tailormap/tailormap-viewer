@@ -23,7 +23,7 @@ export class ApplicationCheckboxFilterFormComponent {
 
   public aliasForm: FormGroup = new FormGroup({});
   public newValueControl = new FormControl<string>('');
-  public useAsLikeSubstringFilterControl = new FormControl<boolean>(false);
+  public useAsIlikeSubstringFilterControl = new FormControl<boolean>(false);
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
@@ -99,9 +99,9 @@ export class ApplicationCheckboxFilterFormComponent {
 
   public addNewValue() {
     const value = this.newValueControl.value;
-    const useAsPartialValue = this.useAsLikeSubstringFilterControl.value;
+    const useAsPartialValue = this.useAsIlikeSubstringFilterControl.value;
     if (!value || this.attributeValuesSettings().some(setting =>
-      setting.value === value && setting.useAsLikeSubstringFilter === useAsPartialValue)) {
+      setting.value === value && setting.useAsIlikeSubstringFilter === useAsPartialValue)) {
       return;
     }
     const currentSettings = this.attributeValuesSettings();
@@ -109,7 +109,7 @@ export class ApplicationCheckboxFilterFormComponent {
       value: value,
       initiallySelected: true,
       selectable: true,
-      useAsLikeSubstringFilter: useAsPartialValue ?? false,
+      useAsIlikeSubstringFilter: useAsPartialValue ?? false,
     };
     const updatedSettings = [ ...currentSettings, newSetting ];
     this.attributeValuesSettings.set(updatedSettings);

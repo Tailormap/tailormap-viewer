@@ -45,7 +45,7 @@ export class EditAttributeFiltersComponent {
     return {
       ...filter.editConfiguration,
       attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => {
-        if (valueSettings.useAsLikeSubstringFilter) {
+        if (valueSettings.useAsIlikeSubstringFilter) {
           const substringFilterId = `${filter.id}-substring-${valueSettings.value}`;
           const substringFilter = this.editableFilters().find(f => f.id === substringFilterId);
           return {

@@ -22,7 +22,7 @@ export class CheckboxFilterComponent {
   constructor() { }
 
   public checkValue(value: AttributeValueSettings, checked: boolean) {
-    this.valueChecked.emit({ value: value.value, checked, substringFilter: value.useAsLikeSubstringFilter ?? false });
+    this.valueChecked.emit({ value: value.value, checked, substringFilter: value.useAsIlikeSubstringFilter ?? false });
   }
 
 }

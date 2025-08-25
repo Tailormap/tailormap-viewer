@@ -9,7 +9,7 @@
             <div i18n="@@admin-core.application.filter.unique-value">Value</div>
           </mat-header-cell>
           <mat-cell *matCellDef="let value">
-            @if (value.useAsLikeSubstringFilter) {
+            @if (value.useAsIlikeSubstringFilter) {
               <div class="wrap-text"><em i18n="@@admin-core.application.filter.contains">contains</em> {{ value.value }}</div>
             } @else {
               <div class="wrap-text">{{ value.value }}</div>
@@ -79,7 +79,7 @@
     <div class="add-value-substring-checkbox">
       <mat-checkbox
         color="primary"
-        [formControl]="useAsLikeSubstringFilterControl"
+        [formControl]="useAsIlikeSubstringFilterControl"
         i18n="@@admin-core.application.filter.use-as-partial-value">
         Look for values containing this value
       </mat-checkbox>

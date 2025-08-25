@@ -5,7 +5,7 @@ export interface AttributeValueSettings {
   initiallySelected: boolean;
   selectable: boolean;
   alias?: string;
-  useAsLikeSubstringFilter?: boolean;
+  useAsIlikeSubstringFilter?: boolean;
 }
 
 export interface CheckboxFilterModel {
