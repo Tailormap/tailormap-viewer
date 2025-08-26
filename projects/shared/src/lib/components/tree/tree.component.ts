@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, HostListener, ElementRef, viewChild, effect,
+} from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
@@ -19,6 +21,10 @@ export class TreeComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private treeDragDropService = inject(TreeDragDropService, { optional: true });
 
+  @HostListener('window:resize', ['$event'])
+  public onResize() {
+    this.updateDropzoneHeight();
+  }
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
@@ -42,7 +48,7 @@ export class TreeComponent implements OnInit, OnDestroy {
       )
       .subscribe(dataSource => {
         const idx = dataSource.findIndex(n => n.id === scrollToItem);
-        this.treeElement?.scrollToIndex(idx, 'smooth');
+        this.treeElement()?.scrollToIndex(idx, 'smooth');
       });
   }
 
@@ -58,8 +64,9 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public extendedDropzone?: boolean;
 
-  @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
-  private treeElement: CdkVirtualScrollViewport | undefined;
+  private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
+
+  private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });
 
   public selectedNodeId: string | undefined;
 
@@ -72,6 +79,17 @@ export class TreeComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public extendedDropzoneClass: string = TreeDragDropService.EXTENDED_DROPZONE_CLASS;
+
+  public dataSource$ = this.treeService.getTreeDataSource$();
+
+  constructor() {
+    effect(() => {
+      const treeElement = this.treeElement();
+      if (treeElement) {
+        this.updateDropzoneHeight();
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.treeService.selectedNode$
@@ -96,17 +114,14 @@ export class TreeComponent implements OnInit, OnDestroy {
       this.treeService.getTreeDataSource$()
         .pipe(takeUntil(this.destroyed), filter(dataSource => !!dataSource && dataSource.length > 0))
         .subscribe(() => {
-          const el = this.treeElement?.elementRef.nativeElement;
+          const el = this.treeElement()?.elementRef.nativeElement;
+          this.updateDropzoneHeight();
           if (!el || !this.getDropZones) {
             return;
           }
           this.treeDragDropService?.dataSourceChanged(this.getDropZones(el));
         });
     }
-  }
-
-  public getDataSource() {
-    return this.treeService.getTreeDataSource$();
   }
 
   public hasChild(nodeData: FlatTreeModel) {
@@ -180,11 +195,12 @@ export class TreeComponent implements OnInit, OnDestroy {
   }
 
   public handleDragStart(event: DragEvent, node: FlatTreeModel) {
-    if (!this.treeDragDropService || !this.getDropZones || !this.treeElement) {
+    const treeElement = this.treeElement();
+    if (!this.treeDragDropService || !this.getDropZones || !treeElement) {
       event.preventDefault();
       return;
     }
-    const dropZoneConfig = this.getDropZones(this.treeElement.elementRef.nativeElement, node);
+    const dropZoneConfig = this.getDropZones(treeElement.elementRef.nativeElement, node);
     const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
     if (!dragAllowed) {
       event.preventDefault();
@@ -235,4 +251,19 @@ export class TreeComponent implements OnInit, OnDestroy {
   public depth(node: FlatTreeModel) {
     return node.level;
   }
+
+  private updateDropzoneHeight() {
+    setTimeout(() => {
+      const dropzoneEl = this.extendedDropzoneEl();
+      const treeElement = this.treeElement();
+      if (!dropzoneEl || !treeElement) {
+        return;
+      }
+      const viewportHeight = treeElement.elementRef.nativeElement.offsetHeight;
+      const contentHeight = treeElement.measureRenderedContentSize();
+      const dropzoneHeight = Math.max(0, viewportHeight - contentHeight);
+      dropzoneEl.nativeElement.style.height = `${dropzoneHeight}px`;
+    }, 100);
+  }
+
 }

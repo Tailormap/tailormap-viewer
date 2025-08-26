@@ -122,7 +122,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   }
 
   public getDropZones() {
-    return DropZoneHelper.getDefaultDropZones(this.treeService, true);
+    return DropZoneHelper.getDefaultDropZones(this.treeService);
   }
 
   public expandCollapseAll(someExpanded: boolean | undefined | null) {
