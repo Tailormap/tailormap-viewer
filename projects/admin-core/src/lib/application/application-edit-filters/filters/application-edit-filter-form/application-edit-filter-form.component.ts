@@ -64,6 +64,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
   private _filter: AttributeFilterModel | null | undefined;
+  private currentFilterId: string | null = null;
+  public initialEditConfiguration: EditFilterConfigurationModel | null = null;
 
   @Input()
   public newFilter: boolean = false;
@@ -72,6 +74,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public set filter(updateFilter: AttributeFilterModel | null | undefined) {
     this._filter = updateFilter;
     this.initForm(updateFilter);
+    if (this.currentFilterId !== updateFilter?.id) {
+      this.currentFilterId = updateFilter?.id || null;
+      if (!updateFilter?.editConfiguration) {
+        this.initialEditConfiguration = null;
+        return;
+      }
+      this.initialEditConfiguration = updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX
+        && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
+        ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
+        : { ...updateFilter.editConfiguration };
+    }
   }
   public get filter() {
     return this._filter;

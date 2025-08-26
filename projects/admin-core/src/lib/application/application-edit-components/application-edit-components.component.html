@@ -1,6 +1,4 @@
 <div class="components-config-page">
-
-  <div class="components">
     <div class="components-list">
       <strong i18n="@@admin-core.application.list-of-components">List of available components</strong>
       <tm-admin-components-list (selectComponent)="setSelectedComponent($event)"></tm-admin-components-list>
@@ -8,6 +6,4 @@
     <div class="component-configuration">
       <tm-admin-component-config-renderer [selectedComponent]="selectedComponent$ | async"></tm-admin-component-config-renderer>
     </div>
-  </div>
-
 </div>
