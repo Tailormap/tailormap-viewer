@@ -37,14 +37,14 @@
       <div class="slider-filter-form">
         <tm-admin-application-slider-filter-form
           [attributeType]="filterForm.get('attributeType')!.value!"
-          [sliderFilter]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [sliderFilter]="initialEditConfiguration"
           [uniqueValues]="uniqueValues$ | async"
           (updateSliderFilter)="setEditFilterConfiguration($event)"></tm-admin-application-slider-filter-form>
       </div>
     } @else if (filterForm.get('tool')?.value === "CHECKBOX") {
-      @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
+      @if (!newFilter && initialEditConfiguration) {
         <tm-admin-application-checkbox-filter-form
-          [checkboxFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [checkboxFilterSettings]="initialEditConfiguration"
           (updateCheckboxFilter)="setEditFilterConfiguration($event)"></tm-admin-application-checkbox-filter-form>
       } @else {
         <tm-admin-application-checkbox-filter-form
@@ -54,9 +54,9 @@
       }
     } @else if (filterForm.get('tool')?.value === "SWITCH") {
       <div class="switch-filter-form">
-        @if (!newFilter && filterForm.get('editFilterConfiguration')?.value) {
+        @if (!newFilter && initialEditConfiguration) {
           <tm-admin-application-switch-filter-form
-            [switchFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
+            [switchFilterSettings]="initialEditConfiguration"
             (updateSwitchFilter)="setEditFilterConfiguration($event)"></tm-admin-application-switch-filter-form>
         } @else {
           <tm-admin-application-switch-filter-form
@@ -69,13 +69,13 @@
       <div class="date-picker-filter-form">
         <tm-admin-application-date-picker-filter-form
           [attributeType]="filterForm.get('attributeType')!.value!"
-          [datePickerFilter]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [datePickerFilter]="initialEditConfiguration"
           (updateDatePickerFilter)="setEditFilterConfiguration($event)"></tm-admin-application-date-picker-filter-form>
       </div>
     } @else if (filterForm.get('tool')?.value === "DROPDOWN_LIST") {
       <div class="dropdown-list-filter-form">
         <tm-admin-application-dropdown-list-filter-form
-          [dropdownListFilterSettings]="filterForm.get('editFilterConfiguration')?.value ?? null"
+          [dropdownListFilterSettings]="initialEditConfiguration"
           [uniqueValues]="uniqueValuesStrings$ | async"
           [loadingUniqueValues]="loadingUniqueValues$ | async"
           (updateDropdownListFilter)="setEditFilterConfiguration($event)"></tm-admin-application-dropdown-list-filter-form>
