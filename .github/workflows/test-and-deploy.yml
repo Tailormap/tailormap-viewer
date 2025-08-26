@@ -120,7 +120,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
-      COMPOSE_PROFILES: solr
+      COMPOSE_PROFILES: solr,prometheus
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
@@ -134,6 +134,7 @@ jobs:
       SOURCE_MAP_AUTH: ${{ vars.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+      COMPOSE_BAKE: 1
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v5
@@ -185,17 +186,6 @@ jobs:
         run: |
           cat image.tar | docker load
 
-      # Latest Docker Compose version needed for ci/docker-compose.pr.yml to use !reset to remove
-      # a service when merging Compose files
-      #      - name: Install latest Docker Compose
-      #        env:
-      #          COMPOSE_VERSION: "2.27.2"
-      #        run: |
-      #          DOCKER_CONFIG=/usr/local/lib/docker
-      #          sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-      #          sudo curl -sSL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-      #          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-      #          docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
           docker compose up -d --remove-orphans
