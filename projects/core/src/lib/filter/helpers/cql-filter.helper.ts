@@ -43,15 +43,16 @@ export class CqlFilterHelper {
 
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
-    const baseFilter: string[] = filterGroup.filters
-      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId))
-      .map(f => {
-        const generatedFilters = filterGroup.filters.filter(
-          filterInGroup => FilterTypeHelper.isAttributeFilter(filterInGroup) && filterInGroup.generatedByFilterId === f.id && !filterInGroup.disabled,
-        );
+    const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
+    const originalFilters = filterGroup.filters
+      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId));
+    const baseFilter: string[] = originalFilters
+      .map(originalFilter => {
         const cqlQueries = [
-          CqlFilterHelper.convertFilterToQuery(f, layerId),
-          ...generatedFilters.map(gf => CqlFilterHelper.convertFilterToQuery(gf, layerId)),
+          CqlFilterHelper.convertFilterToQuery(originalFilter, layerId),
+          ...generatedFilters.filter(
+            generatedFilter => FilterTypeHelper.isAttributeFilter(generatedFilter) && generatedFilter.generatedByFilterId === originalFilter.id,
+          ).map(generatedFilter => CqlFilterHelper.convertFilterToQuery(generatedFilter, layerId)),
         ].filter(TypesHelper.isDefined);
         return cqlQueries.length > 1
           ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
