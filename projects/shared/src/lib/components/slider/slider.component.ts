@@ -46,6 +46,9 @@ export class SliderComponent implements ControlValueAccessor {
     if (betweenValues) {
       this.lowerValue = betweenValues.lower;
       this.upperValue = betweenValues.upper;
+    } else {
+      this.lowerValue = this.min;
+      this.upperValue = this.max;
     }
   }
 

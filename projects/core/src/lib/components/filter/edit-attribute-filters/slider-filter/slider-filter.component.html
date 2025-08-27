@@ -25,7 +25,9 @@
           [min]="minValue"
           [max]="maxValue"
           [step]="stepValue"
-          [betweenValues]="{lower: viewerSliderFilterForm.get('lowerValue')?.value ?? 0, upper: viewerSliderFilterForm.get('upperValue')?.value ?? 0}"
+          [betweenValues]="viewerSliderFilterForm.get('lowerValue')?.value && viewerSliderFilterForm.get('upperValue')?.value
+            ? {lower: viewerSliderFilterForm.get('lowerValue')?.value ?? 0, upper: viewerSliderFilterForm.get('upperValue')?.value ?? 0}
+            : null"
           [displayWith]="displayWith"
           [displayLabels]="inputMode === 'SLIDER'"
           (betweenValuesChange)="changeBetweenValues($event)"></tm-slider>
