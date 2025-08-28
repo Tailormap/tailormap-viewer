@@ -4,7 +4,7 @@ import {
   SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { updateFilter } from '../../../filter/state/filter.actions';
+import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
@@ -44,10 +44,20 @@ export class EditAttributeFiltersComponent {
     }
     return {
       ...filter.editConfiguration,
-      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => ({
-        ...valueSettings,
-        initiallySelected: filter.value.includes(valueSettings.value),
-      })),
+      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => {
+        if (valueSettings.useAsIlikeSubstringFilter) {
+          const substringFilterId = `${filter.id}-substring-${valueSettings.value}`;
+          const substringFilter = this.editableFilters().find(f => f.id === substringFilterId);
+          return {
+            ...valueSettings,
+            initiallySelected: substringFilter ? !substringFilter.disabled : false,
+          };
+        }
+        return {
+          ...valueSettings,
+          initiallySelected: filter.value.includes(valueSettings.value),
+        };
+      }),
     };
   }
 
@@ -99,7 +109,15 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateCheckboxFilterValue(value: string, checked: boolean, filter: AttributeFilterModel) {
+  public updateCheckboxFilterValue(value: string, checked: boolean, substringFilter: boolean, filter: AttributeFilterModel) {
+    if (substringFilter) {
+      this.store$.dispatch(setSingleFilterDisabled({
+        filterGroupId: this.filterGroupId() ?? '',
+        filterId: `${filter.id}-substring-${value}`,
+        disabled: !checked,
+      }));
+      return;
+    }
     let newValue: string[];
     if (checked && !filter.value.includes(value)) {
       newValue = [ ...filter.value, value ];

@@ -37,7 +37,7 @@ export class FilterDescriptionComponent {
 
   public convertGroupToDescription(filterGroup: ExtendedFilterGroupModel) {
     return filterGroup.filters
-      .filter(filter => FilterTypeHelper.isAttributeFilter(filter) && !filter.editConfiguration)
+      .filter(filter => FilterTypeHelper.isAttributeFilter(filter) && !filter.editConfiguration && !filter.generatedByFilterId)
       .map(filter => this.convertFilterToDescription(filter))
       .join(` ${this.convertOperator(filterGroup.operator)} `);
   }

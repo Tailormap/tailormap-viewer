@@ -14,4 +14,5 @@ export interface AttributeFilterModel extends BaseFilterModel {
   type: FilterTypeEnum.ATTRIBUTE;
   editConfiguration?: EditFilterConfigurationModel;
   attributeNotFound?: boolean;
+  generatedByFilterId?: string;
 }

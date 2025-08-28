@@ -21,7 +21,7 @@
             <tm-checkbox-filter
               [label]="filter.attribute"
               [checkboxFilterConfiguration]="checkboxFilterConfig"
-              (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, filter)"></tm-checkbox-filter>
+              (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, $event.substringFilter, filter)"></tm-checkbox-filter>
           </div>
         </div>
       }
@@ -59,7 +59,7 @@
             <tm-dropdown-list-filter
               [dropdownListFilterConfiguration]="dropdownListFilterConfig"
               [uniqueValues]="getUniqueValues$(filter.attribute) | async"
-              (valueSelected)="updateCheckboxFilterValue($event.value, $event.selected, filter)"></tm-dropdown-list-filter>
+              (valueSelected)="updateCheckboxFilterValue($event.value, $event.selected, false, filter)"></tm-dropdown-list-filter>
           </div>
         </div>
       }

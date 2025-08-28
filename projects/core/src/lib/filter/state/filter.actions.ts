@@ -38,3 +38,8 @@ export const toggleFilterDisabled = createAction(
   `${filterActionsPrefix} Toggle Filter Disabled`,
   props<{ filterGroupId: string }>(),
 );
+
+export const setSingleFilterDisabled = createAction(
+  `${filterActionsPrefix} Toggle Single Filter Disabled`,
+  props<{ filterGroupId: string; filterId: string; disabled: boolean }>(),
+);
