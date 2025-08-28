@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/core",
-  "version": "12.1.0-rc.6",
+  "version": "12.1.0-rc.7",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
