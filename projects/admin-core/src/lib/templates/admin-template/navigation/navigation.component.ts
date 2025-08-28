@@ -1,21 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Routes } from '../../../routes';
 import { Observable, of, take } from 'rxjs';
-import { ApplicationFeature, ApplicationFeatureSwitchService, SecurityModel } from '@tailormap-viewer/api';
+import { ApplicationFeature, ApplicationFeatureSwitchService, AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthenticatedUserService } from '@tailormap-viewer/api';
-
-interface ButtonProps {
-  icon?: string;
-  label: string;
-  link: string[];
-  subMenu?: ButtonProps[];
-  matchExact: boolean;
-  requireAdmin: boolean;
-  checkEnabled$?: Observable<boolean>;
-}
+import { NavigationButtonPropsModel } from '../../models/navigation-button-props.model';
+import { AdminNavigationService, NavigationButtonWithPositionModel } from '../../admin-navigation.service';
 
 @Component({
   selector: 'tm-admin-navigation',
@@ -29,11 +20,12 @@ export class NavigationComponent implements OnInit {
   private dialog = inject(MatDialog);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+  private adminNavigationService = inject(AdminNavigationService);
 
 
   public userDetails$: Observable<SecurityModel | null> = of(null);
 
-  public buttons: ButtonProps[] =  [
+  private readonly initialTopButtons: NavigationButtonPropsModel[] = [
     {
       label: $localize`:@@admin-core.navigation.home:Home`,
       matchExact: true,
@@ -77,7 +69,6 @@ export class NavigationComponent implements OnInit {
       icon: 'admin_groups',
       requireAdmin: true,
     },
-    // eslint-disable-next-line max-len
     {
       label: $localize`:@@admin-core.navigation.applications:Applications`,
       matchExact: false,
@@ -87,7 +78,7 @@ export class NavigationComponent implements OnInit {
     },
   ];
 
-  public bottomButtons: ButtonProps[] =  [
+  private readonly initialBottomButtons: NavigationButtonPropsModel[] = [
     {
       label: $localize`:@@admin-core.navigation.tasks:Tasks`,
       matchExact: false,
@@ -112,12 +103,40 @@ export class NavigationComponent implements OnInit {
     },
   ];
 
+  public buttons = signal<NavigationButtonPropsModel[]>(this.initialTopButtons);
+  public bottomButtons = signal<NavigationButtonPropsModel[]>(this.initialBottomButtons);
+
+  constructor() {
+    effect(() => {
+      const registeredButtons = this.adminNavigationService.registeredButtons();
+      this.buttons.set(this.getButtons(registeredButtons, 'top'));
+      this.bottomButtons.set(this.getButtons(registeredButtons, 'bottom'));
+    });
+  }
+
+  private getButtons(
+    registeredButtons: NavigationButtonWithPositionModel[],
+    position: 'top' | 'bottom',
+  ): NavigationButtonPropsModel[] {
+    const buttons = [...position === 'top' ? this.initialTopButtons : this.initialBottomButtons];
+    registeredButtons
+      .filter(button => button.position === position)
+      .forEach(button => {
+        if (button.index !== undefined && button.index >= 0 && button.index < buttons.length) {
+          buttons.splice(button.index, 0, button);
+        } else {
+          buttons.push(button);
+        }
+      });
+    return buttons;
+  }
+
   public ngOnInit(): void {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();
   }
 
-  public getButtonProps(button: ButtonProps): ButtonProps {
-    return button as ButtonProps;
+  public getButtonProps(button: NavigationButtonPropsModel): NavigationButtonPropsModel {
+    return button as NavigationButtonPropsModel;
   }
 
   public logout() {
