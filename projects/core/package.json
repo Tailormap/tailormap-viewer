@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/core",
-  "version": "12.1.0-rc.5",
+  "version": "12.1.0-rc.6",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -25,7 +25,7 @@
     "@tailormap-viewer/shared": "^12.1.0-rc.6",
     "@tailormap-viewer/map": "^12.1.0-rc.6",
     "@tailormap-viewer/api": "^12.1.0-rc.6",
-    "jspdf": "^3.0.1",
+    "jspdf": "^3.0.2",
     "luxon": "^3.5.0",
     "nanoid": "^5.1.4",
     "rxjs": "^7.8.2",
