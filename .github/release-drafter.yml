@@ -4,7 +4,7 @@ name-template: v$NEXT_PATCH_VERSION 🎁
 version-template: "$MAJOR.$MINOR.$PATCH"
 
 template: |
-  ## Uncategorised changes
+  ## Changes
 
   $CHANGES
 
