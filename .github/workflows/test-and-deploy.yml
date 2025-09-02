@@ -169,6 +169,14 @@ jobs:
           docker build --progress plain --build-arg BASE_HREF=${BASE_HREF} --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot -t ghcr.io/tailormap/tailormap:${VERSION} .
           docker save ghcr.io/tailormap/tailormap:${VERSION} > image.tar
 
+      - name: 'Log in to GitHub container registry'
+        if: ${{ env.VERSION == 'snapshot' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 'Push Docker image'
         if: ${{ env.VERSION == 'snapshot' }}
         run: docker push ghcr.io/tailormap/tailormap:${VERSION}
