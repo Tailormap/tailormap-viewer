@@ -169,6 +169,10 @@ jobs:
           docker build --progress plain --build-arg BASE_HREF=${BASE_HREF} --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot -t ghcr.io/tailormap/tailormap:${VERSION} .
           docker save ghcr.io/tailormap/tailormap:${VERSION} > image.tar
 
+      - name: 'Push Docker image'
+        if: ${{ env.VERSION == 'snapshot' }}
+        run: docker push ghcr.io/tailormap/tailormap:${VERSION}
+
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
         with:
