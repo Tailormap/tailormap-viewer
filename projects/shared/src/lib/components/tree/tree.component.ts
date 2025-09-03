@@ -82,11 +82,17 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   public dataSource$ = this.treeService.getTreeDataSource$();
 
+  // Viewport size tracking for optimized checkViewportSize calls
+  private resizeObserver?: ResizeObserver;
+  private lastViewportSize = { width: 0, height: 0 };
+  private viewportSizeCheckTimeout?: number;
+
   constructor() {
     effect(() => {
       const treeElement = this.treeElement();
       if (treeElement) {
         this.updateDropzoneHeight();
+        this.initializeViewportSizeObserver(treeElement);
       }
     });
   }
@@ -182,6 +188,7 @@ export class TreeComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+    this.cleanupViewportSizeObserver();
   }
 
   private toggleNodeChecked(node: FlatTreeModel, descendants?: FlatTreeModel[]) {
@@ -264,6 +271,67 @@ export class TreeComponent implements OnInit, OnDestroy {
       const dropzoneHeight = Math.max(0, viewportHeight - contentHeight);
       dropzoneEl.nativeElement.style.height = `${dropzoneHeight}px`;
     }, 100);
+  }
+
+  /**
+   * Initialize ResizeObserver to efficiently monitor viewport size changes.
+   * Only calls checkViewportSize() when the viewport size actually changes,
+   * with debouncing to prevent excessive calls.
+   */
+  private initializeViewportSizeObserver(treeElement: CdkVirtualScrollViewport) {
+    if (!window.ResizeObserver) {
+      // Fallback for browsers that don't support ResizeObserver
+      return;
+    }
+
+    // Clean up any existing observer
+    this.cleanupViewportSizeObserver();
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        
+        // Only proceed if size actually changed
+        if (this.lastViewportSize.width !== width || this.lastViewportSize.height !== height) {
+          this.lastViewportSize = { width, height };
+          
+          // Debounce the checkViewportSize call to prevent excessive calls
+          if (this.viewportSizeCheckTimeout) {
+            window.clearTimeout(this.viewportSizeCheckTimeout);
+          }
+          
+          this.viewportSizeCheckTimeout = window.setTimeout(() => {
+            // Ensure the tree element still exists before calling checkViewportSize
+            const currentTreeElement = this.treeElement();
+            if (currentTreeElement) {
+              currentTreeElement.checkViewportSize();
+            }
+          }, 50); // 50ms debounce to balance responsiveness with performance
+        }
+      }
+    });
+
+    // Observe the viewport element
+    this.resizeObserver.observe(treeElement.elementRef.nativeElement);
+    
+    // Initialize the last known size
+    const rect = treeElement.elementRef.nativeElement.getBoundingClientRect();
+    this.lastViewportSize = { width: rect.width, height: rect.height };
+  }
+
+  /**
+   * Clean up the ResizeObserver and any pending timeouts
+   */
+  private cleanupViewportSizeObserver() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = undefined;
+    }
+    
+    if (this.viewportSizeCheckTimeout) {
+      window.clearTimeout(this.viewportSizeCheckTimeout);
+      this.viewportSizeCheckTimeout = undefined;
+    }
   }
 
 }

@@ -88,4 +88,118 @@ describe('TreeComponent', () => {
     expect(await screen.findByText('Item 2 - 2 - 1')).toBeInTheDocument();
   });
 
+  test('initializes viewport size observer and cleans up properly', async () => {
+    // Mock ResizeObserver
+    const mockObserve = jest.fn();
+    const mockDisconnect = jest.fn();
+    const mockResizeObserver = jest.fn(() => ({
+      observe: mockObserve,
+      disconnect: mockDisconnect,
+    }));
+    (global as any).ResizeObserver = mockResizeObserver;
+
+    const treeService = new TreeService();
+    const { fixture } = await render(TreeComponent, {
+      providers: [
+        { provide: TreeService, useValue: treeService },
+        { provide: TreeDragDropService, useValue: undefined },
+      ],
+      imports: [
+        SharedImportsModule,
+        MatIconTestingModule,
+        CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
+        CdkVirtualForOf,
+      ],
+    });
+
+    const component = fixture.componentInstance;
+    const tree = getTree();
+    const treeData = new BehaviorSubject<TreeModel[]>(tree);
+    treeService.setDataSource(treeData.asObservable());
+
+    // Allow Angular to initialize the component
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // Verify ResizeObserver was created and observe was called
+    expect(mockResizeObserver).toHaveBeenCalled();
+    expect(mockObserve).toHaveBeenCalled();
+
+    // Destroy component and verify cleanup
+    fixture.destroy();
+    expect(mockDisconnect).toHaveBeenCalled();
+  });
+
+  test('only calls checkViewportSize when size actually changes', async () => {
+    let resizeCallback: (entries: any[]) => void;
+    const mockObserve = jest.fn();
+    const mockDisconnect = jest.fn();
+    const mockResizeObserver = jest.fn((callback) => {
+      resizeCallback = callback;
+      return {
+        observe: mockObserve,
+        disconnect: mockDisconnect,
+      };
+    });
+    (global as any).ResizeObserver = mockResizeObserver;
+
+    const treeService = new TreeService();
+    const { fixture } = await render(TreeComponent, {
+      providers: [
+        { provide: TreeService, useValue: treeService },
+        { provide: TreeDragDropService, useValue: undefined },
+      ],
+      imports: [
+        SharedImportsModule,
+        MatIconTestingModule,
+        CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
+        CdkVirtualForOf,
+      ],
+    });
+
+    const component = fixture.componentInstance;
+    const tree = getTree();
+    const treeData = new BehaviorSubject<TreeModel[]>(tree);
+    treeService.setDataSource(treeData.asObservable());
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // Mock the treeElement and its checkViewportSize method
+    const mockCheckViewportSize = jest.fn();
+    const mockTreeElement = {
+      checkViewportSize: mockCheckViewportSize,
+      elementRef: { nativeElement: document.createElement('div') },
+    };
+    jest.spyOn(component, 'treeElement').mockReturnValue(mockTreeElement as any);
+
+    // Simulate ResizeObserver callback with size change
+    const mockEntry = {
+      contentRect: { width: 100, height: 200 },
+    };
+    resizeCallback([mockEntry]);
+
+    // Wait for debounce timeout
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    expect(mockCheckViewportSize).toHaveBeenCalledTimes(1);
+
+    // Simulate same size change - should not call checkViewportSize
+    resizeCallback([mockEntry]);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    expect(mockCheckViewportSize).toHaveBeenCalledTimes(1); // Still only 1 call
+
+    // Simulate different size change - should call checkViewportSize
+    const mockEntry2 = {
+      contentRect: { width: 150, height: 250 },
+    };
+    resizeCallback([mockEntry2]);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    expect(mockCheckViewportSize).toHaveBeenCalledTimes(2); // Now 2 calls
+  });
+
 });
