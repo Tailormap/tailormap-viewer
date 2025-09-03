@@ -17,7 +17,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
-import { selectComponentsConfig, selectComponentsConfigForType, selectViewerLoadingState } from '@tailormap-viewer/core';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
