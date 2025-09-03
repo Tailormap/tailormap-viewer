@@ -22,7 +22,7 @@ export class EditEffects {
           ofType(EditActions.loadEditFeatures),
           withLatestFrom(this.store$.select(selectSelectedEditLayer)),
           switchMap(([ action, editLayer ]) => {
-            return this.featureInfoService.getEditableFeatures$(action.coordinates, editLayer)
+            return this.featureInfoService.getEditableFeatures$(action.coordinates, editLayer, action.pointerType)
               .pipe(
                 map(result => {
                   if (!result) {

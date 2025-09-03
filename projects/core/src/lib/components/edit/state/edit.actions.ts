@@ -24,7 +24,7 @@ export const setSelectedEditLayer = createAction(
 
 export const loadEditFeatures = createAction(
   `${editActionsPrefix} Load Edit Features`,
-  props<{ coordinates: [number, number] }>(),
+  props<{ coordinates: [number, number]; pointerType?: string }>(),
 );
 
 export const loadEditFeaturesSuccess = createAction(
