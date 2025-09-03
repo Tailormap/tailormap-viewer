@@ -69,6 +69,8 @@ export class PrintService implements OnDestroy {
     return `map-${dateTime}.${extension}`;
   };
 
+  private additionalVectorLayers: string[] = [];
+
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
@@ -88,6 +90,10 @@ export class PrintService implements OnDestroy {
 
   public cancel(): void {
     this.cancelled$.next(null);
+  }
+
+  public addAdditionalVectorLayer(layerId: string): void {
+    this.additionalVectorLayers.push(layerId);
   }
 
   public downloadPdf$(options: PrintPdfOptions): PrintResult {
@@ -163,6 +169,7 @@ export class PrintService implements OnDestroy {
 
   private getVectorLayerFilterFunction(options: PrintOptions): OlLayerFilter {
     const validLayers = new Set(options.includeDrawing ? ['drawing-layer'] : []);
+    this.additionalVectorLayers.forEach(layerId => validLayers.add(layerId));
     if (DEBUG_PRINT_EXTENT) {
       validLayers.add('print-preview-layer');
     }
