@@ -1465,6 +1465,10 @@
         <source>Coordinate link window title</source>
         <target>Coördinatenlinkvenster titel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Open teken component bij het opstarten</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>
         <target>Venster sluiten na toevoegen van nieuw object</target>

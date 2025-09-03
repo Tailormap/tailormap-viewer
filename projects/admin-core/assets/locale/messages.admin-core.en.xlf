@@ -1079,6 +1079,9 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>
       </trans-unit>
