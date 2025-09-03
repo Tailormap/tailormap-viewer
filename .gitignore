@@ -18,6 +18,9 @@ chrome-profiler-events*.json
 # IDEs and editors
 /.idea
 .run/
+
+# Documentation files for this PR
+viewport-optimization-comparison.md
 *.iml
 .project
 .classpath
