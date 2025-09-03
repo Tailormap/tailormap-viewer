@@ -83,6 +83,8 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   public dataSource$ = this.treeService.getTreeDataSource$();
 
+  private prevTreeHeight = 0;
+
   constructor() {
     effect(() => {
       const treeElement = this.treeElement();
@@ -93,7 +95,12 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public ngAfterViewChecked(): void {
-    this.treeElement()?.checkViewportSize();
+    const treeHeight = this.treeElement()?.elementRef.nativeElement.offsetHeight || 0;
+    if (this.prevTreeHeight !== treeHeight) {
+      // Keep previous height to avoid calling checkViewportSize too often
+      this.prevTreeHeight = treeHeight;
+      this.treeElement()?.checkViewportSize();
+    }
   }
 
   public ngOnInit(): void {
