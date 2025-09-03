@@ -39,9 +39,21 @@ export class CqlFilterHelper {
 
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
-    const baseFilter: string[] = filterGroup.filters
-      .filter(f => !f.disabled && (!FilterTypeHelper.isAttributeFilter(f) || !CqlFilterHelper.isNumericFilterWithNoValue(f)))
-      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
+    const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
+    const originalFilters = filterGroup.filters
+      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId) && (!FilterTypeHelper.isAttributeFilter(f) || !CqlFilterHelper.isNumericFilterWithNoValue(f)));
+    const baseFilter: string[] = originalFilters
+      .map(originalFilter => {
+        const cqlQueries = [
+          CqlFilterHelper.convertFilterToQuery(originalFilter, layerId),
+          ...generatedFilters.filter(
+            generatedFilter => FilterTypeHelper.isAttributeFilter(generatedFilter) && generatedFilter.generatedByFilterId === originalFilter.id,
+          ).map(generatedFilter => CqlFilterHelper.convertFilterToQuery(generatedFilter, layerId)),
+        ].filter(TypesHelper.isDefined);
+        return cqlQueries.length > 1
+          ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
+          : cqlQueries[0];
+      })
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);

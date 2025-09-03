@@ -72,7 +72,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-drawing" datatype="html">
         <source>Drawing</source>
-        <target>Tekening</target>
+        <target>Tekenen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-edit" datatype="html">
         <source>Edit</source>
@@ -226,9 +226,9 @@
         <source>Filter application layers</source>
         <target>Filter applicatie lagen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
-        <source>Add new value</source>
-        <target>Voeg nieuwe waarde toe</target>
+      <trans-unit id="admin-core.application.filter.add" datatype="html">
+        <source>Add</source>
+        <target>Voeg toe</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
@@ -241,6 +241,10 @@
       <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
         <source>Choose value to alter</source>
         <target>Kies waardes om te wijzigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.contains" datatype="html">
+        <source>contains</source>
+        <target>bevat</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
@@ -262,6 +266,10 @@
         <source>Value</source>
         <target>Waarde</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
+        <source> Look for values containing this value </source>
+        <target> Zoek naar waardes die deze waarde bevatten </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target>De catalogus hierboven bevat alleen lagen die de applicatie projectie (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) ondersteunen</target>
@@ -280,6 +288,10 @@
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
         <target>Vinkvakjes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+        <target>Kies filter gereedschap</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
@@ -420,10 +432,6 @@
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
         <target>Te veel unieke waardes, alleen de eerste <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> worden getoond.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
-        <target>Gereedschap</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -1457,6 +1465,10 @@
         <source>Coordinate link window title</source>
         <target>Coördinatenlinkvenster titel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Open teken component bij het opstarten</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>
         <target>Venster sluiten na toevoegen van nieuw object</target>
@@ -1473,13 +1485,13 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
         <target>Toon knop om het object te bewerken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Toon locatie op de kaart totdat de knop opnieuw wordt uitgeschakeld.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

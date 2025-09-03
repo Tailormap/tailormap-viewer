@@ -170,8 +170,8 @@
       <trans-unit id="admin-core.application.filter-tree" datatype="html">
         <source>Filter application layers</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
-        <source>Add new value</source>
+      <trans-unit id="admin-core.application.filter.add" datatype="html">
+        <source>Add</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
@@ -181,6 +181,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
         <source>Choose value to alter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.contains" datatype="html">
+        <source>contains</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
@@ -197,6 +200,9 @@
       <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
         <source>Value</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
+        <source> Look for values containing this value </source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
       </trans-unit>
@@ -211,6 +217,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
@@ -316,9 +325,6 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -1073,6 +1079,9 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>
       </trans-unit>
@@ -1085,11 +1094,11 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

@@ -39,11 +39,13 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     nodes: FlatTreeModel<T, TypeDef>[];
   }>({ tree: [], nodes:  [] });
 
+  private readonly dataSource$ = this.dataSource.asObservable().pipe(map(source => source.tree));
+
   public constructor() {
   }
 
   public getTreeDataSource$() {
-    return this.dataSource.asObservable().pipe(map(source => source.tree));
+    return this.dataSource$;
   }
 
   public hasNode(nodeId: string) {

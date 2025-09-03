@@ -23,6 +23,7 @@ export class ApplicationCheckboxFilterFormComponent {
 
   public aliasForm: FormGroup = new FormGroup({});
   public newValueControl = new FormControl<string>('');
+  public useAsIlikeSubstringFilterControl = new FormControl<boolean>(false);
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
@@ -84,25 +85,30 @@ export class ApplicationCheckboxFilterFormComponent {
   }
 
   public changeAlias(value: string, alias?: string) {
-    if (!alias) {
+    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (!attributeValueSettings || attributeValueSettings.alias === alias) {
       return;
     }
-    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
-    if (attributeValueSettings) {
-      const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
-      this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
-        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
-      this.updateCheckboxFilter.emit(this.checkboxFilter);
-    }
+    const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
+    this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+      oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
   public addNewValue() {
     const value = this.newValueControl.value;
-    if (!value || this.attributeValuesSettings().some(setting => setting.value === value)) {
+    const useAsPartialValue = this.useAsIlikeSubstringFilterControl.value;
+    if (!value || this.attributeValuesSettings().some(setting =>
+      setting.value === value && setting.useAsIlikeSubstringFilter === useAsPartialValue)) {
       return;
     }
     const currentSettings = this.attributeValuesSettings();
-    const newSetting: AttributeValueSettings = { value: value, initiallySelected: true, selectable: true };
+    const newSetting: AttributeValueSettings = {
+      value: value,
+      initiallySelected: true,
+      selectable: true,
+      useAsIlikeSubstringFilter: useAsPartialValue ?? false,
+    };
     const updatedSettings = [ ...currentSettings, newSetting ];
     this.attributeValuesSettings.set(updatedSettings);
     this.aliasForm.addControl(value, new FormControl<string>(''));

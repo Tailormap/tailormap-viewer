@@ -37,9 +37,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   public filterToolOptions = [{
-    label: $localize`:@@admin-core.application.filters.preset:Preset`,
-    value: FilterToolEnum.PRESET_STATIC,
-  }, {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
@@ -54,6 +51,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   }, {
     label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
+  }, {
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
+    value: FilterToolEnum.PRESET_STATIC,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -66,6 +66,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
   private _filter: AttributeFilterModel | null | undefined;
+  private currentFilterId: string | null = null;
+  public initialEditConfiguration: EditFilterConfigurationModel | null = null;
 
   @Input()
   public newFilter: boolean = false;
@@ -74,6 +76,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public set filter(updateFilter: AttributeFilterModel | null | undefined) {
     this._filter = updateFilter;
     this.initForm(updateFilter);
+    if (this.currentFilterId !== updateFilter?.id) {
+      this.currentFilterId = updateFilter?.id || null;
+      if (!updateFilter?.editConfiguration) {
+        this.initialEditConfiguration = null;
+        return;
+      }
+      this.initialEditConfiguration = updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX
+        && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
+        ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
+        : { ...updateFilter.editConfiguration };
+    }
   }
   public get filter() {
     return this._filter;
@@ -87,7 +100,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   public filterForm = new FormGroup({
     id: new FormControl(''),
-    tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
+    tool: new FormControl<FilterToolEnum | null>(null),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
@@ -187,6 +200,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       && formValues.attributeType !== null
       && formValues.condition !== null
       && validFilterValues
+      && formValues.tool !== null
       && this.filterForm.dirty;
   }
 
@@ -256,7 +270,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       }
     } else if ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST) {
       value = $event.attributeValuesSettings
-        .filter(setting => setting.initiallySelected)
+        .filter(setting => setting.initiallySelected && !setting.useAsIlikeSubstringFilter)
         .map(setting => setting.value);
     } else if ($event.filterTool === FilterToolEnum.SWITCH && $event.value1 !== undefined && $event.value2 !== undefined) {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];

@@ -15,6 +15,7 @@ import { SelectUploadModule } from '../../shared/components/select-upload/select
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
 import { InfoConfigComponent } from './info-config/info-config.component';
+import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { InfoConfigComponent } from './info-config/info-config.component';
     EditComponentConfigComponent,
     GeolocationConfigComponent,
     InfoConfigComponent,
+    DrawingConfigComponent,
   ],
     imports: [
         CommonModule,
@@ -48,7 +50,7 @@ export class ComponentsModule {
     /* eslint-disable max-len */
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TOC, $localize `:@@admin-core.application.component-table-of-contents:Table of contents`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.LEGEND, $localize `:@@admin-core.application.component-legend:Legend`, BaseComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.DRAWING, $localize `:@@admin-core.application.component-drawing:Drawing`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.DRAWING, $localize `:@@admin-core.application.component-drawing:Drawing`, DrawingConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.PRINT, $localize `:@@admin-core.application.component-print:Print`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FILTER, $localize `:@@admin-core.application.component-filter:Filter`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FEATURE_INFO, $localize `:@@admin-core.application.component-feature-info:Feature info`, FeatureInfoComponentConfigComponent);

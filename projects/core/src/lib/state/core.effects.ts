@@ -44,6 +44,7 @@ export class CoreEffects {
       ofType(CoreActions.loadViewerSuccess),
       map(action => action.viewer.filterGroups || []),
       switchMap(groups => this.attributeFilterService.disableFiltersForMissingAttributes$(groups)),
+      map(groups => this.attributeFilterService.separateSubstringFiltersInCheckboxFilters(groups)),
       concatMap(filterGroups => filterGroups.map(
           filterGroup => FilterActions.addFilterGroup({ filterGroup }))),
     );

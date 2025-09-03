@@ -1,6 +1,6 @@
 import { DrawingState, drawingStateKey } from './drawing.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map';
 
 const selectDrawingState = createFeatureSelector<DrawingState>(drawingStateKey);

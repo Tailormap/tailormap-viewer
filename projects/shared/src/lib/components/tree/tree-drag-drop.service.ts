@@ -98,6 +98,11 @@ export class TreeDragDropService implements OnDestroy {
     this.dragNodeExpandOverTime = 0;
     this.lastOffsetY = null;
 
+    const dragEnd = () => {
+      this.handleDragEnd();
+      event.target?.removeEventListener('dragend', dragEnd);
+    };
+    event.target?.addEventListener('dragend', dragEnd);
     dropZones.forEach(dz => this.initDropZone(dz));
   }
 

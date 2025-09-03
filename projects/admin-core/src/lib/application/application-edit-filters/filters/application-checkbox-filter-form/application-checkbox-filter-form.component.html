@@ -9,7 +9,11 @@
             <div i18n="@@admin-core.application.filter.unique-value">Value</div>
           </mat-header-cell>
           <mat-cell *matCellDef="let value">
-            <div class="wrap-text">{{ value.value }}</div>
+            @if (value.useAsIlikeSubstringFilter) {
+              <div class="wrap-text"><em i18n="@@admin-core.application.filter.contains">contains</em> {{ value.value }}</div>
+            } @else {
+              <div class="wrap-text">{{ value.value }}</div>
+            }
           </mat-cell>
         </ng-container>
 
@@ -72,12 +76,20 @@
           [formControl]="newValueControl" />
       </mat-form-field>
     </div>
+    <div class="add-value-substring-checkbox">
+      <mat-checkbox
+        color="primary"
+        [formControl]="useAsIlikeSubstringFilterControl"
+        i18n="@@admin-core.application.filter.use-as-partial-value">
+        Look for values containing this value
+      </mat-checkbox>
+    </div>
     <div class="add-value-button">
       <button
         mat-raised-button
         color="primary"
         (click)="addNewValue()"
-        i18n="@@admin-core.application.filter.add-new-value">Add new value</button>
+        i18n="@@admin-core.application.filter.add">Add</button>
     </div>
   </div>
 }

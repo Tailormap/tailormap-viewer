@@ -18,3 +18,4 @@ export * from './lib/shared/services/admin-snackbar.service';
 export * from './lib/shared/services/admin-sse.service';
 export * from './lib/shared/components';
 export * from './lib/helpers/form.helper';
+export * from './lib/templates/admin-navigation.service';

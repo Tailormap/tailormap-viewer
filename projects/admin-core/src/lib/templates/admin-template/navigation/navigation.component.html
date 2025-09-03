@@ -29,13 +29,13 @@
 
 @if (userDetails$ | async; as userDetails) {
   <div class="navigation-bar">
-    @for(menu of buttons; track menu.link) {
+    @for(menu of buttons(); track menu.link) {
       @if (isAdmin(userDetails) || !menu.requireAdmin) {
         <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
       }
     }
     <div class="divider"></div>
-    @for(menu of bottomButtons; track menu.link) {
+    @for(menu of bottomButtons(); track menu.link) {
       @if (isAdmin(userDetails) || !menu.requireAdmin) {
         <ng-container *ngTemplateOutlet="menuButton; context: {$implicit: menu}"></ng-container>
       }

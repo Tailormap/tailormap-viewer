@@ -226,9 +226,9 @@
         <source>Filter application layers</source>
         <target>Anwendungsschichten filtern</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filter.add-new-value" datatype="html">
-        <source>Add new value</source>
-        <target>Neuen Wert hinzufügen</target>
+      <trans-unit id="admin-core.application.filter.add" datatype="html">
+        <source>Add</source>
+        <target>Hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.alias" datatype="html">
         <source>Alias</source>
@@ -241,6 +241,10 @@
       <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
         <source>Choose value to alter</source>
         <target>zu ändernden Wert auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.contains" datatype="html">
+        <source>contains</source>
+        <target>enthält</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
         <source>Initially selected</source>
@@ -262,6 +266,10 @@
         <source>Value</source>
         <target>Wert</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
+        <source> Look for values containing this value </source>
+        <target> Nach Werten suchen, die diesen Wert enthalten </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target>Der obige Katalog enthält nur Layer, die die (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) Projektionsanwendung unterstützen</target>
@@ -281,6 +289,10 @@
       <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
         <source>Checkbox</source>
         <target>Kontrollkästchen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+        <target>Filterwerkzeug auswählen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
@@ -421,10 +433,6 @@
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
         <target>Zu viele eindeutige Werte, es werden nur die ersten <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> angezeigt.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application.filters.tool" datatype="html">
-        <source>Tool</source>
-        <target>Werkzeug</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -1458,6 +1466,10 @@
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Zeichnenkomponente beim Start öffnen</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>
         <target>Fenster nach dem Hinzufügen eines neuen Objekts schließen</target>
@@ -1474,13 +1486,13 @@
         <source>Feature info</source>
         <target>Feature-Informationen</target>
       </trans-unit>
-      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
-        <source>Show location on the map until the button is toggled off.</source>
-        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
-      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
         <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
         <source>Add Menu Item</source>

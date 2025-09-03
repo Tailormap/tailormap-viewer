@@ -52,3 +52,8 @@ mat-header-cell {
   padding-right: 8px;
   padding-left: 0;
 }
+
+.add-value-substring-checkbox   {
+  max-width: 200px;
+  text-overflow: clip;
+}

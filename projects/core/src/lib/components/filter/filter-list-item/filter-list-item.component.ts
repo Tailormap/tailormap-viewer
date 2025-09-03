@@ -36,7 +36,7 @@ export class FilterListItemComponent {
       }) ?? [],
     };
     this.editableFilters = this.filter?.filters.filter((f): f is AttributeFilterModel =>
-      FilterTypeHelper.isAttributeFilter(f) && !!f.editConfiguration) ?? [];
+      FilterTypeHelper.isAttributeFilter(f) && (!!f.editConfiguration || !!f.generatedByFilterId)) ?? [];
   }
 
   private store$ = inject(Store);

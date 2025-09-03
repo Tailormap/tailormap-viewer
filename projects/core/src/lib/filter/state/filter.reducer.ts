@@ -120,6 +120,27 @@ const onToggleFilterDisabled = (
   });
 };
 
+const onSetSingleFilterDisabled = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.setSingleFilterDisabled>,
+): FilterState => {
+  return updateFilterGroup(state, payload.filterGroupId, fg => {
+    const filterIdx = fg.filters.findIndex(f => f.id === payload.filterId);
+    if (filterIdx === -1) {
+      return fg;
+    }
+    const filter = fg.filters[filterIdx];
+    return {
+      ...fg,
+      filters: [
+        ...fg.filters.slice(0, filterIdx),
+        { ...filter, disabled: payload.disabled },
+        ...fg.filters.slice(filterIdx + 1),
+      ],
+    };
+  });
+};
+
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
   on(FilterActions.addFilterGroup, onAddFilterGroup),
@@ -129,5 +150,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.removeFilter, onRemoveFilter),
   on(FilterActions.updateFilter, onUpdateFilter),
   on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
+  on(FilterActions.setSingleFilterDisabled, onSetSingleFilterDisabled),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);

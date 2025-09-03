@@ -368,7 +368,7 @@ export class OlLayerHelper {
   public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
     const params: WmsServiceParamsModel = {
       LAYERS: layer.layers,
-      VERSION: '1.1.1',
+      VERSION: '1.3.0',
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
     };
