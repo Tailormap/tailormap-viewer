@@ -424,7 +424,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       this.store$,
       BaseComponentTypeEnum.DRAWING,
       config => {
-        if (config.openOnStartup) {
+        if (config && config.openOnStartup) {
           this.store$.select(selectComponentTitle(BaseComponentTypeEnum.DRAWING, $localize `:@@core.drawing.drawing:Drawing`))
             .pipe(take(1))
             .subscribe(title => {
