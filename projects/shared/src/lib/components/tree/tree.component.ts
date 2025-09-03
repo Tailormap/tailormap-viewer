@@ -1,5 +1,6 @@
 import {
   ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, HostListener, ElementRef, viewChild, effect,
+  AfterViewChecked,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -15,7 +16,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   styleUrls: ['./tree.component.css'],
   standalone: false,
 })
-export class TreeComponent implements OnInit, OnDestroy {
+export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private treeService = inject(TreeService);
   private ngZone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
@@ -89,6 +90,10 @@ export class TreeComponent implements OnInit, OnDestroy {
         this.updateDropzoneHeight();
       }
     });
+  }
+
+  public ngAfterViewChecked(): void {
+    this.treeElement()?.checkViewportSize();
   }
 
   public ngOnInit(): void {
