@@ -45,7 +45,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
   private cdr = inject(ChangeDetectorRef);
 
-  private componentsContainer = viewChild('additionalDrawingComponentsContainer', { read: ViewContainerRef });
+  private belowDrawingButtonsContainer = viewChild('belowDrawingButtonsContainer', { read: ViewContainerRef });
+  private aboveDrawingButtonsContainer = viewChild('aboveDrawingButtonsContainer', { read: ViewContainerRef });
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
@@ -81,12 +82,20 @@ export class DrawingComponent implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const components = this.drawingFeatureRegistrationService.registeredAdditionalDrawingFeatures();
-      const container = this.componentsContainer();
-      if (!container) {
+      const belowButtonsContainer = this.belowDrawingButtonsContainer();
+      const aboveButtonsContainer = this.aboveDrawingButtonsContainer();
+      if (!belowButtonsContainer || !aboveButtonsContainer) {
         return;
       }
-      container.clear();
-      components.forEach(component => container.createComponent(component.component));
+      belowButtonsContainer.clear();
+      aboveButtonsContainer.clear();
+      components.forEach(component => {
+        if (component.position === 'aboveDrawingButtons') {
+          aboveButtonsContainer.createComponent(component.component);
+          return;
+        }
+        belowButtonsContainer.createComponent(component.component);
+      });
     });
   }
 
