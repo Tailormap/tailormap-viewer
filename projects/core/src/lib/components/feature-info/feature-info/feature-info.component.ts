@@ -62,7 +62,9 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
   }
 
-  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel }) {
+  private handleMapClick(evt: {
+    mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel; pointerType?: string;
+  }) {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
@@ -78,7 +80,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           return layers.length > 0 || wmsLayers.length > 0;
         }),
         concatMap(() => {
-          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates, evt.cesiumFeatureInfo);
+          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates, evt.cesiumFeatureInfo, evt.pointerType);
         }),
       )
       .subscribe(response => {
