@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "12.1.0-rc.8",
+  "version": "12.1.0-rc.9",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -15,8 +15,8 @@
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
     "rxjs": "^7.8.2",
-    "@tailormap-viewer/shared": "^12.1.0-rc.8",
-    "@tailormap-viewer/api": "^12.1.0-rc.8"
+    "@tailormap-viewer/shared": "^12.1.0-rc.9",
+    "@tailormap-viewer/api": "^12.1.0-rc.9"
   },
   "dependencies": {
     "tslib": "^2.8.1"
