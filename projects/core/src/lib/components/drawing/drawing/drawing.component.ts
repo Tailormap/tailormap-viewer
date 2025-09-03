@@ -20,10 +20,12 @@ import {
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
-import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, DrawingComponentConfigModel, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
+import { selectComponentTitle } from '../../../state/core.selectors';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 
 @Component({
@@ -45,7 +47,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
   private cdr = inject(ChangeDetectorRef);
 
-  private componentsContainer = viewChild('additionalDrawingComponentsContainer', { read: ViewContainerRef });
+  private belowDrawingButtonsContainer = viewChild('belowDrawingButtonsContainer', { read: ViewContainerRef });
+  private aboveDrawingButtonsContainer = viewChild('aboveDrawingButtonsContainer', { read: ViewContainerRef });
 
   private destroyed = new Subject();
   public drawingLayerId = 'drawing-layer';
@@ -81,12 +84,20 @@ export class DrawingComponent implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const components = this.drawingFeatureRegistrationService.registeredAdditionalDrawingFeatures();
-      const container = this.componentsContainer();
-      if (!container) {
+      const belowButtonsContainer = this.belowDrawingButtonsContainer();
+      const aboveButtonsContainer = this.aboveDrawingButtonsContainer();
+      if (!belowButtonsContainer || !aboveButtonsContainer) {
         return;
       }
-      container.clear();
-      components.forEach(component => container.createComponent(component.component));
+      belowButtonsContainer.clear();
+      aboveButtonsContainer.clear();
+      components.forEach(component => {
+        if (component.position === 'aboveDrawingButtons') {
+          aboveButtonsContainer.createComponent(component.component);
+          return;
+        }
+        belowButtonsContainer.createComponent(component.component);
+      });
     });
   }
 
@@ -152,6 +163,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.drawingService.predefinedStyleSelected$
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => this.store$.dispatch(setSelectedFeature({ fid: null })));
+
+    this.openDrawingPanelIfConfigured();
   }
 
   public ngOnDestroy() {
@@ -404,6 +417,22 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public clearSquareLength() {
     this.drawingService.customSquareLength.set(null);
     this.drawSquare();
+  }
+
+  private openDrawingPanelIfConfigured() {
+    ComponentConfigHelper.useInitialConfigForComponent<DrawingComponentConfigModel>(
+      this.store$,
+      BaseComponentTypeEnum.DRAWING,
+      config => {
+        if (config && config.openOnStartup) {
+          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.DRAWING, $localize `:@@core.drawing.drawing:Drawing`))
+            .pipe(take(1))
+            .subscribe(title => {
+              this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.DRAWING, title);
+            });
+        }
+      },
+    );
   }
 
 }
