@@ -41,7 +41,8 @@ export class CqlFilterHelper {
     const filter: string[] = [];
     const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
     const originalFilters = filterGroup.filters
-      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId) && (!FilterTypeHelper.isAttributeFilter(f) || !CqlFilterHelper.isNumericFilterWithNoValue(f)));
+      .filter(f => !f.disabled
+        && !(FilterTypeHelper.isAttributeFilter(f) && (f.generatedByFilterId || CqlFilterHelper.isNumericFilterWithNoValue(f))));
     const baseFilter: string[] = originalFilters
       .map(originalFilter => {
         const cqlQueries = [
