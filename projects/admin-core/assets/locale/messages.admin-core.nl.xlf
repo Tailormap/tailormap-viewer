@@ -397,6 +397,10 @@
         <source>Slider and input field</source>
         <target>Slider en invoerveld</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+        <target>Stapgrootte</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
         <target>Gebruik attribuutbereik</target>
