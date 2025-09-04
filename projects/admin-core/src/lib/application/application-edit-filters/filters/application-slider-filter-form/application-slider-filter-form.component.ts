@@ -76,6 +76,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     initialLowerValue: new FormControl<number | null>(null),
     initialUpperValue: new FormControl<number | null>(null),
     inputMode: new FormControl<SliderFilterInputModeEnum>(SliderFilterInputModeEnum.SLIDER),
+    stepSize: new FormControl<number | null>(null),
   });
 
   public ngOnInit(): void {
@@ -95,6 +96,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
           initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue ?? undefined) : undefined,
           initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue ?? undefined) : undefined,
           inputMode: value.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+          stepSize: value.stepSize ?? undefined,
         });
       });
   }
