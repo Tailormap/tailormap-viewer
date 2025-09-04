@@ -17,7 +17,7 @@ export class SliderFilterComponent implements OnInit {
 
   public minValue: number = 0;
   public maxValue: number = 100;
-  public stepValue: number = 1;
+  public stepSize: number = 1;
   public initialValue: number | null = null;
   public initialLowerValue: number | null = null;
   public initialUpperValue: number | null = null;
@@ -30,7 +30,7 @@ export class SliderFilterComponent implements OnInit {
   public set sliderFilterConfiguration(config: UpdateSliderFilterModel) {
     this.minValue = config.minimumValue;
     this.maxValue = config.maximumValue;
-    this.stepValue = (config.maximumValue - config.minimumValue) / 50;
+    this.stepSize = config.stepSize || (config.maximumValue - config.minimumValue) / 50;
     this.inputMode = config.inputMode || SliderFilterInputModeEnum.SLIDER;
     this.betweenInput = config.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY
       || (!(config.initialLowerValue === null || config.initialLowerValue === undefined)

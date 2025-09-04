@@ -52,6 +52,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         initialLowerValue: configuration.initialLowerValue,
         initialUpperValue: configuration.initialUpperValue,
         inputMode: configuration.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+        stepSize: configuration.stepSize,
       }, { emitEvent: false });
     }
   }
@@ -76,6 +77,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     initialLowerValue: new FormControl<number | null>(null),
     initialUpperValue: new FormControl<number | null>(null),
     inputMode: new FormControl<SliderFilterInputModeEnum>(SliderFilterInputModeEnum.SLIDER),
+    stepSize: new FormControl<number | null>(null),
   });
 
   public ngOnInit(): void {
@@ -95,6 +97,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
           initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? value.initialLowerValue : undefined,
           initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? value.initialUpperValue : undefined,
           inputMode: value.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+          stepSize: value.stepSize ?? undefined,
         });
       });
   }

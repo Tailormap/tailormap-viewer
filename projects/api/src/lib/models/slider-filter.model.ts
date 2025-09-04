@@ -15,6 +15,7 @@ export interface SliderFilterModel {
   initialLowerValue?: number | null;
   initialUpperValue?: number | null;
   inputMode?: SliderFilterInputModeEnum;
+  stepSize?: number;
 }
 
 export interface UpdateSliderFilterModel {
@@ -26,4 +27,5 @@ export interface UpdateSliderFilterModel {
   initialLowerValue?: number | null;
   initialUpperValue?: number | null;
   inputMode?: SliderFilterInputModeEnum;
+  stepSize?: number;
 }

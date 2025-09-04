@@ -398,6 +398,10 @@
         <source>Slider and input field</source>
         <target>Schieberegler und Eingabefeld</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+        <target>Schrittweite</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
         <target>Attributbereich verwenden</target>

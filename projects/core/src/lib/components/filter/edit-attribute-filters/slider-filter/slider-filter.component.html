@@ -24,7 +24,7 @@
         <tm-slider
           [min]="minValue"
           [max]="maxValue"
-          [step]="stepValue"
+          [step]="stepSize"
           [betweenValues]="{
             lower: viewerSliderFilterForm.get('lowerValue')?.value ?? null,
             upper: viewerSliderFilterForm.get('upperValue')?.value ?? null,
@@ -50,7 +50,7 @@
         <tm-slider
           [min]="minValue"
           [max]="maxValue"
-          [step]="stepValue"
+          [step]="stepSize"
           [value]="viewerSliderFilterForm.get('filterValue')?.value"
           [displayWith]="displayWith"
           [displayLabels]="inputMode === 'SLIDER'"
