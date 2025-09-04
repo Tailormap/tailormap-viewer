@@ -299,6 +299,9 @@
       <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
         <source>Slider and input field</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
       </trans-unit>
