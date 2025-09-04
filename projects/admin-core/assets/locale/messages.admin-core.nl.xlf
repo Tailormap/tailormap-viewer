@@ -397,6 +397,10 @@
         <source>Slider and input field</source>
         <target>Slider en invoerveld</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+        <target>Stapgrootte</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
         <target>Gebruik attribuutbereik</target>
@@ -1464,6 +1468,10 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
         <target>Coördinatenlinkvenster titel</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Open teken component bij het opstarten</target>
       </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>

@@ -85,16 +85,14 @@ export class ApplicationCheckboxFilterFormComponent {
   }
 
   public changeAlias(value: string, alias?: string) {
-    if (!alias) {
+    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (!attributeValueSettings || attributeValueSettings.alias === alias) {
       return;
     }
-    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
-    if (attributeValueSettings) {
-      const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
-      this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
-        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
-      this.updateCheckboxFilter.emit(this.checkboxFilter);
-    }
+    const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
+    this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+      oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
   public addNewValue() {

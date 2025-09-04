@@ -398,6 +398,10 @@
         <source>Slider and input field</source>
         <target>Schieberegler und Eingabefeld</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+        <target>Schrittweite</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
         <source>Use attribute range</source>
         <target>Attributbereich verwenden</target>
@@ -1465,6 +1469,10 @@
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Zeichnenkomponente beim Start öffnen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
         <source>Close window after adding new feature</source>

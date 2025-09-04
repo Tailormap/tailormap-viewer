@@ -3,6 +3,7 @@ import { Injectable, signal, Type } from '@angular/core';
 interface AdditionalDrawingFeatureModel {
   component: Type<any>;
   type: string;
+  position?: 'belowDrawingButtons' | 'aboveDrawingButtons';
 }
 
 @Injectable({
