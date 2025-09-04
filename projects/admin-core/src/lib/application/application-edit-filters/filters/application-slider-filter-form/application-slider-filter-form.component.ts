@@ -52,6 +52,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         initialLowerValue: configuration.initialLowerValue,
         initialUpperValue: configuration.initialUpperValue,
         inputMode: configuration.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+        stepSize: configuration.stepSize,
       }, { emitEvent: false });
     }
   }
