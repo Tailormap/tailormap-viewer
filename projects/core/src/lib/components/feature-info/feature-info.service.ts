@@ -28,6 +28,7 @@ export class FeatureInfoService {
    * default buffer distance for feature info requests in pixels.
    */
   private static DEFAULT_DISTANCE = 10;
+  private static TOUCH_DISTANCE = 30;
 
   private store$ = inject(Store);
   private mapService = inject(MapService);
@@ -39,6 +40,7 @@ export class FeatureInfoService {
     mapCoordinates: [number, number],
     mouseCoordinates: [number, number],
     cesiumFeatureInfo?: FeatureInfo3DModel,
+    pointerType?: string,
   ): Observable<FeatureInfoResponseModel | null> {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
@@ -69,7 +71,7 @@ export class FeatureInfoService {
             return [];
           }
           const requests$ = [
-            ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails)),
+            ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails, false, pointerType)),
             ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
           ];
           if (cesiumFeatureInfo) {
@@ -84,7 +86,7 @@ export class FeatureInfoService {
       );
   }
 
-  public getEditableFeatures$(coordinates: [ number, number ], selectedLayer?: string | null): Observable<FeatureInfoResponseModel[]> {
+  public getEditableFeatures$(coordinates: [ number, number ], selectedLayer?: string | null, pointerType?: string): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
       this.store$.select(selectEditableLayers),
       this.store$.select(selectViewerId),
@@ -100,7 +102,7 @@ export class FeatureInfoService {
             return of([]);
           }
           const featureRequests$ = layers
-              .map(layer => this.getFeatureInfoFromApi$( layer.id, coordinates, applicationId, resolutions,  true ));
+              .map(layer => this.getFeatureInfoFromApi$( layer.id, coordinates, applicationId, resolutions,  true, pointerType ));
           return forkJoin(featureRequests$);
         }),
       );
@@ -130,15 +132,19 @@ export class FeatureInfoService {
     applicationId: string,
     resolutions: MapViewDetailsModel,
     geometryInAttributes=false,
+    pointerType?: string,
   ): Observable<FeatureInfoResponseModel> {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
+    // meters per pixel * fixed value
+    const distance = pointerType === 'touch'
+      ? resolutions.resolution * FeatureInfoService.TOUCH_DISTANCE
+      : resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE;
     return this.apiService.getFeatures$({
       layerId,
       applicationId,
       x: coordinates[0],
       y: coordinates[1],
-      // meters per pixel * fixed value
-      distance: resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE,
+      distance: distance,
       simplify: false,
       geometryInAttributes: geometryInAttributes,
       filter: layerFilter,

@@ -45,6 +45,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
         this.mapClickSubject.next({
           mapCoordinates: [ click.coordinate[0], click.coordinate[1] ],
           mouseCoordinates: [ click.pixel[0], click.pixel[1] ],
+          pointerType: click.originalEvent.pointerType,
           resolution,
           scale,
         });
