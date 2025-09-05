@@ -27,13 +27,14 @@ export class ApplicationCheckboxFilterFormComponent {
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
-    const newSettings: AttributeValueSettings[] = [];
-    if (uniqueValues) {
-      uniqueValues.forEach((value) => {
-        newSettings.push({ value: value, initiallySelected: true, selectable: true });
-        this.aliasForm.addControl(value, new FormControl<string>(''));
-      });
+    if (!uniqueValues) {
+      return;
     }
+    const newSettings: AttributeValueSettings[] = [];
+    uniqueValues.forEach((value) => {
+      newSettings.push({ value: value, initiallySelected: true, selectable: true });
+      this.aliasForm.addControl(value, new FormControl<string>(''));
+    });
     this.attributeValuesSettings.set(newSettings);
     this.checkboxFilter.attributeValuesSettings = newSettings;
     this.updateCheckboxFilter.emit(this.checkboxFilter);
