@@ -166,8 +166,8 @@ export class EditMapToolService implements OnDestroy {
     this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.EDIT }));
   }
 
-  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number] }) {
-    this.store$.dispatch(loadEditFeatures({ coordinates: evt.mapCoordinates }));
+  private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; pointerType?: string }) {
+    this.store$.dispatch(loadEditFeatures({ coordinates: evt.mapCoordinates, pointerType: evt.pointerType }));
     this.store$.pipe(selectEditError$)
       .subscribe(error => {
         if (!error || error.error === 'none') {
