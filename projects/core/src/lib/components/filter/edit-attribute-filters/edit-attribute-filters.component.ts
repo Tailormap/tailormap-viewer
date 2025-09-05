@@ -142,13 +142,13 @@ export class EditAttributeFiltersComponent {
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
     if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
       && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
-      return `${filter.attribute} ${filter.condition}`;
+      return `${filter.attributeAlias ?? filter.attribute} ${filter.condition}`;
     }
     const formattedValues = filter.value.map(value => {
       const num = Number(value);
       return isNaN(num) ? value : num.toPrecision(5);
     });
-    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
+    return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
