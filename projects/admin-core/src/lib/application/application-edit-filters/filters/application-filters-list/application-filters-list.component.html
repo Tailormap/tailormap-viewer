@@ -1,6 +1,6 @@
 <div class="filter-list">
   <mat-selection-list cdkDropList (cdkDropListDropped)="drop($event)">
-    @for (filter of filters(); track filter.filter.id) {
+    @for (filter of filtersWithAttributeAlias(); track filter.filter.id) {
       <mat-list-item
         cdkDrag
         (cdkDragStarted)="isDragging.set(true)"
@@ -21,7 +21,12 @@
           } @else {
             <mat-icon svgIcon="admin/filters_filter"></mat-icon>
           }
-          <div class="filter-label">{{ filter.filter.attribute }}</div>
+          <div class="filter-label">
+            {{ filter.filter.attribute }}
+            @if (filter.filter.attributeAlias) {
+              <i>({{ filter.filter.attributeAlias }})</i>
+            }
+          </div>
           <button mat-icon-button
                   class="remove-filter"
                   color="warn"

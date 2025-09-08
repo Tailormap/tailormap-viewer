@@ -19,6 +19,9 @@
         @for (attribute of attributes$ | async; track attribute) {
           <mat-option [value]="attribute" (click)="attributeClicked(attribute)" class="attribute-option">
             {{ attribute.name }}
+            @if (attribute.alias) {
+                <i>({{ attribute.alias }})</i>
+            }
           </mat-option>
         }
       </mat-autocomplete>

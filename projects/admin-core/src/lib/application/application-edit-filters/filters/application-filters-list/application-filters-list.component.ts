@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, signal, Signal, inject, computed } from '@angular/core';
 import { AttributeFilterModel, FilterToolEnum } from '@tailormap-viewer/api';
 import { selectFiltersForSelectedGroup } from '../../../state/application.selectors';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,9 @@ import {
   setApplicationSelectedFilterId, updateApplicationFiltersConfigForSelectedGroup,
 } from '../../../state/application.actions';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ApplicationEditFilterService } from '../../application-edit-filter.service';
+import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-admin-application-filters-list',
@@ -17,9 +20,27 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class ApplicationFiltersListComponent implements OnDestroy {
   private store$ = inject(Store);
+  private applicationEditFilterService = inject(ApplicationEditFilterService);
 
 
   public filters: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = this.store$.selectSignal(selectFiltersForSelectedGroup);
+  private featureTypesForSelectedLayers: Signal<FeatureTypeModel[] | undefined> = toSignal(this.applicationEditFilterService.featureTypesForSelectedLayers$);
+  public filtersWithAttributeAlias: Signal<{filter: AttributeFilterModel; selected: boolean}[]> = computed(() => {
+    const filters  = this.filters();
+    const featureTypes = this.featureTypesForSelectedLayers();
+    if (!featureTypes) {
+      return filters;
+    }
+    return filters.map(f => {
+      let alias: string | undefined;
+      for (const ft of featureTypes) {
+        if (ft.settings.attributeSettings?.[f.filter.attribute]) {
+          alias = ft.settings.attributeSettings?.[f.filter.attribute].title;
+        }
+      }
+      return { ...f, filter: { ...f.filter, attributeAlias: alias } };
+    });
+  });
 
   public isDragging = signal<boolean>(false);
 

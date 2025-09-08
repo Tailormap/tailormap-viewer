@@ -45,7 +45,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   private filterToolSubject$ = new BehaviorSubject<FilterToolEnum>(FilterToolEnum.PRESET_STATIC);
 
   public featureTypes$ = this.featureTypesSubject$.asObservable();
-  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
+  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean } & { alias?: string }>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
 
@@ -75,7 +75,12 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
             attributeSets.reduce((a, b) => new Set([...a].filter(x => b.has(x)))),
           );
           const firstAttributes = featureTypes[0].attributes || [];
-          const attributes = firstAttributes
+          //
+          const firstAttributesWithAlias = firstAttributes.map(att => ({
+            ...att,
+            alias: featureTypes[0].settings.attributeSettings?.[att.name]?.title,
+          }));
+          const attributes = firstAttributesWithAlias
             .filter(att => commonAttributeKeys.includes(`${att.name}::${att.type}`))
             .filter((att: AttributeDescriptorModel) => {
               if (filterTool === FilterToolEnum.SLIDER) {
@@ -91,7 +96,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
-            .map((att: AttributeDescriptorModel) => ({
+            .map((att) => ({
               ...att,
               selected: selectedAttribute === att.name,
             }));
