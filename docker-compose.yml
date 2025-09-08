@@ -145,7 +145,7 @@ services:
       CMD: >-
         --config.file=/etc/prometheus/prometheus.yml
         --web.enable-admin-api
-        --storage.tsdb.retention.time=${TSDB_RETENTION_TIME:-1y}
+        --storage.tsdb.retention.time=${TSDB_RETENTION_TIME:-2y}
         --storage.tsdb.retention.size=${TSDB_RETENTION_SIZE:-1GB}
     entrypoint: /bin/sh -c 'echo "$$DYNAMIC_CONFIG" > /etc/prometheus/prometheus.yml && /bin/prometheus $$CMD'
     volumes:
