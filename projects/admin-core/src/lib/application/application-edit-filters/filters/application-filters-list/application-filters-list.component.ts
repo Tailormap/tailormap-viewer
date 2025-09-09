@@ -32,12 +32,8 @@ export class ApplicationFiltersListComponent implements OnDestroy {
       return filters;
     }
     return filters.map(f => {
-      let alias: string | undefined;
-      for (const ft of featureTypes) {
-        if (ft.settings.attributeSettings?.[f.filter.attribute]) {
-          alias = ft.settings.attributeSettings?.[f.filter.attribute].title;
-        }
-      }
+      const ftWithAttribute = featureTypes.find(ft => ft.settings.attributeSettings?.[f.filter.attribute]);
+      const alias: string | undefined = ftWithAttribute?.settings.attributeSettings?.[f.filter.attribute]?.title;
       return { ...f, filter: { ...f.filter, attributeAlias: alias } };
     });
   });
