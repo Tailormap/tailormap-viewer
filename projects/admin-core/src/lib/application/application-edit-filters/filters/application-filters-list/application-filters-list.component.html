@@ -21,7 +21,8 @@
           } @else {
             <mat-icon svgIcon="admin/filters_filter"></mat-icon>
           }
-          <div class="filter-label">
+          <div class="filter-label"
+               [tmTooltip]="filter.filter.attribute + (filter.filter.attributeAlias ? ' / alias: ' + filter.filter.attributeAlias : '')">
             {{ filter.filter.attribute }}
             @if (filter.filter.attributeAlias) {
               <i>({{ filter.filter.attributeAlias }})</i>

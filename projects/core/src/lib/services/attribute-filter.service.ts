@@ -91,7 +91,7 @@ export class AttributeFilterService {
 
   }
 
-  getFeaturesColumnMetadataForLayer$(layerId: string): Observable<ColumnMetadataModel[]> {
+  private getFeaturesColumnMetadataForLayer$(layerId: string): Observable<ColumnMetadataModel[]> {
     return this.store$.select(selectViewerId).pipe(
       first(applicationId => applicationId !== null),
       switchMap(applicationId => this.apiService.getFeatures$({
@@ -103,7 +103,7 @@ export class AttributeFilterService {
     );
   }
 
-  addAttributeAliasesToFilters$(
+  public addAttributeAliasesToFilters$(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
   ): Observable<FilterGroupModel<AttributeFilterModel>[]> {
     return forkJoin(
