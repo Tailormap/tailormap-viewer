@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
@@ -27,66 +26,46 @@ export class EditAttributeFiltersComponent {
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
 
-  public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
-    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
-    if (editConfiguration && editConfiguration.initialValue !== null) {
-      editConfiguration.initialValue = Number(filter.value[0]);
-    } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
-      editConfiguration.initialLowerValue = Number(filter.value[0]);
-      editConfiguration.initialUpperValue = Number(filter.value[1]);
-    }
-    return editConfiguration;
+  public isSliderFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER;
   }
 
-  public getCheckboxFilterConfiguration(filter: AttributeFilterModel): CheckboxFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX) {
-      return null;
-    }
-    return {
-      ...filter.editConfiguration,
-      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => {
-        if (valueSettings.useAsIlikeSubstringFilter) {
-          const substringFilterId = `${filter.id}-substring-${valueSettings.value}`;
-          const substringFilter = this.editableFilters().find(f => f.id === substringFilterId);
-          return {
-            ...valueSettings,
-            initiallySelected: substringFilter ? !substringFilter.disabled : false,
-          };
-        }
-        return {
-          ...valueSettings,
-          initiallySelected: filter.value.includes(valueSettings.value),
-        };
-      }),
-    };
+  public isCheckboxFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX;
   }
 
-  public getSwitchFilterConfiguration(filter: AttributeFilterModel): SwitchFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
-      return null;
-    }
-    return filter.editConfiguration;
+  public isSwitchFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SWITCH;
   }
 
-  public getDatePickerFilterConfiguration(filter: AttributeFilterModel): DatePickerFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DATE_PICKER) {
-      return null;
-    }
-    const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
-    if (editConfiguration.initialDate) {
-      editConfiguration.initialDate = filter.value[0];
-    } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
-      editConfiguration.initialLowerDate = filter.value[0];
-      editConfiguration.initialUpperDate = filter.value[1];
-    }
-    return editConfiguration;
+  public isDatePickerFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DATE_PICKER;
   }
 
-  public getDropdownListFilterConfiguration(filter: AttributeFilterModel): DropdownListFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
-      return null;
+  public isDropdownListFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DROPDOWN_LIST;
+  }
+
+  public getSubstringFilters(filter: AttributeFilterModel): { id: string; disabled: boolean }[] {
+    return this.editableFilters()
+      .filter(f => f.id.startsWith(`${filter.id}-substring-`))
+      .map(f => ({ id: f.id, disabled: f.disabled ?? false }));
+  }
+
+  public getConditionLabel(condition: FilterConditionEnum): string {
+    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
+  }
+
+  public getSliderFilterLabel(filter: AttributeFilterModel): string {
+    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
+      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
+      return `${filter.attribute} ${filter.condition}`;
     }
-    return filter.editConfiguration;
+    const formattedValues = filter.value.map(value => {
+      const num = Number(value);
+      return isNaN(num) ? value : num.toPrecision(5);
+    });
+    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
@@ -133,22 +112,6 @@ export class EditAttributeFiltersComponent {
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
     }
-  }
-
-  public getConditionLabel(condition: FilterConditionEnum): string {
-    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
-  }
-
-  public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
-      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
-      return `${filter.attribute} ${filter.condition}`;
-    }
-    const formattedValues = filter.value.map(value => {
-      const num = Number(value);
-      return isNaN(num) ? value : num.toPrecision(5);
-    });
-    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {

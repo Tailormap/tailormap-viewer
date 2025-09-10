@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { DateTime } from 'luxon';
-import { DatePickerFilterModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, FilterConditionEnum, FilterToolEnum } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
@@ -19,12 +19,15 @@ export class DatePickerFilterComponent implements OnInit {
   public isBetweenCondition: boolean = false;
 
   @Input()
-  public set datePickerFilterConfiguration(config: DatePickerFilterModel) {
-    this.isBetweenCondition = !config.initialDate;
+  public set datePickerFilter(filter: AttributeFilterModel) {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DATE_PICKER) {
+      return;
+    }
+    this.isBetweenCondition = filter.condition === FilterConditionEnum.DATE_BETWEEN_KEY;
     this.datePickerFilterForm.patchValue({
-      date: config.initialDate ? DateTime.fromISO(config.initialDate) : null,
-      lowerDate: config.initialLowerDate ? DateTime.fromISO(config.initialLowerDate) : null,
-      upperDate: config.initialUpperDate ? DateTime.fromISO(config.initialUpperDate) : null,
+      date: this.isBetweenCondition ? null : DateTime.fromISO(filter.value[0]),
+      lowerDate: this.isBetweenCondition ? DateTime.fromISO(filter.value[0]) : null,
+      upperDate: this.isBetweenCondition ? DateTime.fromISO(filter.value[1]) : null,
     }, { emitEvent: false });
   }
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { SwitchFilterComponent } from './switch-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { FilterToolEnum } from '@tailormap-viewer/api';
+import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, FilterTypeEnum } from '@tailormap-viewer/api';
 import { TooltipDirective } from '@tailormap-viewer/shared';
 
 describe('SwitchFilterComponent', () => {
@@ -16,15 +16,25 @@ describe('SwitchFilterComponent', () => {
   });
 
   test('should display aliases from switchFilterConfiguration', async () => {
+    const switchFilter: AttributeFilterModel = {
+      id: 'filter1',
+      attributeType: AttributeType.BOOLEAN,
+      attribute: 'attribute1',
+      condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
+      value: ['true'],
+      invertCondition: false,
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      editConfiguration: {
+        filterTool: FilterToolEnum.SWITCH,
+        alias1: 'Yes',
+        alias2: 'No',
+      },
+    };
     await render(SwitchFilterComponent, {
       imports: [MatButtonToggleModule],
       declarations: [TooltipDirective],
-      inputs: { switchFilterConfiguration: {
-          filterTool: FilterToolEnum.SWITCH,
-          alias1: 'Yes',
-          alias2: 'No',
-        },
-      },
+      inputs: { switchFilter },
     });
 
     expect(screen.getByText('Yes')).toBeInTheDocument();

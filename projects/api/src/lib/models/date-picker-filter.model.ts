@@ -8,10 +8,6 @@ export interface DatePickerFilterModel {
   initialUpperDate?: string;
 }
 
-export interface UpdateDatePickerFilterModel {
-  filterTool: FilterToolEnum.DATE_PICKER;
+export interface UpdateDatePickerFilterModel extends DatePickerFilterModel {
   condition?: FilterConditionEnum;
-  initialDate?: string;
-  initialLowerDate?: string;
-  initialUpperDate?: string;
 }

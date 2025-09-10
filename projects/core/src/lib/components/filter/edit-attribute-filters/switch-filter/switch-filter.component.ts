@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { SwitchFilterModel } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SwitchFilterModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-switch-filter',
@@ -10,8 +10,21 @@ import { SwitchFilterModel } from '@tailormap-viewer/api';
 })
 export class SwitchFilterComponent {
 
+  public switchFilterConfiguration?: SwitchFilterModel;
+  public startWithValue2: boolean = false;
+
   @Input()
-  public switchFilterConfiguration: SwitchFilterModel | null = null;
+  public set switchFilter(filter: AttributeFilterModel) {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
+      return;
+    }
+    this.switchFilterConfiguration = filter.editConfiguration;
+    if (filter.attributeType === AttributeType.BOOLEAN) {
+      this.startWithValue2 = filter.condition === FilterConditionEnum.BOOLEAN_FALSE_KEY;
+    } else {
+      this.startWithValue2 = filter.value[0] === filter.editConfiguration.value2;
+    }
+  };
 
   @Output()
   public valueChange = new EventEmitter<boolean>();

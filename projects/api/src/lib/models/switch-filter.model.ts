@@ -10,12 +10,6 @@ export interface SwitchFilterModel {
   startWithValue2?: boolean;
 }
 
-export interface UpdateSwitchFilterModel {
-  filterTool: FilterToolEnum.SWITCH;
+export interface UpdateSwitchFilterModel extends SwitchFilterModel {
   condition?: FilterConditionEnum;
-  value1?: string;
-  value2?: string;
-  alias1?: string;
-  alias2?: string;
-  startWithValue2?: boolean;
 }
