@@ -21,7 +21,7 @@ export class AttributeFilterService {
         forkJoin(
           layerIds.map(layerId =>
             this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
-              map(layerDetails => layerDetails?.attributes?.map(attr => attr.key) || []),
+              map(layerDetails => layerDetails?.attributes?.map(attr => attr.name) || []),
             ),
           ),
         ),
