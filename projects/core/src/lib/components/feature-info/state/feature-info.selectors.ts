@@ -32,7 +32,7 @@ export const selectFeatureInfoList = createSelector(
         return;
       }
       const columnMetadata = metadata.filter(m => m.layerId === feature.layerId);
-      const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.key, c ]));
+      const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.name, c ]));
       const attributes: Array<{ label: string; attributeValue: any; key: string }> = [];
       Object.keys(feature.attributes).forEach(key => {
         const attMetadata = columnMetadataDict.get(key);
@@ -41,7 +41,7 @@ export const selectFeatureInfoList = createSelector(
         }
         attributes.push({ label: attMetadata?.alias || key, attributeValue: feature.attributes[key], key });
       });
-      const attributeOrder = columnMetadata.map(c => c.key);
+      const attributeOrder = columnMetadata.map(c => c.name);
       featureInfoModels.push({
         __fid: feature.__fid,
         layer,
@@ -148,7 +148,7 @@ export const selectCurrentFeatureForEdit = createSelector(
     const feature = features.find(f => f.__fid === selectedLayer.selectedFeatureId);
     if (feature && featureInfoMetadata) {
       const filteredMetadata = featureInfoMetadata.filter(m => m.layerId === feature.layerId);
-      const geometryAttributeName = filteredMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.key;
+      const geometryAttributeName = filteredMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.name;
       if (!geometryAttributeName) {
         return null;
       }

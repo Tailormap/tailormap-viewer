@@ -19,7 +19,7 @@
         <div class="edit-filter-wrapper">
           <div class="editable-checkbox-filter">
             <tm-checkbox-filter
-              [label]="filter.attribute"
+              [label]="filter.attributeAlias ?? filter.attribute"
               [checkboxFilterConfiguration]="checkboxFilterConfig"
               (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, $event.substringFilter, filter)"></tm-checkbox-filter>
           </div>
@@ -28,7 +28,7 @@
       @if (getSwitchFilterConfiguration(filter); as switchFilterConfig) {
         <div class="edit-filter-wrapper">
           <div class="editable-switch-filter-title">
-            {{ filter.attribute }}
+            {{ filter.attributeAlias ?? filter.attribute }}
           </div>
           <div class="editable-switch-filter-content">
             <tm-switch-filter
@@ -40,7 +40,7 @@
       @if (getDatePickerFilterConfiguration(filter); as datePickerFilterConfig) {
         <div class="edit-filter-wrapper">
           <div class="editable-date-picker-filter-title">
-            {{ filter.attribute + ' ' + getConditionLabel(filter.condition) }}
+            {{ filter.attributeAlias ?? filter.attribute + ' ' + getConditionLabel(filter.condition) }}
           </div>
           <div class="editable-date-picker-filter-content">
             <tm-date-picker-filter
@@ -53,7 +53,7 @@
       @if (getDropdownListFilterConfiguration(filter); as dropdownListFilterConfig) {
         <div class="edit-filter-wrapper">
           <div class="editable-dropdown-list-filter-title">
-            {{ filter.attribute }}
+            {{ filter.attributeAlias ?? filter.attribute }}
           </div>
           <div class="editable-dropdown-list-filter-content">
             <tm-dropdown-list-filter

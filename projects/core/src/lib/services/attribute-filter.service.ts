@@ -1,7 +1,8 @@
 import { Store } from '@ngrx/store';
 import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import {
-  AttributeFilterModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
+  AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
+  TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
@@ -13,7 +14,6 @@ export class AttributeFilterService {
   private store$ = inject(Store);
   private describeAppLayerService = inject(DescribeAppLayerService);
 
-
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(
       take(1),
@@ -21,7 +21,7 @@ export class AttributeFilterService {
         forkJoin(
           layerIds.map(layerId =>
             this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
-              map(layerDetails => layerDetails?.attributes?.map(attr => attr.key) || []),
+              map(layerDetails => layerDetails?.attributes?.map(attr => attr.name) || []),
             ),
           ),
         ),
@@ -88,6 +88,46 @@ export class AttributeFilterService {
       return group;
     });
 
+  }
+
+  private getFeaturesColumnMetadataForLayer$(layerId: string): Observable<ColumnMetadataModel[]> {
+    return this.store$.select(selectViewerId).pipe(
+      take(1),
+      switchMap(applicationId =>
+        this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
+          map(layerDetails => layerDetails?.attributes.map(attribute => ({
+            name: attribute.name,
+            type: attribute.type,
+            alias: attribute.alias,
+          })) || []),
+        ),
+      ),
+    );
+  }
+
+  public addAttributeAliasesToFilters$(
+    filterGroups: FilterGroupModel<AttributeFilterModel>[],
+  ): Observable<FilterGroupModel<AttributeFilterModel>[]> {
+    return forkJoin(
+      filterGroups.map(group => {
+        if (group.type === FilterTypeEnum.ATTRIBUTE) {
+          return this.getFeaturesColumnMetadataForLayer$(group.layerIds[0]).pipe(
+            take(1),
+            map(columnMetadata => ({
+              ...group,
+              filters: group.filters.map(filter => {
+                const column = columnMetadata.find(col => col.name === filter.attribute);
+                return {
+                  ...filter,
+                  attributeAlias: column?.alias,
+                };
+              }),
+            })),
+          );
+        }
+        return of(group);
+      }),
+    );
   }
 
 }

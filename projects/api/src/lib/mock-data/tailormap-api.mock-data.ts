@@ -111,7 +111,7 @@ export const getFeatureModel = (overrides?: Partial<FeatureModel>): FeatureModel
 
 export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>): ColumnMetadataModel => ({
   type: AttributeType.STRING,
-  key: 'prop1',
+  name: 'prop1',
   alias: 'Property 1',
   ...overrides,
 });
@@ -128,10 +128,10 @@ export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseMod
     { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' } },
   ];
   const columnMetadata: Partial<ColumnMetadataModel>[] = [
-    { key: 'object_id', alias: 'Pand', type: AttributeType.STRING },
-    { key: 'valid_from', alias: 'Geldig vanaf', type: AttributeType.DATE },
-    { key: 'year', alias: 'Bouwjaar', type: AttributeType.INTEGER },
-    { key: 'status', alias: 'Status', type: AttributeType.STRING },
+    { name: 'object_id', alias: 'Pand', type: AttributeType.STRING },
+    { name: 'valid_from', alias: 'Geldig vanaf', type: AttributeType.DATE },
+    { name: 'year', alias: 'Bouwjaar', type: AttributeType.INTEGER },
+    { name: 'status', alias: 'Status', type: AttributeType.STRING },
   ];
   return {
     features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),
