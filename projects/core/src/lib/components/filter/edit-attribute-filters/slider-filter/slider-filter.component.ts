@@ -70,6 +70,8 @@ export class SliderFilterComponent implements OnInit {
         }
       });
 
+    // If only one of the upper and lower values is set, the other is set to min/max to get a valid filter,
+    // if neither are set, both remain null.
     this.viewerSliderFilterForm.patchValue({
       filterValue: this.initialValue,
       lowerValue: this.initialUpperValue !== null
