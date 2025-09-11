@@ -32,8 +32,8 @@ describe('EditFormComponent', () => {
         details: getLayerDetailsModel({
           editable: true,
           attributes: [
-            { id: 1, type: AttributeType.STRING, featureType: 1, key: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-            { id: 2, type: AttributeType.STRING, featureType: 1, key: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+            { id: 1, type: AttributeType.STRING, featureType: 1, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
+            { id: 2, type: AttributeType.STRING, featureType: 1, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
           ],
         }),
       } },
@@ -62,8 +62,8 @@ describe('EditFormComponent', () => {
           details: getLayerDetailsModel({
             editable: true,
             attributes: [
-              { id: 1, type: AttributeType.STRING, featureType: 1, key: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-              { id: 2, type: AttributeType.STRING, featureType: 1, key: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+              { id: 1, type: AttributeType.STRING, featureType: 1, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
+              { id: 2, type: AttributeType.STRING, featureType: 1, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
             ],
             form: {
               options: {

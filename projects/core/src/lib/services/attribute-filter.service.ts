@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { first, forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import {
   AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
   TAILORMAP_API_V1_SERVICE,
@@ -13,7 +13,6 @@ import { selectViewerId } from '../state/core.selectors';
 export class AttributeFilterService {
   private store$ = inject(Store);
   private describeAppLayerService = inject(DescribeAppLayerService);
-  private apiService = inject(TAILORMAP_API_V1_SERVICE);
 
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(
@@ -22,7 +21,7 @@ export class AttributeFilterService {
         forkJoin(
           layerIds.map(layerId =>
             this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
-              map(layerDetails => layerDetails?.attributes?.map(attr => attr.key) || []),
+              map(layerDetails => layerDetails?.attributes?.map(attr => attr.name) || []),
             ),
           ),
         ),
@@ -93,13 +92,16 @@ export class AttributeFilterService {
 
   private getFeaturesColumnMetadataForLayer$(layerId: string): Observable<ColumnMetadataModel[]> {
     return this.store$.select(selectViewerId).pipe(
-      first(applicationId => applicationId !== null),
-      switchMap(applicationId => this.apiService.getFeatures$({
-        applicationId,
-        layerId,
-        page: 1,
-      })),
-      map(result => result.columnMetadata || []),
+      take(1),
+      switchMap(applicationId =>
+        this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
+          map(layerDetails => layerDetails?.attributes.map(attribute => ({
+            name: attribute.name,
+            type: attribute.type,
+            alias: attribute.alias,
+          })) || []),
+        ),
+      ),
     );
   }
 
@@ -114,7 +116,7 @@ export class AttributeFilterService {
             map(columnMetadata => ({
               ...group,
               filters: group.filters.map(filter => {
-                const column = columnMetadata.find(col => col.key === filter.attribute);
+                const column = columnMetadata.find(col => col.name === filter.attribute);
                 return {
                   ...filter,
                   attributeAlias: column?.alias,

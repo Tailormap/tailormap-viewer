@@ -92,8 +92,8 @@ describe('AttributeListDataService', () => {
       ],
       columnMetadata: [
         getColumnMetadataModel(),
-        getColumnMetadataModel({ key: 'prop2' }),
-        getColumnMetadataModel({ key: 'geom', type: AttributeType.GEOMETRY }),
+        getColumnMetadataModel({ name: 'prop2' }),
+        getColumnMetadataModel({ name: 'geom', type: AttributeType.GEOMETRY }),
       ],
       pageSize: 10,
       page: 0,
