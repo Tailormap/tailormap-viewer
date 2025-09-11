@@ -25,15 +25,15 @@ describe('EditFormComponent', () => {
       inputs: { feature: {
         feature: getFeatureModel(),
         columnMetadata: [
-          { key: 'prop', alias: 'Property', type: AttributeType.STRING },
-          { key: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-          { key: 'fid', alias: 'fid', type: AttributeType.STRING },
+          { name: 'prop', alias: 'Property', type: AttributeType.STRING },
+          { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+          { name: 'fid', alias: 'fid', type: AttributeType.STRING },
         ],
         details: getLayerDetailsModel({
           editable: true,
           attributes: [
-            { id: 1, type: AttributeType.STRING, featureType: 1, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-            { id: 2, type: AttributeType.STRING, featureType: 1, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+            { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
+            { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
           ],
         }),
       } },
@@ -62,8 +62,8 @@ describe('EditFormComponent', () => {
           details: getLayerDetailsModel({
             editable: true,
             attributes: [
-              { id: 1, type: AttributeType.STRING, featureType: 1, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-              { id: 2, type: AttributeType.STRING, featureType: 1, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+              { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
+              { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
             ],
             form: {
               options: {
