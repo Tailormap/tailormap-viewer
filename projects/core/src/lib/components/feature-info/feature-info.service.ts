@@ -169,11 +169,10 @@ export class FeatureInfoService {
   }
 
   private featuresToFeatureInfoResponseModel(features: FeatureModel[], layerId: string): FeatureInfoResponseModel {
-    const columnMetadata = Object.keys(features.length > 0 ? features[0].attributes : {}).map(key => ({
+    const columnMetadata = Object.keys(features.length > 0 ? features[0].attributes : {}).map(name => ({
       layerId,
       type: AttributeType.STRING,
-      key,
-      alias: key,
+      name,
     }));
     return {
       features: features.map(feature => ({ ...feature, layerId })),

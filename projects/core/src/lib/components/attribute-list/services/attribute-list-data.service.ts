@@ -132,10 +132,10 @@ export class AttributeListDataService implements OnDestroy {
         return !AttributeTypeHelper.isGeometryType(column.type);
       })
       .map<AttributeListColumnModel>(column => ({
-        id: column.key,
+        id: column.name,
         visible: true,
         type: column.type,
-        label: column.alias || column.key,
+        label: column.alias || column.name,
       }));
   }
 

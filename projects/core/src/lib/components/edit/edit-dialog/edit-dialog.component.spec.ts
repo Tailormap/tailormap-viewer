@@ -20,9 +20,9 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
     feature: { ...getFeatureModel(), layerId: '1' },
     columnMetadata: [
-      { layerId: '1', key: 'prop', alias: 'Property', type: AttributeType.STRING },
-      { layerId: '1', key: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-      { layerId: '1', key: 'fid', alias: 'fid', type: AttributeType.STRING },
+      { layerId: '1', name: 'prop', alias: 'Property', type: AttributeType.STRING },
+      { layerId: '1', name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+      { layerId: '1', name: 'fid', alias: 'fid', type: AttributeType.STRING },
     ],
   };
 };

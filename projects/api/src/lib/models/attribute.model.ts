@@ -3,7 +3,8 @@ import { AttributeType } from './attribute-type.enum';
 export interface AttributeModel {
     id: number;
     featureType: number;
-    key: string;
+    name: string;
+    title?: string | null;
     type: AttributeType;
     editable: boolean;
     editAlias?: string;
