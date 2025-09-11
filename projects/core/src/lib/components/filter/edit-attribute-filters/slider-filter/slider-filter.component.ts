@@ -24,7 +24,12 @@ export class SliderFilterComponent implements OnInit {
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
-  public displayWith: ((value: number) => string) = (value: number) => value.toPrecision(SliderFilterComponent.MAX_PRECISION);
+  public displayWith: ((value: number) => string) = (value: number) => {
+    if (value.toString().length <= SliderFilterComponent.MAX_PRECISION) {
+      return value.toString();
+    }
+    return value.toPrecision(SliderFilterComponent.MAX_PRECISION);
+  };
 
   @Input()
   public set sliderFilterConfiguration(config: UpdateSliderFilterModel) {

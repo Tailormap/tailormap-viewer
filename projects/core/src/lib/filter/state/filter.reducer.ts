@@ -25,13 +25,18 @@ const updateFilterGroup = (
 const onAddFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.addFilterGroup>,
-): FilterState => ({
-  ...state,
-  filterGroups: [
-    ...state.filterGroups,
-    payload.filterGroup,
-  ],
-});
+): FilterState => {
+  if (state.filterGroups.find(fg => fg.id === payload.filterGroup.id)) {
+    return state;
+  }
+  return {
+    ...state,
+    filterGroups: [
+      ...state.filterGroups,
+      payload.filterGroup,
+    ],
+  };
+};
 
 const onRemoveFilterGroup = (
   state: FilterState,
