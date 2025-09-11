@@ -4,7 +4,7 @@
     <div class="edit-attribute-filters">
       @if (getSliderFilterConfiguration(filter); as sliderFilterConfig) {
         <div class="edit-filter-wrapper">
-          <div class="editable-slider-filter-title">
+          <div class="editable-slider-filter-title" [class.disabled]="isSliderFilterDisabled(filter)">
             {{ getSliderFilterLabel(filter) }}
           </div>
           <div class="editable-slider-filter-content">

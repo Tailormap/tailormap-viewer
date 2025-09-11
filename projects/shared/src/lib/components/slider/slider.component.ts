@@ -42,11 +42,9 @@ export class SliderComponent implements ControlValueAccessor {
   public value: number | undefined | null;
 
   @Input()
-  public set betweenValues(betweenValues: {lower: number; upper: number} | null) {
-    if (betweenValues) {
-      this.lowerValue = betweenValues.lower;
-      this.upperValue = betweenValues.upper;
-    }
+  public set betweenValues(betweenValues: {lower: number | null; upper: number | null}) {
+    this.lowerValue = betweenValues.lower ?? this.min;
+    this.upperValue = betweenValues.upper ?? this.max;
   }
 
   @Input()
