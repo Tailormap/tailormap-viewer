@@ -2,10 +2,11 @@ import { Store } from '@ngrx/store';
 import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import {
   AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
-  TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
+import { FilterTypeHelper } from '../filter/helpers/filter-type.helper';
+import { ExtendedFilterGroupModel } from '../filter/models/extended-filter-group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -106,28 +107,29 @@ export class AttributeFilterService {
   }
 
   public addAttributeAliasesToFilters$(
-    filterGroups: FilterGroupModel<AttributeFilterModel>[],
-  ): Observable<FilterGroupModel<AttributeFilterModel>[]> {
-    return forkJoin(
-      filterGroups.map(group => {
-        if (group.type === FilterTypeEnum.ATTRIBUTE) {
-          return this.getFeaturesColumnMetadataForLayer$(group.layerIds[0]).pipe(
-            take(1),
-            map(columnMetadata => ({
-              ...group,
-              filters: group.filters.map(filter => {
-                const column = columnMetadata.find(col => col.name === filter.attribute);
-                return {
-                  ...filter,
-                  attributeAlias: column?.alias,
-                };
-              }),
-            })),
-          );
-        }
-        return of(group);
-      }),
-    );
+    filterGroups: ExtendedFilterGroupModel[],
+  ): Observable<ExtendedFilterGroupModel[]> {
+    return forkJoin(filterGroups.map(filterGroup => {
+      if (FilterTypeHelper.isAttributeFilterGroup(filterGroup)) {
+        return this.getFeaturesColumnMetadataForLayer$(filterGroup.layerIds[0]).pipe(
+          take(1),
+          map(columnMetadata => ({
+            ...filterGroup,
+            filters: filterGroup.filters.map(filter => {
+              if (!FilterTypeHelper.isAttributeFilter(filter)) {
+                return filter;
+              }
+              const column = columnMetadata.find(col => col.name === filter.attribute);
+              return {
+                ...filter,
+                attributeAlias: column?.alias,
+              };
+            }),
+          })),
+        );
+      }
+      return of(filterGroup);
+    }));
   }
 
 }
