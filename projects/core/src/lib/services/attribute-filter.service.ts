@@ -173,7 +173,7 @@ export class AttributeFilterService {
           map(layerDetails => layerDetails?.attributes.map(attribute => ({
             name: attribute.name,
             type: attribute.type,
-            alias: attribute.alias,
+            alias: attribute.alias || undefined,
           })) || []),
         ),
       ),
@@ -183,27 +183,49 @@ export class AttributeFilterService {
   public addAttributeAliasesToFilters$(
     filterGroups: ExtendedFilterGroupModel[],
   ): Observable<ExtendedFilterGroupModel[]> {
-    return forkJoin(filterGroups.map(filterGroup => {
-      if (FilterTypeHelper.isAttributeFilterGroup(filterGroup)) {
-        return this.getFeaturesColumnMetadataForLayer$(filterGroup.layerIds[0]).pipe(
-          take(1),
-          map(columnMetadata => ({
-            ...filterGroup,
-            filters: filterGroup.filters.map(filter => {
-              if (!FilterTypeHelper.isAttributeFilter(filter)) {
-                return filter;
-              }
-              const column = columnMetadata.find(col => col.name === filter.attribute);
-              return {
-                ...filter,
-                attributeAlias: column?.alias,
-              };
-            }),
-          })),
-        );
-      }
-      return of(filterGroup);
-    }));
+    // Collect unique layerIds from attribute filter groups
+    const layerIds = Array.from(
+      new Set(
+        filterGroups
+          .filter(FilterTypeHelper.isAttributeFilterGroup)
+          .map(group =>
+            group.layers.filter(layer => layer.visible).map(layer => layer.id)).flat(),
+      ),
+    );
+
+    return forkJoin(
+      layerIds.map(layerId =>
+        this.getFeaturesColumnMetadataForLayer$(layerId).pipe(take(1)),
+      ),
+    ).pipe(
+      map(metadataArrays => {
+        const metadataMap = new Map<string, ColumnMetadataModel[]>();
+        layerIds.forEach((layerId, idx) => {
+          metadataMap.set(layerId, metadataArrays[idx]);
+        });
+
+        return filterGroups.map(filterGroup => {
+          if (FilterTypeHelper.isAttributeFilterGroup(filterGroup)) {
+            const columnMetadata = metadataMap
+              .get(filterGroup.layerIds.find(layerId => metadataMap.has(layerId)) || filterGroup.layerIds[0]) || [];
+            return {
+              ...filterGroup,
+              filters: filterGroup.filters.map(filter => {
+                if (!FilterTypeHelper.isAttributeFilter(filter)) {
+                  return filter;
+                }
+                const column = columnMetadata.find(col => col.name === filter.attribute);
+                return {
+                  ...filter,
+                  attributeAlias: column?.alias,
+                };
+              }),
+            };
+          }
+          return filterGroup;
+        });
+      }),
+    );
   }
 
 }
