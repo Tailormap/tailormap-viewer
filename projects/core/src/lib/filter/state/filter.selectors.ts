@@ -12,6 +12,8 @@ import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
+export const selectAllFilterGroupsInConfig = createSelector(selectFilterState, state => state.allFilterGroupsInConfig);
+
 export const selectFilterGroups = createSelector(selectFilterState, state => state.filterGroups);
 
 export const selectFilterGroup = (source: string, layerId: string) => createSelector(

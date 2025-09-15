@@ -4,6 +4,11 @@ import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 const filterActionsPrefix = '[Filter]';
 
+export const addAllFilterGroupsInConfig = createAction(
+  `${filterActionsPrefix} Add All Filter Groups In Config`,
+  props<{ filterGroups: FilterGroupModel[] }>(),
+);
+
 export const addFilterGroup = createAction(
   `${filterActionsPrefix} Add Filter Group`,
   props<{ filterGroup: FilterGroupModel }>(),

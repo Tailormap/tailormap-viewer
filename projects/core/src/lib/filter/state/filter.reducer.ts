@@ -3,6 +3,16 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { FilterState, initialFilterState } from './filter.state';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 
+const onAddAllFilterGroupsInConfig = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.addAllFilterGroupsInConfig>,
+): FilterState => {
+  return {
+    ...state,
+    allFilterGroupsInConfig: payload.filterGroups,
+  };
+};
+
 const updateFilterGroup = (
   state: FilterState,
   filterGroupId: string,
@@ -148,6 +158,7 @@ const onSetSingleFilterDisabled = (
 
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
+  on(FilterActions.addAllFilterGroupsInConfig, onAddAllFilterGroupsInConfig),
   on(FilterActions.addFilterGroup, onAddFilterGroup),
   on(FilterActions.removeFilterGroup, onRemoveFilterGroup),
   on(FilterActions.updateFilterGroup, onUpdateFilterGroup),

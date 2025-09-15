@@ -1,12 +1,10 @@
 import { Store } from '@ngrx/store';
-import { forkJoin, map, Observable, of, switchMap, take, takeUntil, first, BehaviorSubject, tap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import {
   AttributeFilterModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
-import { selectFilterGroups } from '../filter/state/filter.selectors';
-import { withLatestFrom } from 'rxjs/operators';
 import { updateFilterGroup } from '../filter/state/filter.actions';
 import { selectVisibleLayersWithServices } from '../map/state/map.selectors';
 
@@ -43,16 +41,10 @@ export class AttributeFilterService {
 
   public disableFiltersForMissingAttributes$(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
-  ): Observable<FilterGroupModel<AttributeFilterModel>[]> {
-    return this.store$.select(selectVisibleLayersWithServices)
+  ) {
+    this.store$.select(selectVisibleLayersWithServices)
       .pipe(
-        take(1),
-        tap(visibleLayers => {
-          const visibleLayerIds = visibleLayers.map(layer => layer.id);
-          const uncheckedLayerIds = filterGroups
-            .map(g => g.layerIds).flat().filter(id => !visibleLayerIds.includes(id));
-          this.checkLayersOnVisible(uncheckedLayerIds);
-        }),
+        // takeUntil(uncheckedLayersSubject$.pipe(first(layers => layers.length === 0))),
         switchMap(visibleLayers => {
           const visibleLayerIds = visibleLayers.map(layer => layer.id);
           return forkJoin(
@@ -76,56 +68,11 @@ export class AttributeFilterService {
             }),
           );
         }),
-      );
-  }
-
-  private checkLayersOnVisible(uncheckedLayerIds: string[]) {
-    const newUncheckedLayersSubject$ = new BehaviorSubject<string[]>(uncheckedLayerIds);
-    const uncheckedLayersSubject$ = new BehaviorSubject<string[]>(uncheckedLayerIds);
-
-    this.store$.select(selectVisibleLayersWithServices)
-      .pipe(
-        withLatestFrom(uncheckedLayersSubject$, this.store$.select(selectFilterGroups)),
-        takeUntil(uncheckedLayersSubject$.pipe(first(layers => layers.length === 0))),
-        switchMap(([ visibleLayers, uncheckedLayers, filterGroups ]) => {
-          const newVisibleLayerIds = visibleLayers.map(layer => layer.id).filter(id => uncheckedLayers.includes(id));
-          if (newVisibleLayerIds.length === 0) {
-            return of(null);
-          }
-          const affectedFilterGroups = filterGroups.filter(group =>
-            group.layerIds.some(layerId => newVisibleLayerIds.includes(layerId)));
-          const remainingUncheckedLayers = uncheckedLayers.filter(id => !newVisibleLayerIds.includes(id));
-          newUncheckedLayersSubject$.next(remainingUncheckedLayers);
-          return forkJoin(
-            affectedFilterGroups.map(group => {
-              if (group.type === FilterTypeEnum.ATTRIBUTE) {
-                return this.getAttributeNamesForLayers$(group.layerIds.filter(layerId => newVisibleLayerIds.includes(layerId))).pipe(
-                  take(1),
-                  map(attributeNames => ({
-                    ...group,
-                    filters: group.filters.map(filter => {
-                      return {
-                        ...filter,
-                        disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                        attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                      };
-                    }),
-                  })),
-                );
-              }
-              return of(group);
-            }),
-          );
-        }),
-      )
-      .subscribe(affectedGroups => {
-        if (affectedGroups) {
-          for (const group of affectedGroups) {
-            this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
-          }
+      ).subscribe(groups => {
+        for (const group of groups) {
+          this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
         }
-        uncheckedLayersSubject$.next(newUncheckedLayersSubject$.getValue());
-      });
+    });
   }
 
   public separateSubstringFiltersInCheckboxFilters(
