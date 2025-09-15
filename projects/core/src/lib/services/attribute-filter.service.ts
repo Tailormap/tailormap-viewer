@@ -19,7 +19,7 @@ export class AttributeFilterService {
 
 
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
-    // Get the attribute names that are in all layers
+    // Get only the attribute names that common to all layers
     return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId =>
@@ -32,11 +32,13 @@ export class AttributeFilterService {
           ),
         ),
       ),
-      map(attributeArrays => {
-        if (attributeArrays.length === 0) {
+      map(layerAttributeNames => {
+        if (layerAttributeNames.length === 0) {
           return [];
         }
-        return attributeArrays.reduce((acc, curr) => acc.filter(attr => curr.includes(attr)));
+        // return the attribute names of the first layer, filtered with only the attributes that are in all other layers
+        const [ firstLayer, ...remainingLayers ] = layerAttributeNames;
+        return firstLayer.filter(attribute => remainingLayers.every(otherLayer => otherLayer.includes(attribute)));
       }),
     );
   }
