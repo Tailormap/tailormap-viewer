@@ -1,10 +1,14 @@
 import { Store } from '@ngrx/store';
-import { forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, take, takeUntil, first, BehaviorSubject, tap } from 'rxjs';
 import {
   AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
+import { selectFilterGroups } from '../filter/state/filter.selectors';
+import { withLatestFrom } from 'rxjs/operators';
+import { updateFilterGroup } from '../filter/state/filter.actions';
+import { selectVisibleLayersWithServices } from '../map/state/map.selectors';
 import { FilterTypeHelper } from '../filter/helpers/filter-type.helper';
 import { ExtendedFilterGroupModel } from '../filter/models/extended-filter-group.model';
 
@@ -15,45 +19,115 @@ export class AttributeFilterService {
   private store$ = inject(Store);
   private describeAppLayerService = inject(DescribeAppLayerService);
 
+
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
+    // Get the attribute names that are in all layers
     return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId =>
         forkJoin(
-          layerIds.map(layerId =>
-            this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
-              map(layerDetails => layerDetails?.attributes?.map(attr => attr.name) || []),
-            ),
+          layerIds.map(layerId => {
+              return this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
+                map(layerDetails => layerDetails?.attributes?.map(attr => attr.name) || []),
+              );
+            },
           ),
         ),
       ),
-      map(attributeArrays => Array.from(new Set(attributeArrays.flat()))),
+      map(attributeArrays => {
+        if (attributeArrays.length === 0) {
+          return [];
+        }
+        return attributeArrays.reduce((acc, curr) => acc.filter(attr => curr.includes(attr)));
+      }),
     );
   }
 
   public disableFiltersForMissingAttributes$(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
   ): Observable<FilterGroupModel<AttributeFilterModel>[]> {
-    return forkJoin(
-      filterGroups.map(group => {
-        if (group.type === FilterTypeEnum.ATTRIBUTE) {
-          return this.getAttributeNamesForLayers$(group.layerIds).pipe(
-            take(1),
-            map(attributeNames => ({
-              ...group,
-              filters: group.filters.map(filter => {
-                return {
-                  ...filter,
-                  disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                  attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                };
-              }),
-            })),
+    return this.store$.select(selectVisibleLayersWithServices)
+      .pipe(
+        take(1),
+        tap(visibleLayers => {
+          const visibleLayerIds = visibleLayers.map(layer => layer.id);
+          const uncheckedLayerIds = filterGroups
+            .map(g => g.layerIds).flat().filter(id => !visibleLayerIds.includes(id));
+          this.checkLayersOnVisible(uncheckedLayerIds);
+        }),
+        switchMap(visibleLayers => {
+          const visibleLayerIds = visibleLayers.map(layer => layer.id);
+          return forkJoin(
+            filterGroups.map(group => {
+              if (group.type === FilterTypeEnum.ATTRIBUTE && group.layerIds.some(layerId => visibleLayerIds.includes(layerId))) {
+                return this.getAttributeNamesForLayers$(group.layerIds.filter(layerId => visibleLayerIds.includes(layerId))).pipe(
+                  take(1),
+                  map(attributeNames => ({
+                    ...group,
+                    filters: group.filters.map(filter => {
+                      return {
+                        ...filter,
+                        disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                        attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                      };
+                    }),
+                  })),
+                );
+              }
+              return of(group);
+            }),
           );
+        }),
+      );
+  }
+
+  private checkLayersOnVisible(uncheckedLayerIds: string[]) {
+    const newUncheckedLayersSubject$ = new BehaviorSubject<string[]>(uncheckedLayerIds);
+    const uncheckedLayersSubject$ = new BehaviorSubject<string[]>(uncheckedLayerIds);
+
+    this.store$.select(selectVisibleLayersWithServices)
+      .pipe(
+        withLatestFrom(uncheckedLayersSubject$, this.store$.select(selectFilterGroups)),
+        takeUntil(uncheckedLayersSubject$.pipe(first(layers => layers.length === 0))),
+        switchMap(([ visibleLayers, uncheckedLayers, filterGroups ]) => {
+          const newVisibleLayerIds = visibleLayers.map(layer => layer.id).filter(id => uncheckedLayers.includes(id));
+          if (newVisibleLayerIds.length === 0) {
+            return of(null);
+          }
+          const affectedFilterGroups = filterGroups.filter(group =>
+            group.layerIds.some(layerId => newVisibleLayerIds.includes(layerId)));
+          const remainingUncheckedLayers = uncheckedLayers.filter(id => !newVisibleLayerIds.includes(id));
+          newUncheckedLayersSubject$.next(remainingUncheckedLayers);
+          return forkJoin(
+            affectedFilterGroups.map(group => {
+              if (group.type === FilterTypeEnum.ATTRIBUTE) {
+                return this.getAttributeNamesForLayers$(group.layerIds.filter(layerId => newVisibleLayerIds.includes(layerId))).pipe(
+                  take(1),
+                  map(attributeNames => ({
+                    ...group,
+                    filters: group.filters.map(filter => {
+                      return {
+                        ...filter,
+                        disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                        attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                      };
+                    }),
+                  })),
+                );
+              }
+              return of(group);
+            }),
+          );
+        }),
+      )
+      .subscribe(affectedGroups => {
+        if (affectedGroups) {
+          for (const group of affectedGroups) {
+            this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
+          }
         }
-        return of(group);
-      }),
-    );
+        uncheckedLayersSubject$.next(newUncheckedLayersSubject$.getValue());
+      });
   }
 
   public separateSubstringFiltersInCheckboxFilters(
