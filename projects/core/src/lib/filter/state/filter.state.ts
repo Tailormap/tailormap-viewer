@@ -7,10 +7,10 @@ export interface FilterState {
   allFilterGroupsInConfig: FilterGroupModel[];
 
   // Validated filter groups for visible layers
-  filterGroups: FilterGroupModel[];
+  activeFilterGroups: FilterGroupModel[];
 }
 
 export const initialFilterState: FilterState = {
   allFilterGroupsInConfig: [],
-  filterGroups: [],
+  activeFilterGroups: [],
 };

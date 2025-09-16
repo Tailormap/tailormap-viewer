@@ -18,17 +18,17 @@ const updateFilterGroup = (
   filterGroupId: string,
   updateFn: (filterGroup: FilterGroupModel) => FilterGroupModel,
 ): FilterState => {
-  const idx = state.filterGroups.findIndex(fg => fg.id === filterGroupId);
+  const idx = state.activeFilterGroups.findIndex(fg => fg.id === filterGroupId);
   const idxInAllFilterGroups = state.allFilterGroupsInConfig.findIndex(fg => fg.id === filterGroupId);
   if (idx === -1 && idxInAllFilterGroups === -1) {
     return state;
   }
   const newFilterGroups = idx === -1
-    ? state.filterGroups
+    ? state.activeFilterGroups
     : [
-      ...state.filterGroups.slice(0, idx),
-      updateFn(state.filterGroups[idx]),
-      ...state.filterGroups.slice(idx + 1),
+      ...state.activeFilterGroups.slice(0, idx),
+      updateFn(state.activeFilterGroups[idx]),
+      ...state.activeFilterGroups.slice(idx + 1),
     ];
   const newAllFilterGroupsInConfig = idxInAllFilterGroups === -1
     ? state.allFilterGroupsInConfig
@@ -39,7 +39,7 @@ const updateFilterGroup = (
     ];
   return {
     ...state,
-    filterGroups: newFilterGroups,
+    activeFilterGroups: newFilterGroups,
     allFilterGroupsInConfig: newAllFilterGroupsInConfig,
   };
 };
@@ -48,13 +48,13 @@ const onAddFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.addFilterGroup>,
 ): FilterState => {
-  if (state.filterGroups.find(fg => fg.id === payload.filterGroup.id)) {
+  if (state.activeFilterGroups.find(fg => fg.id === payload.filterGroup.id)) {
     return state;
   }
   return {
     ...state,
-    filterGroups: [
-      ...state.filterGroups,
+    activeFilterGroups: [
+      ...state.activeFilterGroups,
       payload.filterGroup,
     ],
   };
@@ -64,15 +64,15 @@ const onRemoveFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.removeFilterGroup>,
 ): FilterState => {
-  const idx = state.filterGroups.findIndex(fg => fg.id === payload.filterGroupId);
+  const idx = state.activeFilterGroups.findIndex(fg => fg.id === payload.filterGroupId);
   if (idx === -1) {
     return state;
   }
   return {
     ...state,
-    filterGroups: [
-      ...state.filterGroups.slice(0, idx),
-      ...state.filterGroups.slice(idx + 1),
+    activeFilterGroups: [
+      ...state.activeFilterGroups.slice(0, idx),
+      ...state.activeFilterGroups.slice(idx + 1),
     ],
   };
 };
