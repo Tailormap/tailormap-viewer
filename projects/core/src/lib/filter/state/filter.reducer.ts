@@ -19,16 +19,28 @@ const updateFilterGroup = (
   updateFn: (filterGroup: FilterGroupModel) => FilterGroupModel,
 ): FilterState => {
   const idx = state.filterGroups.findIndex(fg => fg.id === filterGroupId);
-  if (idx === -1) {
+  const idxInAllFilterGroups = state.allFilterGroupsInConfig.findIndex(fg => fg.id === filterGroupId);
+  if (idx === -1 && idxInAllFilterGroups === -1) {
     return state;
   }
-  return {
-    ...state,
-    filterGroups: [
+  const newFilterGroups = idx === -1
+    ? state.filterGroups
+    : [
       ...state.filterGroups.slice(0, idx),
       updateFn(state.filterGroups[idx]),
       ...state.filterGroups.slice(idx + 1),
-    ],
+    ];
+  const newAllFilterGroupsInConfig = idxInAllFilterGroups === -1
+    ? state.allFilterGroupsInConfig
+    : [
+      ...state.allFilterGroupsInConfig.slice(0, idxInAllFilterGroups),
+      updateFn(state.allFilterGroupsInConfig[idxInAllFilterGroups]),
+      ...state.allFilterGroupsInConfig.slice(idxInAllFilterGroups + 1),
+    ];
+  return {
+    ...state,
+    filterGroups: newFilterGroups,
+    allFilterGroupsInConfig: newAllFilterGroupsInConfig,
   };
 };
 

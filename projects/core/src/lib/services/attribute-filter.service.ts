@@ -42,18 +42,18 @@ export class AttributeFilterService {
           const layerIds = Array.from(
             new Set(
               filterGroups.flatMap(group =>
-                group.layerIds.filter(id => visibleLayerIds.includes(id))
-              )
-            )
+                group.layerIds.filter(id => visibleLayerIds.includes(id)),
+              ),
+            ),
           );
           // get attribute names for all visible layers in filterGroups
           return forkJoin(
             layerIds.map(layerId =>
               this.getAttributeNamesForLayer$(layerId).pipe(
                 take(1),
-                map((attributeNames): [string, string[]] => [layerId, attributeNames]),
-              )
-            )
+                map((attributeNames): [string, string[]] => [ layerId, attributeNames ]),
+              ),
+            ),
           ).pipe(
             map(layerIdsWithListOfAttributeNames => new Map(layerIdsWithListOfAttributeNames)),
             // use map of layers with attribute names to filter out invisible layers and disable filters for missing attributes
@@ -65,7 +65,7 @@ export class AttributeFilterService {
                   layerIds: validLayerIds,
                   filters: group.filters.map((filter): AttributeFilterModel => {
                     const attributeExists = validLayerIds.every(layerId =>
-                      layerAttributesMap.get(layerId)?.includes(filter.attribute)
+                      layerAttributesMap.get(layerId)?.includes(filter.attribute),
                     );
                     return {
                       ...filter,
@@ -74,7 +74,7 @@ export class AttributeFilterService {
                     };
                   }),
                 };
-              })
+              }),
             ),
           );
         }),
