@@ -75,7 +75,7 @@ export class AttributeFilterService {
           );
         }),
         withLatestFrom(this.store$.select(selectFilterGroups)),
-      ).subscribe(([groups, visibleGroups]) => {
+      ).subscribe(([ groups, visibleGroups ]) => {
         const visibleGroupIds = visibleGroups.map(g => g.id);
         for (const group of groups) {
           if (visibleGroupIds.includes(group.id)) {
