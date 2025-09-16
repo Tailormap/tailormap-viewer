@@ -5,8 +5,10 @@ import {
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId } from '../state/core.selectors';
-import { updateFilterGroup } from '../filter/state/filter.actions';
+import { addFilterGroup, removeFilterGroup, updateFilterGroup } from '../filter/state/filter.actions';
 import { selectVisibleLayersWithServices } from '../map/state/map.selectors';
+import { withLatestFrom } from 'rxjs/operators';
+import { selectFilterGroups } from '../filter/state/filter.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,9 @@ export class AttributeFilterService {
 
   public getAttributeNamesForLayers$(layerIds: string[]): Observable<string[]> {
     // Get the attribute names that are in all layers
+    if (layerIds.length === 0) {
+      return of([]);
+    }
     return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId =>
@@ -39,40 +44,56 @@ export class AttributeFilterService {
     );
   }
 
-  public disableFiltersForMissingAttributes$(
+  public disableFiltersForMissingAttributes(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
   ) {
+    // For each filter group, check if the attributes exist in the visible layers,
+    // and add visible and validated filter groups to the filterGroups state
     this.store$.select(selectVisibleLayersWithServices)
       .pipe(
-        // takeUntil(uncheckedLayersSubject$.pipe(first(layers => layers.length === 0))),
         switchMap(visibleLayers => {
           const visibleLayerIds = visibleLayers.map(layer => layer.id);
           return forkJoin(
             filterGroups.map(group => {
-              if (group.type === FilterTypeEnum.ATTRIBUTE && group.layerIds.some(layerId => visibleLayerIds.includes(layerId))) {
-                return this.getAttributeNamesForLayers$(group.layerIds.filter(layerId => visibleLayerIds.includes(layerId))).pipe(
-                  take(1),
-                  map(attributeNames => ({
-                    ...group,
-                    filters: group.filters.map(filter => {
-                      return {
-                        ...filter,
-                        disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                        attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
-                      };
-                    }),
-                  })),
-                );
-              }
-              return of(group);
+              return this.getAttributeNamesForLayers$(group.layerIds.filter(layerId => visibleLayerIds.includes(layerId))).pipe(
+                take(1),
+                map(attributeNames => ({
+                  ...group,
+                  layerIds: group.layerIds.filter(layerId => visibleLayerIds.includes(layerId)),
+                  filters: group.filters.map(filter => {
+                    return {
+                      ...filter,
+                      disabled: filter.disabled || !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                      attributeNotFound: !attributeNames.includes((filter as AttributeFilterModel).attribute),
+                    };
+                  }),
+                })),
+              );
             }),
           );
         }),
-      ).subscribe(groups => {
+        withLatestFrom(this.store$.select(selectFilterGroups)),
+      ).subscribe(([groups, visibleGroups]) => {
+        const visibleGroupIds = visibleGroups.map(g => g.id);
         for (const group of groups) {
-          this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
+          if (visibleGroupIds.includes(group.id)) {
+            if (group.layerIds.length === 0) {
+              // remove filter group if no layers are visible
+              this.store$.dispatch(removeFilterGroup({ filterGroupId: group.id }));
+
+            } else if (visibleGroups.find(g => g.id === group.id)?.layerIds.length !== group.layerIds.length) {
+              // update filter group if the layerIds have changed
+              this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
+
+            }
+          } else {
+            if (group.layerIds.length > 0) {
+              // add filter group if it has visible layers
+              this.store$.dispatch(addFilterGroup({ filterGroup: group }));
+            }
+          }
         }
-    });
+      });
   }
 
   public separateSubstringFiltersInCheckboxFilters(

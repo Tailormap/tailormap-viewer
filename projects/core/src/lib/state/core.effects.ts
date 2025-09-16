@@ -44,7 +44,7 @@ export class CoreEffects {
       ofType(CoreActions.loadViewerSuccess),
       map(action => action.viewer.filterGroups || []),
       map(groups => this.attributeFilterService.separateSubstringFiltersInCheckboxFilters(groups)),
-      tap(groups => this.attributeFilterService.disableFiltersForMissingAttributes$(groups)),
+      tap(groups => this.attributeFilterService.disableFiltersForMissingAttributes(groups)),
       map(filterGroups => FilterActions.addAllFilterGroupsInConfig({ filterGroups })),
     );
   });
