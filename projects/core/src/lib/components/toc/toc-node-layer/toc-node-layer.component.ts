@@ -65,6 +65,9 @@ export class TocNodeLayerComponent {
     if (typeof node?.metadata?.maxScale === 'number') {
       scales.push(node?.metadata?.maxScale);
     }
+    if (scales.length === 0) {
+      return;
+    }
     const zoomToScale = Math.min(...scales);
     this.zoomToScale.emit(zoomToScale);
   }
