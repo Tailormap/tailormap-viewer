@@ -394,10 +394,6 @@
         <source>Stroke type</source>
         <target>Type streep</target>
       </trans-unit>
-      <trans-unit id="core.drawing.style-library" datatype="html">
-        <source>Style library</source>
-        <target>Stijlbibliotheek</target>
-      </trans-unit>
       <trans-unit id="core.drawing.symbol" datatype="html">
         <source>Symbol</source>
         <target>Symbool</target>
@@ -1090,6 +1086,10 @@
       <trans-unit id="core.toc.toggle-layers-on" datatype="html">
         <source>Toggle all layers on</source>
         <target>Alle lagen aanzetten</target>
+      </trans-unit>
+      <trans-unit id="core.toc.zoom-to-scale" datatype="html">
+        <source>Click to zoom in to make this layer visible</source>
+        <target>Klik om in te zoomen zodat deze laag zichtbaar wordt</target>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>

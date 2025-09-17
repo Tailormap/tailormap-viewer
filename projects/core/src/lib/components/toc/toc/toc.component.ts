@@ -134,4 +134,9 @@ export class TocComponent implements OnInit, OnDestroy {
     this.dragDropEnabled = !this.dragDropEnabled;
     this.treeDragDropService.setDragDropEnabled(this.dragDropEnabled);
   }
+
+  public zoomToScale(minScale: number) {
+    this.mapService.zoomToScale(minScale);
+  }
+
 }

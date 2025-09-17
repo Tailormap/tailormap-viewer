@@ -242,6 +242,10 @@ export class MapService {
       });
   }
 
+  public zoomToScale(scale: number) {
+    this.map.zoomToScale(scale);
+  }
+
   /**
    * Export the current map to an image.
    */
