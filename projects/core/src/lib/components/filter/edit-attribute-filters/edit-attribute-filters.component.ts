@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  SwitchFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  UpdateSliderFilterModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
@@ -27,13 +28,15 @@ export class EditAttributeFiltersComponent {
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
 
-  public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
+  public getSliderFilterConfiguration(filter: AttributeFilterModel): UpdateSliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
-    if (editConfiguration && editConfiguration.initialValue !== null) {
+    if (editConfiguration && filter.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 1) {
       editConfiguration.initialValue = Number(filter.value[0]);
-    } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
+    } else if (editConfiguration && filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 2) {
       editConfiguration.initialLowerValue = Number(filter.value[0]);
       editConfiguration.initialUpperValue = Number(filter.value[1]);
+    } else if (editConfiguration) {
+      editConfiguration.condition = filter.condition;
     }
     return editConfiguration;
   }
@@ -89,7 +92,7 @@ export class EditAttributeFiltersComponent {
     return filter.editConfiguration;
   }
 
-  public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
+  public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [`${$event}`],
@@ -99,7 +102,7 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateBetweenSliderFilterValues($event: { lower: number; upper: number }, filter: AttributeFilterModel) {
+  public updateBetweenSliderFilterValues($event: { lower: number | null; upper: number | null }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [ `${$event.lower}`, `${$event.upper}` ],
@@ -142,13 +145,13 @@ export class EditAttributeFiltersComponent {
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
     if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
       && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
-      return `${filter.attribute} ${filter.condition}`;
+      return `${filter.attributeAlias ?? filter.attribute} ${filter.condition}`;
     }
     const formattedValues = filter.value.map(value => {
       const num = Number(value);
       return isNaN(num) ? value : num.toPrecision(5);
     });
-    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
+    return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
@@ -217,8 +220,10 @@ export class EditAttributeFiltersComponent {
         );
       }),
     );
+  }
 
-
+  public isSliderFilterDisabled(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER && filter.value.length === 0;
   }
 
 }

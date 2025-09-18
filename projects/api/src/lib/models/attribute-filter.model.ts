@@ -15,4 +15,5 @@ export interface AttributeFilterModel extends BaseFilterModel {
   editConfiguration?: EditFilterConfigurationModel;
   attributeNotFound?: boolean;
   generatedByFilterId?: string;
+  attributeAlias?: string;
 }

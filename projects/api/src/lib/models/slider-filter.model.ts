@@ -9,11 +9,11 @@ export enum SliderFilterInputModeEnum {
 
 export interface SliderFilterModel {
   filterTool: FilterToolEnum.SLIDER;
-  initialValue?: number;
+  initialValue?: number | null;
   minimumValue: number;
   maximumValue: number;
-  initialLowerValue?: number;
-  initialUpperValue?: number;
+  initialLowerValue?: number | null;
+  initialUpperValue?: number | null;
   inputMode?: SliderFilterInputModeEnum;
   stepSize?: number;
 }
@@ -21,11 +21,11 @@ export interface SliderFilterModel {
 export interface UpdateSliderFilterModel {
   filterTool: FilterToolEnum.SLIDER;
   condition?: FilterConditionEnum;
-  initialValue?: number;
+  initialValue?: number | null;
   minimumValue: number;
   maximumValue: number;
-  initialLowerValue?: number;
-  initialUpperValue?: number;
+  initialLowerValue?: number | null;
+  initialUpperValue?: number | null;
   inputMode?: SliderFilterInputModeEnum;
   stepSize?: number;
 }

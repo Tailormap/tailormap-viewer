@@ -8,10 +8,15 @@ import { FilterListItemComponent } from '../filter-list-item/filter-list-item.co
 import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selectors';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
+import { AttributeFilterService } from '../../../services/attribute-filter.service';
+import { of } from 'rxjs';
 
 describe('FilterListComponent', () => {
 
   test('should render empty list', async () => {
+    const mockAttributeFilterService = {
+      addAttributeAliasesToFilters$: jest.fn().mockImplementation((filterGroups) => of(filterGroups)),
+    };
     await render(FilterListComponent, {
       imports: [ SharedImportsModule, MatIconTestingModule ],
       declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
@@ -29,6 +34,7 @@ describe('FilterListComponent', () => {
             },
           ],
         }),
+        { provide: AttributeFilterService, useValue: mockAttributeFilterService },
       ],
     });
     expect(screen.queryByText('Attribute filter')).not.toBeInTheDocument();
@@ -36,6 +42,9 @@ describe('FilterListComponent', () => {
   });
 
   test('should render list with filters', async () => {
+    const mockAttributeFilterService = {
+      addAttributeAliasesToFilters$: jest.fn().mockImplementation((filterGroups) => of(filterGroups)),
+    };
     const store = provideMockStore({
       initialState: {},
       selectors: [
@@ -48,7 +57,10 @@ describe('FilterListComponent', () => {
       ],
     });
     await render(FilterListComponent, {
-      providers: [store],
+      providers: [
+        store,
+        { provide: AttributeFilterService, useValue: mockAttributeFilterService },
+      ],
       declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
       imports: [ SharedImportsModule, MatIconTestingModule ],
     });
