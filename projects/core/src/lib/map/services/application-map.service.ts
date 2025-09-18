@@ -158,6 +158,8 @@ export class ApplicationMapService implements OnDestroy {
       url: extendedAppLayer.url || service.url,
       layerType: LayerTypesEnum.WMS,
       visible: extendedAppLayer.visible,
+      minScale: extendedAppLayer.minScale,
+      maxScale: extendedAppLayer.maxScale,
       // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
       crossOrigin: 'anonymous',
       opacity: extendedAppLayer.opacity,

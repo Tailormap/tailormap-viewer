@@ -394,10 +394,6 @@
         <source>Stroke type</source>
         <target>Strichart</target>
       </trans-unit>
-      <trans-unit id="core.drawing.style-library" datatype="html">
-        <source>Style library</source>
-        <target>Stilbibliothek</target>
-      </trans-unit>
       <trans-unit id="core.drawing.symbol" datatype="html">
         <source>Symbol</source>
         <target>Symbol</target>
@@ -1090,6 +1086,10 @@
       <trans-unit id="core.toc.toggle-layers-on" datatype="html">
         <source>Toggle all layers on</source>
         <target>Alle Ebenen einschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toc.zoom-to-scale" datatype="html">
+        <source>Click to zoom in to make this layer visible</source>
+        <target>Klicken Sie, um heranzuzoomen und diese Ebene sichtbar zu machen</target>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>

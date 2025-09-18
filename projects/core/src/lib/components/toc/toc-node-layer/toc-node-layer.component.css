@@ -34,9 +34,12 @@
   text-decoration: line-through;
 }
 
-.layer-3d-icon,
-.layer-filtered-icon {
+.icon {
   width: 18px;
   height: 18px;
   margin-right: 8px;
+}
+
+.not-visible-on-map .icon {
+  color: var(--text-color);
 }

@@ -5,7 +5,8 @@
     [in3D]="in3D()"
     [layersWithoutWebMercator]="layersWithoutWebMercator()"
     [tiles3DLayerIds]="tiles3DLayerIds()"
-  [filteredLayerIds]="filteredLayerIds()"></tm-toc-node-layer>
+    [filteredLayerIds]="filteredLayerIds()"
+    (zoomToScale)="zoomToScale($event)"></tm-toc-node-layer>
 </ng-template>
 
 @if (visible$ | async) {
