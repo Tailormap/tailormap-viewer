@@ -1,16 +1,16 @@
-import { FilterGroupModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 export const filterStateKey = 'filter';
 
 export interface FilterState {
   // All filter groups that are defined in the application config
-  allFilterGroupsInConfig: FilterGroupModel[];
+  configuredFilterGroups: FilterGroupModel<AttributeFilterModel>[];
 
-  // Validated filter groups for visible layers
-  activeFilterGroups: FilterGroupModel[];
+  // Validated filter groups in their current state, i.e. with changes from users
+  verifiedCurrentFilterGroups: FilterGroupModel[];
 }
 
 export const initialFilterState: FilterState = {
-  allFilterGroupsInConfig: [],
-  activeFilterGroups: [],
+  configuredFilterGroups: [],
+  verifiedCurrentFilterGroups: [],
 };

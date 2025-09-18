@@ -9,7 +9,7 @@ const onAddAllFilterGroupsInConfig = (
 ): FilterState => {
   return {
     ...state,
-    allFilterGroupsInConfig: payload.filterGroups,
+    configuredFilterGroups: payload.filterGroups,
   };
 };
 
@@ -18,29 +18,17 @@ const updateFilterGroup = (
   filterGroupId: string,
   updateFn: (filterGroup: FilterGroupModel) => FilterGroupModel,
 ): FilterState => {
-  const idx = state.activeFilterGroups.findIndex(fg => fg.id === filterGroupId);
-  const idxInAllFilterGroups = state.allFilterGroupsInConfig.findIndex(fg => fg.id === filterGroupId);
-  if (idx === -1 && idxInAllFilterGroups === -1) {
+  const idx = state.verifiedCurrentFilterGroups.findIndex(fg => fg.id === filterGroupId);
+  if (idx === -1) {
     return state;
   }
-  const newFilterGroups = idx === -1
-    ? state.activeFilterGroups
-    : [
-      ...state.activeFilterGroups.slice(0, idx),
-      updateFn(state.activeFilterGroups[idx]),
-      ...state.activeFilterGroups.slice(idx + 1),
-    ];
-  const newAllFilterGroupsInConfig = idxInAllFilterGroups === -1
-    ? state.allFilterGroupsInConfig
-    : [
-      ...state.allFilterGroupsInConfig.slice(0, idxInAllFilterGroups),
-      updateFn(state.allFilterGroupsInConfig[idxInAllFilterGroups]),
-      ...state.allFilterGroupsInConfig.slice(idxInAllFilterGroups + 1),
-    ];
   return {
     ...state,
-    activeFilterGroups: newFilterGroups,
-    allFilterGroupsInConfig: newAllFilterGroupsInConfig,
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups.slice(0, idx),
+      updateFn(state.verifiedCurrentFilterGroups[idx]),
+      ...state.verifiedCurrentFilterGroups.slice(idx + 1),
+    ],
   };
 };
 
@@ -48,13 +36,13 @@ const onAddFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.addFilterGroup>,
 ): FilterState => {
-  if (state.activeFilterGroups.find(fg => fg.id === payload.filterGroup.id)) {
+  if (state.verifiedCurrentFilterGroups.find(fg => fg.id === payload.filterGroup.id)) {
     return state;
   }
   return {
     ...state,
-    activeFilterGroups: [
-      ...state.activeFilterGroups,
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups,
       payload.filterGroup,
     ],
   };
@@ -64,15 +52,15 @@ const onRemoveFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.removeFilterGroup>,
 ): FilterState => {
-  const idx = state.activeFilterGroups.findIndex(fg => fg.id === payload.filterGroupId);
+  const idx = state.verifiedCurrentFilterGroups.findIndex(fg => fg.id === payload.filterGroupId);
   if (idx === -1) {
     return state;
   }
   return {
     ...state,
-    activeFilterGroups: [
-      ...state.activeFilterGroups.slice(0, idx),
-      ...state.activeFilterGroups.slice(idx + 1),
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups.slice(0, idx),
+      ...state.verifiedCurrentFilterGroups.slice(idx + 1),
     ],
   };
 };
@@ -168,6 +156,22 @@ const onSetSingleFilterDisabled = (
   });
 };
 
+const onAddLayerIdsToFilterGroup = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.addLayerIdsToFilterGroup>,
+): FilterState => {
+  return updateFilterGroup(state, payload.filterGroupId, fg => {
+    const newLayerIds = payload.layerIds.filter(id => !fg.layerIds.includes(id));
+    if (newLayerIds.length === 0) {
+      return fg;
+    }
+    return {
+      ...fg,
+      layerIds: [ ...fg.layerIds, ...newLayerIds ],
+    };
+  });
+};
+
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
   on(FilterActions.addAllFilterGroupsInConfig, onAddAllFilterGroupsInConfig),
@@ -179,5 +183,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.updateFilter, onUpdateFilter),
   on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
   on(FilterActions.setSingleFilterDisabled, onSetSingleFilterDisabled),
+  on(FilterActions.addLayerIdsToFilterGroup, onAddLayerIdsToFilterGroup),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);

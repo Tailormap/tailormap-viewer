@@ -3,7 +3,7 @@ import { SimpleAttributeFilterService } from './simple-attribute-filter.service'
 import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { filterStateKey } from '../state/filter.state';
-import { selectFilterGroups } from '../state/filter.selectors';
+import { selectActiveFilterGroups } from '../state/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
 import { filterReducer } from '../state/filter.reducer';
 
@@ -43,7 +43,7 @@ describe('SimpleAttributeFilterService', () => {
   test('should create filter', (done) => {
     const { service, store } = createService();
     service.setFilter('source', '1', createFilter());
-    store.select(selectFilterGroups).subscribe(filterGroups => {
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(1);
@@ -57,7 +57,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter());
     service.setFilter('source', '1', createFilter('attribute2'));
     service.setFilter('source', '1', createFilter('attribute', 'other_value'));
-    store.select(selectFilterGroups).subscribe(filterGroups => {
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(2);
@@ -78,7 +78,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter());
     // now remove that filter
     service.removeFilter('source', '1', 'attribute');
-    store.select(selectFilterGroups).subscribe(filterGroups => {
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(0);
       done();
     });
@@ -89,7 +89,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter());
     service.setFilter('source', '1', createFilter('attribute2'));
     service.removeFilter('source', '1', 'attribute');
-    store.select(selectFilterGroups).subscribe(filterGroups => {
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(1);
@@ -104,7 +104,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '2', createFilter());
     service.setFilter('source', '3', createFilter());
     service.removeFiltersForLayer('source', '2');
-    store.select(selectFilterGroups).subscribe(filterGroups => {
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(2);
       expect(filterGroups[0].layerIds).toEqual(['1']);
       expect(filterGroups[1].layerIds).toEqual(['3']);

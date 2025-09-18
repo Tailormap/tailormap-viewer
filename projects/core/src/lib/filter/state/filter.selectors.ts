@@ -1,7 +1,7 @@
 import  { FilterState, filterStateKey } from './filter.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CqlFilterHelper } from '../helpers/cql-filter.helper';
-import { selectLayersWithServices } from '../../map/state/map.selectors';
+import { selectLayersWithServices, selectVisibleLayersWithServices } from '../../map/state/map.selectors';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
@@ -12,17 +12,31 @@ import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
-export const selectAllFilterGroupsInConfig = createSelector(selectFilterState, state => state.allFilterGroupsInConfig);
+export const selectAllFilterGroupsInConfig = createSelector(selectFilterState, state => state.configuredFilterGroups);
 
-export const selectFilterGroups = createSelector(selectFilterState, state => state.activeFilterGroups);
+export const selectVerifiedCurrentFilterGroups = createSelector(selectFilterState, state => state.verifiedCurrentFilterGroups);
+
+export const selectActiveFilterGroups = createSelector(
+  selectVerifiedCurrentFilterGroups,
+  selectVisibleLayersWithServices,
+  (filterGroups, visibleLayers): FilterGroupModel[] => {
+    const visibleLayerIds = visibleLayers.map(layer => layer.id);
+    return filterGroups
+      .filter(group => group.layerIds.some(layerId => visibleLayerIds.includes(layerId)))
+      .map(group => ({
+        ...group,
+        layersIds: group.layerIds.filter(layerId => visibleLayerIds.includes(layerId)),
+      }));
+  },
+);
 
 export const selectFilterGroup = (source: string, layerId: string) => createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   groups => groups.find(group => group.source === source && group.layerIds.includes(layerId)),
 );
 
 export const selectFilterGroupForType = <T extends BaseFilterModel>(source: string, layerId: string, filterType: FilterTypeEnum) => createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   (groups): FilterGroupModel<T> | undefined => {
     const isOfType = (g: FilterGroupModel): g is FilterGroupModel<T> => g.type === filterType;
     const group = groups.find(g => g.source === source && g.layerIds.includes(layerId));
@@ -31,7 +45,7 @@ export const selectFilterGroupForType = <T extends BaseFilterModel>(source: stri
 );
 
 export const selectFilterGroupsWithLayers = createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   selectLayersWithServices,
   (groups, layers): ExtendedFilterGroupModel[] => groups.map(group => ({
     ...group,
@@ -42,7 +56,7 @@ export const selectFilterGroupsWithLayers = createSelector(
 );
 
 export const selectEnabledFilterGroups = createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   groups => groups.filter(group => !group.disabled),
 );
 
@@ -52,7 +66,7 @@ export const selectCQLFilters = createSelector(
 );
 
 export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   (groups): FilterGroupModel<SpatialFilterModel>[] => {
     return groups.filter(FilterTypeHelper.isSpatialFilterGroup)
       .filter(group => group.filters.length > 0 && group.filters[0].baseLayerId);

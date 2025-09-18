@@ -1,14 +1,14 @@
 import { Store } from '@ngrx/store';
-import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
+import { first, forkJoin, map, Observable, switchMap, take, withLatestFrom } from 'rxjs';
 import {
   AttributeFilterModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
-import { selectViewerId } from '../state/core.selectors';
-import { addFilterGroup, removeFilterGroup, updateFilterGroup } from '../filter/state/filter.actions';
+import { selectViewerId, selectViewerLoadingState } from '../state/core.selectors';
+import { addFilterGroup, addLayerIdsToFilterGroup, removeFilter } from '../filter/state/filter.actions';
 import { selectVisibleLayersWithServices } from '../map/state/map.selectors';
-import { withLatestFrom } from 'rxjs/operators';
-import { selectFilterGroups } from '../filter/state/filter.selectors';
+import { selectAllFilterGroupsInConfig, selectVerifiedCurrentFilterGroups } from '../filter/state/filter.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +17,14 @@ export class AttributeFilterService {
   private store$ = inject(Store);
   private describeAppLayerService = inject(DescribeAppLayerService);
 
+  public constructor() {
+    console.debug("AttributeFilterService initialized");
+    this.store$.select(selectViewerLoadingState).pipe(
+      first(status => status === LoadingStateEnum.LOADED),
+    ).subscribe(() => {
+      this.validateFilterGroups();
+    });
+  }
 
   public getAttributeNamesForLayer$(layerId: string): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(
@@ -29,77 +37,81 @@ export class AttributeFilterService {
     );
   }
 
-  public disableFiltersForMissingAttributes(
-    filterGroups: FilterGroupModel<AttributeFilterModel>[],
-  ) {
-    // For each filterGroup, check if the attributes exist in the visible layers,
-    // and add visible and validated filterGroups to the filterGroups state
-    this.store$.select(selectVisibleLayersWithServices)
-      .pipe(
-        switchMap(visibleLayers => {
-         // get all unique visible layerIds in filterGroups
-          const visibleLayerIds = visibleLayers.map(layer => layer.id);
-          const layerIds = Array.from(
-            new Set(
-              filterGroups.flatMap(group =>
-                group.layerIds.filter(id => visibleLayerIds.includes(id)),
-              ),
-            ),
-          );
-          // get attribute names for all visible layers in filterGroups
-          return forkJoin(
-            layerIds.map(layerId =>
-              this.getAttributeNamesForLayer$(layerId).pipe(
-                take(1),
-                map((attributeNames): [string, string[]] => [ layerId, attributeNames ]),
-              ),
-            ),
-          ).pipe(
-            map(layerIdsWithListOfAttributeNames => new Map(layerIdsWithListOfAttributeNames)),
-            // use map of layers with attribute names to filter out invisible layers and disable filters for missing attributes
-            map(layerAttributesMap =>
-              filterGroups.map((group): FilterGroupModel<AttributeFilterModel> => {
-                const validLayerIds = group.layerIds.filter(id => layerAttributesMap.has(id));
-                return {
-                  ...group,
-                  layerIds: validLayerIds,
-                  filters: group.filters.map((filter): AttributeFilterModel => {
-                    const attributeExists = validLayerIds.every(layerId =>
-                      layerAttributesMap.get(layerId)?.includes(filter.attribute),
-                    );
-                    return {
-                      ...filter,
-                      disabled: filter.disabled || !attributeExists,
-                      attributeNotFound: !attributeExists,
-                    };
-                  }),
-                };
-              }),
-            ),
-          );
-        }),
-        withLatestFrom(this.store$.select(selectFilterGroups)),
-      ).subscribe(([ groups, visibleGroups ]) => {
-      const visibleGroupIds = visibleGroups.map(g => g.id);
-      for (const group of groups) {
-        if (visibleGroupIds.includes(group.id)) {
-          if (group.layerIds.length === 0) {
-            // remove filter group if no layers are visible
-            this.store$.dispatch(removeFilterGroup({ filterGroupId: group.id }));
+  public getLayerIdsToAttributeNamesMap$(layerIds: string[]): Observable<Map<string, string[]>> {
+    return forkJoin(
+      layerIds.map(layerId =>
+        this.getAttributeNamesForLayer$(layerId).pipe(
+          take(1),
+          map((attributeNames): [string, string[]] => [ layerId, attributeNames ]),
+        ),
+      ),
+    ).pipe(
+      map(layerIdsWithListOfAttributeNames => new Map(layerIdsWithListOfAttributeNames)),
+    );
+  }
 
-          } else if (visibleGroups.find(g => g.id === group.id)?.layerIds.length !== group.layerIds.length) {
-            // update filter group if the layerIds have changed
-            this.store$.dispatch(updateFilterGroup({ filterGroup: group }));
-
+  public validateFilterGroups() {
+    this.store$.select(selectVisibleLayersWithServices).pipe(
+      withLatestFrom(this.store$.select(selectAllFilterGroupsInConfig)),
+      switchMap(([ visibleLayers, filterGroups ]) => {
+        const visibleLayerIds = visibleLayers.map(layer => layer.id);
+        const visibleLayerIdsInGroups = Array.from(
+          new Set(
+            filterGroups.flatMap(group =>
+              group.layerIds.filter(id => visibleLayerIds.includes(id)),
+            ),
+          ),
+        );
+        return this.getLayerIdsToAttributeNamesMap$(visibleLayerIdsInGroups).pipe(take(1));
+      }),
+      withLatestFrom(this.store$.select(selectAllFilterGroupsInConfig), this.store$.select(selectVerifiedCurrentFilterGroups)),
+    ).subscribe(([ layerIdsToAttributesMap, allFilterGroups, currentFilterGroups ]) => {
+      for (const configuredGroup of allFilterGroups) {
+        const currentGroup = currentFilterGroups.find(g => g.id === configuredGroup.id);
+        if (currentGroup?.layerIds.length === configuredGroup.layerIds.length) {
+          // skip groups that have been validated for all layerIds
+          continue;
+        }
+        const validatedFilterGroup = this.validateFilterGroup(layerIdsToAttributesMap, configuredGroup);
+        if (currentGroup) {
+          // Remove filters for missing attributes
+          const removedFilters = configuredGroup.filters
+            .filter(f => !validatedFilterGroup.filters.find(vf => vf.id === f.id));
+          for (const filter of removedFilters) {
+            this.store$.dispatch(removeFilter({ filterGroupId: currentGroup.id, filterId: filter.id }));
           }
-        } else {
-          if (group.layerIds.length > 0) {
-            // add filter group if it has visible layers
-            this.store$.dispatch(addFilterGroup({ filterGroup: group }));
+          // Add newly validated layerIds
+          const newlyValidatedLayerIds = validatedFilterGroup.layerIds
+            .filter(id => !currentGroup.layerIds.includes(id));
+          if (newlyValidatedLayerIds.length > 0) {
+            this.store$.dispatch(addLayerIdsToFilterGroup({ filterGroupId: currentGroup.id, layerIds: newlyValidatedLayerIds }));
           }
+        } else if (validatedFilterGroup.layerIds.length > 0 && validatedFilterGroup.filters.length > 0) {
+          // add filter group if not present and has visible layers and valid filters
+          this.store$.dispatch(addFilterGroup({ filterGroup: validatedFilterGroup }));
         }
       }
     });
+  }
+
+  private validateFilterGroup(
+    layerAttributesMap: Map<string, string[]>,
+    group: FilterGroupModel<AttributeFilterModel>,
+  ): FilterGroupModel<AttributeFilterModel> {
+    const activeLayerIds = group.layerIds.filter(id => layerAttributesMap.has(id));
+    return {
+      ...group,
+      layerIds: activeLayerIds,
+      filters: group.filters.filter(filter => {
+        const attributeExists = activeLayerIds.every(layerId =>
+          layerAttributesMap.get(layerId)?.includes(filter.attribute),
+        );
+        if (!attributeExists) {
+          console.error(`Attribute '${filter.attribute}' not found. Filter with id '${filter.id}' hidden.`);
+        }
+        return attributeExists;
+      }),
+    };
   }
 
   public separateSubstringFiltersInCheckboxFilters(

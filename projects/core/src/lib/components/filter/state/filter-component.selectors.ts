@@ -1,6 +1,6 @@
 import { FilterComponentState, filterComponentStateKey } from './filter-component.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { selectFilterGroups } from '../../../filter/state/filter.selectors';
+import { selectActiveFilterGroups } from '../../../filter/state/filter.selectors';
 import { FeatureModel, FilterTypeEnum, SpatialFilterGeometry } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
@@ -14,7 +14,7 @@ export const selectSelectedLayersCount = createSelector(selectSelectedLayers, se
 export const hasSelectedLayers = createSelector(selectSelectedLayersCount, selectedLayersCount => selectedLayersCount > 0);
 
 export const selectSelectedFilterGroup = createSelector(
-  selectFilterGroups,
+  selectActiveFilterGroups,
   selectSelectedFilterGroupId,
   (filterGroups, selectedFilterGroupId) => {
     return filterGroups.find(group => group.id === selectedFilterGroupId);
