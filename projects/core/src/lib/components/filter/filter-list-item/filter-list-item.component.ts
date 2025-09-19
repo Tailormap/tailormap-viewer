@@ -25,16 +25,7 @@ export class FilterListItemComponent {
     if (!filterGroup) {
       return;
     }
-    this.filter = {
-      ...filterGroup,
-      filters: filterGroup?.filters.filter(f => {
-        if (FilterTypeHelper.isAttributeFilter(f) && f.attributeNotFound) {
-          console.error(`Attribute '${f.attribute}' not found. Filter hidden and disabled.`);
-          return false;
-        }
-        return true;
-      }) ?? [],
-    };
+    this.filter = filterGroup;
     this.editableFilters = this.filter?.filters.filter((f): f is AttributeFilterModel =>
       FilterTypeHelper.isAttributeFilter(f) && (!!f.editConfiguration || !!f.generatedByFilterId)) ?? [];
   }

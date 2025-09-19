@@ -25,7 +25,7 @@ export const selectActiveFilterGroups = createSelector(
       .filter(group => group.layerIds.some(layerId => visibleLayerIds.includes(layerId)))
       .map(group => ({
         ...group,
-        layersIds: group.layerIds.filter(layerId => visibleLayerIds.includes(layerId)),
+        layerIds: group.layerIds.filter(layerId => visibleLayerIds.includes(layerId)),
       }));
   },
 );

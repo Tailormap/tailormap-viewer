@@ -18,7 +18,6 @@ export class AttributeFilterService {
   private describeAppLayerService = inject(DescribeAppLayerService);
 
   public constructor() {
-    console.debug("AttributeFilterService initialized");
     this.store$.select(selectViewerLoadingState).pipe(
       first(status => status === LoadingStateEnum.LOADED),
     ).subscribe(() => {
