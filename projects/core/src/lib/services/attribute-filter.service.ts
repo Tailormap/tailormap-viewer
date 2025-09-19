@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { first, forkJoin, map, Observable, switchMap, take, withLatestFrom } from 'rxjs';
 import {
-  AttributeFilterModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
+  AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { inject, Injectable } from '@angular/core';
 import { selectViewerId, selectViewerLoadingState } from '../state/core.selectors';
@@ -9,6 +9,8 @@ import { addFilterGroup, addLayerIdsToFilterGroup, removeFilter } from '../filte
 import { selectVisibleLayersWithServices } from '../map/state/map.selectors';
 import { selectAllFilterGroupsInConfig, selectVerifiedCurrentFilterGroups } from '../filter/state/filter.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { FilterTypeHelper } from '../filter/helpers/filter-type.helper';
+import { ExtendedFilterGroupModel } from '../filter/models/extended-filter-group.model';
 
 @Injectable({
   providedIn: 'root',
@@ -146,6 +148,69 @@ export class AttributeFilterService {
       return group;
     });
 
+  }
+
+  private getFeaturesColumnMetadataForLayer$(layerId: string): Observable<ColumnMetadataModel[]> {
+    return this.store$.select(selectViewerId).pipe(
+      take(1),
+      switchMap(applicationId =>
+        this.describeAppLayerService.getDescribeAppLayer$(applicationId, layerId).pipe(
+          map(layerDetails => layerDetails?.attributes.map(attribute => ({
+            name: attribute.name,
+            type: attribute.type,
+            alias: attribute.alias || undefined,
+          })) || []),
+        ),
+      ),
+    );
+  }
+
+  public addAttributeAliasesToFilters$(
+    filterGroups: ExtendedFilterGroupModel[],
+  ): Observable<ExtendedFilterGroupModel[]> {
+    // Collect unique layerIds from attribute filter groups
+    const layerIds = Array.from(
+      new Set(
+        filterGroups
+          .filter(FilterTypeHelper.isAttributeFilterGroup)
+          .map(group =>
+            group.layers.filter(layer => layer.visible).map(layer => layer.id)).flat(),
+      ),
+    );
+
+    return forkJoin(
+      layerIds.map(layerId =>
+        this.getFeaturesColumnMetadataForLayer$(layerId).pipe(take(1)),
+      ),
+    ).pipe(
+      map(metadataArrays => {
+        const metadataMap = new Map<string, ColumnMetadataModel[]>();
+        layerIds.forEach((layerId, idx) => {
+          metadataMap.set(layerId, metadataArrays[idx]);
+        });
+
+        return filterGroups.map(filterGroup => {
+          if (FilterTypeHelper.isAttributeFilterGroup(filterGroup)) {
+            const columnMetadata = metadataMap
+              .get(filterGroup.layerIds.find(layerId => metadataMap.has(layerId)) || filterGroup.layerIds[0]) || [];
+            return {
+              ...filterGroup,
+              filters: filterGroup.filters.map(filter => {
+                if (!FilterTypeHelper.isAttributeFilter(filter)) {
+                  return filter;
+                }
+                const column = columnMetadata.find(col => col.name === filter.attribute);
+                return {
+                  ...filter,
+                  attributeAlias: column?.alias,
+                };
+              }),
+            };
+          }
+          return filterGroup;
+        });
+      }),
+    );
   }
 
 }

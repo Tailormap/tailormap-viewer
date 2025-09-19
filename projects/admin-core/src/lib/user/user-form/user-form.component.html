@@ -4,7 +4,11 @@
       <mat-label i18n="@@admin-core.common.username">Username</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>
-    <tm-admin-password-field formControlName="password" label="Password" i18n-label="@@admin-core.common.password">
+    <tm-admin-password-field
+      formControlName="password"
+      label="Password"
+      i18n-label="@@admin-core.common.password"
+      [value]="userForm.get('password')?.value || null">
       @if (!userForm.get('password')?.valid && userForm.get('password')?.errors?.['minlength']) {
         <mat-error
         i18n="@@admin-core.users.password-short-error">Password shorter than {{userForm.get('password')?.errors?.['minlength'].requiredLength}}</mat-error>
@@ -14,7 +18,11 @@
         i18n="@@admin-core.users.password-too-easy-error">Password too short or too easily guessable</mat-error>
       }
     </tm-admin-password-field>
-    <tm-admin-password-field formControlName="confirmedPassword" label="Confirm password" i18n-label="@@admin-core.users.confirm-password">
+    <tm-admin-password-field
+      formControlName="confirmedPassword"
+      label="Confirm password"
+      i18n-label="@@admin-core.users.confirm-password"
+      [value]="userForm.get('confirmedPassword')?.value || null">
       @if (!userForm.valid && userForm.errors?.['matching']) {
         <mat-error
         i18n="@@admin-core.users.password-match-error">Passwords need to match</mat-error>
