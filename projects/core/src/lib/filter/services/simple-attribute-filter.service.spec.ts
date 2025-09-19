@@ -1,11 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { filterStateKey } from '../state/filter.state';
-import { selectActiveFilterGroups } from '../state/filter.selectors';
+import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../state/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
 import { filterReducer } from '../state/filter.reducer';
+import { addAppLayers } from '../../map/state/map.actions';
+import { mapStateKey } from '../../map/state/map.state';
+import { mapReducer } from '../../map/state/map.reducer';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -18,13 +21,13 @@ jest.mock('nanoid', () => ({
 const createService = () => {
   idCount = 0;
   TestBed.configureTestingModule({
-    imports: [StoreModule.forRoot({ [filterStateKey]: filterReducer })],
+    imports: [StoreModule.forRoot({ [filterStateKey]: filterReducer, [mapStateKey]: mapReducer })],
     providers: [SimpleAttributeFilterService],
   });
-  return {
-    service: TestBed.inject(SimpleAttributeFilterService),
-    store: TestBed.inject(Store),
-  };
+  const service = TestBed.inject(SimpleAttributeFilterService);
+  const store = TestBed.inject(Store);
+  addMockLayers(store); // Add mock layers to the state
+  return { service, store };
 };
 
 const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilterModel => ({
@@ -38,12 +41,52 @@ const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilter
   invertCondition: false,
 });
 
+const mockLayers: AppLayerModel[] = [
+  {
+    id: '1',
+    layerName: 'layer_1',
+    title: 'Layer 1',
+    serviceId: 'service-1',
+    visible: true,
+    hasAttributes: true,
+    editable: false,
+    opacity: 1,
+    searchIndex: null,
+  },
+  {
+    id: '2',
+    layerName: 'layer_2',
+    title: 'Layer 2',
+    serviceId: 'service-2',
+    visible: true,
+    hasAttributes: true,
+    editable: false,
+    opacity: 1,
+    searchIndex: null,
+  },
+  {
+    id: '3',
+    layerName: 'layer_3',
+    title: 'Layer 3',
+    serviceId: 'service-3',
+    visible: true,
+    hasAttributes: true,
+    editable: false,
+    opacity: 1,
+    searchIndex: null,
+  },
+];
+
+const addMockLayers = (store: Store) => {
+  store.dispatch(addAppLayers({ appLayers: mockLayers }));
+};
+
 describe('SimpleAttributeFilterService', () => {
 
   test('should create filter', (done) => {
     const { service, store } = createService();
     service.setFilter('source', '1', createFilter());
-    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
+    store.select(selectVerifiedCurrentFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(1);
       expect(filterGroups[0].id).toEqual('id-1');
       expect(filterGroups[0].filters.length).toEqual(1);
