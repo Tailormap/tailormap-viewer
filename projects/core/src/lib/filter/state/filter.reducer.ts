@@ -3,21 +3,31 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { FilterState, initialFilterState } from './filter.state';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 
+const onAddAllFilterGroupsInConfig = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.addAllFilterGroupsInConfig>,
+): FilterState => {
+  return {
+    ...state,
+    configuredFilterGroups: payload.filterGroups,
+  };
+};
+
 const updateFilterGroup = (
   state: FilterState,
   filterGroupId: string,
   updateFn: (filterGroup: FilterGroupModel) => FilterGroupModel,
 ): FilterState => {
-  const idx = state.filterGroups.findIndex(fg => fg.id === filterGroupId);
+  const idx = state.verifiedCurrentFilterGroups.findIndex(fg => fg.id === filterGroupId);
   if (idx === -1) {
     return state;
   }
   return {
     ...state,
-    filterGroups: [
-      ...state.filterGroups.slice(0, idx),
-      updateFn(state.filterGroups[idx]),
-      ...state.filterGroups.slice(idx + 1),
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups.slice(0, idx),
+      updateFn(state.verifiedCurrentFilterGroups[idx]),
+      ...state.verifiedCurrentFilterGroups.slice(idx + 1),
     ],
   };
 };
@@ -26,13 +36,13 @@ const onAddFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.addFilterGroup>,
 ): FilterState => {
-  if (state.filterGroups.find(fg => fg.id === payload.filterGroup.id)) {
+  if (state.verifiedCurrentFilterGroups.find(fg => fg.id === payload.filterGroup.id)) {
     return state;
   }
   return {
     ...state,
-    filterGroups: [
-      ...state.filterGroups,
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups,
       payload.filterGroup,
     ],
   };
@@ -42,15 +52,15 @@ const onRemoveFilterGroup = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.removeFilterGroup>,
 ): FilterState => {
-  const idx = state.filterGroups.findIndex(fg => fg.id === payload.filterGroupId);
+  const idx = state.verifiedCurrentFilterGroups.findIndex(fg => fg.id === payload.filterGroupId);
   if (idx === -1) {
     return state;
   }
   return {
     ...state,
-    filterGroups: [
-      ...state.filterGroups.slice(0, idx),
-      ...state.filterGroups.slice(idx + 1),
+    verifiedCurrentFilterGroups: [
+      ...state.verifiedCurrentFilterGroups.slice(0, idx),
+      ...state.verifiedCurrentFilterGroups.slice(idx + 1),
     ],
   };
 };
@@ -146,8 +156,25 @@ const onSetSingleFilterDisabled = (
   });
 };
 
+const onAddLayerIdsToFilterGroup = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.addLayerIdsToFilterGroup>,
+): FilterState => {
+  return updateFilterGroup(state, payload.filterGroupId, fg => {
+    const newLayerIds = payload.layerIds.filter(id => !fg.layerIds.includes(id));
+    if (newLayerIds.length === 0) {
+      return fg;
+    }
+    return {
+      ...fg,
+      layerIds: [ ...fg.layerIds, ...newLayerIds ],
+    };
+  });
+};
+
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
+  on(FilterActions.addAllFilterGroupsInConfig, onAddAllFilterGroupsInConfig),
   on(FilterActions.addFilterGroup, onAddFilterGroup),
   on(FilterActions.removeFilterGroup, onRemoveFilterGroup),
   on(FilterActions.updateFilterGroup, onUpdateFilterGroup),
@@ -156,5 +183,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.updateFilter, onUpdateFilter),
   on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
   on(FilterActions.setSingleFilterDisabled, onSetSingleFilterDisabled),
+  on(FilterActions.addLayerIdsToFilterGroup, onAddLayerIdsToFilterGroup),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);
