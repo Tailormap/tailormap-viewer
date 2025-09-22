@@ -613,6 +613,10 @@
         <source>Allow access from:</source>
         <target>Toegang toestaan van:</target>
       </trans-unit>
+      <trans-unit id="admin-core.authorizations.allow-access-from-logged-in-inherited" datatype="html">
+        <source>Allow access from: Logged in (inherited)</source>
+        <target>Toegang toestaan van: Ingelogd (overgeërfd)</target>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
         <target>Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
@@ -654,8 +658,8 @@
         <target>(overgeërfd)</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.read" datatype="html">
-        <source>Read</source>
-        <target>Lezen</target>
+        <source>Allow</source>
+        <target>Toestaan</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
