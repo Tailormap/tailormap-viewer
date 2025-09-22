@@ -43,7 +43,7 @@
           <td class="subheader" mat-cell *matCellDef="let rule" colspan="3">{{rule.headerText}}</td>
         </ng-container>
         <ng-container matColumnDef="read">
-          <th mat-header-cell i18n="@@admin-core.authorizations.read" *matHeaderCellDef>Read</th>
+          <th mat-header-cell i18n="@@admin-core.authorizations.read" *matHeaderCellDef>Allow</th>
           <td mat-cell *matCellDef="let rule">
             <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
           </td>

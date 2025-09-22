@@ -614,6 +614,10 @@
         <source>Allow access from:</source>
         <target>Zugriff erlauben von:</target>
       </trans-unit>
+      <trans-unit id="admin-core.authorizations.allow-access-from-logged-in-inherited" datatype="html">
+        <source>Allow access from: Logged in (inherited)</source>
+        <target>Zugriff erlauben von: Eingelogd (vererbt)</target>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
         <target>Auf <x id="PH" equiv-text="this.selfType"/> konfiguriert</target>
@@ -655,8 +659,8 @@
         <target>(vererbt)</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.read" datatype="html">
-        <source>Read</source>
-        <target>Lesen</target>
+        <source>Allow</source>
+        <target>Gestatten</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
