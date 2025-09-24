@@ -4,6 +4,11 @@ import { AttributeFilterModel } from '@tailormap-viewer/api';
 
 const filterActionsPrefix = '[Filter]';
 
+export const addAllFilterGroupsInConfig = createAction(
+  `${filterActionsPrefix} Add All Filter Groups In Config`,
+  props<{ filterGroups: FilterGroupModel<AttributeFilterModel>[] }>(),
+);
+
 export const addFilterGroup = createAction(
   `${filterActionsPrefix} Add Filter Group`,
   props<{ filterGroup: FilterGroupModel }>(),
@@ -42,4 +47,9 @@ export const toggleFilterDisabled = createAction(
 export const setSingleFilterDisabled = createAction(
   `${filterActionsPrefix} Toggle Single Filter Disabled`,
   props<{ filterGroupId: string; filterId: string; disabled: boolean }>(),
+);
+
+export const addLayerIdsToFilterGroup = createAction(
+  `${filterActionsPrefix} Add Layer Ids To Filter Group`,
+  props<{ filterGroupId: string; layerIds: string[] }>(),
 );
