@@ -233,7 +233,11 @@ export class DrawingService {
     this.drawingResetCalled.next(null);
   }
 
-  public setPredefinedStyle(style: DrawingFeatureModelAttributes) {
+  public setPredefinedStyle(style: DrawingFeatureModelAttributes | null) {
+    if (style == null) {
+      this.enableSelectAndModify();
+      return;
+    }
     this.predefinedStyleSelected.next(style.style);
     this.style.set({
       ...DrawingHelper.getDefaultStyle(),
