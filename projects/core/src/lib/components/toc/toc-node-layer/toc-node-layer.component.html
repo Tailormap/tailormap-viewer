@@ -6,8 +6,17 @@
     <div class="tree-node__label">
       <span class="tree-node__label-content">{{node.label}}</span>
     </div>
+    @if (!isInScale() && node.checked) {
+      <mat-icon class="icon"
+                (click)="zoomToLayer($event, node)"
+                svgIcon="zoom_to_scale"
+                tmTooltip="Click to zoom in to make this layer visible"
+                i18n-tmTooltip="@@core.toc.zoom-to-scale"
+                matListItemMeta>
+      </mat-icon>
+    }
     @if (isLayerHiddenIn2d()) {
-      <mat-icon class="layer-3d-icon"
+      <mat-icon class="icon"
                 svgIcon="tools_3d"
                 tmTooltip="Switch to 3D to see this layer"
                 i18n-tmTooltip="@@core.toc.3d-layer"
@@ -15,7 +24,7 @@
       </mat-icon>
     }
     @if (isLayerFiltered()) {
-      <mat-icon class="layer-filtered-icon"
+      <mat-icon class="icon"
                 svgIcon="components_filter"
                 tmTooltip="A filter is applied to this layer"
                 i18n-tmTooltip=":@@core.toc.filtered-layer"

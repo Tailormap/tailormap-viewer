@@ -23,8 +23,8 @@ import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
-import { OpenLayersHelper } from './helpers/open-layers.helper';
 import { CesiumManager } from './cesium-map/cesium-manager';
+import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -173,6 +173,19 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public zoomToScale(scale: number) {
+    this.executeMapAction(olMap => {
+      const view = olMap.getView();
+      const resolution = OlMapScaleHelper.getResolutionForScale(view.getProjection(), scale);
+      if (resolution) {
+        const zoom = view.getZoomForResolution(resolution);
+        if (zoom) {
+          view.setZoom(zoom);
+        }
+      }
+    });
+  }
+
   private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {
     if (olFeatures.length === 0) {
       return;
@@ -288,7 +301,7 @@ export class OpenLayersMap implements MapViewerModel {
       .pipe(
         map(olMap => {
           const view = olMap.getView();
-          const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(view);
+          const { scale, resolution } = OlMapScaleHelper.getResolutionAndScale(view);
           return {
             zoomLevel: view.getZoom() || 0,
             minZoomLevel: view.getMinZoom() || 0,
