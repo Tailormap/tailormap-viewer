@@ -1,23 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
-  selectEditCreateNewFeatureActive,
-  selectEditDialogCollapsed,
-  selectEditDialogVisible,
-  selectEditFeatures,
-  selectEditMapCoordinates,
-  selectLoadingEditFeatures,
-  selectSelectedEditFeature,
+  selectEditCreateNewFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
+  selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
-import {
-  editNewlyCreatedFeature,
-  expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
-} from '../state/edit.actions';
-import {
-  BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
-} from '@tailormap-viewer/api';
+import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
+import { BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';

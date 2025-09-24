@@ -9,7 +9,7 @@ const editActionsPrefix = '[Edit]';
 
 export const setEditActive = createAction(
   `${editActionsPrefix} Set Active`,
-  props<{ active: boolean }>(),
+  props<{ active: boolean; openedFromFeatureInfo?: boolean }>(),
 );
 
 export const setEditCreateNewFeatureActive = createAction(

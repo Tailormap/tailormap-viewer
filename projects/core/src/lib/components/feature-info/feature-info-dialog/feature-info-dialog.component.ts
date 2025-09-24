@@ -156,7 +156,7 @@ export class FeatureInfoDialogComponent {
   }
 
   public editFeature() {
-    this.store$.dispatch(setEditActive({ active: true }));
+    this.store$.dispatch(setEditActive({ active: true, openedFromFeatureInfo: true }));
     this.store$.select(selectCurrentFeatureForEdit)
       .pipe(take(1))
       .subscribe(featureWithMetadata => {
