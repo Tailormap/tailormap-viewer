@@ -13,7 +13,7 @@ import { FeatureInfoService } from '../feature-info.service';
 import {
   select3dTilesLayers, selectIn3dView, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
-import { take } from 'rxjs/operators';
+import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
 
 @Component({
@@ -59,12 +59,12 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe();
 
-    combineLatest([
-      this.store$.select(selectFeatureInfoFeatures),
-      this.featureUpdatedService.featureUpdated$,
-    ])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(([ features, updatedFeature ]) => {
+    this.featureUpdatedService.featureUpdated$
+      .pipe(
+        takeUntil(this.destroyed),
+        withLatestFrom(this.store$.select(selectFeatureInfoFeatures)),
+      )
+      .subscribe(([ updatedFeature, features ]) => {
         const updatedFeatureInFeatureInfo = features.find(f => f.__fid === updatedFeature.featureId);
         if (updatedFeatureInFeatureInfo) {
           this.featureInfoService.updateSingleFeature(updatedFeatureInFeatureInfo.__fid, updatedFeatureInFeatureInfo.layerId);

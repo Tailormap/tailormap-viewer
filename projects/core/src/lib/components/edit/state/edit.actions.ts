@@ -9,7 +9,7 @@ const editActionsPrefix = '[Edit]';
 
 export const setEditActive = createAction(
   `${editActionsPrefix} Set Active`,
-  props<{ active: boolean; openedFromFeatureInfo?: boolean }>(),
+  props<{ active: boolean }>(),
 );
 
 export const setEditCreateNewFeatureActive = createAction(
@@ -44,7 +44,7 @@ export const setSelectedEditFeature = createAction(
 
 export const setLoadedEditFeature = createAction(
   `${editActionsPrefix} Set Loaded Edit Feature`,
-  props<{ feature: FeatureInfoFeatureModel; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+  props<{ feature: FeatureInfoFeatureModel; columnMetadata: FeatureInfoColumnMetadataModel[]; openedFromFeatureInfo?: boolean }>(),
 );
 
 export const showEditDialog = createAction(`${editActionsPrefix} Show Edit Dialog`);
