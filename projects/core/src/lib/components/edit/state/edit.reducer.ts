@@ -14,6 +14,7 @@ const onSetIsActive = (
   isCreateNewFeatureActive: payload.active ? state.isCreateNewFeatureActive : false,
   dialogVisible: false,
   selectedFeature: null,
+  openedFromFeatureInfo: false,
 });
 
 const onSetSelectedLayer = (

@@ -124,6 +124,12 @@ export class EditDialogComponent {
 
   public closeDialog() {
     this.store$.dispatch(hideEditDialog());
+    this.store$.select(selectEditOpenedFromFeatureInfo).pipe(take(1)).subscribe(openedFromFeatureInfo => {
+      if (openedFromFeatureInfo) {
+        this.store$.dispatch(setEditActive({ active: false }));
+        this.store$.dispatch(reopenFeatureInfoDialog());
+      }
+    });
   }
 
   public expandCollapseDialog() {
@@ -226,11 +232,16 @@ export class EditDialogComponent {
             }),
           );
         }),
+        withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
-      .subscribe(succes => {
-        if (succes) {
+      .subscribe(([ success, openedFromFeatureInfo ]) => {
+        if (success) {
           this.featureUpdatedService.updatedFeature(layerId, featureId);
           this.closeDialog();
+          if (openedFromFeatureInfo) {
+            this.store$.dispatch(setEditActive({ active: false }));
+            this.store$.dispatch(reopenFeatureInfoDialog());
+          }
         }
         this.removingFeature.set(false);
       });
