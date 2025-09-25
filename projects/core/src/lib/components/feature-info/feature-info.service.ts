@@ -207,6 +207,17 @@ export class FeatureInfoService {
           layerId,
           __fid: featureId,
         })),
+        catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
+          const error = response.error?.message ? response.error.message : null;
+          return of({
+            features: [],
+            columnMetadata: [],
+            template: null,
+            layerId,
+            error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
+          });
+        }),
+        take(1),
       ).subscribe(featureInfoResponse => {
         if (featureInfoResponse.features.length === 1) {
           const feature = featureInfoResponse.features[0];
