@@ -3,7 +3,9 @@ import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapServ
 import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
-import { selectCurrentlySelectedFeatureGeometry, selectLoadingFeatureInfo, selectMapCoordinates } from '../state/feature-info.selectors';
+import {
+  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoFeatures, selectLoadingFeatureInfo, selectMapCoordinates,
+} from '../state/feature-info.selectors';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
@@ -12,6 +14,7 @@ import {
   select3dTilesLayers, selectIn3dView, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../../map/state/map.selectors';
 import { take } from 'rxjs/operators';
+import { FeatureUpdatedService } from '../../../services';
 
 @Component({
   selector: 'tm-feature-info',
@@ -24,6 +27,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private featureInfoService = inject(FeatureInfoService);
   private store$ = inject(Store);
+  private featureUpdatedService = inject(FeatureUpdatedService);
 
 
   private destroyed = new Subject();
@@ -54,6 +58,19 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     )
       .pipe(takeUntil(this.destroyed))
       .subscribe();
+
+    combineLatest([
+      this.store$.select(selectFeatureInfoFeatures),
+      this.featureUpdatedService.featureUpdated$,
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([ features, updatedFeature ]) => {
+        const updatedFeatureInFeatureInfo = features.find(f => f.__fid === updatedFeature.featureId);
+        if (updatedFeatureInFeatureInfo) {
+          this.featureInfoService.updateSingleFeature(updatedFeatureInFeatureInfo.__fid, updatedFeatureInFeatureInfo.layerId);
+        }
+      });
+
   }
 
   public ngOnDestroy() {

@@ -6,7 +6,7 @@ import {
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
-import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, updateEditFeature } from '../state/edit.actions';
+import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
 import { BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
@@ -15,8 +15,9 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
-import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
+import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -148,12 +149,17 @@ export class EditDialogComponent {
             attributes: updatedFeature,
           });
         }),
+        withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
-      .subscribe(feature => {
+      .subscribe(([ feature, openedFromFeatureInfo ]) => {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
           this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
           this.resetChanges();
+          if (openedFromFeatureInfo) {
+            this.store$.dispatch(setEditActive({ active: false }));
+            this.store$.dispatch(reopenFeatureInfoDialog());
+          }
         }
         this.creatingSavingFeature.set(false);
       });

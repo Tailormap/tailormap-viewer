@@ -4,7 +4,7 @@ import {
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
-import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, take, tap } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, switchMap, take, tap } from 'rxjs';
 import { FeatureInfoResponseModel } from './models/feature-info-response.model';
 import {
   selectEditableLayers, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
@@ -14,7 +14,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { loadFeatureInfo } from './state/feature-info.actions';
+import { loadFeatureInfo, updateFeatureInFeatureInfo } from './state/feature-info.actions';
 import { FeatureInfoFeatureModel } from './models/feature-info-feature.model';
 
 @Injectable({
@@ -195,6 +195,25 @@ export class FeatureInfoService {
       columnMetadata: cesiumFeatureInfo.columnMetadata,
       layerId: cesiumFeatureInfo.layerId,
     };
+
+  }
+
+  public updateSingleFeature(featureId: string, layerId: string): void {
+    this.store$.select(selectViewerId)
+      .pipe(
+        take(1),
+        switchMap(viewerId => this.apiService.getFeatures$({
+          applicationId: viewerId || '',
+          layerId,
+          __fid: featureId,
+        })),
+      ).subscribe(featureInfoResponse => {
+        if (featureInfoResponse.features.length === 1) {
+          const feature = featureInfoResponse.features[0];
+          const featureWithLayerId: FeatureInfoFeatureModel = { ...feature, layerId };
+          this.store$.dispatch(updateFeatureInFeatureInfo({ feature: featureWithLayerId }));
+        }
+    });
 
   }
 }
