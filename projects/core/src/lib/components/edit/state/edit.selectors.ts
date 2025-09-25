@@ -27,8 +27,9 @@ export const selectEditOpenedFromFeatureInfo = createSelector(selectEditState, (
 export const selectEditActiveWithSelectedLayer = createSelector(
   selectEditActive,
   selectSelectedEditLayer,
-  (isActive, selectedLayer) => {
-    return isActive && !!selectedLayer;
+  selectEditOpenedFromFeatureInfo,
+  (isActive, selectedLayer, editOpenedFromFeatureInfo) => {
+    return (isActive || editOpenedFromFeatureInfo) && !!selectedLayer;
   });
 
 export const selectEditStatus = createSelector(
