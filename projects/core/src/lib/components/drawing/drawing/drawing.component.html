@@ -72,7 +72,7 @@
               (click)="draw(drawingTypes.POLYGON)">
         <mat-icon svgIcon="tools_draw_polygon"></mat-icon>
       </button>
-      <button [class.button--active]="activeTool === 'SQUARE'"
+      <button [class.button--active]="activeTool === 'SQUARE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE'"
               i18n-tmTooltip="@@core.draw.draw-square"
               tmTooltip="Draw square"
               mat-stroked-button

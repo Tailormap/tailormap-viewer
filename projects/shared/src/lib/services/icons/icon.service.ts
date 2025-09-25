@@ -18,7 +18,7 @@ export class IconService {
     'drag', 'resize', 'chevron_bottom', 'chevron_left', 'chevron_right', 'chevron_top',
     'close', 'minimize', 'drop_down', 'drop_top', 'search', 'copy', 'menu',
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
-    'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'coordinates',
+    'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'zoom_to_scale', 'coordinates',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
     'check', 'check_all', 'uncheck_all', 'edit', 'edit_square', 'info', 'reset', 'reorder', 'location_searching',
     'visibility_off', 'visibility', 'my_location', 'key', 'settings', 'fullscreen', 'fullscreen_exit', 'show_position', 'map',
