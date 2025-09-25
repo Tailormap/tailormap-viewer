@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, HostListener, ViewContainerRef, viewChild, effect,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -162,7 +162,11 @@ export class DrawingComponent implements OnInit, OnDestroy {
       .subscribe(feature => this.onFeatureSelected(feature));
     this.drawingService.predefinedStyleSelected$
       .pipe(takeUntil(this.destroyed))
-      .subscribe(() => this.store$.dispatch(setSelectedFeature({ fid: null })));
+      .subscribe((style) => {
+        if (style) {
+          this.store$.dispatch(setSelectedFeature({ fid: null }));
+        }
+      });
 
     this.openDrawingPanelIfConfigured();
   }
@@ -188,20 +192,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
     }
   }
 
-  private resetBeforeDrawing() {
-    const defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
-      description: undefined,
-      secondaryStroke: undefined,
-      tertiaryStroke: undefined,
-      dashOffset: 0,
-      strokeOffset: 0,
-    };
-    DrawingHelper.updateDefaultStyle(defaultNonUserEditableStyle);
-    this.drawingService.resetBeforeDrawing();
-  }
-
   public draw(type: DrawingFeatureTypeEnum) {
-    this.resetBeforeDrawing();
+    this.drawingService.resetBeforeDrawing(type);
     if (this.activeTool !== type) {
       this.drawingService.toggle(type);
     }
@@ -344,7 +336,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawRectangle() {
-    this.resetBeforeDrawing();
+    this.drawingService.resetBeforeDrawing(DrawingFeatureTypeEnum.RECTANGLE);
     const customRectangleWidth = this.drawingService.customRectangleWidth();
     const customRectangleLength = this.drawingService.customRectangleLength();
     if (customRectangleWidth !== null && customRectangleWidth >= this.SIZE_MAX && customRectangleWidth <= this.SIZE_MIN
@@ -374,7 +366,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawCircle() {
-    this.resetBeforeDrawing();
+    this.drawingService.resetBeforeDrawing(DrawingFeatureTypeEnum.CIRCLE);
     const customCircleRadius = this.drawingService.customCircleRadius();
     if (customCircleRadius !== null && customCircleRadius >= this.SIZE_MAX && customCircleRadius <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS) {
@@ -401,7 +393,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   public drawSquare() {
-    this.resetBeforeDrawing();
+    this.drawingService.resetBeforeDrawing(DrawingFeatureTypeEnum.SQUARE);
     const customSquareLength = this.drawingService.customSquareLength();
     if (customSquareLength !== null && customSquareLength >= this.SIZE_MAX && customSquareLength <= this.SIZE_MIN) {
       if (this.activeTool !== DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH) {
