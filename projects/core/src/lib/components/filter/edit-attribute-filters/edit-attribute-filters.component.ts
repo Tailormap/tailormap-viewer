@@ -152,7 +152,7 @@ export class EditAttributeFiltersComponent {
       if (isNaN(num)) {
         return value;
       } else {
-        return num.toString().length <= 5 ? num.toString() : num.toPrecision(5);
+        return new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(num);
       }
     });
     return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
