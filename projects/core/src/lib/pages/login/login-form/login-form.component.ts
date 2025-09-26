@@ -46,6 +46,7 @@ export class LoginFormComponent {
 
   @Input()
   public set loginConfiguration(loginConfiguration: LoginConfigurationModel | null) {
+    console.debug("Setting login configuration", loginConfiguration);
     this._loginConfiguration = loginConfiguration;
     this.hasSSOButtons = (loginConfiguration?.ssoLinks || [])
       .filter(l => l.showForViewer)

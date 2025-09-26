@@ -17,6 +17,19 @@
     </div>
   }
   @if (loginConfiguration?.hideLoginForm !== true) {
+    @if (hasSSOButtons) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Tailormap account</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+      </mat-expansion-panel>
+    } @else {
+      <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+    }
+  }
+
+  <ng-template #loginFormTemplate>
     <div class="login-form__body">
       @if (hasSSOButtons) {
         <div class="section-title" i18n="@@shared.login-form.tm-title">Login with your Tailormap account</div>
@@ -53,5 +66,8 @@
         }
       </button>
     </div>
-  }
+  </ng-template>
+
 </div>
+
+
