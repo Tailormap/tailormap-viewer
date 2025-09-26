@@ -22,12 +22,14 @@ export const selectEditDialogCollapsed = createSelector(selectEditState, (state)
 export const selectEditFeatures = createSelector(selectEditState, (state): FeatureInfoFeatureModel[] => state.features);
 export const selectEditFeatureColumnMetadata = createSelector(selectEditState, (state): FeatureInfoColumnMetadataModel[] => state.columnMetadata);
 export const selectSelectedEditFeatureId = createSelector(selectEditState, (state): string | null => state.selectedFeature);
+export const selectEditOpenedFromFeatureInfo = createSelector(selectEditState, (state): boolean => !!state.openedFromFeatureInfo);
 
 export const selectEditActiveWithSelectedLayer = createSelector(
   selectEditActive,
   selectSelectedEditLayer,
-  (isActive, selectedLayer) => {
-    return isActive && !!selectedLayer;
+  selectEditOpenedFromFeatureInfo,
+  (isActive, selectedLayer, editOpenedFromFeatureInfo) => {
+    return (isActive || editOpenedFromFeatureInfo) && !!selectedLayer;
   });
 
 export const selectEditStatus = createSelector(
