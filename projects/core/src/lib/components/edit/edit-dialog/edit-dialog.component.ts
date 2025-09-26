@@ -1,23 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
-  selectEditCreateNewFeatureActive,
-  selectEditDialogCollapsed,
-  selectEditDialogVisible,
-  selectEditFeatures,
-  selectEditMapCoordinates,
-  selectLoadingEditFeatures,
-  selectSelectedEditFeature,
+  selectEditCreateNewFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
+  selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
-import {
-  editNewlyCreatedFeature,
-  expandCollapseEditDialog, hideEditDialog,  updateEditFeature,
-} from '../state/edit.actions';
-import {
-  BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
-} from '@tailormap-viewer/api';
+import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
+import { BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
@@ -25,8 +15,11 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
-import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
+import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { withLatestFrom } from 'rxjs/operators';
+import { activateTool } from '../../toolbar/state/toolbar.actions';
+import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -131,8 +124,15 @@ export class EditDialogComponent {
     this.updatedAttributes[attribute] = value;
 }
 
-  public closeDialog() {
+  public closeDialog(reopenFeatureInfo = true) {
     this.store$.dispatch(hideEditDialog());
+    this.store$.select(selectEditOpenedFromFeatureInfo).pipe(take(1)).subscribe(openedFromFeatureInfo => {
+      if (openedFromFeatureInfo && reopenFeatureInfo) {
+        this.store$.dispatch(setEditActive({ active: false }));
+        this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
+        this.store$.dispatch(reopenFeatureInfoDialog());
+      }
+    });
   }
 
   public expandCollapseDialog() {
@@ -158,12 +158,18 @@ export class EditDialogComponent {
             attributes: updatedFeature,
           });
         }),
+        withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
-      .subscribe(feature => {
+      .subscribe(([ feature, openedFromFeatureInfo ]) => {
         if (feature) {
           this.store$.dispatch(updateEditFeature({ feature, layerId }));
           this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
           this.resetChanges();
+          if (openedFromFeatureInfo) {
+            this.store$.dispatch(setEditActive({ active: false }));
+            this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
+            this.store$.dispatch(reopenFeatureInfoDialog());
+          }
         }
         this.creatingSavingFeature.set(false);
       });
@@ -231,10 +237,10 @@ export class EditDialogComponent {
           );
         }),
       )
-      .subscribe(succes => {
-        if (succes) {
+      .subscribe(success => {
+        if (success) {
           this.featureUpdatedService.updatedFeature(layerId, featureId);
-          this.closeDialog();
+          this.closeDialog(false);
         }
         this.removingFeature.set(false);
       });
