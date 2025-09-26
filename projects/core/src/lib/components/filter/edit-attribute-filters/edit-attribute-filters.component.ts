@@ -149,7 +149,11 @@ export class EditAttributeFiltersComponent {
     }
     const formattedValues = filter.value.map(value => {
       const num = Number(value);
-      return isNaN(num) ? value : num.toPrecision(5);
+      if (isNaN(num)) {
+        return value;
+      } else {
+        return num.toString().length <= 5 ? num.toString() : num.toPrecision(5);
+      }
     });
     return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
