@@ -149,7 +149,11 @@ export class EditAttributeFiltersComponent {
     }
     const formattedValues = filter.value.map(value => {
       const num = Number(value);
-      return isNaN(num) ? value : num.toPrecision(5);
+      if (isNaN(num)) {
+        return value;
+      } else {
+        return new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(num);
+      }
     });
     return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }

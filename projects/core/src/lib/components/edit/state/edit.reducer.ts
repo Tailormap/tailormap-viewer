@@ -14,6 +14,7 @@ const onSetIsActive = (
   isCreateNewFeatureActive: payload.active ? state.isCreateNewFeatureActive : false,
   dialogVisible: false,
   selectedFeature: null,
+  openedFromFeatureInfo: false,
 });
 
 const onSetSelectedLayer = (
@@ -119,6 +120,7 @@ const onSetLoadedEditFeature = (
     dialogVisible: true,
     dialogCollapsed: false,
     selectedLayer: payload.feature.layerId,
+    openedFromFeatureInfo: payload.openedFromFeatureInfo,
   };
 };
 
