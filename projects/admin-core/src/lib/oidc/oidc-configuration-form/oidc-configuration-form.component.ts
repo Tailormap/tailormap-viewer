@@ -1,19 +1,26 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
+import { OIDCConfigurationModel, UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
+import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
+import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-form',
   templateUrl: './oidc-configuration-form.component.html',
   styleUrls: ['./oidc-configuration-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: UPLOAD_REMOVE_SERVICE, useClass: OidcImageRemoveService },
+  ],
   standalone: false,
 })
 export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 
   private _oidcConfiguration: OIDCConfigurationModel | null = null;
+
+  public imageCategory = UploadCategoryEnum.IMAGE;
 
   @Input()
   public set oidcConfiguration(oidcConfiguration: OIDCConfigurationModel | null) {
@@ -42,6 +49,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     clientSecret: new FormControl(''),
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    image: new FormControl<string | null>(null),
   });
 
 
@@ -61,6 +69,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           clientId: value.clientId || '',
           clientSecret: value.clientSecret || undefined,
           userNameAttribute: value.userNameAttribute || 'name',
+          image: value.image || undefined,
         });
       });
   }
@@ -89,6 +98,10 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       && FormHelper.isValidValue(values.userNameAttribute)
       && this.oidcConfigurationForm.dirty
       && this.oidcConfigurationForm.valid;
+  }
+
+  public onImageChanged($event: string | null) {
+    this.oidcConfigurationForm.patchValue({ image: $event }, { emitEvent: true });
   }
 
 }

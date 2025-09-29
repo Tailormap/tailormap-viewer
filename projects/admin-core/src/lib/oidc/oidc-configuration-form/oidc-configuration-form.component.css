@@ -1,1 +1,9 @@
+.upload-image-for-sso {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
 
+.upload-image-label {
+  display: block;
+  padding-bottom: 10px;
+}

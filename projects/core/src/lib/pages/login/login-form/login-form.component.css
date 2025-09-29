@@ -90,3 +90,8 @@ button mat-spinner {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
+.sso-image {
+  width: 24px;
+  height: 24px;
+}
