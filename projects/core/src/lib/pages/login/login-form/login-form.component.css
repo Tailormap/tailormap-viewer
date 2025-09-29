@@ -23,10 +23,18 @@
   height: 40px;
 }
 
-.login-form__sso,
-.login-form__body {
+.login-form__sso {
   padding: 14px 17px 24px 17px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.login-form__body {
+  padding: 0 17px 24px 17px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.login-form-no-sso {
+  padding-top: 14px;
 }
 
 .section-title {

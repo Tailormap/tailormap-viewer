@@ -25,7 +25,9 @@
         <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
       </mat-expansion-panel>
     } @else {
-      <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+      <div class="login-form-no-sso">
+        <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+      </div>
     }
   }
 
