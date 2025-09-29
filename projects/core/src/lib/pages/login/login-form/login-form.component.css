@@ -35,6 +35,11 @@
   margin-bottom: 16px;
 }
 
+.tailormap-account-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .login-form__sso {
   display: flex;
   flex-direction: column;
@@ -66,4 +71,14 @@ label {
 
 button mat-spinner {
   margin: 8px;
+}
+
+.login-form__sso button {
+  min-height: 48px;
+  font-size: 20px;
+}
+
+.login-form-panel-header {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
