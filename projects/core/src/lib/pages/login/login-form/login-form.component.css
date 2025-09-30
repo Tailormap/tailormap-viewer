@@ -92,6 +92,6 @@ button mat-spinner {
 }
 
 .sso-image {
-  width: 24px;
-  height: 24px;
+  max-width: 124px;
+  max-height: 24px;
 }

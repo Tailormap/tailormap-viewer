@@ -20,7 +20,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 
   private _oidcConfiguration: OIDCConfigurationModel | null = null;
 
-  public imageCategory = UploadCategoryEnum.IMAGE;
+  public imageCategory = UploadCategoryEnum.SSO_IMAGE;
 
   @Input()
   public set oidcConfiguration(oidcConfiguration: OIDCConfigurationModel | null) {
@@ -86,6 +86,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       clientId: oidcConfiguration?.clientId ?? '',
       clientSecret: oidcConfiguration?.clientSecret,
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
+      image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
   }
 
