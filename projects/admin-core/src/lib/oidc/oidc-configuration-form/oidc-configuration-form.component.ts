@@ -103,6 +103,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 
   public onImageChanged($event: string | null) {
     this.oidcConfigurationForm.patchValue({ image: $event }, { emitEvent: true });
+    this.oidcConfigurationForm.markAsDirty();
   }
 
 }
