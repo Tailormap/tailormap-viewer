@@ -3,7 +3,6 @@ import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, inject
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'tm-login-form',
@@ -15,7 +14,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class LoginFormComponent {
   private formBuilder = inject(FormBuilder);
   private locationStrategy = inject(LocationStrategy);
-  private sanitizer = inject(DomSanitizer);
 
 
   @Input()
@@ -92,13 +90,6 @@ export class LoginFormComponent {
     }
 
     window.location.href = ssoUrl;
-  }
-
-  public getSafeUrl(url: string): SafeUrl | string {
-    if (url.startsWith('data:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
   }
 
 }

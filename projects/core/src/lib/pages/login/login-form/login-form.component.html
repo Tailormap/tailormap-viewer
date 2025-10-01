@@ -17,7 +17,7 @@
                     (click)="loginSSO(item.url)">
               @if (item.image) {
                 <img
-                  [src]="getSafeUrl(item.image)"
+                  [src]="item.image"
                   class="sso-image"
                   alt="Logo">
               }
