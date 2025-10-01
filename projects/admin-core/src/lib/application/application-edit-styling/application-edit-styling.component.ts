@@ -42,7 +42,6 @@ export class ApplicationEditStylingComponent {
   }
 
   public onImageChanged($event: string | null) {
-    console.debug("Image changed:", $event);
     this.updateStyling({ logo: $event });
   }
 
