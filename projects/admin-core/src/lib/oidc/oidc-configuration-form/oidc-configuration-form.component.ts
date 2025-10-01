@@ -69,7 +69,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           clientId: value.clientId || '',
           clientSecret: value.clientSecret || undefined,
           userNameAttribute: value.userNameAttribute || 'name',
-          image: value.image || undefined,
+          image: value.image,
         });
       });
   }
