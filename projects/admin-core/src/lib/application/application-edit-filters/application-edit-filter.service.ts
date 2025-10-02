@@ -5,7 +5,7 @@ import {
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable, distinctUntilChanged } from 'rxjs';
-import { UniqueValuesAdminService } from '@tailormap-admin/admin-api';
+import { FeatureTypeModel, UniqueValuesAdminService } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
@@ -39,7 +39,7 @@ export class ApplicationEditFilterService {
 
   private isLoadingFeaturesTypes = new BehaviorSubject(false);
   public isLoadingFeaturesTypes$ = this.isLoadingFeaturesTypes.asObservable();
-  public featureTypesForSelectedLayers$ = this.layers$.pipe(
+  public featureTypesForSelectedLayers$: Observable<FeatureTypeModel[]> = this.layers$.pipe(
     tap(() => this.isLoadingFeaturesTypes.next(true)),
     switchMap(layers => {
       if (layers.length === 0) {

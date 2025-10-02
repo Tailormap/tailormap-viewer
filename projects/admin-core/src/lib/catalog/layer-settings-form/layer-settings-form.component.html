@@ -123,11 +123,16 @@
     </div>
   }
   @if (isLeaf || layerSettingsForm.get('authorizationRules')?.value?.length) {
-    <tm-admin-authorization-edit class="authorization-edit"
-      formControlName="authorizationRules"
-      [groups]="(groups$ | async) ?? []"
-      [parentAuthorizations]="geoServiceAuthorizations$ | async"
-      parentType="GeoService"
-    selfType="Layer"></tm-admin-authorization-edit>
+    @if (isServiceAuthorisationLoggedIn$ | async) {
+      <p i18n="@@admin-core.authorizations.allow-access-from-logged-in-inherited">Allow access from: Logged in (inherited)</p>
+    } @else {
+      <tm-admin-authorization-edit class="authorization-edit"
+                                   formControlName="authorizationRules"
+                                   [groups]="(groups$ | async) ?? []"
+                                   [parentAuthorizations]="geoServiceAuthorizations$ | async"
+                                   parentType="GeoService"
+                                   selfType="Layer">
+      </tm-admin-authorization-edit>
+    }
   }
 </form>

@@ -20,7 +20,7 @@ export class ComponentConfigHelper {
   ) {
     return store$.select(selectViewerLoadingState)
       .pipe(
-        filter(loadState => loadState === LoadingStateEnum.LOADED || loadState === LoadingStateEnum.FAILED),
+        filter(loadState => loadState === LoadingStateEnum.LOADED),
         take(1),
         switchMap(() => store$.select(selectComponentsConfigForType<ConfigType>(type)).pipe(take(1))),
       )

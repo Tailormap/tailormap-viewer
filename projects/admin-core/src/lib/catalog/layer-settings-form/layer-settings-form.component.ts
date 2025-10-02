@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import {  ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
+  AuthorizationGroups,
   AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
 } from '@tailormap-admin/admin-api';
 import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
@@ -58,7 +59,11 @@ export class LayerSettingsFormComponent implements OnInit {
       this.layers$ = of([]);
       this.xyzProjection$ = of('');
     } else {
-      this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.authorizationRules ?? []));
+      this.geoServiceAuthorizations$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(
+        takeUntil(this.destroyed),
+        map((settings) => settings?.authorizationRules ?? []),
+      );
+      this.isServiceAuthorisationLoggedIn$ = this.geoServiceAuthorizations$.pipe(map((rules) => !!rules?.find(rule => rule.groupName === AuthorizationGroups.AUTHENTICATED)));
       this.layers$ = this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(takeUntil(this.destroyed));
       this.xyzProjection$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.settings?.xyzCrs ?? ''));
     }
@@ -100,6 +105,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public isTILES3D = false;
   public isQUANTIZEDMESH = false;
   public hiDpiModes = TileLayerHiDpiModeEnum;
+  public isServiceAuthorisationLoggedIn$ = of(false);
 
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),

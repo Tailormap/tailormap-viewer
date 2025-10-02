@@ -1,10 +1,7 @@
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
-  ExtTransformToolModel, FeatureHelper, MapService,
-  MapStyleModel,
-  SelectToolConfigModel, SelectToolModel, ToolManagerModel,
-  ToolTypeEnum,
+  ExtTransformToolModel, FeatureHelper, MapService, MapStyleModel, SelectToolConfigModel, SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -30,7 +27,7 @@ export class DrawingService {
   private activeToolChanged = new Subject<DrawingFeatureTypeEnum | null>();
   private selectToolActive = new BehaviorSubject<boolean>(false);
   private drawingResetCalled = new Subject();
-  private predefinedStyleSelected = new Subject<DrawingFeatureStyleModel>();
+  private predefinedStyleSelected = new BehaviorSubject<DrawingFeatureStyleModel | null>(null);
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
@@ -196,13 +193,51 @@ export class DrawingService {
     return this.activeDrawingTool;
   }
 
-  public resetBeforeDrawing() {
+  private static allPolygonDrawingTypes: DrawingFeatureTypeEnum[] = [
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE,
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS,
+    DrawingFeatureTypeEnum.ELLIPSE,
+  ];
+
+  private static polygonDrawingTypes: DrawingFeatureTypeEnum[] = [
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.ELLIPSE,
+  ];
+
+  public resetBeforeDrawing(nextDrawingType?: DrawingFeatureTypeEnum) {
+    if (this.predefinedStyleSelected.value && this.activeDrawingTool && nextDrawingType) {
+      if (DrawingService.allPolygonDrawingTypes.includes(this.activeDrawingTool) && DrawingService.polygonDrawingTypes.includes(nextDrawingType)) {
+        return;
+      }
+    }
+
+    const defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
+      description: undefined,
+      secondaryStroke: undefined,
+      tertiaryStroke: undefined,
+      dashOffset: 0,
+      strokeOffset: 0,
+    };
+    DrawingHelper.updateDefaultStyle(defaultNonUserEditableStyle);
     this.style.set(DrawingHelper.getUpdatedDefaultStyle());
+    this.predefinedStyleSelected.next(null);
     this.lockedStyle.set(false);
     this.drawingResetCalled.next(null);
   }
 
-  public setPredefinedStyle(style: DrawingFeatureModelAttributes) {
+  public setPredefinedStyle(style: DrawingFeatureModelAttributes | null) {
+    if (style == null) {
+      this.enableSelectAndModify();
+      return;
+    }
     this.predefinedStyleSelected.next(style.style);
     this.style.set({
       ...DrawingHelper.getDefaultStyle(),
@@ -222,7 +257,12 @@ export class DrawingService {
       this.customSquareLength.set(style.squareLength);
     }
     if (this.getActiveTool() !== style.type) {
-      this.toggle(style.type);
+      const compatibleDrawingType = this.activeDrawingTool != null
+        && DrawingService.polygonDrawingTypes.includes(style.type) && DrawingService.allPolygonDrawingTypes.includes(this.activeDrawingTool);
+
+      if (!compatibleDrawingType) {
+        this.toggle(style.type);
+      }
     }
   }
 

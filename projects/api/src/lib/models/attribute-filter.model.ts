@@ -13,6 +13,6 @@ export interface AttributeFilterModel extends BaseFilterModel {
   value: string[];
   type: FilterTypeEnum.ATTRIBUTE;
   editConfiguration?: EditFilterConfigurationModel;
-  attributeNotFound?: boolean;
   generatedByFilterId?: string;
+  attributeAlias?: string;
 }

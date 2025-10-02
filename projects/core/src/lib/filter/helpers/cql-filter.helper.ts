@@ -1,10 +1,6 @@
-import { FilterGroupModel } from '@tailormap-viewer/api';
-import { AttributeFilterModel } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '@tailormap-viewer/api';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
-import { BaseFilterModel } from '@tailormap-viewer/api';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
@@ -45,7 +41,8 @@ export class CqlFilterHelper {
     const filter: string[] = [];
     const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
     const originalFilters = filterGroup.filters
-      .filter(f => !f.disabled && !(FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId));
+      .filter(f => !f.disabled
+        && !(FilterTypeHelper.isAttributeFilter(f) && (f.generatedByFilterId || CqlFilterHelper.isNumericFilterWithNoValue(f))));
     const baseFilter: string[] = originalFilters
       .map(originalFilter => {
         const cqlQueries = [
@@ -193,4 +190,9 @@ export class CqlFilterHelper {
     return attributeType === AttributeType.DATE || attributeType === AttributeType.TIMESTAMP;
   }
 
+  private static isNumericFilterWithNoValue(filter: AttributeFilterModel) {
+    return CqlFilterHelper.isNumeric(filter.attributeType)
+      && (filter.condition !== FilterConditionEnum.NULL_KEY)
+      && (!filter.value || filter.value.length === 0);
+  }
 }

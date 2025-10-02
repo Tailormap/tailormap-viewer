@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
+  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
+  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
@@ -68,7 +69,7 @@ export class EditAttributeFiltersComponent {
     return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
-  public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
+  public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [`${$event}`],
@@ -78,7 +79,7 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateBetweenSliderFilterValues($event: { lower: number; upper: number }, filter: AttributeFilterModel) {
+  public updateBetweenSliderFilterValues($event: { lower: number | null; upper: number | null }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [ `${$event.lower}`, `${$event.upper}` ],
@@ -112,6 +113,26 @@ export class EditAttributeFiltersComponent {
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
     }
+  }
+
+  public getConditionLabel(condition: FilterConditionEnum): string {
+    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
+  }
+
+  public getSliderFilterLabel(filter: AttributeFilterModel): string {
+    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
+      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
+      return `${filter.attributeAlias ?? filter.attribute} ${filter.condition}`;
+    }
+    const formattedValues = filter.value.map(value => {
+      const num = Number(value);
+      if (isNaN(num)) {
+        return value;
+      } else {
+        return new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(num);
+      }
+    });
+    return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
@@ -180,8 +201,10 @@ export class EditAttributeFiltersComponent {
         );
       }),
     );
+  }
 
-
+  public isSliderFilterDisabled(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER && filter.value.length === 0;
   }
 
 }

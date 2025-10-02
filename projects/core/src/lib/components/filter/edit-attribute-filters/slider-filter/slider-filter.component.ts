@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AttributeFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum } from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
+import { SliderFilterInputModeEnum, SliderFilterModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
@@ -24,7 +24,12 @@ export class SliderFilterComponent implements OnInit {
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
-  public displayWith: ((value: number) => string) = (value: number) => value.toPrecision(SliderFilterComponent.MAX_PRECISION);
+  public displayWith: ((value: number) => string) = (value: number) => {
+    if (value.toString().length <= SliderFilterComponent.MAX_PRECISION) {
+      return value.toString();
+    }
+    return value.toPrecision(SliderFilterComponent.MAX_PRECISION);
+  };
 
   @Input()
   public set sliderFilter(filter: AttributeFilterModel) {
@@ -45,10 +50,10 @@ export class SliderFilterComponent implements OnInit {
   }
 
   @Output()
-  public valueChange = new EventEmitter<number>();
+  public valueChange = new EventEmitter<number | null>();
 
   @Output()
-  public betweenValuesChange = new EventEmitter<{lower: number; upper: number}>();
+  public betweenValuesChange = new EventEmitter<{lower: number | null; upper: number | null}>();
 
   public viewerSliderFilterForm = new FormGroup({
     filterValue: new FormControl<number | null>(null),
@@ -57,12 +62,6 @@ export class SliderFilterComponent implements OnInit {
   });
 
   public ngOnInit(): void {
-    this.viewerSliderFilterForm.patchValue({
-      filterValue: this.initialValue,
-      lowerValue: this.initialLowerValue,
-      upperValue: this.initialUpperValue,
-    }, { emitEvent: false });
-
     this.viewerSliderFilterForm.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -70,11 +69,27 @@ export class SliderFilterComponent implements OnInit {
       )
       .subscribe(value => {
         if (this.betweenInput) {
-          this.betweenValuesChange.emit({ lower: value.lowerValue ?? 0, upper: value.upperValue ?? 0 });
+          this.betweenValuesChange.emit({ lower: value.lowerValue ?? this.minValue, upper: value.upperValue ?? this.maxValue });
+          this.viewerSliderFilterForm.patchValue({
+            lowerValue: value.lowerValue ?? this.minValue,
+            upperValue: value.upperValue ?? this.maxValue,
+          }, { emitEvent: false });
         } else {
-          this.valueChange.emit(value.filterValue ?? 0);
+          this.valueChange.emit(value.filterValue ?? null);
         }
       });
+
+    // If only one of the upper and lower values is set, the other is set to min/max to get a valid filter,
+    // if neither are set, both remain null.
+    this.viewerSliderFilterForm.patchValue({
+      filterValue: this.initialValue,
+      lowerValue: this.initialUpperValue !== null
+        ? this.initialLowerValue ?? this.minValue
+        : this.initialLowerValue,
+      upperValue: this.initialLowerValue !== null
+        ? this.initialUpperValue ?? this.maxValue
+        : this.initialUpperValue,
+    }, { emitEvent: false });
   }
 
   public changeValue(value: number) {

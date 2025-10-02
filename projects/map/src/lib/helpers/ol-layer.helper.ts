@@ -23,6 +23,8 @@ import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
 import { get as getProjection } from 'ol/proj.js';
 import { PROJECTION_REQUIRED_FOR_3D } from '../models/3d-projection.const';
+import { ServiceLayerModel } from '../models';
+import { OlMapScaleHelper } from './ol-map-scale.helper';
 
 export interface LayerProperties {
   id: string;
@@ -153,9 +155,12 @@ export class OlLayerHelper {
     options.attributions = layer.attribution ? [layer.attribution] : undefined;
 
     const source = new WMTS(options);
+    const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
     return new TileLayer({
       visible: layer.visible,
       source,
+      minResolution,
+      maxResolution,
     });
   }
 
@@ -209,9 +214,12 @@ export class OlLayerHelper {
       attributions: layer.attribution ? [layer.attribution] : undefined,
     });
 
+    const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
     return new TileLayer({
       visible: layer.visible,
       source,
+      minResolution,
+      maxResolution,
     });
   }
 
@@ -252,8 +260,11 @@ export class OlLayerHelper {
         imageLoadFunction,
       });
       source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
+      const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
       return new ImageLayer({
         visible: layer.visible,
+        minResolution,
+        maxResolution,
         source,
       });
     } else {
@@ -270,8 +281,11 @@ export class OlLayerHelper {
         tileGrid,
       });
       source.set('olcs_tileLoadFunction', tileLoadFunction);
+      const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
       return new TileLayer({
         visible: layer.visible,
+        minResolution,
+        maxResolution,
         source,
       });
     }
@@ -383,6 +397,18 @@ export class OlLayerHelper {
       params.CACHE = Date.now();
     }
     return params;
+  }
+
+  private static getMinMaxResolution(layer: ServiceLayerModel, projection: Projection) {
+    let minResolution: number | undefined;
+    let maxResolution: number | undefined;
+    if (typeof layer.minScale === 'number') {
+      minResolution = OlMapScaleHelper.getResolutionForScale(projection, layer.minScale);
+    }
+    if (typeof layer.maxScale === 'number') {
+      maxResolution = OlMapScaleHelper.getResolutionForScale(projection, layer.maxScale);
+    }
+    return { minResolution, maxResolution };
   }
 
 }

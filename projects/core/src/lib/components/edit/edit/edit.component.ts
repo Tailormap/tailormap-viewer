@@ -133,7 +133,7 @@ export class EditComponent implements OnInit {
           columnMetadata: layerDetails.details.attributes.map(attribute => {
               return {
                 layerId: layerDetails.details.id,
-                key: attribute.key,
+                name: attribute.name,
                 type: attribute.type as unknown as AttributeType,
                 alias: attribute.editAlias,
               };

@@ -45,7 +45,7 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   private filterToolSubject$ = new BehaviorSubject<FilterToolEnum>(FilterToolEnum.PRESET_STATIC);
 
   public featureTypes$ = this.featureTypesSubject$.asObservable();
-  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
+  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean } & { alias?: string }>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
 
@@ -91,9 +91,10 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
-            .map((att: AttributeDescriptorModel) => ({
+            .map((att) => ({
               ...att,
               selected: selectedAttribute === att.name,
+              alias: featureTypes[0].settings.attributeSettings?.[att.name]?.title,
             }));
           if (filterStr) {
             return FilterHelper.filterByTerm(attributes, filterStr, a => a.name);

@@ -61,7 +61,7 @@ export class FilterDescriptionComponent {
     if (values.length === 2) {
       value = `${values[0]} ${this.AND} ${values[1]}`;
     }
-    return `<strong>${filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
+    return `<strong>${filter.attributeAlias ?? filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
   }
 
   private convertOperator(operator: 'AND' | 'OR') {

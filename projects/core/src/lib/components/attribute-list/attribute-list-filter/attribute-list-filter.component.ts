@@ -13,6 +13,7 @@ export interface FilterDialogData {
   columnType: AttributeType;
   cqlFilter?: string;
   applicationId: string;
+  attributeAlias?: string;
 }
 
 interface FilterType {
@@ -122,6 +123,7 @@ export class AttributeListFilterComponent implements OnInit {
       invertCondition: typeof this.updatedFilter.invertCondition === 'boolean'
         ? this.updatedFilter.invertCondition
         : false,
+      attributeAlias: this.data.attributeAlias,
     };
   }
 

@@ -18,6 +18,7 @@ export interface EditState {
   columnMetadata: FeatureInfoColumnMetadataModel[];
   selectedFeature: string | null;
   errorMessage?: string;
+  openedFromFeatureInfo?: boolean;
 }
 
 export const initialEditState: EditState = {

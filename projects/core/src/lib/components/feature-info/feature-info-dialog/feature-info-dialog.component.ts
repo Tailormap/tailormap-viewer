@@ -20,7 +20,7 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { setEditActive, setLoadedEditFeature } from '../../edit/state/edit.actions';
+import { setLoadedEditFeature } from '../../edit/state/edit.actions';
 import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
@@ -156,7 +156,6 @@ export class FeatureInfoDialogComponent {
   }
 
   public editFeature() {
-    this.store$.dispatch(setEditActive({ active: true }));
     this.store$.select(selectCurrentFeatureForEdit)
       .pipe(take(1))
       .subscribe(featureWithMetadata => {
@@ -164,6 +163,7 @@ export class FeatureInfoDialogComponent {
           this.store$.dispatch(setLoadedEditFeature({
             feature: featureWithMetadata.feature,
             columnMetadata: featureWithMetadata.columnMetadata,
+            openedFromFeatureInfo: true,
           }));
         }
       });
