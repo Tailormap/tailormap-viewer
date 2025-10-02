@@ -186,7 +186,11 @@ const onResetAttributeFilters = (
         ...fg,
         filters: fg.filters.map(f => {
           const configuredFilterGroup = state.configuredFilterGroups.find(cfg => cfg.id === fg.id);
-          return configuredFilterGroup?.filters.find(cf => cf.id === f.id) || f;
+          const configuredFilter = configuredFilterGroup?.filters.find(cf => cf.id === f.id) || f;
+          if (!configuredFilter) {
+            return f;
+          }
+          return configuredFilter;
         }),
       };
     }),
