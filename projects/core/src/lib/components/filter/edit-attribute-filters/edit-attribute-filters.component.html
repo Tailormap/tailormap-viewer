@@ -20,7 +20,6 @@
           <div class="editable-checkbox-filter">
             <tm-checkbox-filter
               [checkboxFilter]="{filter, substringFilters: getSubstringFilters(filter)}"
-              [label]="filter.attributeAlias ?? filter.attribute"
               (valueChecked)="updateCheckboxFilterValue($event.value, $event.checked, $event.substringFilter, filter)"></tm-checkbox-filter>
           </div>
         </div>

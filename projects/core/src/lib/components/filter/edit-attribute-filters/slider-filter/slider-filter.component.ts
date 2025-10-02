@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
-import { SliderFilterInputModeEnum, SliderFilterModel } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
+} from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
@@ -51,22 +50,6 @@ export class EditAttributeFiltersComponent {
     return this.editableFilters()
       .filter(f => f.id.startsWith(`${filter.id}-substring-`))
       .map(f => ({ id: f.id, disabled: f.disabled ?? false }));
-  }
-
-  public getConditionLabel(condition: FilterConditionEnum): string {
-    return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
-  }
-
-  public getSliderFilterLabel(filter: AttributeFilterModel): string {
-    if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
-      && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
-      return `${filter.attribute} ${filter.condition}`;
-    }
-    const formattedValues = filter.value.map(value => {
-      const num = Number(value);
-      return isNaN(num) ? value : num.toPrecision(5);
-    });
-    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {

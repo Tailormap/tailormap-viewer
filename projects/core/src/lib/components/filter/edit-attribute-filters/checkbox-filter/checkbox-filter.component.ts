@@ -32,7 +32,7 @@ export class CheckboxFilterComponent {
         initiallySelected: config.filter.value.includes(valueSettings.value),
       };
     });
-    this.label = config.filter.attribute;
+    this.label = config.filter.attributeAlias || config.filter.attribute;
   }
 
   @Output()
