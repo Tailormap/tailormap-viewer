@@ -4,6 +4,7 @@ import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selec
 import { map, Observable, of, switchMap } from 'rxjs';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { AttributeFilterService } from '../../../services/attribute-filter.service';
+import { resetAttributeFilters } from '../../../filter/state/filter.actions';
 
 @Component({
   selector: 'tm-filter-list',
@@ -27,4 +28,7 @@ export class FilterListComponent implements OnInit {
     );
   }
 
+  public resetAttributeFilters() {
+    this.store$.dispatch(resetAttributeFilters());
+  }
 }

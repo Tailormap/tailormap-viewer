@@ -2,6 +2,7 @@ import * as FilterActions from './filter.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { FilterState, initialFilterState } from './filter.state';
 import { FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterTypeHelper } from '../helpers/filter-type.helper';
 
 const onAddAllFilterGroupsInConfig = (
   state: FilterState,
@@ -172,6 +173,27 @@ const onAddLayerIdsToFilterGroup = (
   });
 };
 
+const onResetAttributeFilters = (
+  state: FilterState,
+): FilterState => {
+  return {
+    ...state,
+    verifiedCurrentFilterGroups: state.verifiedCurrentFilterGroups.map(fg => {
+      if (!FilterTypeHelper.isAttributeFilterGroup(fg)) {
+        return fg;
+      }
+      return {
+        ...fg,
+        filters: fg.filters.map(f => {
+          const configuredFilterGroup = state.configuredFilterGroups.find(cfg => cfg.id === fg.id);
+          return configuredFilterGroup?.filters.find(cf => cf.id === f.id) || f;
+        }),
+      };
+    }),
+  };
+};
+
+
 const filterReducerImpl = createReducer<FilterState>(
   initialFilterState,
   on(FilterActions.addAllFilterGroupsInConfig, onAddAllFilterGroupsInConfig),
@@ -184,5 +206,6 @@ const filterReducerImpl = createReducer<FilterState>(
   on(FilterActions.toggleFilterDisabled, onToggleFilterDisabled),
   on(FilterActions.setSingleFilterDisabled, onSetSingleFilterDisabled),
   on(FilterActions.addLayerIdsToFilterGroup, onAddLayerIdsToFilterGroup),
+  on(FilterActions.resetAttributeFilters, onResetAttributeFilters),
 );
 export const filterReducer = (state: FilterState | undefined, action: Action) => filterReducerImpl(state, action);
