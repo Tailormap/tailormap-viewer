@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FilterConditionEnum, SliderFilterInputModeEnum, UpdateSliderFilterModel } from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
+import {
+  AttributeFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
+} from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
@@ -18,6 +20,9 @@ export class SliderFilterComponent implements OnInit {
   public minValue: number = 0;
   public maxValue: number = 100;
   public stepSize: number = 1;
+  public initialValue: number | null = null;
+  public initialLowerValue: number | null = null;
+  public initialUpperValue: number | null = null;
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
@@ -29,14 +34,21 @@ export class SliderFilterComponent implements OnInit {
   };
 
   @Input()
-  public set sliderFilterConfiguration(config: UpdateSliderFilterModel) {
-    this.minValue = config.minimumValue;
-    this.maxValue = config.maximumValue;
-    this.stepSize = config.stepSize || (config.maximumValue - config.minimumValue) / 50;
-    this.inputMode = config.inputMode || SliderFilterInputModeEnum.SLIDER;
-    this.betweenInput = config.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY
-      || (!(config.initialLowerValue === null || config.initialLowerValue === undefined)
-        && !(config.initialUpperValue === null || config.initialUpperValue === undefined));
+  public set sliderFilter(filter: AttributeFilterModel) {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SLIDER) {
+      return;
+    }
+    this.minValue = filter.editConfiguration.minimumValue;
+    this.maxValue = filter.editConfiguration.maximumValue;
+    this.stepSize = filter.editConfiguration.stepSize || (filter.editConfiguration.maximumValue - filter.editConfiguration.minimumValue) / 50;
+    this.inputMode = filter.editConfiguration.inputMode || SliderFilterInputModeEnum.SLIDER;
+    this.betweenInput = filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY;
+    if (!this.betweenInput) {
+      this.initialValue = filter.value[0] ? Number(filter.value[0]) : filter.editConfiguration.minimumValue;
+    } else {
+      this.initialLowerValue = filter.value[0] ? Number(filter.value[0]) : filter.editConfiguration.minimumValue;
+      this.initialUpperValue = filter.value[1] ? Number(filter.value[1]) : filter.editConfiguration.maximumValue;
+    }
     this.initForm(config.initialValue ?? null, config.initialLowerValue ?? null, config.initialUpperValue ?? null);
   }
 
@@ -59,7 +71,6 @@ export class SliderFilterComponent implements OnInit {
         debounceTime(250),
       )
       .subscribe(value => {
-        console.debug("Slider filter value changed", value);
         if (this.betweenInput) {
           this.betweenValuesChange.emit({ lower: value.lowerValue ?? this.minValue, upper: value.upperValue ?? this.maxValue });
           this.viewerSliderFilterForm.patchValue({
