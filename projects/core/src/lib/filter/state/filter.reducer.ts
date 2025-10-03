@@ -178,22 +178,24 @@ const onResetAttributeFilters = (
 ): FilterState => {
   return {
     ...state,
-    verifiedCurrentFilterGroups: state.verifiedCurrentFilterGroups.map(fg => {
-      if (!FilterTypeHelper.isAttributeFilterGroup(fg)) {
-        return fg;
-      }
-      return {
-        ...fg,
-        filters: fg.filters.map(f => {
-          const configuredFilterGroup = state.configuredFilterGroups.find(cfg => cfg.id === fg.id);
-          const configuredFilter = configuredFilterGroup?.filters.find(cf => cf.id === f.id) || f;
-          if (!configuredFilter) {
-            return f;
-          }
-          return configuredFilter;
-        }),
-      };
-    }),
+    verifiedCurrentFilterGroups: state.verifiedCurrentFilterGroups
+      .filter(fg => fg.source === "PRESET")
+      .map(fg => {
+        if (!FilterTypeHelper.isAttributeFilterGroup(fg)) {
+          return fg;
+        }
+        return {
+          ...fg,
+          filters: fg.filters.map(f => {
+            const configuredFilterGroup = state.configuredFilterGroups.find(cfg => cfg.id === fg.id);
+            const configuredFilter = configuredFilterGroup?.filters.find(cf => cf.id === f.id) || f;
+            if (!configuredFilter) {
+              return f;
+            }
+            return configuredFilter;
+          }),
+        };
+      }),
   };
 };
 
