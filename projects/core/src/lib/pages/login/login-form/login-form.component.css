@@ -111,3 +111,9 @@ button mat-spinner {
   width: 100%;
   display: block;
 }
+
+.password-reset {
+  padding-bottom: 4px;
+  padding-right: 4px;
+  text-align: right;
+}

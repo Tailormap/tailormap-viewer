@@ -29,6 +29,7 @@ export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): Us
 export const getLoginConfigurationModel = (overrides?: Partial<LoginConfigurationModel>): LoginConfigurationModel => ({
   hideLoginForm: false,
   ssoLinks: [],
+  enablePasswordReset: true,
   ...overrides,
 });
 
