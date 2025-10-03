@@ -94,6 +94,7 @@ export class OIDCConfigurationService implements OnDestroy {
               clientSecret: oidcConfiguration.clientSecret,
               issuerUrl: oidcConfiguration.issuerUrl,
               userNameAttribute: oidcConfiguration.userNameAttribute,
+              image: oidcConfiguration.image,
            };
             return this.updateOIDCConfiguration$(draftOIDCConfiguration.id, draftOIDCConfiguration);
           }

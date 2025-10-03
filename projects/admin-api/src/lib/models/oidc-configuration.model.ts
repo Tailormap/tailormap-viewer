@@ -6,4 +6,5 @@ export interface OIDCConfigurationModel {
   issuerUrl: string;
   userNameAttribute: string;
   status?: string;
+  image?: string | null;
 }
