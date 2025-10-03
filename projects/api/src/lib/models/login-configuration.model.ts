@@ -8,4 +8,5 @@ export interface SSOLinkModel {
 export interface LoginConfigurationModel {
   hideLoginForm: boolean;
   ssoLinks: SSOLinkModel[];
+  enablePasswordReset: boolean;
 }
