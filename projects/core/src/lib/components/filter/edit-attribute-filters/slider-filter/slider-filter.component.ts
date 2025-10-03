@@ -18,9 +18,6 @@ export class SliderFilterComponent implements OnInit {
   public minValue: number = 0;
   public maxValue: number = 100;
   public stepSize: number = 1;
-  public initialValue: number | null = null;
-  public initialLowerValue: number | null = null;
-  public initialUpperValue: number | null = null;
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
@@ -40,9 +37,7 @@ export class SliderFilterComponent implements OnInit {
     this.betweenInput = config.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY
       || (!(config.initialLowerValue === null || config.initialLowerValue === undefined)
         && !(config.initialUpperValue === null || config.initialUpperValue === undefined));
-    this.initialValue = config.initialValue ?? null;
-    this.initialLowerValue = config.initialLowerValue ?? null;
-    this.initialUpperValue = config.initialUpperValue ?? null;
+    this.initForm(config.initialValue ?? null, config.initialLowerValue ?? null, config.initialUpperValue ?? null);
   }
 
   @Output()
@@ -64,6 +59,7 @@ export class SliderFilterComponent implements OnInit {
         debounceTime(250),
       )
       .subscribe(value => {
+        console.debug("Slider filter value changed", value);
         if (this.betweenInput) {
           this.betweenValuesChange.emit({ lower: value.lowerValue ?? this.minValue, upper: value.upperValue ?? this.maxValue });
           this.viewerSliderFilterForm.patchValue({
@@ -74,17 +70,19 @@ export class SliderFilterComponent implements OnInit {
           this.valueChange.emit(value.filterValue ?? null);
         }
       });
+  }
 
+  private initForm(filterValue: number | null, lowerValue: number | null, upperValue: number | null) {
     // If only one of the upper and lower values is set, the other is set to min/max to get a valid filter,
     // if neither are set, both remain null.
     this.viewerSliderFilterForm.patchValue({
-      filterValue: this.initialValue,
-      lowerValue: this.initialUpperValue !== null
-        ? this.initialLowerValue ?? this.minValue
-        : this.initialLowerValue,
-      upperValue: this.initialLowerValue !== null
-        ? this.initialUpperValue ?? this.maxValue
-        : this.initialUpperValue,
+      filterValue,
+      lowerValue: upperValue !== null
+        ? lowerValue ?? this.minValue
+        : lowerValue,
+      upperValue: lowerValue !== null
+        ? upperValue ?? this.maxValue
+        : upperValue,
     }, { emitEvent: false });
   }
 

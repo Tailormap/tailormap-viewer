@@ -770,6 +770,14 @@
         <source>or</source>
         <target>of</target>
       </trans-unit>
+      <trans-unit id="core.filter.reset-attribute-filters" datatype="html">
+        <source> Reset attribute filters </source>
+        <target> Attribuutfilters resetten </target>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-attribute-filters-tooltip" datatype="html">
+        <source>Reset attribute filters to their original state</source>
+        <target>Attribuutfilters terugzetten naar oorspronkelijke staat</target>
+      </trans-unit>
       <trans-unit id="core.filter.save-filter" datatype="html">
         <source>Save filter</source>
         <target>Filter opslaan</target>
