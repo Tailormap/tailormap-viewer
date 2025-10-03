@@ -49,7 +49,7 @@ export class SliderFilterComponent implements OnInit {
       this.initialLowerValue = filter.value[0] ? Number(filter.value[0]) : filter.editConfiguration.minimumValue;
       this.initialUpperValue = filter.value[1] ? Number(filter.value[1]) : filter.editConfiguration.maximumValue;
     }
-    this.initForm(config.initialValue ?? null, config.initialLowerValue ?? null, config.initialUpperValue ?? null);
+    this.initForm(this.initialValue ?? null, this.initialLowerValue ?? null, this.initialUpperValue ?? null);
   }
 
   @Output()
