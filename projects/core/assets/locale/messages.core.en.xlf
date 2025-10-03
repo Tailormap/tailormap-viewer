@@ -578,11 +578,14 @@
       <trans-unit id="core.filter.or" datatype="html">
         <source>or</source>
       </trans-unit>
-      <trans-unit id="core.filter.reset-attribute-filters" datatype="html">
-        <source> Reset attribute filters </source>
+      <trans-unit id="core.filter.reset-filters" datatype="html">
+        <source> Reset filters </source>
       </trans-unit>
-      <trans-unit id="core.filter.reset-attribute-filters-tooltip" datatype="html">
-        <source>Reset attribute filters to their original state</source>
+      <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
+        <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-filters-tooltip" datatype="html">
+        <source>Reset filters to their original state</source>
       </trans-unit>
       <trans-unit id="core.filter.save-filter" datatype="html">
         <source>Save filter</source>
