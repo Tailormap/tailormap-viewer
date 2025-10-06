@@ -77,6 +77,10 @@
         <source>Login with your Tailormap account</source>
         <target>Inloggen met uw Tailormap account</target>
       </trans-unit>
+      <trans-unit id="shared.login-form.forgot-password" datatype="html">
+        <source>Forgot your password?</source>
+        <target>Wachtwoord vergeten?</target>
+      </trans-unit>
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>
         <target>Gebruikersnaam</target>

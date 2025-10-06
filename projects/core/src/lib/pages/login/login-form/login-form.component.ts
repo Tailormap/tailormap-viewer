@@ -50,6 +50,7 @@ export class LoginFormComponent {
     this.hasSSOButtons = (loginConfiguration?.ssoLinks || [])
       .filter(l => l.showForViewer)
       .length > 0;
+    this.enablePasswordReset = !!loginConfiguration?.enablePasswordReset;
   }
   public get loginConfiguration(): LoginConfigurationModel | null {
     return this._loginConfiguration;
@@ -57,6 +58,7 @@ export class LoginFormComponent {
   private _loginConfiguration: LoginConfigurationModel | null = null;
 
   public hasSSOButtons: boolean = false;
+  public enablePasswordReset: boolean = true;
 
   public login() {
     const username = this.loginForm.get('username')?.value;
@@ -90,6 +92,12 @@ export class LoginFormComponent {
     }
 
     window.location.href = ssoUrl;
+  }
+
+  public requestPasswordResetForm() {
+    // TODO route to /reset-password or whatever we build
+    //  in https://b3partners.atlassian.net/browse/HTM-1647
+    console.log('TODO: Request password reset');
   }
 
 }

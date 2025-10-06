@@ -59,6 +59,9 @@
       <trans-unit id="shared.login-form.tm-title" datatype="html">
         <source>Login with your Tailormap account</source>
       </trans-unit>
+      <trans-unit id="shared.login-form.forgot-password" datatype="html">
+        <source>Forgot your password?</source>
+      </trans-unit>
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>
       </trans-unit>
