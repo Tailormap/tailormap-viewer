@@ -69,7 +69,6 @@ export class TocNodeLayerComponent {
       return;
     }
     const zoomToScale = Math.min(...scales);
-    console.debug("zoom to scale: ", zoomToScale)
     this.zoomToScale.emit(zoomToScale);
   }
 
