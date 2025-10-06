@@ -1,57 +1,84 @@
-<div class="login-form" [formGroup]="loginForm">
-  <div class="login-form__header">
-    <div i18n="@@shared.login-form.title">Login</div>
-    <mat-icon class="logo" svgIcon="logo"></mat-icon>
-  </div>
-  @if (hasSSOButtons) {
-    <div class="login-form__sso">
-      <div class="section-title" i18n="@@shared.login-form.sso-title">Login with your organisation</div>
-      @for (item of loginConfiguration?.ssoLinks; track idx; let idx = $index) {
-        @if (item.showForViewer) {
-          <button mat-stroked-button
-                  color="primary"
-                  [tmAutoFocus]="idx === 0"
-                  (click)="loginSSO(item.url)">{{item.name}}</button>
-        }
-      }
+@if (!loginConfiguration) {
+  <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+} @else {
+  <div class="login-form" [formGroup]="loginForm">
+    <div class="login-form__header">
+      <div i18n="@@shared.login-form.title">Login</div>
+      <mat-icon class="logo" svgIcon="logo"></mat-icon>
     </div>
-  }
-  @if (loginConfiguration?.hideLoginForm !== true) {
-    <div class="login-form__body">
+    @if (hasSSOButtons) {
+      <div class="login-form__sso">
+        <div class="section-title" i18n="@@shared.login-form.sso-title">Login with your organisation</div>
+        @for (item of loginConfiguration.ssoLinks; track idx; let idx = $index) {
+          @if (item.showForViewer) {
+            <button mat-stroked-button
+                    color="primary"
+                    [tmAutoFocus]="idx === 0"
+                    (click)="loginSSO(item.url)">
+              @if (item.image) {
+                <img
+                  [src]="item.image"
+                  class="sso-image"
+                  alt="Logo">
+              }
+              <span class="sso-button-text">
+                {{item.name}}
+              </span>
+            </button>
+          }
+        }
+      </div>
+    }
+    @if (loginConfiguration.hideLoginForm !== true) {
       @if (hasSSOButtons) {
-        <div class="section-title" i18n="@@shared.login-form.tm-title">Login with your Tailormap account</div>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header class="login-form-panel-header">
+            <mat-panel-title class="tailormap-account-title" i18n="@@shared.login-form.tm-title">Login with your Tailormap account</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+        </mat-expansion-panel>
+      } @else {
+        <div class="login-form-no-sso">
+          <ng-container *ngTemplateOutlet="loginFormTemplate"></ng-container>
+        </div>
       }
-      <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
-      <div class="form-field">
-        <label for="login_username" i18n="@@shared.login-form.username">Username</label>
-        <input id="login_username"
-               [tmAutoFocus]="hasSSOButtons"
-               name="username"
-               type="text"
-               formControlName="username"
-               (keyup.enter)="login()" />
+    }
+
+    <ng-template #loginFormTemplate>
+      <div class="login-form__body">
+        <tm-error-message [message]="(errorMessage$ | async) ?? ''"></tm-error-message>
+        <div class="form-field">
+          <label for="login_username" i18n="@@shared.login-form.username">Username</label>
+          <input id="login_username"
+                 [tmAutoFocus]="hasSSOButtons"
+                 name="username"
+                 type="text"
+                 formControlName="username"
+                 (keyup.enter)="login()" />
+        </div>
+        <div class="form-field">
+          <label for="login_password" i18n="@@shared.login-form.password">Password</label>
+          <input id="login_password"
+                 name="password"
+                 type="password"
+                 formControlName="password"
+                 (keyup.enter)="login()" />
+        </div>
       </div>
-      <div class="form-field">
-        <label for="login_password" i18n="@@shared.login-form.password">Password</label>
-        <input id="login_password"
-               name="password"
-               type="password"
-               formControlName="password"
-               (keyup.enter)="login()" />
+      <div class="buttons">
+        <button mat-flat-button
+                name="login"
+                color="primary"
+                [disabled]="loginForm.invalid || (loggingIn$ | async) === true"
+                (click)="login()">
+          @if (loggingIn$ | async) {
+            <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+          } @else {
+            Login
+          }
+        </button>
       </div>
-    </div>
-    <div class="buttons">
-      <button mat-flat-button
-              name="login"
-              color="primary"
-              [disabled]="loginForm.invalid || (loggingIn$ | async) === true"
-              (click)="login()">
-        @if (loggingIn$ | async) {
-          <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
-        } @else {
-          Login
-        }
-      </button>
-    </div>
-  }
-</div>
+    </ng-template>
+
+  </div>
+}

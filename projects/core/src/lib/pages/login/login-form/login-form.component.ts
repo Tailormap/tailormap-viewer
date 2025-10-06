@@ -91,4 +91,5 @@ export class LoginFormComponent {
 
     window.location.href = ssoUrl;
   }
+
 }
