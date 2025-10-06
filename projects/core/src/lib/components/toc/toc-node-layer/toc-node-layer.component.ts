@@ -60,15 +60,16 @@ export class TocNodeLayerComponent {
     $event.stopPropagation();
     const scales: number[] = [];
     if (typeof node?.metadata?.minScale === 'number') {
-      scales.push(node?.metadata?.minScale + 1);
+      scales.push(node?.metadata?.minScale * 1.001);
     }
     if (typeof node?.metadata?.maxScale === 'number') {
-      scales.push(node?.metadata?.maxScale - 1);
+      scales.push(node?.metadata?.maxScale * 0.999);
     }
     if (scales.length === 0) {
       return;
     }
     const zoomToScale = Math.min(...scales);
+    console.debug("zoom to scale: ", zoomToScale)
     this.zoomToScale.emit(zoomToScale);
   }
 
