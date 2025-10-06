@@ -64,4 +64,15 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     );
   }
 
+  public requestPasswordReset$(email: string): Observable<boolean> {
+    const body = new HttpParams({
+      fromObject: {
+        email,
+      },
+    });
+    return this.httpClient.post(`${TailormapApiConstants.BASE_URL}/password-reset`, body, { observe: 'response' }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
 }

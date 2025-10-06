@@ -1,4 +1,6 @@
-<div class="info-message">
-  {{message}}
-  <ng-content></ng-content>
-</div>
+@if (message) {
+  <div class="info-message">
+    {{ message }}
+    <ng-content></ng-content>
+  </div>
+}

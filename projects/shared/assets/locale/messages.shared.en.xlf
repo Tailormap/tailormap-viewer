@@ -65,6 +65,21 @@
       <trans-unit id="shared.login-form.username" datatype="html">
         <source>Username</source>
       </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.title" datatype="html">
+        <source>Reset Password</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.email" datatype="html">
+        <source>Email</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.submit" datatype="html">
+        <source>Request password reset</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
+        <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.error-message" datatype="html">
+        <source>An error occurred processing your request.</source>
+      </trans-unit>
       <trans-unit id="shared.markdown-editor.advancedgroup" datatype="html">
         <source>Advanced</source>
       </trans-unit>

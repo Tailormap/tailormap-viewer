@@ -94,10 +94,10 @@ export class LoginFormComponent {
     window.location.href = ssoUrl;
   }
 
+  @Output() public requestPasswordReset = new EventEmitter<void>();
+
   public requestPasswordResetForm() {
-    // TODO route to /reset-password or whatever we build
-    //  in https://b3partners.atlassian.net/browse/HTM-1647
-    console.log('TODO: Request password reset');
+    this.requestPasswordReset.emit();
   }
 
 }
