@@ -776,7 +776,7 @@
       </trans-unit>
       <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
         <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>
-        <target>Het resetten van filters zal uw toegevoegde filters verwijderen. Wilt u doorgaan?</target>
+        <target>Het resetten van filters verwijdert alle door u toegevoegde filters. Wilt u doorgaan?</target>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters-tooltip" datatype="html">
         <source>Reset filters to their original state</source>
