@@ -116,4 +116,5 @@ button mat-spinner {
   padding-bottom: 4px;
   padding-right: 4px;
   text-align: right;
+  cursor: pointer;
 }
