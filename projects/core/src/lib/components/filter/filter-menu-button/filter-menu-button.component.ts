@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
+import { selectActiveFilterGroups } from '../../../filter/state/filter.selectors';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'tm-filter-menu-button',
@@ -15,4 +17,8 @@ export class FilterMenuButtonComponent {
 
   public componentType = BaseComponentTypeEnum.FILTER;
   public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.filter.filtering:Filtering`));
+  public activeFilters$: Observable<number> = this.store$.select(selectActiveFilterGroups)
+    .pipe(
+      map(groups => groups.filter(group => !group.disabled).length),
+    );
 }
