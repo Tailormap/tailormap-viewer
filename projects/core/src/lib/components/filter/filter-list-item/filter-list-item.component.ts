@@ -30,6 +30,9 @@ export class FilterListItemComponent {
       FilterTypeHelper.isAttributeFilter(f) && (!!f.editConfiguration || !!f.generatedByFilterId)) ?? [];
   }
 
+  @Input()
+  public onlyGroupInList = false;
+
   private store$ = inject(Store);
   private removeFilterService = inject(RemoveFilterService);
 

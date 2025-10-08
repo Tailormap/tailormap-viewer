@@ -1,4 +1,4 @@
-<mat-expansion-panel class="edit-filter-expansion-panel">
+<mat-expansion-panel class="edit-filter-expansion-panel" [expanded]="onlyGroupInList()">
   <mat-expansion-panel-header i18n="@@core.filter.edit-filters">Edit filters</mat-expansion-panel-header>
   @for (filter of editableFilters(); track filter.id) {
     <div class="edit-attribute-filters">

@@ -17,6 +17,7 @@ export class FilterListComponent implements OnInit {
   private store$ = inject(Store);
   private attributeFilterService = inject(AttributeFilterService);
   public filters$: Observable<ExtendedFilterGroupModel[]> = of([]);
+  public onlyGroupInList$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {
     this.filters$ = this.store$.select(selectFilterGroupsWithLayers).pipe(
@@ -24,6 +25,10 @@ export class FilterListComponent implements OnInit {
         groups.filter(group => group.layers.some(layer => layer.visible)),
       ),
       switchMap(groups => this.attributeFilterService.addAttributeAliasesToFilters$(groups)),
+    );
+
+    this.onlyGroupInList$ = this.filters$.pipe(
+      map(groups => groups.length === 1),
     );
   }
 
