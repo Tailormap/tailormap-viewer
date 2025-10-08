@@ -17,8 +17,11 @@ export class FilterMenuButtonComponent {
 
   public componentType = BaseComponentTypeEnum.FILTER;
   public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.filter.filtering:Filtering`));
-  public activeFilters$: Observable<number> = this.store$.select(selectActiveFilterGroups)
+  public activeFilters$: Observable<number | null> = this.store$.select(selectActiveFilterGroups)
     .pipe(
-      map(groups => groups.filter(group => !group.disabled).length),
+      map(groups => {
+        const activeFilters = groups.filter(group => !group.disabled).length;
+        return activeFilters > 0 ? activeFilters : null;
+      }),
     );
 }

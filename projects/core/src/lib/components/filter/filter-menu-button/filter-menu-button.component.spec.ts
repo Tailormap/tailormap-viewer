@@ -7,6 +7,8 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
+import { MatBadge } from '@angular/material/badge';
+import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../../filter/state/filter.selectors';
 
 describe('FilterMenuButtonComponent', () => {
 
@@ -18,9 +20,14 @@ describe('FilterMenuButtonComponent', () => {
     };
     await render(FilterMenuButtonComponent, {
       declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
       providers: [
-        provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
+        provideMockStore({
+          initialState: { [coreStateKey]: initialCoreState },
+          selectors: [
+            { selector: selectActiveFilterGroups, value: [] },
+          ],
+        }),
         { provide: MenubarService, useValue: menubarService },
       ],
     });

@@ -7,6 +7,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
+import { MatBadge } from '@angular/material/badge';
 
 describe('LegendMenuButtonComponent', () => {
 
@@ -18,7 +19,7 @@ describe('LegendMenuButtonComponent', () => {
     };
     await render(LegendMenuButtonComponent, {
       declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },
