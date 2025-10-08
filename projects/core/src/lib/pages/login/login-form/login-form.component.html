@@ -29,7 +29,7 @@
         }
       </div>
     }
-    @if (loginConfiguration.hideLoginForm !== true) {
+    @if (!loginConfiguration.hideLoginForm) {
       @if (hasSSOButtons) {
         <mat-expansion-panel class="mat-elevation-z0">
           <mat-expansion-panel-header class="login-form-panel-header">
@@ -78,6 +78,13 @@
           }
         </button>
       </div>
+
+      @if (enablePasswordReset) {
+        <div class="password-reset">
+          <a (click)="requestPasswordResetForm()"
+             i18n="@@shared.login-form.forgot-password">Forgot your password?</a>
+        </div>
+      }
     </ng-template>
 
   </div>
