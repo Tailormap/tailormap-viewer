@@ -27,7 +27,7 @@ export class EditAttributeFiltersComponent {
   public editableFilters = input<AttributeFilterModel[]>([]);
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
-  public onlyGroupInList = input<boolean>(false);
+  public onlyGroupInListOnInit = input<boolean>(false);
 
   public getSliderFilterConfiguration(filter: AttributeFilterModel): UpdateSliderFilterModel | null {
     const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
