@@ -69,12 +69,11 @@ label {
 .buttons {
   display: flex;
   justify-content: flex-end;
-  padding: 16px;
+  padding: 16px 0 16px 16px;
 }
 
-.buttons > * {
-  margin-left: 8px;
-  margin-right: 8px;
+.login-form-no-sso .buttons {
+ padding-right: 16px;
 }
 
 button mat-spinner {
@@ -116,4 +115,5 @@ button mat-spinner {
   padding-bottom: 4px;
   padding-right: 4px;
   text-align: right;
+  cursor: pointer;
 }

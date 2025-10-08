@@ -7,4 +7,5 @@ export interface TailormapSecurityApiV1ServiceModel {
   getUser$(): Observable<ExtendedUserResponseModel>;
   login$(username: string, password: string): Observable<UserResponseModel>;
   logout$(): Observable<boolean>;
+  requestPasswordReset$(email: string): Observable<boolean>;
 }

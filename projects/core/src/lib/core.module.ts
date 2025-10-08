@@ -30,6 +30,7 @@ import { ApplicationStyleService } from './services/application-style.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
+import { PasswordResetRequestFormComponent } from './pages/login/password-reset-request-form/password-reset-request-form.component';
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
@@ -54,6 +55,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     ViewerAppComponent,
     LoginComponent,
     LoginFormComponent,
+    PasswordResetRequestFormComponent,
   ],
   imports: [
     CoreRoutingModule,
