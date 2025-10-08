@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
@@ -16,7 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: false,
 })
 export class LoginComponent implements OnInit {
-  private store$ = inject(Store);
   private router = inject(Router);
   private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
   private authenticatedUserService = inject(AuthenticatedUserService);
@@ -24,9 +22,11 @@ export class LoginComponent implements OnInit {
 
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
+  public requestPasswordReset$ = (email: string):Observable<boolean> => this.api.requestPasswordReset$(email);
   public loginConfiguration$: Observable<LoginConfigurationModel>;
   public routeBeforeLogin: string | undefined;
   public insufficientRightsMessage: string | undefined;
+  public showPasswordResetForm = false;
 
   constructor() {
     const state = this.router.getCurrentNavigation()?.extras.state;
@@ -48,4 +48,7 @@ export class LoginComponent implements OnInit {
     this.authenticatedUserService.setUserDetails($event);
   }
 
+  public onRequestPasswordReset() {
+    this.showPasswordResetForm = true;
+  }
 }

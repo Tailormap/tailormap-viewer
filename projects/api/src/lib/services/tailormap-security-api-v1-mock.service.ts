@@ -22,4 +22,7 @@ export class TailormapSecurityApiV1MockService implements TailormapSecurityApiV1
     return of(true);
   }
 
+  public requestPasswordReset$(): Observable<boolean> {
+    return of(true);
+  }
 }
