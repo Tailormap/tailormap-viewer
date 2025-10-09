@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { first, forkJoin, map, Observable, switchMap, take, withLatestFrom } from 'rxjs';
+import { first, forkJoin, map, Observable, of, switchMap, take, withLatestFrom } from 'rxjs';
 import {
   AttributeFilterModel, ColumnMetadataModel, DescribeAppLayerService, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
@@ -177,6 +177,10 @@ export class AttributeFilterService {
             group.layers.filter(layer => layer.visible).map(layer => layer.id)).flat(),
       ),
     );
+
+    if (layerIds.length === 0) {
+      return of(filterGroups);
+    }
 
     return forkJoin(
       layerIds.map(layerId =>
