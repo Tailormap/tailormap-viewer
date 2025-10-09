@@ -510,10 +510,6 @@
         <source>Select layer</source>
         <target>Layer auswählen</target>
       </trans-unit>
-      <trans-unit id="core.filter.add-filter" datatype="html">
-        <source>Add filter</source>
-        <target>Filter hinzufügen</target>
-      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
         <target>Räumlichen Filter hinzufügen</target>
@@ -633,6 +629,10 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fehler beim Laden der Geometrien der Referenzschicht</target>
+      </trans-unit>
+      <trans-unit id="core.filter.filter" datatype="html">
+        <source>Filter</source>
+        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -771,7 +771,7 @@
         <target>oder</target>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters" datatype="html">
-        <source> Reset filters </source>
+        <source>Reset filters</source>
         <target>Filter zurücksetzen</target>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters-confirm" datatype="html">

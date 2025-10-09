@@ -510,10 +510,6 @@
         <source>Select layer</source>
         <target>Selecteer laag</target>
       </trans-unit>
-      <trans-unit id="core.filter.add-filter" datatype="html">
-        <source>Add filter</source>
-        <target>Filter toevoegen</target>
-      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
         <target>Ruimtelijk filter toevoegen</target>
@@ -633,6 +629,10 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fout bij het laden van referentielaaggeometrieën</target>
+      </trans-unit>
+      <trans-unit id="core.filter.filter" datatype="html">
+        <source>Filter</source>
+        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -771,8 +771,8 @@
         <target>of</target>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters" datatype="html">
-        <source> Reset filters </source>
-        <target> Filters resetten </target>
+        <source>Reset filters</source>
+        <target>Filters resetten</target>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
         <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>

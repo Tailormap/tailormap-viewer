@@ -383,9 +383,6 @@
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
       </trans-unit>
-      <trans-unit id="core.filter.add-filter" datatype="html">
-        <source>Add filter</source>
-      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
       </trans-unit>
@@ -475,6 +472,9 @@
       </trans-unit>
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
+      </trans-unit>
+      <trans-unit id="core.filter.filter" datatype="html">
+        <source>Filter</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -579,7 +579,7 @@
         <source>or</source>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters" datatype="html">
-        <source> Reset filters </source>
+        <source>Reset filters</source>
       </trans-unit>
       <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
         <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>
