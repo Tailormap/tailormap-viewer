@@ -7,6 +7,7 @@ import { MenubarButtonComponent, MenubarService } from '../../menubar';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { coreStateKey, initialCoreState } from '../../../state';
+import { MatBadge } from '@angular/material/badge';
 
 describe('InfoMenuButtonComponent', () => {
 
@@ -21,6 +22,7 @@ describe('InfoMenuButtonComponent', () => {
       imports: [
         SharedModule,
         MatIconTestingModule,
+        MatBadge,
       ],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
