@@ -18,14 +18,6 @@ export interface SliderFilterModel {
   stepSize?: number;
 }
 
-export interface UpdateSliderFilterModel {
-  filterTool: FilterToolEnum.SLIDER;
+export interface UpdateSliderFilterModel extends SliderFilterModel {
   condition?: FilterConditionEnum;
-  initialValue?: number | null;
-  minimumValue: number;
-  maximumValue: number;
-  initialLowerValue?: number | null;
-  initialUpperValue?: number | null;
-  inputMode?: SliderFilterInputModeEnum;
-  stepSize?: number;
 }
