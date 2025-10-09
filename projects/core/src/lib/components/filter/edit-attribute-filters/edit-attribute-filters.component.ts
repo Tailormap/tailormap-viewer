@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum, DropdownListFilterModel, UniqueValuesService,
-  UpdateSliderFilterModel,
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
@@ -28,68 +26,30 @@ export class EditAttributeFiltersComponent {
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
 
-  public getSliderFilterConfiguration(filter: AttributeFilterModel): UpdateSliderFilterModel | null {
-    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
-    if (editConfiguration && filter.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 1) {
-      editConfiguration.initialValue = Number(filter.value[0]);
-    } else if (editConfiguration && filter.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY && filter.value.length === 2) {
-      editConfiguration.initialLowerValue = Number(filter.value[0]);
-      editConfiguration.initialUpperValue = Number(filter.value[1]);
-    } else if (editConfiguration) {
-      editConfiguration.condition = filter.condition;
-    }
-    return editConfiguration;
+  public isSliderFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER;
   }
 
-  public getCheckboxFilterConfiguration(filter: AttributeFilterModel): CheckboxFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX) {
-      return null;
-    }
-    return {
-      ...filter.editConfiguration,
-      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => {
-        if (valueSettings.useAsIlikeSubstringFilter) {
-          const substringFilterId = `${filter.id}-substring-${valueSettings.value}`;
-          const substringFilter = this.editableFilters().find(f => f.id === substringFilterId);
-          return {
-            ...valueSettings,
-            initiallySelected: substringFilter ? !substringFilter.disabled : false,
-          };
-        }
-        return {
-          ...valueSettings,
-          initiallySelected: filter.value.includes(valueSettings.value),
-        };
-      }),
-    };
+  public isCheckboxFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX;
   }
 
-  public getSwitchFilterConfiguration(filter: AttributeFilterModel): SwitchFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
-      return null;
-    }
-    return filter.editConfiguration;
+  public isSwitchFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SWITCH;
   }
 
-  public getDatePickerFilterConfiguration(filter: AttributeFilterModel): DatePickerFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DATE_PICKER) {
-      return null;
-    }
-    const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
-    if (editConfiguration.initialDate) {
-      editConfiguration.initialDate = filter.value[0];
-    } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
-      editConfiguration.initialLowerDate = filter.value[0];
-      editConfiguration.initialUpperDate = filter.value[1];
-    }
-    return editConfiguration;
+  public isDatePickerFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DATE_PICKER;
   }
 
-  public getDropdownListFilterConfiguration(filter: AttributeFilterModel): DropdownListFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
-      return null;
-    }
-    return filter.editConfiguration;
+  public isDropdownListFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DROPDOWN_LIST;
+  }
+
+  public getSubstringFilters(filter: AttributeFilterModel): { id: string; disabled: boolean }[] {
+    return this.editableFilters()
+      .filter(f => f.id.startsWith(`${filter.id}-substring-`))
+      .map(f => ({ id: f.id, disabled: f.disabled ?? false }));
   }
 
   public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {
