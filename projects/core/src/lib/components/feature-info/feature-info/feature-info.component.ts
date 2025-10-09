@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, DestroyRef } from '@angular/core';
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { featureInfoLoaded } from '../state/feature-info.actions';
+import { featureInfoLoaded, hideFeatureInfoDialog } from '../state/feature-info.actions';
 import {
-  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoFeatures, selectLoadingFeatureInfo, selectMapCoordinates,
+  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoDialogVisible, selectFeatureInfoFeatures, selectLoadingFeatureInfo,
+  selectMapCoordinates,
 } from '../state/feature-info.selectors';
 import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
@@ -15,6 +16,7 @@ import {
 } from '../../../map/state/map.selectors';
 import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-feature-info',
@@ -28,7 +30,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private featureInfoService = inject(FeatureInfoService);
   private store$ = inject(Store);
   private featureUpdatedService = inject(FeatureUpdatedService);
-
+  private destroyRef = inject(DestroyRef);
 
   private destroyed = new Subject();
 
@@ -38,11 +40,14 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.feature-info.error-loading-feature-info:Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.feature-info.no-features-found:No features found`;
 
+  private clickTool: MapClickToolModel | undefined;
+
   public ngOnInit(): void {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
+          this.clickTool = tool;
           this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id } }));
         }),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
@@ -50,6 +55,16 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .subscribe(mapClick => {
         this.handleMapClick(mapClick);
       });
+
+    this.mapService.getToolManager$().pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(toolManager => toolManager.getToolsDisabled$()),
+      withLatestFrom(this.store$.select(selectFeatureInfoDialogVisible)),
+    ).subscribe(([{ disabledTools }, featureInfoDialogVisible ]) => {
+      if (this.clickTool && disabledTools.includes(this.clickTool.id) && featureInfoDialogVisible) {
+        this.store$.dispatch(hideFeatureInfoDialog());
+      }
+    });
 
     this.mapService.renderFeatures$(
       'feature-info-highlight-layer',
