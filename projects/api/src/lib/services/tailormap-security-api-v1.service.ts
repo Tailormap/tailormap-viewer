@@ -75,4 +75,18 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
       catchError(() => of(false)),
     );
   }
+
+  public validatePasswordStrength$(password: string): Observable<boolean> {
+    const body = new HttpParams().set('password', password);
+    return this.httpClient.post<{ result: boolean }>(`${TailormapApiConstants.BASE_URL}/validate-password`, body)
+      .pipe(map(response => response.result));
+  }
+
+  public resetPassword$(token: string, username: string, newPassword: string): Observable<boolean> {
+    const body = new HttpParams().set('token', token).set('username', username).set('newPassword', newPassword);
+    return this.httpClient.post(`${TailormapApiConstants.BASE_URL}/password-reset/confirm`, body, { observe: 'response' }).pipe(
+      map(response => response.status === 200),
+      catchError(() => of(false)),
+    );
+  }
 }
