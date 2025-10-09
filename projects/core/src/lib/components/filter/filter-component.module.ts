@@ -25,6 +25,7 @@ import { CheckboxFilterComponent } from './edit-attribute-filters/checkbox-filte
 import { SwitchFilterComponent } from './edit-attribute-filters/switch-filter/switch-filter.component';
 import { DatePickerFilterComponent } from './edit-attribute-filters/date-picker-filter/date-picker-filter.component';
 import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-list-filter/dropdown-list-filter.component';
+import { ResetFiltersButtonComponent } from './reset-filters-button/reset-filters-button.component';
 
 
 
@@ -46,6 +47,7 @@ import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-l
     SwitchFilterComponent,
     DatePickerFilterComponent,
     DropdownListFilterComponent,
+    ResetFiltersButtonComponent,
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,10 @@
 <ng-template #panelTemplate let-spatialFormVisible>
   <div class="filter-panel">
     @if (!spatialFormVisible) {
-      <tm-create-filter-button></tm-create-filter-button>
+      <div class="filter-buttons">
+        <tm-create-filter-button></tm-create-filter-button>
+        <tm-reset-filters-button></tm-reset-filters-button>
+      </div>
     }
     @if (spatialFormVisible) {
       <div class="filter-form">

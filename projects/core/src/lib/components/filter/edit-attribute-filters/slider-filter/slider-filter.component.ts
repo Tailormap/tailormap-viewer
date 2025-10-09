@@ -49,6 +49,7 @@ export class SliderFilterComponent implements OnInit {
       this.initialLowerValue = filter.value[0] ? Number(filter.value[0]) : filter.editConfiguration.minimumValue;
       this.initialUpperValue = filter.value[1] ? Number(filter.value[1]) : filter.editConfiguration.maximumValue;
     }
+    this.initForm(this.initialValue ?? null, this.initialLowerValue ?? null, this.initialUpperValue ?? null);
   }
 
   @Output()
@@ -80,17 +81,19 @@ export class SliderFilterComponent implements OnInit {
           this.valueChange.emit(value.filterValue ?? null);
         }
       });
+  }
 
+  private initForm(filterValue: number | null, lowerValue: number | null, upperValue: number | null) {
     // If only one of the upper and lower values is set, the other is set to min/max to get a valid filter,
     // if neither are set, both remain null.
     this.viewerSliderFilterForm.patchValue({
-      filterValue: this.initialValue,
-      lowerValue: this.initialUpperValue !== null
-        ? this.initialLowerValue ?? this.minValue
-        : this.initialLowerValue,
-      upperValue: this.initialLowerValue !== null
-        ? this.initialUpperValue ?? this.maxValue
-        : this.initialUpperValue,
+      filterValue,
+      lowerValue: upperValue !== null
+        ? lowerValue ?? this.minValue
+        : lowerValue,
+      upperValue: lowerValue !== null
+        ? upperValue ?? this.maxValue
+        : upperValue,
     }, { emitEvent: false });
   }
 

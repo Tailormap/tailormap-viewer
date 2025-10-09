@@ -13,9 +13,9 @@ import { AttributeFilterService } from '../../../services/attribute-filter.servi
   standalone: false,
 })
 export class FilterListComponent implements OnInit {
-
   private store$ = inject(Store);
   private attributeFilterService = inject(AttributeFilterService);
+
   public filters$: Observable<ExtendedFilterGroupModel[]> = of([]);
   public onlyGroupInListOnInit: boolean = false;
 
