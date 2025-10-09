@@ -86,6 +86,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
   }
 
   public disableTool(toolId: string, preventAutoEnableTools?: boolean): ToolManagerModel {
+    if (!this.tools.get(toolId)?.isActive) {
+     return this;
+    }
     this.tools.get(toolId)?.disable();
     if (!preventAutoEnableTools && !this.switchedTool) {
       this.enableAutoEnabledTools();
