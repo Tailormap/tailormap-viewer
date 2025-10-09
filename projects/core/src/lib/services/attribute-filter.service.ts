@@ -169,7 +169,6 @@ export class AttributeFilterService {
     filterGroups: ExtendedFilterGroupModel[],
   ): Observable<ExtendedFilterGroupModel[]> {
     // Collect unique layerIds from attribute filter groups
-    console.debug("Adding attribute aliases to filters", filterGroups);
     const layerIds = Array.from(
       new Set(
         filterGroups
