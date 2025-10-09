@@ -65,7 +65,6 @@ export class OpenLayersToolManager implements ToolManagerModel {
       this.alwaysEnabledTools.add(toolId);
     }
     if (tool.autoEnable) {
-      console.log('autoEnable', tool);
       this.autoEnabledTools.add(toolId);
     }
     if (tool.alwaysEnabled || tool.autoEnable) {
