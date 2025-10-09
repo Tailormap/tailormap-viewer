@@ -9,12 +9,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectUsers, selectUsersLoadStatus } from '../state/user.selectors';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
+import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private adminApiService = inject(TailormapAdminApiV1Service);
+  private securityApiService = inject(TailormapSecurityApiV1Service);
   private store$ = inject(Store);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
@@ -111,7 +113,7 @@ export class UserService {
   }
 
   public validatePasswordStrength$(password: string) {
-    return this.adminApiService.validatePasswordStrength$(password);
+    return this.securityApiService.validatePasswordStrength$(password);
   }
 
   private updateUserState(
