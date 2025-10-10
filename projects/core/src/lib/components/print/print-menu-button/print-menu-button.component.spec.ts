@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
+import { MatBadge } from '@angular/material/badge';
 
 describe('PrintMenuButtonComponent', () => {
 
@@ -18,7 +19,7 @@ describe('PrintMenuButtonComponent', () => {
     };
     await render(PrintMenuButtonComponent, {
       declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

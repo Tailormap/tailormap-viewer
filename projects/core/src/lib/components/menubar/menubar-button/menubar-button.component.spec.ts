@@ -5,11 +5,12 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenubarService } from '../menubar.service';
 import { of } from 'rxjs';
+import { MatBadge } from '@angular/material/badge';
 
 describe('MenubarButtonComponent', () => {
   test('renders with default inputs', async () => {
     await render(MenubarButtonComponent, {
-      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule ], providers: [{
+      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule, MatBadge ], providers: [{
         provide: MenubarService, useValue: { isComponentVisible$: jest.fn(() => of(false)), toggleActiveComponent: jest.fn() },
       }],
     });
@@ -19,7 +20,7 @@ describe('MenubarButtonComponent', () => {
   test('emits buttonClicked event on click', async () => {
     const onClick = jest.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule ],
+      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule, MatBadge ],
       providers: [{
         provide: MenubarService,
         useValue: { isComponentVisible$: jest.fn(() => of(false)), toggleActiveComponent: jest.fn() },
@@ -35,7 +36,7 @@ describe('MenubarButtonComponent', () => {
   test('calls toggleActiveComponent with correct arguments on click', async () => {
     const toggleActiveComponent = jest.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule ],
+      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule, MatBadge ],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$: jest.fn(() => of(false)), toggleActiveComponent } }],
       inputs: { component: 'test', panelTitle: 'test title' },
     });
@@ -46,7 +47,7 @@ describe('MenubarButtonComponent', () => {
   test('does not call toggleActiveComponent if component is undefined', async () => {
     const toggleActiveComponent = jest.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule ],
+      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule, MatBadge ],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$: jest.fn(() => of(false)), toggleActiveComponent } }],
     });
     fireEvent.click(screen.getByRole('button'));
@@ -56,7 +57,7 @@ describe('MenubarButtonComponent', () => {
   test('sets active$ observable based on isComponentVisible$', async () => {
     const isComponentVisible$ = jest.fn(() => of(true));
     const { fixture } = await render(MenubarButtonComponent, {
-      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule ],
+      imports: [ MatIconTestingModule, SharedModule, NoopAnimationsModule, MatBadge ],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$, toggleActiveComponent: jest.fn() } }],
       inputs: { component: 'test' },
     });

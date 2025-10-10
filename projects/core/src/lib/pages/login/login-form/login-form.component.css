@@ -72,6 +72,10 @@ label {
   padding: 16px 0 16px 16px;
 }
 
+.login-form-no-sso .buttons {
+ padding-right: 16px;
+}
+
 button mat-spinner {
   margin: 8px;
 }

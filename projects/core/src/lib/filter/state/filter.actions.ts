@@ -53,3 +53,7 @@ export const addLayerIdsToFilterGroup = createAction(
   `${filterActionsPrefix} Add Layer Ids To Filter Group`,
   props<{ filterGroupId: string; layerIds: string[] }>(),
 );
+
+export const resetAttributeFilters = createAction(
+  `${filterActionsPrefix} Reset Attribute Filters`,
+);

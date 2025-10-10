@@ -278,3 +278,8 @@ mat-form-field + mat-form-field {
 .cdk-drop-list-dragging mat-row:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+.tooltip-pre-line .mdc-tooltip__surface {
+  white-space: pre-line;
+  max-width: unset !important;
+}

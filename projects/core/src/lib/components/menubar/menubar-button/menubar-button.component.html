@@ -4,6 +4,9 @@
     (click)="handleClick()"
     [tmTooltip]="tooltip || ''"
     matTooltipPosition="right"
+    [matBadge]="badgeCount"
+    matBadgeSize="small"
+    matBadgeColor="primary"
     [class.button--active]="(active$ | async) ?? false">
     @if (icon) {
       <mat-icon [svgIcon]="icon"></mat-icon>

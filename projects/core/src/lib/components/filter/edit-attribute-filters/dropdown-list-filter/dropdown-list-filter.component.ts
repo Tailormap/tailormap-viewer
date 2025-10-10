@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, DestroyRef, inject } from '@angular/core';
-import { AttributeValueSettings, DropdownListFilterModel } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { AttributeFilterModel, AttributeValueSettings, FilterToolEnum } from '@tailormap-viewer/api';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,9 +17,12 @@ export class DropdownListFilterComponent implements OnInit {
 
 
   @Input()
-  public set dropdownListFilterConfiguration(dropdownListFilter: DropdownListFilterModel | null) {
-    this.alteredValuesSubject$.next(dropdownListFilter?.attributeValuesSettings || []);
-    const selectedValues = dropdownListFilter?.attributeValuesSettings
+  public set dropdownListFilter(filter: AttributeFilterModel) {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
+      return;
+    }
+    this.alteredValuesSubject$.next(filter.editConfiguration.attributeValuesSettings || []);
+    const selectedValues = filter.editConfiguration.attributeValuesSettings
       .filter(value => value.initiallySelected)
       .map(value => ({ value: value.value, alias: value.alias })) || [];
     this.selectedValuesSubject$.next(selectedValues);
