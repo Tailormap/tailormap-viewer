@@ -134,6 +134,7 @@ export const getGroups = (): GroupModel[] => {
 export const getUser = (overrides?: Partial<UserModel>): UserModel => ({
   username: 'admin',
   name: null,
+  organisation: null,
   validUntil: null,
   email: null,
   enabled: true,

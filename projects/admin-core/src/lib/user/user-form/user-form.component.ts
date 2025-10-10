@@ -36,6 +36,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
     email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
     name: new FormControl<string>('', { nonNullable: false }),
+    organisation: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false, validators: [Validators.maxLength(10000)] }),
@@ -57,6 +58,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       username: user ? user.username : '',
       email: user ? user.email : '',
       name: user ? user.name : '',
+      organisation: user ? user.organisation : '',
       enabled: user ? user.enabled : true,
       // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
@@ -81,6 +83,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public userUpdated = new EventEmitter<UserAddUpdateModel | null>();
 
   public allGroups$: Observable<GroupModel[]> | undefined;
+  public organisations$: Observable<string[]> | undefined;
   private destroyed = new Subject();
   private _user: UserModel | null = null;
   public additionalProperties: AdditionalPropertyModel[] = [];
@@ -90,6 +93,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.organisations$ = this.userDetailsService.getUsers$().pipe(
+      map(users => {
+        const organisations = users.map(user => user.organisation).filter(org => org != null);
+        return Array.from(new Set(organisations));
+      }),
+    );
     this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.USER);
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
@@ -115,6 +124,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       username: this.userForm.get('username')?.value || '',
       email: this.userForm.get('email')?.value || null,
       name: this.userForm.get('name')?.value || null,
+      organisation: this.userForm.get('organisation')?.value || null,
       enabled: this.userForm.get('enabled')?.value || false,
       validUntil: validUntilFromFormValue ? new Date(validUntilFromFormValue) : null,
       notes: this.userForm.get('notes')?.value || null,
