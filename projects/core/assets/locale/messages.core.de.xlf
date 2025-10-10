@@ -914,7 +914,7 @@
         <source>Your password reset token is invalid or has expired.</source>
         <target>Ihr Passwort-Reset-Token ist ungültig oder abgelaufen.</target>
       </trans-unit>
-      <trans-unit id="core.password-reset-form.succes" datatype="html">
+      <trans-unit id="core.password-reset-form.success" datatype="html">
         <source>Password successfully reset, you can now log in with your new password.</source>
         <target>Passwort erfolgreich zurückgesetzt, Sie können sich jetzt mit Ihrem neuen Passwort anmelden.</target>
       </trans-unit>
