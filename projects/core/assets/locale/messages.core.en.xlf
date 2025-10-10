@@ -925,7 +925,7 @@
         <source>Username is invalid</source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="PH" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
