@@ -8,16 +8,19 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async () => {
-  const mockApiService = {
+  const mockAdminApiService = {
     getUsers$: jest.fn(() => of(getUsers)),
   };
+  const mockApiService = {};
 
   await render(UserListComponent, {
     imports: [ SharedModule, MatListModule, SharedAdminComponentsModule ],
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
+      { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },
+      { provide: TailormapSecurityApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
