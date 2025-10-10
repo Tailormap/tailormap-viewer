@@ -6,8 +6,8 @@ import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
-import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
+import { ValidatorsHelper } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -25,7 +25,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public userForm = new FormGroup({
     username: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(ValidatorsHelper.NAME_REGEX) ],
     }),
     password: new FormControl<string>('', {
       nonNullable: true,

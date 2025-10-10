@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnI
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { AdditionalPropertyModel, GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
-import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
+import { ValidatorsHelper } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-group-form',
@@ -23,7 +23,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   public groupForm = new FormGroup({
     name: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(ValidatorsHelper.NAME_REGEX) ],
     }),
     description: new FormControl<string>('', { nonNullable: false }),
     aliasForGroup: new FormControl<string>('', { nonNullable: false }),

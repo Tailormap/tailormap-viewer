@@ -207,12 +207,6 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  public validatePasswordStrength$(password: string): Observable<boolean> {
-    const body = new HttpParams().set('password', password);
-    return this.httpClient.post<{ result: boolean }>(`${TailormapAdminApiV1Service.BASE_URL}/validate-password`, body)
-      .pipe(map(response => response.result));
-  }
-
   public getApplications$(): Observable<ApplicationModel[]> {
     return this.httpClient.get<{ _embedded: { applications: ApplicationModel[] }}>(`${TailormapAdminApiV1Service.BASE_URL}/applications?size=1000&sort=title`)
       .pipe(map(response => response._embedded.applications));

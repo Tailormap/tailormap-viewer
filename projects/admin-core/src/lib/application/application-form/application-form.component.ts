@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { BoundsModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
+import { BoundsModel, I18nSettingsModel, UiSettingsModel, ValidatorsHelper } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
@@ -51,7 +51,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [
         Validators.required,
-        Validators.pattern(FormHelper.NAME_REGEX),
+        Validators.pattern(ValidatorsHelper.NAME_REGEX),
         this.isUniqueApplicationName(),
       ],
     }),
