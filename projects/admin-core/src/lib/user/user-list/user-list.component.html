@@ -9,9 +9,13 @@
   <mat-selection-list class="userlist">
     @for (user of filteredUsers$ | async; track user) {
       <mat-list-item
+        class="userlist-item"
         [class.selected]="user.selected"
         [routerLink]="['/admin/users/user', user.username]">
-        <span class="userdetail">{{user.username}}</span>
+        <div class="user-item">
+          <div class="name">{{user.username}}</div>
+          <div class="organisation">{{user.organisation}}</div>
+        </div>
       </mat-list-item>
     }
   </mat-selection-list>
