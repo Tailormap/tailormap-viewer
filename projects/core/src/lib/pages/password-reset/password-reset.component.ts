@@ -70,7 +70,7 @@ export class PasswordResetComponent implements OnInit {
             if (result) {
               this.errorMessageSubject.next('');
               this.infoMessageSubject.next(
-                $localize`:@@core.password-reset-form.succes:Password successfully reset, you can now log in with your new password.`);
+                $localize`:@@core.password-reset-form.success:Password successfully reset, you can now log in with your new password.`);
             } else {
               this.infoMessageSubject.next('');
               this.errorMessageSubject.next(
