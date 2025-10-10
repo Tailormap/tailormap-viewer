@@ -97,7 +97,7 @@ export class PasswordResetComponent implements OnInit {
 
   private passwordStrengthValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (!control.value || control.value < PasswordResetComponent.minPasswordLength) {
+      if (!control.value || control.value.length < PasswordResetComponent.minPasswordLength) {
         return of(null);
       }
       return this.securityApiService.validatePasswordStrength$(control.value).pipe(map((result: boolean) => {
