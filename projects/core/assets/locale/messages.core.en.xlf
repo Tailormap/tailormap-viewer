@@ -936,7 +936,7 @@
       <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
         <source>Your password reset token is invalid or has expired.</source>
       </trans-unit>
-      <trans-unit id="core.password-reset-form.succes" datatype="html">
+      <trans-unit id="core.password-reset-form.success" datatype="html">
         <source>Password successfully reset, you can now log in with your new password.</source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-saving" datatype="html">
