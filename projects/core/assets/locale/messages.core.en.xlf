@@ -909,49 +909,48 @@
       <trans-unit id="core.user-login-check-viewer-message" datatype="html">
         <source>You are logged out and might need to login again</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.title" datatype="html">
+      <trans-unit id="core.password-reset-form.title" datatype="html">
         <source>Reset Password</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.username" datatype="html">
+      <trans-unit id="core.password-reset-form.username" datatype="html">
         <source>Username</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.newpassword" datatype="html">
+      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
         <source>New Password</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.confirmedpassword" datatype="html">
+      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
         <source>Confirm Password</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error.username-invalid" datatype="html">
+      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
         <source>Username is invalid</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error.password-tooshort" datatype="html">
+      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
         <source>Password shorter than <x id="PH" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error.password-toosimple" datatype="html">
+      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error.need-match" datatype="html">
+      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
         <source>Passwords need to match</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error.token-expired" datatype="html">
+      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
         <source>Your password reset token is invalid or has expired.</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.succes" datatype="html">
+      <trans-unit id="core.password-reset-form.succes" datatype="html">
         <source>Password successfully reset, you can now log in with your new password.</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error-saving" datatype="html">
+      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
         <source>Error saving password, please check your token, username and password and try again.</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.error-reset" datatype="html">
+      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
         <source>Error resetting password: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.save" datatype="html">
+      <trans-unit id="core.password-reset-form.save" datatype="html">
         <source>Save new password</source>
       </trans-unit>
-      <trans-unit id="shared.password-reset-form.return" datatype="html">
+      <trans-unit id="core.password-reset-form.return" datatype="html">
         <source>Return to Login</source>
       </trans-unit>
-
     </body>
   </file>
 </xliff>
