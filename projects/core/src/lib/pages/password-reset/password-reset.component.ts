@@ -11,7 +11,7 @@ interface Token {
 @Component({
   selector: 'tm-password-reset',
   templateUrl: './password-reset.component.html',
-  styleUrls: [ './password-reset.component.css' ],
+  styleUrls: ['./password-reset.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
@@ -35,7 +35,7 @@ export class PasswordResetComponent implements OnInit {
     newPassword: new FormControl<string>('', {
       nonNullable: true,
       validators: [ Validators.required, Validators.minLength(PasswordResetComponent.minPasswordLength) ],
-      asyncValidators: [ this.passwordStrengthValidator() ],
+      asyncValidators: [this.passwordStrengthValidator()],
     }),
 
     confirmedPassword: new FormControl<string>('', {
@@ -69,15 +69,18 @@ export class PasswordResetComponent implements OnInit {
           next: (result) => {
             if (result) {
               this.errorMessageSubject.next('');
-              this.infoMessageSubject.next($localize`:@@core.password-reset-form.succes:Password successfully reset, you can now log in with your new password.`);
+              this.infoMessageSubject.next(
+                $localize`:@@core.password-reset-form.succes:Password successfully reset, you can now log in with your new password.`);
             } else {
               this.infoMessageSubject.next('');
-              this.errorMessageSubject.next($localize`:@@core.password-reset-form.error-saving:Error saving password, please check your token, username and password and try again.`);
+              this.errorMessageSubject.next(
+                $localize`:@@core.password-reset-form.error-saving:Error saving password, please check your token, username and password and try again.`);
             }
             this.passwordResetForm.reset();
           }, error: (error) => {
             this.infoMessageSubject.next('');
-            this.errorMessageSubject.next($localize`:@@core.password-reset-form.error-reset:Error resetting password: ${(error?.error?.message || error?.message || error.toString())}`);
+            this.errorMessageSubject.next(
+              $localize`:@@core.password-reset-form.error-reset:Error resetting password: ${(error?.error?.message || error?.message || error.toString())}`);
             this.passwordResetForm.reset();
           },
         });

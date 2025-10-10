@@ -10,7 +10,7 @@ describe('PasswordResetComponent', () => {
   test('should render', async () => {
     await render(PasswordResetComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [ReactiveFormsModule, HttpClientTestingModule],
+      imports: [ ReactiveFormsModule, HttpClientTestingModule ],
       declarations: [AutoFocusDirective],
     });
     expect(screen.getByText('Username')).toBeInTheDocument();
