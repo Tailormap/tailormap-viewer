@@ -45,6 +45,7 @@ describe('UserFormComponent', () => {
         username: 'user1',
         email: 'test@test.com',
         name: 'Real name',
+        organisation: null,
         enabled: true,
         validUntil: null,
         groups: [],
