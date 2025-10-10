@@ -24,6 +24,9 @@ export class ListFilterComponent implements OnInit, ControlValueAccessor {
   @Input()
   public label: string = '';
 
+  @Input()
+  public placeholder: string = $localize `:@@admin-core.common.filter-dots:Filter...`;
+
   private _filterTerm: string | null | undefined;
 
   @Input()

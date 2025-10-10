@@ -1370,6 +1370,10 @@
         <source>Ok</source>
         <target>Ok</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.organisation" datatype="html">
+        <source>Organisation</source>
+        <target>Organisation</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.password" datatype="html">
         <source>Password</source>
         <target>Passwort</target>
@@ -2340,6 +2344,10 @@
       <trans-unit id="admin-core.users.filter-users" datatype="html">
         <source>Filter users</source>
         <target>Benutzer filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.users.filter-users-placeholder" datatype="html">
+        <source>Filter on name or organisation...</source>
+        <target>Nach Name oder Organisation filtern...</target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-match-error" datatype="html">
         <source>Passwords need to match</source>

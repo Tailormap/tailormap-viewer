@@ -5,13 +5,19 @@
     [formControl]="userFilter"
     [filterTerm]="filterString$ | async"
     label="Filter users"
+    i18n-placeholder="@@admin-core.users.filter-users-placeholder"
+    placeholder="Filter on name or organisation..."
   i18n-label="@@admin-core.users.filter-users"></tm-admin-list-filter>
   <mat-selection-list class="userlist">
     @for (user of filteredUsers$ | async; track user) {
       <mat-list-item
+        class="userlist-item"
         [class.selected]="user.selected"
         [routerLink]="['/admin/users/user', user.username]">
-        <span class="userdetail">{{user.username}}</span>
+        <div class="user-item">
+          <div class="name">{{user.username}}</div>
+          <div class="organisation">{{user.organisation}}</div>
+        </div>
       </mat-list-item>
     }
   </mat-selection-list>

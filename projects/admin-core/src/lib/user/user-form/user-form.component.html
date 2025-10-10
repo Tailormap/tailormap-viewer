@@ -36,6 +36,18 @@
       <mat-label i18n="@@admin-core.common.name">Name</mat-label>
       <input formControlName="name" matInput>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.organisation">Organisation</mat-label>
+      <input formControlName="organisation" matInput [matAutocomplete]="groupsAutoComplete">
+      <mat-autocomplete #groupsAutoComplete="matAutocomplete"
+                        autoActiveFirstOption>
+        @for(organisation of organisations$ | async; track organisation) {
+          @if(organisation !== user?.name) {
+            <mat-option [value]="organisation">{{organisation}}</mat-option>
+          }
+        }
+      </mat-autocomplete>
+    </mat-form-field>
     <mat-checkbox formControlName="enabled" i18n="@@admin-core.common.enabled" labelPosition="before">Enabled</mat-checkbox>
     <mat-form-field>
       <mat-label i18n="@@admin-core.users.valid-until">Valid until</mat-label>
