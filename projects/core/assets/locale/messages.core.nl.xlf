@@ -899,8 +899,8 @@
         <target>Gebruikersnaam is ongeldig</target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="PH" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
-        <target>Wachtwoord korter dan <x id="PH" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></target>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
+        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
