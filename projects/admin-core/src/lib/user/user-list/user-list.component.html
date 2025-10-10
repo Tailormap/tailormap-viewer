@@ -5,6 +5,8 @@
     [formControl]="userFilter"
     [filterTerm]="filterString$ | async"
     label="Filter users"
+    i18n-placeholder="@@admin-core.users.filter-users-placeholder"
+    placeholder="Filter on name or organisation..."
   i18n-label="@@admin-core.users.filter-users"></tm-admin-list-filter>
   <mat-selection-list class="userlist">
     @for (user of filteredUsers$ | async; track user) {

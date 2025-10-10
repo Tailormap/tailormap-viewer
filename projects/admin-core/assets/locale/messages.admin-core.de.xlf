@@ -2345,6 +2345,10 @@
         <source>Filter users</source>
         <target>Benutzer filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.users.filter-users-placeholder" datatype="html">
+        <source>Filter on name or organisation...</source>
+        <target>Nach Name oder Organisation filtern...</target>
+      </trans-unit>
       <trans-unit id="admin-core.users.password-match-error" datatype="html">
         <source>Passwords need to match</source>
         <target>Passwörter müssen übereinstimmen</target>

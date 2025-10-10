@@ -2329,6 +2329,10 @@
         <source>Filter users</source>
         <target>Gebruikers filteren</target>
       </trans-unit>
+      <trans-unit id="admin-core.users.filter-users-placeholder" datatype="html">
+        <source>Filter on name or organisation...</source>
+        <target>Filter op naam of organisatie...</target>
+      </trans-unit>
       <trans-unit id="admin-core.users.password-match-error" datatype="html">
         <source>Passwords need to match</source>
         <target>Wachtwoorden moeten overeenkomen</target>
