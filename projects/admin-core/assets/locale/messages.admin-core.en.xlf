@@ -1724,6 +1724,9 @@
       <trans-unit id="admin-core.users.filter-users" datatype="html">
         <source>Filter users</source>
       </trans-unit>
+      <trans-unit id="admin-core.users.filter-users-placeholder" datatype="html">
+        <source>Filter on name or organisation...</source>
+      </trans-unit>
       <trans-unit id="admin-core.users.password-match-error" datatype="html">
         <source>Passwords need to match</source>
       </trans-unit>
