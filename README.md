@@ -46,6 +46,23 @@ If your database is running on localhost using `--network=host` is recommended (
 that may not always work). If your database is on another host you can specify `--publish 8080:8080` instead of `--network=host`. Of course,
 you need to specify `SPRING_DATASOURCE_URL` with the database hostname.
 
+### Enabling SMTP for sending emails
+To enable sending emails (for instance for password resets), set the following environment variables in the `.env` file or with
+`-e` arguments to `docker run`:
+- `SPRING_MAIL_HOST` (required)
+- `SPRING_MAIL_PORT` (default: 25)
+- `SPRING_MAIL_USERNAME` (if required by your SMTP server)
+- `SPRING_MAIL_PASSWORD` (if required by your SMTP server)
+
+Other options may be required depending on your SMTP server, see the
+[Spring Boot mail documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-email) and
+eg. [Guide to Spring Email](https://www.baeldung.com/spring-email).
+
+### Enabling user password resets
+To enable user password resets, set the `TAILORMAPAPI_PASSWORDRESET_ENABLED` environment variable to the value `true` in the `.env` file or with
+`-e` arguments to `docker run`. Make sure SMTP is configured as described above.
+
+
 ## Default admin account
 
 To log in to the admin interface go to http://localhost:8080/admin/.
