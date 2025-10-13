@@ -1,9 +1,8 @@
 <mat-form-field appearance="outline">
   <mat-label>{{label}}</mat-label>
   <input [formControl]="filterControl"
-         i18n-placeholder="@@admin-core.common.filter-dots"
          matInput
-         placeholder="Filter..."
+         placeholder="{{placeholder}}"
          tmAutoFocus
          type="text"
   />

@@ -24,9 +24,8 @@ import { MatLabel } from '@angular/material/select';
   ],
 })
 export class BaseComponentConfigComponent implements ConfigurationComponentModel {
-  private componentConfigService = inject(ComponentConfigurationService);
-  private destroyRef = inject(DestroyRef);
-
+  protected componentConfigService = inject(ComponentConfigurationService);
+  protected destroyRef = inject(DestroyRef);
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;

@@ -29,7 +29,11 @@ export class UserListComponent {
     ]).pipe(
       map(([ users, filterString, selectedUser ]) => {
         return users
-          .filter(user => user.username.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
+          .filter(user => {
+            const t = filterString.toLowerCase();
+            return user.username.toLowerCase().includes(t)
+                || user.organisation?.toLowerCase().includes(t);
+          })
           .map(user => ({
             ...user,
             selected: !!(selectedUser && user.username === selectedUser),
