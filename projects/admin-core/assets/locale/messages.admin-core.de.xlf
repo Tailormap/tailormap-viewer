@@ -1370,6 +1370,10 @@
         <source>Ok</source>
         <target>Ok</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.organisation" datatype="html">
+        <source>Organisation</source>
+        <target>Organisation</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.password" datatype="html">
         <source>Password</source>
         <target>Passwort</target>
