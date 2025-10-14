@@ -6,7 +6,7 @@ import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey } from '../state/attribute-list.state';
 import { initialMapState, mapStateKey } from '../../../map/state/map.state';
 import {
-  AppLayerModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1MockService,
+  getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -22,14 +22,13 @@ import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { filterStateKey, initialFilterState } from '../../../state/filterState/filter.state';
-import { filterReducer } from '../../../state/filterState/filter.reducer';
+import { initialFilterState } from '../../../state/filterState/filter.state';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { CoreSharedModule } from '../../../shared';
-import { HttpClientTestingModule, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
@@ -49,10 +48,8 @@ const getStore = (
     },
     [coreStateKey]: {
       loadStatus: 'INITIAL',
+      filters: initialFilterState,
       viewer: {}, // <-- Ensure viewer is always present
-    },
-    [filterStateKey]: {
-      ...initialFilterState,
     },
   };
 };
@@ -112,7 +109,6 @@ describe('AttributeList', () => {
     const reducers = {
       [attributeListStateKey]: attributeListReducer,
       [mapStateKey]: mapReducer,
-      [filterStateKey]: filterReducer,
       [coreStateKey]: coreReducer,
     };
     await render(AttributeListComponent, {

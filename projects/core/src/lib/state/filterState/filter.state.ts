@@ -1,6 +1,5 @@
 import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 
-export const filterStateKey = 'filter';
 
 export interface FilterState {
   // All filter groups that are defined in the application config

@@ -73,6 +73,13 @@ const onSetComponentEnabled = (
   };
 };
 
+const reduceFilters = (reducer: (state: FilterState, payload: any) => FilterState) => {
+  return (state: CoreState, payload: any): CoreState => ({
+    ...state,
+    filters: reducer(state.filters, payload),
+  });
+};
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadViewer, onLoadViewer),
@@ -80,5 +87,16 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
   on(CoreActions.setComponentEnabled, onSetComponentEnabled),
+  on(FilterActions.addAllFilterGroupsInConfig, reduceFilters(FilterReducer.onAddAllFilterGroupsInConfig)),
+  on(FilterActions.addFilterGroup, reduceFilters(FilterReducer.onAddFilterGroup)),
+  on(FilterActions.removeFilterGroup, reduceFilters(FilterReducer.onRemoveFilterGroup)),
+  on(FilterActions.updateFilterGroup, reduceFilters(FilterReducer.onUpdateFilterGroup)),
+  on(FilterActions.addFilter, reduceFilters(FilterReducer.onAddFilter)),
+  on(FilterActions.removeFilter, reduceFilters(FilterReducer.onRemoveFilter)),
+  on(FilterActions.updateFilter, reduceFilters(FilterReducer.onUpdateFilter)),
+  on(FilterActions.toggleFilterDisabled, reduceFilters(FilterReducer.onToggleFilterDisabled)),
+  on(FilterActions.setSingleFilterDisabled, reduceFilters(FilterReducer.onSetSingleFilterDisabled)),
+  on(FilterActions.addLayerIdsToFilterGroup, reduceFilters(FilterReducer.onAddLayerIdsToFilterGroup)),
+  on(FilterActions.resetAttributeFilters, reduceFilters(FilterReducer.onResetAttributeFilters)),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);

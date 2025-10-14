@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
 import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
-import { filterStateKey } from '../../state/filterState/filter.state';
 import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../state/filterState/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
-import { filterReducer } from '../../state/filterState/filter.reducer';
 import { addAppLayers } from '../../map/state/map.actions';
 import { mapStateKey } from '../../map/state/map.state';
 import { mapReducer } from '../../map/state/map.reducer';
+import { coreStateKey } from '../../state';
+import { coreReducer } from '../../state/core.reducer';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -21,7 +21,7 @@ jest.mock('nanoid', () => ({
 const createService = () => {
   idCount = 0;
   TestBed.configureTestingModule({
-    imports: [StoreModule.forRoot({ [filterStateKey]: filterReducer, [mapStateKey]: mapReducer })],
+    imports: [StoreModule.forRoot({ [coreStateKey]: coreReducer, [mapStateKey]: mapReducer })],
     providers: [SimpleAttributeFilterService],
   });
   const service = TestBed.inject(SimpleAttributeFilterService);
