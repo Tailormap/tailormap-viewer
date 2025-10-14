@@ -73,8 +73,8 @@ const onSetComponentEnabled = (
   };
 };
 
-const reduceFilters = (reducer: (state: FilterState, payload: any) => FilterState) => {
-  return (state: CoreState, payload: any): CoreState => ({
+const reduceFilters = <P>(reducer: (state: FilterState, payload: P) => FilterState) => {
+  return (state: CoreState, payload: P): CoreState => ({
     ...state,
     filters: reducer(state.filters, payload),
   });
