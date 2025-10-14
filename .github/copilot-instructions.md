@@ -99,5 +99,5 @@ Never suggest code using deprecated libraries or methods.
 - **Code Performance**: Optimize code for performance by using efficient algorithms and data structures.
 - **Code Security**: Follow secure coding practices to prevent common security vulnerabilities.
 - **Code Testing**: Include unit tests and integration tests for all new features and functions.
-- **Code Documentation**: Document code using comments and JavaDoc to explain complex logic and decisions.
+- **Code Documentation**: Document code using comments and JSDoc (or TSDoc) to explain complex logic and decisions.
 
