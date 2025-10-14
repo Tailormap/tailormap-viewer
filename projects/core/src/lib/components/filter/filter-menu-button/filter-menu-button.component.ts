@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
-import { selectActiveFilterGroups } from '../../../filter/state/filter.selectors';
+import { selectActiveFilterGroups } from '../../../state/filterState/filter.selectors';
 import { map, Observable } from 'rxjs';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 

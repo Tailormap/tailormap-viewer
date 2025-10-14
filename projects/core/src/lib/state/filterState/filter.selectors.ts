@@ -1,20 +1,20 @@
 import  { FilterState, filterStateKey } from './filter.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { CqlFilterHelper } from '../helpers/cql-filter.helper';
+import { CqlFilterHelper } from '../../filter/helpers/cql-filter.helper';
 import { selectLayersWithServices, selectVisibleLayersWithServices } from '../../map/state/map.selectors';
-import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
+import { ExtendedFilterGroupModel } from '../../filter/models/extended-filter-group.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { BaseFilterModel } from '@tailormap-viewer/api';
 import { FilterGroupModel } from '@tailormap-viewer/api';
-import { FilterTypeHelper } from '../helpers/filter-type.helper';
+import { FilterTypeHelper } from '../../filter/helpers/filter-type.helper';
 import { SpatialFilterModel } from '@tailormap-viewer/api';
 
 const selectFilterState = createFeatureSelector<FilterState>(filterStateKey);
 
 export const selectAllFilterGroupsInConfig = createSelector(selectFilterState, state => state.configuredFilterGroups);
 
-export const selectVerifiedCurrentFilterGroups = createSelector(selectFilterState, state => state.verifiedCurrentFilterGroups);
+export const selectVerifiedCurrentFilterGroups = createSelector(selectFilterState, state => state.currentFilterGroups);
 
 export const selectActiveFilterGroups = createSelector(
   selectVerifiedCurrentFilterGroups,

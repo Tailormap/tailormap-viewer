@@ -2,6 +2,9 @@ import * as CoreActions from './core.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import * as FilterActions from './filterState/filter.actions';
+import * as FilterReducer from './filterState/filter.reducer';
+import { FilterState } from './filterState/filter.state';
 
 const onLoadViewer = (state: CoreState): CoreState => ({
   ...state,
@@ -79,4 +82,3 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.setComponentEnabled, onSetComponentEnabled),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);
-

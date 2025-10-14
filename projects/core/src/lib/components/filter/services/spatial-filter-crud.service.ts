@@ -7,7 +7,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
-import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
+import { addFilterGroup, updateFilterGroup } from '../../../state/filterState/filter.actions';
 
 @Injectable({
   providedIn: 'root',
