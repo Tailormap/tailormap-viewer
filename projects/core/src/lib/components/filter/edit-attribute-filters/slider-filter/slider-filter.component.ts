@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, DestroyRef, inject, LOCALE_ID } from '@angular/core';
 import {
   AttributeFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
 } from '@tailormap-viewer/api';
@@ -15,6 +15,7 @@ import { debounceTime } from 'rxjs';
 })
 export class SliderFilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private locale = inject(LOCALE_ID);
 
 
   public minValue: number = 0;
@@ -27,10 +28,12 @@ export class SliderFilterComponent implements OnInit {
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
   public displayWith: ((value: number) => string) = (value: number) => {
-    if (value.toString().length <= SliderFilterComponent.MAX_PRECISION) {
-      return value.toString();
+    const num = Number(value);
+    if (isNaN(num)) {
+      return `${value}`;
+    } else {
+      return new Intl.NumberFormat(this.locale, { maximumSignificantDigits: SliderFilterComponent.MAX_PRECISION }).format(num);
     }
-    return value.toPrecision(SliderFilterComponent.MAX_PRECISION);
   };
 
   @Input()
