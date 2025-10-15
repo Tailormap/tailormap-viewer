@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
         <source>Edit application layer attribute settings</source>
-        <target>Bewerk attribuut-instellingen voor applicatielaag</target>
+        <target state="new">Attributen voor applicatielaag bewerken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
