@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent, ViewerAppComponent } from './pages';
+import { LoginComponent,  ViewerAppComponent, PasswordResetComponent } from './pages';
 import { NavigationErrorRouterService } from './services/navigation-error-router.service';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'user', component: LoginComponent },
+  { path: 'user/password-reset/:token', component: PasswordResetComponent },
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },
   { path: 'service/:name', component: ViewerAppComponent },

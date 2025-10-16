@@ -878,6 +878,62 @@
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Je bent ingelogd <x id="PH" equiv-text="userLabel"/> maar je hebt niet de juiste rollen om toegang te krijgen tot de applicatie. Neem contact op met uw beheerder.</target>
       </trans-unit>
+      <trans-unit id="core.password-reset-form.title" datatype="html">
+        <source>Reset Password</source>
+        <target>Wachtwoord opnieuw instellen</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.username" datatype="html">
+        <source>Username</source>
+        <target>Gebruikersnaam</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
+        <source>New Password</source>
+        <target>Nieuw wachtwoord</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
+        <source>Confirm Password</source>
+        <target>Bevestig wachtwoord</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
+        <source>Username is invalid</source>
+        <target>Gebruikersnaam is ongeldig</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
+        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
+        <source>Password too short or too easily guessable</source>
+        <target>Wachtwoord te kort of te makkelijk te raden</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
+        <source>Passwords need to match</source>
+        <target>Wachtwoorden moeten overeenkomen</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
+        <source>Your password reset token is invalid or has expired.</source>
+        <target>Uw wachtwoord-reset-token is ongeldig of verlopen.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.success" datatype="html">
+        <source>Password successfully reset, you can now log in with your new password.</source>
+        <target>Wachtwoord succesvol opnieuw ingesteld, u kunt nu inloggen met uw nieuwe wachtwoord.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
+        <source>Error saving password, please check your token, username and password and try again.</source>
+        <target>Fout bij het opslaan van het wachtwoord, controleer uw token, gebruikersnaam en wachtwoord en probeer het opnieuw.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
+        <source>Error resetting password: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></source>
+        <target>Fout bij het opnieuw instellen van het wachtwoord: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.save" datatype="html">
+        <source>Save new password</source>
+        <target>Nieuw wachtwoord opslaan</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.return" datatype="html">
+        <source>Return to Login</source>
+        <target>Terug naar inloggen</target>
+      </trans-unit>
       <trans-unit id="core.print.a3" datatype="html">
         <source>A3</source>
         <target>A3</target>
