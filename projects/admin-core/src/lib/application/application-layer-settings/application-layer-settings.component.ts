@@ -9,7 +9,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TreeModel, TilesetStyle } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -191,7 +191,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
-          tileset3dStyle: value.tileset3dStyle ? JSON.parse(value.tileset3dStyle) : null,
+          tileset3dStyle: value.tileset3dStyle
+            ? JSON.parse(value.tileset3dStyle) as TilesetStyle
+            : null,
           hiddenFunctionality: [
             ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
