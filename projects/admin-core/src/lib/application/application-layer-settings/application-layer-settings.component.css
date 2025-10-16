@@ -25,3 +25,11 @@ fieldset {
 fieldset.layer-functionality mat-checkbox {
  display: block;
 }
+
+.set-tileset-style {
+  margin-top: 16px;
+}
+
+.set-tileset-style mat-form-field {
+  margin-top: 8px;
+}
