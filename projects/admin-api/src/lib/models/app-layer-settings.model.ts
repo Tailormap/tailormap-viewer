@@ -11,5 +11,6 @@ export interface AppLayerSettingsModel {
   hideAttributes?: string[] | null;
   readOnlyAttributes?: string[] | null;
   autoRefreshInSeconds?: number | null;
+  tileset3dStyle?: any;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }

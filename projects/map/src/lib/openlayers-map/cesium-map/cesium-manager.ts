@@ -149,6 +149,13 @@ export class CesiumManager {
           const tiles3DLayerPromise = this.create3dTilesLayer(layer);
           tiles3DLayerPromise.then(tiles3dLayer => {
             if (tiles3dLayer) {
+              if (layer.tileset3dStyle) {
+                try {
+                  tiles3dLayer.style = new Cesium.Cesium3DTileStyle(layer.tileset3dStyle);
+                } catch (e) {
+                  console.error(`Error setting 3D Tiles style for layer ${layer.id}:`, e);
+                }
+              }
               scene3d.primitives.add(tiles3dLayer);
               for (let i = 0; i < scene3d.primitives.length; i++) {
                 if (tiles3dLayer === scene3d.primitives.get(i)) {

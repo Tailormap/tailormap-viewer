@@ -119,6 +119,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     showFeatureInfo: new FormControl<boolean>(true),
     showInAttributeList: new FormControl<boolean>(true),
     showExport: new FormControl<boolean>(true),
+    tileset3dStyle: new FormControl<string | null>(null),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -190,6 +191,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
+          tileset3dStyle: value.tileset3dStyle ? JSON.parse(value.tileset3dStyle) : null,
           hiddenFunctionality: [
             ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
@@ -313,6 +315,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
+      tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
       showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
       showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),

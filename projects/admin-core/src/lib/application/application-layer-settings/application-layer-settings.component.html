@@ -106,5 +106,19 @@
         }
       }
     }
+    @if (layerIs3D) {
+      <div class="set-style">
+        <strong class="set-style-label" i18n="@@admin-core.application.set-tileset-style">Set style for 3D Tileset</strong>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.application.tileset-style">Tileset style</mat-label>
+          <textarea matInput formControlName="tileset3dStyle"
+                    [cdkTextareaAutosize]="true"
+                    cdkAutosizeMinRows="4"
+                    cdkAutosizeMaxRows="10">
+          </textarea>
+        </mat-form-field>
+      </div>
+    }
+
   </form>
 }

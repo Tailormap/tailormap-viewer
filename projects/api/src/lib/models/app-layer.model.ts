@@ -31,5 +31,6 @@ export interface AppLayerModel {
   autoRefreshInSeconds?: number | null;
   searchIndex: LayerSearchIndexModel | null;
   webMercatorAvailable?: boolean;
+  tileset3dStyle?: any;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }
