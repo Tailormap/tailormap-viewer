@@ -13,7 +13,7 @@ describe('PasswordResetComponent', () => {
       imports: [ ReactiveFormsModule, HttpClientTestingModule ],
       declarations: [AutoFocusDirective],
     });
-    expect(screen.getByText('Username')).toBeInTheDocument();
+    expect(screen.getByText('Reset Password')).toBeInTheDocument();
   });
 
 });
