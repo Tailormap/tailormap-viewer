@@ -9,7 +9,7 @@ import {
   takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LoadingStateEnum, TreeModel, TilesetStyle } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TreeModel, TilesetStyle, isTilesetStyle } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -67,6 +67,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerIs3D = false;
 
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
+
+  public tilesetStyleErrorMessage: string = '';
+  private tilesetStyleJSONErrorMessage = $localize `:@@admin-core.application.invalid-json:Invalid JSON: `;
+  private tilesetStyleConformErrorMessage = $localize `:@@admin-core.application.invalid-tileset-style:JSON does not conform to the 3D Tileset styling language structure`;
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -191,9 +195,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
-          tileset3dStyle: value.tileset3dStyle
-            ? JSON.parse(value.tileset3dStyle) as TilesetStyle
-            : null,
+          tileset3dStyle: this.getTileset3dStyleFromString(value.tileset3dStyle),
           hiddenFunctionality: [
             ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
@@ -317,11 +319,16 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       formId: nodeSettings.formId || null,
       searchIndexId: nodeSettings.searchIndexId || null,
       autoRefreshInSeconds: nodeSettings.autoRefreshInSeconds || null,
-      tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
       showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
       showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
+
+    if (nodeSettings.tileset3dStyle) {
+      this.layerSettingsForm.patchValue({
+        tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
+      }, { emitEvent: false });
+    }
   }
 
   private initFeatureSource(serviceLayer: ExtendedGeoServiceAndLayerModel | null) {
@@ -411,6 +418,24 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           return AdminProjectionsHelper.getProjectionAvailabilityForServiceLayer(serviceLayer.layer, layersInService);
         }),
       );
+  }
+
+  private getTileset3dStyleFromString(styleString?: string | null): TilesetStyle | null {
+    if (styleString) {
+      try {
+        const styleObject = JSON.parse(styleString);
+        if (isTilesetStyle(styleObject)) {
+          this.tilesetStyleErrorMessage = '';
+          return styleObject;
+        } else {
+          this.tilesetStyleErrorMessage = this.tilesetStyleConformErrorMessage;
+        }
+      } catch (e) {
+        console.error('Invalid tileset 3d style JSON', e);
+        this.tilesetStyleErrorMessage = this.tilesetStyleJSONErrorMessage + e;
+      }
+    }
+    return null;
   }
 
 }

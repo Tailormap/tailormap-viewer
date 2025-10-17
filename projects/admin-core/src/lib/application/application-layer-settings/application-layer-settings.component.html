@@ -114,9 +114,15 @@
           <textarea matInput formControlName="tileset3dStyle"
                     [cdkTextareaAutosize]="true"
                     cdkAutosizeMinRows="4"
-                    cdkAutosizeMaxRows="10">
+                    cdkAutosizeMaxRows="12">
           </textarea>
         </mat-form-field>
+        @if (tilesetStyleErrorMessage) {
+          <div class="tileset-style-error-message">
+            <tm-error-message [message]="tilesetStyleErrorMessage" [friendlyError]="true">
+            </tm-error-message>
+          </div>
+        }
       </div>
     }
 

@@ -33,3 +33,7 @@ fieldset.layer-functionality mat-checkbox {
 .set-tileset-style mat-form-field {
   margin-top: 8px;
 }
+
+.tileset-style-error-message {
+  margin-top: 8px;
+}

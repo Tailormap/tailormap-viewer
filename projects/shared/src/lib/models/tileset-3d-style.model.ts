@@ -8,42 +8,15 @@
  *      * a "conditions" object: { conditions: [ [testExpr, valueExpr], ... ] }
  *  - The spec also allows literal values (numbers, arrays) in some places; this model
  *    permits those as well.
- *
- * Sources: OGC 3D Tiles Declarative Styling & Cesium docs. See:
- *  - OGC 3D Tiles Declarative Styling (spec). :contentReference[oaicite:1]{index=1}
- *  - Cesium3DTileStyle reference & examples. :contentReference[oaicite:2]{index=2}
  */
 
 /** A single condition tuple: [testExpression, resultExpressionOrLiteral] */
-export type StyleConditionTuple =
-  | [string, string | number | boolean | null | number[]]
-  | [string, ExpressionLiteral];
+export type StyleConditionTuple = [string, string];
 
 /** Object form for conditional expressions */
 export interface ConditionsExpression {
   conditions: StyleConditionTuple[];
 }
-
-/** Acceptable literal values used directly in style JSON (fallback type) */
-export type ExpressionLiteral = string | number | boolean | null | number[] | Array<string | number>;
-
-/** A style expression may be:
- *  - a string expression (the common case),
- *  - a conditions object,
- *  - OR a plain literal (number, array, boolean) in some usages.
- */
-export type StyleExpression = string | ConditionsExpression | ExpressionLiteral;
-
-/**
- * Meta dictionary: application-specific named expressions (the spec defines `meta`
- * for holding UI-friendly or otherwise named expressions).
- *
- * Example:
- *   meta: {
- *     description: '"Building id ${id} has height ${Height}."'
- *   }
- */
-export type MetaExpressions = { [key: string]: StyleExpression };
 
 /**
  * The core Tileset Style type.
@@ -58,24 +31,24 @@ export interface TilesetStyle {
    * show: controls visibility. Typically an expression that returns boolean.
    * Example: "(${type} === 'residential')"
    */
-  show?: StyleExpression;
+  show?: string | ConditionsExpression;
 
   /**
    * color: color expression for the feature. Can be 'color("#RRGGBB")', 'vec4(...)',
    * a literal vec/array, or a conditions expression.
    */
-  color?: StyleExpression;
+  color?: string | ConditionsExpression;
 
   /**
    * pointSize: for point clouds / point features. Usually a numeric expression.
    */
-  pointSize?: StyleExpression;
+  pointSize?: string;
 
   /**
    * meta: arbitrary named expressions that can be evaluated by an application (UI text,
    * tooltips, etc.).
    */
-  meta?: MetaExpressions;
+  meta?: { [name: string]: string };
 
   /**
    * defines: expression variables (the spec allows creating variables via 'defines' in some
@@ -84,11 +57,58 @@ export interface TilesetStyle {
    */
   defines?: { [name: string]: string };
 
-  /**
-   * Any other style property supported by a viewer / extension (e.g. anchorLineColor,
-   * translucencyByDistance, disableDepthTestDistance, distanceDisplayCondition, etc.)
-   * The types above model the common cases (string expressions or conditions) but real-world
-   * tilesets may contain many vendor/extension-specific properties.
-   */
-  [other: string]: StyleExpression | MetaExpressions | undefined;
 }
+
+export function isTilesetStyle(obj: unknown): obj is TilesetStyle {
+  const isObject = (v: unknown): v is Record<string, unknown> =>
+    typeof v === 'object' && v !== null;
+
+  const isStyleConditionTuple = (v: unknown): v is StyleConditionTuple =>
+    Array.isArray(v) &&
+    v.length === 2 &&
+    typeof v[0] === 'string' &&
+    typeof v[1] === 'string';
+
+  const isConditionsExpression = (v: unknown): v is ConditionsExpression => {
+    if (!isObject(v)) return false;
+    const conds = v['conditions'];
+    if (!Array.isArray(conds)) return false;
+    return conds.every((c) => isStyleConditionTuple(c));
+  };
+
+  const isStringRecord = (v: unknown): v is { [k: string]: string } => {
+    if (!isObject(v)) return false;
+    return Object.values(v).every((val) => typeof val === 'string');
+  };
+
+  if (!isObject(obj)) return false;
+  const allowedProps = new Set([ 'show', 'color', 'pointSize', 'meta', 'defines' ]);
+  const objKeys = Object.keys(obj);
+  if (!objKeys.every((k) => allowedProps.has(k))) return false;
+
+
+  if ('show' in obj) {
+    const v = obj['show'];
+    if (!(typeof v === 'string' || isConditionsExpression(v))) return false;
+  }
+
+  if ('color' in obj) {
+    const v = obj['color'];
+    if (!(typeof v === 'string' || isConditionsExpression(v))) return false;
+  }
+
+  if ('pointSize' in obj) {
+    if (typeof obj['pointSize'] !== 'string') return false;
+  }
+
+  if ('meta' in obj) {
+    if (!isStringRecord(obj['meta'])) return false;
+  }
+
+  if ('defines' in obj) {
+    if (!isStringRecord(obj['defines'])) return false;
+  }
+
+  return true;
+}
+
