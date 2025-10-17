@@ -1,6 +1,6 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCQLFilters } from '../state/filter.selectors';
+import { selectCQLFilters } from '../../state/filterState/filter.selectors';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { map, Observable, Subject } from 'rxjs';
 

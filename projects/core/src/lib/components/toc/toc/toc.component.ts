@@ -16,7 +16,7 @@ import {
   select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
-import { selectFilteredLayerIds } from '../../../filter/state/filter.selectors';
+import { selectFilteredLayerIds } from '../../../state/filterState/filter.selectors';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;

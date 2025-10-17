@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../../state/filterState/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 

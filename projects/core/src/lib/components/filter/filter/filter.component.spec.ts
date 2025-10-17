@@ -10,7 +10,7 @@ import { selectSpatialFormVisible } from '../state/filter-component.selectors';
 import { ResetFiltersButtonComponent } from '../reset-filters-button/reset-filters-button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selectors';
+import { selectFilterGroupsWithLayers } from '../../../state/filterState/filter.selectors';
 
 const setup = async (isVisible: boolean) => {
   const menubarServiceMock = {

@@ -14,7 +14,7 @@ import {
   selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
-import { selectCQLFilters } from '../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../state/filterState/filter.selectors';
 import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';

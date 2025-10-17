@@ -48,7 +48,10 @@ describe('AttributeListContent', () => {
         provideMockStore({
           initialState: {
             ...store,
-            filter: { verifiedCurrentFilterGroups: [] },
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
             map: { layers: [] },
           },
         }),

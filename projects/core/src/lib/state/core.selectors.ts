@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CoreState, coreStateKey } from './core.state';
 import { BaseComponentTypeEnum, ComponentBaseConfigModel, ComponentModel } from '@tailormap-viewer/api';
 
-const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
+export const selectCoreState = createFeatureSelector<CoreState>(coreStateKey);
 const selectViewerState = createSelector(selectCoreState, state => state.viewer);
 export const selectViewerLoadingState = createSelector(selectCoreState, state => state.loadStatus);
 

@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoreModule } from '@ngrx/store';
-import { filterStateKey } from './state/filter.state';
-import { filterReducer } from './state/filter.reducer';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FilterDescriptionComponent } from './filter-description/filter-description.component';
 import { SpatialFilterReferenceLayerService } from './services/spatial-filter-reference-layer.service';
@@ -15,7 +12,6 @@ import { SpatialFilterReferenceLayerService } from './services/spatial-filter-re
   ],
   imports: [
     CommonModule,
-    StoreModule.forFeature(filterStateKey, filterReducer),
     SharedModule,
   ],
   exports: [
