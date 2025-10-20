@@ -70,7 +70,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   public tilesetStyleErrorMessage: string = '';
   private tilesetStyleJSONErrorMessage = $localize `:@@admin-core.application.invalid-json:Invalid JSON: `;
-  private tilesetStyleConformErrorMessage = $localize `:@@admin-core.application.invalid-tileset-style:JSON does not conform to the 3D Tileset styling language structure`;
+  private tilesetStyleConformErrorMessage = $localize `:@@admin-core.application.invalid-tileset-style:The style does not conform to the 3D Tileset Styling Language structure`;
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {

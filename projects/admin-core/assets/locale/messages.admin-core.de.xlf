@@ -454,9 +454,17 @@
         <source>Initial extent</source>
         <target>Anfangsausdehnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.invalid-json" datatype="html">
+        <source>Invalid JSON: </source>
+        <target>Ongeldige JSON: </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers, underscores and dashes.</source>
         <target>Der Name darf nur Buchstaben, Zahlen, Unterstriche und Bindestriche enthalten.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.invalid-tileset-style" datatype="html">
+        <source>The style does not conform to the 3D Tileset Styling Language structure</source>
+        <target>Der Stil entspricht nicht der Struktur der 3D Tileset Styling Language</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
@@ -590,6 +598,10 @@
         <source>Setting this application as default will overwrite the current default application</source>
         <target>Das Festlegen dieser Anwendung als Standard überschreibt die aktuelle Standardanwendung</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.set-tileset-style" datatype="html">
+        <source>Set a style for the 3D Tileset</source>
+        <target>Stil für das 3D Tileset festlege</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.settings" datatype="html">
         <source>Settings</source>
         <target>Einstellungen</target>
@@ -605,6 +617,14 @@
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
         <target>Geländeebene</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style" datatype="html">
+        <source>Tileset style</source>
+        <target>Kachelstil</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style-hint" datatype="html">
+        <source>Fill in a tileset style in json format according to the OGC 3D Tiles Styling Language. Note: The structure of the style is validated, but not the style expressions.</source>
+        <target>Geben Sie einen Kachelstil im JSON-Format gemäß der OGC 3D Tiles Styling Language ein. Hinweis: Die Struktur des Stils wird validiert, nicht jedoch die Stil-Ausdrücke.</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
