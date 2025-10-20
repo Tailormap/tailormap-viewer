@@ -1,15 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, GeoServiceProtocolEnum, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
-  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
-  takeUntil,
+  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LoadingStateEnum, TreeModel, TilesetStyle, isTilesetStyle } from '@tailormap-viewer/shared';
+import { isTileset3dStyle, LoadingStateEnum, Tileset3dStyle, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -64,7 +63,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
-  public layerIs3D = false;
+  public layerIs3d = false;
+  public layerIs3dTiles = false;
 
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
 
@@ -89,7 +89,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.setTitle();
     this.projectionAvailability$ = this.getProjectionAvailability$(serviceLayer);
     if (serviceLayer?.service) {
-      this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+      this.layerIs3d = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+      this.layerIs3dTiles = serviceLayer.service.protocol === GeoServiceProtocolEnum.TILES3D;
     }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
@@ -324,7 +325,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
 
-    if (nodeSettings.tileset3dStyle) {
+    if (nodeSettings.tileset3dStyle && this.layerSettingsForm.get('tileset3dStyle')?.value === null) {
       this.layerSettingsForm.patchValue({
         tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
       }, { emitEvent: false });
@@ -420,11 +421,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       );
   }
 
-  private getTileset3dStyleFromString(styleString?: string | null): TilesetStyle | null {
+  private getTileset3dStyleFromString(styleString?: string | null): Tileset3dStyle | null {
     if (styleString) {
       try {
         const styleObject = JSON.parse(styleString);
-        if (isTilesetStyle(styleObject)) {
+        if (isTileset3dStyle(styleObject)) {
           this.tilesetStyleErrorMessage = '';
           return styleObject;
         } else {

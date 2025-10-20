@@ -1,32 +1,16 @@
 /**
- * Types for OGC 3D Tiles Styling Language (declarative styling).
- *
- * Notes:
- *  - The official styling language evaluates expressions written as strings (a small subset
- *    of JavaScript plus built-in helper functions). Many style properties accept either:
- *      * an expression string (e.g. "(${height} > 10)"), or
- *      * a "conditions" object: { conditions: [ [testExpr, valueExpr], ... ] }
- *  - The spec also allows literal values (numbers, arrays) in some places; this model
- *    permits those as well.
+ * Types for OGC 3D Tiles Styling Language
  */
 
 /** A single condition tuple: [testExpression, resultExpressionOrLiteral] */
 export type StyleConditionTuple = [string, string];
 
-/** Object form for conditional expressions */
 export interface ConditionsExpression {
   conditions: StyleConditionTuple[];
 }
 
-/**
- * The core Tileset Style type.
- *
- * This covers the most commonly-used visual properties defined by the spec and exposed by
- * Cesium (show, color, pointSize, label, etc.). Implementations often support additional
- * visual properties (anchorLineColor, backgroundColor, translucencyByDistance, etc.);
- * to remain flexible the index signature permits additional keys.
- */
-export interface TilesetStyle {
+
+export interface Tileset3dStyle {
   /**
    * show: controls visibility. Typically an expression that returns boolean.
    * Example: "(${type} === 'residential')"
@@ -59,7 +43,11 @@ export interface TilesetStyle {
 
 }
 
-export function isTilesetStyle(obj: unknown): obj is TilesetStyle {
+export function isTileset3dStyle(obj: unknown): obj is Tileset3dStyle {
+  if (obj === null || typeof obj !== 'object') {
+    return false;
+  }
+
   const isObject = (v: unknown): v is Record<string, unknown> =>
     typeof v === 'object' && v !== null;
 

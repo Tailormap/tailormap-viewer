@@ -1,5 +1,5 @@
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
-import { TilesetStyle } from '@tailormap-viewer/shared';
+import { Tileset3dStyle } from '@tailormap-viewer/shared';
 
 export interface AppLayerSettingsModel {
   title?: string;
@@ -12,6 +12,6 @@ export interface AppLayerSettingsModel {
   hideAttributes?: string[] | null;
   readOnlyAttributes?: string[] | null;
   autoRefreshInSeconds?: number | null;
-  tileset3dStyle?: TilesetStyle | null;
+  tileset3dStyle?: Tileset3dStyle | null;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
 }
