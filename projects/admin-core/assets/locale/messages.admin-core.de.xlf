@@ -174,9 +174,13 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
         <target>Bearbeiten von<x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
       </trans-unit>
-      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+      <trans-unit id="admin-core.application.edit-application-layer-attribute-settings" datatype="html">
         <source>Edit application layer attribute settings</source>
         <target>Einstellungen für Anwendungsebenenattribute bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+        <source>Edit application layer attributes</source>
+        <target>Anwendungsebenenattribute bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
