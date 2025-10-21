@@ -8,7 +8,7 @@ import {
   BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LoadingStateEnum, Tileset3dStyle, Tileset3dStyleHelper, TreeModel } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, Tileset3dStyleHelper, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -24,7 +24,7 @@ import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import {
-  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
+  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality, Tileset3dStyle,
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
