@@ -1,4 +1,4 @@
-import { ConditionsExpression, StyleConditionTuple, Tileset3dStyle } from '../models/tileset-3d-style.model';
+import { ConditionsExpression, StyleConditionTuple, Tileset3dStyle } from '@tailormap-viewer/api';
 
 export class Tileset3dStyleHelper {
   private static isObject = (v: unknown): v is Record<string, unknown> =>
