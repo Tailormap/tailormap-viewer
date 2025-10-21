@@ -132,7 +132,7 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
-        <source>Edit application layer attributes</source>
+        <source>Edit application layer attribute settings</source>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
@@ -468,7 +468,7 @@
         <source>Tileset style</source>
       </trans-unit>
       <trans-unit id="admin-core.application.tileset-style-hint" datatype="html">
-        <source>Fill in a tileset style in json format according to the OGC 3D Tiles Styling Language. Note: The structure of the style is validated, but not the style expressions.</source>
+        <source>Fill in a tileset style in json format according to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Note: The structure of the style is validated, but not the style expressions.</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

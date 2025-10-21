@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
         <source>Edit application layer attribute settings</source>
-        <target state="new">Attributen voor applicatielaag bewerken</target>
+        <target>Attributen voor applicatielaag bewerken</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
@@ -622,8 +622,8 @@
         <target>Tileset stijl</target>
       </trans-unit>
       <trans-unit id="admin-core.application.tileset-style-hint" datatype="html">
-        <source>Fill in a tileset style in json format according to the OGC 3D Tiles Styling Language. Note: The structure of the style is validated, but not the style expressions.</source>
-        <target>Vul een tileset stijl in JSON-formaat in volgens de OGC 3D Tiles Styling Language. Let op: de structuur van de stijl wordt gevalideerd, maar de stijlexpressies niet.</target>
+        <source>Fill in a tileset style in json format according to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Note: The structure of the style is validated, but not the style expressions.</source>
+        <target>Vul een tileset stijl in JSON-formaat in volgens de OGC <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Let op: De structuur van de stijl wordt gevalideerd, maar de stijlexpressies niet.</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>

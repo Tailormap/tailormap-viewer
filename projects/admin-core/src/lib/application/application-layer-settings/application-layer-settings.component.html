@@ -109,6 +109,12 @@
     @if (layerIs3dTiles) {
       <div class="set-tileset-style">
         <strong class="set-tileset-style-label" i18n="@@admin-core.application.set-tileset-style">Set a style for the 3D Tileset</strong>
+        @if (tilesetStyleErrorMessage) {
+          <div class="tileset-style-error-message">
+            <tm-error-message [message]="tilesetStyleErrorMessage" [friendlyError]="true">
+            </tm-error-message>
+          </div>
+        }
         <mat-form-field>
           <mat-label i18n="@@admin-core.application.tileset-style">Tileset style</mat-label>
           <textarea matInput formControlName="tileset3dStyle"
@@ -117,13 +123,7 @@
                     cdkAutosizeMaxRows="12">
           </textarea>
         </mat-form-field>
-        <div class="hint" i18n="@@admin-core.application.tileset-style-hint">Fill in a tileset style in json format according to the OGC 3D Tiles Styling Language. Note: The structure of the style is validated, but not the style expressions.</div>
-        @if (tilesetStyleErrorMessage) {
-          <div class="tileset-style-error-message">
-            <tm-error-message [message]="tilesetStyleErrorMessage" [friendlyError]="true">
-            </tm-error-message>
-          </div>
-        }
+        <div class="hint" i18n="@@admin-core.application.tileset-style-hint">Fill in a tileset style in json format according to the <a href="https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45" target="_blank" rel="noopener">OGC 3D Tiles Styling Language</a>. Note: The structure of the style is validated, but not the style expressions.</div>
       </div>
     }
 
