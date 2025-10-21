@@ -9,7 +9,7 @@ import {
   combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ArrayHelper, HtmlifyHelper, isTileset3dStyle } from '@tailormap-viewer/shared';
+import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
 import {
   selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
@@ -212,7 +212,7 @@ export class ApplicationMapService implements OnDestroy {
       const layer: Tiles3dLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.TILES3D,
-        tileset3dStyle: isTileset3dStyle(extendedAppLayer.tileset3dStyle) ? extendedAppLayer.tileset3dStyle : undefined,
+        tileset3dStyle: Tileset3dStyleHelper.isTileset3dStyle(extendedAppLayer.tileset3dStyle) ? extendedAppLayer.tileset3dStyle : undefined,
       };
       return of(layer);
     }

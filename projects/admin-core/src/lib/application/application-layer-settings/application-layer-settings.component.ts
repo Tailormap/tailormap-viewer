@@ -8,7 +8,7 @@ import {
   BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { isTileset3dStyle, LoadingStateEnum, Tileset3dStyle, TreeModel } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, Tileset3dStyle, Tileset3dStyleHelper, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -425,7 +425,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     if (styleString) {
       try {
         const styleObject = JSON.parse(styleString);
-        if (isTileset3dStyle(styleObject)) {
+        if (Tileset3dStyleHelper.isTileset3dStyle(styleObject)) {
           this.tilesetStyleErrorMessage = '';
           return styleObject;
         } else {
