@@ -325,7 +325,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
 
-    if (nodeSettings.tileset3dStyle && this.layerSettingsForm.get('tileset3dStyle')?.value === null) {
+    if (nodeSettings.tileset3dStyle && !this.layerSettingsForm.get('tileset3dStyle')?.dirty) {
       this.layerSettingsForm.patchValue({
         tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
       }, { emitEvent: false });
@@ -432,7 +432,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           this.tilesetStyleErrorMessage = this.tilesetStyleConformErrorMessage;
         }
       } catch (e) {
-        console.error('Invalid tileset 3d style JSON', e);
         this.tilesetStyleErrorMessage = this.tilesetStyleJSONErrorMessage + e;
       }
     }
