@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, LOCALE_ID } from '@angular/core';
 import {
   AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
@@ -7,7 +7,7 @@ import { setSingleFilterDisabled, updateFilter } from '../../../state/filterStat
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
-import { selectViewerId } from '../../../state/core.selectors';
+import { selectViewerId } from '../../../state';
 
 
 @Component({
@@ -20,6 +20,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 export class EditAttributeFiltersComponent {
   private store$ = inject(Store);
   private uniqueValuesService = inject(UniqueValuesService);
+  private locale = inject(LOCALE_ID);
 
 
   public editableFilters = input<AttributeFilterModel[]>([]);
@@ -113,7 +114,7 @@ export class EditAttributeFiltersComponent {
       if (isNaN(num)) {
         return value;
       } else {
-        return new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(num);
+        return new Intl.NumberFormat(this.locale, { maximumSignificantDigits: 5 }).format(num);
       }
     });
     return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;

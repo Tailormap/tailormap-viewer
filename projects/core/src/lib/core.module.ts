@@ -1,5 +1,5 @@
 import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
-import { LoginComponent, ViewerAppComponent } from './pages';
+import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -56,6 +56,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     LoginComponent,
     LoginFormComponent,
     PasswordResetRequestFormComponent,
+    PasswordResetComponent,
   ],
   imports: [
     CoreRoutingModule,

@@ -6,7 +6,9 @@ import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.
 import { TailormapApiConstants } from './tailormap-api.constants';
 import { ExtendedUserResponseModel } from '../models/extended-user-response.model';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' },
+)
 export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1ServiceModel {
 
   private httpClient = inject(HttpClient);
@@ -72,6 +74,20 @@ export class TailormapSecurityApiV1Service implements TailormapSecurityApiV1Serv
     });
     return this.httpClient.post(`${TailormapApiConstants.BASE_URL}/password-reset`, body, { observe: 'response' }).pipe(
       map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
+  public validatePasswordStrength$(password: string): Observable<boolean> {
+    const body = new HttpParams().set('password', password);
+    return this.httpClient.post<{ result: boolean }>(`${TailormapApiConstants.BASE_URL}/validate-password`, body)
+      .pipe(map(response => response.result));
+  }
+
+  public resetPassword$(token: string, username: string, newPassword: string): Observable<boolean> {
+    const body = new HttpParams().set('token', token).set('username', username).set('newPassword', newPassword);
+    return this.httpClient.post(`${TailormapApiConstants.BASE_URL}/user/reset-password`, body, { observe: 'response' }).pipe(
+      map(response => response.status === 200),
       catchError(() => of(false)),
     );
   }
