@@ -9,7 +9,7 @@ import {
   combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
 import {
   selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
@@ -19,7 +19,6 @@ import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
-import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 
 @Injectable({
    providedIn: 'root',
@@ -29,7 +28,6 @@ export class ApplicationMapService implements OnDestroy {
   private mapService = inject(MapService);
   private httpClient = inject(HttpClient);
   private bookmarkService = inject(BookmarkService);
-  private _applicationRefreshService = inject(ApplicationLayerRefreshService);
   private localeId = inject(LOCALE_ID);
 
   private destroyed = new Subject();
@@ -214,6 +212,7 @@ export class ApplicationMapService implements OnDestroy {
       const layer: Tiles3dLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.TILES3D,
+        tileset3dStyle: Tileset3dStyleHelper.isTileset3dStyle(extendedAppLayer.tileset3dStyle) ? extendedAppLayer.tileset3dStyle : undefined,
       };
       return of(layer);
     }

@@ -25,3 +25,24 @@ fieldset {
 fieldset.layer-functionality mat-checkbox {
  display: block;
 }
+
+.set-tileset-style {
+  margin-top: 16px;
+}
+
+.set-tileset-style mat-form-field {
+  margin-top: 8px;
+}
+
+.tileset-style-error-message {
+  margin-top: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
+}

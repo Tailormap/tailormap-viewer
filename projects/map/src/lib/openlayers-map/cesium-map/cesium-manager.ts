@@ -4,7 +4,7 @@ import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import { Cesium3DTileset, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
+import { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
 import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
@@ -149,6 +149,16 @@ export class CesiumManager {
           const tiles3DLayerPromise = this.create3dTilesLayer(layer);
           tiles3DLayerPromise.then(tiles3dLayer => {
             if (tiles3dLayer) {
+              if (layer.tileset3dStyle) {
+                try {
+                  const tilesetStyle: Cesium3DTileStyle = new Cesium.Cesium3DTileStyle(layer.tileset3dStyle);
+                  if (tilesetStyle) {
+                    tiles3dLayer.style = tilesetStyle;
+                  }
+                } catch (e) {
+                  console.warn(`Failed to set 3D Tiles style for layer ${layer.id}:`, e);
+                }
+              }
               scene3d.primitives.add(tiles3dLayer);
               for (let i = 0; i < scene3d.primitives.length; i++) {
                 if (tiles3dLayer === scene3d.primitives.get(i)) {

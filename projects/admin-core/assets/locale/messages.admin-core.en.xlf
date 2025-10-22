@@ -131,6 +131,9 @@
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attribute-settings" datatype="html">
+        <source>Edit application layer attribute settings</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
         <source>Edit application layer attributes</source>
       </trans-unit>
@@ -341,8 +344,14 @@
       <trans-unit id="admin-core.application.initial-extent" datatype="html">
         <source>Initial extent</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.invalid-json" datatype="html">
+        <source>Invalid JSON: </source>
+      </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers, underscores and dashes.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.invalid-tileset-style" datatype="html">
+        <source>The style does not conform to the 3D Tileset Styling Language structure</source>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
@@ -443,6 +452,9 @@
       <trans-unit id="admin-core.application.set-default-application-hint" datatype="html">
         <source>Setting this application as default will overwrite the current default application</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.set-tileset-style" datatype="html">
+        <source>Set a style for the 3D Tileset</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.settings" datatype="html">
         <source>Settings</source>
       </trans-unit>
@@ -454,6 +466,12 @@
       </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style" datatype="html">
+        <source>Tileset style</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style-hint" datatype="html">
+        <source>Fill in a tileset style in json format according to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Note: The structure of the style is validated, but not the style expressions.</source>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
