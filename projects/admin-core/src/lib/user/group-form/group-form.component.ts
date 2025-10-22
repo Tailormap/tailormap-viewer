@@ -85,22 +85,18 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       combineLatest( [ this.groupSubject.asObservable(), this.oidcConfigurationService.getOIDCConfigurations$() ] ).pipe(
         takeUntil(this.destroyed),
         map(([ group, oidcConfigurations ]) => {
-          if (group == null) {
+          if (group == null || !group.oidcInfo || group.oidcInfo.clientIds.length === 0) {
             return [];
           }
-          const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
-          const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
-          const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
-          const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
-
-          return oidcConfigurations.filter(oidcConfiguration => {
-            return oidcClientIds.includes(oidcConfiguration.clientId);
-          }).map(oidcConfiguration => {
-            return {
-              ...oidcConfiguration,
-              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
-            };
-          });
+          return oidcConfigurations.filter(oidcConfiguration => group.oidcInfo?.clientIds.includes(oidcConfiguration.clientId))
+            .map(oidcConfiguration => {
+              const lastSeenValue = group.oidcInfo?.lastSeenByClientId[oidcConfiguration.clientId];
+              const lastSeen = lastSeenValue ? new Date(lastSeenValue) : null;
+              return {
+                ...oidcConfiguration,
+                lastSeen,
+              };
+            });
         }),
       );
   }
