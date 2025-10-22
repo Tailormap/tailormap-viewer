@@ -61,20 +61,15 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
             return [];
           }
 
-          return groups.filter(group => {
-            const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
-            const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
-
-            return oidcClientIds.includes(oidcConfiguration.clientId);
-          }).map(group => {
-            const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
-            const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
-
-            return {
-              ...group,
-              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
-            };
-          });
+          return groups.filter(group => group.oidcInfo?.clientIds.includes(oidcConfiguration.clientId))
+            .map(group => {
+              const lastSeenValue = group.oidcInfo?.lastSeenByClientId[oidcConfiguration.clientId];
+              const lastSeen = lastSeenValue ? new Date(lastSeenValue) : null;
+              return {
+                ...group,
+                lastSeen,
+              };
+            });
         }),
       );
   }
