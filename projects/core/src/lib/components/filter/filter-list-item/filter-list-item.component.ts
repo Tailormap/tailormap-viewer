@@ -31,7 +31,7 @@ export class FilterListItemComponent {
   }
 
   @Input()
-  public onlyGroupInListOnInit = false;
+  public editFiltersExpanded = false;
 
   private store$ = inject(Store);
   private removeFilterService = inject(RemoveFilterService);
