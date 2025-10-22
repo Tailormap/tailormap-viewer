@@ -1,14 +1,10 @@
 import {
   AttributeFilterModel, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
-import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AttributeFilterService {
+export class AttributeFilterHelper {
 
-  public separateSubstringFiltersInCheckboxFilters(
+  public static separateSubstringFiltersInCheckboxFilters(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
   ): FilterGroupModel<AttributeFilterModel>[] {
     return filterGroups.map(group => {

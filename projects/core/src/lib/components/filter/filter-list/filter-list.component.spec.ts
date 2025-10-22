@@ -8,7 +8,7 @@ import { FilterListItemComponent } from '../filter-list-item/filter-list-item.co
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
-import { AttributeFilterService } from '../../../services/attribute-filter.service';
+import { AttributeFilterHelper } from '../../../filter/helpers/attribute-filter.helper';
 import { of } from 'rxjs';
 
 describe('FilterListComponent', () => {
@@ -34,7 +34,7 @@ describe('FilterListComponent', () => {
             },
           ],
         }),
-        { provide: AttributeFilterService, useValue: mockAttributeFilterService },
+        { provide: AttributeFilterHelper, useValue: mockAttributeFilterService },
       ],
     });
     expect(screen.queryByText('Attribute filter')).not.toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('FilterListComponent', () => {
     await render(FilterListComponent, {
       providers: [
         store,
-        { provide: AttributeFilterService, useValue: mockAttributeFilterService },
+        { provide: AttributeFilterHelper, useValue: mockAttributeFilterService },
       ],
       declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
       imports: [ SharedImportsModule, MatIconTestingModule ],

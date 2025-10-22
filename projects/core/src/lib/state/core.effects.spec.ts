@@ -7,7 +7,7 @@ import { AttributeFilterModel, FilterGroupModel, getViewerResponseData } from '@
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import * as CoreActions from './core.actions';
-import { AttributeFilterService } from '../services/attribute-filter.service';
+import { AttributeFilterHelper } from '../filter/helpers/attribute-filter.helper';
 
 describe('CoreEffects', () => {
 
@@ -32,7 +32,7 @@ describe('CoreEffects', () => {
         { provide: LoadViewerService, useValue: loadViewerServiceMock },
         { provide: Location, useValue: locationMock },
         { provide: Router, useValue: routerMock },
-        { provide: AttributeFilterService, useValue: attributeFilterServiceMock },
+        { provide: AttributeFilterHelper, useValue: attributeFilterServiceMock },
       ],
     });
     const effects = TestBed.inject(CoreEffects);
