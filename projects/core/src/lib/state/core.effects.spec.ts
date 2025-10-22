@@ -3,20 +3,16 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import { LoadViewerService } from '../services/load-viewer.service';
-import { AttributeFilterModel, FilterGroupModel, getViewerResponseData } from '@tailormap-viewer/api';
+import { getViewerResponseData } from '@tailormap-viewer/api';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import * as CoreActions from './core.actions';
-import { AttributeFilterHelper } from '../filter/helpers/attribute-filter.helper';
 
 describe('CoreEffects', () => {
 
   const setup = (currentPath: string, actions$: Observable<any>): [ CoreEffects, jest.Mock ] => {
     const loadViewerServiceMock = {
       loadViewer$: () => of({ success: true, result: { viewer: getViewerResponseData(), components: [] } }),
-    };
-    const attributeFilterServiceMock = {
-      disableFiltersForMissingAttributes$: (filterGroups: FilterGroupModel<AttributeFilterModel>[]) => of(filterGroups),
     };
     const locationMock = {
       path: () => currentPath,
@@ -32,7 +28,6 @@ describe('CoreEffects', () => {
         { provide: LoadViewerService, useValue: loadViewerServiceMock },
         { provide: Location, useValue: locationMock },
         { provide: Router, useValue: routerMock },
-        { provide: AttributeFilterHelper, useValue: attributeFilterServiceMock },
       ],
     });
     const effects = TestBed.inject(CoreEffects);
