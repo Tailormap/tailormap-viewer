@@ -277,4 +277,8 @@ export class MapService {
     this.map.switch3d();
   }
 
+  public set3dTerrainTranslucency(translucency: number){
+    this.map.set3dTerrainTranslucency(translucency);
+  }
+
 }

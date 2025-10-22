@@ -15,9 +15,11 @@ import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
 import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
 import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-toggle.module';
+import { TerrainTranslucencyModule } from './terrain-translucency/terrain-translucency.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     StoreModule.forFeature(toolbarStateKey, toolbarReducer),
@@ -34,6 +36,7 @@ import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-t
     StreetviewModule,
     CoordinateLinkWindowModule,
     TerrainLayerToggleModule,
+    TerrainTranslucencyModule,
   ],
 })
 export class ToolbarModule { }

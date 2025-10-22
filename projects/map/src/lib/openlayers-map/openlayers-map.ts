@@ -423,4 +423,10 @@ export class OpenLayersMap implements MapViewerModel {
     this.in3d.next(!this.in3d.value);
   }
 
+  public set3dTerrainTranslucency(translucency: number) {
+    this.executeCesiumAction(cesiumManager => {
+      cesiumManager.setTerrainTranslucency(translucency);
+    });
+  }
+
 }

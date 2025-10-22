@@ -1,0 +1,9 @@
+<div class="terrain-translucency-control map-control-button">
+  <tm-slider
+    [min]="0"
+    [max]="1"
+    [value]="1"
+    [step]="0.01"
+    (valueChange)="setTerrainTranslucency($event)">
+  </tm-slider>
+</div>

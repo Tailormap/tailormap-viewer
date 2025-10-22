@@ -228,4 +228,13 @@ export class CesiumManager {
     return null;
   }
 
+  public setTerrainTranslucency(value: number) {
+    this.executeScene3dAction(scene3d => {
+      scene3d.globe.translucency.enabled = value < 1;
+      scene3d.globe.translucency.frontFaceAlphaByDistance = new Cesium.NearFarScalar(1.5e2, value, 8.0e6, 0.0);
+      scene3d.screenSpaceCameraController.enableCollisionDetection = value === 1;
+      scene3d.requestRender();
+    });
+  }
+
 }
