@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
 import { MatBadge } from '@angular/material/badge';
-import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../../filter/state/filter.selectors';
+import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../../state/filter-state/filter.selectors';
 
 describe('FilterMenuButtonComponent', () => {
 

@@ -1,13 +1,13 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
-import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../state/filter.selectors';
+import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../../state/filter-state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { SpatialFilterGeometry, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { updateFilterGroup } from '../state/filter.actions';
+import { updateFilterGroup } from '../../state/filter-state/filter.actions';
 
 @Injectable({
   providedIn: 'root',

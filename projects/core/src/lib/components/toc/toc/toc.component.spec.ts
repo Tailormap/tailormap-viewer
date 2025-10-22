@@ -20,7 +20,7 @@ import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../
 import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { selectFilteredLayerIds } from '../../../filter/state/filter.selectors';
+import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [

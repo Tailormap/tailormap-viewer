@@ -3,7 +3,7 @@ import {
   AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { setSingleFilterDisabled, updateFilter } from '../../../filter/state/filter.actions';
+import { setSingleFilterDisabled, updateFilter } from '../../../state/filter-state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
@@ -26,7 +26,7 @@ export class EditAttributeFiltersComponent {
   public editableFilters = input<AttributeFilterModel[]>([]);
   public filterGroupId = input<string | null>(null);
   public layerIds = input<string[]>([]);
-  public onlyGroupInListOnInit = input<boolean>(false);
+  public expanded = input<boolean>(false);
 
   public isSliderFilter(filter: AttributeFilterModel): boolean {
     return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER;

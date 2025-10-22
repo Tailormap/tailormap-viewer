@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selectors';
-import { map, Observable, of, switchMap, take } from 'rxjs';
+import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
+import { Observable, of } from 'rxjs';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
-import { AttributeFilterService } from '../../../services/attribute-filter.service';
 
 @Component({
   selector: 'tm-filter-list',
@@ -14,23 +13,11 @@ import { AttributeFilterService } from '../../../services/attribute-filter.servi
 })
 export class FilterListComponent implements OnInit {
   private store$ = inject(Store);
-  private attributeFilterService = inject(AttributeFilterService);
 
   public filters$: Observable<ExtendedFilterGroupModel[]> = of([]);
-  public onlyGroupInListOnInit: boolean = false;
 
   public ngOnInit(): void {
-    this.filters$ = this.store$.select(selectFilterGroupsWithLayers).pipe(
-      map(groups =>
-        groups.filter(group => group.layers.some(layer => layer.visible)),
-      ),
-      switchMap(groups => this.attributeFilterService.addAttributeAliasesToFilters$(groups)),
-    );
-
-    this.filters$.pipe(
-      take(1),
-      map(groups => groups.length === 1),
-    ).subscribe(onlyGroupInList => this.onlyGroupInListOnInit = onlyGroupInList);
+    this.filters$ = this.store$.select(selectFilterGroupsWithLayers);
   }
 
 }

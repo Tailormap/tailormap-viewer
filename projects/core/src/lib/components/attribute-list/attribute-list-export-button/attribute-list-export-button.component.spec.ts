@@ -9,7 +9,7 @@ import { AttributeListExportService, SupportedExportFormats } from '../services/
 import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 
 const setup = async (layerId: string | null = null, supportedFormats: SupportedExportFormats[] = []) => {

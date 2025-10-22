@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { filter, map, Observable, of, take } from 'rxjs';
-import { resetAttributeFilters } from '../../../filter/state/filter.actions';
+import { resetAttributeFilters } from '../../../state/filter-state/filter.actions';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
-import { selectFilterGroupsWithLayers } from '../../../filter/state/filter.selectors';
+import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 
 @Component({
   selector: 'tm-reset-filters-button',
