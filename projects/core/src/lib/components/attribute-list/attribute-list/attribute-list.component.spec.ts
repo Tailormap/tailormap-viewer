@@ -22,7 +22,7 @@ import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { initialFilterState } from '../../../state/filterState/filter.state';
+import { initialFilterState } from '../../../state/filter-state/filter.state';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';

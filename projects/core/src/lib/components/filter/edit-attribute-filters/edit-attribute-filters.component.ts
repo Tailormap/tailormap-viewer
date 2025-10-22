@@ -3,7 +3,7 @@ import {
   AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { setSingleFilterDisabled, updateFilter } from '../../../state/filterState/filter.actions';
+import { setSingleFilterDisabled, updateFilter } from '../../../state/filter-state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';

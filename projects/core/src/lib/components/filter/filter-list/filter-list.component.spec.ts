@@ -5,7 +5,7 @@ import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { FilterListItemComponent } from '../filter-list-item/filter-list-item.component';
-import { selectFilterGroupsWithLayers } from '../../../state/filterState/filter.selectors';
+import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
 import { AttributeFilterService } from '../../../services/attribute-filter.service';

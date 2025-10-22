@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
-import * as FilterActions from './filterState/filter.actions';
+import * as FilterActions from './filter-state/filter.actions';
 import { concatMap, map, tap, filter } from 'rxjs';
 import { LoadViewerService } from '../services/load-viewer.service';
 import { Location } from '@angular/common';

@@ -4,7 +4,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectFilterGroupsWithLayers } from '../../../state/filterState/filter.selectors';
+import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 

@@ -1,7 +1,7 @@
 import { ViewerStylingModel, ComponentModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FilterGroupModel } from '@tailormap-viewer/api';
-import { FilterState, initialFilterState } from './filterState/filter.state';
+import { FilterState, initialFilterState } from './filter-state/filter.state';
 
 export const coreStateKey = 'core';
 

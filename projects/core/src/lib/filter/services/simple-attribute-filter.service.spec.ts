@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
 import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
-import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../state/filterState/filter.selectors';
+import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../state/filter-state/filter.selectors';
 import { Store, StoreModule } from '@ngrx/store';
 import { addAppLayers } from '../../map/state/map.actions';
 import { mapStateKey } from '../../map/state/map.state';

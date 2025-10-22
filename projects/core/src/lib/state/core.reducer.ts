@@ -2,9 +2,9 @@ import * as CoreActions from './core.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import * as FilterActions from './filterState/filter.actions';
-import * as FilterReducer from './filterState/filter.reducer';
-import { FilterState } from './filterState/filter.state';
+import * as FilterActions from './filter-state/filter.actions';
+import * as FilterReducer from './filter-state/filter.reducer';
+import { FilterState } from './filter-state/filter.state';
 
 const onLoadViewer = (state: CoreState): CoreState => ({
   ...state,

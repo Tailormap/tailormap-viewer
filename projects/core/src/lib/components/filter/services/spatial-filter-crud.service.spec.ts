@@ -8,7 +8,7 @@ import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter
 import { selectViewerId } from '../../../state/core.selectors';
 import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper.spec';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
-import { addFilterGroup, updateFilterGroup } from '../../../state/filterState/filter.actions';
+import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { waitFor } from '@testing-library/angular';
 import { SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { FilterTypeEnum, FilterGroupModel, AttributeFilterModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { toggleFilterDisabled } from '../../../state/filterState/filter.actions';
+import { toggleFilterDisabled } from '../../../state/filter-state/filter.actions';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { setSelectedFilterGroup } from '../state/filter-component.actions';
 import { RemoveFilterService } from '../services/remove-filter.service';

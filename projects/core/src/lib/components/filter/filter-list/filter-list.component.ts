@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterGroupsWithLayers } from '../../../state/filterState/filter.selectors';
+import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { map, Observable, of, take } from 'rxjs';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 
