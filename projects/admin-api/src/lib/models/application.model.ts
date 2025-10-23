@@ -17,4 +17,9 @@ export interface ApplicationModel {
   components?: ComponentModel[];
   styling?: ViewerStylingModel;
   authorizationRules: AuthorizationRuleGroup[];
+  readonly createdBy?: string | null;
+  readonly lastModifiedBy?: string | null;
+  // these dates are in format 2025-10-23T11:09:42.253370769Z
+  readonly createdDate?: string | null;
+  readonly lastModifiedDate?: string | null;
 }
