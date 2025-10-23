@@ -22,6 +22,9 @@
           @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
             <tm-terrain-layer-toggle></tm-terrain-layer-toggle>
           }
+          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_TRANSLUCENCY)) {
+            <tm-terrain-translucency></tm-terrain-translucency>
+          }
         </div>
         <div class="map-controls-right">
           @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)) {
