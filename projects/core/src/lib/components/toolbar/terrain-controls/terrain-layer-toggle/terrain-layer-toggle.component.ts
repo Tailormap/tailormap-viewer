@@ -4,8 +4,8 @@ import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import {
   selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList,
-} from '../../../map/state/map.selectors';
-import { setSelectedTerrainNodeId } from '../../../map/state/map.actions';
+} from '../../../../map/state/map.selectors';
+import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
 
 @Component({
   selector: 'tm-terrain-layer-toggle',

@@ -14,8 +14,7 @@ import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
 import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
-import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-toggle.module';
-import { TerrainTranslucencyModule } from './terrain-translucency/terrain-translucency.module';
+import { TerrainControlsModule } from './terrain-controls/terrain-controls.module';
 
 @NgModule({
   declarations: [
@@ -35,8 +34,7 @@ import { TerrainTranslucencyModule } from './terrain-translucency/terrain-transl
     GeolocationModule,
     StreetviewModule,
     CoordinateLinkWindowModule,
-    TerrainLayerToggleModule,
-    TerrainTranslucencyModule,
+    TerrainControlsModule,
   ],
 })
 export class ToolbarModule { }
