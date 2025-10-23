@@ -14,6 +14,16 @@
   <div class="application-edit-content">
     <router-outlet></router-outlet>
   </div>
+
+  <div class="application-metadata">
+    @if (application.createdBy) {
+      <span i18n="@@admin-core.application-metadata.created">Created by {{ application.createdBy }} at {{ application.createdDate | date:'medium' }}</span>.&nbsp;
+    }
+    @if (application.lastModifiedBy) {
+      <span i18n="@@admin-core.application-metadata.updated">Last updated by {{ application.lastModifiedBy }} at {{ application.lastModifiedDate | date:'medium' }}</span>.
+    }
+  </div>
+
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(application)" i18n="@@admin-core.common.delete">Delete</button>
