@@ -2409,6 +2409,14 @@
         <source>Valid until</source>
         <target>Gültig bis</target>
       </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+        <target>Erstellt von <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:'medium' }} | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></source>
+        <target>Zuletzt aktualisiert von <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
