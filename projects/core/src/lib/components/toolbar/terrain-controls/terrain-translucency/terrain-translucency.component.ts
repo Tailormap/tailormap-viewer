@@ -17,4 +17,8 @@ export class TerrainTranslucencyComponent {
     this.mapService.set3dTerrainTranslucency(value);
   }
 
+  public resetTerrainTranslucency(): void {
+    this.mapService.set3dTerrainTranslucency(1);
+  }
+
 }

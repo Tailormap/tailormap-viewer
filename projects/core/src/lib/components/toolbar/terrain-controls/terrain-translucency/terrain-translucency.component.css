@@ -1,5 +1,5 @@
 .terrain-translucency-control {
-  background-color: #FFFFFF;
+  display: flex;
 }
 
 .terrain-translucency-control tm-slider {

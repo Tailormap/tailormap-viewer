@@ -1,9 +1,9 @@
 .terrain-controls ::ng-deep .mat-expansion-panel {
   width: 100px;
-  transition: width 0.3s ease;
+  transition: width 255ms ease;
   overflow: hidden; /* ensures content doesn’t spill during animation */
 }
 
 .terrain-controls ::ng-deep .mat-expansion-panel.mat-expanded {
-  width: 300px;
+  width: 240px;
 }
