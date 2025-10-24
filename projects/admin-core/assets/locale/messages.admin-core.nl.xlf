@@ -2043,7 +2043,7 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.priority-hint" datatype="html">
         <source>When multiple tasks are scheduled at the same time and they cannot be executed simultaneously, the task with the highest priority will be executed first. If no value is provided for a new schedule, the default value of 5 is used. </source>
-        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd. Als er geen waarde is ingevuld, wordt de standaard waarde van 5 gebruikt.</target>
+        <target>Als er meerdere taken tegelijkertijd zijn gepland en deze niet tegelijkertijd kunnen worden uitgevoerd, wordt de taak met de hoogste prioriteit als eerste uitgevoerd. Als er geen waarde is ingevuld voor een nieuwe planning, wordt de standaardwaarde van 5 gebruikt. </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.reindex" datatype="html">
         <source>Re-index</source>
@@ -2303,7 +2303,7 @@
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file-message" datatype="html">
         <source>Are you sure you want delete to the file <x id="PH" equiv-text="uploadName"/>? This action cannot be undone.</source>
-        <target>Weet u zeker dat u het bestand <x id="PH" equiv-text="uploadName"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+        <target>Weet u zeker dat u het bestand <x id="PH" equiv-text="uploadName"/> wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.error-deleting-file" datatype="html">
         <source>Error removing file <x id="PH" equiv-text="uploadName"/>. Please try again.</source>
@@ -2396,6 +2396,14 @@
       <trans-unit id="admin-core.users.valid-until" datatype="html">
         <source>Valid until</source>
         <target>Geldig tot</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+        <target>Aangemaakt door <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></source>
+        <target>Laatst bijgewerkt door <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></target>
       </trans-unit>
     </body>
   </file>
