@@ -659,6 +659,48 @@
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
       </trans-unit>
+      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
+        <source>Confirm Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
+        <source>Error resetting password: <x id="PH" equiv-text="error?.error?.message || error?.message || error.toString())"/></source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
+        <source>Error saving password, please check your token, username and password and try again.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
+        <source>Passwords need to match</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
+        <source>Password too short or too easily guessable</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
+        <source>Your password reset token is invalid or has expired.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
+        <source>Username is invalid</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
+        <source>New Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.return" datatype="html">
+        <source>Return to Login</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.save" datatype="html">
+        <source>Save new password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.success" datatype="html">
+        <source>Password successfully reset, you can now log in with your new password.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.title" datatype="html">
+        <source>Reset Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.username" datatype="html">
+        <source>Username</source>
+      </trans-unit>
       <trans-unit id="core.print.a3" datatype="html">
         <source>A3</source>
       </trans-unit>
@@ -781,6 +823,12 @@
       </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
+      </trans-unit>
+      <trans-unit id="core.terrain-layer-toggle.model" datatype="html">
+        <source> Model </source>
+      </trans-unit>
+      <trans-unit id="core.terrainOpacity.label" datatype="html">
+        <source> Opacity </source>
       </trans-unit>
       <trans-unit id="core.toc.3d-layer" datatype="html">
         <source>Switch to 3D to see this layer</source>
@@ -908,48 +956,6 @@
       </trans-unit>
       <trans-unit id="core.user-login-check-viewer-message" datatype="html">
         <source>You are logged out and might need to login again</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.title" datatype="html">
-        <source>Reset Password</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.username" datatype="html">
-        <source>Username</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
-        <source>New Password</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
-        <source>Confirm Password</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
-        <source>Username is invalid</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.['minlength'].requiredLength"/></source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
-        <source>Password too short or too easily guessable</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
-        <source>Passwords need to match</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
-        <source>Your password reset token is invalid or has expired.</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.success" datatype="html">
-        <source>Password successfully reset, you can now log in with your new password.</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
-        <source>Error saving password, please check your token, username and password and try again.</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
-        <source>Error resetting password: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.save" datatype="html">
-        <source>Save new password</source>
-      </trans-unit>
-      <trans-unit id="core.password-reset-form.return" datatype="html">
-        <source>Return to Login</source>
       </trans-unit>
     </body>
   </file>

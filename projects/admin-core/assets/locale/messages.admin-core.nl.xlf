@@ -130,6 +130,10 @@
         <source>Terrain layer toggle</source>
         <target>Terreinlaagkiezer</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-opacity" datatype="html">
+        <source>Terrain opacity</source>
+        <target>Terrein ondoorzichtigheid</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Componenten</target>
