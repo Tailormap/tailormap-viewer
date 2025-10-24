@@ -35,7 +35,7 @@
             <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left"></tm-registered-components-renderer>
             <tm-switch3-d></tm-switch3-d>
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)
-            || layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_TRANSLUCENCY)) {
+            || layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
               <tm-terrain-controls></tm-terrain-controls>
             }
           </div>

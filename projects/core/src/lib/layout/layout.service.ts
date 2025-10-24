@@ -31,7 +31,7 @@ export class LayoutService {
 
   private componentsOnlyIn3d = [
     BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
-    BaseComponentTypeEnum.TERRAIN_TRANSLUCENCY,
+    BaseComponentTypeEnum.TERRAIN_OPACITY,
   ];
 
   constructor() {

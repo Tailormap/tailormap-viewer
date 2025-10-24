@@ -7,7 +7,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -423,10 +423,16 @@ export class OpenLayersMap implements MapViewerModel {
     this.in3d.next(!this.in3d.value);
   }
 
-  public set3dTerrainTranslucency(translucency: number) {
+  public set3dTerrainOpacity(opacity: number) {
     this.executeCesiumAction(cesiumManager => {
-      cesiumManager.setTerrainTranslucency(translucency);
+      cesiumManager.setTerrainOpacity(opacity);
     });
+  }
+
+  public get3dTerrainOpacity$(): Observable<number> {
+    return this.getCesiumManager$().pipe(
+      switchMap(cesiumManager => cesiumManager.getTerrainOpacity$()),
+    );
   }
 
 }

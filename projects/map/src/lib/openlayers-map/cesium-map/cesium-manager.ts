@@ -22,6 +22,8 @@ export class CesiumManager {
   private prevLayerIdentifiers: string[] = [];
   private createdTiles3dLayerIds: string[] = [];
 
+  private terrainOpacity$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+
 
   constructor(
     private olMap: OlMap,
@@ -228,13 +230,18 @@ export class CesiumManager {
     return null;
   }
 
-  public setTerrainTranslucency(value: number) {
+  public setTerrainOpacity(opacity: number) {
     this.executeScene3dAction(scene3d => {
-      scene3d.globe.translucency.enabled = value < 1;
-      scene3d.globe.translucency.frontFaceAlphaByDistance = new Cesium.NearFarScalar(1.5e2, value, 8.0e6, 0.0);
-      scene3d.screenSpaceCameraController.enableCollisionDetection = value === 1;
+      scene3d.globe.translucency.enabled = opacity < 1;
+      scene3d.globe.translucency.frontFaceAlphaByDistance = new Cesium.NearFarScalar(1.5e2, opacity, 8.0e6, 1);
+      scene3d.screenSpaceCameraController.enableCollisionDetection = opacity === 1;
       scene3d.requestRender();
     });
+    this.terrainOpacity$.next(opacity);
+  }
+
+  public getTerrainOpacity$(): Observable<number> {
+    return this.terrainOpacity$.asObservable();
   }
 
 }

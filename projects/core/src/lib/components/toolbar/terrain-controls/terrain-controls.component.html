@@ -5,8 +5,8 @@
       <mat-expansion-panel-header [collapsedHeight]="'40px'">
         <mat-icon svgIcon="tools_terrain"></mat-icon>
       </mat-expansion-panel-header>
-      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_TRANSLUCENCY)) {
-        <tm-terrain-translucency></tm-terrain-translucency>
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
+        <tm-terrain-opacity></tm-terrain-opacity>
       }
       @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
         <tm-terrain-layer-toggle></tm-terrain-layer-toggle>

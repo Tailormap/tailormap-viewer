@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
-import { TerrainTranslucencyComponent } from './terrain-translucency.component';
+import { TerrainOpacityComponent } from './terrain-opacity.component';
 
 describe('TerrainTranslucencyComponent', () => {
 
   test('should render', async () => {
-    await render(TerrainTranslucencyComponent);
+    await render(TerrainOpacityComponent);
     expect(screen.getByText('terrain-translucency works!'));
   });
 

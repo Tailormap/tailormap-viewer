@@ -1,18 +1,18 @@
-<div class="terrain-translucency-label">
-  <strong i18n="@@core.terrainTranslucency.label">
-    Translucency
+<div class="terrain-opacity-label">
+  <strong i18n="@@core.terrainOpacity.label">
+    Opacity
   </strong>
 </div>
-<div class="terrain-translucency-control">
+<div class="terrain-opacity-control">
   <tm-slider
     [min]="0"
     [max]="1"
-    [value]="1"
+    [value]="terrainOpacity$ | async"
     [step]="0.01"
-    (valueChange)="setTerrainTranslucency($event)">
+    (valueChange)="setTerrainOpacity($event)">
   </tm-slider>
   <button mat-icon-button
-          (click)="resetTerrainTranslucency()"
+          (click)="resetTerrainOpacity()"
           color="primary"
           i18n-tmTooltip="@@core.toc.reset-opacity"
           tmTooltip="Reset opacity">

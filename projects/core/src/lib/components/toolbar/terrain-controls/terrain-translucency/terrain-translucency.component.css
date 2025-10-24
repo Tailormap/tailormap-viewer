@@ -1,8 +1,0 @@
-.terrain-translucency-control {
-  display: flex;
-}
-
-.terrain-translucency-control tm-slider {
-  margin-left: 16px;
-  margin-right: 16px;
-}
