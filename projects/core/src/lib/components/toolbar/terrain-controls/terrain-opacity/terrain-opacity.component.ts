@@ -25,4 +25,8 @@ export class TerrainOpacityComponent implements OnInit {
     this.mapService.set3dTerrainOpacity(1);
   }
 
+  public toPercentageString(opacity: number): string {
+    return `${Math.round(opacity * 100)}%`;
+  }
+
 }

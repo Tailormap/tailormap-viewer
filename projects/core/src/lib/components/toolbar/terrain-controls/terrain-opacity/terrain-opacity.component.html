@@ -9,6 +9,7 @@
     [max]="1"
     [value]="terrainOpacity$ | async"
     [step]="0.01"
+    [displayWith]="toPercentageString"
     (valueChange)="setTerrainOpacity($event)">
   </tm-slider>
   <button mat-icon-button
