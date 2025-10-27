@@ -1,16 +1,22 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
   <div class="terrain-controls map-control-button-container">
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      #panel
+      [style.width.px]="panelWidth"
+      (opened)="onExpand()"
+      (closed)="onCollapse()">
       <mat-expansion-panel-header [collapsedHeight]="'40px'" [tmTooltip]="tooltip">
         <mat-icon svgIcon="tools_terrain"></mat-icon>
       </mat-expansion-panel-header>
-      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
-        <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
-      }
-      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
-        <tm-terrain-layer-toggle [label]="layerToggleLabel"></tm-terrain-layer-toggle>
-      }
+      <div #panelContent class="panel-content">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
+          <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
+        }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
+          <tm-terrain-layer-toggle class="terrain-layer-toggle" [label]="layerToggleLabel"></tm-terrain-layer-toggle>
+        }
+      </div>
     </mat-expansion-panel>
   </div>
 }

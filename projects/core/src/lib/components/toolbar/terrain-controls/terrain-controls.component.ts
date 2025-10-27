@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, DestroyRef, ElementRef, OnDestroy, viewChild } from '@angular/core';
 import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { LayoutService } from '../../../layout/layout.service';
 import { Store } from '@ngrx/store';
@@ -13,7 +13,7 @@ import { selectComponentsConfigForType } from '../../../state/core.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class TerrainControlsComponent {
+export class TerrainControlsComponent implements OnDestroy {
   public layoutService = inject(LayoutService);
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
@@ -23,6 +23,11 @@ export class TerrainControlsComponent {
   public opacityLabel: string = $localize `:@@core.terrain-controls.opacity:Terrain opacity`;
   public layerToggleLabel: string = $localize `:@@core.terrain-controls.model:Terrain model`;
   public componentTypes = BaseComponentTypeEnum;
+  private resizeObserver?: ResizeObserver;
+
+  private panelContent = viewChild<ElementRef<HTMLDivElement>>('panelContent');
+
+  public panelWidth = 100;
 
   constructor() {
     combineLatest([
@@ -42,4 +47,36 @@ export class TerrainControlsComponent {
         this.tooltip = tooltipParts.join(' & ');
       });
   }
+
+  public onExpand() {
+    const panelEl = this.panelContent()?.nativeElement;
+    if (!panelEl) {
+      return;
+    }
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = new ResizeObserver(() => {
+      console.debug("updating panel width.");
+      this.updatePanelWidth(panelEl);
+    });
+    const terrainLayerToggleEl = this.panelContent()?.nativeElement.querySelector('tm-terrain-layer-toggle');
+    console.debug("Observing terrain layer toggle element for resize:", terrainLayerToggleEl);
+    if (terrainLayerToggleEl) {
+      this.resizeObserver.observe(panelEl);
+    }
+    this.updatePanelWidth(panelEl);
+  }
+
+  public onCollapse() {
+    this.panelWidth = 100;
+    this.resizeObserver?.disconnect();
+  }
+
+  private updatePanelWidth(el: HTMLDivElement) {
+    this.panelWidth = el.scrollWidth + 48;
+  }
+
+  public ngOnDestroy() {
+    this.resizeObserver?.disconnect();
+  }
+
 }
