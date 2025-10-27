@@ -1,8 +1,12 @@
-.terrain-opacity-control {
+.form-field__slider {
   display: flex;
+  align-items: center;
 }
 
-.terrain-opacity-control tm-slider {
-  margin-left: 16px;
-  margin-right: 16px;
+tm-slider {
+  flex: 1;
+}
+
+button {
+  margin-left: 8px;
 }

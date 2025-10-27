@@ -3,7 +3,7 @@
     {{ label() }}
   </strong>
 </div>
-<div class="terrain-opacity-control">
+<div class="form-field form-field__slider">
   <tm-slider
     [min]="0"
     [max]="1"
@@ -12,11 +12,13 @@
     [displayWith]="toPercentageString"
     (valueChange)="setTerrainOpacity($event)">
   </tm-slider>
-  <button mat-icon-button
-          (click)="resetTerrainOpacity()"
-          color="primary"
-          i18n-tmTooltip="@@core.toc.reset-opacity"
-          tmTooltip="Reset opacity">
-    <mat-icon svgIcon="reset"></mat-icon>
-  </button>
+  <div class="terrain-opacity-reset">
+    <button mat-icon-button
+            (click)="resetTerrainOpacity()"
+            color="primary"
+            i18n-tmTooltip="@@core.toc.reset-opacity"
+            tmTooltip="Reset opacity">
+      <mat-icon svgIcon="reset"></mat-icon>
+    </button>
+  </div>
 </div>
