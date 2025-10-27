@@ -1094,17 +1094,17 @@
         <source>Restore panel height</source>
         <target>Paneelhoogte herstellen</target>
       </trans-unit>
+      <trans-unit id="core.terrain-controls.model" datatype="html">
+        <source>Terrain model</source>
+        <target>Terreinmodel</target>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls.opacity" datatype="html">
+        <source>Terrain opacity</source>
+        <target>Terrein ondoorzichtigheid</target>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoïde</target>
-      </trans-unit>
-      <trans-unit id="core.terrain-layer-toggle.model" datatype="html">
-        <source> Model </source>
-        <target> Model </target>
-      </trans-unit>
-      <trans-unit id="core.terrainOpacity.label" datatype="html">
-        <source> Opacity </source>
-        <target> Ondoorzichtigheid </target>
       </trans-unit>
       <trans-unit id="core.toc.3d-layer" datatype="html">
         <source>Switch to 3D to see this layer</source>

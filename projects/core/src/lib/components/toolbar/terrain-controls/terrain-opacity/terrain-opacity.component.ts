@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, input } from '@angular/core';
 import { MapService } from '@tailormap-viewer/map';
 import { Observable, of } from 'rxjs';
 
@@ -11,6 +11,9 @@ import { Observable, of } from 'rxjs';
 })
 export class TerrainOpacityComponent implements OnInit {
   private mapService = inject(MapService);
+
+
+  public label = input<string>('');
   public terrainOpacity$: Observable<number> = of(1);
 
   public ngOnInit(): void {

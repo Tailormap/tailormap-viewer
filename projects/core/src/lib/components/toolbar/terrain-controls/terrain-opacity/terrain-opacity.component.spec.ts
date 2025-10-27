@@ -6,7 +6,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { CommonModule } from '@angular/common';
 import { getMapServiceMock } from '../../../../test-helpers/map-service.mock.spec';
 
-describe('TerrainTranslucencyComponent', () => {
+describe('TerrainOpacityComponent', () => {
 
   test('should render', async () => {
     await render(TerrainOpacityComponent, {
@@ -14,6 +14,7 @@ describe('TerrainTranslucencyComponent', () => {
       providers: [
         getMapServiceMock().provider,
       ],
+      inputs: { label: 'Opacity' },
     });
     expect(screen.getByText('Opacity'));
     expect(screen.getByRole('slider'));

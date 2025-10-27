@@ -821,14 +821,14 @@
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
       </trans-unit>
+      <trans-unit id="core.terrain-controls.model" datatype="html">
+        <source>Terrain model</source>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls.opacity" datatype="html">
+        <source>Terrain opacity</source>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
-      </trans-unit>
-      <trans-unit id="core.terrain-layer-toggle.model" datatype="html">
-        <source> Model </source>
-      </trans-unit>
-      <trans-unit id="core.terrainOpacity.label" datatype="html">
-        <source> Opacity </source>
       </trans-unit>
       <trans-unit id="core.toc.3d-layer" datatype="html">
         <source>Switch to 3D to see this layer</source>

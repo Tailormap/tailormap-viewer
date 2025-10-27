@@ -10,10 +10,8 @@ import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.compo
 import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { provideMockStore } from '@ngrx/store/testing';
-import {
-  selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList,
-} from '@tailormap-viewer/core';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
+import { selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList } from '../../../map/state/map.selectors';
 
 describe('TerrainControlsComponent', () => {
 

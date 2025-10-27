@@ -2,14 +2,14 @@
 @if (layoutConfig) {
   <div class="terrain-controls map-control-button-container">
     <mat-expansion-panel>
-      <mat-expansion-panel-header [collapsedHeight]="'40px'">
+      <mat-expansion-panel-header [collapsedHeight]="'40px'" [tmTooltip]="tooltip">
         <mat-icon svgIcon="tools_terrain"></mat-icon>
       </mat-expansion-panel-header>
       @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
-        <tm-terrain-opacity></tm-terrain-opacity>
+        <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
       }
       @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
-        <tm-terrain-layer-toggle></tm-terrain-layer-toggle>
+        <tm-terrain-layer-toggle [label]="layerToggleLabel"></tm-terrain-layer-toggle>
       }
     </mat-expansion-panel>
   </div>
