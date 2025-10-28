@@ -55,14 +55,9 @@ export class TerrainControlsComponent implements OnDestroy {
     }
     this.resizeObserver?.disconnect();
     this.resizeObserver = new ResizeObserver(() => {
-      console.debug("updating panel width.");
       this.updatePanelWidth(panelEl);
     });
-    const terrainLayerToggleEl = this.panelContent()?.nativeElement.querySelector('tm-terrain-layer-toggle');
-    console.debug("Observing terrain layer toggle element for resize:", terrainLayerToggleEl);
-    if (terrainLayerToggleEl) {
-      this.resizeObserver.observe(panelEl);
-    }
+    this.resizeObserver.observe(panelEl);
     this.updatePanelWidth(panelEl);
   }
 
