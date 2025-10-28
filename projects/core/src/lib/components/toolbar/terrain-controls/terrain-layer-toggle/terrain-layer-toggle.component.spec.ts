@@ -5,7 +5,7 @@ import {
   selectInitiallySelectedTerrainNodes,
   selectSelectedTerrainNodeId,
   selectTerrainNodesList,
-} from '../../../map/state/map.selectors';
+} from '../../../../map/state/map.selectors';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

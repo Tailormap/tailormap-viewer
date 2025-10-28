@@ -1,3 +1,8 @@
+<div class="terrain-layer-toggle-label">
+  <strong>
+    {{ label() }}
+  </strong>
+</div>
 <tm-split-button small_screens_icon="layers_filled"
                  [options]="terrainLayers$ | async"
                  [emptyLabel]="initiallyCheckedLabels$ | async"

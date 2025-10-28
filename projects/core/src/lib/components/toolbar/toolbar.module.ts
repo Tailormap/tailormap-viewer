@@ -14,10 +14,11 @@ import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
 import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
-import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-toggle.module';
+import { TerrainControlsModule } from './terrain-controls/terrain-controls.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     StoreModule.forFeature(toolbarStateKey, toolbarReducer),
@@ -33,7 +34,7 @@ import { TerrainLayerToggleModule } from './terrain-layer-toggle/terrain-layer-t
     GeolocationModule,
     StreetviewModule,
     CoordinateLinkWindowModule,
-    TerrainLayerToggleModule,
+    TerrainControlsModule,
   ],
 })
 export class ToolbarModule { }

@@ -19,8 +19,9 @@
           @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) {
             <tm-simple-search></tm-simple-search>
           }
-          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
-            <tm-terrain-layer-toggle></tm-terrain-layer-toggle>
+          @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)
+          || layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
+            <tm-terrain-controls></tm-terrain-controls>
           }
         </div>
         <div class="map-controls-right">

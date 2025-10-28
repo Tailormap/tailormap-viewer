@@ -277,4 +277,12 @@ export class MapService {
     this.map.switch3d();
   }
 
+  public set3dTerrainOpacity(opacity: number){
+    this.map.set3dTerrainOpacity(opacity);
+  }
+
+  public get3dTerrainOpacity$(): Observable<number> {
+    return this.map.get3dTerrainOpacity$();
+  }
+
 }
