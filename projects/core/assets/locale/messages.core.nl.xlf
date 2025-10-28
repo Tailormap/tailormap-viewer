@@ -884,7 +884,7 @@
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-reset" datatype="html">
         <source>Error resetting password: <x id="PH" equiv-text="error?.error?.message || error?.message || error.toString())"/></source>
-        <target state="new">Fout bij het opnieuw instellen van het wachtwoord: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
+        <target>Fout bij het opnieuw instellen van het wachtwoord: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-saving" datatype="html">
         <source>Error saving password, please check your token, username and password and try again.</source>
@@ -896,7 +896,7 @@
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
         <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
-        <target state="new">Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
+        <target>Wachtwoord korter dan <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
