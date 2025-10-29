@@ -96,12 +96,10 @@ export class EditDialogComponent {
         this.resetChanges();
       });
 
-    this.editMapToolService.editedGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
+    this.editMapToolService.allEditGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
       this.geometryChanged(geometry, false);
     });
-    this.editMapToolService.createdGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
-      this.geometryChanged(geometry, true);
-    });
+
     ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
       this.store$,
       BaseComponentTypeEnum.EDIT,

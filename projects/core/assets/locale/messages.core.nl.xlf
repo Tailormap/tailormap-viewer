@@ -472,11 +472,11 @@
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
-        <target>Selecteer een object om te bewerken</target>
+        <target>Object om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
-        <target>Selecteer een laag om te bewerken</target>
+        <target>Laag om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>

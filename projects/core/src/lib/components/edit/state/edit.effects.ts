@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as EditActions from './edit.actions';
 import { filter, map, switchMap } from 'rxjs';
-import { FeatureInfoService } from '../../feature-info/feature-info.service';
+import { FeatureInfoService } from '../../feature-info';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectEditActive, selectSelectedEditLayer } from './edit.selectors';
 import { Store } from '@ngrx/store';
@@ -16,23 +16,38 @@ export class EditEffects {
   private store$ = inject(Store);
   private featureInfoService = inject(FeatureInfoService);
 
-
   public loadEditFeatures$ = createEffect(() => {
       return this.actions$.pipe(
           ofType(EditActions.loadEditFeatures),
           withLatestFrom(this.store$.select(selectSelectedEditLayer)),
           switchMap(([ action, editLayer ]) => {
-            return this.featureInfoService.getEditableFeatures$(action.coordinates, editLayer, action.pointerType)
-              .pipe(
-                map(result => {
-                  if (!result) {
-                    return EditActions.loadEditFeaturesFailed({});
-                  }
-                  return EditActions.loadEditFeaturesSuccess({ featureInfo: result });
-                }),
-              );
+            return this.featureInfoService.getEditableFeatures$(action.coordinates, editLayer, action.pointerType).pipe(
+              map(result => {
+                if (!result) {
+                  return EditActions.loadEditFeaturesFailed({});
+                }
+                return EditActions.loadEditFeaturesSuccess({ featureInfo: result });
+              }),
+            );
           }),
       );
+  });
+
+  public loadCopyFeatures$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(EditActions.loadCopyFeatures),
+      withLatestFrom(this.store$.select(selectSelectedEditLayer)),
+      switchMap(([ action, editLayer ]) => {
+        return this.featureInfoService.getFeaturesForLayer$(action.coordinates, editLayer, action.pointerType).pipe(
+          map(result => {
+            if (!result) {
+              return EditActions.loadCopyFeaturesFailed({});
+            }
+            return EditActions.loadCopyFeaturesSuccess({ featureInfo: [result] });
+          }),
+        );
+      }),
+    );
   });
 
   public activeTool$ = createEffect(() => {

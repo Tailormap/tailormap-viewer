@@ -37,7 +37,15 @@ const onLoadFeatureInfo = (
   mapCoordinates: payload.coordinates,
   loadStatus: LoadingStateEnum.LOADING,
   features: [],
-  dialogVisible: false,
+});
+
+const onLoadCopyFeatureInfo = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.loadCopyFeatures>,
+): EditState => ({
+  ...state,
+  mapCoordinates: payload.coordinates,
+  loadStatus: LoadingStateEnum.LOADING,
 });
 
 const onLoadEditFeaturesSuccess = (
@@ -56,6 +64,56 @@ const onLoadEditFeaturesSuccess = (
     dialogCollapsed: false,
   };
 };
+
+const onLoadCopyFeaturesSuccess = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.loadCopyFeaturesSuccess>,
+): EditState => {
+  state = {
+    ...state,
+    loadStatus: LoadingStateEnum.LOADED,
+  };
+  const geometry = payload.featureInfo[0]?.features[0]?.geometry;
+  if (!geometry) {
+    return state;
+  }
+
+  // Deselect a feature by checking if the geometry WKT is already in the copiedFeatures array (can't search by fid)
+  const sameGeometryIndex = state.copiedFeatures.findIndex(f => f.geometry === geometry);
+  const copiedFeatures = sameGeometryIndex !== -1
+    ? state.copiedFeatures.filter((_, idx) => idx !== sameGeometryIndex)
+    : [ ...state.copiedFeatures, payload.featureInfo[0].features[0] ];
+
+  return {
+    ...state,
+    features: [{
+      layerId: state.columnMetadata[0].layerId,
+      __fid: 'new',
+      attributes: {},
+    }],
+    copiedFeatures,
+  };
+};
+
+const onSetCopyOtherLayerFeaturesActive = (
+  state: EditState,
+    payload: ReturnType<typeof EditActions.setEditCopyOtherLayerFeaturesActive>,
+): EditState => ({
+  ...state,
+  isCopyOtherLayerFeaturesActive: payload.active,
+  isCreateNewFeatureActive: false,
+  selectedCopyLayer: payload.layerId,
+  dialogVisible: payload.active,
+  selectedFeature: 'new',
+  features: [{
+    layerId: payload.columnMetadata[0].layerId,
+    __fid: 'new',
+    attributes: {},
+  }],
+  columnMetadata: payload.columnMetadata,
+  loadStatus: LoadingStateEnum.LOADED,
+  dialogCollapsed: false,
+});
 
 const onSetCreateNewFeatureActive = (
     state: EditState,
@@ -95,6 +153,15 @@ const onLoadEditFeaturesFailed = (
   errorMessage: payload.errorMessage,
   features: [],
   selectedFeature: null,
+  loadStatus: LoadingStateEnum.FAILED,
+});
+
+const onLoadCopyFeaturesFailed = (
+  state: EditState,
+  payload: ReturnType<typeof EditActions.loadCopyFeaturesFailed>,
+): EditState => ({
+  ...state,
+  errorMessage: payload.errorMessage,
   loadStatus: LoadingStateEnum.FAILED,
 });
 
@@ -167,21 +234,27 @@ const onEditNewlyCreatedFeature = (
 ): EditState => {
   return {
     ...state,
+    isCopyOtherLayerFeaturesActive: false,
+    selectedCopyLayer: null,
+    copiedFeatures: [],
     features: [payload.feature],
     selectedFeature: payload.feature.__fid,
     isCreateNewFeatureActive: false,
   };
-
 };
 
 const editReducerImpl = createReducer<EditState>(
   initialEditState,
   on(EditActions.setEditActive, onSetIsActive),
+  on(EditActions.setEditCopyOtherLayerFeaturesActive, onSetCopyOtherLayerFeaturesActive),
   on(EditActions.setEditCreateNewFeatureActive, onSetCreateNewFeatureActive),
   on(EditActions.setSelectedEditLayer, onSetSelectedLayer),
   on(EditActions.loadEditFeatures, onLoadFeatureInfo),
+  on(EditActions.loadCopyFeatures, onLoadCopyFeatureInfo),
   on(EditActions.loadEditFeaturesSuccess, onLoadEditFeaturesSuccess),
   on(EditActions.loadEditFeaturesFailed, onLoadEditFeaturesFailed),
+  on(EditActions.loadCopyFeaturesSuccess, onLoadCopyFeaturesSuccess),
+  on(EditActions.loadCopyFeaturesFailed, onLoadCopyFeaturesFailed),
   on(EditActions.setSelectedEditFeature, onSetSelectedEditFeature),
   on(EditActions.setLoadedEditFeature, onSetLoadedEditFeature),
   on(EditActions.showEditDialog, onShowEditDialog),

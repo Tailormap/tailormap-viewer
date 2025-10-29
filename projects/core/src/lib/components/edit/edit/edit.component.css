@@ -18,12 +18,18 @@
   border-radius: 3px;
 }
 
-.map-control-button--add-feature {
+.edit-wrapper {
+  flex: 1;
+}
+
+.edit-controls button {
   left: 3px;
 }
 
-.edit-wrapper {
-  flex: 1;
+.edit-controls {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .edit-container mat-form-field {
