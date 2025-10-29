@@ -19,8 +19,7 @@
       <mat-select formControlName="cronExpression">
         @for (option of scheduleOptions; track $index) {
           <mat-option
-            [value]="option.cronExpression"
-            [disabled]="option.cronExpression === '' && taskSchedule?.uuid">
+            [value]="option.cronExpression">
             {{ option.viewValue }}
           </mat-option>
         }

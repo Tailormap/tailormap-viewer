@@ -65,15 +65,12 @@ export class SearchIndexSchedulingComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
-        let schedule: TaskSchedule | undefined = undefined;
-        if (value.cronExpression) {
-          schedule = {
-            ...this.taskSchedule,
-            cronExpression: value.cronExpression,
-            description: value.description,
-            priority: value.priority,
-          };
-        }
+        const schedule = {
+          ...this.taskSchedule,
+          cronExpression: value.cronExpression || '',
+          description: value.description,
+          priority: value.priority,
+        };
         const searchIndex: Pick<SearchIndexModel, 'schedule'> = {
           schedule: schedule,
         };
