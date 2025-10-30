@@ -202,6 +202,9 @@ const onHideEditDialog = (state: EditState): EditState => ({
   dialogCollapsed: false,
   selectedFeature: null,
   isCreateNewFeatureActive: false,
+  isCopyOtherLayerFeaturesActive: false,
+  copiedFeatures: [],
+  selectedCopyLayer: null,
 });
 
 const onExpandCollapseEditDialog = (state: EditState): EditState => ({
