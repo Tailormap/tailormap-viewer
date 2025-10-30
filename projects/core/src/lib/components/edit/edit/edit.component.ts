@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import {
   selectCopiedFeatures,
-  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectEditCreateNewOrCopyFeatureActive,
+  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive,
   selectSelectedEditLayer,
 } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
