@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inje
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import {
-  selectEditCreateNewFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
+  selectEditCreateNewOrCopyFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
@@ -44,6 +44,7 @@ export class EditDialogComponent {
   public dialogCollapsed$;
   public isCreateFeature$;
   public currentFeature$;
+  public dialogTitle$;
   public layerDetails$;
   public selectableFeature$;
 
@@ -70,7 +71,11 @@ export class EditDialogComponent {
     this.loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
     this.editCoordinates$ = this.store$.select(selectEditMapCoordinates);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
-    this.isCreateFeature$ = this.store$.select(selectEditCreateNewFeatureActive);
+    this.dialogTitle$ = this.currentFeature$.pipe(
+      map(feature => feature?.feature.__fid !== 'new'
+        ? $localize `:@@core.edit.edit:Edit feature`
+        : $localize `:@@core.edit.add-new-feature:Add new feature`));
+    this.isCreateFeature$ = this.store$.select(selectEditCreateNewOrCopyFeatureActive);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),
       this.store$.select(selectSelectedEditFeature),

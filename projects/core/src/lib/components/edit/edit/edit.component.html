@@ -11,8 +11,7 @@
       <mat-icon svgIcon="edit"></mat-icon>
     </button>
     @if (active$ | async) {
-      <div class="edit-wrapper"
-        >
+      <div class="edit-wrapper">
         <ng-container>
           @if (editableLayers.length > 0) {
             <mat-form-field appearance="outline" color="primary">
@@ -35,7 +34,8 @@
             tmTooltip="Add new feature"
             i18n-tmTooltip="@@core.edit.add-new-feature"
             class="map-control-button map-control-button--add-feature"
-            mat-flat-button>
+            mat-flat-button
+            [class.toggle-button--active]="createNewFeatureActive$ | async">
             <mat-icon svgIcon="new_object"></mat-icon>
           </button>
           <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
@@ -57,16 +57,21 @@
             i18n-tmTooltip="@@core.edit.add-new-feature"
             class="map-control-button map-control-button--add-feature"
             (click)="createFeatureIfSingleGeometryType()"
-            mat-flat-button>
+            mat-flat-button
+            [class.toggle-button--active]="createNewFeatureActive$ | async">
             <mat-icon svgIcon="new_object"></mat-icon>
           </button>
         }
         @if (layersToCreateNewFeaturesFrom().length > 0) {
           <button [matMenuTriggerFor]="layerToCreateNewFeaturesFromMenu"
                   tmTooltip="Copy from other layer"
-                  class="map-control-button map-control-button--copy-feature"
-                  [class.active]="layer.value !== null"
-                  mat-flat-button>
+                  class="map-control-button"
+                  mat-flat-button
+                  [matBadge]="copiedFeaturesCount$ | async"
+                  [matBadgeHidden]="(copyActive$ | async) === false"
+                  matBadgeSize="small"
+                  matBadgeColor="primary"
+                  [class.toggle-button--active]="copyActive$ | async">
             <mat-icon svgIcon="split"></mat-icon>
           </button>
           <mat-menu #layerToCreateNewFeaturesFromMenu="matMenu" xPosition="after" yPosition="below">

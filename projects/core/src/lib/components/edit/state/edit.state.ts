@@ -24,14 +24,18 @@ export interface EditState {
   openedFromFeatureInfo?: boolean;
 }
 
+export const initialEditCopyState = {
+  isCopyOtherLayerFeaturesActive: false,
+  selectedCopyLayer: null,
+  copiedFeatures: [],
+};
+
 export const initialEditState: EditState = {
   isActive: false,
-  isCopyOtherLayerFeaturesActive: false,
+  ...initialEditCopyState,
   isCreateNewFeatureActive: false,
   newGeometryType: null,
   selectedLayer: null,
-  selectedCopyLayer: null,
-  copiedFeatures: [],
   dialogVisible: false,
   dialogCollapsed: false,
   loadStatus: LoadingStateEnum.INITIAL,

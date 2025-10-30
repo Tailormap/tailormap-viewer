@@ -8,8 +8,8 @@
 }
 
 .edit-container--is-active {
-  padding: 5px 6px 5px 0;
-  width: 300px;
+  padding: 5px 11px 5px 0;
+  width: 305px;
   height: 70px;
   max-width: var(--max-control-width);
 }

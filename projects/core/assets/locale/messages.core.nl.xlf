@@ -427,10 +427,6 @@
         <target>Object verwijderen mislukt</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
-        <source>Edit</source>
-        <target>Bewerken</target>
-      </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
         <target>Object bewerken</target>
       </trans-unit>

@@ -34,7 +34,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   public open: boolean | null = false;
 
   @Input()
-  public dialogTitle = '';
+  public dialogTitle: string | null = '';
 
   @Input()
   public hidden: boolean | null = false;

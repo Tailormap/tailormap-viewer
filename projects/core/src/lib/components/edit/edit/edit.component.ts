@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
+import {
+  selectCopiedFeatures,
+  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectEditCreateNewOrCopyFeatureActive,
+  selectSelectedEditLayer,
+} from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, of, take } from 'rxjs';
+import { combineLatest, map, of, take } from 'rxjs';
 import {
   setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCreateNewFeatureActive, setSelectedEditLayer,
 } from '../state/edit.actions';
@@ -31,13 +35,16 @@ export class EditComponent implements OnInit {
   private mapService = inject(MapService);
 
   public active$ = this.store$.select(selectEditActive);
+  public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
+  public copyActive$ = this.store$.select(selectEditCopyOtherLayerFeaturesActive);
+  public copiedFeaturesCount$ = this.store$.select(selectCopiedFeatures).pipe(map(features => features.length));
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
 
   public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
 
-  private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
+  private defaultTooltip = $localize `:@@core.edit.edit:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
   private noLayersTooltip = $localize `:@@core.edit.no-editable-layers-tooltip:There are no editable layers. Enable a layer to start editing.`;
 

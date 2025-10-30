@@ -7,8 +7,7 @@
            [allowCollapse]="true"
            [collapsed]="dialogCollapsed$ | async"
            (expandCollapseDialog)="expandCollapseDialog()"
-           dialogTitle="Edit"
-           i18n-dialogTitle="@@core.edit.edit">
+           [dialogTitle]="dialogTitle$ | async">
   @let currentFeature = currentFeature$ | async;
   @let layerDetails = layerDetails$ | async;
   @if (currentFeature && layerDetails) {

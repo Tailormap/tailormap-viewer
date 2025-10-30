@@ -4,7 +4,7 @@ import * as EditActions from './edit.actions';
 import { filter, map, switchMap } from 'rxjs';
 import { FeatureInfoService } from '../../feature-info';
 import { withLatestFrom } from 'rxjs/operators';
-import { selectEditActive, selectSelectedEditLayer } from './edit.selectors';
+import { selectEditActive, selectSelectedCopyLayer, selectSelectedEditLayer } from './edit.selectors';
 import { Store } from '@ngrx/store';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
@@ -36,9 +36,9 @@ export class EditEffects {
   public loadCopyFeatures$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EditActions.loadCopyFeatures),
-      withLatestFrom(this.store$.select(selectSelectedEditLayer)),
-      switchMap(([ action, editLayer ]) => {
-        return this.featureInfoService.getFeaturesForLayer$(action.coordinates, editLayer, action.pointerType).pipe(
+      withLatestFrom(this.store$.select(selectSelectedCopyLayer)),
+      switchMap(([ action, copyLayer ]) => {
+        return this.featureInfoService.getFeaturesForLayer$(action.coordinates, copyLayer, action.pointerType).pipe(
           map(result => {
             if (!result) {
               return EditActions.loadCopyFeaturesFailed({});

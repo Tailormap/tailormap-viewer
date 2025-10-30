@@ -1,6 +1,6 @@
 import * as EditActions from './edit.actions';
 import { Action, createReducer, on } from '@ngrx/store';
-import { EditState, initialEditState } from './edit.state';
+import { EditState, initialEditCopyState, initialEditState } from './edit.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../../feature-info/models/feature-info-column-metadata.model';
@@ -12,6 +12,7 @@ const onSetIsActive = (
   ...state,
   isActive: payload.active,
   isCreateNewFeatureActive: payload.active ? state.isCreateNewFeatureActive : false,
+  ...(payload.active ? {} : initialEditCopyState),
   dialogVisible: false,
   selectedFeature: null,
   openedFromFeatureInfo: false,
@@ -111,7 +112,7 @@ const onSetCopyOtherLayerFeaturesActive = (
     attributes: {},
   }],
   columnMetadata: payload.columnMetadata,
-  loadStatus: LoadingStateEnum.LOADED,
+  loadStatus: LoadingStateEnum.INITIAL,
   dialogCollapsed: false,
 });
 
@@ -130,6 +131,7 @@ const onSetCreateNewFeatureActive = (
     return {
       ...state,
       isCreateNewFeatureActive: payload.active,
+      ...initialEditCopyState,
       newGeometryType: payload.geometryType,
       dialogVisible: payload.active,
       selectedFeature: 'new',
@@ -202,9 +204,7 @@ const onHideEditDialog = (state: EditState): EditState => ({
   dialogCollapsed: false,
   selectedFeature: null,
   isCreateNewFeatureActive: false,
-  isCopyOtherLayerFeaturesActive: false,
-  copiedFeatures: [],
-  selectedCopyLayer: null,
+  ...initialEditCopyState,
 });
 
 const onExpandCollapseEditDialog = (state: EditState): EditState => ({
@@ -237,9 +237,7 @@ const onEditNewlyCreatedFeature = (
 ): EditState => {
   return {
     ...state,
-    isCopyOtherLayerFeaturesActive: false,
-    selectedCopyLayer: null,
-    copiedFeatures: [],
+    ...initialEditCopyState,
     features: [payload.feature],
     selectedFeature: payload.feature.__fid,
     isCreateNewFeatureActive: false,
