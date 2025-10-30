@@ -94,7 +94,14 @@ export class SearchIndexSchedulingComponent implements OnInit {
   private initForm(schedule: TaskSchedule | undefined, searchIndexName?: string) {
     const preFillDescription: string = $localize `:@@admin-core.search-index.schedule.prefill-description:Update ${searchIndexName}`;
     if (!schedule) {
-      this.scheduleForm.patchValue({ partialCronExpression: '', description: preFillDescription, priority: undefined }, { emitEvent: false });
+      const time = new Date();
+      time.setHours(6, 0, 0);
+      this.scheduleForm.patchValue({
+        partialCronExpression: '',
+        time: time,
+        description: preFillDescription,
+        priority: undefined,
+      }, { emitEvent: false });
     } else {
       const { time, partialCronExpression } = this.splitCronExpression(schedule.cronExpression);
       if (!this.scheduleOptions.some(option => option.cronExpression === partialCronExpression)) {
