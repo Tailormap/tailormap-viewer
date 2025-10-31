@@ -66,10 +66,10 @@ export class SearchIndexSchedulingComponent implements OnInit {
       )
       .subscribe(value => {
         let schedule: TaskSchedule | undefined = undefined;
-        if (value.cronExpression) {
+        if (value.cronExpression || this.taskSchedule) {
           schedule = {
             ...this.taskSchedule,
-            cronExpression: value.cronExpression,
+            cronExpression: value.cronExpression || '',
             description: value.description,
             priority: value.priority,
           };

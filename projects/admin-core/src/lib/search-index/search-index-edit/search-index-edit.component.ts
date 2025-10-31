@@ -10,6 +10,7 @@ import { FeatureSourceService } from '../../catalog/services/feature-source.serv
 import { SearchIndexService } from '../services/search-index.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
+import { loadTasks } from '../../tasks/state/tasks.actions';
 
 @Component({
   selector: 'tm-admin-search-index-edit',
@@ -47,6 +48,8 @@ export class SearchIndexEditComponent implements OnInit {
   public indexing$ = this.indexingSubject.asObservable();
 
   public ngOnInit() {
+    this.store$.dispatch(loadTasks());
+
     this.route.paramMap.pipe(
       takeUntilDestroyed(this.destroyRef),
       map(params => params.get('searchIndexId')),

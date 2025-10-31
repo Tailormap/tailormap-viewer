@@ -7,7 +7,9 @@ import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TaskMonitoringService {
   private store$ = inject(Store);
   private adminApiService = inject(TailormapAdminApiV1Service);
@@ -64,7 +66,7 @@ export class TaskMonitoringService {
     this.adminApiService.stopTask$(this.uuid$.value, this.type$.value).subscribe();
   }
 
-  public deleteTask(uuid: string, type: string ) {
+  public deleteTask$(uuid: string, type: string ) {
     return this.adminApiService.deleteTask$(uuid, type)
       .pipe(
         catchError(() => {
