@@ -5,7 +5,7 @@ import {
 import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import {
-  selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
+  selectColumnsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
@@ -37,20 +37,20 @@ export class AttributeListExportButtonComponent implements OnDestroy {
   constructor() {
     combineLatest([
       this.store$.select(selectLayers),
-      this.store$.select(selectSelectedTabLayerId),
+      this.store$.select(selectSelectedTab),
     ])
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
-        concatMap(([ layers, layerId ]) => {
-          if (layerId === null) {
+        concatMap(([ layers, selectedTab ]) => {
+          if (!selectedTab || selectedTab.layerId === null || typeof selectedTab.layerId === 'undefined') {
             return of([]);
           }
-          const layer = layers.find(l => l.id === layerId);
+          const layer = layers.find(l => l.id === selectedTab.layerId);
           if (layer?.hiddenFunctionality?.includes(HiddenLayerFunctionality.export)) {
             return of([]);
           }
-          return this.exportService.getExportFormats$(layerId);
+          return this.exportService.getExportFormats$(selectedTab.tabSourceId, selectedTab.layerId);
         }),
       )
       .subscribe(formats => this.supportedFormatsSubject.next(formats));
@@ -77,7 +77,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           }
           const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
-          return this.exportService.export$({ layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
+          return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
         }))
       .subscribe(() => {
         this.isExportingSubject.next(false);
