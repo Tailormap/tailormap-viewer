@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import {
   selectCopiedFeatures,
-  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive,
+  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectSelectedCopyLayer,
   selectSelectedEditLayer,
 } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, of, take } from 'rxjs';
 import {
-  setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCreateNewFeatureActive, setSelectedEditLayer,
+  setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
+  setSelectedEditLayer,
 } from '../state/edit.actions';
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
@@ -38,6 +39,7 @@ export class EditComponent implements OnInit {
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
   public copyActive$ = this.store$.select(selectEditCopyOtherLayerFeaturesActive);
   public copiedFeaturesCount$ = this.store$.select(selectCopiedFeatures).pipe(map(features => features.length));
+  public selectedCopyLayer$ = this.store$.select(selectSelectedCopyLayer);
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
@@ -144,25 +146,22 @@ export class EditComponent implements OnInit {
     if (!this.layer.value) {
       return;
     }
-    // get layer attribute details for edit form
-    this.applicationLayerService.getLayerDetails$(this.layer.value)
-      .pipe(take(1))
-      .subscribe(layerDetails => {
-        // show edit dialog
-        this.store$.dispatch(setEditCreateNewFeatureActive({
-          active: true,
-          geometryType,
-          columnMetadata: layerDetails.details.attributes.map(attribute => {
-              return {
-                layerId: layerDetails.details.id,
-                name: attribute.name,
-                type: attribute.type as unknown as AttributeType,
-                alias: attribute.editAlias,
-              };
-            },
-          ),
-        }));
-      });
+
+    this.applicationLayerService.getLayerDetails$(this.layer.value).pipe(take(1)).subscribe(layerDetails => {
+      this.store$.dispatch(setEditCreateNewFeatureActive({
+        active: true,
+        geometryType,
+        columnMetadata: layerDetails.details.attributes.map(attribute => {
+            return {
+              layerId: layerDetails.details.id,
+              name: attribute.name,
+              type: attribute.type as unknown as AttributeType,
+              alias: attribute.editAlias,
+            };
+          },
+        ),
+      }));
+    });
   }
 
   public createFeatureIfSingleGeometryType() {
@@ -175,13 +174,15 @@ export class EditComponent implements OnInit {
   }
 
   public createFeatureFromLayer(id: string) {
-    // get layer attribute details for edit form
-    this.applicationLayerService.getLayerDetails$(this.layer.value)
-      .pipe(take(1))
-      .subscribe(layerDetails => {
-        // show edit dialog
+
+    this.selectedCopyLayer$.pipe(take(1)).subscribe(selectedCopyLayer => {
+      if (id == selectedCopyLayer) {
+        this.store$.dispatch(setEditCopyOtherLayerFeaturesDisabled());
+        return;
+      }
+
+      this.applicationLayerService.getLayerDetails$(this.layer.value).pipe(take(1)).subscribe(layerDetails => {
         this.store$.dispatch(setEditCopyOtherLayerFeaturesActive({
-          active: true,
           layerId: id,
           columnMetadata: layerDetails.details.attributes.map(attribute => {
               return {
@@ -194,5 +195,6 @@ export class EditComponent implements OnInit {
           ),
         }));
       });
+    });
   }
 }

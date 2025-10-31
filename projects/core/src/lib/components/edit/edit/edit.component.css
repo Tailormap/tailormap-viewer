@@ -37,6 +37,10 @@
   padding-top: 6px;
 }
 
+.mat-mdc-menu-item.selected {
+  color: var(--primary-color);
+}
+
 @media screen and (max-width: 730px) {
   .edit-container--is-active {
     padding: 0;

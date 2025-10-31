@@ -75,8 +75,13 @@
             <mat-icon svgIcon="split"></mat-icon>
           </button>
           <mat-menu #layerToCreateNewFeaturesFromMenu="matMenu" xPosition="after" yPosition="below">
+            @let selectedCopyLayerId = selectedCopyLayer$ | async;
             @for (layer of layersToCreateNewFeaturesFrom(); track layer) {
-              <button mat-menu-item (click)="createFeatureFromLayer(layer.id)">{{layer.title || layer.layerName}}</button>
+              @let selected = layer.id === selectedCopyLayerId;
+              <button mat-menu-item [class.selected]="selected" (click)="createFeatureFromLayer(layer.id)">
+                <mat-icon [svgIcon]="selected ? 'check' : ''" color="primary"/>
+                <span>{{layer.title || layer.layerName}}</span>
+              </button>
             }
           </mat-menu>
         }

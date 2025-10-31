@@ -19,8 +19,11 @@ export const setEditCreateNewFeatureActive = createAction(
 
 export const setEditCopyOtherLayerFeaturesActive = createAction(
   `${editActionsPrefix} Set Copy Other Layer Features Active`,
-  props<{ active: boolean; layerId: string; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+  props<{ layerId: string; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
 );
+
+export const setEditCopyOtherLayerFeaturesDisabled = createAction(
+  `${editActionsPrefix} Set Copy Other Layer Features Disabled`);
 
 export const setSelectedEditLayer = createAction(
   `${editActionsPrefix} Set Selected Layer`,

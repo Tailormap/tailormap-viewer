@@ -101,19 +101,30 @@ const onSetCopyOtherLayerFeaturesActive = (
     payload: ReturnType<typeof EditActions.setEditCopyOtherLayerFeaturesActive>,
 ): EditState => ({
   ...state,
-  isCopyOtherLayerFeaturesActive: payload.active,
+  isCopyOtherLayerFeaturesActive: true,
   isCreateNewFeatureActive: false,
+  dialogVisible: true,
+  dialogCollapsed: false,
   selectedCopyLayer: payload.layerId,
-  dialogVisible: payload.active,
+  columnMetadata: payload.columnMetadata,
+  // Do not reset copiedFeatures, so features from different layers can be copied
   selectedFeature: 'new',
   features: [{
     layerId: payload.columnMetadata[0].layerId,
     __fid: 'new',
     attributes: {},
   }],
-  columnMetadata: payload.columnMetadata,
   loadStatus: LoadingStateEnum.INITIAL,
-  dialogCollapsed: false,
+});
+
+const onSetCopyOtherLayerFeaturesDisabled = (
+  state: EditState,
+): EditState => ({
+  ...state,
+  isCreateNewFeatureActive: false,
+  dialogVisible: false,
+  dialogCollapsed: true,
+  ...initialEditCopyState,
 });
 
 const onSetCreateNewFeatureActive = (
@@ -248,6 +259,7 @@ const editReducerImpl = createReducer<EditState>(
   initialEditState,
   on(EditActions.setEditActive, onSetIsActive),
   on(EditActions.setEditCopyOtherLayerFeaturesActive, onSetCopyOtherLayerFeaturesActive),
+  on(EditActions.setEditCopyOtherLayerFeaturesDisabled, onSetCopyOtherLayerFeaturesDisabled),
   on(EditActions.setEditCreateNewFeatureActive, onSetCreateNewFeatureActive),
   on(EditActions.setSelectedEditLayer, onSetSelectedLayer),
   on(EditActions.loadEditFeatures, onLoadFeatureInfo),
