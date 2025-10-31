@@ -2,7 +2,7 @@ import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry, Point } from 'ol/geom';
+import { Circle, Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
 import { fromCircle, fromExtent } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
@@ -208,5 +208,48 @@ export class FeatureHelper {
     }
     const circle = new Circle(point.getCoordinates(), radius);
     return FeatureHelper.getWKT(circle);
+  }
+
+  public static appendMultiGeometryWKT(currentWkt: string | null, newGeometryWkt: string) {
+    const newGeom = FeatureHelper.fromWKT(newGeometryWkt);
+    if (!currentWkt) {
+      return newGeom;
+    }
+    const currentMultiGeom = this.ensureMultiGeometry(FeatureHelper.fromWKT(currentWkt));
+
+    if (currentMultiGeom instanceof MultiPoint && newGeom instanceof Point) {
+      currentMultiGeom.appendPoint(newGeom);
+    } else if (currentMultiGeom instanceof MultiLineString && newGeom instanceof LineString) {
+      currentMultiGeom.appendLineString(newGeom);
+    } else if (currentMultiGeom instanceof MultiPolygon && newGeom instanceof Polygon) {
+      currentMultiGeom.appendPolygon(newGeom);
+    } else {
+      // In case of incompatible geometry types, just return the new geometry
+      // TODO, maybe create a GeometryCollection?
+      return newGeom;
+    }
+    return currentMultiGeom;
+  }
+
+  private static ensureMultiGeometry(geometry: Geometry) {
+    if (geometry instanceof MultiPoint || geometry instanceof MultiLineString || geometry instanceof MultiPolygon) {
+      return geometry;
+    }
+    if (geometry instanceof Point) {
+      const multiPoint = new MultiPoint([]);
+      multiPoint.appendPoint(geometry);
+      return multiPoint;
+    }
+    if (geometry instanceof LineString) {
+      const multiLineString = new MultiLineString([]);
+      multiLineString.appendLineString(geometry);
+      return multiLineString;
+    }
+    if (geometry instanceof Polygon) {
+      const multiPolygon = new MultiPolygon([]);
+      multiPolygon.appendPolygon(geometry);
+      return multiPolygon;
+    }
+    throw new Error('Unsupported geometry type');
   }
 }

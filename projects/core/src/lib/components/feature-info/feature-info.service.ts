@@ -86,6 +86,30 @@ export class FeatureInfoService {
       );
   }
 
+  public getFeaturesForLayer$(coordinates: [ number, number ], selectedLayer: string | null, pointerType?: string): Observable<FeatureInfoResponseModel | null> {
+    return combineLatest([
+      this.store$.select(selectVisibleLayersWithAttributes),
+      this.store$.select(selectVisibleWMSLayersWithoutAttributes),
+      this.store$.select(selectViewerId),
+      this.mapService.getMapViewDetails$(),
+    ])
+      .pipe(
+        take(1),
+        switchMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
+          if (!viewerId) {
+            return of(null);
+          }
+          if (layers.some(l => l.id === selectedLayer)) {
+            return this.getFeatureInfoFromApi$(selectedLayer!, coordinates, viewerId, mapViewDetails, false, pointerType);
+          } else if (wmsLayers.some(l => l.id === selectedLayer)) {
+            return this.getWmsGetFeatureInfo$(selectedLayer!, coordinates);
+          } else {
+            return of(null);
+          }
+        }),
+      );
+  }
+
   public getEditableFeatures$(coordinates: [ number, number ], selectedLayer?: string | null, pointerType?: string): Observable<FeatureInfoResponseModel[]> {
     return combineLatest([
       this.store$.select(selectEditableLayers),

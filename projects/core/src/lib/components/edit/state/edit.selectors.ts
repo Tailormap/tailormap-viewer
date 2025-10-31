@@ -10,9 +10,16 @@ const selectEditState = createFeatureSelector<EditState>(editStateKey);
 
 export const selectEditActive = createSelector(selectEditState, state => state.isActive);
 export const selectEditSelectedFeature = createSelector(selectEditState, state => state.selectedFeature);
+export const selectEditCopyOtherLayerFeaturesActive = createSelector(selectEditState, state => state.isCopyOtherLayerFeaturesActive);
 export const selectEditCreateNewFeatureActive = createSelector(selectEditState, state => state.isCreateNewFeatureActive);
+export const selectEditCreateNewOrCopyFeatureActive = createSelector(selectEditState,
+    state => state.isCreateNewFeatureActive || state.isCopyOtherLayerFeaturesActive);
 export const selectNewFeatureGeometryType = createSelector(selectEditState, state => state.newGeometryType);
+
 export const selectSelectedEditLayer = createSelector(selectEditState, state => state.selectedLayer);
+export const selectSelectedCopyLayer = createSelector(selectEditState, state => state.selectedCopyLayer);
+export const selectCopiedFeatures = createSelector(selectEditState, state => state.copiedFeatures);
+
 export const selectEditMapCoordinates = createSelector(selectEditState, state => state.mapCoordinates);
 export const selectEditLoadStatus = createSelector(selectEditState, state => state.loadStatus);
 export const selectEditErrorMessage = createSelector(selectEditState, state => state.errorMessage);
@@ -34,11 +41,15 @@ export const selectEditActiveWithSelectedLayer = createSelector(
 
 export const selectEditStatus = createSelector(
   selectEditActiveWithSelectedLayer,
+  selectEditCopyOtherLayerFeaturesActive,
   selectEditSelectedFeature,
-  selectEditCreateNewFeatureActive,
-  (editWithLayerActive, editSelectedFeatureActive, editCreateNewFeatureActive) => {
+  selectEditCreateNewOrCopyFeatureActive,
+  (editWithLayerActive, editCopyOtherLayerFeaturesActive, editSelectedFeatureActive, editCreateNewFeatureActive) => {
     if (!editWithLayerActive) {
       return 'inactive';
+    }
+    if (editCopyOtherLayerFeaturesActive) {
+      return 'copy_features';
     }
     if (editCreateNewFeatureActive) {
       return 'create_feature';

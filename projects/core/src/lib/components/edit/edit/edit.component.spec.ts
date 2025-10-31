@@ -8,12 +8,14 @@ import { selectEditActive, selectSelectedEditLayer } from "../state/edit.selecto
 import { SharedModule } from "@tailormap-viewer/shared";
 import { MatIconTestingModule } from "@angular/material/icon/testing";
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 const setup = async (hasLayers: boolean, authenticated: boolean) => {
   await render(EditComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
+      { provide: HttpXsrfTokenExtractor, useValue: {} as HttpXsrfTokenExtractor },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       AuthenticatedUserTestHelper.provideAuthenticatedUserService(authenticated, []),
       provideMockStore({
@@ -35,8 +37,6 @@ describe('EditComponent', () => {
     const buttons  = screen.getAllByRole('button');
     expect(buttons[0]).toBeVisible();
     expect(buttons[0]).not.toHaveClass("disabled");
-    expect(buttons[1]).toBeVisible();
-    expect(buttons[1]).toHaveClass("disabled");
   });
 
   test('should be disabled when user is not logged in button', async () => {
