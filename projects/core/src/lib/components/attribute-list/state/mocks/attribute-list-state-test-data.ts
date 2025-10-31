@@ -4,10 +4,12 @@ import { AttributeListTabModel } from '../../models/attribute-list-tab.model';
 import { AttributeListManagerService } from '../../services/attribute-list-manager.service';
 import { AttributeListDataModel } from '../../models/attribute-list-data.model';
 import { AttributeType } from '@tailormap-viewer/api';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../../models/attribute-list-default-source.const';
 
 export const createDummyAttributeListTab = (
   overrides?: Partial<AttributeListTabModel>,
 ): AttributeListTabModel => ({
+  tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE,
   id: '1',
   selectedDataId: '1',
   loadingData: true,
