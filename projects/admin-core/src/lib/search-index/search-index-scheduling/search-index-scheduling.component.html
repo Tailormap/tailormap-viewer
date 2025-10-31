@@ -5,9 +5,6 @@
     @if (taskSchedule?.uuid; as uuid) {
       <div class="label">Uuid</div>
       <div class="uuid">{{ uuid }}</div>
-      <div class="delete-schedule-message" i18n="@@admin-core.search-index.delete-schedule-message">
-        Deleting the schedule of a search index can be done by deleting the task on the tasks page
-      </div>
     } @else {
       <span class="no-schedule" i18n="@@admin-core.search-index.no-schedule">There is no schedule for this search index yet.</span>
     }
