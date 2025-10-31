@@ -24,19 +24,19 @@ export class CronExpressionHelper {
     return { time, partialCronExpression };
   }
 
-  public static cronExpressionToReadableText(cronExpression: string): string {
+  public static cronExpressionToReadableText(cronExpression: string, locale: string): string {
     if (cronExpression === CronExpressionHelper.HOURLY_CRON_EXPRESSION) {
       return CronExpressionHelper.SCHEDULE_OPTIONS
         .find(option => option.cronExpression === CronExpressionHelper.HOURLY_CRON_EXPRESSION)?.viewValue || cronExpression;
     }
     const { time, partialCronExpression } = CronExpressionHelper.splitCronExpression(cronExpression);
     const timeString = time
-      ? `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`
+      ? time.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
       : '';
     const schedule = CronExpressionHelper.SCHEDULE_OPTIONS
       .find(option => option.cronExpression === partialCronExpression);
     if (schedule) {
-      return timeString ? schedule.viewValue + $localize `:@@admin-core.tasks.at: at ` + timeString : schedule.viewValue;
+      return timeString ? $localize `:@@admin-core.tasks.time:${schedule.viewValue} at ${timeString}` : schedule.viewValue;
     }
     return cronExpression;
   }

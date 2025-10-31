@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, inject, LOCALE_ID } from '@angular/core';
 import { CronExpressionHelper } from '../helpers/cron-expression.helper';
 
 @Component({
@@ -9,6 +9,7 @@ import { CronExpressionHelper } from '../helpers/cron-expression.helper';
   standalone: false,
 })
 export class TaskDetailsRowComponent {
+  public locale = inject(LOCALE_ID);
 
   private static DATE_VALIDATOR_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -51,7 +52,7 @@ export class TaskDetailsRowComponent {
   }
 
   public cronExpressionToReadableText(cronExpression: string): string {
-    return CronExpressionHelper.cronExpressionToReadableText(cronExpression);
+    return CronExpressionHelper.cronExpressionToReadableText(cronExpression, this.locale);
   }
 
 }

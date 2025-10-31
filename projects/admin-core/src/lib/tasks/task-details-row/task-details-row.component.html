@@ -3,7 +3,7 @@
   @if (infoValue) {
     <div class="info-value">
       @if (canConvertToDate(infoValue)) {
-        {{ infoValue | date: 'medium' }}
+        {{ infoValue | date: 'medium':'':locale }}
       } @else if (isCronExpression()) {
         {{ cronExpressionToReadableText(infoValue) }}
       }

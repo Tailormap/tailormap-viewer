@@ -2197,10 +2197,6 @@
         <source>Select settings from the left side</source>
         <target>Wählen Sie Einstellungen auf der linken Seite aus</target>
       </trans-unit>
-      <trans-unit id="admin-core.tasks.at" datatype="html">
-        <source> at </source>
-        <target> um </target>
-      </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
         <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
         <target>Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen</target>
@@ -2328,6 +2324,10 @@
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
         <target>Aufgaben</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.time" datatype="html">
+        <source><x id="PH" equiv-text="schedule.viewValue"/> at <x id="PH_1" equiv-text="timeString"/></source>
+        <target><x id="PH" equiv-text="schedule.viewValue"/> um <x id="PH_1" equiv-text="timeString"/> Uhr</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
