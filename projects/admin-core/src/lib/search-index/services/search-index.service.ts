@@ -78,7 +78,12 @@ export class SearchIndexService {
     }
     return this.store$.select(selectTask(searchIndex.schedule.uuid)).pipe(
       take(1),
-      switchMap(task => this.taskMonitoringService.deleteTask$(task.uuid, task.type)),
+      switchMap(task => {
+        if (!task) {
+          return of(null);
+        }
+        return this.taskMonitoringService.deleteTask$(task.uuid, task.type);
+      }),
       switchMap((response) => {
         if (response) {
           const searchIndexEmptySchedule: Partial<SearchIndexModel> = { ...searchIndex, schedule: undefined };
@@ -89,7 +94,7 @@ export class SearchIndexService {
     );
   }
 
-  public updateSearchIndex$(id: number, searchIndex: Partial<SearchIndexModel>): Observable<SearchIndexModel | null> {
+  private updateSearchIndex$(id: number, searchIndex: Partial<SearchIndexModel>): Observable<SearchIndexModel | null> {
     return this.adminApiService.updateSearchIndex$({ id, searchIndex })
       .pipe(
         catchError(() => {
