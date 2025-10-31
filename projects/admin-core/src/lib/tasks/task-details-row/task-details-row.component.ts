@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { CronExpressionHelper } from '../helpers/cron-expression.helper';
 
 @Component({
   selector: 'tm-admin-task-details-row',
@@ -23,7 +24,7 @@ export class TaskDetailsRowComponent {
     type: $localize `:@@admin-core.tasks.task-details.type:Type`,
     description: $localize `:@@admin-core.tasks.task-details.description:Description`,
     uuid: $localize `:@@admin-core.tasks.task-details.uuid:Uuid`,
-    cronExpression: $localize `:@@admin-core.tasks.task-details.cron-expression:Cron expression`,
+    cronExpression: $localize `:@@admin-core.tasks.task-details.schedule:Schedule`,
     timezone: $localize `:@@admin-core.tasks.task-details.timezone:Timezone`,
     startTime: $localize `:@@admin-core.tasks.task-details.start-time:Start time`,
     lastTime: $localize `:@@admin-core.tasks.task-details.last-time:Last time the task was started`,
@@ -43,6 +44,14 @@ export class TaskDetailsRowComponent {
 
   public canConvertToDate(original: string): boolean {
     return TaskDetailsRowComponent.DATE_VALIDATOR_PATTERN.test(original.toString().substring(0, 10));
+  }
+
+  public isCronExpression(): boolean {
+    return this.infoType === 'cronExpression';
+  }
+
+  public cronExpressionToReadableText(cronExpression: string): string {
+    return CronExpressionHelper.cronExpressionToReadableText(cronExpression);
   }
 
 }

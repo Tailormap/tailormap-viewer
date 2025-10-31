@@ -1613,6 +1613,9 @@
       <trans-unit id="admin-core.settings.home" datatype="html">
         <source>Select settings from the left side</source>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.at" datatype="html">
+        <source> at </source>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
         <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
       </trans-unit>
@@ -1633,9 +1636,6 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
         <source>last execution succesful</source>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
-        <source>Cron expression</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
         <source>Description</source>
@@ -1660,6 +1660,9 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
         <source>Progress</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.schedule" datatype="html">
+        <source>Schedule</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
         <source>Scheduling state</source>

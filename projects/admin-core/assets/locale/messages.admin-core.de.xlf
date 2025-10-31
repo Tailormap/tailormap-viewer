@@ -2197,6 +2197,10 @@
         <source>Select settings from the left side</source>
         <target>Wählen Sie Einstellungen auf der linken Seite aus</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.at" datatype="html">
+        <source> at </source>
+        <target> um </target>
+      </trans-unit>
       <trans-unit id="admin-core.tasks.delete-task" datatype="html">
         <source>Delete task &apos;<x id="PH" equiv-text="task.description"/>&apos;</source>
         <target>Aufgabe &apos;<x id="PH" equiv-text="task.description"/>&apos; löschen</target>
@@ -2224,10 +2228,6 @@
       <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
         <source>last execution succesful</source>
         <target>letzte Ausführung erfolgreich</target>
-      </trans-unit>
-      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
-        <source>Cron expression</source>
-        <target>Planung (Cron expression)</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
         <source>Description</source>
@@ -2260,6 +2260,10 @@
       <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
         <source>Progress</source>
         <target>Fortschritt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
         <source>Scheduling state</source>

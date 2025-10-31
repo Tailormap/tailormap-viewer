@@ -4,7 +4,10 @@
     <div class="info-value">
       @if (canConvertToDate(infoValue)) {
         {{ infoValue | date: 'medium' }}
-      } @else {
+      } @else if (isCronExpression()) {
+        {{ cronExpressionToReadableText(infoValue) }}
+      }
+      @else {
         {{ infoValue }}
       }
     </div>

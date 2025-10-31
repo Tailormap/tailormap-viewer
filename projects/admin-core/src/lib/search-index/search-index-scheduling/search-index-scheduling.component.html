@@ -27,7 +27,7 @@
           }
         </mat-select>
       </mat-form-field>
-      @if (!(scheduleForm.get('partialCronExpression')?.value === HOURLY_CRON_EXPRESSION
+      @if (!(scheduleForm.get('partialCronExpression')?.value === hourlyCronExpression
         || scheduleForm.get('partialCronExpression')?.value === '')) {
         <mat-form-field class="time-picker-field">
           <mat-label i18n="@@admin-core.search-index.pick-time">Pick a time</mat-label>

@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { DateAdapter } from '@angular/material/core';
+import { CronExpressionHelper } from '../../tasks/helpers/cron-expression.helper';
 
 @Component({
   selector: 'tm-admin-search-index-scheduling',
@@ -20,7 +21,6 @@ export class SearchIndexSchedulingComponent implements OnInit {
 
   private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
   public taskSchedule: TaskSchedule | undefined = undefined;
-  public HOURLY_CRON_EXPRESSION = '0 0 0/1 1/1 * ? *';
 
   @Input({ required: true })
   public set searchIndex(form: SearchIndexModel | null) {
@@ -34,13 +34,8 @@ export class SearchIndexSchedulingComponent implements OnInit {
   @Output()
   public formChanged = new EventEmitter<boolean>();
 
-  public scheduleOptions = [
-    { cronExpression: '', viewValue: $localize `:@@admin-core.search-index.schedule.no-schedule:No schedule` },
-    { cronExpression: this.HOURLY_CRON_EXPRESSION, viewValue: $localize `:@@admin-core.search-index.schedule.every-hour:Every hour` },
-    { cronExpression: '1/1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-day:Every day` },
-    { cronExpression: '? * MON *', viewValue: $localize `:@@admin-core.search-index.schedule.every-week:Every week on monday` },
-    { cronExpression: '1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-month:Every first day of the month` },
-  ];
+  public hourlyCronExpression = CronExpressionHelper.HOURLY_CRON_EXPRESSION;
+  public scheduleOptions = CronExpressionHelper.SCHEDULE_OPTIONS;
 
   public scheduleForm = new FormGroup({
     partialCronExpression: new FormControl('', { nonNullable: true }),
@@ -73,8 +68,8 @@ export class SearchIndexSchedulingComponent implements OnInit {
       .subscribe(value => {
         let schedule: TaskSchedule | undefined = undefined;
         if (value.partialCronExpression) {
-          const timePart = value.time ? this.timeToPartialCronExpression(value.time) : '0 0 18 ';
-          const cronExpression = value.partialCronExpression === this.HOURLY_CRON_EXPRESSION
+          const timePart = value.time ? this.timeToPartialCronExpression(value.time) : '0 0 6 ';
+          const cronExpression = value.partialCronExpression === CronExpressionHelper.HOURLY_CRON_EXPRESSION
             ? value.partialCronExpression
             : timePart + value.partialCronExpression;
           schedule = {
@@ -103,7 +98,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
         priority: undefined,
       }, { emitEvent: false });
     } else {
-      const { time, partialCronExpression } = this.splitCronExpression(schedule.cronExpression);
+      const { time, partialCronExpression } = CronExpressionHelper.splitCronExpression(schedule.cronExpression);
       if (!this.scheduleOptions.some(option => option.cronExpression === partialCronExpression)) {
         this.scheduleOptions.push({ cronExpression: schedule.cronExpression, viewValue: schedule.cronExpression });
       }
@@ -124,22 +119,10 @@ export class SearchIndexSchedulingComponent implements OnInit {
   }
 
   private timeToPartialCronExpression(time: Date): string {
-    const minutes = isNaN(time.getMinutes()) ? 0 : time.getMinutes();
-    const hours = isNaN(time.getHours()) ? 6 : time.getHours();
+    const timeDateObject = new Date(time);
+    const minutes = isNaN(timeDateObject.getMinutes()) ? 0 : timeDateObject.getMinutes();
+    const hours = isNaN(timeDateObject.getHours()) ? 6 : timeDateObject.getHours();
     return `0 ${minutes} ${hours} `;
-  }
-
-  private splitCronExpression(cronExpression: string): { time: Date | null; partialCronExpression: string } {
-    const parts = cronExpression.split(' ');
-    if (cronExpression === this.HOURLY_CRON_EXPRESSION) {
-      return { time: null, partialCronExpression: cronExpression };
-    }
-    const hours = parseInt(parts[2], 10);
-    const minutes = parseInt(parts[1], 10);
-    const time = new Date();
-    time.setHours(hours, minutes, 0);
-    const partialCronExpression = parts.slice(3).join(' ');
-    return { time, partialCronExpression };
   }
 
 }
