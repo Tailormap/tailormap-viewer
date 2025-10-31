@@ -66,5 +66,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.INFO, $localize `:@@admin-core.application.component-info:Info`, InfoConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_OPACITY, $localize `:@@admin-core.application.component-terrain-opacity:Terrain opacity`, BaseComponentConfigComponent);
   }
 }

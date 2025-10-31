@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
 import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import {
   selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList,
-} from '../../../map/state/map.selectors';
-import { setSelectedTerrainNodeId } from '../../../map/state/map.actions';
+} from '../../../../map/state/map.selectors';
+import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
 
 @Component({
   selector: 'tm-terrain-layer-toggle',
@@ -18,6 +18,7 @@ export class TerrainLayerToggleComponent {
   private store$ = inject(Store);
 
 
+  public label = input<string>('');
   public selectedTerrainNodeId$: Observable<string | undefined>;
   public terrainLayers$: Observable<SplitButtonOptionModel[]>;
   public initiallyCheckedLabels$: Observable<string>;

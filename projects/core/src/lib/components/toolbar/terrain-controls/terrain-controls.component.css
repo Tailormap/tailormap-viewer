@@ -1,0 +1,8 @@
+.terrain-controls ::ng-deep .mat-expansion-panel {
+  transition: width 255ms ease;
+  overflow: hidden;
+}
+
+.panel-content {
+  display: inline-block;
+}
