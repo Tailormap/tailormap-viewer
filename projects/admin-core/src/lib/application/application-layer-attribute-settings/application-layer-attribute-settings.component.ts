@@ -25,7 +25,7 @@ export class ApplicationLayerAttributeSettingsComponent {
 
 
   private hideAttributes: string[] | null | undefined;
-  private readOnlyAttributes: string[] | null | undefined;
+  private editableAttributes: string[] | null | undefined;
 
   public attributes: AttributeDescriptorModel[] = [];
   public settings: FeatureTypeSettingsModel | null = null;
@@ -39,7 +39,7 @@ export class ApplicationLayerAttributeSettingsComponent {
       .filter(a => !hiddenAttributes.has(a.name));
     this.featureType = this.data.featureType;
     this.hideAttributes = this.data.appLayerSettings.hideAttributes || [];
-    this.readOnlyAttributes = this.data.appLayerSettings.readOnlyAttributes || [];
+    this.editableAttributes = this.data.appLayerSettings.editableAttributes || [];
     this.updateSettings();
   }
 
@@ -61,7 +61,7 @@ export class ApplicationLayerAttributeSettingsComponent {
   public save() {
     this.dialogRef.close({
       hideAttributes: [...this.hideAttributes || []],
-      readOnlyAttributes: [...this.readOnlyAttributes || []],
+      editableAttributes: [...this.editableAttributes || []],
     });
   }
 
@@ -70,8 +70,8 @@ export class ApplicationLayerAttributeSettingsComponent {
     this.updateSettings();
   }
 
-  public attributesReadonlyChanged($event: Array<{ attribute: string; checked: boolean }>) {
-    this.readOnlyAttributes = this.updateAttributeChecked(this.readOnlyAttributes || [], $event);
+  public attributesEditableChanged($event: Array<{ attribute: string; checked: boolean }>) {
+    this.editableAttributes = this.updateAttributeChecked(this.editableAttributes || [], $event);
     this.updateSettings();
   }
 
@@ -94,7 +94,7 @@ export class ApplicationLayerAttributeSettingsComponent {
     this.settings = {
       ...this.data.featureType.settings,
       hideAttributes: this.hideAttributes || [],
-      readOnlyAttributes: this.readOnlyAttributes || [],
+      editableAttributes: this.editableAttributes || [],
     };
   }
 
