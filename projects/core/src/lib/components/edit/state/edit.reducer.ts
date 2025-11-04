@@ -28,6 +28,7 @@ const onSetSelectedLayer = (
   dialogCollapsed: false,
   selectedFeature: null,
   isCreateNewFeatureActive: false,
+  ...initialEditCopyState,
 });
 
 const onLoadFeatureInfo = (
