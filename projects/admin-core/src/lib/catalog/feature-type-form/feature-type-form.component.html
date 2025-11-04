@@ -41,7 +41,7 @@
     [featureTypeSettings]="featureTypeSettings$ | async"
     [showFullSettings]="true"
     (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
-    (attributeEditableChanged)="attributeReadonlyChanged(featureType.settings, $event)"
+    (attributeEditableChanged)="attributeEditableChanged(featureType.settings, $event)"
     (attributeOrderChanged)="attributeOrderChanged($event)"
   (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
 </ng-template>

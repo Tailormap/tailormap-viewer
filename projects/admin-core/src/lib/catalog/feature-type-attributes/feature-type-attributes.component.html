@@ -29,7 +29,7 @@
               <span [tmTooltip]="getTooltip(att.name)">
                 <mat-checkbox (change)="toggleAttribute('editable', att.name)"
                   [disabled]="isEditableFieldDisabled(att.name)"
-                [checked]="isReadonlyFieldChecked(att.name)"></mat-checkbox>
+                [checked]="isEditableFieldChecked(att.name)"></mat-checkbox>
               </span>
             </mat-cell>
           </ng-container>

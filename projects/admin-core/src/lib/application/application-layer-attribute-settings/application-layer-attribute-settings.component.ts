@@ -25,7 +25,7 @@ export class ApplicationLayerAttributeSettingsComponent {
 
 
   private hideAttributes: string[] | null | undefined;
-  private editableAttributes: string[] | null | undefined;
+  private appReadOnlyAttributes: string[] | null | undefined;
 
   public attributes: AttributeDescriptorModel[] = [];
   public settings: FeatureTypeSettingsModel | null = null;
@@ -39,7 +39,7 @@ export class ApplicationLayerAttributeSettingsComponent {
       .filter(a => !hiddenAttributes.has(a.name));
     this.featureType = this.data.featureType;
     this.hideAttributes = this.data.appLayerSettings.hideAttributes || [];
-    this.editableAttributes = this.data.appLayerSettings.readOnlyAttributes || [];
+    this.appReadOnlyAttributes = this.data.appLayerSettings.readOnlyAttributes || [];
     this.updateSettings();
   }
 
@@ -61,7 +61,7 @@ export class ApplicationLayerAttributeSettingsComponent {
   public save() {
     this.dialogRef.close({
       hideAttributes: [...this.hideAttributes || []],
-      editableAttributes: [...this.editableAttributes || []],
+      appReadOnlyAttributes: [...this.appReadOnlyAttributes || []],
     });
   }
 
@@ -71,7 +71,7 @@ export class ApplicationLayerAttributeSettingsComponent {
   }
 
   public attributesEditableChanged($event: Array<{ attribute: string; checked: boolean }>) {
-    this.editableAttributes = this.updateAttributeChecked(this.editableAttributes || [], $event);
+    this.appReadOnlyAttributes = this.updateAttributeChecked(this.appReadOnlyAttributes || [], $event);
     this.updateSettings();
   }
 
@@ -91,10 +91,11 @@ export class ApplicationLayerAttributeSettingsComponent {
   }
 
   private updateSettings() {
+    const editableAttributes = this.catalogFeatureTypeSettings.editableAttributes?.filter(a => !this.appReadOnlyAttributes?.includes(a)) || [];
     this.settings = {
       ...this.data.featureType.settings,
       hideAttributes: this.hideAttributes || [],
-      editableAttributes: this.editableAttributes || [],
+      editableAttributes: editableAttributes,
     };
   }
 
