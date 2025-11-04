@@ -87,11 +87,6 @@ const onLoadCopyFeaturesSuccess = (
 
   return {
     ...state,
-    features: [{
-      layerId: state.columnMetadata[0].layerId,
-      __fid: 'new',
-      attributes: {},
-    }],
     copiedFeatures,
   };
 };
@@ -215,6 +210,7 @@ const onHideEditDialog = (state: EditState): EditState => ({
   dialogCollapsed: false,
   selectedFeature: null,
   isCreateNewFeatureActive: false,
+  features: [],
   ...initialEditCopyState,
 });
 
