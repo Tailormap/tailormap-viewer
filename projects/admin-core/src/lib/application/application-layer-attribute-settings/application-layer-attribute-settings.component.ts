@@ -39,7 +39,7 @@ export class ApplicationLayerAttributeSettingsComponent {
       .filter(a => !hiddenAttributes.has(a.name));
     this.featureType = this.data.featureType;
     this.hideAttributes = this.data.appLayerSettings.hideAttributes || [];
-    this.editableAttributes = this.data.appLayerSettings.editableAttributes || [];
+    this.editableAttributes = this.data.appLayerSettings.readOnlyAttributes || [];
     this.updateSettings();
   }
 

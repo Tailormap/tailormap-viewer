@@ -9,7 +9,7 @@ export interface AppLayerSettingsModel {
   formId?: number | null;
   searchIndexId?: number | null;
   hideAttributes?: string[] | null;
-  editableAttributes?: string[] | null;
+  readOnlyAttributes?: string[] | null;
   autoRefreshInSeconds?: number | null;
   tileset3dStyle?: Tileset3dStyle | null;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
