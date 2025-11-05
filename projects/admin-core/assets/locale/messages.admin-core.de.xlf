@@ -10,6 +10,14 @@
         <source>Single-layer filter</source>
         <target>Einzel-Ebenen-Filter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+        <target>Erstellt von <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }} | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.lastModifiedDate | date:&apos;medium&apos; }}"/></source>
+        <target>Zuletzt aktualisiert von <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
         <target>Anwendung hinzufügen</target>
@@ -141,6 +149,10 @@
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
         <target>Anwendung kopieren <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-layers-info" datatype="html">
+        <source>Select one or more layers that are available for copying features from. If no layers are selected, all layers will be available. Note that incompatible layer geometry types may prevent successful copying.</source>
+        <target>Wählen Sie eine oder mehrere Ebenen aus, von denen Features kopiert werden können. Wenn keine Ebenen ausgewählt sind, stehen alle Ebenen zur Verfügung. Beachten Sie, dass inkompatible Geometrietypen der Ebenen ein erfolgreiches Kopieren verhindern können.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -2412,14 +2424,6 @@
       <trans-unit id="admin-core.users.valid-until" datatype="html">
         <source>Valid until</source>
         <target>Gültig bis</target>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.created" datatype="html">
-        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></source>
-        <target>Erstellt von <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:'medium' }} | date:&apos;medium&apos; }}"/></target>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
-        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></source>
-        <target>Zuletzt aktualisiert von <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></target>
       </trans-unit>
     </body>
   </file>
