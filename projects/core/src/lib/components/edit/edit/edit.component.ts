@@ -104,7 +104,7 @@ export class EditComponent implements OnInit {
       this.mapService.getMapViewDetails$() ]).pipe(
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(([ selectedEditLayerId, visibleLayers, mapViewDetails ]) => {
-      const layers = selectedEditLayerId == null ? [] : visibleLayers.filter(layer =>
+      const layers = selectedEditLayerId === null ? [] : visibleLayers.filter(layer =>
         layer.id !== selectedEditLayerId
         && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale)
         && this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id));
@@ -190,7 +190,7 @@ export class EditComponent implements OnInit {
   public createFeatureFromLayer(id: string) {
 
     this.selectedCopyLayer$.pipe(take(1)).subscribe(selectedCopyLayer => {
-      if (id == selectedCopyLayer) {
+      if (id === selectedCopyLayer) {
         this.store$.dispatch(setEditCopyOtherLayerFeaturesDisabled());
         return;
       }
