@@ -1,14 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/angular';
-import {
-  createDummyRow, createDummyRows, getLoadedStoreNoRows, getLoadedStoreWithMultipleTabs, getLoadingStore,
-} from '../state/mocks/attribute-list-state-test-data';
+import { getLoadedStoreNoRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListComponent } from './attribute-list.component';
 import { AttributeListState, attributeListStateKey, initialAttributeListState } from '../state/attribute-list.state';
 import { initialMapState, MapState, mapStateKey } from '../../../map/state/map.state';
 import {
-  AttributeType, ColumnMetadataModel, FeatureModel, FeaturesResponseModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE,
+  AttributeType, FeatureModel, FeaturesResponseModel, getAppLayerModel, getLayerTreeNode, TAILORMAP_API_V1_SERVICE,
   TailormapApiConstants,
   TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
@@ -39,7 +37,6 @@ import { AttributeListSourceModel } from '../models/attribute-list-source.model'
 import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { EffectsModule } from '@ngrx/effects';
 import { AttributeListEffects } from '../state/attribute-list.effects';
 
@@ -89,7 +86,7 @@ const createDummyFeatures = (
 ): FeatureModel[] => {
   const rows: FeatureModel[] = [];
   for (let i = 0; i < count; i++) {
-    rows.push(createDummyFeature(`${i+1}`, rowOverride ? rowOverride(i) : undefined));
+    rows.push(createDummyFeature(`${i + 1}`, rowOverride ? rowOverride(i) : undefined));
   }
   return rows;
 };
@@ -263,7 +260,6 @@ describe('AttributeList', () => {
       }]),
       dataLoader: {
         getFeatures$: jest.fn((): Observable<FeaturesResponseModel> => {
-          console.log('fetching features for other source');
           return of({
             features: [
               { __fid: '1', attributes: { name: 'Pro', title: 'Tailormap Pro' } },
