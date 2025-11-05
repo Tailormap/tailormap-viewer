@@ -16,10 +16,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { AppLayerModel, AttributeType, AuthenticatedUserService, GeometryType } from '@tailormap-viewer/api';
+import {
+  AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum, EditConfigModel, GeometryType,
+} from '@tailormap-viewer/api';
 import { activateTool } from '../../toolbar/state/toolbar.actions';
 import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
+import { ComponentConfigHelper } from '../../../shared';
 
 @Component({
   selector: 'tm-edit',
@@ -52,6 +55,8 @@ export class EditComponent implements OnInit {
 
   public tooltip = this.defaultTooltip;
   public disabled = false;
+
+  private selectedCopyLayerIds: string[] = [];
 
   public ngOnInit(): void {
     this.store$.select(selectSelectedEditLayer)
@@ -86,6 +91,14 @@ export class EditComponent implements OnInit {
         }
       });
 
+    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
+      this.store$,
+      BaseComponentTypeEnum.EDIT,
+      config => {
+        this.selectedCopyLayerIds = config.copyLayerIds || [];
+      },
+    );
+
     combineLatest([ this.store$.select(selectSelectedEditLayer),
       this.store$.select(selectOrderedVisibleLayersWithServices),
       this.mapService.getMapViewDetails$() ]).pipe(
@@ -93,7 +106,8 @@ export class EditComponent implements OnInit {
     ).subscribe(([ selectedEditLayerId, visibleLayers, mapViewDetails ]) => {
       const layers = selectedEditLayerId == null ? [] : visibleLayers.filter(layer =>
         layer.id !== selectedEditLayerId
-        && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale));
+        && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale)
+        && this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id));
       this.layersToCreateNewFeaturesFrom.set(layers);
     });
   }
