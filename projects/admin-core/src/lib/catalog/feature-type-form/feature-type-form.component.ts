@@ -143,7 +143,6 @@ export class FeatureTypeFormComponent {
   }
 
   private updateSettings(type: keyof FeatureTypeSettingsModel, value: any) {
-    console.debug('updateSettings', type, value);
     const settings = this.updatedFeatureTypeSubject.value?.settings || {};
     this.updatedFeatureTypeSubject.next({
       ...this.updatedFeatureTypeSubject.value || {},

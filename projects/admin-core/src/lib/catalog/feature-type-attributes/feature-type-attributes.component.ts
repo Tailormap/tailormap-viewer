@@ -127,19 +127,16 @@ export class FeatureTypeAttributesComponent implements OnChanges {
       this.attributeEnabledChanged.emit(updatedAttributesChecked);
     }
     if (type === 'editable') {
-      console.debug("emitting change:", type, updatedAttributesChecked);
       this.attributeEditableChanged.emit(updatedAttributesChecked);
     }
   }
 
   public toggleAttribute(type: CheckableAttribute, attribute: string) {
     const updatedAttributeChecked = [{ attribute, checked: !this.isAttributeEnabled(type, attribute) }];
-    console.debug("Toggling attribute", type, updatedAttributeChecked);
     if (type === 'hidden') {
       this.attributeEnabledChanged.emit(updatedAttributeChecked);
     }
     if (type === 'editable' && !this.isEditableFieldDisabled(attribute)) {
-      console.debug("emitting change:", type, updatedAttributeChecked);
       this.attributeEditableChanged.emit(updatedAttributeChecked);
     }
   }
@@ -151,13 +148,10 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public updateChecked(changes: SimpleChanges, type: CheckableAttribute) {
     const attribute = type === 'hidden' ? 'hideAttributes' : 'editableAttributes';
     if (this.changedSettings(changes, attribute)) {
-      console.debug("featureType settings: ", this.featureTypeSettings);
       const hideAttributes = new Set((this.featureTypeSettings ? this.featureTypeSettings[attribute] : []) || []);
-      console.debug("hide attributes", type, hideAttributes);
       this.checkedAttributes[type] = new Set(this.dataAttributes
         .map(a => a.name)
         .filter(a => type === 'hidden' ? !hideAttributes.has(a) : hideAttributes.has(a)));
-      console.debug("Updated checked attributes for type", type, this.checkedAttributes[type]);
       this.allChecked[type] = this.checkedAttributes[type].size === this.dataAttributes.length;
       this.someChecked[type] = this.checkedAttributes[type].size !== 0 && !this.allChecked[type];
     }
