@@ -16,6 +16,7 @@ import { EditComponentConfigComponent } from './edit-config/edit-component-confi
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
 import { InfoConfigComponent } from './info-config/info-config.component';
 import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
+import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { DrawingConfigComponent } from './drawing-config/drawing-config.componen
     GeolocationConfigComponent,
     InfoConfigComponent,
     DrawingConfigComponent,
+    TocComponentConfigComponent,
   ],
     imports: [
         CommonModule,
@@ -48,7 +50,7 @@ export class ComponentsModule {
     const configurationComponentService = inject(ConfigurationComponentRegistryService);
 
     /* eslint-disable max-len */
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TOC, $localize `:@@admin-core.application.component-table-of-contents:Table of contents`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TOC, $localize `:@@admin-core.application.component-table-of-contents:Table of contents`, TocComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.LEGEND, $localize `:@@admin-core.application.component-legend:Legend`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.DRAWING, $localize `:@@admin-core.application.component-drawing:Drawing`, DrawingConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.PRINT, $localize `:@@admin-core.application.component-print:Print`, BaseComponentConfigComponent);

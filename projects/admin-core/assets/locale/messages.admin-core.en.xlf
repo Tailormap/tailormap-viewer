@@ -8,6 +8,12 @@
       <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
         <source>Single-layer filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.lastModifiedDate | date:&apos;medium&apos; }}"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
       </trans-unit>
@@ -1181,6 +1187,9 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
       </trans-unit>
@@ -1774,12 +1783,6 @@
       </trans-unit>
       <trans-unit id="admin-core.users.valid-until" datatype="html">
         <source>Valid until</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.created" datatype="html">
-        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></source>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
-        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></source>
       </trans-unit>
     </body>
   </file>
