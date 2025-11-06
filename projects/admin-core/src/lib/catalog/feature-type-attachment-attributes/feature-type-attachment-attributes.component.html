@@ -21,9 +21,6 @@
           <mat-cell *matCellDef="let element; let i = index">
             <mat-form-field [formGroupName]="i">
               <input matInput formControlName="attributeName" i18n-placeholder="@@admin-core.catalog.attribute-name-placeholder" placeholder="Enter attribute name">
-              <mat-error *ngIf="attributes.at(i).get('attributeName')?.hasError('required')">
-
-              </mat-error>
               @if (attributes.at(i).get('attributeName')?.hasError('required')) {
                 <mat-error i18n="@@admin-core.catalog.attribute-name-required-error">Attribute name is required</mat-error>
               }
@@ -61,8 +58,7 @@
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>
           <mat-cell *matCellDef="let element; let i = index">
-            <button mat-icon-button color="warn" type="button" (click)="removeAttribute(i)"
-                    [disabled]="attributes.length === 1">
+            <button mat-icon-button color="warn" type="button" (click)="removeAttribute(i)">
               <mat-icon svgIcon="trash_filled"></mat-icon>
             </button>
           </mat-cell>
