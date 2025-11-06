@@ -190,4 +190,25 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getLatestUpload$(category: string): Observable<any> {
     return this.httpClient.get<any>(`${TailormapApiConstants.BASE_URL}/uploads/${category}/latest`);
   }
+
+  public addAttachment$(params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    const formData = new FormData();
+    formData.append('attachment', params.file);
+    formData.append('attachmentMetadata', new Blob([JSON.stringify({
+      attributeName: params.attribute,
+      fileName: params.file.name,
+      mimeType: params.file.type,
+      lastModified: params.file.lastModified,
+      description: params.description,
+    })], { type: 'application/json' }));
+    return this.httpClient.post<any>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.featureId}/attachment`,
+      formData);
+  }
 }

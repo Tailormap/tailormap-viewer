@@ -87,4 +87,13 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<SearchResponseModel>;
 
   getLatestUpload$<T>(category: string): Observable<T>;
+
+  addAttachment$(param: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any>;
 }

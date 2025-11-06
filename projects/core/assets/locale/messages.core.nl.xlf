@@ -482,6 +482,10 @@
         <source>Update feature failed</source>
         <target>Object bijwerken mislukt</target>
       </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+        <target>Uploaden van bijlage &quot;<x id="PH" equiv-text="file.name"/>&quot; mislukt: </target>
+      </trans-unit>
       <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Object bewerken</target>

@@ -362,6 +362,9 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
       </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+      </trans-unit>
       <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
       </trans-unit>

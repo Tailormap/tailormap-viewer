@@ -7,4 +7,5 @@ export enum FormFieldTypeEnum {
   TEXTAREA = 'textarea',
   DATE = 'date',
   TIMESTAMP = 'timestamp',
+  FILE = 'file',
 }

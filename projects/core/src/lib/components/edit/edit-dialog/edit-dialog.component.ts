@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
+import { from, mergeMap } from 'rxjs';
 import {
   selectEditCreateNewOrCopyFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
@@ -59,6 +60,8 @@ export class EditDialogComponent {
   public editCoordinates$;
 
   public updatedAttributes: FeatureModelAttributes | null = null;
+
+  public newAttachments = new Map<string, FileList>();
 
   public formValid: boolean = false;
 
@@ -194,7 +197,17 @@ export class EditDialogComponent {
               return this.editFeatureService.createFeature$(viewerId, layerId, {
                 __fid: '',
                 attributes: updatedFeature,
-              });
+              }).pipe(
+                 concatMap(result => {
+                   if (!result.success || !result.feature) {
+                     return of(result);
+                   }
+                   if (this.newAttachments.size !== 0) {
+                    return this.uploadAttachments$(viewerId, layerId, result.feature!.__fid).pipe(mergeMap(() => of(result)));
+                   } else {
+                     return of(result);
+                   }
+                 }));
             }),
         )
         .subscribe(result => {
@@ -210,6 +223,21 @@ export class EditDialogComponent {
             this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...result.feature, layerId } }));
           }
         });
+  }
+
+  private uploadAttachments$(viewerId: string, layerId: string, featureId: string) {
+    const uploads = Array.from(this.newAttachments.entries()).flatMap(([ attribute, files ]) =>
+      Array.from(files ?? []).map(file => ({ attribute, file })),
+    );
+
+    return from(uploads).pipe(
+      mergeMap(upload => this.editFeatureService.addAttachment$(
+        viewerId,
+        layerId,
+        featureId,
+        upload.attribute,
+        upload.file,
+      ), 1));
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
@@ -282,4 +310,10 @@ export class EditDialogComponent {
     this.clearCacheValuesAfterSave.add(uniqueValueCacheKey);
   }
 
+  public attachmentFileChanged($event: { attribute: string; files: FileList }) {
+    this.newAttachments.set($event.attribute, $event.files);
+  }
+
+  public attachmentFileDescriptionChanged(_$event: {attribute: string; description: string}) {
+  }
 }

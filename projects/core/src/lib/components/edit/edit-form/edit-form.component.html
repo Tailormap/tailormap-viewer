@@ -45,6 +45,13 @@
           <mat-label>{{ item.label }}</mat-label>
         </mat-checkbox>
       }
+      @if (item.type === 'file') {
+        <div class="file-input-wrapper">
+          {{ item.label }}
+          <input type="file" multiple (change)="onFileChange(item.name, $event)" [placeholder]="item.placeholder || item.label">
+          <input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)">
+        </div>
+      }
     </div>
   }
 </form>

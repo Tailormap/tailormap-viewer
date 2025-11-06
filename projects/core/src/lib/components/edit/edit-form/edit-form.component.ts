@@ -48,6 +48,12 @@ export class EditFormComponent implements OnDestroy {
   @Output()
   public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
 
+  @Output()
+  public attachmentFileChanged = new EventEmitter<{ attribute: string; files: FileList }>();
+
+  @Output()
+  public attachmentFileDescriptionChanged = new EventEmitter<{ attribute: string; description: string }>();
+
   public form: FormGroup = new FormGroup({});
 
   public layerId: string = '';
@@ -126,4 +132,13 @@ export class EditFormComponent implements OnDestroy {
     return control as FormControl;
   }
 
+  public onFileChange(attribute: string, $event: Event) {
+    const target = $event.target as HTMLInputElement;
+    this.attachmentFileChanged.emit({ attribute, files: target.files ?? new FileList() });
+  }
+
+  public onFileDescriptionChange(attribute: string, $event: Event) {
+    const target = $event.target as HTMLInputElement;
+    this.attachmentFileDescriptionChanged.emit({ attribute, description: target.value });
+  }
 }

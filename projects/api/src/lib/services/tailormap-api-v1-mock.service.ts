@@ -134,4 +134,15 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
         }));
     }
   }
+
+  public addAttachment$(_param: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    return of({ id: crypto.randomUUID() });
+  }
 }
