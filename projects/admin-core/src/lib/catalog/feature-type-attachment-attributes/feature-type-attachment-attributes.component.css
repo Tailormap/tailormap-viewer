@@ -1,0 +1,60 @@
+.add-button-container {
+  margin-bottom: 20px;
+}
+
+.add-button-container button mat-icon {
+  margin-right: 8px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+mat-header-cell {
+  font-weight: bold;
+}
+
+.table-container table mat-form-field {
+  width: 100%;
+}
+
+.mat-column-actions,
+.mat-column-label-actions,
+.mat-column-drag,
+.mat-column-label-drag {
+  flex: 0 0 90px;
+}
+
+.mat-column-maxAttachmentSize,
+.mat-column-label-maxAttachmentSize {
+  flex: 0 0 200px;
+}
+
+.drag-handle {
+  cursor: move;
+  user-select: none;
+}
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  opacity: 0.8;
+  background: white;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}

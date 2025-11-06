@@ -527,6 +527,9 @@
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.add-attachment-attribute-button" datatype="html">
+        <source>Add Attachment Attribute</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
       </trans-unit>
@@ -538,6 +541,18 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-duplicate-error" datatype="html">
+        <source>Attribute name must be unique</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-header" datatype="html">
+        <source>Attribute Name *</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-placeholder" datatype="html">
+        <source>Enter attribute name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-required-error" datatype="html">
+        <source>Attribute name is required</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
         <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
@@ -773,8 +788,23 @@
       <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
         <source>Available projections for this layer</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
+        <source>Max Size (MB)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-min-error" datatype="html">
+        <source>Size must be positive</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-placeholder" datatype="html">
+        <source>e.g. 2</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-header" datatype="html">
+        <source>MIME Type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-placeholder" datatype="html">
+        <source>e.g. application/pdf</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>

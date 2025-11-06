@@ -1,0 +1,87 @@
+<div class="attachment-attributes-container">
+  <form [formGroup]="attachmentForm">
+    <div class="add-button-container">
+      <button mat-flat-button color="primary" type="button" (click)="addAttribute()">
+        <mat-icon svgIcon="plus"></mat-icon>
+        <span i18n="@@admin-core.catalog.add-attachment-attribute-button">Add Attachment Attribute</span>
+      </button>
+    </div>
+
+    <div class="table-container" formArrayName="attributes">
+      <table mat-table
+             [dataSource]="dataSource"
+             cdkDropList
+             (cdkDropListDropped)="drop($event)"
+             [cdkDropListDisabled]="dragDropDisabled()"
+             [cdkDropListData]="dataSource.data">
+
+        <!-- Attribute Name Column -->
+        <ng-container matColumnDef="attributeName">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.catalog.attribute-name-header">Attribute Name *</mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index">
+            <mat-form-field [formGroupName]="i">
+              <input matInput formControlName="attributeName" i18n-placeholder="@@admin-core.catalog.attribute-name-placeholder" placeholder="Enter attribute name">
+              <mat-error *ngIf="attributes.at(i).get('attributeName')?.hasError('required')">
+
+              </mat-error>
+              @if (attributes.at(i).get('attributeName')?.hasError('required')) {
+                <mat-error i18n="@@admin-core.catalog.attribute-name-required-error">Attribute name is required</mat-error>
+              }
+              @if (attributes.at(i).get('attributeName')?.hasError('duplicate')) {
+                <mat-error i18n="@@admin-core.catalog.attribute-name-duplicate-error">Attribute name must be unique</mat-error>
+              }
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <!-- MIME Type Column -->
+        <ng-container matColumnDef="mimeType">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.catalog.mime-type-header">MIME Type</mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index">
+            <mat-form-field [formGroupName]="i">
+              <input matInput formControlName="mimeType" i18n-placeholder="@@admin-core.catalog.mime-type-placeholder" placeholder="e.g. application/pdf">
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Max Attachment Size Column -->
+        <ng-container matColumnDef="maxAttachmentSize">
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.catalog.max-size-header">Max Size (MB)</mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index">
+            <mat-form-field [formGroupName]="i">
+              <input matInput type="number" formControlName="maxAttachmentSize" i18n-placeholder="@@admin-core.catalog.max-size-placeholder" placeholder="e.g. 2">
+              @if (attributes.at(i).get('maxAttachmentSize')?.hasError('min')) {
+                <mat-error i18n="@@admin-core.catalog.max-size-min-error">Size must be positive</mat-error>
+              }
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="warn" type="button" (click)="removeAttribute(i)"
+                    [disabled]="attributes.length === 1">
+              <mat-icon svgIcon="trash_filled"></mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="drag">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element; let i = index">
+            <mat-icon cdkDragHandle
+                      (mousedown)="dragDropDisabled.set(false)"
+                      (mouseup)="dragDropDisabled.set(true)"
+                      class="drag-handle"
+                      svgIcon="reorder"></mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></mat-row>
+      </table>
+    </div>
+  </form>
+</div>

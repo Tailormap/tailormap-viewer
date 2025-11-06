@@ -41,6 +41,9 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/catalog-shortcut-buttons.component';
 import { FeatureTypeTemplateComponent } from './feature-type-template/feature-type-template.component';
 import { ProjectionAvailabilityComponent } from './projection-availability/projection-availability.component';
+import {
+  FeatureTypeAttachmentAttributesComponent
+} from './feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 
 
 @NgModule({
@@ -71,6 +74,7 @@ import { ProjectionAvailabilityComponent } from './projection-availability/proje
     FeatureSourceUsedDialogComponent,
     CatalogItemsInFolderDialogComponent,
     FeatureTypeAttributesComponent,
+    FeatureTypeAttachmentAttributesComponent,
     CatalogShortcutButtonsComponent,
     FeatureTypeTemplateComponent,
     ProjectionAvailabilityComponent,
