@@ -74,7 +74,7 @@ export class EditFeatureService {
   }
 
   public addAttachment$(applicationId: string, layerId: string, featureId: string, attribute: string, file: File, description?: string): Observable<boolean> {
-    return this.api.addAttachment$({ applicationId, layerId, featureId, attribute, file, description}).pipe(
+    return this.api.addAttachment$({ applicationId, layerId, featureId, attribute, file, description }).pipe(
       catchError((_e) => {
         this.showSnackbarMessage($localize `:@@core.edit.upload-attachment-failed:Uploading attachment "${file.name}" failed: `, _e);
         return of(false);
