@@ -6,7 +6,10 @@
     [layersWithoutWebMercator]="layersWithoutWebMercator()"
     [tiles3DLayerIds]="tiles3DLayerIds()"
     [filteredLayerIds]="filteredLayerIds()"
-    (zoomToScale)="zoomToScale($event)"></tm-toc-node-layer>
+    [editableLayerIds]="config?.showEditLayerIcon && editComponentEnabled ? editableLayerIds() : []"
+    (zoomToScale)="zoomToScale($event)"
+    (editLayer)="editLayer($event)"
+  ></tm-toc-node-layer>
 </ng-template>
 
 @if (visible$ | async) {
