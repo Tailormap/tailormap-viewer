@@ -2,7 +2,7 @@ import { LoadingStateEnum, RegisteredComponent } from '@tailormap-viewer/shared'
 import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, ComponentModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType, selectViewerLoadingState } from '../../state/core.selectors';
-import { filter, switchMap, take } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs';
 
 export class ComponentConfigHelper {
 
@@ -23,11 +23,16 @@ export class ComponentConfigHelper {
         filter(loadState => loadState === LoadingStateEnum.LOADED),
         take(1),
         switchMap(() => store$.select(selectComponentsConfigForType<ConfigType>(type)).pipe(take(1))),
+        map((config): ConfigType => {
+          const enabled = BaseComponentConfigHelper.isComponentEnabled(config ? [config] : [], type);
+          if (config) {
+            return { ...config.config, enabled };
+          }
+          return { enabled } as ConfigType;
+        }),
       )
       .subscribe(config => {
-        if (config) {
-          callback(config.config);
-        }
+        callback(config);
       });
   }
 
