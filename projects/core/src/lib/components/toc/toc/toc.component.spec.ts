@@ -13,7 +13,7 @@ import {
 import { setLayerVisibility, toggleSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
-import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
@@ -72,6 +72,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
+      { provide: AuthenticatedUserService, useValue: { getUserDetails$: jest.fn(() => of({ isAuthenticated: false })) } },
     ],
   });
   return { registerComponentFn, mockStore, mockDispatch };
