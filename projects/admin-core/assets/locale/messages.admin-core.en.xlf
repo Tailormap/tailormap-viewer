@@ -1190,6 +1190,9 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
       </trans-unit>

@@ -1122,6 +1122,10 @@
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
         <target>Details für <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></target>
       </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+        <target>Ebene bearbeiten</target>
+      </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
         <target>Nach Ebenennamen filtern...</target>

@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
@@ -21,6 +21,7 @@ import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [
@@ -44,6 +45,8 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectLayersWithoutWebMercatorIds, value: [] },
       { selector: select3dTilesLayers, value: [] },
       { selector: selectFilteredLayerIds, value: [] },
+      { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+      { selector: selectComponentsConfig, value: [] },
     ],
   });
 };

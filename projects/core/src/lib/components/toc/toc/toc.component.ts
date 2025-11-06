@@ -8,15 +8,17 @@ import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AppLayerModel, BaseComponentConfigHelper, BaseComponentTypeEnum, EditConfigModel, TocConfigModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
-  select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
+  select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
 import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
+import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
+import { ComponentConfigHelper } from '../../../shared';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -38,7 +40,6 @@ export class TocComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private ngZone = inject(NgZone);
 
-
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
@@ -54,6 +55,11 @@ export class TocComponent implements OnInit, OnDestroy {
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
   public filteredLayerIds: Signal<string[]> = signal([]);
+  public editableLayerIds: Signal<string[]> = signal([]);
+
+  public config: TocConfigModel | undefined;
+
+  public editComponentEnabled = !BaseComponentConfigHelper.isComponentDisabledByDefault(BaseComponentTypeEnum.EDIT);
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
@@ -94,11 +100,29 @@ export class TocComponent implements OnInit, OnDestroy {
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
 
+    ComponentConfigHelper.useInitialConfigForComponent<TocConfigModel>(
+      this.store$,
+      BaseComponentTypeEnum.TOC,
+      config => {
+        this.config = config;
+      },
+    );
+
+    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
+      this.store$,
+      BaseComponentTypeEnum.EDIT,
+      config => {
+        this.editComponentEnabled = config.enabled;
+      },
+    );
+
     this.in3D = this.store$.selectSignal(selectIn3dView);
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
     this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
+    const editableLayers = this.store$.selectSignal(selectEditableLayers);
+    this.editableLayerIds = computed(() => editableLayers().map(layer => layer.id));
   }
 
   public getDropZoneConfig() {
@@ -139,4 +163,8 @@ export class TocComponent implements OnInit, OnDestroy {
     this.mapService.zoomToScale(minScale);
   }
 
+  public editLayer(layer: string) {
+    this.store$.dispatch(setSelectedEditLayer( { layer }));
+    this.store$.dispatch(setEditActive({ active: true }));
+  }
 }

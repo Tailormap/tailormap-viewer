@@ -1614,6 +1614,10 @@
         <source>Search title</source>
         <target>Suchtitel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+        <target>Symbol zum Bearbeiten der Ebene anzeigen</target>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
         <target>Feature-Typ-Einstellungen aktualisiert</target>

@@ -842,6 +842,9 @@
       <trans-unit id="core.toc.details-for" datatype="html">
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
       </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+      </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
       </trans-unit>
