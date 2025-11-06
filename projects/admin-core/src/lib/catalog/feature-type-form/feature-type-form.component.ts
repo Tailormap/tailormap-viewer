@@ -73,6 +73,7 @@ export class FeatureTypeFormComponent {
         attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
         readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
+        attachmentAttributes: featureType.settings.attachmentAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
         template: currentUpdatedValue?.settings?.template || featureType.settings.template || undefined,
       },

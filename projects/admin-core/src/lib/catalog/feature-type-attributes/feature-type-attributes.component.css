@@ -1,6 +1,7 @@
 .attributes-wrapper {
   --selected-items-count: 0;
   display: flex;
+  flex-wrap: wrap;
   padding: 20px 1px 1px 1px;
 }
 
@@ -21,6 +22,16 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.attachments-attributes {
+  flex: 1 0 100%;
+  padding-top: 20px;
+  padding-right: 20px;
+}
+
+.attachments-attributes mat-card {
+
 }
 
 mat-header-cell {
