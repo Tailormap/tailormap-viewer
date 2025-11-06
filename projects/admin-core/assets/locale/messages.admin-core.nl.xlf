@@ -717,6 +717,10 @@
         <source>Add map service</source>
         <target>Kaartservice toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
+        <source>Attachment attributes</source>
+        <target>Bijlage-attributen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
         <target>Attribuut</target>
