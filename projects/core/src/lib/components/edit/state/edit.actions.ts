@@ -17,6 +17,14 @@ export const setEditCreateNewFeatureActive = createAction(
   props<{ active: boolean; geometryType: DrawingType; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
 );
 
+export const setEditCopyOtherLayerFeaturesActive = createAction(
+  `${editActionsPrefix} Set Copy Other Layer Features Active`,
+  props<{ layerId: string; columnMetadata: FeatureInfoColumnMetadataModel[] }>(),
+);
+
+export const setEditCopyOtherLayerFeaturesDisabled = createAction(
+  `${editActionsPrefix} Set Copy Other Layer Features Disabled`);
+
 export const setSelectedEditLayer = createAction(
   `${editActionsPrefix} Set Selected Layer`,
   props<{ layer: string | null }>(),
@@ -24,7 +32,12 @@ export const setSelectedEditLayer = createAction(
 
 export const loadEditFeatures = createAction(
   `${editActionsPrefix} Load Edit Features`,
-  props<{ coordinates: [number, number]; pointerType?: string }>(),
+  props<{ coordinates: [number, number]; mouseCoordinates: [number, number]; pointerType?: string }>(),
+);
+
+export const loadCopyFeatures = createAction(
+  `${editActionsPrefix} Load Copy Features`,
+  props<{ coordinates: [number, number]; mouseCoordinates: [number, number]; pointerType?: string }>(),
 );
 
 export const loadEditFeaturesSuccess = createAction(
@@ -34,6 +47,16 @@ export const loadEditFeaturesSuccess = createAction(
 
 export const loadEditFeaturesFailed = createAction(
   `${editActionsPrefix} Load Edit Features Failed`,
+  props<{ errorMessage?: string }>(),
+);
+
+export const loadCopyFeaturesSuccess = createAction(
+  `${editActionsPrefix} Load Copy Features Success`,
+  props<{ featureInfo: FeatureInfoResponseModel[] }>(),
+);
+
+export const loadCopyFeaturesFailed = createAction(
+  `${editActionsPrefix} Load Copy Features Failed`,
   props<{ errorMessage?: string }>(),
 );
 
