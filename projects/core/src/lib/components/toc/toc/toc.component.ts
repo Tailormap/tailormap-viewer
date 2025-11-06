@@ -59,7 +59,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
   private config = ComponentConfigHelper.componentConfigSignal<TocConfigModel>(this.store$, BaseComponentTypeEnum.TOC);
 
-  public editComponentEnabled= ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
+  private editComponentEnabled = ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
   private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
 
   private editableLayerIds = computed(() => {
@@ -163,5 +163,4 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setSelectedEditLayer( { layer }));
     this.store$.dispatch(setEditActive({ active: true }));
   }
-
 }
