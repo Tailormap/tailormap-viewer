@@ -113,6 +113,9 @@
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.application.copy-layers-info" datatype="html">
+        <source>Select one or more layers that are available for copying features from. If no layers are selected, all layers will be available. Note that incompatible layer geometry types may prevent successful copying.</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
       </trans-unit>
