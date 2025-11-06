@@ -705,6 +705,10 @@
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
         <target>Omdat deze service beveiligd is en geproxied wordt, is deze niet toegankelijk zonder in te loggen. Dit is een beveiligingsmaatregel om te voorkomen dat onbedoeld gevoelige lagen voor iedereen geopenbaard worden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.add-attachment-attribute-button" datatype="html">
+        <source>Add Attachment Attribute</source>
+        <target>Bijlage-attribuut toevoegen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
         <target>Feature source toevoegen</target>
@@ -717,9 +721,29 @@
         <source>Add map service</source>
         <target>Kaartservice toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
+        <source>Attachment attributes</source>
+        <target>Bijlage-attributen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
         <target>Attribuut</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-duplicate-error" datatype="html">
+        <source>Attribute name must be unique</source>
+        <target>Attribuutnaam moet uniek zijn</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-header" datatype="html">
+        <source>Attribute Name *</source>
+        <target>Attribuutnaam *</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-placeholder" datatype="html">
+        <source>Enter attribute name</source>
+        <target>Voer attribuutnaam in</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-required-error" datatype="html">
+        <source>Attribute name is required</source>
+        <target>Attribuutnaam is verplicht</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
         <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
@@ -1033,9 +1057,29 @@
         <source>Available projections for this layer</source>
         <target>Beschikbare projecties voor deze laag</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
+        <source>Max Size (MB)</source>
+        <target>Max. grootte (MB)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-min-error" datatype="html">
+        <source>Size must be positive</source>
+        <target>Grootte moet positief zijn</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-placeholder" datatype="html">
+        <source>e.g. 2</source>
+        <target>bijv. 2</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
         <target>Maximaal zoomniveau</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-header" datatype="html">
+        <source>MIME Type</source>
+        <target>MIME-type</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-placeholder" datatype="html">
+        <source>e.g. application/pdf</source>
+        <target>bijv. application/pdf</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
@@ -1612,6 +1656,10 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
         <target>Zoeken titel</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+        <target>Toon icoon voor het bewerken van de laag</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>

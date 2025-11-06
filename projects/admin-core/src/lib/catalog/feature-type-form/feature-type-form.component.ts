@@ -2,7 +2,9 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, inject
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
+import {
+  AttachmentAttributeModel, AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
+} from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
@@ -73,6 +75,7 @@ export class FeatureTypeFormComponent {
         attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
         readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
+        attachmentAttributes: currentUpdatedValue?.settings?.attachmentAttributes || featureType.settings.attachmentAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
         template: currentUpdatedValue?.settings?.template || featureType.settings.template || undefined,
       },
@@ -140,6 +143,10 @@ export class FeatureTypeFormComponent {
       };
     });
     this.updateSettings('attributeSettings', attributeSettings);
+  }
+
+  public attachmentAttributesChanged(attachmentAttributes: AttachmentAttributeModel[]) {
+    this.updateSettings('attachmentAttributes', attachmentAttributes);
   }
 
   private updateSettings(type: keyof FeatureTypeSettingsModel, value: any) {

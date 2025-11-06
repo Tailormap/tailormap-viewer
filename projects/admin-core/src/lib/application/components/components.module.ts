@@ -16,6 +16,7 @@ import { EditComponentConfigComponent } from './edit-config/edit-component-confi
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
 import { InfoConfigComponent } from './info-config/info-config.component';
 import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
+import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
 import { SharedAdminComponentsModule } from '../../shared/components';
 
 @NgModule({
@@ -31,15 +32,16 @@ import { SharedAdminComponentsModule } from '../../shared/components';
     GeolocationConfigComponent,
     InfoConfigComponent,
     DrawingConfigComponent,
+    TocComponentConfigComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    BaseComponentConfigComponent,
-    SelectUploadModule,
-    MarkdownEditorComponent,
-    SharedAdminComponentsModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        BaseComponentConfigComponent,
+        SelectUploadModule,
+        MarkdownEditorComponent,
+        SharedAdminComponentsModule,
+    ],
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
