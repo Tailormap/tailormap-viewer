@@ -15,6 +15,10 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form.component';
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import {
+  FeatureTypeAttachmentAttributesComponent
+} from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 const setup = async () => {
   const activeRoute = {
@@ -37,6 +41,7 @@ const setup = async () => {
     originalId: 'ft_1',
     featureSourceId: '1',
     catalogNodeId: 'node-1',
+    featureSourceProtocol: FeatureSourceProtocolEnum.JDBC,
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
@@ -60,8 +65,14 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    declarations: [ FeatureTypeFormComponent, FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [SharedModule],
+    declarations: [
+      FeatureTypeFormComponent,
+      FeatureTypeAttributesComponent,
+      FeatureTypeAttachmentAttributesComponent,
+      SaveButtonComponent,
+      SpinnerButtonComponent,
+    ],
+    imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureSourceService },

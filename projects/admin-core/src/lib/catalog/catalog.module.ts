@@ -42,7 +42,7 @@ import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/cata
 import { FeatureTypeTemplateComponent } from './feature-type-template/feature-type-template.component';
 import { ProjectionAvailabilityComponent } from './projection-availability/projection-availability.component';
 import {
-  FeatureTypeAttachmentAttributesComponent
+  FeatureTypeAttachmentAttributesComponent,
 } from './feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 
 
