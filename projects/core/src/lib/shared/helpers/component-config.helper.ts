@@ -3,6 +3,7 @@ import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigMo
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType, selectViewerLoadingState } from '../../state/core.selectors';
 import { filter, map, switchMap, take } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export class ComponentConfigHelper {
 
@@ -13,15 +14,13 @@ export class ComponentConfigHelper {
     return components.filter(c => BaseComponentConfigHelper.isComponentEnabled(config, c.type));
   }
 
-  public static useInitialConfigForComponent<ConfigType extends ComponentBaseConfigModel = ComponentBaseConfigModel>(
+  public static componentConfig$<ConfigType extends ComponentBaseConfigModel = ComponentBaseConfigModel>(
     store$: Store,
     type: string | BaseComponentTypeEnum,
-    callback: (config: ConfigType) => void,
   ) {
     return store$.select(selectViewerLoadingState)
       .pipe(
         filter(loadState => loadState === LoadingStateEnum.LOADED),
-        take(1),
         switchMap(() => store$.select(selectComponentsConfigForType<ConfigType>(type)).pipe(take(1))),
         map((config): ConfigType => {
           const enabled = BaseComponentConfigHelper.isComponentEnabled(config ? [config] : [], type);
@@ -30,10 +29,30 @@ export class ComponentConfigHelper {
           }
           return { enabled } as ConfigType;
         }),
-      )
+      );
+  }
+
+  public static useInitialConfigForComponent<ConfigType extends ComponentBaseConfigModel = ComponentBaseConfigModel>(
+    store$: Store,
+    type: string | BaseComponentTypeEnum,
+    callback: (config: ConfigType) => void,
+  ) {
+    ComponentConfigHelper.componentConfig$<ConfigType>(store$, type)
+      .pipe(take(1))
       .subscribe(config => {
         callback(config);
       });
   }
 
+  public static componentConfigSignal<ConfigType extends ComponentBaseConfigModel = ComponentBaseConfigModel>(
+    store$: Store,
+    type: string | BaseComponentTypeEnum) {
+    return toSignal(ComponentConfigHelper.componentConfig$<ConfigType>(store$, type));
+  }
+
+  public static componentEnabledConfigSignal(
+    store$: Store,
+    type: string | BaseComponentTypeEnum) {
+    return toSignal(ComponentConfigHelper.componentConfig$(store$, type).pipe(map(config => config.enabled)), { initialValue: false });
+  }
 }

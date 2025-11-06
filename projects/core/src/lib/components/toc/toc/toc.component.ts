@@ -1,23 +1,20 @@
-import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal, inject } from '@angular/core';
+import { Component, computed, inject, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
-  TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import {
-  AppLayerModel, AuthenticatedUserService, BaseComponentConfigHelper, BaseComponentTypeEnum, EditConfigModel, TocConfigModel,
-} from '@tailormap-viewer/api';
+import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
   select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
+import { moveLayerTreeNode, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId } from '../../../map/state/map.actions';
 import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
@@ -59,17 +56,21 @@ export class TocComponent implements OnInit, OnDestroy {
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
   public filteredLayerIds: Signal<string[]> = signal([]);
-  public editableLayerIds: Signal<string[]> = signal([]);
 
-  public config: TocConfigModel | undefined;
+  private config = ComponentConfigHelper.componentConfigSignal<TocConfigModel>(this.store$, BaseComponentTypeEnum.TOC);
 
-  public editComponentEnabled = !BaseComponentConfigHelper.isComponentDisabledByDefault(BaseComponentTypeEnum.EDIT);
-
+  public editComponentEnabled= ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
   private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
-  public getEditableLayerIds = computed(() => {
-    return this.config?.showEditLayerIcon
-        && this.authenticatedUserDetails()?.isAuthenticated
-        && this.editComponentEnabled
+
+  private editableLayerIds = computed(() => {
+    const editableLayers = this.store$.selectSignal(selectEditableLayers);
+    return editableLayers().map(layer => layer.id);
+  });
+
+  public getCurrentlyEditableLayerIds = computed(() => {
+    return this.config()?.showEditLayerIcon
+        && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
+        && this.editComponentEnabled()
       ? this.editableLayerIds()
       : [];
   });
@@ -113,29 +114,11 @@ export class TocComponent implements OnInit, OnDestroy {
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
 
-    ComponentConfigHelper.useInitialConfigForComponent<TocConfigModel>(
-      this.store$,
-      BaseComponentTypeEnum.TOC,
-      config => {
-        this.config = config;
-      },
-    );
-
-    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
-      this.store$,
-      BaseComponentTypeEnum.EDIT,
-      config => {
-        this.editComponentEnabled = config.enabled;
-      },
-    );
-
     this.in3D = this.store$.selectSignal(selectIn3dView);
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
     this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
-    const editableLayers = this.store$.selectSignal(selectEditableLayers);
-    this.editableLayerIds = computed(() => editableLayers().map(layer => layer.id));
   }
 
   public getDropZoneConfig() {
