@@ -17,6 +17,7 @@ import { GeolocationConfigComponent } from './geolocation-config/geolocation-con
 import { InfoConfigComponent } from './info-config/info-config.component';
 import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
 import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
+import { SharedAdminComponentsModule } from '../../shared/components';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TocComponentConfigComponent } from './toc-config/toc-component-config.c
         BaseComponentConfigComponent,
         SelectUploadModule,
         MarkdownEditorComponent,
+        SharedAdminComponentsModule,
     ],
   exports: [
     ComponentsListComponent,
