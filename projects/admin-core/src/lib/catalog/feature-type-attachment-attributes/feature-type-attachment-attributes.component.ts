@@ -133,7 +133,7 @@ export class FeatureTypeAttachmentAttributesComponent {
       return null;
     }
     const currentValues = formArray.controls.map(c => c.get('attributeName')?.value ?? '');
-    const currentFieldsWithFieldValue = currentValues.filter(c => c === currentValue);
+    const currentFieldsWithFieldValue = currentValues.filter(c => c.toLowerCase().trim() === currentValue);
     if (currentFieldsWithFieldValue.length > 1) {
       return { duplicate: true };
     }
