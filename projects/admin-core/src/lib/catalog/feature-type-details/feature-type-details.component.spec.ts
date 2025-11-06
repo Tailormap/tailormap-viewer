@@ -16,7 +16,7 @@ import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import {
-  FeatureTypeAttachmentAttributesComponent
+  FeatureTypeAttachmentAttributesComponent,
 } from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
