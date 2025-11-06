@@ -321,9 +321,6 @@
         <source>Delete feature failed</source>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
-        <source>Edit</source>
-      </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
       </trans-unit>
       <trans-unit id="core.edit.error-getting-features" datatype="html">
