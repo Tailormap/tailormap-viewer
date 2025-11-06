@@ -6,7 +6,7 @@
     [layersWithoutWebMercator]="layersWithoutWebMercator()"
     [tiles3DLayerIds]="tiles3DLayerIds()"
     [filteredLayerIds]="filteredLayerIds()"
-    [editableLayerIds]="config?.showEditLayerIcon && editComponentEnabled ? editableLayerIds() : []"
+    [editableLayerIds]="getCurrentlyEditableLayerIds()"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
   ></tm-toc-node-layer>
