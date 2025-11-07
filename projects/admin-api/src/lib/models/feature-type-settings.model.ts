@@ -1,11 +1,6 @@
 import { AttributeSettingsModel } from './attribute-settings.model';
 import { FeatureTypeTemplateModel } from './feature-type-template.model';
-
-export interface AttachmentAttributeModel {
-  attributeName: string;
-  mimeType: string | null;
-  maxAttachmentSize: number | null;
-}
+import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 
 export interface FeatureTypeSettingsModel {
   template?: FeatureTypeTemplateModel;
