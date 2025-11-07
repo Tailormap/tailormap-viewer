@@ -67,7 +67,17 @@ export class SearchIndexSchedulingComponent implements OnInit {
       )
       .subscribe(value => {
         let schedule: TaskSchedule | undefined = undefined;
-        if (value.partialCronExpression) {
+        if (this.taskSchedule && !value.partialCronExpression) {
+          // Schedule was removed and the task should be deleted
+          schedule = {
+            ...this.taskSchedule,
+            cronExpression: '',
+            description: value.description,
+            priority: value.priority,
+          };
+        }
+        else if (value.partialCronExpression) {
+          // Schedule was added or updated
           const timePart = value.time ? this.timeToPartialCronExpression(value.time) : '0 0 6 ';
           const cronExpression = value.partialCronExpression === CronExpressionHelper.HOURLY_CRON_EXPRESSION
             ? value.partialCronExpression

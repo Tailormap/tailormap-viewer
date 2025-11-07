@@ -15,8 +15,7 @@ import { reloadSearchIndexes } from '../../search-index/state/search-index.actio
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
-  providers: [TaskMonitoringService],
-changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -69,7 +68,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             .pipe(
               take(1),
               filter(answer => answer),
-              switchMap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
+              switchMap(() => this.taskMonitoringService.deleteTask$(task.uuid, task.type)),
             )
             .subscribe((response) => {
               if (response) {
