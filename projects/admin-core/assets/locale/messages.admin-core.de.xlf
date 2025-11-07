@@ -2114,6 +2114,10 @@
         <source>There is no schedule for this search index yet.</source>
         <target>Für diesen Suchindex gibt es noch keinen Zeitplan.</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.pick-time" datatype="html">
+        <source>Pick a time</source>
+        <target>Wähle eine Uhrzeit</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
         <source>Priority</source>
         <target>Priorität</target>
@@ -2135,20 +2139,20 @@
         <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
-        <source>Every day at 18:00</source>
-        <target>Jeden Tag um 18:00 Uhr</target>
+        <source>Every day</source>
+        <target>Jeden Tag</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
         <source>Every hour</source>
         <target>Stündlich</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
-        <source>Every first day of the month at 18:00</source>
-        <target>Jeden ersten Tag im Monat um 18:00 Uhr</target>
+        <source>Every first day of the month</source>
+        <target>Jeden ersten Tag im Monat</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
-        <source>Every week Monday at 18:00</source>
-        <target>Jede Woche Montag um 18:00 Uhr</target>
+        <source>Every week on monday</source>
+        <target>Jede Woche im Montag</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
         <source>No schedule</source>
@@ -2273,10 +2277,6 @@
         <source>last execution succesful</source>
         <target>letzte Ausführung erfolgreich</target>
       </trans-unit>
-      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
-        <source>Cron expression</source>
-        <target>Planung (Cron expression)</target>
-      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -2308,6 +2308,10 @@
       <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
         <source>Progress</source>
         <target>Fortschritt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
         <source>Scheduling state</source>
@@ -2372,6 +2376,10 @@
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
         <target>Aufgaben</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.time" datatype="html">
+        <source><x id="PH" equiv-text="schedule.viewValue"/> at <x id="PH_1" equiv-text="timeString"/></source>
+        <target><x id="PH" equiv-text="schedule.viewValue"/> um <x id="PH_1" equiv-text="timeString"/> Uhr</target>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>

@@ -1,9 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input, inject, LOCALE_ID } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchIndexModel, TaskSchedule } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
+import { DateAdapter } from '@angular/material/core';
+import { CronExpressionHelper } from '../../tasks/helpers/cron-expression.helper';
 
 @Component({
   selector: 'tm-admin-search-index-scheduling',
@@ -14,8 +16,10 @@ import { FormHelper } from '../../helpers/form.helper';
 })
 export class SearchIndexSchedulingComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private locale = inject(LOCALE_ID);
 
 
+  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
   public taskSchedule: TaskSchedule | undefined = undefined;
 
   @Input({ required: true })
@@ -30,16 +34,12 @@ export class SearchIndexSchedulingComponent implements OnInit {
   @Output()
   public formChanged = new EventEmitter<boolean>();
 
-  public scheduleOptions = [
-    { cronExpression: '', viewValue: $localize `:@@admin-core.search-index.schedule.no-schedule:No schedule` },
-    { cronExpression: '0 0 0/1 1/1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-hour:Every hour` },
-    { cronExpression: '0 0 18 1/1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-day:Every day at 18:00` },
-    { cronExpression: '0 0 18 ? * MON *', viewValue: $localize `:@@admin-core.search-index.schedule.every-week:Every week Monday at 18:00` },
-    { cronExpression: '0 0 18 1 * ? *', viewValue: $localize `:@@admin-core.search-index.schedule.every-month:Every first day of the month at 18:00` },
-  ];
+  public hourlyCronExpression = CronExpressionHelper.HOURLY_CRON_EXPRESSION;
+  public scheduleOptions = CronExpressionHelper.SCHEDULE_OPTIONS;
 
   public scheduleForm = new FormGroup({
-    cronExpression: new FormControl('', { nonNullable: true }),
+    partialCronExpression: new FormControl('', { nonNullable: true }),
+    time: new FormControl<Date | null>(null, { nonNullable: true }),
     description: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -48,6 +48,7 @@ export class SearchIndexSchedulingComponent implements OnInit {
   });
 
   public ngOnInit(): void {
+    this._adapter.setLocale(this.locale);
     const scheduleFormChanges$ = this.scheduleForm.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef),
       debounceTime(250),
@@ -66,10 +67,14 @@ export class SearchIndexSchedulingComponent implements OnInit {
       )
       .subscribe(value => {
         let schedule: TaskSchedule | undefined = undefined;
-        if (value.cronExpression) {
+        if (value.partialCronExpression) {
+          const timePart = value.time ? this.timeToPartialCronExpression(value.time) : '0 0 6 ';
+          const cronExpression = value.partialCronExpression === CronExpressionHelper.HOURLY_CRON_EXPRESSION
+            ? value.partialCronExpression
+            : timePart + value.partialCronExpression;
           schedule = {
             ...this.taskSchedule,
-            cronExpression: value.cronExpression,
+            cronExpression: cronExpression,
             description: value.description,
             priority: value.priority,
           };
@@ -84,13 +89,22 @@ export class SearchIndexSchedulingComponent implements OnInit {
   private initForm(schedule: TaskSchedule | undefined, searchIndexName?: string) {
     const preFillDescription: string = $localize `:@@admin-core.search-index.schedule.prefill-description:Update ${searchIndexName}`;
     if (!schedule) {
-      this.scheduleForm.patchValue({ cronExpression: '', description: preFillDescription, priority: undefined }, { emitEvent: false });
+      const time = new Date();
+      time.setHours(6, 0, 0);
+      this.scheduleForm.patchValue({
+        partialCronExpression: '',
+        time: time,
+        description: preFillDescription,
+        priority: undefined,
+      }, { emitEvent: false });
     } else {
-      if (!this.scheduleOptions.some(option => option.cronExpression === schedule.cronExpression)) {
+      const { time, partialCronExpression } = CronExpressionHelper.splitCronExpression(schedule.cronExpression);
+      if (!this.scheduleOptions.some(option => option.cronExpression === partialCronExpression)) {
         this.scheduleOptions.push({ cronExpression: schedule.cronExpression, viewValue: schedule.cronExpression });
       }
       this.scheduleForm.patchValue({
-        cronExpression: schedule.cronExpression,
+        partialCronExpression: partialCronExpression,
+        time: time,
         description: schedule.description || preFillDescription,
         priority: schedule.priority,
       }, { emitEvent: false });
@@ -102,6 +116,13 @@ export class SearchIndexSchedulingComponent implements OnInit {
     return ( FormHelper.isValidPositiveIntegerValue(values.priority) || values.priority === null || values.priority === undefined )
       && this.scheduleForm.dirty
       && this.scheduleForm.valid;
+  }
+
+  private timeToPartialCronExpression(time: Date): string {
+    const timeDateObject = new Date(time);
+    const minutes = isNaN(timeDateObject.getMinutes()) ? 0 : timeDateObject.getMinutes();
+    const hours = isNaN(timeDateObject.getHours()) ? 6 : timeDateObject.getHours();
+    return `0 ${minutes} ${hours} `;
   }
 
 }

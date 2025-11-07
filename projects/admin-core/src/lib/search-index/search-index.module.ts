@@ -17,6 +17,7 @@ import { FormModule } from '../form/form.module';
 import { SearchIndexService } from './services/search-index.service';
 import { SearchIndexAttributeListComponent } from './search-index-attribute-list/search-index-attribute-list.component';
 import { SearchIndexSchedulingComponent } from './search-index-scheduling/search-index-scheduling.component';
+import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular/material/timepicker';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,9 @@ import { SearchIndexSchedulingComponent } from './search-index-scheduling/search
     SharedAdminComponentsModule,
     CatalogModule,
     FormModule,
+    MatTimepickerToggle,
+    MatTimepicker,
+    MatTimepickerInput,
   ],
   exports: [
     SearchIndexListComponent,
