@@ -17,6 +17,7 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { CoreSharedModule } from '../../../shared';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -51,6 +52,8 @@ const setup = async (withState = false) => {
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectIsPrevButtonDisabled, value: false },
           { selector: selectIsNextButtonDisabled, value: false },
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [] },
         ] : [],
       }),
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },

@@ -43,7 +43,8 @@
     (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
     (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
     (attributeOrderChanged)="attributeOrderChanged($event)"
-  (aliasesChanged)="aliasesChanged(featureType.settings, $event)"></tm-admin-feature-type-attributes>
+    (aliasesChanged)="aliasesChanged(featureType.settings, $event)"
+    (attachmentAttributesChanged)="attachmentAttributesChanged($event)"></tm-admin-feature-type-attributes>
 </ng-template>
 @if (dialogLayout) {
   <mat-dialog-content><ng-container *ngTemplateOutlet="content"></ng-container></mat-dialog-content>

@@ -8,6 +8,12 @@
       <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
         <source>Single-layer filter</source>
       </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.lastModifiedDate | date:&apos;medium&apos; }}"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
       </trans-unit>
@@ -106,6 +112,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-layers-info" datatype="html">
+        <source>Select one or more layers that are available for copying features from. If no layers are selected, all layers will be available. Note that incompatible layer geometry types may prevent successful copying.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -521,6 +530,9 @@
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.add-attachment-attribute-button" datatype="html">
+        <source>Add Attachment Attribute</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
       </trans-unit>
@@ -530,8 +542,23 @@
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
+        <source>Attachment attributes</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-duplicate-error" datatype="html">
+        <source>Attribute name must be unique</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-header" datatype="html">
+        <source>Attribute Name *</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-placeholder" datatype="html">
+        <source>Enter attribute name</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-required-error" datatype="html">
+        <source>Attribute name is required</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
         <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
@@ -767,8 +794,23 @@
       <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
         <source>Available projections for this layer</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
+        <source>Max Size (MB)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-min-error" datatype="html">
+        <source>Size must be positive</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-placeholder" datatype="html">
+        <source>e.g. 2</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-header" datatype="html">
+        <source>MIME Type</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.mime-type-placeholder" datatype="html">
+        <source>e.g. application/pdf</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
@@ -1181,6 +1223,9 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
       </trans-unit>
@@ -1505,6 +1550,9 @@
       <trans-unit id="admin-core.search-index.no-schedule" datatype="html">
         <source>There is no schedule for this search index yet.</source>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.pick-time" datatype="html">
+        <source>Pick a time</source>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
         <source>Priority</source>
       </trans-unit>
@@ -1521,16 +1569,16 @@
         <source>Schedule</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
-        <source>Every day at 18:00</source>
+        <source>Every day</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
         <source>Every hour</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
-        <source>Every first day of the month at 18:00</source>
+        <source>Every first day of the month</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
-        <source>Every week Monday at 18:00</source>
+        <source>Every week on monday</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
         <source>No schedule</source>
@@ -1625,9 +1673,6 @@
       <trans-unit id="admin-core.tasks.last-execution-successful" datatype="html">
         <source>last execution succesful</source>
       </trans-unit>
-      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
-        <source>Cron expression</source>
-      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
         <source>Description</source>
       </trans-unit>
@@ -1651,6 +1696,9 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
         <source>Progress</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.schedule" datatype="html">
+        <source>Schedule</source>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
         <source>Scheduling state</source>
@@ -1699,6 +1747,9 @@
       </trans-unit>
       <trans-unit id="admin-core.tasks.tasks" datatype="html">
         <source>Tasks</source>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.time" datatype="html">
+        <source><x id="PH" equiv-text="schedule.viewValue"/> at <x id="PH_1" equiv-text="timeString"/></source>
       </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
@@ -1774,12 +1825,6 @@
       </trans-unit>
       <trans-unit id="admin-core.users.valid-until" datatype="html">
         <source>Valid until</source>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.created" datatype="html">
-        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }}"/></source>
-      </trans-unit>
-      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
-        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></source>
       </trans-unit>
     </body>
   </file>

@@ -427,10 +427,6 @@
         <target>Löschen des Features fehlgeschlagen</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
-        <source>Edit</source>
-        <target>Bearbeiten</target>
-      </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
       </trans-unit>
@@ -1125,6 +1121,10 @@
       <trans-unit id="core.toc.details-for" datatype="html">
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
         <target>Details für <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></target>
+      </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+        <target>Ebene bearbeiten</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

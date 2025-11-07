@@ -7,3 +7,4 @@ export * from './edit-config.model';
 export * from './geolocation-config.model';
 export * from './info-component-config.model';
 export * from './drawing-component-config.model';
+export * from './toc-config.model';

@@ -11,6 +11,7 @@ import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { GeoServiceLayerInApplicationModel } from '../models/geo-service-layer-in-application.model';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
+import { ExtendedAppTreeLayerNodeModel } from '../models/extended-app-tree-layer-node.model';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -204,6 +205,36 @@ export const selectServiceLayerTreeForApplication = createSelector(
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
 
 export const selectFilterGroups = createSelector(selectDraftApplication, application => application?.settings?.filterGroups || []);
+
+export const selectExtendedAppLayerNodesForSelectedApplication = createSelector(
+  selectAppLayerNodesForSelectedApplication,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectSelectedApplicationLayerSettings,
+  selectFeatureTypes,
+  (appLayerTreeNodes, geoServices, geoServiceLayers, layerSettings, featureTypes) => {
+    const geoServiceLayerMap = ApplicationTreeHelper.getLayerMap(geoServiceLayers);
+    return appLayerTreeNodes
+      .filter(node => ApplicationModelHelper.isLayerTreeNode(node))
+      .map((appLayerNode): ExtendedAppTreeLayerNodeModel => {
+        const geoServiceLayer = geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(appLayerNode.layerName, appLayerNode.serviceId));
+        const geoService = geoServices.find(service => service.id === geoServiceLayer?.serviceId);
+        const appLayerSettings = layerSettings[appLayerNode.id];
+        const featureType = featureTypes.find(ft => {
+          return ft.featureSourceId === geoServiceLayer?.layerSettings?.featureType?.featureSourceId.toString()
+            && ft.name === geoServiceLayer.layerSettings?.featureType?.featureTypeName;
+        });
+        return {
+          ...appLayerNode,
+          label: ApplicationTreeHelper.getTreeModelLabel(appLayerNode, geoServiceLayerMap, layerSettings, 'layer'),
+          appLayerSettings,
+          geoService,
+          geoServiceLayer,
+          featureType,
+        };
+      });
+  },
+);
 
 export const selectFilterableLayersForApplication = createSelector(
   selectAppLayerNodesForSelectedApplication,
