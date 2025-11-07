@@ -2,7 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
-import { AuthenticatedUserService, ColumnMetadataModel, FeatureModel, LayerDetailsModel, SecurityModel } from '@tailormap-viewer/api';
+import {
+  AttachmentMetadataModel, AuthenticatedUserService, ColumnMetadataModel, FeatureModel, LayerDetailsModel,
+  SecurityModel,
+} from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { DateTime } from 'luxon';
@@ -47,6 +50,9 @@ export class EditFormComponent implements OnDestroy {
 
   @Output()
   public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
+
+  @Input()
+  public attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string}>> | null = null;
 
   @Output()
   public attachmentFileChanged = new EventEmitter<{ attribute: string; files: FileList }>();

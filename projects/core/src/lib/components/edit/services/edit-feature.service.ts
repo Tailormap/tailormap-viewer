@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import {
+  AttachmentMetadataModel, ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE,
+} from '@tailormap-viewer/api';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
@@ -80,5 +82,13 @@ export class EditFeatureService {
         return of(false);
       }),
     );
+  }
+
+  public listAttachments$(applicationId: string, layerId: string, featureId: string): Observable<AttachmentMetadataModel[]> {
+    return this.api.listAttachments$({ applicationId, layerId, featureId });
+  }
+
+  public getAttachmentUrl(applicationId: string, layerId: string, attachmentId: string) {
+    return this.api.getAttachmentUrl({ applicationId, layerId, attachmentId });
   }
 }

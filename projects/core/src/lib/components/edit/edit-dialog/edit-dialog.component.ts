@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
-import { from, mergeMap } from 'rxjs';
+import { from, mergeMap, Observable, tap } from 'rxjs';
 import {
   selectEditCreateNewOrCopyFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
 import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
-import { BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
+import {
+  AttachmentMetadataModel, BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
@@ -62,6 +64,7 @@ export class EditDialogComponent {
   public updatedAttributes: FeatureModelAttributes | null = null;
 
   public newAttachments = new Map<string, FileList>();
+  public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
 
   public formValid: boolean = false;
 
@@ -103,6 +106,33 @@ export class EditDialogComponent {
         this.store$.dispatch(hideFeatureInfoDialog());
         this.resetChanges();
       });
+    this.attachments$ = this.currentFeature$.pipe(
+      switchMap(feature => {
+        if (!feature) {
+          return of(new Map());
+        } else {
+          let viewerId: string;
+          return this.store$.select(selectViewerId)
+            .pipe(
+              take(1),
+              tap(id => viewerId = id!),
+              switchMap(() => this.editFeatureService.listAttachments$(viewerId, feature.feature.layerId, feature.feature.__fid)),
+              map(attachments => attachments.map(attachment => ({
+                    ...attachment,
+                    url: this.editFeatureService.getAttachmentUrl(viewerId, feature.feature.layerId, attachment.attachmentId),
+                })).reduce((attachmentsByAttributeName, attachment) => {
+                  if (attachmentsByAttributeName.has(attachment.attributeName)) {
+                    attachmentsByAttributeName.get(attachment.attributeName)?.push(attachment);
+                  } else {
+                    attachmentsByAttributeName.set(attachment.attributeName, [attachment]);
+                  }
+                  return attachmentsByAttributeName;
+                }, new Map<string, Array<AttachmentMetadataModel & { url: string }>>()),
+              ),
+            );
+        }
+      }),
+    );
 
     this.editMapToolService.allEditGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
       this.geometryChanged(geometry, false);

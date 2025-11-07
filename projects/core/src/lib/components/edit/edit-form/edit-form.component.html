@@ -45,13 +45,31 @@
           <mat-label>{{ item.label }}</mat-label>
         </mat-checkbox>
       }
-      @if (item.type === 'file') {
-        <div class="file-input-wrapper">
-          {{ item.label }}
-          <input type="file" multiple (change)="onFileChange(item.name, $event)" [placeholder]="item.placeholder || item.label">
-          <input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)">
-        </div>
-      }
     </div>
   }
 </form>
+
+@for (item of formConfig; track item) {
+  @if (item.type === 'file') {
+    @let attachments = attachmentsByAttributeName?.get(item.name);
+    @if (attachments && attachments.length > 0) {
+      <h2>{{ item.name }} ({{ attachments.length }})</h2>
+      @for (attachment of attachments; track attachment) {
+        <div>
+          <a [href]="attachment.url" target="_blank">{{ attachment.fileName }}</a>
+          <button mat-stroked-button
+                  color="warn"
+                  tmTooltip="Verwijder bijlage">
+            <mat-icon svgIcon="remove"></mat-icon>
+          </button>
+        </div>
+      }
+    }
+
+    <div class="file-input-wrapper">
+      <span>{{ item.label }} toevoegen:</span>
+      <input type="file" multiple (change)="onFileChange(item.name, $event)" [placeholder]="item.placeholder || item.label">
+      <input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)">
+    </div>
+  }
+}
