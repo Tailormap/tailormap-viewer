@@ -18,8 +18,8 @@
                       (featureAttributeChanged)="featureChanged($event)"
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"
                       [attachmentsByAttributeName]="attachments$ | async"
-                      (attachmentFileChanged)="attachmentFileChanged($event)"
-                      (attachmentFileDescriptionChanged)="attachmentFileDescriptionChanged($event)"
+                      (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
+                      (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-form>
       </div>
       <div class="buttons">

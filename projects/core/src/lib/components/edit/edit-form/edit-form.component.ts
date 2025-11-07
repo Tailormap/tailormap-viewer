@@ -55,14 +55,16 @@ export class EditFormComponent implements OnDestroy {
   public attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string}>> | null = null;
 
   @Output()
-  public attachmentFileChanged = new EventEmitter<{ attribute: string; files: FileList }>();
+  public newAttachmentsChanged = new EventEmitter<{ attribute: string; files: FileList }>();
 
   @Output()
-  public attachmentFileDescriptionChanged = new EventEmitter<{ attribute: string; description: string }>();
+  public deletedAttachmentsChanged = new EventEmitter<Set<string>>();
 
   public form: FormGroup = new FormGroup({});
 
   public layerId: string = '';
+
+  public deletedAttachments = new Set<string>();
 
   constructor() {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();
@@ -140,11 +142,15 @@ export class EditFormComponent implements OnDestroy {
 
   public onFileChange(attribute: string, $event: Event) {
     const target = $event.target as HTMLInputElement;
-    this.attachmentFileChanged.emit({ attribute, files: target.files ?? new FileList() });
+    this.newAttachmentsChanged.emit({ attribute, files: target.files ?? new FileList() });
   }
 
-  public onFileDescriptionChange(attribute: string, $event: Event) {
-    const target = $event.target as HTMLInputElement;
-    this.attachmentFileDescriptionChanged.emit({ attribute, description: target.value });
+  public onDeleteAttachment(attachmentId: string) {
+    if (this.deletedAttachments.has(attachmentId)) {
+      this.deletedAttachments.delete(attachmentId);
+    } else {
+      this.deletedAttachments.add(attachmentId);
+    }
+    this.deletedAttachmentsChanged.emit(this.deletedAttachments);
   }
 }

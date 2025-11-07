@@ -350,10 +350,10 @@ export class EditDialogComponent {
     this.clearCacheValuesAfterSave.add(uniqueValueCacheKey);
   }
 
-  public attachmentFileChanged($event: { attribute: string; files: FileList }) {
+  public onNewAttachmentsChanged($event: { attribute: string; files: FileList }) {
     this.newAttachments.set($event.attribute, $event.files);
   }
 
-  public attachmentFileDescriptionChanged(_$event: {attribute: string; description: string}) {
+  public onDeletedAttachmentsChanged(_deletedAttachmentIds: Set<string>) {
   }
 }

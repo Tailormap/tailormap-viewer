@@ -5,3 +5,7 @@ form {
 form > div + div {
   margin-top: 16px;
 }
+
+.deleted {
+  text-decoration: line-through;
+}

@@ -56,9 +56,10 @@
       <h2>{{ item.name }} ({{ attachments.length }})</h2>
       @for (attachment of attachments; track attachment) {
         <div>
-          <a [href]="attachment.url" target="_blank">{{ attachment.fileName }}</a>
+          <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
           <button mat-stroked-button
                   color="warn"
+                  (click)="onDeleteAttachment(attachment.attachmentId)"
                   tmTooltip="Verwijder bijlage">
             <mat-icon svgIcon="remove"></mat-icon>
           </button>
@@ -69,7 +70,6 @@
     <div class="file-input-wrapper">
       <span>{{ item.label }} toevoegen:</span>
       <input type="file" multiple (change)="onFileChange(item.name, $event)" [placeholder]="item.placeholder || item.label">
-      <input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)">
     </div>
   }
 }
