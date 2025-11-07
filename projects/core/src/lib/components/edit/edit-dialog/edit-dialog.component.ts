@@ -193,7 +193,7 @@ export class EditDialogComponent {
             return of(null);
           }
           if (updatedFeature === null) { // no changes to data, check if we have new or deleted attachments
-            if (this.newAttachments.size === 0 || this.deletedAttachmentIds.size === 0) {
+            if (this.newAttachments.size === 0 && this.deletedAttachmentIds.size === 0) {
               return of(currentFeature.feature);
             } else {
               return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid)
@@ -300,6 +300,9 @@ export class EditDialogComponent {
   }
 
   private deleteAttachments$(viewerId: string, layerId: string, attachmentIds: Set<string>) {
+    if (attachmentIds.size === 0) {
+      return of(null);
+    }
     return from(attachmentIds.values()).pipe(
       mergeMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId), 1));
   }
