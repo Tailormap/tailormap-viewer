@@ -1,25 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectCurrentFeatureForEdit,
-  selectCurrentlySelectedFeature,
-  selectFeatureInfoDialogCollapsed,
-  selectFeatureInfoDialogVisible, selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers,
-  selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
+  selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
+  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled, selectIsPrevButtonDisabled,
+  selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { map, Observable, combineLatest, take } from 'rxjs';
+import { combineLatest, map, Observable, take } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
-import { FeatureInfoModel } from '../models/feature-info.model';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
 import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
@@ -40,12 +36,11 @@ export class FeatureInfoDialogComponent {
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
-  public currentFeature$: Observable<FeatureInfoModel | null>;
+  public currentFeature = toSignal(this.store$.select(selectCurrentlySelectedFeature), { initialValue: null });
   public selectedLayer$: Observable<FeatureInfoLayerModel | null>;
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
-  public isEditPossible$: Observable<boolean>;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
@@ -53,7 +48,17 @@ export class FeatureInfoDialogComponent {
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
-  public showEditButtonConfig: boolean = true;
+  public config = ComponentConfigHelper.componentConfigSignal<FeatureInfoConfigModel>(this.store$, BaseComponentTypeEnum.FEATURE_INFO);
+  public editComponentEnabled= ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
+  private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
+
+  public isEditPossible = computed(() => {
+    const showEditButton = !(this.config()?.showEditButton === false);
+    return showEditButton
+        && this.currentFeature()?.layer?.editable
+        && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
+        && this.editComponentEnabled();
+  });
 
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
@@ -61,11 +66,8 @@ export class FeatureInfoDialogComponent {
   public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor() {
-    const store$ = this.store$;
-
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
-    this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
     this.selectedLayer$ = this.store$.select(selectSelectedFeatureInfoLayer);
     this.selectedSingleLayer$ = combineLatest([
       this.store$.select(selectSelectedFeatureInfoLayer),
@@ -77,27 +79,8 @@ export class FeatureInfoDialogComponent {
       return null;
     }));
 
-    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
-      store$,
-      BaseComponentTypeEnum.FEATURE_INFO,
-      config => {
-        this.showEditButtonConfig = config.showEditButton ?? true;
-      },
-    );
-
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
-    this.isEditPossible$ = combineLatest([
-      this.authenticatedUserService.getUserDetails$(),
-      this.currentFeature$,
-    ]).pipe(
-      takeUntilDestroyed(this.destroyRef),
-      map(([ userDetails, feature ]) => {
-        const isAuthenticated = userDetails.isAuthenticated;
-        const isLayerEditable = feature?.layer?.editable ?? false;
-        return isAuthenticated && isLayerEditable;
-      }),
-    );
 
     combineLatest([
       this.store$.select(selectFeatureInfoLayerListCollapsed),

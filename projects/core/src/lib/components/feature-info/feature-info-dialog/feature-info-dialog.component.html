@@ -32,7 +32,7 @@
       @if (layer.error) {
         <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
       }
-      @if(currentFeature$ | async; as feature) {
+      @if(currentFeature(); as feature) {
         <div class="feature-info" [class.attributes-collapsed]="attributesCollapsed() && !!layer.template">
           @if (layer.template) {
             <div class="row template-row">
@@ -51,7 +51,7 @@
           <div class="buttons">
             <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
             <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
-            @if (showEditButtonConfig && (isEditPossible$ | async)) {
+            @if (isEditPossible()) {
               <div class="edit-feature-button">
                 <button mat-icon-button
                   tmTooltip="Edit feature"

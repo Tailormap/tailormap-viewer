@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed, inject } from '@angular/core';
-import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { AttachmentAttributeModel, AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -69,6 +69,9 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   @Output()
   public aliasesChanged = new EventEmitter<Array<{ attribute: string; alias: string | undefined }>>();
 
+  @Output()
+  public attachmentAttributesChanged = new EventEmitter<AttachmentAttributeModel[]>();
+
   public catalogFeatureTypeEditable: Set<string> = new Set();
 
   public aliasForm: FormGroup = new FormGroup({});
@@ -86,6 +89,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
 
   public dataAttributes: Array<AttributeDescriptorModel & { alias?: string }> = [];
   public geomAttributes: AttributeDescriptorModel[] = [];
+  public attachmentAttributes: AttachmentAttributeModel[] = [];
 
   constructor() {
     this.aliasForm.valueChanges
@@ -116,6 +120,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
         this.aliasForm.addControl(att.name, control, { emitEvent: false });
       });
     }
+    this.attachmentAttributes = [...this.featureTypeSettings?.attachmentAttributes || []];
     this.updateChecked(changes, 'hidden');
     this.updateChecked(changes, 'editable');
     this.catalogFeatureTypeEditable = new Set(this.catalogFeatureTypeSettings?.editableAttributes || []);
@@ -230,4 +235,9 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     });
     this.isDragging.set(true);
   }
+
+  public onAttachmentAttributesChanged(attributes: AttachmentAttributeModel[]) {
+    this.attachmentAttributesChanged.emit(attributes);
+  }
+
 }

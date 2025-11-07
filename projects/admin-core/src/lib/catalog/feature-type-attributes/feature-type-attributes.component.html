@@ -1,4 +1,3 @@
-<script src="feature-type-attributes.component.ts"></script>
 <div class="attributes-wrapper">
 
   <mat-card class="attributes-table">
@@ -116,5 +115,15 @@
       }
     </mat-card-content>
   </mat-card>
+
+  <div class="attachments-attributes">
+    <mat-card>
+      <mat-card-title i18n="@@admin-core.catalog.attachment-attributes">Attachment attributes</mat-card-title>
+      <mat-card-content>
+        <tm-admin-feature-type-attachment-attributes [attachmentAttributes]="attachmentAttributes"
+                                                     (attachmentAttributesChange)="onAttachmentAttributesChanged($event)"></tm-admin-feature-type-attachment-attributes>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
 </div>
