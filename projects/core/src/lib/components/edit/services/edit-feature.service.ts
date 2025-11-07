@@ -44,6 +44,20 @@ export class EditFeatureService {
     );
   }
 
+  public getFeature$(applicationId: string, layerId: string, __fid: string): Observable<FeatureModel | null> {
+    return this.api.getFeatures$({ applicationId, layerId, __fid }).pipe(
+      catchError((_e) => {
+        return of(null);
+      }),
+      map(response => {
+        if (response && response.features.length > 0) {
+          return response.features[0];
+        }
+        return null;
+      }),
+    );
+  }
+
   public updateFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<FeatureModel | null> {
     return this.api.updateFeature$({ applicationId, layerId, feature }).pipe(
       catchError((_e) => {

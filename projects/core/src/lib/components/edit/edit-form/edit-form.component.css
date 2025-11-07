@@ -1,9 +1,23 @@
-form {
+form,
+.attachment-wrapper {
   padding: 16px;
 }
 
 form > div + div {
   margin-top: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+.attachment-wrapper {
+  padding-top: 0;
+}
+
+.attachment-wrapper h2 {
+  color: var(--primary-color);
+  padding-bottom: 14px;
 }
 
 .deleted {
