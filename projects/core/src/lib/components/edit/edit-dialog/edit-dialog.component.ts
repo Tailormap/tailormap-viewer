@@ -108,7 +108,7 @@ export class EditDialogComponent {
       });
     this.attachments$ = this.currentFeature$.pipe(
       switchMap(feature => {
-        if (!feature) {
+        if (!feature || feature.feature.__fid === 'new') {
           return of(new Map());
         } else {
           let viewerId: string;
@@ -192,7 +192,17 @@ export class EditDialogComponent {
           return this.editFeatureService.updateFeature$(viewerId, layerId, {
             __fid: currentFeature.feature.__fid,
             attributes: updatedFeature,
-          });
+          }).pipe(
+            concatMap(result => {
+              if (!result) {
+                return of(result);
+              }
+              if (this.newAttachments.size !== 0) {
+                return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(mergeMap(() => of(result)));
+              } else {
+                return of(result);
+              }
+            }));
         }),
         withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
