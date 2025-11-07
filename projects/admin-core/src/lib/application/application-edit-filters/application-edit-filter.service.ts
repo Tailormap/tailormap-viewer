@@ -33,7 +33,7 @@ export class ApplicationEditFilterService {
   ]).pipe(
     map(([ layerIds, layers ]) => {
       const layerIdsSet = new Set(layerIds);
-      return layers.filter(layer => layerIdsSet.has(layer.appLayerId) && !!layer.geoServiceLayer.layerSettings?.featureType);
+      return layers.filter(layer => layerIdsSet.has(layer.id) && !!layer.geoServiceLayer?.layerSettings?.featureType);
     }),
   );
 
@@ -47,7 +47,7 @@ export class ApplicationEditFilterService {
         return [[]];
       }
       const featureTypeRequests$ = layers
-        .map(layer => layer.geoServiceLayer.layerSettings?.featureType)
+        .map(layer => layer.geoServiceLayer?.layerSettings?.featureType)
         .filter((featureType) => !!featureType)
         .map(ft => this.featureSourceService.loadFeatureType$(
           ft.featureTypeName,
