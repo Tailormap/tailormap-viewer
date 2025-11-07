@@ -222,4 +222,8 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
     return `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/attachment/${params.attachmentId}`;
   }
+
+  public deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return this.httpClient.delete(this.getAttachmentUrl(params));
+  }
 }

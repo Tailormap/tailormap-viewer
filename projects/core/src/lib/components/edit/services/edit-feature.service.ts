@@ -105,4 +105,8 @@ export class EditFeatureService {
   public getAttachmentUrl(applicationId: string, layerId: string, attachmentId: string) {
     return this.api.getAttachmentUrl({ applicationId, layerId, attachmentId });
   }
+
+  public deleteAttachment$(viewerId: string, layerId: string, attachmentId: string) {
+    return this.api.deleteAttachment$({ applicationId: viewerId, layerId, attachmentId });
+  }
 }

@@ -100,4 +100,6 @@ export interface TailormapApiV1ServiceModel {
   listAttachments$(params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]>;
 
   getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string;
+
+  deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any;
 }

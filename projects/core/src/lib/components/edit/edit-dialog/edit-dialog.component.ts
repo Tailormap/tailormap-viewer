@@ -63,7 +63,8 @@ export class EditDialogComponent {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
 
-  public newAttachments = new Map<string, File[]>();
+  private newAttachments = new Map<string, File[]>();
+  private deletedAttachmentIds = new Set<string>();
   public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
 
   public formValid: boolean = false;
@@ -148,6 +149,8 @@ export class EditDialogComponent {
   }
 
   private resetChanges() {
+    this.newAttachments = new Map();
+    this.deletedAttachmentIds = new Set();
     this.updatedAttributes = null;
     this.formValid = false;
     this.clearCacheValuesAfterSave = new Set();
@@ -177,7 +180,7 @@ export class EditDialogComponent {
 
   public save(layerId: string, currentFeature: FeatureWithMetadataModel) {
     const updatedFeature = this.updatedAttributes;
-    if (!updatedFeature && this.newAttachments.size === 0) {
+    if (!updatedFeature && this.newAttachments.size === 0 && this.deletedAttachmentIds.size === 0) {
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
@@ -189,12 +192,14 @@ export class EditDialogComponent {
           if (!viewerId) {
             return of(null);
           }
-          if (updatedFeature === null) { // no changes to data, check if we have new attachments
-            if (this.newAttachments.size === 0) {
+          if (updatedFeature === null) { // no changes to data, check if we have new or deleted attachments
+            if (this.newAttachments.size === 0 || this.deletedAttachmentIds.size === 0) {
               return of(currentFeature.feature);
             } else {
               return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid)
-                .pipe(mergeMap(() => {
+                .pipe(
+                  mergeMap(() => this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds)),
+                  mergeMap(() => {
                   return this.editFeatureService.getFeature$(viewerId, layerId, currentFeature.feature.__fid);
                 }));
             }
@@ -204,15 +209,20 @@ export class EditDialogComponent {
             attributes: updatedFeature,
           }).pipe(
             concatMap(result => {
-              if (!result) {
+              if (!result || this.newAttachments.size === 0) {
                 return of(result);
-              }
-              if (this.newAttachments.size !== 0) {
-                return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(mergeMap(() => of(result)));
               } else {
-                return of(result);
+                return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(mergeMap(() => of(result)));
               }
-            }));
+            }),
+            concatMap(result => {
+              if (!result || this.deletedAttachmentIds.size === 0) {
+                return of(result);
+              } else {
+                return this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds).pipe(mergeMap(() => of(result)));
+              }
+            }),
+          );
         }),
         withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
@@ -287,6 +297,11 @@ export class EditDialogComponent {
         upload.attribute,
         upload.file,
       ), 1));
+  }
+
+  private deleteAttachments$(viewerId: string, layerId: string, attachmentIds: Set<string>) {
+    return from(attachmentIds.values()).pipe(
+      mergeMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId), 1));
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
@@ -366,6 +381,7 @@ export class EditDialogComponent {
     }
   }
 
-  public onDeletedAttachmentsChanged(_deletedAttachmentIds: Set<string>) {
+  public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
+    this.deletedAttachmentIds = deletedAttachmentIds;
   }
 }

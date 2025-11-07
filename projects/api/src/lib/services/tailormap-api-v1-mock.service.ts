@@ -153,4 +153,8 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
   public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
     return 'url-to-attachment/' + params.attachmentId;
   }
+
+  public deleteAttachment$(_params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return of();
+  }
 }
