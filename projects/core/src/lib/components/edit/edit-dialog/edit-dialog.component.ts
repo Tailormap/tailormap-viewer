@@ -177,7 +177,7 @@ export class EditDialogComponent {
 
   public save(layerId: string, currentFeature: FeatureWithMetadataModel) {
     const updatedFeature = this.updatedAttributes;
-    if (!updatedFeature) {
+    if (!updatedFeature && this.newAttachments.size === 0) {
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
@@ -188,6 +188,16 @@ export class EditDialogComponent {
         concatMap(viewerId => {
           if (!viewerId) {
             return of(null);
+          }
+          if (updatedFeature === null) { // no changes to data, check if we have new attachments
+            if (this.newAttachments.size === 0) {
+              return of(currentFeature.feature);
+            } else {
+              return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid)
+                .pipe(mergeMap(() => {
+                  return this.editFeatureService.getFeature$(viewerId, layerId, currentFeature.feature.__fid);
+                }));
+            }
           }
           return this.editFeatureService.updateFeature$(viewerId, layerId, {
             __fid: currentFeature.feature.__fid,
@@ -352,6 +362,9 @@ export class EditDialogComponent {
 
   public onNewAttachmentsChanged($event: { attribute: string; files: FileList }) {
     this.newAttachments.set($event.attribute, $event.files);
+    if (this.newAttachments.size > 0) {
+      this.formValid = true;
+    }
   }
 
   public onDeletedAttachmentsChanged(_deletedAttachmentIds: Set<string>) {
