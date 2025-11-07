@@ -57,24 +57,30 @@
       @if (attachments && attachments.length > 0) {
         <h2>{{ item.name }} ({{ attachments.length }})</h2>
         @for (attachment of attachments; track attachment) {
-          <div>
+          <div class="attachment-row">
             <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
-            <button mat-stroked-button
-                    color="warn"
-                    (click)="onDeleteAttachment(attachment.attachmentId)"
-                    tmTooltip="Verwijder bijlage">
-              <mat-icon svgIcon="remove"></mat-icon>
-            </button>
+            <!-- input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)" -->
+            @if (deletedAttachments.has(attachment.attachmentId)) {
+              <button mat-icon-button
+                      (click)="onDeleteAttachment(attachment.attachmentId)"
+                      tmTooltip="Bijlage behouden">
+                  <mat-icon svgIcon="reset"></mat-icon>
+              </button>
+            } @else {
+              <button mat-icon-button
+                      color="warn"
+                      (click)="onDeleteAttachment(attachment.attachmentId)"
+                      tmTooltip="Verwijder bijlage">
+                <mat-icon svgIcon="remove" color="warn"></mat-icon>
+              </button>
+            }
           </div>
         }
       }
-
-
-        <button mat-flat-button color="accent" (click)="fileInput.click()">
-          {{ item.label }} toevoegen
-        </button>
-        <input type="file" class="hidden" #fileInput multiple (change)="onFileChange(item.name, $event)">
-        <!-- input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)" -->
+      <button class="add-attachment-button" mat-flat-button color="accent" (click)="fileInput.click()">
+        {{ item.label }} toevoegen
+      </button>
+      <input type="file" class="hidden" #fileInput multiple (change)="onFileChange(item.name, $event)">
     }
   }
 </div>

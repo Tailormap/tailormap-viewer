@@ -23,3 +23,29 @@ form > div + div {
 .deleted {
   text-decoration: line-through;
 }
+
+.attachment-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.attachment-row + .attachment-row {
+  margin-top: 8px;
+}
+
+.attachment-row:last-of-type {
+  border-bottom: none;
+}
+
+.attachment-row a {
+  flex: 1;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-attachment-button {
+  margin-top: 16px;
+}
