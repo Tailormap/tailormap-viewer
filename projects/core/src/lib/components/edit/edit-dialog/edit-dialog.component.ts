@@ -63,7 +63,7 @@ export class EditDialogComponent {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
 
-  private newAttachments = new Map<string, File[]>();
+  public newAttachments = new Map<string, File[]>();
   private deletedAttachmentIds = new Set<string>();
   public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
 
