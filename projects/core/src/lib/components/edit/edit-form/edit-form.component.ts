@@ -54,8 +54,11 @@ export class EditFormComponent implements OnDestroy {
   @Input()
   public attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string}>> | null = null;
 
+  @Input()
+  public newAttachments: Map<string, File[]> = new Map();
+
   @Output()
-  public newAttachmentsChanged = new EventEmitter<{ attribute: string; files: FileList }>();
+  public newAttachmentsChanged = new EventEmitter<{ attribute: string; files: File[] }>();
 
   @Output()
   public deletedAttachmentsChanged = new EventEmitter<Set<string>>();
@@ -142,7 +145,12 @@ export class EditFormComponent implements OnDestroy {
 
   public onFileChange(attribute: string, $event: Event) {
     const target = $event.target as HTMLInputElement;
-    this.newAttachmentsChanged.emit({ attribute, files: target.files ?? new FileList() });
+    this.newAttachmentsChanged.emit({ attribute, files: target.files ? Array.from(target.files) : [] });
+  }
+
+  public onRemoveNewAttachment(fileList: File[], attribute: string, attachmentName: string) {
+    const newFileList = fileList.filter(file => file.name !== attachmentName);
+    this.newAttachmentsChanged.emit({ attribute, files: newFileList });
   }
 
   public onDeleteAttachment(attachmentId: string) {

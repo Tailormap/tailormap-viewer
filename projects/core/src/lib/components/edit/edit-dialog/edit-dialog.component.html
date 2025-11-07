@@ -18,6 +18,7 @@
                       (featureAttributeChanged)="featureChanged($event)"
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"
                       [attachmentsByAttributeName]="attachments$ | async"
+                      [newAttachments]="newAttachments"
                       (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
                       (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-form>

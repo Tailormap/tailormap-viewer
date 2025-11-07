@@ -38,7 +38,8 @@ form > div + div {
   border-bottom: none;
 }
 
-.attachment-row a {
+.attachment-row a,
+.attachment-row > div {
   flex: 1;
   display: block;
   white-space: nowrap;

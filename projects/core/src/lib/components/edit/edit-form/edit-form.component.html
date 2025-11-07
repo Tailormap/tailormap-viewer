@@ -54,8 +54,12 @@
   @for (item of formConfig; track item) {
     @if (item.type === 'file') {
       @let attachments = attachmentsByAttributeName?.get(item.name);
+      @let tempAttachments = newAttachments.get(item.name);
+      @let totalCount = (attachments ? attachments.length : 0) + (tempAttachments ? tempAttachments.length : 0);
+      @if (totalCount > 0) {
+        <h2>{{ item.name }} ({{ totalCount }})</h2>
+      }
       @if (attachments && attachments.length > 0) {
-        <h2>{{ item.name }} ({{ attachments.length }})</h2>
         @for (attachment of attachments; track attachment) {
           <div class="attachment-row">
             <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
@@ -74,6 +78,19 @@
                 <mat-icon svgIcon="remove" color="warn"></mat-icon>
               </button>
             }
+          </div>
+        }
+      }
+      @if (tempAttachments && tempAttachments.length > 0) {
+        @for (attachment of tempAttachments; track attachment) {
+          <div class="attachment-row">
+            <div>{{ attachment.name }}</div>
+            <button mat-icon-button
+                    color="warn"
+                    (click)="onRemoveNewAttachment(tempAttachments, item.name, attachment.name)"
+                    tmTooltip="Verwijder bijlage">
+              <mat-icon svgIcon="remove" color="warn"></mat-icon>
+            </button>
           </div>
         }
       }

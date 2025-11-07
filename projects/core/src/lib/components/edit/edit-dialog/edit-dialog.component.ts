@@ -63,7 +63,7 @@ export class EditDialogComponent {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
 
-  public newAttachments = new Map<string, FileList>();
+  public newAttachments = new Map<string, File[]>();
   public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
 
   public formValid: boolean = false;
@@ -277,9 +277,8 @@ export class EditDialogComponent {
 
   private uploadAttachments$(viewerId: string, layerId: string, featureId: string) {
     const uploads = Array.from(this.newAttachments.entries()).flatMap(([ attribute, files ]) =>
-      Array.from(files ?? []).map(file => ({ attribute, file })),
+      files.map(file => ({ attribute, file })),
     );
-
     return from(uploads).pipe(
       mergeMap(upload => this.editFeatureService.addAttachment$(
         viewerId,
@@ -360,7 +359,7 @@ export class EditDialogComponent {
     this.clearCacheValuesAfterSave.add(uniqueValueCacheKey);
   }
 
-  public onNewAttachmentsChanged($event: { attribute: string; files: FileList }) {
+  public onNewAttachmentsChanged($event: { attribute: string; files: File[] }) {
     this.newAttachments.set($event.attribute, $event.files);
     if (this.newAttachments.size > 0) {
       this.formValid = true;
