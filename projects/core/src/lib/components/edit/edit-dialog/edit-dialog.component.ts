@@ -149,6 +149,8 @@ export class EditDialogComponent {
   }
 
   private resetChanges() {
+    this.newAttachments = new Map();
+    this.deletedAttachmentIds = new Set();
     this.updatedAttributes = null;
     this.formValid = false;
     this.clearCacheValuesAfterSave = new Set();
