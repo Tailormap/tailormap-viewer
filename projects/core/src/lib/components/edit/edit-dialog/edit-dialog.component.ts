@@ -178,7 +178,7 @@ export class EditDialogComponent {
 
   public save(layerId: string, currentFeature: FeatureWithMetadataModel) {
     const updatedFeature = this.updatedAttributes;
-    if (!updatedFeature && this.newAttachments.size === 0) {
+    if (!updatedFeature && this.newAttachments.size === 0 && this.deletedAttachmentIds.size === 0) {
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
@@ -190,12 +190,14 @@ export class EditDialogComponent {
           if (!viewerId) {
             return of(null);
           }
-          if (updatedFeature === null) { // no changes to data, check if we have new attachments
-            if (this.newAttachments.size === 0) {
+          if (updatedFeature === null) { // no changes to data, check if we have new or deleted attachments
+            if (this.newAttachments.size === 0 || this.deletedAttachmentIds.size === 0) {
               return of(currentFeature.feature);
             } else {
               return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid)
-                .pipe(mergeMap(() => {
+                .pipe(
+                  mergeMap(() => this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds)),
+                  mergeMap(() => {
                   return this.editFeatureService.getFeature$(viewerId, layerId, currentFeature.feature.__fid);
                 }));
             }
