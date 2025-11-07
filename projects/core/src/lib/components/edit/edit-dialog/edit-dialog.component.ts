@@ -63,7 +63,8 @@ export class EditDialogComponent {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
 
-  public newAttachments = new Map<string, FileList>();
+  private newAttachments = new Map<string, FileList>();
+  private deletedAttachmentIds = new Set<string>();
   public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
 
   public formValid: boolean = false;
@@ -194,15 +195,20 @@ export class EditDialogComponent {
             attributes: updatedFeature,
           }).pipe(
             concatMap(result => {
-              if (!result) {
+              if (!result || this.newAttachments.size === 0) {
                 return of(result);
-              }
-              if (this.newAttachments.size !== 0) {
-                return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(mergeMap(() => of(result)));
               } else {
-                return of(result);
+                return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(mergeMap(() => of(result)));
               }
-            }));
+            }),
+            concatMap(result => {
+              if (!result || this.deletedAttachmentIds.size === 0) {
+                return of(result);
+              } else {
+                return this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds).pipe(mergeMap(() => of(result)));
+              }
+            }),
+          );
         }),
         withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
       )
@@ -280,6 +286,11 @@ export class EditDialogComponent {
       ), 1));
   }
 
+  private deleteAttachments$(viewerId: string, layerId: string, attachmentIds: Set<string>) {
+    return from(attachmentIds.values()).pipe(
+      mergeMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId), 1));
+  }
+
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
     this.removingFeature.set(true);
     const featureId = currentFeature.feature.__fid;
@@ -354,6 +365,7 @@ export class EditDialogComponent {
     this.newAttachments.set($event.attribute, $event.files);
   }
 
-  public onDeletedAttachmentsChanged(_deletedAttachmentIds: Set<string>) {
+  public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
+    this.deletedAttachmentIds = deletedAttachmentIds;
   }
 }
