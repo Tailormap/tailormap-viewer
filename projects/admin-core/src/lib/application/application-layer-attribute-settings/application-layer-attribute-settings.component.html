@@ -7,7 +7,7 @@
                                     [primaryKeyAttributeName]="featureType?.primaryKeyAttribute || null"
                                     [catalogFeatureTypeSettings]="catalogFeatureTypeSettings"
                                     (attributeEnabledChanged)="attributesEnabledChanged($event)"
-                                    (attributeReadonlyChanged)="attributesReadonlyChanged($event)"
+                                    (attributeEditableChanged)="attributesEditableChanged($event)"
                                     [featureTypeSettings]="settings"></tm-admin-feature-type-attributes>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

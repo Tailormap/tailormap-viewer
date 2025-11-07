@@ -11,7 +11,7 @@ export interface FeatureTypeSettingsModel {
   template?: FeatureTypeTemplateModel;
   attributeOrder?: string[];
   hideAttributes?: string[];
-  readOnlyAttributes?: string[];
+  editableAttributes?: string[];
   attributeSettings?: Record<string, AttributeSettingsModel>;
   attachmentAttributes?: AttachmentAttributeModel[];
 }

@@ -41,7 +41,7 @@
     [featureTypeSettings]="featureTypeSettings$ | async"
     [showFullSettings]="true"
     (attributeEnabledChanged)="attributeEnabledChanged(featureType.settings, $event)"
-    (attributeReadonlyChanged)="attributeReadonlyChanged(featureType.settings, $event)"
+    (attributeEditableChanged)="attributeEditableChanged(featureType.settings, $event)"
     (attributeOrderChanged)="attributeOrderChanged($event)"
     (aliasesChanged)="aliasesChanged(featureType.settings, $event)"
     (attachmentAttributesChanged)="attachmentAttributesChanged($event)"></tm-admin-feature-type-attributes>
