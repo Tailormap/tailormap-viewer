@@ -22,9 +22,12 @@ export class FormWarningMessageComponent implements OnChanges {
   public unavailableFields: string[] = [];
 
   public ngOnChanges() {
+    const readOnlyFeatureTypeAttributes: string[] = this.featureType?.attributes
+      .map(a => a.name)
+      .filter(attrName => !this.featureType?.settings.editableAttributes?.includes(attrName)) || [];
     const hiddenFeatureTypeAttributes: string[] = [
       ...this.featureType?.settings.hideAttributes || [],
-      ...this.featureType?.settings.readOnlyAttributes || [],
+      ...readOnlyFeatureTypeAttributes,
     ];
     const appLayerHiddenAttributes: string[] = [
       ...this.applicationLayerSetting?.hideAttributes || [],

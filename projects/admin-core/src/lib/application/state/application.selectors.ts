@@ -8,8 +8,6 @@ import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
-import { GeoServiceLayerInApplicationModel } from '../models/geo-service-layer-in-application.model';
-import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { ExtendedAppTreeLayerNodeModel } from '../models/extended-app-tree-layer-node.model';
 
@@ -237,38 +235,17 @@ export const selectExtendedAppLayerNodesForSelectedApplication = createSelector(
 );
 
 export const selectFilterableLayersForApplication = createSelector(
-  selectAppLayerNodesForSelectedApplication,
-  selectGeoServiceLayers,
-  selectGeoServices,
-  selectFeatureTypes,
-  (appLayersNodes, geoServiceLayers, geoServices, featureTypes): GeoServiceLayerInApplicationModel[] => {
-    const geoServiceLayerMap = ApplicationTreeHelper.getLayerMap(geoServiceLayers);
+  selectExtendedAppLayerNodesForSelectedApplication,
+  (appLayersNodes): ExtendedAppTreeLayerNodeModel[] => {
     return appLayersNodes
-      .filter(layer => ApplicationModelHelper.isLayerTreeNode(layer))
-      .map(layerNode => ({
-        geoServiceLayer: geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(layerNode.layerName, layerNode.serviceId)),
-        appLayerId: layerNode.id,
-      }))
-      .filter(({ geoServiceLayer }) => {
-        if (!geoServiceLayer) {
+      .filter((extendedAppLayerNode) => {
+        if (!extendedAppLayerNode.geoService
+          || !extendedAppLayerNode.geoServiceLayer
+          || !extendedAppLayerNode.featureType) {
           return false;
         }
-        const geoService = geoServices.find(service => service.id === geoServiceLayer.serviceId);
-        const isGeoServer = geoService?.settings?.serverType === AdminServerType.GEOSERVER
-          || (geoService?.settings?.serverType === AdminServerType.AUTO && geoService.resolvedServerType === AdminServerType.GEOSERVER);
-        if (!isGeoServer || !geoServiceLayer.layerSettings?.featureType) {
-          return false;
-        }
-        const featureTypeOfLayer = featureTypes.find(featureType => {
-          return featureType.featureSourceId === geoServiceLayer.layerSettings!.featureType!.featureSourceId.toString()
-            && featureType.name === geoServiceLayer.layerSettings!.featureType!.featureTypeName;
-        });
-        return !!featureTypeOfLayer;
-      })
-      .map(geoServiceLayerInApplication => ({
-        geoServiceLayer: geoServiceLayerInApplication.geoServiceLayer!,
-        appLayerId: geoServiceLayerInApplication.appLayerId,
-      }));
+        return extendedAppLayerNode.geoService.resolvedServerType === AdminServerType.GEOSERVER;
+      });
   },
 );
 
@@ -282,9 +259,9 @@ export const selectFilterableFilterGroups = createSelector(
         filterGroup,
         isSelected: filterGroup.id === selectedFilterId,
         layers: filterGroup.layerIds.map(layerId => {
-          const layer = filterableLayers.find(l => l.appLayerId === layerId);
-          return layer ? layer.geoServiceLayer : null;
-        }).filter((layer: ExtendedGeoServiceLayerModel | null): layer is ExtendedGeoServiceLayerModel => layer !== null),
+          const layer = filterableLayers.find(l => l.id === layerId);
+          return layer ? layer : null;
+        }).filter((layer: ExtendedAppTreeLayerNodeModel | null): layer is ExtendedAppTreeLayerNodeModel => layer !== null),
       };
     });
   },

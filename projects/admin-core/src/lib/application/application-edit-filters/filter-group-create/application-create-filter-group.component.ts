@@ -6,11 +6,11 @@ import {
   selectFilterableLayersForApplication, selectSelectedApplicationId,
 } from '../../state/application.selectors';
 import { nanoid } from 'nanoid';
-import { GeoServiceLayerInApplicationModel } from '../../models/geo-service-layer-in-application.model';
 import { MatSelectionListChange } from '@angular/material/list';
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
+import { ExtendedAppTreeLayerNodeModel } from '../../models/extended-app-tree-layer-node.model';
 
 @Component({
   selector: 'tm-admin-application-create-filter-group',
@@ -25,22 +25,22 @@ export class ApplicationCreateFilterGroupComponent implements OnInit {
 
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
-  public filterableLayers: Signal<GeoServiceLayerInApplicationModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
+  public filterableLayers: Signal<ExtendedAppTreeLayerNodeModel[]> = this.store$.selectSignal(selectFilterableLayersForApplication);
   public selectedLayers = signal<string[]>([]);
 
   public layerFilter = new FormControl<string>('');
   public layerFilterSignal = signal<string>('');
 
-  public layerList: Signal<Array<GeoServiceLayerInApplicationModel & { selected: boolean }>> = computed(() => {
+  public layerList: Signal<Array<ExtendedAppTreeLayerNodeModel & { selected: boolean }>> = computed(() => {
     const filterableLayers = this.filterableLayers();
     const selectedLayerIds = this.selectedLayers();
     const filterTerm = this.layerFilterSignal();
     const layersWithSelected = filterableLayers.map(layer => ({
       ...layer,
-      selected: selectedLayerIds.includes(layer.appLayerId),
+      selected: selectedLayerIds.includes(layer.id),
     }));
     if (filterTerm) {
-      return FilterHelper.filterByTerm(layersWithSelected, filterTerm, l => l.geoServiceLayer.title);
+      return FilterHelper.filterByTerm(layersWithSelected, filterTerm, l => l.label);
     }
     return layersWithSelected;
   });

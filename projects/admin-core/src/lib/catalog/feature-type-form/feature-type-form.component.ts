@@ -75,7 +75,7 @@ export class FeatureTypeFormComponent {
       settings: {
         attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
-        readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
+        editableAttributes: currentUpdatedValue?.settings?.editableAttributes || featureType.settings.editableAttributes || [],
         attachmentAttributes: currentUpdatedValue?.settings?.attachmentAttributes || featureType.settings.attachmentAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
         template: currentUpdatedValue?.settings?.template || featureType.settings.template || undefined,
@@ -103,22 +103,22 @@ export class FeatureTypeFormComponent {
     this.updateAttributeChecked('hideAttributes', originalSettings, $event);
   }
 
-  public attributeReadonlyChanged(
+  public attributeEditableChanged(
     originalSettings: FeatureTypeSettingsModel,
     $event: Array<{ attribute: string; checked: boolean }>,
   ) {
-    this.updateAttributeChecked('readOnlyAttributes', originalSettings, $event);
+    this.updateAttributeChecked('editableAttributes', originalSettings, $event);
   }
 
   private updateAttributeChecked(
-    type: 'readOnlyAttributes' | 'hideAttributes',
+    type: 'editableAttributes' | 'hideAttributes',
     originalSettings: FeatureTypeSettingsModel,
     $event: Array<{ attribute: string; checked: boolean }>,
   ) {
     const settings = this.updatedFeatureTypeSubject.value?.settings || {};
     const attributes = new Set(settings[type] || originalSettings[type] || []);
     $event.forEach(change => {
-      if (change.checked) {
+      if ((type === 'hideAttributes' && change.checked) || (type === 'editableAttributes' && !change.checked)) {
         attributes.delete(change.attribute);
       } else {
         attributes.add(change.attribute);
