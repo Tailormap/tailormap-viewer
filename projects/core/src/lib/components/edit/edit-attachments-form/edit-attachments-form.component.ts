@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
 import { EditFormInput } from '../models/edit-form-input.model';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'tm-edit-attachments-form',
@@ -10,6 +11,8 @@ import { EditFormInput } from '../models/edit-form-input.model';
   standalone: false,
 })
 export class EditAttachmentsFormComponent {
+  private locale = inject(LOCALE_ID);
+
   private _feature: EditFormInput | undefined;
 
   public attachmentAttributes: AttachmentAttributeModel[] = [];
@@ -49,5 +52,16 @@ export class EditAttachmentsFormComponent {
       this.deletedAttachments.add(attachmentId);
     }
     this.deletedAttachmentsChanged.emit(this.deletedAttachments);
+  }
+
+  public getAttachmentTooltip(attachment: AttachmentMetadataModel) {
+    const createdAt = formatDate(attachment.createdAt, 'short', this.locale);
+    let tooltip = $localize`:@@core.edit.attachment.tooltip.added-on-by:Added on ${createdAt} by ${attachment.createdBy}`;
+    const sizeKB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attachment.attachmentSize / 1024);
+    tooltip += '\n' + $localize`:@@core.edit.attachment.tooltip.size:Size: ${sizeKB} KB`;
+    if (attachment.description) {
+      tooltip += '\n' + $localize`:@@core.edit.attachment.tooltip.description:Description: ${attachment.description}`;
+    }
+    return tooltip;
   }
 }

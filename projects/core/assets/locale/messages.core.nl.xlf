@@ -410,6 +410,18 @@
         <source>Add new feature</source>
         <target>Nieuw object toevoegen</target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+        <target>Toegevoegd op <x id="PH" equiv-text="createdAt"/> door <x id="PH_1" equiv-text="attachment.createdBy"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+        <target>Omschrijving: <x id="PH" equiv-text="attachment.description"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+        <target>Bestandsgrootte: <x id="PH" equiv-text="sizeKB"/> KB</target>
+      </trans-unit>
       <trans-unit id="core.edit.attachments" datatype="html">
         <source>Attachments</source>
         <target>Bijlagen</target>

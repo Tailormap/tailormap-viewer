@@ -10,7 +10,11 @@
       }
       @for (attachment of attachments; track attachment) {
         <div class="attachment-row">
-          <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
+          <a [href]="attachment.url"
+             matTooltipClass="tooltip-pre-line"
+             [matTooltip]="getAttachmentTooltip(attachment)"
+             [class.deleted]="deletedAttachments.has(attachment.attachmentId)"
+             target="_blank">{{ attachment.fileName }}</a>
           @if (deletedAttachments.has(attachment.attachmentId)) {
             <button mat-icon-button
                     (click)="onDeleteAttachment(attachment.attachmentId)"

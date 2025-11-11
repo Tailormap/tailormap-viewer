@@ -308,6 +308,15 @@
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+      </trans-unit>
       <trans-unit id="core.edit.attachments" datatype="html">
         <source>Attachments</source>
       </trans-unit>
@@ -862,6 +871,7 @@
       </trans-unit>
       <trans-unit id="core.toc.edit-layer" datatype="html">
         <source>Edit layer</source>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
