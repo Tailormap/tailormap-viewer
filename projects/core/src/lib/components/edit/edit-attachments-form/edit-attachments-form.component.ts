@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output, ViewChild, ElementRef } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
 import { formatDate } from '@angular/common';
 
@@ -14,16 +14,31 @@ export class EditAttachmentsFormComponent {
 
   public _attachmentAttributes: AttachmentAttributeModel[] = [];
 
+  @ViewChild('fileInput')
+  private fileInput?: ElementRef<HTMLInputElement>;
+
   @Input({ required: true })
   public set attachmentAttributes(attachmentAttributes: AttachmentAttributeModel[] | undefined) {
     this._attachmentAttributes = attachmentAttributes || [];
+
   }
   public get attachmentAttributes(): AttachmentAttributeModel[] {
     return this._attachmentAttributes;
   }
 
+  private _attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string }>> | null = null;
+
   @Input()
-  public attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string}>> | null = null;
+  public set attachmentsByAttributeName(value: Map<string, Array<AttachmentMetadataModel & { url: string }>> | null) {
+    this._attachmentsByAttributeName = value;
+    if (this.fileInput?.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
+  }
+
+  public get attachmentsByAttributeName(): Map<string, Array<AttachmentMetadataModel & { url: string }>> | null {
+    return this._attachmentsByAttributeName;
+  }
 
   @Input()
   public newAttachmentsByAttributeName: Map<string, File[]> = new Map();
