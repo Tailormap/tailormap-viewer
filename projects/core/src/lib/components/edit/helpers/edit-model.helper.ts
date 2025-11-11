@@ -25,7 +25,7 @@ export class EditModelHelper {
         .filter(a => formFields.has(a.name))
         .sort(ArrayHelper.getArraySorter('name', orderedFormFields))
       : [...layerDetails.attributes];
-    const attributesEditFormFields = attributes
+    return attributes
       .filter(attribute => !AttributeTypeHelper.isGeometryType(attribute.type))
       .map<ViewerEditFormFieldModel>(attribute => {
         const attributeValue = feature.attributes[attribute.name];
@@ -57,18 +57,6 @@ export class EditModelHelper {
           }),
         };
     });
-
-    const attachmentEditFormFields = layerDetails.attachmentAttributes
-      .map<ViewerEditFormFieldModel>(attachmentAttribute => {
-        return  {
-          name: attachmentAttribute.attributeName,
-          label: attachmentAttribute.attributeName,
-          value: undefined,
-          type: FormFieldTypeEnum.FILE,
-        };
-      });
-
-    return [ ...attributesEditFormFields, ...attachmentEditFormFields ];
   }
 
   private static getFormFieldType(attribute: AttributeModel): FormFieldTypeEnum {

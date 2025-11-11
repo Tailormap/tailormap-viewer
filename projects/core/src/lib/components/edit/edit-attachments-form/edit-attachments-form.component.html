@@ -1,0 +1,48 @@
+@if (attachmentAttributes.length > 0) {
+  <div class="attachment-wrapper">
+    <h2>Bijlagen</h2>
+    @for(attribute of attachmentAttributes; track attribute) {
+      @let attachments = attachmentsByAttributeName?.get(attribute.attributeName) || [];
+      @let newAttachments = newAttachmentsByAttributeName.get(attribute.attributeName) || [];
+      @let totalCount = attachments.length + newAttachments.length;
+      @if (totalCount > 0) {
+        <h2>{{ attribute.attributeName }} ({{ totalCount }})</h2>
+      }
+      @for (attachment of attachments; track attachment) {
+        <div class="attachment-row">
+          <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
+          <!-- input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)" -->
+          @if (deletedAttachments.has(attachment.attachmentId)) {
+            <button mat-icon-button
+                    (click)="onDeleteAttachment(attachment.attachmentId)"
+                    tmTooltip="Bijlage behouden">
+                <mat-icon svgIcon="reset"></mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button
+                    color="warn"
+                    (click)="onDeleteAttachment(attachment.attachmentId)"
+                    tmTooltip="Verwijder bijlage">
+              <mat-icon svgIcon="remove" color="warn"></mat-icon>
+            </button>
+          }
+        </div>
+      }
+      @for (attachment of newAttachments; track attachment) {
+        <div class="attachment-row">
+          <div>{{ attachment.name }}</div>
+          <button mat-icon-button
+                  color="warn"
+                  (click)="onRemoveNewAttachment(newAttachments, attribute.attributeName, attachment.name)"
+                  tmTooltip="Verwijder bijlage">
+            <mat-icon svgIcon="remove" color="warn"></mat-icon>
+          </button>
+        </div>
+      }
+      <button class="add-attachment-button" mat-flat-button color="accent" (click)="fileInput.click()">
+        {{ attribute.attributeName }} toevoegen
+      </button>
+      <input type="file" class="hidden" #fileInput multiple [accept]="attribute.mimeType" (change)="onFileChange(attribute.attributeName, $event)">
+    }
+  </div>
+}

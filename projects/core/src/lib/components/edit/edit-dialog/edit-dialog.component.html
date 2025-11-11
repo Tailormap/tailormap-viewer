@@ -14,14 +14,17 @@
     <div class="edit-form">
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
-        <tm-edit-form [feature]="{ feature: currentFeature.feature, details: layerDetails.details, columnMetadata: currentFeature.columnMetadata }"
+        @let editFeature = { feature: currentFeature.feature, details: layerDetails.details, columnMetadata: currentFeature.columnMetadata };
+        <tm-edit-form [feature]="editFeature"
                       (featureAttributeChanged)="featureChanged($event)"
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"
-                      [attachmentsByAttributeName]="attachments$ | async"
-                      [newAttachments]="newAttachments"
-                      (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
-                      (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-form>
+        <tm-edit-attachments-form [feature]="editFeature"
+                                  [attachmentsByAttributeName]="attachments$ | async"
+                                  [newAttachmentsByAttributeName]="newAttachments"
+                                  (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
+                                  (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
+        ></tm-edit-attachments-form>
       </div>
       <div class="buttons">
         @if (isCreateFeature$ | async) {

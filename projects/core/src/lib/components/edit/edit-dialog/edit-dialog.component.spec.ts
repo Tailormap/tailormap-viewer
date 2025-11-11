@@ -42,7 +42,7 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
         provide: ApplicationLayerService,
         useValue: getLayerDetails ? { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } : {},
       },
-      { provide: EditFeatureService, useValue: {} },
+      { provide: EditFeatureService, useValue: { listAttachments$: () => [] } },
       getMapServiceMock().provider,
       provideMockStore({ initialState: {
         [editStateKey]: { ...initialEditState },

@@ -1,0 +1,48 @@
+.hidden {
+  display: none;
+}
+
+.attachment-wrapper {
+  padding: 16px;
+}
+
+.attachment-wrapper {
+  padding-top: 0;
+}
+
+.attachment-wrapper h2 {
+  color: var(--primary-color);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.deleted {
+  text-decoration: line-through;
+}
+
+.attachment-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.attachment-row + .attachment-row {
+  margin-top: 8px;
+}
+
+.attachment-row:last-of-type {
+  border-bottom: none;
+}
+
+.attachment-row a,
+.attachment-row > div {
+  flex: 1;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-attachment-button {
+  margin-top: 16px;
+}

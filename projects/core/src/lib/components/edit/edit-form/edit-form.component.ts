@@ -2,20 +2,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
-import {
-  AttachmentMetadataModel, AuthenticatedUserService, ColumnMetadataModel, FeatureModel, LayerDetailsModel,
-  SecurityModel,
-} from '@tailormap-viewer/api';
+import { AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { DateTime } from 'luxon';
-
-interface EditFormInput {
-  feature: FeatureModel | undefined;
-  details: LayerDetailsModel | undefined;
-  columnMetadata: ColumnMetadataModel[];
-  isNewFeature?: boolean;
-}
+import { EditFormInput } from '../models/edit-form-input.model';
 
 @Component({
   selector: 'tm-edit-form',
@@ -51,23 +42,9 @@ export class EditFormComponent implements OnDestroy {
   @Output()
   public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
 
-  @Input()
-  public attachmentsByAttributeName: Map<string, Array<AttachmentMetadataModel & { url: string}>> | null = null;
-
-  @Input()
-  public newAttachments: Map<string, File[]> = new Map();
-
-  @Output()
-  public newAttachmentsChanged = new EventEmitter<{ attribute: string; files: File[] }>();
-
-  @Output()
-  public deletedAttachmentsChanged = new EventEmitter<Set<string>>();
-
   public form: FormGroup = new FormGroup({});
 
   public layerId: string = '';
-
-  public deletedAttachments = new Set<string>();
 
   constructor() {
     this.userDetails$ = this.authenticatedUserService.getUserDetails$();
@@ -141,24 +118,5 @@ export class EditFormComponent implements OnDestroy {
       throw new Error(`Control with name ${name} not found`);
     }
     return control as FormControl;
-  }
-
-  public onFileChange(attribute: string, $event: Event) {
-    const target = $event.target as HTMLInputElement;
-    this.newAttachmentsChanged.emit({ attribute, files: target.files ? Array.from(target.files) : [] });
-  }
-
-  public onRemoveNewAttachment(fileList: File[], attribute: string, attachmentName: string) {
-    const newFileList = fileList.filter(file => file.name !== attachmentName);
-    this.newAttachmentsChanged.emit({ attribute, files: newFileList });
-  }
-
-  public onDeleteAttachment(attachmentId: string) {
-    if (this.deletedAttachments.has(attachmentId)) {
-      this.deletedAttachments.delete(attachmentId);
-    } else {
-      this.deletedAttachments.add(attachmentId);
-    }
-    this.deletedAttachmentsChanged.emit(this.deletedAttachments);
   }
 }

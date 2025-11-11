@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 
-describe('EditFormComponent', () => {
+describe('EditAttachmentsFormComponent', () => {
 
   test('should render', async () => {
     const featureAttributeChanged = jest.fn();
