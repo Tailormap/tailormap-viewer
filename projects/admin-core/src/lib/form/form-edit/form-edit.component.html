@@ -18,6 +18,6 @@
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(form)" i18n="@@admin-core.common.delete">Delete</button>
-    <button mat-flat-button routerLink="/admin/forms" i18n="@@admin-core.common.close">Close</button>
+    <button mat-flat-button tmCancelCloseButton routerLink="/admin/forms" i18n="@@admin-core.common.close">Close</button>
   </div>
 }
