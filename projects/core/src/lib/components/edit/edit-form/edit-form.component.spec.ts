@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 
-describe('EditAttachmentsFormComponent', () => {
+describe('EditFormComponent', () => {
 
   test('should render', async () => {
     const featureAttributeChanged = jest.fn();
@@ -22,13 +22,15 @@ describe('EditAttachmentsFormComponent', () => {
           },
         },
       ],
-      inputs: { feature: {
-        feature: getFeatureModel(),
-        columnMetadata: [
-          { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-          { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-          { name: 'fid', alias: 'fid', type: AttributeType.STRING },
-        ],
+      inputs: { input: {
+        feature: {
+          feature: getFeatureModel(),
+          columnMetadata: [
+            { name: 'prop', alias: 'Property', type: AttributeType.STRING },
+            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+            { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+          ],
+        },
         details: getLayerDetailsModel({
           editable: true,
           attributes: [
@@ -52,8 +54,15 @@ describe('EditAttachmentsFormComponent', () => {
       providers: [
         AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
       ],
-      inputs: { feature: {
-          feature: getFeatureModel(),
+      inputs: { input: {
+          feature: {
+            feature: getFeatureModel(),
+            columnMetadata: [
+              { name: 'prop', alias: 'Property', type: AttributeType.STRING },
+              { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+              { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+            ],
+          },
           columnMetadata: [
             { name: 'prop', alias: 'Property', type: AttributeType.STRING },
             { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
