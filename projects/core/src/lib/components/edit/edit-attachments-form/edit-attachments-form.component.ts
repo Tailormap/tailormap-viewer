@@ -42,11 +42,6 @@ export class EditAttachmentsFormComponent {
     this.newAttachmentsChanged.emit({ attribute, files: target.files ? Array.from(target.files) : [] });
   }
 
-  public onRemoveNewAttachment(fileList: File[], attribute: string, attachmentName: string) {
-    const newFileList = fileList.filter(file => file.name !== attachmentName);
-    this.newAttachmentsChanged.emit({ attribute, files: newFileList });
-  }
-
   public onDeleteAttachment(attachmentId: string) {
     if (this.deletedAttachments.has(attachmentId)) {
       this.deletedAttachments.delete(attachmentId);

@@ -1,6 +1,6 @@
 @if (attachmentAttributes.length > 0) {
   <div class="attachment-wrapper">
-    <h2>Bijlagen</h2>
+    <h2 i18n="@@core.edit.attachments">Attachments</h2>
     @for(attribute of attachmentAttributes; track attribute) {
       @let attachments = attachmentsByAttributeName?.get(attribute.attributeName) || [];
       @let newAttachments = newAttachmentsByAttributeName.get(attribute.attributeName) || [];
@@ -11,18 +11,19 @@
       @for (attachment of attachments; track attachment) {
         <div class="attachment-row">
           <a [href]="attachment.url" [class.deleted]="deletedAttachments.has(attachment.attachmentId)" target="_blank">{{ attachment.fileName }}</a>
-          <!-- input type="text" placeholder="Description" (change)="onFileDescriptionChange(item.name, $event)" -->
           @if (deletedAttachments.has(attachment.attachmentId)) {
             <button mat-icon-button
                     (click)="onDeleteAttachment(attachment.attachmentId)"
-                    tmTooltip="Bijlage behouden">
+                    i18n-tmTooltip="@@core.edit.keep-attachment"
+                    tmTooltip="Keep attachment">
                 <mat-icon svgIcon="reset"></mat-icon>
             </button>
           } @else {
             <button mat-icon-button
                     color="warn"
                     (click)="onDeleteAttachment(attachment.attachmentId)"
-                    tmTooltip="Verwijder bijlage">
+                    i18n-tmTooltip="@@core.edit.delete-attachment"
+                    tmTooltip="Remove attachment">
               <mat-icon svgIcon="remove" color="warn"></mat-icon>
             </button>
           }
@@ -32,15 +33,15 @@
         <div class="attachment-row">
           <div>{{ attachment.name }}</div>
           <button mat-icon-button
-                  color="warn"
-                  (click)="onRemoveNewAttachment(newAttachments, attribute.attributeName, attachment.name)"
-                  tmTooltip="Verwijder bijlage">
-            <mat-icon svgIcon="remove" color="warn"></mat-icon>
+                  (click)="fileInput.click()"
+                  i18n-tmTooltip="@@core.edit.new-attachment"
+                  tmTooltip="New">
+            <mat-icon svgIcon="note_add"></mat-icon>
           </button>
         </div>
       }
-      <button class="add-attachment-button" mat-flat-button color="accent" (click)="fileInput.click()">
-        {{ attribute.attributeName }} toevoegen
+      <button class="select-attachment-button" mat-flat-button color="primary" (click)="fileInput.click()">
+        <ng-container i18n="@@core.edit.select-attachments">Select {{ attribute.attributeName }}</ng-container>
       </button>
       <input type="file" class="hidden" #fileInput multiple [accept]="attribute.mimeType" (change)="onFileChange(attribute.attributeName, $event)">
     }

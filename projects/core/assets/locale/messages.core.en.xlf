@@ -308,8 +308,14 @@
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
       </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -341,6 +347,12 @@
       <trans-unit id="core.edit.hover-to-highlight" datatype="html">
         <source>Hover over the buttons to highlight the feature on the map</source>
       </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
+      </trans-unit>
+      <trans-unit id="core.edit.new-attachment" datatype="html">
+        <source>New</source>
+      </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
       </trans-unit>
@@ -349,6 +361,9 @@
       </trans-unit>
       <trans-unit id="core.edit.require-login-tooltip" datatype="html">
         <source>You must be logged in to edit.</source>
+      </trans-unit>
+      <trans-unit id="core.edit.select-attachments" datatype="html">
+        <source>Select <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></source>
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>

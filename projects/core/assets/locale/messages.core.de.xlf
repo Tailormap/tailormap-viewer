@@ -410,9 +410,17 @@
         <source>Add new feature</source>
         <target>Neues Feature hinzufügen</target>
       </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+        <target>Anhänge</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Feature-Erstellung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
+        <target>Anhang entfernen</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -454,6 +462,14 @@
         <source>Hover over the buttons to highlight the feature on the map</source>
         <target>Bewege den Mauszeiger über die Schaltflächen, um das Objekt auf der Karte hervorzuheben</target>
       </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
+        <target>Anhang behalten</target>
+      </trans-unit>
+      <trans-unit id="core.edit.new-attachment" datatype="html">
+        <source>New</source>
+        <target>Neu</target>
+      </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
         <target>Es gibt keine bearbeitbaren Ebenen. Aktiviere eine Ebene, um mit der Bearbeitung zu beginnen.</target>
@@ -465,6 +481,10 @@
       <trans-unit id="core.edit.require-login-tooltip" datatype="html">
         <source>You must be logged in to edit.</source>
         <target>Du musst angemeldet sein, um zu bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="core.edit.select-attachments" datatype="html">
+        <source>Select <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></source>
+        <target>Wählen Sie <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></target>
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>

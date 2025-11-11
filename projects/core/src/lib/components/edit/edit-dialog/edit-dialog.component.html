@@ -29,7 +29,7 @@
       <div class="buttons">
         @if (isCreateFeature$ | async) {
           <button (click)="add(layerDetails.layer.id)"
-                  [disabled]="!formValid || creatingSavingFeature()"
+                  [disabled]="addOrSaveDisabled()"
                   color="primary"
                   mat-flat-button>
             @if (creatingSavingFeature()) {
@@ -40,7 +40,7 @@
           </button>
         } @else {
           <button (click)="save(layerDetails.layer.id, currentFeature)"
-                  [disabled]="!formValid || creatingSavingFeature()"
+                  [disabled]="addOrSaveDisabled()"
                   color="primary"
                   mat-flat-button>
             @if (creatingSavingFeature()) {
