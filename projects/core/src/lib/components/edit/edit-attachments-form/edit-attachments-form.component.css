@@ -20,6 +20,10 @@
   text-decoration: line-through;
 }
 
+.size-exceeded {
+  color: var(--error-color);
+}
+
 .attachment-row {
   display: flex;
   align-items: center;

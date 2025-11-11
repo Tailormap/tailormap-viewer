@@ -9,7 +9,7 @@ import {
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
 import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
 import {
-  AttachmentMetadataModel, BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService,
+  AttachmentMetadataModel, BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, LayerDetailsModel, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
@@ -188,7 +188,8 @@ export class EditDialogComponent {
     return !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
   }
 
-  public save(layerId: string, currentFeature: FeatureWithMetadataModel) {
+  public save(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel })  {
+    const currentFeature = info.feature;
     const updatedFeature = this.updatedAttributes;
     if (!updatedFeature && !this.attachmentsUpdated()) {
       this.resetChanges();
@@ -205,7 +206,7 @@ export class EditDialogComponent {
           }
           if (updatedFeature === null) {
             // Only attachments updated
-            return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid)
+            return this.uploadAttachments$(viewerId, layerId, currentFeature.feature.__fid, info.details)
               .pipe(
                 concatMap(() => this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds)),
                 concatMap(() => {
@@ -220,7 +221,7 @@ export class EditDialogComponent {
               if (!result) {
                 return of(result);
               }
-              return this.uploadAttachments$(viewerId, layerId, result.__fid).pipe(
+              return this.uploadAttachments$(viewerId, layerId, result.__fid, info.details).pipe(
                 concatMap(() => this.deleteAttachments$(viewerId, layerId, this.deletedAttachmentIds)),
                 map(() => result),
               );
@@ -244,7 +245,7 @@ export class EditDialogComponent {
       });
   }
 
-  public add(layerId: string) {
+  public add(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel }) {
     const updatedFeature = this.updatedAttributes;
     if (!updatedFeature) {
       return;
@@ -265,7 +266,7 @@ export class EditDialogComponent {
                    if (!result.success || !result.feature || !this.attachmentsUpdated()) {
                      return of(result);
                    } else {
-                     return this.uploadAttachments$(viewerId, layerId, result.feature.__fid).pipe(
+                     return this.uploadAttachments$(viewerId, layerId, result.feature.__fid, info.details).pipe(
                        map(() => result));
                    }
                  }));
@@ -286,10 +287,17 @@ export class EditDialogComponent {
         });
   }
 
-  private uploadAttachments$(viewerId: string, layerId: string, featureId: string) {
+  private uploadAttachments$(viewerId: string, layerId: string, featureId: string, details: LayerDetailsModel) {
     const uploads = Array.from(this.newAttachments.entries()).flatMap(([ attribute, files ]) =>
       files.map(file => ({ attribute, file })),
-    );
+    ).filter(({ attribute, file }) => {
+      const attachmentAttribute = details.attachmentAttributes.find(att => att.attributeName === attribute);
+      if (!attachmentAttribute) {
+        return false;
+      }
+      return !(attachmentAttribute.maxAttachmentSize && file.size > attachmentAttribute.maxAttachmentSize);
+
+    });
     if (uploads.length === 0) {
       return of(true);
     }

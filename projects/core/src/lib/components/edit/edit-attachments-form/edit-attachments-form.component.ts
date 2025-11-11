@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
-import { EditFormInput } from '../models/edit-form-input.model';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -13,17 +12,14 @@ import { formatDate } from '@angular/common';
 export class EditAttachmentsFormComponent {
   private locale = inject(LOCALE_ID);
 
-  private _feature: EditFormInput | undefined;
-
-  public attachmentAttributes: AttachmentAttributeModel[] = [];
+  public _attachmentAttributes: AttachmentAttributeModel[] = [];
 
   @Input({ required: true })
-  public set feature(feature: EditFormInput | undefined) {
-    this._feature = feature;
-    this.attachmentAttributes = feature?.details?.attachmentAttributes || [];
+  public set attachmentAttributes(attachmentAttributes: AttachmentAttributeModel[] | undefined) {
+    this._attachmentAttributes = attachmentAttributes || [];
   }
-  public get feature(): EditFormInput | undefined {
-    return this._feature;
+  public get attachmentAttributes(): AttachmentAttributeModel[] {
+    return this._attachmentAttributes;
   }
 
   @Input()
@@ -63,5 +59,11 @@ export class EditAttachmentsFormComponent {
       tooltip += '\n' + $localize`:@@core.edit.attachment.tooltip.description:Description: ${attachment.description}`;
     }
     return tooltip;
+  }
+
+  public getMaxSizeExceededTooltip(attribute: AttachmentAttributeModel, attachment: File) {
+    const maxSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attribute.maxAttachmentSize! / (1024 * 1024));
+    const fileSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attachment.size / (1024 * 1024));
+    return $localize`:@@core.edit.attachment.tooltip.max-size-exceeded:File size (${fileSizeMB} MB) exceeds maximum allowed size of ${maxSizeMB} MB`;
   }
 }

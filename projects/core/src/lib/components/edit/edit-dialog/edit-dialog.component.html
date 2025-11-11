@@ -14,12 +14,12 @@
     <div class="edit-form">
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
-        @let editFeature = { feature: currentFeature.feature, details: layerDetails.details, columnMetadata: currentFeature.columnMetadata };
-        <tm-edit-form [feature]="editFeature"
+        @let editInput = { feature: currentFeature, details: layerDetails.details };
+        <tm-edit-form [input]="editInput"
                       (featureAttributeChanged)="featureChanged($event)"
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"
         ></tm-edit-form>
-        <tm-edit-attachments-form [feature]="editFeature"
+        <tm-edit-attachments-form [attachmentAttributes]="editInput.details.attachmentAttributes"
                                   [attachmentsByAttributeName]="attachments$ | async"
                                   [newAttachmentsByAttributeName]="newAttachments"
                                   (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
@@ -28,7 +28,7 @@
       </div>
       <div class="buttons">
         @if (isCreateFeature$ | async) {
-          <button (click)="add(layerDetails.layer.id)"
+          <button (click)="add(layerDetails.layer.id, editInput)"
                   [disabled]="addOrSaveDisabled()"
                   color="primary"
                   mat-flat-button>
@@ -39,7 +39,7 @@
             }
           </button>
         } @else {
-          <button (click)="save(layerDetails.layer.id, currentFeature)"
+          <button (click)="save(layerDetails.layer.id, editInput)"
                   [disabled]="addOrSaveDisabled()"
                   color="primary"
                   mat-flat-button>

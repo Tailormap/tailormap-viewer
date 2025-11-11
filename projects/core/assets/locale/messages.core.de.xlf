@@ -418,6 +418,10 @@
         <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
         <target>Beschreibung: <x id="PH" equiv-text="attachment.description"/></target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+        <target>Dateigröße (<x id="PH" equiv-text="fileSizeMB"/> MB) überschreitet die maximal zulässige Größe von <x id="PH_1" equiv-text="maxSizeMB"/> MB</target>
+      </trans-unit>
       <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
         <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
         <target>Größe: <x id="PH" equiv-text="sizeKB"/> KB</target>

@@ -314,6 +314,9 @@
       <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
         <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+      </trans-unit>
       <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
         <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
       </trans-unit>

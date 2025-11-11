@@ -418,6 +418,10 @@
         <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
         <target>Omschrijving: <x id="PH" equiv-text="attachment.description"/></target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+        <target>Bestandsgrootte (<x id="PH" equiv-text="fileSizeMB"/> MB) is groter dan de maximaal toegestane <x id="PH_1" equiv-text="maxSizeMB"/> MB</target>
+      </trans-unit>
       <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
         <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
         <target>Bestandsgrootte: <x id="PH" equiv-text="sizeKB"/> KB</target>
@@ -1161,6 +1165,7 @@
       <trans-unit id="core.toc.edit-layer" datatype="html">
         <source>Edit layer</source>
         <target>Laag bewerken</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

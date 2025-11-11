@@ -1,8 +1,8 @@
-import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
+import { LayerDetailsModel } from '@tailormap-viewer/api';
+import { FeatureWithMetadataModel } from './feature-with-metadata.model';
 
 export interface EditFormInput {
-  feature: FeatureModel | undefined;
+  feature: FeatureWithMetadataModel | undefined;
   details: LayerDetailsModel | undefined;
-  columnMetadata: ColumnMetadataModel[];
   isNewFeature?: boolean;
 }
