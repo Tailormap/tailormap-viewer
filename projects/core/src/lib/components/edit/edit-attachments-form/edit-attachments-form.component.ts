@@ -76,9 +76,14 @@ export class EditAttachmentsFormComponent {
     return tooltip;
   }
 
-  public getMaxSizeExceededTooltip(attribute: AttachmentAttributeModel, attachment: File) {
-    const maxSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attribute.maxAttachmentSize! / (1024 * 1024));
-    const fileSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attachment.size / (1024 * 1024));
-    return $localize`:@@core.edit.attachment.tooltip.max-size-exceeded:File size (${fileSizeMB} MB) exceeds maximum allowed size of ${maxSizeMB} MB`;
+  public getNewAttachmentTooltip(attribute: AttachmentAttributeModel, file: File, sizeExceeded: boolean) {
+    if (sizeExceeded) {
+      const maxSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(attribute.maxAttachmentSize! / (1024 * 1024));
+      const fileSizeMB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(file.size / (1024 * 1024));
+      return $localize`:@@core.edit.attachment.tooltip.max-size-exceeded:File size (${fileSizeMB} MB) exceeds maximum allowed size of ${maxSizeMB} MB`;
+    } else {
+      const fileSizeKB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(file.size / 1024);
+      return `${file.name} (${fileSizeKB} KB)`;
+    }
   }
 }

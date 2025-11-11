@@ -36,7 +36,7 @@
       @for (attachment of newAttachments; track attachment) {
         <div class="attachment-row">
           @let sizeExceeded = attribute.maxAttachmentSize ? attachment.size > attribute.maxAttachmentSize : false;
-          <div [class.size-exceeded]="sizeExceeded" [matTooltip]="getMaxSizeExceededTooltip(attribute, attachment)">{{ attachment.name }} {{ attachment.size }} </div>
+          <div [class.size-exceeded]="sizeExceeded" [matTooltip]="getNewAttachmentTooltip(attribute, attachment, sizeExceeded)">{{ attachment.name }}</div>
           <button mat-icon-button
                   (click)="fileInput.click()"
                   i18n-tmTooltip="@@core.edit.new-attachment"
