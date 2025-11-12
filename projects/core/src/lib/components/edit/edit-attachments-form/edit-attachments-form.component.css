@@ -54,3 +54,11 @@
 .select-attachment-button {
   margin-top: 16px;
 }
+
+mat-spinner:first-child {
+  margin-top: 16px;
+}
+
+mat-spinner + button {
+  margin-top: 16px;
+}
