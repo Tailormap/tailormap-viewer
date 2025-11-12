@@ -66,6 +66,7 @@ export class EditDialogComponent {
   public newAttachments = new Map<string, File[]>();
   private deletedAttachmentIds = new Set<string>();
   public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
+  public loadingAttachments = signal(false);
 
   public formValid: boolean = false;
 
@@ -108,6 +109,9 @@ export class EditDialogComponent {
         this.resetChanges();
       });
     this.attachments$ = this.currentFeature$.pipe(
+      tap(() => {
+        this.loadingAttachments.set(true);
+      }),
       switchMap(feature => {
         if (!feature || feature.feature.__fid === 'new') {
           return of(new Map());
@@ -132,6 +136,9 @@ export class EditDialogComponent {
               ),
             );
         }
+      }),
+      tap(() => {
+        this.loadingAttachments.set(false);
       }),
     );
 

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output, ViewChild, ElementRef } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
 import { formatDate } from '@angular/common';
-import { HtmlHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-edit-attachments-form',
@@ -41,6 +40,9 @@ export class EditAttachmentsFormComponent {
   public get attachmentsByAttributeName(): Map<string, Array<AttachmentMetadataModel & { url: string }>> | null {
     return this._attachmentsByAttributeName;
   }
+
+  @Input()
+  public loadingAttachments = false;
 
   @Input()
   public newAttachmentsByAttributeName: Map<string, File[]> = new Map();
