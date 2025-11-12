@@ -10,10 +10,14 @@
   padding-top: 0;
 }
 
-.attachment-wrapper h2 {
+.attachment h2 {
   color: var(--primary-color);
-  padding-top: 8px;
+  padding-top: 16px;
   padding-bottom: 8px;
+}
+
+.attachment:first-of-type h2 {
+  padding-top: 8px;
 }
 
 .deleted {

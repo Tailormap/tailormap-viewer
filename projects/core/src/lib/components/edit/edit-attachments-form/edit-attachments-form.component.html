@@ -1,54 +1,56 @@
 @if (attachmentAttributes.length > 0) {
-  <div class="attachment-wrapper">
+  <div class="attachment-wrapper" #attachmentsSection>
     <h2 i18n="@@core.edit.attachments">Attachments</h2>
     @for(attribute of attachmentAttributes; track attribute) {
-      @let attachments = attachmentsByAttributeName?.get(attribute.attributeName) || [];
-      @let newAttachments = newAttachmentsByAttributeName.get(attribute.attributeName) || [];
-      @let totalCount = attachments.length + newAttachments.length;
-      @if (totalCount > 0) {
-        <h2>{{ attribute.attributeName }} ({{ totalCount }})</h2>
-      }
-      @for (attachment of attachments; track attachment) {
-        <div class="attachment-row">
-          <a [href]="attachment.url"
-             matTooltipClass="tooltip-pre-line"
-             [matTooltip]="getAttachmentTooltip(attachment)"
-             [class.deleted]="deletedAttachments.has(attachment.attachmentId)"
-             target="_blank">{{ attachment.fileName }}</a>
-          @if (deletedAttachments.has(attachment.attachmentId)) {
+      <div class="attachment">
+        @let attachments = attachmentsByAttributeName?.get(attribute.attributeName) || [];
+        @let newAttachments = newAttachmentsByAttributeName.get(attribute.attributeName) || [];
+        @let totalCount = attachments.length + newAttachments.length;
+        @if (totalCount > 0) {
+          <h2>{{ attribute.attributeName }} ({{ totalCount }})</h2>
+        }
+        @for (attachment of attachments; track attachment) {
+          <div class="attachment-row">
+            <a [href]="attachment.url"
+               matTooltipClass="tooltip-pre-line"
+               [matTooltip]="getAttachmentTooltip(attachment)"
+               [class.deleted]="deletedAttachments.has(attachment.attachmentId)"
+               target="_blank">{{ attachment.fileName }}</a>
+            @if (deletedAttachments.has(attachment.attachmentId)) {
+              <button mat-icon-button
+                      (click)="onDeleteAttachment(attachment.attachmentId)"
+                      i18n-tmTooltip="@@core.edit.keep-attachment"
+                      tmTooltip="Keep attachment">
+                  <mat-icon svgIcon="reset"></mat-icon>
+              </button>
+            } @else {
+              <button mat-icon-button
+                      color="warn"
+                      (click)="onDeleteAttachment(attachment.attachmentId)"
+                      i18n-tmTooltip="@@core.edit.delete-attachment"
+                      tmTooltip="Remove attachment">
+                <mat-icon svgIcon="remove" color="warn"></mat-icon>
+              </button>
+            }
+          </div>
+        }
+        @for (attachment of newAttachments; track attachment) {
+          <div class="attachment-row">
+            @let sizeExceeded = attribute.maxAttachmentSize ? attachment.size > attribute.maxAttachmentSize : false;
+            <div [class.size-exceeded]="sizeExceeded" [matTooltip]="getNewAttachmentTooltip(attribute, attachment, sizeExceeded)">{{ attachment.name }}</div>
             <button mat-icon-button
-                    (click)="onDeleteAttachment(attachment.attachmentId)"
-                    i18n-tmTooltip="@@core.edit.keep-attachment"
-                    tmTooltip="Keep attachment">
-                <mat-icon svgIcon="reset"></mat-icon>
+                    (click)="fileInput.click()"
+                    i18n-tmTooltip="@@core.edit.new-attachment"
+                    tmTooltip="New">
+              <mat-icon svgIcon="note_add"></mat-icon>
             </button>
-          } @else {
-            <button mat-icon-button
-                    color="warn"
-                    (click)="onDeleteAttachment(attachment.attachmentId)"
-                    i18n-tmTooltip="@@core.edit.delete-attachment"
-                    tmTooltip="Remove attachment">
-              <mat-icon svgIcon="remove" color="warn"></mat-icon>
-            </button>
-          }
-        </div>
-      }
-      @for (attachment of newAttachments; track attachment) {
-        <div class="attachment-row">
-          @let sizeExceeded = attribute.maxAttachmentSize ? attachment.size > attribute.maxAttachmentSize : false;
-          <div [class.size-exceeded]="sizeExceeded" [matTooltip]="getNewAttachmentTooltip(attribute, attachment, sizeExceeded)">{{ attachment.name }}</div>
-          <button mat-icon-button
-                  (click)="fileInput.click()"
-                  i18n-tmTooltip="@@core.edit.new-attachment"
-                  tmTooltip="New">
-            <mat-icon svgIcon="note_add"></mat-icon>
-          </button>
-        </div>
-      }
-      <button class="select-attachment-button" mat-flat-button color="primary" (click)="fileInput.click()">
-        <ng-container i18n="@@core.edit.select-attachments">Select {{ attribute.attributeName }}</ng-container>
-      </button>
-      <input type="file" class="hidden" #fileInput multiple [accept]="attribute.mimeType" (change)="onFileChange(attribute.attributeName, $event)">
+          </div>
+        }
+        <button class="select-attachment-button" mat-flat-button color="primary" (click)="fileInput.click()">
+          <ng-container i18n="@@core.edit.select-attachments">Select {{ attribute.attributeName }}</ng-container>
+        </button>
+        <input type="file" class="hidden" #fileInput multiple [accept]="attribute.mimeType" (change)="onFileChange(attribute.attributeName, $event)">
+      </div>
     }
   </div>
 }
