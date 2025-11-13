@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output, ViewChild, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, EventEmitter, inject, Input, LOCALE_ID, Output, ViewChildren, QueryList, ElementRef,
+} from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
 import { formatDate } from '@angular/common';
 
@@ -14,8 +16,8 @@ export class EditAttachmentsFormComponent {
 
   public _attachmentAttributes: AttachmentAttributeModel[] = [];
 
-  @ViewChild('attachmentsSection')
-  private attachmentSection?: ElementRef<HTMLDivElement>;
+  @ViewChildren('fileInput')
+  private fileInputs?: QueryList<ElementRef<HTMLInputElement>>;
 
   @Input({ required: true })
   public set attachmentAttributes(attachmentAttributes: AttachmentAttributeModel[] | undefined) {
@@ -31,10 +33,6 @@ export class EditAttachmentsFormComponent {
   @Input()
   public set attachmentsByAttributeName(value: Map<string, Array<AttachmentMetadataModel & { url: string }>> | null) {
     this._attachmentsByAttributeName = value;
-    if (this.attachmentSection?.nativeElement) {
-      this.attachmentSection.nativeElement.querySelectorAll('input')
-        .forEach(input => input.value = '');
-    }
   }
 
   public get attachmentsByAttributeName(): Map<string, Array<AttachmentMetadataModel & { url: string }>> | null {
@@ -48,16 +46,28 @@ export class EditAttachmentsFormComponent {
   public newAttachmentsByAttributeName: Map<string, File[]> = new Map();
 
   @Output()
-  public newAttachmentsChanged = new EventEmitter<{ attribute: string; files: File[] }>();
+  public newAttachmentsChanged = new EventEmitter<Map<string, File[]>>();
 
   @Output()
   public deletedAttachmentsChanged = new EventEmitter<Set<string>>();
 
   public deletedAttachments = new Set<string>();
 
+  private resetFileInputValues() {
+    if (this.fileInputs) {
+      this.fileInputs.forEach(input => input.nativeElement.value = '');
+    }
+  }
+
   public onFileChange(attribute: string, $event: Event) {
     const target = $event.target as HTMLInputElement;
-    this.newAttachmentsChanged.emit({ attribute, files: target.files ? Array.from(target.files) : [] });
+    const files = [
+      ...this.newAttachmentsByAttributeName.get(attribute) || [],
+      ...(target.files ? Array.from(target.files) : []),
+    ];
+    this.newAttachmentsByAttributeName.set(attribute, files);
+    this.newAttachmentsChanged.emit(this.newAttachmentsByAttributeName);
+    this.resetFileInputValues();
   }
 
   public onDeleteAttachment(attachmentId: string) {
@@ -89,5 +99,11 @@ export class EditAttachmentsFormComponent {
       const fileSizeKB = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 1 }).format(file.size / 1024);
       return `${file.name} (${fileSizeKB} KB)`;
     }
+  }
+
+  public onRemoveNewAttachment(attribute: AttachmentAttributeModel, attachment: File) {
+    const files = this.newAttachmentsByAttributeName.get(attribute.attributeName)!.filter(f => f !== attachment);
+    this.newAttachmentsByAttributeName.set(attribute.attributeName, files);
+    this.newAttachmentsChanged.emit(this.newAttachmentsByAttributeName);
   }
 }

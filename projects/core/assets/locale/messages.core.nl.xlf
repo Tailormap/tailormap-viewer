@@ -482,10 +482,6 @@
         <source>Keep attachment</source>
         <target>Bijlage behouden</target>
       </trans-unit>
-      <trans-unit id="core.edit.new-attachment" datatype="html">
-        <source>New</source>
-        <target>Nieuw</target>
-      </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
         <target>Er zijn geen bewerkbare lagen. Activeer een laag om te beginnen met bewerken.</target>

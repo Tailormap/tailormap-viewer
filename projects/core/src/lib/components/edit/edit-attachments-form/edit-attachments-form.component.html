@@ -42,10 +42,11 @@
             @let sizeExceeded = attribute.maxAttachmentSize ? attachment.size > attribute.maxAttachmentSize : false;
             <div [class.size-exceeded]="sizeExceeded" [matTooltip]="getNewAttachmentTooltip(attribute, attachment, sizeExceeded)">{{ attachment.name }}</div>
             <button mat-icon-button
-                    (click)="fileInput.click()"
-                    i18n-tmTooltip="@@core.edit.new-attachment"
-                    tmTooltip="New">
-              <mat-icon svgIcon="note_add"></mat-icon>
+                    color="warn"
+                    (click)="onRemoveNewAttachment(attribute, attachment)"
+                    i18n-tmTooltip="@@core.edit.delete-attachment"
+                    tmTooltip="Remove attachment">
+              <mat-icon svgIcon="remove" color="warn"></mat-icon>
             </button>
           </div>
         }
