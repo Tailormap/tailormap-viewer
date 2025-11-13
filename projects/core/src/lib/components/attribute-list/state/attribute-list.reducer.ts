@@ -88,6 +88,7 @@ const onLoadDataSuccess = (
         ...data,
         errorMessage: payload.data.errorMessage,
         totalCount: payload.data.totalCount,
+        pageSize: payload.data.pageSize,
         rows: payload.data.rows,
         columns: data.columns.length > 0 ? data.columns : payload.data.columns,
         selectedRowId: undefined,
