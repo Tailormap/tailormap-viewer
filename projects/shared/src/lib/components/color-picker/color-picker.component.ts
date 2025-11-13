@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import {
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject, HostListener,
+} from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -91,6 +93,14 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
 
   @Input()
   public dropdownPosition: PopoverPositionEnum | undefined;
+
+  @HostListener('document:keydown.escape', ['$event'])
+  public onEscapeOnOverlay(e: KeyboardEvent) {
+    if (this.popoverRef?.isOpen) {
+      this.popoverRef?.close();
+      e.stopImmediatePropagation();
+    }
+  }
 
   public pickerOpen = false;
 

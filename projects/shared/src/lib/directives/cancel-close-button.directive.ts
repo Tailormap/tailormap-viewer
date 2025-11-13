@@ -24,6 +24,7 @@ export class CancelCloseButtonDirective {
   public onEscape(event: KeyboardEvent) {
     event.preventDefault();
     event.stopPropagation();
+    event.stopImmediatePropagation();
     if (this.matDialog.openDialogs.length === 0) {
       this.triggerAction();
     }
