@@ -105,6 +105,7 @@ export class AttributeListDataService implements OnDestroy {
           success: true,
           columns: AttributeListDataService.getColumns(response.columnMetadata),
           rows: AttributeListDataService.decorateFeatures(response.features, selectedData),
+          pageSize: response.pageSize || selectedData.pageSize,
         };
       }),
     );
@@ -148,6 +149,7 @@ export class AttributeListDataService implements OnDestroy {
       columns: [],
       success: false,
       errorMessage: message || AttributeListDataService.DEFAULT_ERROR_MESSAGE,
+      pageSize: 0,
     };
   }
 
