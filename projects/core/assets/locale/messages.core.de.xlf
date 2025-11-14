@@ -410,9 +410,33 @@
         <source>Add new feature</source>
         <target>Neues Feature hinzufügen</target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+        <target>Hinzugefügt am <x id="PH" equiv-text="createdAt"/> von <x id="PH_1" equiv-text="attachment.createdBy"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+        <target>Beschreibung: <x id="PH" equiv-text="attachment.description"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+        <target>Dateigröße (<x id="PH" equiv-text="fileSizeMB"/> MB) überschreitet die maximal zulässige Größe von <x id="PH_1" equiv-text="maxSizeMB"/> MB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+        <target>Größe: <x id="PH" equiv-text="sizeKB"/> KB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+        <target>Anhänge</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Feature-Erstellung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
+        <target>Anhang entfernen</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -454,6 +478,10 @@
         <source>Hover over the buttons to highlight the feature on the map</source>
         <target>Bewege den Mauszeiger über die Schaltflächen, um das Objekt auf der Karte hervorzuheben</target>
       </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
+        <target>Anhang behalten</target>
+      </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
         <target>Es gibt keine bearbeitbaren Ebenen. Aktiviere eine Ebene, um mit der Bearbeitung zu beginnen.</target>
@@ -465,6 +493,10 @@
       <trans-unit id="core.edit.require-login-tooltip" datatype="html">
         <source>You must be logged in to edit.</source>
         <target>Du musst angemeldet sein, um zu bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="core.edit.select-attachments" datatype="html">
+        <source>Select <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></source>
+        <target>Wählen Sie <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></target>
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
@@ -481,6 +513,10 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
         <target>Objektaktualisierung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+        <target>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </target>
       </trans-unit>
       <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
@@ -1125,6 +1161,7 @@
       <trans-unit id="core.toc.edit-layer" datatype="html">
         <source>Edit layer</source>
         <target>Ebene bearbeiten</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

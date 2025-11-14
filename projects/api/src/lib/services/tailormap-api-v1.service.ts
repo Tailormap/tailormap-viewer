@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
-  FeatureModel, ConfigResponseModel, SearchResponseModel,
+  FeatureModel, ConfigResponseModel, SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
 import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -189,5 +189,41 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public getLatestUpload$(category: string): Observable<any> {
     return this.httpClient.get<any>(`${TailormapApiConstants.BASE_URL}/uploads/${category}/latest`);
+  }
+
+  private static getAttachmentApiUrl(params: { applicationId: string; layerId: string; featureId: string }): string {
+    return `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.featureId}/attachments`;
+  }
+
+  public addAttachment$(params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    const formData = new FormData();
+    formData.append('attachment', params.file);
+    formData.append('attachmentMetadata', new Blob([JSON.stringify({
+      attributeName: params.attribute,
+      fileName: params.file.name,
+      mimeType: params.file.type,
+      lastModified: params.file.lastModified,
+      description: params.description,
+    })], { type: 'application/json' }));
+    return this.httpClient.post(TailormapApiV1Service.getAttachmentApiUrl(params), formData);
+  }
+
+  public listAttachments$(params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]> {
+    return this.httpClient.get<AttachmentMetadataModel[]>(TailormapApiV1Service.getAttachmentApiUrl(params));
+  }
+
+  public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
+    return `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/attachment/${params.attachmentId}`;
+  }
+
+  public deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return this.httpClient.delete(this.getAttachmentUrl(params));
   }
 }

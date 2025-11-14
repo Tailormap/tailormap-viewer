@@ -90,6 +90,7 @@ export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): La
   featureTypeName: 'test',
   editable: false,
   attributes: [],
+  attachmentAttributes: [],
   ...overrides,
 });
 

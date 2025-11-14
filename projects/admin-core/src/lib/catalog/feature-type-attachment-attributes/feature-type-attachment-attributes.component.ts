@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal } from '@angular/core';
-import { AttachmentAttributeModel } from '@tailormap-admin/admin-api';
+import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs';

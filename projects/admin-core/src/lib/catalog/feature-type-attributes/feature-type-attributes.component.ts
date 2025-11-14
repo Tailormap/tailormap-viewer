@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed, inject } from '@angular/core';
-import { AttachmentAttributeModel, AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AttributeTypeHelper } from "@tailormap-viewer/api";
+import { AttachmentAttributeModel, AttributeTypeHelper } from "@tailormap-viewer/api";
 
 type CheckableAttribute =  'hidden' | 'editable';
 

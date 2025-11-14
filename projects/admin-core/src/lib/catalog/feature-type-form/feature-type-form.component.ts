@@ -3,11 +3,12 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
-  AttachmentAttributeModel, AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
+  AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
 } from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
+import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
