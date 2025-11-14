@@ -259,4 +259,33 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
   }
 
+  public selectNextNode(): FlatTreeModel<T, TypeDef> | null {
+    return this.selectAdjacentNode('next');
+  }
+
+  public selectPreviousNode(): FlatTreeModel<T, TypeDef> | null {
+    return this.selectAdjacentNode('previous');
+  }
+
+  public selectAdjacentNode(direction: 'next' | 'previous'): FlatTreeModel<T, TypeDef> | null {
+    const tree = this.dataSource.value.tree;
+    if (!tree.length) {
+      return null;
+    }
+
+    let currentIdx = tree.findIndex(n => n.id === this.selectedNode.value);
+    if (currentIdx === -1) {
+      return null;
+    }
+
+    let targetIndex = direction === 'next' ? currentIdx + 1 : currentIdx - 1;
+    if (targetIndex < 0 || targetIndex >= tree.length) {
+      return null;
+    }
+
+    const node = tree[targetIndex];
+    this.selectedNode.next(node.id);
+    this.selectionStateChanged(node);
+    return node;
+  }
 }

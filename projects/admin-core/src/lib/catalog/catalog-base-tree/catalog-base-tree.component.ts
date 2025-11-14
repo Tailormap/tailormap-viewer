@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject, HostListener } from '@angular/core';
 import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
@@ -7,6 +7,7 @@ import { selectCatalogLoadError, selectCatalogLoadStatus } from '../state/catalo
 import { map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { expandTree, loadCatalog } from '../state/catalog.actions';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree',
@@ -19,6 +20,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
   private store$ = inject(Store);
   private ngZone = inject(NgZone);
+  private router = inject(Router);
 
 
   public isLoading$: Observable<boolean> = of(false);
@@ -33,6 +35,31 @@ export class CatalogBaseTreeComponent implements OnDestroy {
 
   @Input()
   public scrollToItem?: string | null;
+
+  @HostListener('window:keydown.arrowup', ['$event'])
+  public onArrowUp($event: KeyboardEvent) {
+    $event.preventDefault();
+    const selectedNode = this.treeService.selectPreviousNode();
+    if (selectedNode) {
+      const routerLink = CatalogTreeHelper.getRouterLink(selectedNode);
+      if (routerLink) {
+        this.router.navigateByUrl(routerLink);
+      }
+    }
+  }
+
+  @HostListener('window:keydown.arrowdown', ['$event'])
+  public onArrowDown($event: KeyboardEvent) {
+    console.debug('down');
+    $event.preventDefault();
+    const selectedNode = this.treeService.selectNextNode();
+    if (selectedNode) {
+      const routerLink = CatalogTreeHelper.getRouterLink(selectedNode);
+      if (routerLink) {
+        this.router.navigateByUrl(routerLink);
+      }
+    }
+  }
 
   constructor() {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)
