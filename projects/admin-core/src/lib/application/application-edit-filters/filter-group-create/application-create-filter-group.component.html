@@ -21,7 +21,11 @@
     </mat-selection-list>
     <div class="page-details-actions">
       <tm-admin-save-button label="Create" i18n-label="@@admin-core.common.create" [disabled]="!saveEnabled()" (save)="save()"></tm-admin-save-button>
-      <button mat-flat-button [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'" i18n="@@admin-core.common.cancel">Cancel</button>
+      <button
+        mat-flat-button
+        tmCancelCloseButton
+        [routerLink]="'/admin/applications/application/' + applicationId() + '/filters'"
+        i18n="@@admin-core.common.cancel">Cancel</button>
     </div>
   </div>
 </div>
