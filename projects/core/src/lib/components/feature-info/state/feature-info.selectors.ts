@@ -47,6 +47,7 @@ export const selectFeatureInfoList = createSelector(
         layer,
         sortedAttributes: attributes.sort(ArrayHelper.getArraySorter('key', attributeOrder)),
         geometry: FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature, columnMetadata) || null,
+        attachments: feature.attachments || [],
       });
     });
     return featureInfoModels;

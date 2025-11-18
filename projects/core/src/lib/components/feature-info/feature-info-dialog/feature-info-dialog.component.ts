@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, Signal, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
@@ -17,8 +17,11 @@ import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
-import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
+import {
+  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel, TAILORMAP_API_V1_SERVICE,
+} from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { selectViewerId } from '../../../state';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -32,8 +35,9 @@ export class FeatureInfoDialogComponent {
   public breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
-
+  public viewerId: Signal<string | null> = signal<string | null>(null);
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
   public currentFeature = toSignal(this.store$.select(selectCurrentlySelectedFeature), { initialValue: null });
@@ -63,9 +67,12 @@ export class FeatureInfoDialogComponent {
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
   public attributesCollapsed = signal<boolean>(false);
-  public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attachmentsCollapsed = signal<boolean>(false);
+  public attachmentsToggleIcon = computed(() => this.attachmentsCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor() {
+    this.viewerId = this.store$.selectSignal(selectViewerId);
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.selectedLayer$ = this.store$.select(selectSelectedFeatureInfoLayer);
@@ -138,6 +145,10 @@ export class FeatureInfoDialogComponent {
     this.attributesCollapsed.set(!this.attributesCollapsed());
   }
 
+  public toggleAttachments() {
+    this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
+  }
+
   public editFeature() {
     this.store$.select(selectCurrentFeatureForEdit)
       .pipe(take(1))
@@ -151,5 +162,9 @@ export class FeatureInfoDialogComponent {
         }
       });
 
+  }
+
+  public getAttachmentUrl(layerId: string, attachmentId: string) {
+    return this.api.getAttachmentUrl({ applicationId: this.viewerId()!, layerId, attachmentId });
   }
 }

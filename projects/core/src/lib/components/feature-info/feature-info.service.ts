@@ -71,7 +71,7 @@ export class FeatureInfoService {
             return [];
           }
           const requests$ = [
-            ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails, false, pointerType)),
+            ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails, false, pointerType, true)),
             ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
           ];
           if (cesiumFeatureInfo) {
@@ -155,8 +155,9 @@ export class FeatureInfoService {
     coordinates: [ number, number ],
     applicationId: string,
     resolutions: MapViewDetailsModel,
-    geometryInAttributes=false,
+    geometryInAttributes = false,
     pointerType?: string,
+    withAttachments = false,
   ): Observable<FeatureInfoResponseModel> {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     // meters per pixel * fixed value
@@ -171,6 +172,7 @@ export class FeatureInfoService {
       distance: distance,
       simplify: false,
       geometryInAttributes: geometryInAttributes,
+      withAttachments,
       filter: layerFilter,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({

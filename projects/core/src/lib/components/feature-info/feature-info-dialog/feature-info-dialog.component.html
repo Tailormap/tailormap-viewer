@@ -38,7 +38,7 @@
             <div class="row template-row">
               <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
             </div>
-            <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="toggleIcon()"></mat-icon></div>
+            <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="attributesToggleIcon()"></mat-icon></div>
           }
           <div class="content attributes-list">
             @for (att of feature.sortedAttributes; track att) {
@@ -48,6 +48,24 @@
               </div>
             }
           </div>
+          @if(feature.attachments.length > 0) {
+            <div class="toggle attachments-toggle" (click)="toggleAttachments()">
+              <div class="label">
+                <span i18n="@@core.edit.attachments">Attachments</span>&nbsp;({{feature.attachments.length}})
+              </div>
+              <mat-icon [svgIcon]="attachmentsToggleIcon()"></mat-icon>
+            </div>
+            <div class="content attachments-list" [class.attachments-collapsed]="attachmentsCollapsed()">
+              @for (attachment of feature.attachments; track attachment) {
+                <div class="attachment-row">
+                  <a [href]="getAttachmentUrl(layer.id, attachment.attachmentId)" target="_blank" rel="noopener">
+                    <mat-icon svgIcon="attachment"></mat-icon>
+                    {{attachment.fileName}}
+                  </a>
+                </div>
+              }
+            </div>
+          }
           <div class="buttons">
             <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
             <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>

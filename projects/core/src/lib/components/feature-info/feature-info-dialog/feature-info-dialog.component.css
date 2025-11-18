@@ -120,6 +120,21 @@ tm-feature-info-layer-dropdown {
   display: none;
 }
 
+.attachments-toggle {
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.attachments-toggle .label {
+  font-weight: bold;
+}
+
+.attachments-collapsed .attachment-row {
+  display: none;
+}
+
 .buttons {
   display: flex;
   box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.09);
