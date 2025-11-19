@@ -22,6 +22,7 @@ import {
 } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { selectViewerId } from '../../../state';
+import { AttachmentHelper } from '../../../shared/helpers/attachment.helper';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -36,6 +37,7 @@ export class FeatureInfoDialogComponent {
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
+  public attachmentHelper = inject(AttachmentHelper);
 
   public viewerId: Signal<string | null> = signal<string | null>(null);
   public dialogOpen$: Observable<boolean>;

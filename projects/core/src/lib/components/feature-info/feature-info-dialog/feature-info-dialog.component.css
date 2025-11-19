@@ -132,12 +132,18 @@ tm-feature-info-layer-dropdown {
   font-weight: bold;
 }
 
-.attachments-collapsed .attachment-row {
+.attachments-collapsed {
   display: none;
 }
 
 .attachments-list {
   overflow: auto;
+  padding: 10px;
+}
+
+.attachment-row,
+.attachment-attribute {
+  padding: 5px 0;
 }
 
 .buttons {

@@ -5,7 +5,7 @@ import {
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, switchMap, take, tap } from 'rxjs';
-import { FeatureInfoResponseModel } from './models/feature-info-response.model';
+import { emptyFeaturesResponse, FeatureInfoResponseModel } from './models/feature-info-response.model';
 import {
   selectEditableLayers, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
@@ -140,10 +140,9 @@ export class FeatureInfoService {
       .pipe(map(response => {
         if (ApiHelper.isApiErrorResponse(response)) {
           return {
-            features: [],
+            ...emptyFeaturesResponse,
             error: response.message,
             layerId,
-            columnMetadata: [],
           };
         }
         return this.featuresToFeatureInfoResponseModel(response, layerId);
@@ -178,15 +177,14 @@ export class FeatureInfoService {
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),
         columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
+        attachmentMetadata: (featureInfoResult.attachmentMetadata || []).map(metadata=> ({ ...metadata, layerId })),
         template: featureInfoResult.template,
         layerId,
       })),
       catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
         const error = response.error?.message ? response.error.message : null;
         return of({
-          features: [],
-          columnMetadata: [],
-          template: null,
+          ...emptyFeaturesResponse,
           layerId,
           error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
         });
@@ -203,6 +201,7 @@ export class FeatureInfoService {
     return {
       features: features.map(feature => ({ ...feature, layerId })),
       columnMetadata,
+      attachmentMetadata: [],
       layerId,
     };
   }
@@ -219,6 +218,7 @@ export class FeatureInfoService {
     return {
       features: [feature],
       columnMetadata: cesiumFeatureInfo.columnMetadata,
+      attachmentMetadata: [],
       layerId: cesiumFeatureInfo.layerId,
     };
 
@@ -237,9 +237,7 @@ export class FeatureInfoService {
         catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
           const error = response.error?.message ? response.error.message : null;
           return of({
-            features: [],
-            columnMetadata: [],
-            template: null,
+            ...emptyFeaturesResponse,
             layerId,
             error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
           });
@@ -252,6 +250,5 @@ export class FeatureInfoService {
           this.store$.dispatch(updateFeatureInFeatureInfo({ feature: featureWithLayerId }));
         }
     });
-
   }
 }
