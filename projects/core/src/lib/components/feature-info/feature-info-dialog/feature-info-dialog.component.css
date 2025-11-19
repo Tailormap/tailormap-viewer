@@ -69,6 +69,7 @@ tm-feature-info-layer-dropdown {
 .content {
   flex: 1;
   overflow: auto;
+  min-height: 150px;
 }
 
 .content h2 {
@@ -133,6 +134,10 @@ tm-feature-info-layer-dropdown {
 
 .attachments-collapsed .attachment-row {
   display: none;
+}
+
+.attachments-list {
+  overflow: auto;
 }
 
 .buttons {

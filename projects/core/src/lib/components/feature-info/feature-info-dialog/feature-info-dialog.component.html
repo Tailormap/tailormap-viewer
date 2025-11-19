@@ -55,7 +55,7 @@
               </div>
               <mat-icon [svgIcon]="attachmentsToggleIcon()"></mat-icon>
             </div>
-            <div class="content attachments-list" [class.attachments-collapsed]="attachmentsCollapsed()">
+            <div class="attachments-list" [class.attachments-collapsed]="attachmentsCollapsed()">
               @for (attachment of feature.attachments; track attachment) {
                 <div class="attachment-row">
                   <a [href]="getAttachmentUrl(layer.id, attachment.attachmentId)" target="_blank" rel="noopener">
