@@ -157,7 +157,7 @@ export class FeatureInfoService {
     resolutions: MapViewDetailsModel,
     geometryInAttributes = false,
     pointerType?: string,
-    withAttachments = false,
+    withAttachments = true,
   ): Observable<FeatureInfoResponseModel> {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     // meters per pixel * fixed value
@@ -232,6 +232,7 @@ export class FeatureInfoService {
           applicationId: viewerId || '',
           layerId,
           __fid: featureId,
+          withAttachments: true,
         })),
         catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
           const error = response.error?.message ? response.error.message : null;
