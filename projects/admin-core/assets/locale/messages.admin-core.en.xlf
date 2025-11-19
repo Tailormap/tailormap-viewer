@@ -794,6 +794,9 @@
       <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
         <source>Available projections for this layer</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.max-file-size-warning" datatype="html">
+        <source> Global maximum file size is <x id="INTERPOLATION" equiv-text="{{maxFileSizeMB}}"/> MB. Individual attachment attribute sizes cannot exceed this limit. Contact your system administrator if you need to increase this limit. </source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
         <source>Max Size (MB)</source>
       </trans-unit>
@@ -1519,9 +1522,6 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
         <source>Create search index</source>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
-        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>

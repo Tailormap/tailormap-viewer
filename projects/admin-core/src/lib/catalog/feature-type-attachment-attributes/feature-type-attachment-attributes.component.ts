@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, input, output, effect, signal } from '@angular/core';
-import { AttachmentAttributeModel } from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
+import { AttachmentAttributeModel, TailormapApiConstants } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'tm-admin-feature-type-attachment-attributes',
@@ -14,9 +15,12 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
   standalone: false,
 })
 export class FeatureTypeAttachmentAttributesComponent {
+  private httpClient = inject(HttpClient);
 
   public attachmentAttributes = input<AttachmentAttributeModel[]>([]);
   public attachmentAttributesChange = output<AttachmentAttributeModel[]>();
+
+  public globalMaxFileSizeMB = signal<number | null>(null);
 
   public attachmentForm = new FormGroup({
     attributes: new FormArray([]),
@@ -43,6 +47,19 @@ export class FeatureTypeAttachmentAttributesComponent {
     effect(() => {
       const inputData = this.attachmentAttributes();
       this.initForm(inputData);
+    });
+
+    this.httpClient.get(`${TailormapApiConstants.BASE_URL}/actuator/configprops`).subscribe(configProps => {
+      const maxFileSize = (configProps as any)?.contexts?.['tailormap-api']
+        ?.beans?.['spring.servlet.multipart-org.springframework.boot.autoconfigure.web.servlet.MultipartProperties']
+        ?.properties?.maxFileSize;
+
+      if (typeof maxFileSize === 'string' && /[0-9]+B/.test(maxFileSize)) {
+        const bytes = Number(maxFileSize.slice(0, -1));
+        if (!isNaN(bytes)) {
+          this.globalMaxFileSizeMB.set(Math.round(bytes / 1024 / 1024)); // Not localized for now
+        }
+      }
     });
   }
 
