@@ -273,12 +273,12 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       return null;
     }
 
-    let currentIdx = tree.findIndex(n => n.id === this.selectedNode.value);
+    const currentIdx = tree.findIndex(n => n.id === this.selectedNode.value);
     if (currentIdx === -1) {
       return null;
     }
 
-    let targetIndex = direction === 'next' ? currentIdx + 1 : currentIdx - 1;
+    const targetIndex = direction === 'next' ? currentIdx + 1 : currentIdx - 1;
     if (targetIndex < 0 || targetIndex >= tree.length) {
       return null;
     }

@@ -38,6 +38,9 @@ export class CatalogBaseTreeComponent implements OnDestroy {
 
   @HostListener('window:keydown.arrowup', ['$event'])
   public onArrowUp($event: KeyboardEvent) {
+    if (this.isFormFieldFocused()) {
+      return;
+    }
     $event.preventDefault();
     const selectedNode = this.treeService.selectPreviousNode();
     if (selectedNode) {
@@ -50,7 +53,9 @@ export class CatalogBaseTreeComponent implements OnDestroy {
 
   @HostListener('window:keydown.arrowdown', ['$event'])
   public onArrowDown($event: KeyboardEvent) {
-    console.debug('down');
+    if (this.isFormFieldFocused()) {
+      return;
+    }
     $event.preventDefault();
     const selectedNode = this.treeService.selectNextNode();
     if (selectedNode) {
@@ -59,6 +64,52 @@ export class CatalogBaseTreeComponent implements OnDestroy {
         this.router.navigateByUrl(routerLink);
       }
     }
+  }
+
+  @HostListener('window:keydown.arrowleft', ['$event'])
+  public onArrowLeft($event: KeyboardEvent) {
+    if (this.isFormFieldFocused()) {
+      return;
+    }
+    $event.preventDefault();
+    this.treeService.selectedNode$
+      .pipe(take(1))
+      .subscribe(selectedId => {
+        if (!selectedId) {
+          return;
+        }
+        const node = this.treeService.getNode(selectedId);
+        if (!node) {
+          return;
+        }
+        if (CatalogTreeHelper.isExpandableNode(node) && node.expanded) {
+          // collapse selected expandable node
+          this.treeService.toggleNodeExpanded(node);
+        }
+      });
+  }
+
+  @HostListener('window:keydown.arrowright', ['$event'])
+  public onArrowRight($event: KeyboardEvent) {
+    if (this.isFormFieldFocused()) {
+      return;
+    }
+    $event.preventDefault();
+    this.treeService.selectedNode$
+      .pipe(take(1))
+      .subscribe(selectedId => {
+        if (!selectedId) {
+          return;
+        }
+        const node = this.treeService.getNode(selectedId);
+        if (!node) {
+          return;
+        }
+        if (CatalogTreeHelper.isExpandableNode(node) && !node.expanded) {
+          // expand selected expandable node
+          this.treeService.expandNode(node.id);
+        }
+      });
   }
 
   constructor() {
@@ -91,6 +142,18 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  private isFormFieldFocused(): boolean {
+    const ae = document.activeElement as HTMLElement | null;
+    if (!ae) {
+      return false;
+    }
+    const tag = ae.tagName.toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') {
+      return true;
+    }
+    return ae.isContentEditable;
   }
 
 }
