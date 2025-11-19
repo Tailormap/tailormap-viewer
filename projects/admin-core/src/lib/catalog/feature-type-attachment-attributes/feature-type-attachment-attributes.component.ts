@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
-import { AttachmentAttributeModel, TailormapApiConstants } from '@tailormap-viewer/api';
+import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { HttpClient } from '@angular/common/http';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-attachment-attributes',
@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: false,
 })
 export class FeatureTypeAttachmentAttributesComponent {
-  private httpClient = inject(HttpClient);
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
   public attachmentAttributes = input<AttachmentAttributeModel[]>([]);
   public attachmentAttributesChange = output<AttachmentAttributeModel[]>();
@@ -49,17 +49,8 @@ export class FeatureTypeAttachmentAttributesComponent {
       this.initForm(inputData);
     });
 
-    this.httpClient.get(`${TailormapApiConstants.BASE_URL}/actuator/configprops`).subscribe(configProps => {
-      const maxFileSize = (configProps as any)?.contexts?.['tailormap-api']
-        ?.beans?.['spring.servlet.multipart-org.springframework.boot.autoconfigure.web.servlet.MultipartProperties']
-        ?.properties?.maxFileSize;
-
-      if (typeof maxFileSize === 'string' && /[0-9]+B/.test(maxFileSize)) {
-        const bytes = Number(maxFileSize.slice(0, -1));
-        if (!isNaN(bytes)) {
-          this.globalMaxFileSizeMB.set(Math.round(bytes / 1024 / 1024)); // Not localized for now
-        }
-      }
+    this.adminApiService.getServerConfig$().subscribe(config => {
+      this.globalMaxFileSizeMB.set(Math.round(config.multipart.maxFileSize / 1024 / 1024));
     });
   }
 
