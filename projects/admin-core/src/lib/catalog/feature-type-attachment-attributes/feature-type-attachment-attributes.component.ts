@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input, output, effect, signal, inje
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { debounceTime } from 'rxjs';
+import { debounceTime, map } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
@@ -20,8 +20,8 @@ export class FeatureTypeAttachmentAttributesComponent {
   public attachmentAttributes = input<AttachmentAttributeModel[]>([]);
   public attachmentAttributesChange = output<AttachmentAttributeModel[]>();
 
-  private serverConfig = toSignal(this.adminApiService.getServerConfig$());
-  public globalMaxFileSizeMB = signal<number | null>(null);
+  public globalMaxFileSizeMB = toSignal(this.adminApiService.getServerConfig$().pipe(
+    map(config => Math.round(config.multipart.maxFileSize / 1024 / 1024))));
 
   public attachmentForm = new FormGroup({
     attributes: new FormArray([]),
@@ -48,13 +48,6 @@ export class FeatureTypeAttachmentAttributesComponent {
     effect(() => {
       const inputData = this.attachmentAttributes();
       this.initForm(inputData);
-    });
-
-    effect(() => {
-      const config = this.serverConfig();
-      if (config?.multipart?.maxFileSize) {
-        this.globalMaxFileSizeMB.set(Math.round(config.multipart.maxFileSize / 1024 / 1024));
-      }
     });
   }
 
