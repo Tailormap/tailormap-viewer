@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
@@ -18,11 +18,10 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
 import {
-  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel, TAILORMAP_API_V1_SERVICE,
+  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
 } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
-import { selectViewerId } from '../../../state';
-import { AttachmentHelper } from '../../../shared/helpers/attachment.helper';
+import { AttachmentService } from '../../../services/attachment.service';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -36,10 +35,8 @@ export class FeatureInfoDialogComponent {
   public breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
-  private api = inject(TAILORMAP_API_V1_SERVICE);
-  public attachmentHelper = inject(AttachmentHelper);
+  public attachmentHelper = inject(AttachmentService);
 
-  public viewerId: Signal<string | null> = signal<string | null>(null);
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
   public currentFeature = toSignal(this.store$.select(selectCurrentlySelectedFeature), { initialValue: null });
@@ -74,7 +71,6 @@ export class FeatureInfoDialogComponent {
   public attachmentsToggleIcon = computed(() => this.attachmentsCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor() {
-    this.viewerId = this.store$.selectSignal(selectViewerId);
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
     this.selectedLayer$ = this.store$.select(selectSelectedFeatureInfoLayer);
@@ -164,9 +160,5 @@ export class FeatureInfoDialogComponent {
         }
       });
 
-  }
-
-  public getAttachmentUrl(layerId: string, attachmentId: string) {
-    return this.api.getAttachmentUrl({ applicationId: this.viewerId()!, layerId, attachmentId });
   }
 }

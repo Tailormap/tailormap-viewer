@@ -57,12 +57,10 @@
             </div>
             <div class="attachments-list" [class.attachments-collapsed]="attachmentsCollapsed()">
               @for(attachmentsForAttribute of feature.sortedAttachmentsByAttribute; track attachmentsForAttribute) {
-                <div class="attachment-attribute">{{attachmentsForAttribute.attributeName}} <span class="attachment-attribute-count">
-                  ({{attachmentsForAttribute.attachments.length}})
-                </span></div>
+                <div class="attachment-attribute">{{attachmentsForAttribute.attributeName}} ({{attachmentsForAttribute.attachments.length}})</div>
                 @for(attachment of attachmentsForAttribute.attachments; track attachment) {
                   <div class="attachment-row">
-                    <a [href]="getAttachmentUrl(layer.id, attachment.attachmentId)"
+                    <a [href]="attachmentHelper.getAttachmentUrl(layer.id, attachment)"
                        matTooltipClass="tooltip-pre-line"
                        [matTooltip]="attachmentHelper.getAttachmentTooltip(attachment)"
                        target="_blank">

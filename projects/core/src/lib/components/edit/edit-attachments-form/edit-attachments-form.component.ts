@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output, ViewChildren, QueryList, ElementRef,
 } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
-import { AttachmentHelper } from '../../../shared/helpers/attachment.helper';
+import { AttachmentService } from '../../../services/attachment.service';
 
 @Component({
   selector: 'tm-edit-attachments-form',
@@ -12,7 +12,7 @@ import { AttachmentHelper } from '../../../shared/helpers/attachment.helper';
   standalone: false,
 })
 export class EditAttachmentsFormComponent {
-  public attachmentHelper = inject(AttachmentHelper);
+  public attachmentHelper = inject(AttachmentService);
 
   public _attachmentAttributes: AttachmentAttributeModel[] = [];
 
