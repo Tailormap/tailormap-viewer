@@ -3,7 +3,7 @@ import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
@@ -20,6 +20,7 @@ export class FeatureTypeAttachmentAttributesComponent {
   public attachmentAttributes = input<AttachmentAttributeModel[]>([]);
   public attachmentAttributesChange = output<AttachmentAttributeModel[]>();
 
+  private serverConfig = toSignal(this.adminApiService.getServerConfig$());
   public globalMaxFileSizeMB = signal<number | null>(null);
 
   public attachmentForm = new FormGroup({
@@ -49,11 +50,13 @@ export class FeatureTypeAttachmentAttributesComponent {
       this.initForm(inputData);
     });
 
-    this.adminApiService.getServerConfig$().subscribe(config => {
-      this.globalMaxFileSizeMB.set(Math.round(config.multipart.maxFileSize / 1024 / 1024));
+    effect(() => {
+      const config = this.serverConfig();
+      if (config?.multipart?.maxFileSize) {
+        this.globalMaxFileSizeMB.set(Math.round(config.multipart.maxFileSize / 1024 / 1024));
+      }
     });
   }
-
 
   public get attributes(): FormArray {
     return this.attachmentForm.get('attributes') as FormArray;
