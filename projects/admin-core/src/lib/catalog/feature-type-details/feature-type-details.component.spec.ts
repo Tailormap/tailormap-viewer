@@ -19,7 +19,6 @@ import {
   FeatureTypeAttachmentAttributesComponent,
 } from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
