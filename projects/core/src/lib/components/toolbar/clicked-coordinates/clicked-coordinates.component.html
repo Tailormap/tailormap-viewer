@@ -1,9 +1,9 @@
-<div [class.clicked-coordinates-container--is-active]="toolActive$ | async"
+<div [class.clicked-coordinates-container--is-active]="toolActive()"
   class="clicked-coordinates-container map-control-button-container"
   (keyup.escape)="toggle()">
 
   <button (click)="toggle()"
-    [class.toggle-button--active]="toolActive$ | async"
+    [class.toggle-button--active]="toolActive()"
     class="map-control-button toggle-button"
     i18n-tmTooltip="@@core.toolbar.coordinate-picker"
     mat-flat-button
@@ -11,7 +11,7 @@
     <mat-icon svgIcon="tools_push_pin"></mat-icon>
   </button>
 
-  @if (toolActive$ | async) {
+  @if (toolActive()) {
     <div class="clicked-coordinates-field-wrapper">
 
       <form [formGroup]="coordinatesForm" class="clicked-coordinates-inputs">

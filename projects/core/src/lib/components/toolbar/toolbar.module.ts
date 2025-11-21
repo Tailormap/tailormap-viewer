@@ -3,12 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MeasureModule } from './measure/measure.module';
 import { GeolocationModule } from './geolocation/geolocation.module';
 import { ZoomButtonsModule } from './zoom-buttons/zoom-buttons.module';
-import { StoreModule } from '@ngrx/store';
-import { toolbarStateKey } from './state/toolbar.state';
-import { toolbarReducer } from './state/toolbar.reducer';
 import { ClickedCoordinatesModule } from './clicked-coordinates/clicked-coordinates.module';
-import { EffectsModule } from '@ngrx/effects';
-import { ToolbarEffects } from './state/toolbar.effects';
 import { MouseCoordinatesModule } from './mouse-coordinates/mouse-coordinates.module';
 import { ScaleBarModule } from './scale-bar/scale-bar.module';
 import { SimpleSearchModule } from './simple-search';
@@ -17,13 +12,8 @@ import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-
 import { TerrainControlsModule } from './terrain-controls/terrain-controls.module';
 
 @NgModule({
-  declarations: [
-  ],
-  imports: [
-    CommonModule,
-    StoreModule.forFeature(toolbarStateKey, toolbarReducer),
-    EffectsModule.forFeature([ToolbarEffects]),
-  ],
+  declarations: [],
+  imports: [CommonModule],
   exports: [
     ZoomButtonsModule,
     MeasureModule,

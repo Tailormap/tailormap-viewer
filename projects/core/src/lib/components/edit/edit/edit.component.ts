@@ -19,8 +19,6 @@ import { ApplicationLayerService } from '../../../map/services/application-layer
 import {
   AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum, EditConfigModel, GeometryType,
 } from '@tailormap-viewer/api';
-import { activateTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
 
@@ -110,6 +108,15 @@ export class EditComponent implements OnInit {
         && this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id));
       this.layersToCreateNewFeaturesFrom.set(layers);
     });
+
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(enabled => {
+        if (!enabled) {
+          // Maybe we should check for changes and then ask what the user wants to do?
+          this.store$.dispatch(setEditActive({ active: false }));
+        }
+      });
   }
 
   public isLine() {
@@ -151,7 +158,6 @@ export class EditComponent implements OnInit {
         this.store$.dispatch(setEditActive({ active: editActive }));
         if (editActive) {
           this.store$.dispatch(hideFeatureInfoDialog());
-          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT, preventMapToolActivation: true }));
         }
       });
   }

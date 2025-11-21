@@ -6,8 +6,6 @@ import { selectEnable3d } from '../../../state/core.selectors';
 import { toggleIn3dView } from '../../../map/state/map.actions';
 import { MenubarService } from '../../menubar';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { selectActiveTool } from '../state/toolbar.selectors';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import {
   selectIn3dView, selectLayersWithoutWebMercatorTitles,
 } from '../../../map/state/map.selectors';
@@ -36,7 +34,7 @@ export class Switch3dComponent {
     BaseComponentTypeEnum.DRAWING,
   ];
   private toolsPreventingSwitching = [
-    ToolbarComponentEnum.MEASURE,
+    BaseComponentTypeEnum.MEASURE,
   ];
 
   public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3d);
@@ -59,14 +57,10 @@ export class Switch3dComponent {
           component => !this.componentsPreventingSwitching.some(disallowingComponent => disallowingComponent === component?.componentId),
         ),
       ),
-      this.store$.select(selectActiveTool).pipe(
-        map(
-          tool => !this.toolsPreventingSwitching.some(disallowingTool => disallowingTool === tool),
-        ),
-      ),
+      this.mapService.someToolsEnabled$(this.toolsPreventingSwitching),
     ]).pipe(
       takeUntilDestroyed(this.destroyRef),
-      map(([ componentBoolean, toolBoolean ]) => componentBoolean && toolBoolean),
+      map(([ componentBoolean, toolBoolean ]) => componentBoolean && !toolBoolean),
     );
   }
 

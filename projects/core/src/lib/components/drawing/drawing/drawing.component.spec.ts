@@ -15,13 +15,13 @@ import { ConfirmDialogService, LoadingStateEnum, SharedDirectivesModule, SharedI
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
-  const mapServiceMock = createMapServiceMock();
+  const mapServiceMock = createMapServiceMockWithDrawingTools();
   const menubarServiceMock = {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),

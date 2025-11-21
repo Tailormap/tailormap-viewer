@@ -4,10 +4,9 @@ import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'r
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
 import {
-  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoFeatures, selectLoadingFeatureInfo, selectMapCoordinates,
+  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoFeatures, selectLoadingFeatureInfo,
+  selectMapCoordinates,
 } from '../state/feature-info.selectors';
-import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureInfoService } from '../feature-info.service';
 import {
@@ -15,6 +14,7 @@ import {
 } from '../../../map/state/map.selectors';
 import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-feature-info',
@@ -37,14 +37,17 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
 
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.feature-info.error-loading-feature-info:Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.feature-info.no-features-found:No features found`;
+  private tool: string | undefined;
 
   public ngOnInit(): void {
-    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, autoEnable: true })
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
+      type: ToolTypeEnum.MapClick,
+      autoEnable: true,
+      owner: BaseComponentTypeEnum.FEATURE_INFO,
+    })
       .pipe(
         takeUntil(this.destroyed),
-        tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: tool.id } }));
-        }),
+        tap(({ tool }) => this.tool = tool.id),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
@@ -70,13 +73,11 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
           this.featureInfoService.updateSingleFeature(updatedFeatureInFeatureInfo.__fid, updatedFeatureInFeatureInfo.layerId);
         }
       });
-
   }
 
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
   }
 
   private handleMapClick(evt: {

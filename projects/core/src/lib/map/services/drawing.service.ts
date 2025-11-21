@@ -6,7 +6,7 @@ import {
 import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
 import { DrawingHelper } from '../helpers/drawing.helper';
@@ -66,19 +66,19 @@ export class DrawingService {
       .pipe(takeUntilDestroyed(this.destroyRef));
     toolManager$.subscribe(toolManager => this.toolManager = toolManager);
     toolManager$
-      .pipe(switchMap(toolManager => toolManager.getToolsDisabled$()))
+      .pipe(switchMap(toolManager => toolManager.getToolStatusChanged$()))
       .subscribe(({ disabledTools, enabledTools }) => {
-        if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.includes(this.drawingTool.id)) {
+        if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.some(t => t.toolId === this.drawingTool?.id)) {
           // Drawing tool is disabled while drawing (probably because of other tool activation)
           this.featureSelected.next(null);
           this.enableSelectAndModify(false);
         }
-        if (this.extTransformTool && this.selectedFeature !== null && disabledTools.includes(this.extTransformTool.id)) {
+        if (this.extTransformTool && this.selectedFeature !== null && disabledTools.some(t => t.toolId === this.extTransformTool?.id)) {
           // Transform tool is disabled while we have a selected feature, unselect feature to keep it visible
           this.featureSelected.next(null);
         }
         if (this.selectTool) {
-          this.selectToolActive.next(enabledTools.includes(this.selectTool.id));
+          this.selectToolActive.next(enabledTools.some(t => t.toolId === this.selectTool?.id));
         }
       });
   }
@@ -95,6 +95,7 @@ export class DrawingService {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       style: DrawingService.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.DRAWING,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -120,6 +121,7 @@ export class DrawingService {
       type: ToolTypeEnum.Select,
       layers: [opts.drawingLayerId],
       style: opts.selectionStyle || DrawingService.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.DRAWING,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -150,6 +152,7 @@ export class DrawingService {
     this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
       type: ToolTypeEnum.ExtTransform,
       style,
+      owner: BaseComponentTypeEnum.DRAWING,
     }).pipe(
       takeUntilDestroyed(this.destroyRef),
       tap(({ tool }) => {

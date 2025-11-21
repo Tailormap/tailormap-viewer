@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MapService, MousePositionToolConfigModel, MousePositionToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
 import { concatMap, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-mouse-coordinates',
@@ -21,6 +22,7 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
     this.coordinates$ = this.mapService.createTool$<MousePositionToolModel, MousePositionToolConfigModel>({
       type: ToolTypeEnum.MousePosition,
       alwaysEnabled: true,
+      owner: BaseComponentTypeEnum.MOUSE_COORDINATES,
     })
       .pipe(
         takeUntil(this.destroyed),

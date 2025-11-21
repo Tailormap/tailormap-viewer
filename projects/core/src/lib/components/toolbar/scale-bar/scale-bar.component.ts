@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-scale-bar',
@@ -25,6 +26,7 @@ export class ScaleBarComponent implements OnInit, OnDestroy {
       type: ToolTypeEnum.ScaleBar,
       scaleType: this.scaleType,
       alwaysEnabled: true,
+      owner: BaseComponentTypeEnum.SCALE_BAR,
     })
       .pipe(takeUntil(this.destroyed))
       .subscribe(({ tool }) => {

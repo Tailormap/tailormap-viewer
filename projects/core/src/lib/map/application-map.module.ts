@@ -6,13 +6,11 @@ import { mapReducer } from './state/map.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { MapEffects } from './state/map.effects';
 import { ApplicationMapService } from './services/application-map.service';
-import { MapDrawingButtonsComponent } from './components/map-drawing-buttons/map-drawing-buttons.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MapSpinnerComponent } from './components/map-spinner/map-spinner.component';
 
 @NgModule({
   declarations: [
-    MapDrawingButtonsComponent,
     MapSpinnerComponent,
   ],
   imports: [
@@ -22,7 +20,6 @@ import { MapSpinnerComponent } from './components/map-spinner/map-spinner.compon
     SharedModule,
   ],
   exports: [
-    MapDrawingButtonsComponent,
     MapSpinnerComponent,
   ],
 })

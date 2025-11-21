@@ -6,8 +6,6 @@ import { of, Subject } from 'rxjs';
 import { CoordinateLinkWindowConfigModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { CoordinateHelper } from '@tailormap-viewer/map';
-import { registerTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import userEvent from '@testing-library/user-event';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
@@ -28,9 +26,7 @@ const setup = async (withConfig?: boolean) => {
   const mapServiceMock = getMapServiceMock(tool => ({
     id: 'map-click',
     mapClick$: mapClickSubject.asObservable(),
-  }), {
-    getProjectionCode$: () => of('EPSG:28992'),
-  });
+  }), 'EPSG:28992');
   await render(CoordinateLinkWindowComponent, {
     imports: [ MatIconTestingModule, SharedModule ],
     providers: [
@@ -68,10 +64,9 @@ describe('CoordinateLinkWindowComponent', () => {
     window.open = jest.fn();
     // run tests
     const { mapService, store, simulateMapClick } = await setup(true);
-    expect(await screen.queryByRole('button')).toBeInTheDocument();
+    expect(await screen.findByRole('button')).toBeInTheDocument();
     expect(mapService.createTool$).toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(registerTool({ tool: { id: ToolbarComponentEnum.COORDINATE_LINK_WINDOW, mapToolId: 'map-click' } }));
-    await userEvent.click(await screen.queryByRole('button'));
+    await userEvent.click(screen.getByRole('button'));
     expect(await screen.findByRole('combobox')).toBeInTheDocument();
     simulateMapClick();
     expect(window.open).toHaveBeenCalledWith(

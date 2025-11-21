@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries.component';
-import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
-import { MapDrawingButtonsComponent } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component';
+import { MapDrawingButtonsComponent } from './map-drawing-buttons/map-drawing-buttons.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 import { of } from 'rxjs';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -19,7 +19,7 @@ jest.mock('nanoid', () => ({
 
 const setup = async () => {
   const store = { dispatch: jest.fn(), select: jest.fn(() => of(null)) };
-  const mapServiceMock = createMapServiceMock();
+  const mapServiceMock = createMapServiceMockWithDrawingTools();
   const mockSpatialCrudService = { addGeometry: jest.fn(), removeGeometry: jest.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
     declarations: [MapDrawingButtonsComponent],
