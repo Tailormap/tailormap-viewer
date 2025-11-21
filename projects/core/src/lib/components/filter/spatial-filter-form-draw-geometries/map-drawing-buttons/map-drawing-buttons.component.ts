@@ -7,9 +7,9 @@ import {
   SelectToolConfigModel,
   SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { DrawingFeatureTypeEnum } from '../../models/drawing-feature-type.enum';
-import { FeatureModel } from '@tailormap-viewer/api';
-import { ApplicationStyleService } from '../../../services/application-style.service';
+import { DrawingFeatureTypeEnum } from '../../../../map';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { ApplicationStyleService } from '../../../../services';
 
 @Component({
   selector: 'tm-map-drawing-buttons',
@@ -99,6 +99,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       style: MapDrawingButtonsComponent.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.FILTER,
     })
       .pipe(
         takeUntil(this.destroyed),
@@ -125,6 +126,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       type: ToolTypeEnum.Select,
       layers: [this.drawingLayerId],
       style: this.selectionStyle || MapDrawingButtonsComponent.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.FILTER,
     })
       .pipe(
         takeUntil(this.destroyed),
@@ -157,6 +159,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
         type: ToolTypeEnum.ExtTransform,
         style,
+        owner: BaseComponentTypeEnum.FILTER,
       }).pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {

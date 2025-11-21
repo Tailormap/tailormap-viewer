@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, OnDestroy, inject } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import {
   DrawingToolConfigModel,
   DrawingToolEvent,
@@ -17,19 +17,18 @@ import {
 } from '../state/edit.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, concatMap, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
-import { deregisterTool, registerTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 import { loadCopyFeatures, loadEditFeatures } from '../state/edit.actions';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EditMapToolService implements OnDestroy {
+export class EditMapToolService {
   private mapService = inject(MapService);
   private store$ = inject(Store);
   private snackBar = inject(MatSnackBar);
@@ -51,12 +50,11 @@ export class EditMapToolService implements OnDestroy {
 
   constructor() {
 
-    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick })
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({ type: ToolTypeEnum.MapClick, owner: BaseComponentTypeEnum.EDIT })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool }) => {
           this.editMapClickToolId = tool.id;
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.EDIT, mapToolId: tool.id } }));
         }),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
@@ -79,6 +77,7 @@ export class EditMapToolService implements OnDestroy {
     this.mapService.createTool$<ModifyToolModel, ModifyToolConfigModel>({
       type: ToolTypeEnum.Modify,
       style,
+      owner: BaseComponentTypeEnum.EDIT,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -117,6 +116,7 @@ export class EditMapToolService implements OnDestroy {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       style,
+      owner: BaseComponentTypeEnum.EDIT,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -182,10 +182,6 @@ export class EditMapToolService implements OnDestroy {
             return '';
           }
         }));
-  }
-
-  public ngOnDestroy() {
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.EDIT }));
   }
 
   private handleMapClick(evt: { mapCoordinates: [number, number]; mouseCoordinates: [number, number]; pointerType?: string }) {

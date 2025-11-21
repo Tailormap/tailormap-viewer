@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { MapService, MapViewDetailsModel, ToolTypeEnum } from '@tailormap-viewer/map';
 
 export const getMapServiceMock = (
@@ -9,7 +9,7 @@ export const getMapServiceMock = (
   const toolManagerMock = {
     enableTool: jest.fn(),
     disableTool: jest.fn(),
-    getToolsDisabled$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
+    getToolStatusChanged$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
     getTool: jest.fn(() => null),
   };
   const mapServiceMock = {
@@ -21,7 +21,12 @@ export const getMapServiceMock = (
       const tool = createdTool ? createdTool(type) : { id: type };
       return of({ tool, manager: toolManagerMock });
     }),
+    getToolStatusChanged$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
     getToolManager$: jest.fn(() => of(toolManagerMock)),
+    someToolsEnabled$: jest.fn(() => of(true)),
+    enableTool: jest.fn(),
+    disableTool: jest.fn(),
+    executeToolManagerAction: jest.fn(cb => cb(toolManagerMock)),
     renderFeatures$: jest.fn(() => of(true)),
     setPadding: jest.fn(() => {}),
     getMapViewDetails$: jest.fn((): Observable<MapViewDetailsModel> => of({
@@ -51,6 +56,32 @@ export const getMapServiceMock = (
     provider: { provide: MapService, useValue: mapServiceMock },
     mapService: mapServiceMock,
     toolManager: toolManagerMock,
+    createTool$: mapServiceMock.createTool$,
+  };
+};
+
+export const createMapServiceMockWithDrawingTools = () => {
+  const drawingSubject = new BehaviorSubject<{ type: string; geometry?: string }>({ type: 'start' });
+  const selectedFeaturesSubject = new Subject();
+  const mapServiceMock = getMapServiceMock(type => {
+    switch (type) {
+      case ToolTypeEnum.Draw:
+        return { id: 'draw-1', drawing$: drawingSubject.asObservable() };
+      case ToolTypeEnum.Select:
+        return { id: 'select-1', selectedFeatures$: selectedFeaturesSubject.asObservable() };
+      case ToolTypeEnum.Modify:
+        return { id: 'modify-1', featureModified$: new Subject().asObservable() };
+      case ToolTypeEnum.ExtTransform:
+        return { id: 'ext-transform-1', featureModified$: new Subject().asObservable(), disableTranslate: jest.fn(), enableTranslate: jest.fn() };
+      default:
+        return {};
+    }
+  });
+  return {
+    mapService: mapServiceMock.mapService,
+    provider: mapServiceMock.provider,
+    addDrawingEvent: (event: { type: string; geometry?: string }) => drawingSubject.next(event),
+    toolManager: mapServiceMock.toolManager,
     createTool$: mapServiceMock.createTool$,
   };
 };

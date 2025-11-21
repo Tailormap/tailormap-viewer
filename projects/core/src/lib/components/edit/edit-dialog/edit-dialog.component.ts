@@ -21,8 +21,6 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
 import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { withLatestFrom } from 'rxjs/operators';
-import { activateTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -175,7 +173,6 @@ export class EditDialogComponent {
     this.store$.select(selectEditOpenedFromFeatureInfo).pipe(take(1)).subscribe(openedFromFeatureInfo => {
       if (openedFromFeatureInfo && reopenFeatureInfo) {
         this.store$.dispatch(setEditActive({ active: false }));
-        this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
         this.store$.dispatch(reopenFeatureInfoDialog());
       }
     });
@@ -244,7 +241,6 @@ export class EditDialogComponent {
           this.resetChanges();
           if (openedFromFeatureInfo) {
             this.store$.dispatch(setEditActive({ active: false }));
-            this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
             this.store$.dispatch(reopenFeatureInfoDialog());
           }
         }

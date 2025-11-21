@@ -7,7 +7,6 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectEnable3d } from '../../../state/core.selectors';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { selectActiveTool } from '../state/toolbar.selectors';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import userEvent from '@testing-library/user-event';
 import { Store } from '@ngrx/store';
@@ -17,7 +16,6 @@ const setup = async (enable3d: boolean) => {
   const mockStore = createMockStore({
     selectors: [
       { selector: selectEnable3d, value: enable3d },
-      { selector: selectActiveTool, value: null },
       { selector: selectIn3dView, value: false },
     ],
   });
