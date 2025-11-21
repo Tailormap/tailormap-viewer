@@ -1057,6 +1057,10 @@
         <source>Available projections for this layer</source>
         <target>Beschikbare projecties voor deze laag</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.max-file-size-warning" datatype="html">
+        <source> Global maximum file size is <x id="INTERPOLATION" equiv-text="{{maxFileSizeMB}}"/> MB. Individual attachment attribute sizes cannot exceed this limit. Contact your system administrator if you need to increase this limit. </source>
+        <target> De globale maximale bestandsgrootte is <x id="INTERPOLATION" equiv-text="{{maxFileSizeMB}}"/> MB. Instellingen voor individuele bijlage-attributen kunnen deze limiet niet overschrijden. Neem contact op met uw systeembeheerder om deze limiet op te hogen. </target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
         <source>Max Size (MB)</source>
         <target>Max. grootte (MB)</target>
@@ -2056,10 +2060,6 @@
       <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
         <source>Create search index</source>
         <target>Zoekindex aanmaken</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
-        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
-        <target> De planning van de zoekindex kan verwijderd worden door de taak verwijderen op de taken pagina </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>

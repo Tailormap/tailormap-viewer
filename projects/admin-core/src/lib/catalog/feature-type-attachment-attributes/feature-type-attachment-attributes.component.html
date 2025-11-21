@@ -78,6 +78,12 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></mat-row>
       </table>
+      @let maxFileSizeMB = globalMaxFileSizeMB();
+      @if (maxFileSizeMB) {
+        <div class="max-file-size-warning" i18n="@@admin-core.catalog.max-file-size-warning">
+          Global maximum file size is {{maxFileSizeMB}} MB. Individual attachment attribute sizes cannot exceed this limit. Contact your system administrator if you need to increase this limit.
+        </div>
+      }
     </div>
   </form>
 </div>

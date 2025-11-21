@@ -5,7 +5,7 @@ import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -248,4 +248,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(mockData.getUniqueValues());
   }
 
+  public getServerConfig$(): Observable<AdminServerConfigModel> {
+    return of({ multipart: { maxFileSize: 15728640, maxRequestSize: 15728640 } });
+  }
 }
