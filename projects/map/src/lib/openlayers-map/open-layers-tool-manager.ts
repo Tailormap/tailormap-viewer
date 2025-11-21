@@ -8,7 +8,7 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
 import { debounceTime } from 'rxjs/operators';
 import { ToolsStatusModel } from '../models/tools-status.model';
@@ -38,14 +38,15 @@ export class OpenLayersToolManager implements ToolManagerModel {
           .map(t => ({ toolId: t.tool.id, owner: t.owner })),
       })));
 
-  private debugLogging = true;
+  private debugLogging = false;
+  private destroyed = new Subject<void>();
 
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
   ) {
     if (this.debugLogging) {
-      this.getToolStatusChanged$().subscribe(() => {
+      this.getToolStatusChanged$().pipe(takeUntil(this.destroyed)).subscribe(() => {
         console.log('[OpenLayersToolManager] Tools status changed');
         const toolStatus: Array<{ id: string; owner: string; active: boolean }> = [];
         this.tools.forEach(tool => {
@@ -68,6 +69,8 @@ export class OpenLayersToolManager implements ToolManagerModel {
     this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
     this.toolsStatusChanged.complete();
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {

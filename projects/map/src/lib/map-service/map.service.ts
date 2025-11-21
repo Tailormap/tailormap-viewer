@@ -43,7 +43,7 @@ export interface MapExportOptions {
 export class MapService {
 
   private readonly map: OpenLayersMap;
-  private ngZone = inject( NgZone);
+  private ngZone = inject(NgZone);
   private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
 
   constructor() {

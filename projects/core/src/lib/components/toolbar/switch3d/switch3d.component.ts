@@ -60,7 +60,7 @@ export class Switch3dComponent {
       this.mapService.someToolsEnabled$(this.toolsPreventingSwitching),
     ]).pipe(
       takeUntilDestroyed(this.destroyRef),
-      map(([ componentBoolean, toolBoolean ]) => componentBoolean && toolBoolean),
+      map(([ componentBoolean, toolBoolean ]) => componentBoolean && !toolBoolean),
     );
   }
 
