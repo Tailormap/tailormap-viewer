@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, distinctUntilChanged, filter, of, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
 import {
-  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoDialogVisible, selectFeatureInfoFeatures, selectLoadingFeatureInfo,
+  selectCurrentlySelectedFeatureGeometry, selectFeatureInfoFeatures, selectLoadingFeatureInfo,
   selectMapCoordinates,
 } from '../state/feature-info.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
@@ -15,7 +15,6 @@ import {
 import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-feature-info',
@@ -72,15 +71,6 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
         const updatedFeatureInFeatureInfo = features.find(f => f.__fid === updatedFeature.featureId);
         if (updatedFeatureInFeatureInfo) {
           this.featureInfoService.updateSingleFeature(updatedFeatureInFeatureInfo.__fid, updatedFeatureInFeatureInfo.layerId);
-        }
-      });
-
-    this.store$.select(selectFeatureInfoDialogVisible)
-      .pipe(takeUntil(this.destroyed), distinctUntilChanged(), withLatestFrom(this.mapService.someToolsEnabled$([BaseComponentTypeEnum.FEATURE_INFO])))
-      .subscribe(([ open, toolEnabled ]) => {
-        console.log('Feature info dialog visibility changed, open:', open, 'toolEnabled:', toolEnabled);
-        if (open && !toolEnabled) {
-          this.mapService.enableTool(this.tool, true);
         }
       });
   }

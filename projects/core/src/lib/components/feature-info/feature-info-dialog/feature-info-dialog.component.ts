@@ -5,7 +5,7 @@ import {
   selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled, selectIsPrevButtonDisabled,
   selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { combineLatest, distinctUntilChanged, map, Observable, take } from 'rxjs';
+import { combineLatest, map, Observable, take } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
