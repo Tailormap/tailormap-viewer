@@ -58,3 +58,8 @@ mat-header-cell {
 .cdk-drag-placeholder {
   opacity: 0;
 }
+
+.max-file-size-warning {
+  padding-left: 24px;
+  padding-top: 12px;
+}

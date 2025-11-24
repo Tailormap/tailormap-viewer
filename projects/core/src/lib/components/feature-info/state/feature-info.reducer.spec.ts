@@ -21,6 +21,7 @@ describe('FeatureInfoReducer', () => {
     const featureInfo: FeatureInfoResponseModel = {
       features: [{ ...getFeatureModel(), layerId: '1' }],
       columnMetadata: [{ ...getColumnMetadataModel(), layerId: '1' }],
+      attachmentMetadata: [],
       layerId: '1',
     };
     const action = FeatureInfoActions.featureInfoLoaded({ featureInfo });

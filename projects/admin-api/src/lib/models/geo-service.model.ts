@@ -3,6 +3,7 @@ import { GeoServiceProtocolEnum } from './geo-service-protocol.enum';
 import { GeoServiceSettingsModel } from './geo-service-settings.model';
 import { ServiceAuthenticationModel } from './service-authentication.model';
 import { AuthorizationRuleGroup } from './authorization-rules.model';
+import { AdminServerType } from './admin-server-type.model';
 
 export interface GeoServiceModel {
   id: string;
@@ -19,4 +20,5 @@ export interface GeoServiceModel {
   capabilitiesFetched?: string;
   advertisedUrl?: string;
   settings?: GeoServiceSettingsModel;
+  resolvedServerType?: AdminServerType;
 }

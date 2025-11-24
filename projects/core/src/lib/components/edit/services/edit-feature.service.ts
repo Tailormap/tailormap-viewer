@@ -45,7 +45,7 @@ export class EditFeatureService {
   }
 
   public getFeature$(applicationId: string, layerId: string, __fid: string): Observable<FeatureModel | null> {
-    return this.api.getFeatures$({ applicationId, layerId, __fid }).pipe(
+    return this.api.getFeatures$({ applicationId, layerId, __fid, geometryInAttributes: true }).pipe(
       catchError((_e) => {
         return of(null);
       }),

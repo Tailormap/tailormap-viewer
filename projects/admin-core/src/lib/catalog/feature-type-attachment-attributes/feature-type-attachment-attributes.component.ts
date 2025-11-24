@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, input, output, effect, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { debounceTime } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, map } from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 
 @Component({
   selector: 'tm-admin-feature-type-attachment-attributes',
@@ -14,9 +15,13 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
   standalone: false,
 })
 export class FeatureTypeAttachmentAttributesComponent {
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
   public attachmentAttributes = input<AttachmentAttributeModel[]>([]);
   public attachmentAttributesChange = output<AttachmentAttributeModel[]>();
+
+  public globalMaxFileSizeMB = toSignal(this.adminApiService.getServerConfig$().pipe(
+    map(config => Math.round(config.multipart.maxFileSize / 1024 / 1024))));
 
   public attachmentForm = new FormGroup({
     attributes: new FormArray([]),
@@ -45,7 +50,6 @@ export class FeatureTypeAttachmentAttributesComponent {
       this.initForm(inputData);
     });
   }
-
 
   public get attributes(): FormArray {
     return this.attachmentForm.get('attributes') as FormArray;
