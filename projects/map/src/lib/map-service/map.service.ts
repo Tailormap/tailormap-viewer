@@ -140,8 +140,6 @@ export class MapService {
           });
           const featureModels = FeatureHelper.getFeatures(featureGeometry, vectorLayer.getSource()?.getProjection()?.getCode());
           featureModels.forEach(feature => {
-            // Set altitudeMode to clampToGround to display features on the terrain in 3D view
-            feature.getGeometry()?.set('altitudeMode', 'clampToGround');
             vectorLayer.getSource()?.addFeature(feature);
           });
           const shouldZoom = this.getBoolean(config?.zoomToFeature);
