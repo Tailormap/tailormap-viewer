@@ -371,9 +371,6 @@
       <trans-unit id="core.edit.require-login-tooltip" datatype="html">
         <source>You must be logged in to edit.</source>
       </trans-unit>
-      <trans-unit id="core.edit.select-attachments" datatype="html">
-        <source>Select <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></source>
-      </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
       </trans-unit>

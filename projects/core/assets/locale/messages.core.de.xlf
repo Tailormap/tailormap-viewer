@@ -494,10 +494,6 @@
         <source>You must be logged in to edit.</source>
         <target>Du musst angemeldet sein, um zu bearbeiten.</target>
       </trans-unit>
-      <trans-unit id="core.edit.select-attachments" datatype="html">
-        <source>Select <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></source>
-        <target>Wählen Sie <x id="INTERPOLATION" equiv-text="{{ attribute.attributeName }}"/></target>
-      </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
         <target>Wähle das zu bearbeitende Objekt aus</target>

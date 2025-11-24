@@ -51,7 +51,8 @@
           </div>
         }
         <button class="select-attachment-button" mat-flat-button color="primary" (click)="fileInput.click()">
-          <ng-container i18n="@@core.edit.select-attachments">Select {{ attribute.attributeName }}</ng-container>
+          <mat-icon svgIcon="plus"></mat-icon>
+          {{ attribute.attributeName }}
         </button>
         <input type="file" class="hidden" #fileInput multiple [accept]="attribute.mimeType" (change)="onFileChange(attribute.attributeName, $event)">
       </div>
