@@ -33,10 +33,15 @@
 
         <!-- MIME Type Column -->
         <ng-container matColumnDef="mimeType">
-          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.catalog.mime-type-header">MIME Type</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef i18n="@@admin-core.catalog.accept-header">Accepted files</mat-header-cell>
           <mat-cell *matCellDef="let element; let i = index">
             <mat-form-field [formGroupName]="i">
-              <input matInput formControlName="mimeType" i18n-placeholder="@@admin-core.catalog.mime-type-placeholder" placeholder="e.g. application/pdf">
+              <mat-select formControlName="mimeType">
+                <mat-option value="" i18n="@@admin-core.catalog.attachment-accept.all">All files</mat-option>
+                <mat-option value="images" i18n="@@admin-core.catalog.attachment-accept.images">Images</mat-option>
+                <mat-option value="pdfs" i18n="@@admin-core.catalog.attachment-accept.pdfs">PDFs</mat-option>
+                <mat-option value="docs" i18n="@@admin-core.catalog.attachment-accept.docs">Documents (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</mat-option>
+              </mat-select>
             </mat-form-field>
           </mat-cell>
         </ng-container>

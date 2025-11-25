@@ -90,7 +90,7 @@ export class FeatureTypeAttachmentAttributesComponent {
       if (existingFormGroup) {
         // Update existing row
         existingFormGroup.patchValue({
-          mimeType: attr.mimeType,
+          mimeType: this.convertToAcceptDropdownItem(attr.mimeType),
           maxAttachmentSize: this.convertToMB(attr.maxAttachmentSize),
         }, { emitEvent: false });
 
@@ -122,7 +122,7 @@ export class FeatureTypeAttachmentAttributesComponent {
         data?.attributeName || '',
         [ Validators.required, this.uniqueAttributeNameValidator.bind(this) ],
       ),
-      mimeType: new FormControl(data?.mimeType || ''),
+      mimeType: new FormControl(this.convertToAcceptDropdownItem(data?.mimeType || null)),
       maxAttachmentSize: new FormControl(this.convertToMB(data?.maxAttachmentSize) || null, [Validators.min(0)]),
     });
   }
@@ -194,6 +194,7 @@ export class FeatureTypeAttachmentAttributesComponent {
       })
       .map(attr => ({
         ...attr,
+        mimeType: this.convertFromAcceptDropdownItem(attr.mimeType),
         maxAttachmentSize: this.convertFromMB(attr.maxAttachmentSize),
       }));
     const currentInput = this.attachmentAttributes();
@@ -234,4 +235,25 @@ export class FeatureTypeAttachmentAttributesComponent {
     return size * 1024 * 1024;
   }
 
+  private acceptDropdownList = [
+    [ 'images', 'image/*' ],
+    [ 'pdfs', '.pdf' ],
+    [ 'docs', '.pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .odt, .ods' ],
+  ];
+
+  private convertToAcceptDropdownItem(mimeType: string | null): string {
+    if (mimeType === null || mimeType.trim() === '') {
+      return '';
+    }
+    const dropdownItem = this.acceptDropdownList.find(i => i[1] === mimeType);
+    return dropdownItem ? dropdownItem[0] : '';
+  }
+
+  private convertFromAcceptDropdownItem(item: string | null): string | null{
+    if (item === '') {
+      return null;
+    }
+    const dropdownItem = this.acceptDropdownList.find(i => i[0] === item);
+    return dropdownItem ? dropdownItem[1] : null;
+  }
 }

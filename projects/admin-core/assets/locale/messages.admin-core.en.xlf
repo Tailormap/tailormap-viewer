@@ -527,6 +527,9 @@
       <trans-unit id="admin-core.authorizations.read" datatype="html">
         <source>Allow</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.accept-header" datatype="html">
+        <source>Accepted files</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
       </trans-unit>
@@ -541,6 +544,18 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.all" datatype="html">
+        <source>All files</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.docs" datatype="html">
+        <source>Documents (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.images" datatype="html">
+        <source>Images</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.pdfs" datatype="html">
+        <source>PDFs</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
         <source>Attachment attributes</source>
@@ -808,12 +823,6 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.mime-type-header" datatype="html">
-        <source>MIME Type</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.mime-type-placeholder" datatype="html">
-        <source>e.g. application/pdf</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
