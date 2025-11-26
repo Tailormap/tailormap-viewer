@@ -18,7 +18,17 @@ export const getMapServiceMock = (
     getRoundedCoordinates$: jest.fn(coords => of(coords)),
     getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)),
     createTool$: jest.fn(({ type }) => {
-      const tool = createdTool ? createdTool(type) : { id: type };
+      // Returns a default tool with common observables if no custom tool is provided
+      const defaultTool = {
+        id: type,
+        drawing$: new Subject().asObservable(),
+        selectedFeatures$: new Subject().asObservable(),
+        featureModified$: new Subject().asObservable(),
+        disableTranslate: jest.fn(),
+        enableTranslate: jest.fn(),
+        mapClick$: new Subject().asObservable(),
+      };
+      const tool = createdTool ? createdTool(type) : defaultTool;
       return of({ tool, manager: toolManagerMock });
     }),
     getToolStatusChanged$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
@@ -73,6 +83,8 @@ export const createMapServiceMockWithDrawingTools = () => {
         return { id: 'modify-1', featureModified$: new Subject().asObservable() };
       case ToolTypeEnum.ExtTransform:
         return { id: 'ext-transform-1', featureModified$: new Subject().asObservable(), disableTranslate: jest.fn(), enableTranslate: jest.fn() };
+      case ToolTypeEnum.MapClick:
+        return { id: 'mapclick-1', mapClick$: new Subject().asObservable() };
       default:
         return {};
     }

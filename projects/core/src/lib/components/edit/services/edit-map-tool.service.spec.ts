@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EditMapToolService } from './edit-map-tool.service';
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectEditStatus, selectNewFeatureGeometryType, selectSelectedEditFeature } from "../state/edit.selectors";
@@ -22,7 +22,11 @@ describe('EditMapToolService', () => {
         mapServiceMock.provider,
         { provide: ApplicationLayerService, useValue: mockApplicationLayerService },
         provideMockStore({
-          initialState: {},
+          initialState: {
+            edit: {
+              features: [],
+            },
+          },
           selectors: [
             { selector: selectEditStatus, value: editStatus },
             { selector: selectNewFeatureGeometryType, value: 'rectangle' },
@@ -40,46 +44,50 @@ describe('EditMapToolService', () => {
     };
   };
 
-  test('should disable the edit tools when edit tool is inactive', () => {
+  test('should disable the edit tools when edit tool is inactive', fakeAsync(() => {
     const { service, enableTool, disableTool } = setup('inactive');
     expect(service).toBeTruthy();
+    tick(0);
     expect(enableTool).not.toHaveBeenCalled();
     expect(disableTool).toBeCalledTimes(3);
     expect(disableTool).nthCalledWith(1, ToolTypeEnum.MapClick, true);
     expect(disableTool).nthCalledWith(2, ToolTypeEnum.Modify, true);
     expect(disableTool).nthCalledWith(3, ToolTypeEnum.Draw, false);
-  });
+  }));
 
-  test('should enable the correct tools when edit tool is active', () => {
+  test('should enable the correct tools when edit tool is active', fakeAsync(() => {
     const { service, enableTool, disableTool } = setup('active');
     expect(service).toBeTruthy();
+    tick(0);
     expect(enableTool).toHaveBeenCalled();
     expect(enableTool).nthCalledWith(1, ToolTypeEnum.MapClick, true);
     expect(disableTool).toBeCalledTimes(2);
     expect(disableTool).nthCalledWith(1, ToolTypeEnum.Modify, true);
     expect(disableTool).nthCalledWith(2, ToolTypeEnum.Draw, true);
-  });
+  }));
 
-  test('should enable the correct tools when editing a feature', () => {
+  test('should enable the correct tools when editing a feature', fakeAsync(() => {
     const { service, enableTool, disableTool } = setup('edit_feature');
     expect(service).toBeTruthy();
+    tick(0);
     expect(disableTool).toBeCalledTimes(1);
     expect(disableTool).toBeCalledWith(ToolTypeEnum.Draw, true);
 
     expect(enableTool).toBeCalledTimes(2);
     expect(enableTool).nthCalledWith(1, ToolTypeEnum.MapClick, true);
     expect(enableTool).nthCalledWith(2, ToolTypeEnum.Modify, false, { geometry: 'POINT(0 0)' });
-  });
+  }));
 
-  test('should enable the correct tools when creating a feature', () => {
+  test('should enable the correct tools when creating a feature', fakeAsync(() => {
     const { service, enableTool, disableTool } = setup('create_feature');
     expect(service).toBeTruthy();
+    tick(0);
     expect(disableTool).toBeCalledTimes(2);
     expect(disableTool).nthCalledWith(1, ToolTypeEnum.MapClick, true);
     expect(disableTool).nthCalledWith(2, ToolTypeEnum.Modify, true);
 
     expect(enableTool).toBeCalledTimes(1);
     expect(enableTool).toBeCalledWith( ToolTypeEnum.Draw, true, { type: 'rectangle' });
-  });
+  }));
 
 });
