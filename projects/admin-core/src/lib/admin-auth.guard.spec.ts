@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { RedirectCommand, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AdminAuthGuard } from './admin-auth.guard';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
@@ -61,7 +61,8 @@ describe('AdminAuthGuard', () => {
 
     guard.canActivate(mockRoute, mockState).subscribe(result => {
       expect(result).not.toBe(true);
-      if (typeof result !== 'boolean') {
+      expect(result).toBeInstanceOf(RedirectCommand);
+      if (result instanceof RedirectCommand) {
         expect(result.redirectTo.toString()).toBe('/login');
         done();
       }
@@ -80,12 +81,11 @@ describe('AdminAuthGuard', () => {
 
     guard.canActivate(mockRoute, mockState).subscribe(result => {
       expect(result).not.toBe(true);
-      if (typeof result !== 'boolean') {
-        // Access the navigation extras from the RedirectCommand
-        const navigationExtras = (result as any).navigationBehaviorOptions;
-        expect(navigationExtras).toBeDefined();
-        expect(navigationExtras.state).toBeDefined();
-        expect(navigationExtras.state.routeBeforeLogin).toBe(originalUrl);
+      expect(result).toBeInstanceOf(RedirectCommand);
+      if (result instanceof RedirectCommand) {
+        expect(result.navigationBehaviorOptions).toBeDefined();
+        expect(result.navigationBehaviorOptions?.state).toBeDefined();
+        expect(result.navigationBehaviorOptions?.state?.routeBeforeLogin).toBe(originalUrl);
         done();
       }
     });
