@@ -10,9 +10,9 @@ export class AdminAuthGuard implements CanActivate {
   private authService = inject(AuthenticatedUserService);
   private router = inject(Router);
   public canActivate(_next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | RedirectCommand> {
-    return this.authService.getUserDetails$().pipe(
-      map(user => {
-        if (user.isAuthenticated) {
+    return this.authService.isAdminUser$().pipe(
+      map(isAdminUser => {
+        if (isAdminUser) {
           return true;
         }
         return new RedirectCommand(

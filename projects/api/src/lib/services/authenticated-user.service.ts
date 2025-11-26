@@ -63,7 +63,8 @@ export class AuthenticatedUserService {
         take(1),
         tap(loggedOut => {
           if (loggedOut) {
-            this.setUserDetails({ isAuthenticated: false });
+            this.authenticatedUserSubject.next({ isAuthenticated: false });
+            this.userDetailsFetched.next(false);
           }
         }),
       );
