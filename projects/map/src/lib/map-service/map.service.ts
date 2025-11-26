@@ -90,7 +90,7 @@ export class MapService {
   }
 
   public getToolStatusChanged$(): Observable<ToolsStatusModel> {
-    return this.map.getToolManager$().pipe(switchMap(manager => manager.getToolStatusChanged$()));
+    return this.getToolManager$().pipe(switchMap(manager => manager.getToolStatusChanged$()));
   }
 
   public someToolsEnabled$(owners: string[]): Observable<boolean> {
