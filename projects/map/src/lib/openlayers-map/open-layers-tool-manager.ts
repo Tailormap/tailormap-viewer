@@ -191,7 +191,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private enableAutoEnabledTools() {
     if (this.debugLogging) {
-      console.log('[OpenLayersToolManager] Enabling auto-enabled tools', Array.from(this.autoEnabledTools));
+      console.log(`[OpenLayersToolManager] ${this.switchedTool ? '[Ignore because switching tools]' : ''} Enabling auto-enabled tools`, Array.from(this.autoEnabledTools));
     }
     if (this.switchedTool || this.autoEnabledTools.size === 0) {
       return;
