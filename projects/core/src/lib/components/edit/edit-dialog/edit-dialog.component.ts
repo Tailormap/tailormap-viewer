@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
-import { from, mergeMap, Observable, tap } from 'rxjs';
+import { from, Observable, tap, toArray } from 'rxjs';
 import {
   selectEditCreateNewOrCopyFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
@@ -305,13 +305,16 @@ export class EditDialogComponent {
       return of(true);
     }
     return from(uploads).pipe(
-      mergeMap(upload => this.editFeatureService.addAttachment$(
+      concatMap(upload => this.editFeatureService.addAttachment$(
         viewerId,
         layerId,
         featureId,
         upload.attribute,
         upload.file,
-      ), 1));
+      )),
+      toArray(),
+      map(() => true),
+    );
   }
 
   private deleteAttachments$(viewerId: string, layerId: string, attachmentIds: Set<string>) {
@@ -319,7 +322,10 @@ export class EditDialogComponent {
       return of(null);
     }
     return from(attachmentIds.values()).pipe(
-      mergeMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId), 1));
+      concatMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId)),
+      toArray(),
+      map(() => null),
+    );
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {

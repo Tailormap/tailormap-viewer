@@ -19,6 +19,7 @@ import {
   FeatureTypeAttachmentAttributesComponent,
 } from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
   const activeRoute = {
@@ -77,6 +78,7 @@ const setup = async () => {
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureSourceService },
       { provide: Store, useValue: store },
+      provideHttpClient(),
     ],
   });
   return { featureSourceService, featureTypeModel };

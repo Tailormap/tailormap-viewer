@@ -108,6 +108,7 @@ export const getFeatureModel = (overrides?: Partial<FeatureModel>): FeatureModel
     prop1: 'test',
     prop2: 'another test',
   },
+  attachments: [],
   ...overrides,
 });
 
@@ -138,6 +139,7 @@ export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseMod
   return {
     features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),
     columnMetadata: columnMetadata.map(columnMetadataOverride => getColumnMetadataModel({ ...columnMetadataOverride })),
+    attachmentMetadata: [],
     template: null,
     page: null,
     pageSize: null,

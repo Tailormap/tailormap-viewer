@@ -17,8 +17,11 @@ import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
-import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
+import {
+  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
+} from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { AttachmentService } from '../../../services/attachment.service';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -32,7 +35,7 @@ export class FeatureInfoDialogComponent {
   public breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
-
+  public attachmentHelper = inject(AttachmentService);
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
@@ -63,7 +66,9 @@ export class FeatureInfoDialogComponent {
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
   public attributesCollapsed = signal<boolean>(false);
-  public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attachmentsCollapsed = signal<boolean>(false);
+  public attachmentsToggleIcon = computed(() => this.attachmentsCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor() {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
@@ -136,6 +141,10 @@ export class FeatureInfoDialogComponent {
 
   public toggleAttributes() {
     this.attributesCollapsed.set(!this.attributesCollapsed());
+  }
+
+  public toggleAttachments() {
+    this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
   }
 
   public editFeature() {
