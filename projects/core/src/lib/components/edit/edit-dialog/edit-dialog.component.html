@@ -20,9 +20,7 @@
                       (clearUniqueValueCacheAfterSave)="clearUniqueValuesCacheAfterSave($event)"
         ></tm-edit-form>
         <tm-edit-attachments-form [attachmentAttributes]="editInput.details.attachmentAttributes"
-                                  [loadingAttachments]="loadingAttachments()"
                                   [attachmentsByAttributeName]="attachments$ | async"
-                                  [newAttachmentsByAttributeName]="newAttachments"
                                   (newAttachmentsChanged)="onNewAttachmentsChanged($event)"
                                   (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-attachments-form>

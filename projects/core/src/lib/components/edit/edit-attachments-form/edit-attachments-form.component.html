@@ -9,9 +9,6 @@
         @if (totalCount > 0) {
           <h2>{{ attribute.attributeName }} ({{ totalCount }})</h2>
         }
-        @if (loadingAttachments) {
-          <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
-        }
         @for (attachment of attachments; track attachment) {
           <div class="attachment-row">
             <a [href]="attachment.url"

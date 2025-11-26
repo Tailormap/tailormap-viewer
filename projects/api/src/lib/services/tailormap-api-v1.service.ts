@@ -83,9 +83,9 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       });
   }
 
-    public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+    public deleteFeature$(params: { applicationId: string; layerId: string; fid: string }): Observable<HttpStatusCode> {
         return this.httpClient.delete<HttpResponse<Response>>(
-            `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
+            `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.fid}`,
             { observe: 'response' },
         ).pipe(
             map(response => {

@@ -28,8 +28,8 @@ export class EditFeatureService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  public deleteFeature$(applicationId: string, layerId: string, feature: FeatureModel): Observable<boolean> {
-    return this.api.deleteFeature$({ applicationId, layerId, feature }).pipe(
+  public deleteFeature$(applicationId: string, layerId: string, fid: string): Observable<boolean> {
+    return this.api.deleteFeature$({ applicationId, layerId, fid }).pipe(
       catchError((_e) => {
         this.showSnackbarMessage($localize `:@@core.edit.delete-feature-failed:Delete feature failed`, _e);
         return of(false);
@@ -45,7 +45,7 @@ export class EditFeatureService {
   }
 
   public getFeature$(applicationId: string, layerId: string, __fid: string): Observable<FeatureModel | null> {
-    return this.api.getFeatures$({ applicationId, layerId, __fid, geometryInAttributes: true }).pipe(
+    return this.api.getFeatures$({ applicationId, layerId, __fid, geometryInAttributes: true, withAttachments: true }).pipe(
       catchError((_e) => {
         return of(null);
       }),

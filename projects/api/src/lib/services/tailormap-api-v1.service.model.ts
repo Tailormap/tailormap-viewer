@@ -41,7 +41,7 @@ export interface TailormapApiV1ServiceModel {
   deleteFeature$(params: {
     applicationId: string;
     layerId: string;
-    feature: FeatureModel;
+    fid: string;
   }): Observable<HttpStatusCode>;
 
   updateFeature$(params: {
