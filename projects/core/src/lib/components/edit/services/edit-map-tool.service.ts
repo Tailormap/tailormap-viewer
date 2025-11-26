@@ -16,7 +16,7 @@ import {
   selectEditStatus, selectEditError$, selectNewFeatureGeometryType, selectSelectedEditFeature, selectCopiedFeatures,
 } from '../state/edit.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, combineLatest, concatMap, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, concatMap, debounceTime, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
 import { loadCopyFeatures, loadEditFeatures } from '../state/edit.actions';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -135,6 +135,7 @@ export class EditMapToolService {
       .pipe(
         withLatestFrom(this.mapService.getToolManager$()),
         takeUntilDestroyed(this.destroyRef),
+        debounceTime(0), // debounce to avoid multiple rapid enable/disable tool calls
       )
       .subscribe(([[ editStatus, newFeatureGeometryType, editGeometry ], toolManager ]) => {
         if (this.createdGeometrySubject.getValue() !== null) {
