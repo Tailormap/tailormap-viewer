@@ -1,15 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { concatMap, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, DestroyRef, signal } from '@angular/core';
+import { concatMap, Subject, takeUntil, tap } from 'rxjs';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { Store } from '@ngrx/store';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { map, take } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-streetview',
@@ -19,21 +16,24 @@ import { FeatureModel } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class StreetviewComponent implements OnInit, OnDestroy {
-  private store$ = inject(Store);
   private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
 
-  public toolActive$: Observable<boolean>;
+  public toolActive = signal<boolean>(false);
   private destroyed = new Subject();
   private mapCRS = '';
   private streetviewLocation = new Subject<FeatureModel[]>();
+  private tool: string | undefined;
 
   constructor() {
-    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.STREETVIEW));
-    this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
-      if (!isActive) {
-        this.streetviewLocation.next([]);
-      }
-    });
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.STREETVIEW])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(enabled => {
+        this.toolActive.set(enabled);
+        if (!enabled) {
+          this.streetviewLocation.next([]);
+        }
+      });
     this.mapService.getProjectionCode$().pipe(take(1))
       .pipe().subscribe(projectionCode => {
       this.mapCRS = projectionCode;
@@ -57,10 +57,11 @@ export class StreetviewComponent implements OnInit, OnDestroy {
 
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.STREETVIEW,
     })
       .pipe(takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.STREETVIEW, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         concatMap(({ tool }) => tool.mapClick$),
         map(mapClick => {
@@ -77,8 +78,6 @@ export class StreetviewComponent implements OnInit, OnDestroy {
       wgsCoord => {
         const url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${wgsCoord.lat}%2C${wgsCoord.lon}`;
         window.open(url, '_blank', 'noopener,noreferrer');
-        // tool stays active after click... otherwise
-        // this.store$.dispatch(deactivateTool({tool: ToolbarComponentEnum.STREETVIEW}));
       },
     );
   }
@@ -86,11 +85,15 @@ export class StreetviewComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.STREETVIEW }));
+    this.mapService.disableTool(this.tool);
   }
 
   public toggle() {
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.STREETVIEW }));
+    if (this.toolActive()) {
+      this.mapService.disableTool(this.tool);
+      return;
+    }
+    this.mapService.enableTool(this.tool, true);
   }
 
 }

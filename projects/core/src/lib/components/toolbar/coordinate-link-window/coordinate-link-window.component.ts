@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
@@ -10,10 +10,7 @@ import {
 import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take } from 'rxjs/operators';
-import { deactivateTool, deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -22,15 +19,16 @@ import { isActiveToolbarTool } from '../state/toolbar.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
+export class CoordinateLinkWindowComponent implements OnInit {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
 
 
-  public toolActive$: Observable<boolean>;
+  public toolActive = toSignal(this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW]));
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
+  private tool: string | undefined;
 
   public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
@@ -39,7 +37,6 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
       .pipe(map(config => config?.config));
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
     this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
-    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.COORDINATE_LINK_WINDOW));
   }
 
   public ngOnInit(): void {
@@ -56,26 +53,23 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
       });
   }
 
-  public ngOnDestroy() {
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
-  }
-
   public toggle(close?: boolean) {
-    if (close === true) {
-      this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+    if (close === true || this.toolActive()) {
+      this.mapService.disableTool(this.tool);
       return;
     }
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+    this.mapService.enableTool(this.tool, true);
   }
 
   private createMapClickTool() {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.COORDINATE_LINK_WINDOW, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         concatMap(({ tool }) => tool.mapClick$),
         switchMap(({ mapCoordinates }) => {

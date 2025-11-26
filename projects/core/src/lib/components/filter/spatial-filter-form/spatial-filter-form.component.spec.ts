@@ -11,13 +11,13 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
-import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { TestBed } from '@angular/core/testing';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
@@ -36,7 +36,7 @@ const setup = async (conf: {
       { selector: selectIn3dView, value: false },
     ],
   });
-  const mapServiceMock = createMapServiceMock();
+  const mapServiceMock = createMapServiceMockWithDrawingTools();
   const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
