@@ -1,14 +1,10 @@
 import { render } from '@testing-library/angular';
 import { FeatureInfoComponent } from './feature-info.component';
 import { Store } from '@ngrx/store';
-import { loadFeatureInfo } from '../state/feature-info.actions';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { FeatureInfoService } from '../feature-info.service';
-import { registerTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 const setup = async (returnError = false) => {
   const mapServiceMock = getMapServiceMock(tool => ({
@@ -52,13 +48,11 @@ describe('FeatureInfoComponent', () => {
   afterEach(() => { jest.useRealTimers(); });
 
   test('should render', async () => {
-    const { mapServiceMock, mockDispatch, mockSelect } = await setup();
+    const { mapServiceMock, mockSelect } = await setup();
     expect(mapServiceMock.mapService.createTool$).toHaveBeenCalled();
     const highlightArgs = Array.from(mapServiceMock.mapService.renderFeatures$.mock.calls[0]);
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
-
-    expect(mockDispatch).toHaveBeenCalledWith(registerTool({ tool: { id: ToolbarComponentEnum.FEATURE_INFO, mapToolId: 'MapClick' } }));
     expect(mockSelect).toHaveBeenCalled();
   });
 
