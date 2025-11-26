@@ -37,6 +37,7 @@ export class Switch3dComponent {
   ];
   private toolsPreventingSwitching = [
     ToolbarComponentEnum.MEASURE,
+    BaseComponentTypeEnum.EDIT,
   ];
 
   public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3d);

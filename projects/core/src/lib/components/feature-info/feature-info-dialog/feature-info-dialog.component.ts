@@ -22,6 +22,7 @@ import {
 } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { AttachmentService } from '../../../services/attachment.service';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -54,13 +55,15 @@ export class FeatureInfoDialogComponent {
   public config = ComponentConfigHelper.componentConfigSignal<FeatureInfoConfigModel>(this.store$, BaseComponentTypeEnum.FEATURE_INFO);
   public editComponentEnabled= ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
   private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
+  private in3DView = this.store$.selectSignal(selectIn3dView);
 
   public isEditPossible = computed(() => {
     const showEditButton = !(this.config()?.showEditButton === false);
     return showEditButton
         && this.currentFeature()?.layer?.editable
         && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
-        && this.editComponentEnabled();
+        && this.editComponentEnabled()
+        && !this.in3DView();
   });
 
   public isWideScreen = signal<boolean>(false);
