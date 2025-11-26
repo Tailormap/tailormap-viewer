@@ -27,6 +27,7 @@ export class LayoutService {
     BaseComponentTypeEnum.MOUSE_COORDINATES,
     BaseComponentTypeEnum.SCALE_BAR,
     BaseComponentTypeEnum.COORDINATE_PICKER,
+    BaseComponentTypeEnum.EDIT,
   ];
 
   private componentsOnlyIn3d = [

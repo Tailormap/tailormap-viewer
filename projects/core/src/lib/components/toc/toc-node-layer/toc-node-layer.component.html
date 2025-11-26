@@ -31,7 +31,7 @@
                 matListItemMeta>
       </mat-icon>
     }
-    @if (isInScale() && isLayerEditable() && node.checked) {
+    @if (isInScale() && isLayerEditable() && node.checked && !in3D) {
       <mat-icon class="icon"
                 (click)="editLayerClicked(node)"
                 svgIcon="edit"

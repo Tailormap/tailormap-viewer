@@ -18,6 +18,7 @@ import { CoreSharedModule } from '../../../shared';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -55,6 +56,7 @@ const setup = async (withState = false) => {
           { selector: selectIsNextButtonDisabled, value: false },
           { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
           { selector: selectComponentsConfig, value: [] },
+          { selector: selectIn3dView, value: false },
         ] : [],
       }),
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
