@@ -235,7 +235,7 @@ export class FeatureTypeAttachmentAttributesComponent {
     return size * 1024 * 1024;
   }
 
-  private acceptDropdownList = [
+  private static acceptDropdownList = [
     [ 'images', 'image/*' ],
     [ 'pdfs', '.pdf' ],
     [ 'docs', '.pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .odt, .ods' ],
@@ -245,7 +245,7 @@ export class FeatureTypeAttachmentAttributesComponent {
     if (mimeType === null || mimeType.trim() === '') {
       return '';
     }
-    const dropdownItem = this.acceptDropdownList.find(i => i[1] === mimeType);
+    const dropdownItem = FeatureTypeAttachmentAttributesComponent.acceptDropdownList.find(i => i[1] === mimeType);
     return dropdownItem ? dropdownItem[0] : '';
   }
 
@@ -253,7 +253,7 @@ export class FeatureTypeAttachmentAttributesComponent {
     if (item === '') {
       return null;
     }
-    const dropdownItem = this.acceptDropdownList.find(i => i[0] === item);
+    const dropdownItem = FeatureTypeAttachmentAttributesComponent.acceptDropdownList.find(i => i[0] === item);
     return dropdownItem ? dropdownItem[1] : null;
   }
 }

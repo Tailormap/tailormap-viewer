@@ -739,7 +739,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.attachment-accept.pdfs" datatype="html">
         <source>PDFs</source>
-        <target state="new">PDFs</target>
+        <target>PDFs</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
         <source>Attachment attributes</source>
