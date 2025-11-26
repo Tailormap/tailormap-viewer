@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
-  SliderFilterInputModeEnum, UpdateDatePickerFilterModel,
+  AttributeType, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel, SliderFilterInputModeEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,6 +16,8 @@ import { FormHelper } from '../../../../helpers/form.helper';
   standalone: false,
 })
 export class ApplicationSliderFilterFormComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   public attributeType = input<AttributeType>(AttributeType.INTEGER);
   public filterConditions = computed(() => {
@@ -40,7 +41,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
 
   @Input()
   public set sliderFilter(
-    configuration: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+    configuration: EditFilterConfigurationModel | null,
   ) {
     if (configuration && configuration.filterTool === FilterToolEnum.SLIDER) {
       this.sliderFilterForm.patchValue({
@@ -51,6 +52,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         initialLowerValue: configuration.initialLowerValue,
         initialUpperValue: configuration.initialUpperValue,
         inputMode: configuration.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+        stepSize: configuration.stepSize,
       }, { emitEvent: false });
     }
   }
@@ -67,8 +69,6 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   @Output()
   public updateSliderFilter = new EventEmitter<UpdateSliderFilterModel>();
 
-  constructor(private destroyRef: DestroyRef) { }
-
   public sliderFilterForm = new FormGroup({
     condition: new FormControl<FilterConditionEnum | null>(null),
     initialValue: new FormControl<number | null>(null),
@@ -77,6 +77,7 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     initialLowerValue: new FormControl<number | null>(null),
     initialUpperValue: new FormControl<number | null>(null),
     inputMode: new FormControl<SliderFilterInputModeEnum>(SliderFilterInputModeEnum.SLIDER),
+    stepSize: new FormControl<number | null>(null),
   });
 
   public ngOnInit(): void {
@@ -90,12 +91,13 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         this.updateSliderFilter.emit({
           filterTool: FilterToolEnum.SLIDER,
           condition: value.condition ?? FilterConditionEnum.NULL_KEY,
-          initialValue: value.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialValue ?? undefined) : undefined,
+          initialValue: value.condition !== FilterConditionEnum.NUMBER_BETWEEN_KEY ? value.initialValue : undefined,
           minimumValue: value.minimumValue ?? 0,
           maximumValue: value.maximumValue ?? 0,
-          initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialLowerValue ?? undefined) : undefined,
-          initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? (value.initialUpperValue ?? undefined) : undefined,
+          initialLowerValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? value.initialLowerValue : undefined,
+          initialUpperValue: value.condition === FilterConditionEnum.NUMBER_BETWEEN_KEY ? value.initialUpperValue : undefined,
           inputMode: value.inputMode ?? SliderFilterInputModeEnum.SLIDER,
+          stepSize: value.stepSize ?? undefined,
         });
       });
   }
@@ -103,8 +105,9 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   private isValidSliderForm(): boolean {
     const formValues = this.sliderFilterForm.getRawValue();
     return !!formValues.condition
-      && (FormHelper.isValidNumberValue(formValues.initialValue) ||
-        (FormHelper.isValidNumberValue(formValues.initialLowerValue) && FormHelper.isValidNumberValue(formValues.initialUpperValue)))
+      && ((formValues.initialValue !== null && formValues.initialValue !== undefined) ||
+        ((formValues.initialLowerValue !== null && formValues.initialLowerValue !== undefined)
+          === (formValues.initialUpperValue !== null && formValues.initialUpperValue !== undefined)))
       && FormHelper.isValidNumberValue(formValues.minimumValue)
       && FormHelper.isValidNumberValue(formValues.maximumValue);
   }

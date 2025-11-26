@@ -27,7 +27,7 @@ export class FeatureInfoHelper {
     if (!geomAttribute) {
       return null;
     }
-    return FeatureHelper.getGeometryForFeature(feature, geomAttribute.key);
+    return FeatureHelper.getGeometryForFeature(feature, geomAttribute.name);
   }
 
 }

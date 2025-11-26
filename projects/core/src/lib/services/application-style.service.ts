@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectViewerStyling } from '../state/core.selectors';
 import { takeUntil } from 'rxjs/operators';
@@ -11,12 +11,14 @@ import { updateViewerStyle } from '../state/core.actions';
   providedIn: 'root',
 })
 export class ApplicationStyleService implements OnDestroy {
+  private store$ = inject(Store);
+
 
   private destroyed = new Subject();
 
   private static initialPrimaryColor = CssHelper.getCssVariableValue('--primary-color');
 
-  constructor(private store$: Store) {
+  constructor() {
     this.store$.select(selectViewerStyling)
       .pipe(takeUntil(this.destroyed), distinctUntilChanged())
       .subscribe((appStyling) => {

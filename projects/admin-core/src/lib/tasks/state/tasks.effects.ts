@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap, take, tap } from 'rxjs';
 import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
@@ -10,6 +10,10 @@ import { loadTaskDetailsStart, loadTasksStart } from './tasks.actions';
 
 @Injectable()
 export class TasksEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+
 
   public loadTasks$ = createEffect(() => {
     return this.actions$.pipe(
@@ -68,11 +72,5 @@ export class TasksEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {}
 
 }

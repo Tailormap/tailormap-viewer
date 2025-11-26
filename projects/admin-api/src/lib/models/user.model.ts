@@ -7,6 +7,7 @@ export interface UserModel {
   email: string | null;
   enabled: boolean;
   name: string | null;
+  organisation: string | null;
   notes?: string | null;
   validUntil: Date | null;
   version?: number | null;

@@ -1,13 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { concatMap, map, of, Subject, take, takeUntil, tap } from 'rxjs';
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectMapSettings } from '../../../map/state/map.selectors';
 
@@ -20,8 +17,12 @@ import { selectMapSettings } from '../../../map/state/map.selectors';
   standalone: false,
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private clipboard = inject(Clipboard);
 
-  public toolActive$: Observable<boolean>;
+
+  public toolActive = signal<boolean>(false);
 
   public coordinatesForm = new FormGroup({
     x: new FormControl<number | null>(null),
@@ -36,17 +37,19 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   private clickLocationSubject = new Subject<FeatureModel[]>();
   private clickLocationSubject$ = this.clickLocationSubject.asObservable();
   private crs: string = '';
+  private tool: string | undefined;
 
-  constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
-    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
-    this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
-      if (!isActive) {
-        //only reset the input fields, not the hidden fields
-        this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
-        this.clickLocationSubject.next([]);
-      }
-    });
-
+  constructor() {
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_PICKER])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(enabled => {
+        this.toolActive.set(enabled);
+        if (!enabled) {
+          //only reset the input fields, not the hidden fields
+          this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
+          this.clickLocationSubject.next([]);
+        }
+      });
     this.store$.select(selectMapSettings).pipe(
       takeUntil(this.destroyed),
       map(settings => {
@@ -76,11 +79,12 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.COORDINATE_PICKER,
     })
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       ).subscribe(mapClick => this.handleMapClick(mapClick));
@@ -117,11 +121,14 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
     this.clickLocationSubject.complete();
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
   }
 
   public toggle() {
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
+    if (this.toolActive()) {
+      this.mapService.disableTool(this.tool);
+      return;
+    }
+    this.mapService.enableTool(this.tool, true);
   }
 
   public copy() {

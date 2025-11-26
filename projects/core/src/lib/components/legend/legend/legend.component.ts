@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { LegendService } from '../services/legend.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
@@ -17,17 +17,17 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class LegendComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private legendService = inject(LegendService);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+
 
   public visible$: Observable<boolean>;
   public layers$: Observable<LegendInfoModel[]>;
   public trackById = (index: number, item: LegendInfoModel) => item.layer.id;
 
-  constructor(
-    private store$: Store,
-    private legendService: LegendService,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-  ) {
+  constructor() {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.LEGEND);
     this.layers$ = this.visible$.pipe(
       switchMap(visible => {

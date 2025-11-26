@@ -3,13 +3,17 @@
 } @else {
   <div class="checkbox-filter-table">
     <form [formGroup]="aliasForm">
-      <mat-table [dataSource]="attributeValuesSettings">
+      <mat-table [dataSource]="attributeValuesSettings()">
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef>
             <div i18n="@@admin-core.application.filter.unique-value">Value</div>
           </mat-header-cell>
           <mat-cell *matCellDef="let value">
-            <div class="wrap-text">{{ value.value }}</div>
+            @if (value.useAsIlikeSubstringFilter) {
+              <div class="wrap-text"><em i18n="@@admin-core.application.filter.contains">contains</em> {{ value.value }}</div>
+            } @else {
+              <div class="wrap-text">{{ value.value }}</div>
+            }
           </mat-cell>
         </ng-container>
 
@@ -42,10 +46,51 @@
           </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="columnLabels"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columnLabels;"></mat-row>
+        <ng-container matColumnDef="remove">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <button
+              mat-icon-button
+              (click)="removeValue(value.value)"
+              matTooltip="Remove"
+              i18n-matTooltip="@@admin-core.application.filter.remove">
+              <mat-icon svgIcon="close"></mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnLabels.concat('remove')"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnLabels.concat('remove')"></mat-row>
       </mat-table>
     </form>
+  </div>
+
+  <div class="add-value-container">
+    <div class="add-value-input">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          placeholder="New value"
+          i18n-placeholder="@@admin-core.application.filter.new-value"
+          [formControl]="newValueControl" />
+      </mat-form-field>
+    </div>
+    <div class="add-value-substring-checkbox">
+      <mat-checkbox
+        color="primary"
+        [formControl]="useAsIlikeSubstringFilterControl"
+        i18n="@@admin-core.application.filter.use-as-partial-value">
+        Look for values containing this value
+      </mat-checkbox>
+    </div>
+    <div class="add-value-button">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="addNewValue()"
+        i18n="@@admin-core.application.filter.add">Add</button>
+    </div>
   </div>
 }
 

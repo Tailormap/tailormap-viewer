@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
@@ -16,6 +16,9 @@ import { FilterData, InputFilterData, OutputFilterData } from '../../models/attr
   standalone: false,
 })
 export class AttributeFilterComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
 
   @Input()
   public set attributeType(attributeType: AttributeType) {
@@ -110,11 +113,6 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
 
   private formValues: FilterData = {};
   public trackByIndex = (idx: number) => idx;
-
-  constructor(
-    private fb: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {}
 
   public ngOnInit(): void {
     this.attributeFilterForm.valueChanges

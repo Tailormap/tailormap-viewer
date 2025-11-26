@@ -4,4 +4,5 @@ export enum FilterToolEnum {
   SLIDER = 'SLIDER',
   SWITCH = 'SWITCH',
   DATE_PICKER = 'DATE_PICKER',
+  DROPDOWN_LIST = 'DROPDOWN_LIST',
 }

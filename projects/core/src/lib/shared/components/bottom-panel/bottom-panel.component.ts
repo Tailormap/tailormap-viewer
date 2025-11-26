@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
@@ -11,6 +11,9 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
   standalone: false,
 })
 export class BottomPanelComponent implements OnInit {
+  private layoutService = inject(ViewerLayoutService);
+  private destroyRef = inject(DestroyRef);
+
 
   public tooltips = {
     minimize: $localize `:@@core.shared.minimize-panel:Minimize panel`,
@@ -48,11 +51,6 @@ export class BottomPanelComponent implements OnInit {
 
   public isMinimized = false;
   public isMaximized = false;
-
-  constructor(
-    private layoutService: ViewerLayoutService,
-    private destroyRef: DestroyRef,
-  ) { }
 
   public ngOnInit(): void {
     this.heightSubject.next(this.initialHeight || 350);

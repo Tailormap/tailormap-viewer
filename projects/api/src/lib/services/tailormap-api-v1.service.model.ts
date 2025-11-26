@@ -1,6 +1,6 @@
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel,
+  SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
@@ -35,6 +35,7 @@ export interface TailormapApiV1ServiceModel {
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
     geometryInAttributes?: boolean;
+    withAttachments?: boolean;
   }): Observable<FeaturesResponseModel>;
 
   deleteFeature$(params: {
@@ -87,4 +88,19 @@ export interface TailormapApiV1ServiceModel {
   }): Observable<SearchResponseModel>;
 
   getLatestUpload$<T>(category: string): Observable<T>;
+
+  addAttachment$(params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any>;
+
+  listAttachments$(params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]>;
+
+  getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string;
+
+  deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any;
 }

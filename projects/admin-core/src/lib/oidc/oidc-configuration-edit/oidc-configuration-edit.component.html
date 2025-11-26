@@ -1,9 +1,7 @@
-<ng-container *ngIf="oidcConfiguration$ | async as oidcConfiguration">
+@if (oidcConfiguration$ | async; as oidcConfiguration) {
   <h2 class="page-details-title" i18n="@@admin-core.oidc.edit-configuration">Edit {{ oidcConfiguration.name }}</h2>
-
   <div class="oidc-configuration-edit-content">
     <tm-admin-oidc-configuration-edit-settings></tm-admin-oidc-configuration-edit-settings>
-
     @let groups = groups$ | async;
     @if (groups && groups.length > 0) {
       <div class="linked-groups">
@@ -16,7 +14,6 @@
               <a [routerLink]="'/admin/groups/group/' + group.name">{{ group.name}}</a>
             </mat-cell>
           </ng-container>
-
           <ng-container matColumnDef="alias">
             <mat-header-cell *matHeaderCellDef i18n="@@admin-core.groups.alias">Alias</mat-header-cell>
             <mat-cell *matCellDef="let group">
@@ -25,24 +22,19 @@
               }
             </mat-cell>
           </ng-container>
-
           <ng-container matColumnDef="lastSeen">
             <mat-header-cell *matHeaderCellDef i18n="@@admin-core.common.last-seen">Last seen</mat-header-cell>
             <mat-cell class="last-seen" *matCellDef="let group">{{ group.lastSeen | date: 'medium' }}</mat-cell>
           </ng-container>
-
           <mat-header-row *matHeaderRowDef="['name', 'alias', 'lastSeen']"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ['name', 'alias', 'lastSeen'];"></mat-row>
         </mat-table>
       </div>
     }
   </div>
-
   <div class="page-details-actions oidcConfiguration-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="draftOIDCConfigurationPristine$ | async" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(oidcConfiguration)" i18n="@@admin-core.common.delete">Delete</button>
     <button mat-flat-button routerLink="/admin/settings/oidc-configurations" i18n="@@admin-core.common.close">Close</button>
   </div>
-
-
-</ng-container>
+}

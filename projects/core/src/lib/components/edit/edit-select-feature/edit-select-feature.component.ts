@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-feature.model";
 import { MapService } from "@tailormap-viewer/map";
 import { Store } from "@ngrx/store";
@@ -15,18 +15,16 @@ import { setSelectedEditFeature } from "../state/edit.actions";
   standalone: false,
 })
 export class EditSelectFeatureComponent implements OnInit {
+  private mapService = inject(MapService);
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public features: FeatureInfoFeatureModel[] = [];
 
   private highlightedFeatureGeometrySubject = new BehaviorSubject<string | null>(null);
   private highlightedFeatureGeometry$ = this.highlightedFeatureGeometrySubject.asObservable();
-
-  constructor(
-      private mapService: MapService,
-      private store$: Store,
-      private destroyRef: DestroyRef,
-  ) { }
 
   public ngOnInit(): void {
     this.mapService.renderFeatures$(

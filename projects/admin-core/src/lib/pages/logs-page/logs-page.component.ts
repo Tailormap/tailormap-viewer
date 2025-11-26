@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, signal, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -11,13 +11,10 @@ import { TailormapApiConstants } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class LogsPageComponent implements OnInit {
-  public log = signal('');
+  private destroyRef = inject(DestroyRef);
+  private httpClient = inject(HttpClient);
 
-  constructor(
-    private destroyRef: DestroyRef,
-    private httpClient: HttpClient,
-  ) {
-  }
+  public log = signal('');
 
   public ngOnInit(): void {
     this.httpClient.get(`${TailormapApiConstants.BASE_URL}/actuator/logfile`, { responseType: 'text' }).pipe(

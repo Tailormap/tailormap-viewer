@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as CoreActions from './core.actions';
-import * as FilterActions from '../filter/state/filter.actions';
+import * as FilterActions from './filter-state/filter.actions';
 import { concatMap, map, tap, filter } from 'rxjs';
 import { LoadViewerService } from '../services/load-viewer.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { UrlHelper } from '@tailormap-viewer/shared';
+import { AttributeFilterHelper } from '../filter/helpers/attribute-filter.helper';
 
 @Injectable()
 export class CoreEffects {
+  private actions$ = inject(Actions);
+  private loadViewerService = inject(LoadViewerService);
+  private location = inject(Location);
+  private router = inject(Router);
+
 
   public loadViewer$ = createEffect(() => {
     return this.actions$.pipe(
@@ -35,8 +41,8 @@ export class CoreEffects {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewerSuccess),
       map(action => action.viewer.filterGroups || []),
-      concatMap(filterGroups => filterGroups.map(
-          filterGroup => FilterActions.addFilterGroup({ filterGroup }))),
+      map(groups => AttributeFilterHelper.separateSubstringFiltersInCheckboxFilters(groups)),
+      map(filterGroups => FilterActions.addAllFilterGroupsInConfig({ filterGroups })),
     );
   });
 
@@ -48,12 +54,5 @@ export class CoreEffects {
       tap(paths => this.router.navigate(paths, { preserveFragment: true, skipLocationChange: true })),
     );
   }, { dispatch: false });
-
-  constructor(
-    private actions$: Actions,
-    private loadViewerService: LoadViewerService,
-    private location: Location,
-    private router: Router,
-  ) {}
 
 }

@@ -1,10 +1,6 @@
-import { FilterGroupModel } from '@tailormap-viewer/api';
-import { AttributeFilterModel } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '@tailormap-viewer/api';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
-import { BaseFilterModel } from '@tailormap-viewer/api';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 
 export class CqlFilterHelper {
@@ -43,8 +39,22 @@ export class CqlFilterHelper {
 
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
     const filter: string[] = [];
-    const baseFilter: string[] = filterGroup.filters
-      .map(f => CqlFilterHelper.convertFilterToQuery(f, layerId))
+    const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
+    const originalFilters = filterGroup.filters
+      .filter(f => !f.disabled
+        && !(FilterTypeHelper.isAttributeFilter(f) && (f.generatedByFilterId || CqlFilterHelper.isNumericFilterWithNoValue(f))));
+    const baseFilter: string[] = originalFilters
+      .map(originalFilter => {
+        const cqlQueries = [
+          CqlFilterHelper.convertFilterToQuery(originalFilter, layerId),
+          ...generatedFilters.filter(
+            generatedFilter => FilterTypeHelper.isAttributeFilter(generatedFilter) && generatedFilter.generatedByFilterId === originalFilter.id,
+          ).map(generatedFilter => CqlFilterHelper.convertFilterToQuery(generatedFilter, layerId)),
+        ].filter(TypesHelper.isDefined);
+        return cqlQueries.length > 1
+          ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
+          : cqlQueries[0];
+      })
       .filter(TypesHelper.isDefined);
     filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);
@@ -180,4 +190,9 @@ export class CqlFilterHelper {
     return attributeType === AttributeType.DATE || attributeType === AttributeType.TIMESTAMP;
   }
 
+  private static isNumericFilterWithNoValue(filter: AttributeFilterModel) {
+    return CqlFilterHelper.isNumeric(filter.attributeType)
+      && (filter.condition !== FilterConditionEnum.NULL_KEY)
+      && (!filter.value || filter.value.length === 0);
+  }
 }

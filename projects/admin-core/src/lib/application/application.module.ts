@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { applicationStateKey } from './state/application.state';
 import { applicationReducer } from './state/application.reducer';
@@ -46,6 +46,9 @@ import {
   ApplicationFiltersListComponent,
   ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent,
 } from './application-edit-filters/filters';
+import {
+  ApplicationDropdownListFilterFormComponent,
+} from './application-edit-filters/filters/application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +82,7 @@ import {
     ApplicationSwitchFilterFormComponent,
     ApplicationEditFilterFormComponent,
     ApplicationDatePickerFilterFormComponent,
+    ApplicationDropdownListFilterFormComponent,
   ],
   imports: [
     CommonModule,
@@ -99,7 +103,9 @@ import {
     ],
 })
 export class ApplicationModule {
-  constructor(applicationService: ApplicationService) {
+  constructor() {
+    const applicationService = inject(ApplicationService);
+
     applicationService.listenForApplicationChanges();
   }
 }

@@ -4,7 +4,7 @@ name-template: v$NEXT_PATCH_VERSION 🎁
 version-template: "$MAJOR.$MINOR.$PATCH"
 
 template: |
-  ## Uncategorised changes
+  ## Changes
 
   $CHANGES
 
@@ -44,3 +44,5 @@ categories:
 replacers:
   - search: '/CVE-(\d{4})-(\d+)/g'
     replace: 'https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$1-$2'
+  - search: '/HTM-(\d+)/g'
+    replace: '[HTM-$1](https://b3partners.atlassian.net/browse/HTM-$1)'

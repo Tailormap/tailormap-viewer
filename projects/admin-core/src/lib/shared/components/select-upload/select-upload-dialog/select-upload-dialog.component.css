@@ -46,5 +46,5 @@ h2 {
   width: 24px;
   height: 24px;
   padding: 2px 0;
-  --mdc-icon-button-icon-size: 18px;
+  --mat-icon-button-icon-size: 18px;
 }

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
+import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -135,10 +136,6 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true).pipe(delay(this.delay));
   }
 
-  public validatePasswordStrength$(_password: string): Observable<boolean> {
-    return of(true).pipe(delay(this.delay));
-  }
-
   public updateUser$(params: { username: string; user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel> {
     return of({ ...params.user, groupNames: params.user.groups }).pipe(delay(this.delay));
   }
@@ -247,5 +244,11 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true);
   }
 
+  public getUniqueValues$(): Observable<UniqueValuesResponseModel> {
+    return of(mockData.getUniqueValues());
+  }
 
+  public getServerConfig$(): Observable<AdminServerConfigModel> {
+    return of({ multipart: { maxFileSize: 15728640, maxRequestSize: 15728640 } });
+  }
 }

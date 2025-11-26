@@ -1,18 +1,26 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
-import { selectEditActive, selectSelectedEditLayer } from '../state/edit.selectors';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  selectCopiedFeatures,
+  selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectSelectedCopyLayer,
+  selectSelectedEditLayer,
+} from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, of, take } from 'rxjs';
-import { setEditActive, setEditCreateNewFeatureActive, setSelectedEditLayer } from '../state/edit.actions';
+import { combineLatest, map, of, take } from 'rxjs';
+import {
+  setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
+  setSelectedEditLayer,
+} from '../state/edit.actions';
 import { FormControl } from '@angular/forms';
-import { selectEditableLayers } from '../../../map/state/map.selectors';
+import { selectEditableLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { AttributeType, AuthenticatedUserService, GeometryType } from '@tailormap-viewer/api';
-import { activateTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
-import { DrawingType } from '@tailormap-viewer/map';
+import {
+  AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum, EditConfigModel, GeometryType,
+} from '@tailormap-viewer/api';
+import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
+import { ComponentConfigHelper } from '../../../shared';
 
 @Component({
   selector: 'tm-edit',
@@ -22,25 +30,31 @@ import { DrawingType } from '@tailormap-viewer/map';
   standalone: false,
 })
 export class EditComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private applicationLayerService = inject(ApplicationLayerService);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  private mapService = inject(MapService);
 
   public active$ = this.store$.select(selectEditActive);
+  public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
+  public copyActive$ = this.store$.select(selectEditCopyOtherLayerFeaturesActive);
+  public copiedFeaturesCount$ = this.store$.select(selectCopiedFeatures).pipe(map(features => features.length));
+  public selectedCopyLayer$ = this.store$.select(selectSelectedCopyLayer);
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
 
-  private defaultTooltip = $localize `:@@core.edit.edit-feature-tooltip:Edit feature`;
+  public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
+
+  private defaultTooltip = $localize `:@@core.edit.edit:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
   private noLayersTooltip = $localize `:@@core.edit.no-editable-layers-tooltip:There are no editable layers. Enable a layer to start editing.`;
 
   public tooltip = this.defaultTooltip;
   public disabled = false;
 
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private applicationLayerService: ApplicationLayerService,
-    private authenticatedUserService: AuthenticatedUserService,
-  ) { }
+  private selectedCopyLayerIds: string[] = [];
 
   public ngOnInit(): void {
     this.store$.select(selectSelectedEditLayer)
@@ -72,6 +86,35 @@ export class EditComponent implements OnInit {
         }
         if (active && editableLayers.length === 0) {
           this.toggle(true);
+        }
+      });
+
+    ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
+      this.store$,
+      BaseComponentTypeEnum.EDIT,
+      config => {
+        this.selectedCopyLayerIds = config.copyLayerIds || [];
+      },
+    );
+
+    combineLatest([ this.store$.select(selectSelectedEditLayer),
+      this.store$.select(selectOrderedVisibleLayersWithServices),
+      this.mapService.getMapViewDetails$() ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(([ selectedEditLayerId, visibleLayers, mapViewDetails ]) => {
+      const layers = selectedEditLayerId === null ? [] : visibleLayers.filter(layer =>
+        layer.id !== selectedEditLayerId
+        && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale)
+        && this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id));
+      this.layersToCreateNewFeaturesFrom.set(layers);
+    });
+
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(enabled => {
+        if (!enabled) {
+          // Maybe we should check for changes and then ask what the user wants to do?
+          this.store$.dispatch(setEditActive({ active: false }));
         }
       });
   }
@@ -115,7 +158,6 @@ export class EditComponent implements OnInit {
         this.store$.dispatch(setEditActive({ active: editActive }));
         if (editActive) {
           this.store$.dispatch(hideFeatureInfoDialog());
-          this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.EDIT, preventMapToolActivation: true }));
         }
       });
   }
@@ -124,25 +166,22 @@ export class EditComponent implements OnInit {
     if (!this.layer.value) {
       return;
     }
-    // get layer attribute details for edit form
-    this.applicationLayerService.getLayerDetails$(this.layer.value)
-      .pipe(take(1))
-      .subscribe(layerDetails => {
-        // show edit dialog
-        this.store$.dispatch(setEditCreateNewFeatureActive({
-          active: true,
-          geometryType,
-          columnMetadata: layerDetails.details.attributes.map(attribute => {
-              return {
-                layerId: layerDetails.details.id,
-                key: attribute.key,
-                type: attribute.type as unknown as AttributeType,
-                alias: attribute.editAlias,
-              };
-            },
-          ),
-        }));
-      });
+
+    this.applicationLayerService.getLayerDetails$(this.layer.value).pipe(take(1)).subscribe(layerDetails => {
+      this.store$.dispatch(setEditCreateNewFeatureActive({
+        active: true,
+        geometryType,
+        columnMetadata: layerDetails.details.attributes.map(attribute => {
+            return {
+              layerId: layerDetails.details.id,
+              name: attribute.name,
+              type: attribute.type as unknown as AttributeType,
+              alias: attribute.editAlias,
+            };
+          },
+        ),
+      }));
+    });
   }
 
   public createFeatureIfSingleGeometryType() {
@@ -154,4 +193,28 @@ export class EditComponent implements OnInit {
     }
   }
 
+  public createFeatureFromLayer(id: string) {
+
+    this.selectedCopyLayer$.pipe(take(1)).subscribe(selectedCopyLayer => {
+      if (id === selectedCopyLayer) {
+        this.store$.dispatch(setEditCopyOtherLayerFeaturesDisabled());
+        return;
+      }
+
+      this.applicationLayerService.getLayerDetails$(this.layer.value).pipe(take(1)).subscribe(layerDetails => {
+        this.store$.dispatch(setEditCopyOtherLayerFeaturesActive({
+          layerId: id,
+          columnMetadata: layerDetails.details.attributes.map(attribute => {
+              return {
+                layerId: layerDetails.details.id,
+                name: attribute.name,
+                type: attribute.type as unknown as AttributeType,
+                alias: attribute.editAlias,
+              };
+            },
+          ),
+        }));
+      });
+    });
+  }
 }

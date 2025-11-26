@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ConnectionPositionPair, Overlay, OverlayConfig, PositionStrategy } from '@angular/cdk/overlay';
 import { PopoverParamsModel } from './models/popover-params.model';
 import { PopoverRef } from './popover-ref';
@@ -10,11 +10,9 @@ import { OverlayRef } from '../overlay/overlay-ref';
   providedIn: 'root',
 })
 export class PopoverService {
+  private overlayService = inject(OverlayService);
+  private overlay = inject(Overlay);
 
-  constructor(
-    private overlayService: OverlayService,
-    private overlay: Overlay,
-  ) {}
 
   public open<R = any, T = any>(params: PopoverParamsModel<T>): OverlayRef<R, T> {
     const overlayConfig = this.getOverlayConfig(

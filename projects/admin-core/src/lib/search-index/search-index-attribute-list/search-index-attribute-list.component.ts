@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, Output, EventEmitter, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
@@ -13,6 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class SearchIndexAttributeListComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public title: string = '';
@@ -42,11 +44,6 @@ export class SearchIndexAttributeListComponent implements OnInit {
   public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
 
   public filterTerm$ = this.attributeFilter.asObservable();
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

@@ -46,7 +46,14 @@ describe('AttributeListContent', () => {
       declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent ],
       providers: [
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });

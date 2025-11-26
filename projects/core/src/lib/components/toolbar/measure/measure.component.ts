@@ -1,13 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal } from '@angular/core';
 import { DrawingToolConfigModel, DrawingToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { map, Observable, Subject, switchMap, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { activateTool, deactivateTool, deregisterTool, registerTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { selectActiveTool } from '../state/toolbar.selectors';
-import { ApplicationStyleService } from '../../../services/application-style.service';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { ApplicationStyleService } from '../../../services';
+import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-measure',
@@ -16,21 +14,20 @@ import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-v
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class MeasureComponent implements OnInit, OnDestroy {
+export class MeasureComponent implements OnInit {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
 
-  private destroyed = new Subject();
-  public toolActive: 'length' | 'area' | null = null;
+  public toolActive = signal<'length' | 'area' | null>(null);
   private featureGeom = new Subject<string>();
 
   private defaultLengthTooltip = $localize `:@@core.toolbar.measure-length:Measure distance`;
   private defaultAreaTooltip = $localize `:@@core.toolbar.measure-area:Measure area`;
   public tooltips$: Observable<{ length: string; area: string }>;
+  private tool: string | undefined;
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.tooltips$ = this.store$.select(selectComponentsConfigForType<MeasureComponentConfigModel>(BaseComponentTypeEnum.MEASURE))
       .pipe(
         map(config => {
@@ -43,15 +40,14 @@ export class MeasureComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.store$.select(selectActiveTool)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(activeTool => {
-        if (activeTool === ToolbarComponentEnum.MEASURE) {
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.MEASURE])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(enabled => {
+        if (enabled) {
           return;
         }
         this.hideGeometry();
-        this.toolActive = null;
-        this.cdr.detectChanges();
+        this.toolActive.set(null);
       });
 
     this.mapService.renderFeatures$('measurement-layer', this.featureGeom.asObservable(), {
@@ -60,10 +56,11 @@ export class MeasureComponent implements OnInit, OnDestroy {
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeWidth: 3,
       showTotalSize: true,
-    }, { updateWhileAnimating: true }).pipe(takeUntil(this.destroyed)).subscribe();
+    }, { updateWhileAnimating: true }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
+      owner: BaseComponentTypeEnum.MEASURE,
       style: {
         strokeColor: ApplicationStyleService.getPrimaryColor(),
         pointFillColor: 'transparent',
@@ -72,9 +69,9 @@ export class MeasureComponent implements OnInit, OnDestroy {
       },
     })
       .pipe(
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.MEASURE, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         switchMap(({ tool }) => tool.drawing$),
       )
@@ -89,21 +86,14 @@ export class MeasureComponent implements OnInit, OnDestroy {
       });
   }
 
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.MEASURE }));
-  }
-
   public measure(type: 'length' | 'area') {
-    if (this.toolActive === type) {
+    if (this.toolActive() === type) {
       this.hideGeometry();
-      this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.MEASURE }));
+      this.mapService.disableTool(this.tool);
       return;
     }
-    const enableArguments = { type: type === 'area' ? 'area' : 'line' };
-    this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.MEASURE, enableArguments }));
-    this.toolActive = type;
+    this.mapService.enableTool(this.tool, true, { type: type === 'area' ? 'area' : 'line' });
+    this.toolActive.set(type);
     this.hideGeometry();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject, signal, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
@@ -56,20 +56,20 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
   standalone: false,
 })
 export class SelectUploadDialogComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);
+  public data = inject<SelectUploadData>(MAT_DIALOG_DATA);
+  private uploadRemoveService = inject<UploadRemoveServiceModel>(UPLOAD_REMOVE_SERVICE);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private dialog = inject(MatDialog);
+  private confirmDialogService = inject(ConfirmDialogService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
   public loading = signal(false);
   public dialogProps: DialogProps;
 
-  constructor(
-    private dialogRef: MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>,
-    @Inject(MAT_DIALOG_DATA) public data: SelectUploadData,
-    @Inject(UPLOAD_REMOVE_SERVICE) private uploadRemoveService: UploadRemoveServiceModel,
-    private adminApiService: TailormapAdminApiV1Service,
-    private dialog: MatDialog,
-    private confirmDialogService: ConfirmDialogService,
-    private adminSnackbarService: AdminSnackbarService,
-  ) {
+  constructor() {
     this.dialogProps = CATEGORY_PROPS[this.data.category]
       ? CATEGORY_PROPS[this.data.category]
       : CATEGORY_PROPS['defaultProps'];

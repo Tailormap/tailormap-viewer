@@ -1,19 +1,20 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
-  ExtTransformToolModel, MapService,
-  MapStyleModel,
-  SelectToolConfigModel, SelectToolModel, ToolManagerModel,
-  ToolTypeEnum,
+  ExtTransformToolModel, FeatureHelper, MapService, MapStyleModel, SelectToolConfigModel, SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DrawingFeatureTypeEnum } from '../models/drawing-feature-type.enum';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../services/application-style.service';
+import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import { DrawingHelper } from '../helpers/drawing.helper';
 
 @Injectable()
 export class DrawingService {
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
 
   private activeDrawingTool: DrawingFeatureTypeEnum | null = null;
   private drawingTool: DrawingToolModel | null = null;
@@ -25,15 +26,30 @@ export class DrawingService {
   private featureGeometryModified = new Subject<string>();
   private activeToolChanged = new Subject<DrawingFeatureTypeEnum | null>();
   private selectToolActive = new BehaviorSubject<boolean>(false);
+  private drawingResetCalled = new Subject();
+  private predefinedStyleSelected = new BehaviorSubject<DrawingFeatureStyleModel | null>(null);
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
   public featureGeometryModified$ = this.featureGeometryModified.asObservable();
   public activeToolChanged$ = this.activeToolChanged.asObservable();
   public selectToolActive$ = this.selectToolActive.asObservable();
+  public drawingResetCalled$ = this.drawingResetCalled.asObservable();
+  public predefinedStyleSelected$ = this.predefinedStyleSelected.asObservable();
 
   private selectedFeature: FeatureModel | null = null;
   public isSelectedFeaturePointGeometry = false;
+
+  public SIZE_MIN = 10000;
+  public SIZE_MAX = 1;
+  public customRectangleWidth = signal<number | null>(null);
+  public customRectangleLength = signal<number | null>(null);
+  public customSquareLength = signal<number | null>(null);
+  public customCircleRadius = signal<number | null>(null);
+
+  public lockedStyle = signal<boolean>(false);
+  public style = signal<DrawingFeatureStyleModel>(DrawingHelper.getUpdatedDefaultStyle());
+  public showMeasures = signal<boolean>(false);
 
   private static getDefaultStyle = (): Partial<MapStyleModel> => ({
     pointType: 'circle',
@@ -45,27 +61,24 @@ export class DrawingService {
   private selectionStyle: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel) | undefined;
   private toolManager: ToolManagerModel | undefined;
 
-  constructor(
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     const toolManager$ = this.mapService.getToolManager$()
       .pipe(takeUntilDestroyed(this.destroyRef));
     toolManager$.subscribe(toolManager => this.toolManager = toolManager);
     toolManager$
-      .pipe(switchMap(toolManager => toolManager.getToolsDisabled$()))
+      .pipe(switchMap(toolManager => toolManager.getToolStatusChanged$()))
       .subscribe(({ disabledTools, enabledTools }) => {
-        if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.includes(this.drawingTool.id)) {
+        if (this.drawingTool && this.activeDrawingTool !== null && disabledTools.some(t => t.toolId === this.drawingTool?.id)) {
           // Drawing tool is disabled while drawing (probably because of other tool activation)
           this.featureSelected.next(null);
           this.enableSelectAndModify(false);
         }
-        if (this.extTransformTool && this.selectedFeature !== null && disabledTools.includes(this.extTransformTool.id)) {
+        if (this.extTransformTool && this.selectedFeature !== null && disabledTools.some(t => t.toolId === this.extTransformTool?.id)) {
           // Transform tool is disabled while we have a selected feature, unselect feature to keep it visible
           this.featureSelected.next(null);
         }
         if (this.selectTool) {
-          this.selectToolActive.next(enabledTools.includes(this.selectTool.id));
+          this.selectToolActive.next(enabledTools.some(t => t.toolId === this.selectTool?.id));
         }
       });
   }
@@ -82,6 +95,7 @@ export class DrawingService {
     this.mapService.createTool$<DrawingToolModel, DrawingToolConfigModel>({
       type: ToolTypeEnum.Draw,
       style: DrawingService.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.DRAWING,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -90,7 +104,10 @@ export class DrawingService {
       )
       .subscribe(drawEvent => {
         if (drawEvent && drawEvent.type === 'end' && this.activeDrawingTool) {
-          this.drawingAdded.next(drawEvent);
+          this.drawingAdded.next({
+            ...drawEvent,
+            geometry: this.applyFixedSize(drawEvent.geometry),
+          });
           if (opts.drawSingleShape) {
             const activeTool = this.activeDrawingTool;
             setTimeout(() => {
@@ -104,6 +121,7 @@ export class DrawingService {
       type: ToolTypeEnum.Select,
       layers: [opts.drawingLayerId],
       style: opts.selectionStyle || DrawingService.getDefaultStyle(),
+      owner: BaseComponentTypeEnum.DRAWING,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -134,6 +152,7 @@ export class DrawingService {
     this.mapService.createTool$<ExtTransformToolModel, ExtTransformToolConfigModel>({
       type: ToolTypeEnum.ExtTransform,
       style,
+      owner: BaseComponentTypeEnum.DRAWING,
     }).pipe(
       takeUntilDestroyed(this.destroyRef),
       tap(({ tool }) => {
@@ -158,8 +177,8 @@ export class DrawingService {
     this.activeDrawingTool = null;
   }
 
-  public toggle(type: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
-    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, showMeasures, forceEnableDrawing);
+  public toggle(type: DrawingFeatureTypeEnum, forceEnableDrawing?: boolean) {
+    this.toggleTool(DrawingService.drawingFeatureTypeToDrawingType(type), type, forceEnableDrawing);
   }
 
   public setSelectedFeature(feature: FeatureModel | null) {
@@ -173,8 +192,110 @@ export class DrawingService {
     this.disableDrawing(disableOtherTools);
     this.enableModifyTool();
   }
+  public getActiveTool() {
+    return this.activeDrawingTool;
+  }
 
-  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, showMeasures?: boolean, forceEnableDrawing?: boolean) {
+  private static allPolygonDrawingTypes: DrawingFeatureTypeEnum[] = [
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE,
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS,
+    DrawingFeatureTypeEnum.ELLIPSE,
+  ];
+
+  private static polygonDrawingTypes: DrawingFeatureTypeEnum[] = [
+    DrawingFeatureTypeEnum.POLYGON,
+    DrawingFeatureTypeEnum.SQUARE,
+    DrawingFeatureTypeEnum.RECTANGLE,
+    DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.ELLIPSE,
+  ];
+
+  public resetBeforeDrawing(nextDrawingType?: DrawingFeatureTypeEnum) {
+    if (this.predefinedStyleSelected.value && this.activeDrawingTool && nextDrawingType) {
+      if (DrawingService.allPolygonDrawingTypes.includes(this.activeDrawingTool) && DrawingService.polygonDrawingTypes.includes(nextDrawingType)) {
+        return;
+      }
+    }
+
+    const defaultNonUserEditableStyle: Partial<DrawingFeatureStyleModel> = {
+      description: undefined,
+      secondaryStroke: undefined,
+      tertiaryStroke: undefined,
+      dashOffset: 0,
+      strokeOffset: 0,
+    };
+    DrawingHelper.updateDefaultStyle(defaultNonUserEditableStyle);
+    this.style.set(DrawingHelper.getUpdatedDefaultStyle());
+    this.predefinedStyleSelected.next(null);
+    this.lockedStyle.set(false);
+    this.drawingResetCalled.next(null);
+  }
+
+  public setPredefinedStyle(style: DrawingFeatureModelAttributes | null) {
+    if (style == null) {
+      this.enableSelectAndModify();
+      return;
+    }
+    this.predefinedStyleSelected.next(style.style);
+    this.style.set({
+      ...DrawingHelper.getDefaultStyle(),
+      ...style.style,
+      markerSize: style.type === DrawingFeatureTypeEnum.IMAGE ? 100 : undefined,
+      label: '',
+    });
+    this.lockedStyle.set(style.lockedStyle ?? false);
+    if (style.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && style.rectangleSize) {
+      this.customRectangleWidth.set(style.rectangleSize.width);
+      this.customRectangleLength.set(style.rectangleSize.height);
+    }
+    if (style.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && style.circleRadius) {
+      this.customCircleRadius.set(style.circleRadius);
+    }
+    if (style.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && style.squareLength) {
+      this.customSquareLength.set(style.squareLength);
+    }
+    if (this.getActiveTool() !== style.type) {
+      const compatibleDrawingType = this.activeDrawingTool != null
+        && DrawingService.polygonDrawingTypes.includes(style.type) && DrawingService.allPolygonDrawingTypes.includes(this.activeDrawingTool);
+
+      if (!compatibleDrawingType) {
+        this.toggle(style.type);
+      }
+    }
+  }
+
+  private applyFixedSize(geometry: string): string {
+    const customRectangleWidth = this.customRectangleWidth();
+    const customRectangleLength = this.customRectangleLength();
+    if (this.activeDrawingTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && customRectangleWidth != null && customRectangleLength != null && geometry) {
+      const rectangle = FeatureHelper.createRectangleAtPoint(geometry, customRectangleWidth, customRectangleLength);
+      if (rectangle) {
+        return rectangle;
+      }
+    }
+    const customCircleRadius = this.customCircleRadius();
+    if (this.activeDrawingTool === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && customCircleRadius != null && geometry) {
+      const circle = FeatureHelper.createCircleAtPoint(geometry, customCircleRadius);
+      if (circle) {
+        return circle;
+      }
+    }
+    const customSquareLength = this.customSquareLength();
+    if (this.activeDrawingTool === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && customSquareLength != null && geometry) {
+      const square = FeatureHelper.createRectangleAtPoint(geometry, customSquareLength, customSquareLength);
+      if (square) {
+        return square;
+      }
+    }
+    return geometry;
+  }
+
+  private toggleTool(type: DrawingType, drawingFeatureType: DrawingFeatureTypeEnum, forceEnableDrawing?: boolean) {
     if (!this.drawingTool || !this.selectTool) {
       return;
     }
@@ -184,7 +305,7 @@ export class DrawingService {
     } else {
       // Enable drawing
       this.activeDrawingTool = drawingFeatureType;
-      const style: MapStyleModel = showMeasures ? { showTotalSize: true, showSegmentSize: true } : {};
+      const style: MapStyleModel = this.showMeasures() ? { showTotalSize: true, showSegmentSize: true } : {};
       this.toolManager?.enableTool(this.drawingTool.id, true, { type, style }, true);
       this.toolManager?.disableTool(this.selectTool.id, true);
       if (this.extTransformTool) {
@@ -236,6 +357,7 @@ export class DrawingService {
       [DrawingFeatureTypeEnum.CIRCLE]: 'circle',
       [DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS]: 'point',
       [DrawingFeatureTypeEnum.SQUARE]: 'square',
+      [DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH]: 'point',
       [DrawingFeatureTypeEnum.RECTANGLE]: 'rectangle',
       [DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE]: 'point',
       [DrawingFeatureTypeEnum.ELLIPSE]: 'ellipse',

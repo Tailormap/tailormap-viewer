@@ -1,5 +1,6 @@
 import {
-  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, Optional, TemplateRef, ViewChild,
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, HostListener, ElementRef, viewChild, effect,
+  AfterViewChecked,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -15,7 +16,16 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   styleUrls: ['./tree.component.css'],
   standalone: false,
 })
-export class TreeComponent implements OnInit, OnDestroy {
+export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
+  private treeService = inject(TreeService);
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+  private treeDragDropService = inject(TreeDragDropService, { optional: true });
+
+  @HostListener('window:resize', ['$event'])
+  public onResize() {
+    this.updateDropzoneHeight();
+  }
 
   @Input()
   public treeNodeTemplate?: TemplateRef<any>;
@@ -39,7 +49,7 @@ export class TreeComponent implements OnInit, OnDestroy {
       )
       .subscribe(dataSource => {
         const idx = dataSource.findIndex(n => n.id === scrollToItem);
-        this.treeElement?.scrollToIndex(idx, 'smooth');
+        this.treeElement()?.scrollToIndex(idx, 'smooth');
       });
   }
 
@@ -52,8 +62,12 @@ export class TreeComponent implements OnInit, OnDestroy {
   @Input()
   public dragHandleSelector?: string;
 
-  @ViewChild('treeElement', { static: false, read: CdkVirtualScrollViewport })
-  private treeElement: CdkVirtualScrollViewport | undefined;
+  @Input()
+  public extendedDropzone?: boolean;
+
+  private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
+
+  private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });
 
   public selectedNodeId: string | undefined;
 
@@ -65,12 +79,29 @@ export class TreeComponent implements OnInit, OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private treeService: TreeService,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-    @Optional() private treeDragDropService: TreeDragDropService,
-  ) { }
+  public extendedDropzoneClass: string = TreeDragDropService.EXTENDED_DROPZONE_CLASS;
+
+  public dataSource$ = this.treeService.getTreeDataSource$();
+
+  private prevTreeHeight = 0;
+
+  constructor() {
+    effect(() => {
+      const treeElement = this.treeElement();
+      if (treeElement) {
+        this.updateDropzoneHeight();
+      }
+    });
+  }
+
+  public ngAfterViewChecked(): void {
+    const treeHeight = this.treeElement()?.elementRef.nativeElement.offsetHeight || 0;
+    if (this.prevTreeHeight !== treeHeight) {
+      // Keep previous height to avoid calling checkViewportSize too often
+      this.prevTreeHeight = treeHeight;
+      this.treeElement()?.checkViewportSize();
+    }
+  }
 
   public ngOnInit(): void {
     this.treeService.selectedNode$
@@ -95,17 +126,14 @@ export class TreeComponent implements OnInit, OnDestroy {
       this.treeService.getTreeDataSource$()
         .pipe(takeUntil(this.destroyed), filter(dataSource => !!dataSource && dataSource.length > 0))
         .subscribe(() => {
-          const el = this.treeElement?.elementRef.nativeElement;
+          const el = this.treeElement()?.elementRef.nativeElement;
+          this.updateDropzoneHeight();
           if (!el || !this.getDropZones) {
             return;
           }
-          this.treeDragDropService.dataSourceChanged(this.getDropZones(el));
+          this.treeDragDropService?.dataSourceChanged(this.getDropZones(el));
         });
     }
-  }
-
-  public getDataSource() {
-    return this.treeService.getTreeDataSource$();
   }
 
   public hasChild(nodeData: FlatTreeModel) {
@@ -179,18 +207,19 @@ export class TreeComponent implements OnInit, OnDestroy {
   }
 
   public handleDragStart(event: DragEvent, node: FlatTreeModel) {
-    if (!this.treeDragDropService || !this.getDropZones || !this.treeElement) {
+    const treeElement = this.treeElement();
+    if (!this.treeDragDropService || !this.getDropZones || !treeElement) {
       event.preventDefault();
       return;
     }
-    const dropZoneConfig = this.getDropZones(this.treeElement.elementRef.nativeElement, node);
+    const dropZoneConfig = this.getDropZones(treeElement.elementRef.nativeElement, node);
     const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
     if (!dragAllowed) {
       event.preventDefault();
       return;
     }
     this.ngZone.runOutsideAngular(() => {
-      this.treeDragDropService.handleDragStart(event, node, dropZoneConfig);
+      this.treeDragDropService?.handleDragStart(event, node, dropZoneConfig);
     });
   }
 
@@ -234,4 +263,19 @@ export class TreeComponent implements OnInit, OnDestroy {
   public depth(node: FlatTreeModel) {
     return node.level;
   }
+
+  private updateDropzoneHeight() {
+    setTimeout(() => {
+      const dropzoneEl = this.extendedDropzoneEl();
+      const treeElement = this.treeElement();
+      if (!dropzoneEl || !treeElement) {
+        return;
+      }
+      const viewportHeight = treeElement.elementRef.nativeElement.offsetHeight;
+      const contentHeight = treeElement.measureRenderedContentSize();
+      const dropzoneHeight = Math.max(0, viewportHeight - contentHeight);
+      dropzoneEl.nativeElement.style.height = `${dropzoneHeight}px`;
+    }, 100);
+  }
+
 }

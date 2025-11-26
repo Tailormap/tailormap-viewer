@@ -1,13 +1,19 @@
 <h1 mat-dialog-title i18n="@@shared.about.title">About Tailormap</h1>
 
 <ng-template #infoOrUnknown let-infoText>
-  <ng-container *ngIf="infoText">{{infoText}}</ng-container>
-  <ng-container *ngIf="!infoText" i18n="@@shared.about.unknown">Unknown</ng-container>
+  @if (infoText) {
+    {{infoText}}
+  }
+  @if (!infoText) {
+    <ng-container i18n="@@shared.about.unknown">Unknown</ng-container>
+  }
 </ng-template>
 
 <div class="dialog-content">
-  <mat-spinner *ngIf="loading$ | async" mode="indeterminate" diameter="20" color="primary"></mat-spinner>
-  <ng-container *ngIf="version$ | async as version">
+  @if (loading$ | async) {
+    <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+  }
+  @if (version$ | async; as version) {
     <div class="row">
       <div class="label" i18n="@@shared.about.version">Version</div>
       <div><ng-container *ngTemplateOutlet="infoOrUnknown; context: {$implicit: version.version}"></ng-container></div>
@@ -15,22 +21,28 @@
     <div class="row">
       <div class="label" i18n="@@shared.about.build-date">Build date</div>
       <div>
-        <ng-container *ngIf="version.buildDate">
+        @if (version.buildDate) {
           <span>{{version.buildDate | date:"mediumDate" }}</span>&nbsp;
           <span>{{version.buildDate | date:"mediumTime" }}</span>
-        </ng-container>
-        <ng-container *ngIf="!version.buildDate" i18n="@@shared.about.unknown">Unknown</ng-container>
+        }
+        @if (!version.buildDate) {
+          <ng-container i18n="@@shared.about.unknown">Unknown</ng-container>
+        }
       </div>
     </div>
-    <div class="row" *ngIf="version.addedPackages.length > 0">
-      <div class="label" i18n="@@shared.about.added-packages">Extensions</div>
-      <div>
-        <div *ngFor="let pkg of version.addedPackages">
-          {{pkg.name}} {{pkg.version}}
+    @if (version.addedPackages.length > 0) {
+      <div class="row">
+        <div class="label" i18n="@@shared.about.added-packages">Extensions</div>
+        <div>
+          @for (pkg of version.addedPackages; track pkg) {
+            <div>
+              {{pkg.name}} {{pkg.version}}
+            </div>
+          }
         </div>
       </div>
-    </div>
-  </ng-container>
+    }
+  }
 </div>
 
 <div mat-dialog-actions align="end">

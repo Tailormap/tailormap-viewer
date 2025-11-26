@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectDrawingFeatures, selectSelectedDrawingFeature, setSelectedFeature, updateDrawingFeatureStyle } from '../state';
+import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 
 @Component({
   selector: 'tm-drawing-objects-list',
@@ -12,52 +12,72 @@ import { DrawingFeatureModel } from '../models/drawing-feature.model';
   standalone: false,
 })
 export class DrawingObjectsListComponent {
+  private store$ = inject(Store);
+  private elRef = inject(ElementRef);
 
   @Input()
   public drawingLayerId = '';
 
-  @ViewChild('editLabel')
-  private editLabel: ElementRef | null = null;
+  @Output()
+  public featureSelected = new EventEmitter<string>();
+
+  @ViewChild('editDescription')
+  private editDescription: ElementRef | null = null;
 
   public features$: Observable<Array<DrawingFeatureModel & { selected: boolean }>> = combineLatest([
     this.store$.select(selectDrawingFeatures),
     this.store$.select(selectSelectedDrawingFeature),
   ]).pipe(map(([ features, selectedFeature ]) => {
+    this.selectedFeature = selectedFeature?.__fid ?? null;
     return features.map(f => ({ ...f, selected: f.__fid === selectedFeature?.__fid }));
   }));
-  public editingLabelForFeatureFid: string | null = null;
 
-  constructor(
-    private store$: Store,
-  ) {
-    // TODO: scroll to selected feature -- ViewportScroller or scrollIntoView() don't work somehow
+  public editingDescriptionForFeatureFid: string | null = null;
+  private selectedFeature: string | null = null;
+  public isExpanded = signal<boolean>(false);
+
+  constructor() {
+    afterEveryRender(() => {
+      this.scrollToSelectedFeature();
+    });
   }
 
   public selectFeature(fid: string) {
-    this.store$.dispatch(setSelectedFeature({ fid }));
+    this.featureSelected.emit(fid);
   }
 
-  public stripMacros(label: string | undefined) {
-    return (label || '').replace(/\[[A-Z]+]/g, '');
+  public stripMacros(description: string | undefined) {
+    return (description || '').replace(/\[[A-Z]+]/g, '');
   }
 
-  public selectFeatureAndEditLabel(fid: string) {
+  public selectFeatureAndEditDescription(fid: string) {
     this.selectFeature(fid);
-    this.editingLabelForFeatureFid = fid;
+    this.editingDescriptionForFeatureFid = fid;
     setTimeout(() => {
-      this.editLabel?.nativeElement.focus();
+      this.editDescription?.nativeElement.focus();
     }, 0);
   }
 
-  public updateLabel() {
-    if (!this.editingLabelForFeatureFid || !this.editLabel) {
+  public updateDescription() {
+    if (!this.editingDescriptionForFeatureFid || !this.editDescription) {
       return;
     }
-    this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingLabelForFeatureFid, style: { label: this.editLabel.nativeElement.value } }));
-    this.editingLabelForFeatureFid = null;
+    this.store$.dispatch(updateDrawingFeatureStyle({ fid: this.editingDescriptionForFeatureFid, style: { description: this.editDescription.nativeElement.value } }));
+    this.editingDescriptionForFeatureFid = null;
   }
 
-  public cancelLabelEdit() {
-    this.editingLabelForFeatureFid = null;
+  public cancelDescriptionEdit() {
+    this.editingDescriptionForFeatureFid = null;
   }
+
+  private srcolledToFeature: string | null = null;
+
+  private scrollToSelectedFeature() {
+    if (!this.isExpanded() || !this.selectedFeature || !this.elRef || !this.elRef.nativeElement || this.srcolledToFeature === this.selectedFeature) {
+      return;
+    }
+    this.srcolledToFeature = this.selectedFeature;
+    this.elRef.nativeElement.querySelector(`[data-feature-fid="${this.selectedFeature}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
 }

@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
-  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel,
+  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,19 +15,20 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: false,
 })
 export class LoginComponent implements OnInit {
+  private router = inject(Router);
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  private dialog = inject(MatDialog);
+
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
+  public requestPasswordReset$ = (email: string):Observable<boolean> => this.api.requestPasswordReset$(email);
   public loginConfiguration$: Observable<LoginConfigurationModel>;
   public routeBeforeLogin: string | undefined;
   public insufficientRightsMessage: string | undefined;
+  public showPasswordResetForm = false;
 
-  constructor(
-    private store$: Store,
-    private router: Router,
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-    private authenticatedUserService: AuthenticatedUserService,
-    private dialog: MatDialog,
-  ) {
+  constructor() {
     const state = this.router.getCurrentNavigation()?.extras.state;
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
     this.routeBeforeLogin = state ? state['routeBeforeLogin'] : undefined;
@@ -48,4 +48,7 @@ export class LoginComponent implements OnInit {
     this.authenticatedUserService.setUserDetails($event);
   }
 
+  public onRequestPasswordReset() {
+    this.showPasswordResetForm = true;
+  }
 }

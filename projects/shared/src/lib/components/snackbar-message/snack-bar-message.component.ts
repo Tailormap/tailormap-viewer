@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarDismiss, MatSnackBarRef } from '@angular/material/snack-bar';
 import { SnackBarMessageOptionsModel } from './snack-bar-message-options.model';
 import { map, Observable, takeWhile, timer } from 'rxjs';
@@ -11,13 +11,10 @@ import { map, Observable, takeWhile, timer } from 'rxjs';
   standalone: false,
 })
 export class SnackBarMessageComponent implements OnInit {
+  public data = inject<SnackBarMessageOptionsModel>(MAT_SNACK_BAR_DATA);
+  private snackBarRef = inject<MatSnackBarRef<SnackBarMessageComponent>>(MatSnackBarRef);
 
   public progress$: null | Observable<number> = null;
-
-  constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public data: SnackBarMessageOptionsModel,
-    private snackBarRef: MatSnackBarRef<SnackBarMessageComponent>,
-  ) { }
 
   public static open$(matSnackBar: MatSnackBar, config: SnackBarMessageOptionsModel): Observable<MatSnackBarDismiss> {
     const panelClass = ['snack-bar-message-panel'];

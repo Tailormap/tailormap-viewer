@@ -1,10 +1,16 @@
 <div [formGroup]="boundsForm">
   <div class="label">
     <mat-label>
-      <ng-container *ngIf="label">{{ label }}</ng-container>
-      <ng-container *ngIf="!label" i18n="@@admin-core.common.bounds">Bounds</ng-container>
+      @if (label) {
+        {{ label }}
+      }
+      @if (!label) {
+        <ng-container i18n="@@admin-core.common.bounds">Bounds</ng-container>
+      }
     </mat-label>
-    <button *ngIf="projection" mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
+    @if (projection) {
+      <button mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
+    }
     <button mat-stroked-button color="accent" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
   </div>
   <div class="fields">

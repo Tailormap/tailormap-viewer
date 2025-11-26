@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
@@ -20,6 +20,14 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private catalogService = inject(CatalogService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private dialog = inject(MatDialog);
+  private confirmDialog = inject(ConfirmDialogService);
+  private router = inject(Router);
+
 
   public node$: Observable<ExtendedCatalogNodeModel | null> = of(null);
   private destroyed = new Subject();
@@ -28,16 +36,6 @@ export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
   public saving$ = this.savingSubject.asObservable();
 
   public updatedNode: Omit<ExtendedCatalogNodeModel, 'id'> | null = null;
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private catalogService: CatalogService,
-    private adminSnackbarService: AdminSnackbarService,
-    private dialog: MatDialog,
-    private confirmDialog: ConfirmDialogService,
-    private router: Router,
-  ) { }
 
   public ngOnInit(): void {
     this.node$ = this.route.paramMap.pipe(

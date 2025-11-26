@@ -1,6 +1,4 @@
-import {
-  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -18,6 +16,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   standalone: false,
 })
 export class SliderComponent implements ControlValueAccessor {
+  private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input()
   public min = 0;
@@ -28,6 +29,12 @@ export class SliderComponent implements ControlValueAccessor {
   @Input()
   public step = 1;
 
+  /**
+   * Make sure to add a proper debouncing, especially before expensive tasks like dispatching rxjs actions.
+   */
+  @Input()
+  public changeValueWhileSliding: boolean = false;
+
   @Input()
   public displayWith: ((value: number) => string) = (value: number) => value.toString();
 
@@ -35,11 +42,9 @@ export class SliderComponent implements ControlValueAccessor {
   public value: number | undefined | null;
 
   @Input()
-  public set betweenValues(betweenValues: {lower: number; upper: number} | null) {
-    if (betweenValues) {
-      this.lowerValue = betweenValues.lower;
-      this.upperValue = betweenValues.upper;
-    }
+  public set betweenValues(betweenValues: {lower: number | null; upper: number | null}) {
+    this.lowerValue = betweenValues.lower ?? this.min;
+    this.upperValue = betweenValues.upper ?? this.max;
   }
 
   @Input()
@@ -57,11 +62,6 @@ export class SliderComponent implements ControlValueAccessor {
 
   public lowerValue: number | null = null;
   public upperValue: number | null = null;
-
-  constructor(
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public writeValue(obj: number | undefined | null): void {
     this.value = obj;
@@ -124,6 +124,26 @@ export class SliderComponent implements ControlValueAccessor {
     const avgLabelPx = (lowerLabelPx + upperLabelPx) / 2;
 
     return distPx < avgLabelPx + 16;
+  }
+
+  public onInput(event: Event, changeFunction = (v: number) => this.onValueChange(v)): void {
+    if (!this.changeValueWhileSliding) {
+      return;
+    }
+    if (event.target instanceof HTMLInputElement) {
+      const value = parseFloat(event.target.value);
+      if (!isNaN(value)) {
+        changeFunction(value);
+      }
+    }
+  }
+
+  public onLowerInput($event: Event) {
+    this.onInput($event, (value) => this.onLowerValueChange(value));
+  }
+
+  public onUpperInput($event: Event) {
+    this.onInput($event, (value) => this.onUpperValueChange(value));
   }
 
 }

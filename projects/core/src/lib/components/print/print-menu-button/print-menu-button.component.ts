@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,8 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class PrintMenuButtonComponent {
+  private store$ = inject(Store);
+
   public componentType = BaseComponentTypeEnum.PRINT;
   public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.print.print:Print`));
-  constructor(private store$: Store) {}
 }

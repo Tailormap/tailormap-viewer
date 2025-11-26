@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
@@ -20,6 +20,14 @@ import { GroupService } from '../../user/services/group.service';
   standalone: false,
 })
 export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private oidcConfigurationService = inject(OIDCConfigurationService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private groupService = inject(GroupService);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -29,17 +37,6 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   public draftOIDCConfigurationPristine$: Observable<boolean> = of(false);
 
   public groups$: Observable<Array<GroupModel & { lastSeen: Date | null }>> = of([]);
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private oidcConfigurationService: OIDCConfigurationService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-    private groupService: GroupService,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.store$.select(selectOIDCConfigurationsLoadStatus).pipe(
@@ -64,20 +61,15 @@ export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
             return [];
           }
 
-          return groups.filter(group => {
-            const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
-            const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
-
-            return oidcClientIds.includes(oidcConfiguration.clientId);
-          }).map(group => {
-            const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
-            const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
-
-            return {
-              ...group,
-              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
-            };
-          });
+          return groups.filter(group => group.oidcInfo?.clientIds.includes(oidcConfiguration.clientId))
+            .map(group => {
+              const lastSeenValue = group.oidcInfo?.lastSeenByClientId[oidcConfiguration.clientId];
+              const lastSeen = lastSeenValue ? new Date(lastSeenValue) : null;
+              return {
+                ...group,
+                lastSeen,
+              };
+            });
         }),
       );
   }

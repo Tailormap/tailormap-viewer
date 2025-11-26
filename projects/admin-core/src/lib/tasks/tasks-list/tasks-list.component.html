@@ -26,7 +26,8 @@
           </mat-icon>
         }
 
-        @if ( task.lastResult?.includes(' successfully')) {
+        @if ( task.lastResult?.includes(' successfully') ||
+              task.lastResult?.includes(' succeeded') ) {
           <mat-icon class="list-icon success"
                     svgIcon="admin_task_successful"
                     tmTooltip="last execution succesful"

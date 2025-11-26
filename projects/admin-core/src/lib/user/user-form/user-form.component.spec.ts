@@ -10,11 +10,14 @@ import { initialUserState, userStateKey } from '../state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async (isValidPassword: boolean) => {
-  const mockApiService = {
+  const mockAdminApiService = {
     getGroups$: jest.fn(() => of([])),
     getUsers$: jest.fn(() => of([])),
+  };
+  const mockApiService = {
     validatePasswordStrength$: jest.fn(() => of(isValidPassword)),
   };
   const userUpdated = jest.fn();
@@ -23,7 +26,8 @@ const setup = async (isValidPassword: boolean) => {
     declarations: [PasswordFieldComponent],
     on: { userUpdated },
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: mockApiService },
+      { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },
+      { provide: TailormapSecurityApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
@@ -45,6 +49,7 @@ describe('UserFormComponent', () => {
         username: 'user1',
         email: 'test@test.com',
         name: 'Real name',
+        organisation: null,
         enabled: true,
         validUntil: null,
         groups: [],

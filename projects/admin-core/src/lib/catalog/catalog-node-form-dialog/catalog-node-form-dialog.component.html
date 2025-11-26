@@ -1,11 +1,15 @@
 <h2 mat-dialog-title>
-  <ng-container *ngIf="!data.node" i18n="@@admin-core.catalog.create-new-folder">Create new folder</ng-container>
-  <ng-container *ngIf="data.node" i18n="@@admin-core.catalog.edit-node">Edit {{data.node.title}}</ng-container>
+  @if (!data.node) {
+    <ng-container i18n="@@admin-core.catalog.create-new-folder">Create new folder</ng-container>
+  }
+  @if (data.node) {
+    <ng-container i18n="@@admin-core.catalog.edit-node">Edit {{data.node.title}}</ng-container>
+  }
 </h2>
 <mat-dialog-content>
   <tm-admin-catalog-node-form [node]="data.node"
-                              [parentNode]="data.parentNode"
-                              (changed)="updateNode($event)"></tm-admin-catalog-node-form>
+    [parentNode]="data.parentNode"
+  (changed)="updateNode($event)"></tm-admin-catalog-node-form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-flat-button (click)="cancel()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>

@@ -1,15 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
-  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, SearchIndexModel,
+  AppLayerSettingsModel, AppTreeLayerNodeModel, FeatureTypeModel, FormModel, FormSummaryModel, GeoServiceProtocolEnum, SearchIndexModel,
 } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicationLayerSettings } from '../state/application.selectors';
 import {
-  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take,
-  takeUntil,
+  BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { LoadingStateEnum, TreeModel } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, Tileset3dStyleHelper, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
@@ -25,7 +24,7 @@ import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import {
-  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality,
+  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality, Tileset3dStyle,
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
@@ -43,6 +42,12 @@ type FeatureSourceAndType = {
   standalone: false,
 })
 export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private dialog = inject(MatDialog);
+  private featureSourceService = inject(FeatureSourceService);
+  private formService = inject(FormService);
+  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+
 
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
@@ -58,9 +63,14 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
 
-  public layerIs3D = false;
+  public layerIs3d = false;
+  public layerIs3dTiles = false;
 
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
+
+  public tilesetStyleErrorMessage: string = '';
+  private tilesetStyleJSONErrorMessage = $localize `:@@admin-core.application.invalid-json:Invalid JSON: `;
+  private tilesetStyleConformErrorMessage = $localize `:@@admin-core.application.invalid-tileset-style:The style does not conform to the 3D Tileset Styling Language structure`;
 
   @Input()
   public set node(node: TreeModel<AppTreeLayerNodeModel> | null) {
@@ -79,7 +89,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.setTitle();
     this.projectionAvailability$ = this.getProjectionAvailability$(serviceLayer);
     if (serviceLayer?.service) {
-      this.layerIs3D = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+      this.layerIs3d = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
+      this.layerIs3dTiles = serviceLayer.service.protocol === GeoServiceProtocolEnum.TILES3D;
     }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
@@ -113,17 +124,12 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     showFeatureInfo: new FormControl<boolean>(true),
     showInAttributeList: new FormControl<boolean>(true),
     showExport: new FormControl<boolean>(true),
+    tileset3dStyle: new FormControl<string | null>(null),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
 
-  constructor(
-    private store$: Store,
-    private dialog: MatDialog,
-    private featureSourceService: FeatureSourceService,
-    private formService: FormService,
-    private applicationFeatureSwitchService: ApplicationFeatureSwitchService,
-  ) {
+  constructor() {
     this.searchIndexEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.SEARCH_INDEX);
   }
 
@@ -190,6 +196,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           formId: value.formId ?? null,
           searchIndexId: value.searchIndexId ?? null,
           autoRefreshInSeconds: value.autoRefreshInSeconds ?? null,
+          tileset3dStyle: this.getTileset3dStyleFromString(value.tileset3dStyle),
           hiddenFunctionality: [
             ...showFeatureInfo ? [] : [HiddenLayerFunctionality.featureInfo],
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
@@ -317,6 +324,12 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
+
+    if (nodeSettings.tileset3dStyle && !this.layerSettingsForm.get('tileset3dStyle')?.dirty) {
+      this.layerSettingsForm.patchValue({
+        tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
+      }, { emitEvent: false });
+    }
   }
 
   private initFeatureSource(serviceLayer: ExtendedGeoServiceAndLayerModel | null) {
@@ -406,6 +419,23 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
           return AdminProjectionsHelper.getProjectionAvailabilityForServiceLayer(serviceLayer.layer, layersInService);
         }),
       );
+  }
+
+  private getTileset3dStyleFromString(styleString?: string | null): Tileset3dStyle | null {
+    if (styleString) {
+      try {
+        const styleObject = JSON.parse(styleString);
+        if (Tileset3dStyleHelper.isTileset3dStyle(styleObject)) {
+          this.tilesetStyleErrorMessage = '';
+          return styleObject;
+        } else {
+          this.tilesetStyleErrorMessage = this.tilesetStyleConformErrorMessage;
+        }
+      } catch (e) {
+        this.tilesetStyleErrorMessage = this.tilesetStyleJSONErrorMessage + e;
+      }
+    }
+    return null;
   }
 
 }

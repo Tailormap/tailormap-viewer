@@ -1,11 +1,17 @@
-<div class="geolocation-buttons map-control-button-container" *ngIf="hasGeolocation">
-  <button mat-flat-button
-          class="toggle-button map-control-button"
-          i18n-tmTooltip="@@core.toolbar.zoom-to-location"
-          tmTooltip="Zoom to location"
-          [class.toggle-button--active]="isWatching"
-          (click)="onClick()">
-    <mat-icon svgIcon="location_searching" *ngIf="!hasFix"></mat-icon>
-    <mat-icon svgIcon="my_location" *ngIf="hasFix"></mat-icon>
-  </button>
-</div>
+@if (hasGeolocation) {
+  <div class="geolocation-buttons map-control-button-container">
+    <button mat-flat-button
+      class="toggle-button map-control-button"
+      i18n-tmTooltip="@@core.toolbar.zoom-to-location"
+      tmTooltip="Zoom to location"
+      [class.toggle-button--active]="isWatching"
+      (click)="onClick()">
+      @if (!hasFix) {
+        <mat-icon svgIcon="location_searching"></mat-icon>
+      }
+      @if (hasFix) {
+        <mat-icon svgIcon="my_location"></mat-icon>
+      }
+    </button>
+  </div>
+}

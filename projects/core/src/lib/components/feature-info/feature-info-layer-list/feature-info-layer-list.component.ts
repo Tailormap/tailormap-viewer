@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { selectFeatureInfoLayerListItems } from '../state/feature-info.selectors';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -12,8 +12,10 @@ import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list
   standalone: false,
 })
 export class FeatureInfoLayerListComponent {
+  private store$ = inject(Store);
+
   public layers$: Observable<FeatureInfoLayerListItemModel[]>;
-  constructor(private store$: Store) {
+  constructor() {
     this.layers$ = this.store$.select(selectFeatureInfoLayerListItems);
   }
 }

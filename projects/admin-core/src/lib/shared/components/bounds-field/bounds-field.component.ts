@@ -1,6 +1,4 @@
-import {
-  Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, ChangeDetectorRef, Output, EventEmitter, OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, ChangeDetectorRef, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -22,6 +20,8 @@ import { ClipboardHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  private cdr = inject(ChangeDetectorRef);
+
 
   private _bounds: BoundsModel | null = null;
   private _projection: string | null = null;
@@ -66,9 +66,6 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     maxx: new FormControl<number | null>(null),
     maxy: new FormControl<number | null>(null),
   });
-
-  constructor(private cdr: ChangeDetectorRef) {
-  }
 
   public ngOnInit(): void {
     this.boundsForm.valueChanges

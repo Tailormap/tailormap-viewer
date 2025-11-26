@@ -1,24 +1,28 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  selectCurrentlySelectedFeature,
-  selectFeatureInfoDialogCollapsed,
-  selectFeatureInfoDialogVisible, selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers,
-  selectIsNextButtonDisabled,
-  selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
+  selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
+  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled, selectIsPrevButtonDisabled,
+  selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { map, Observable, combineLatest, take } from 'rxjs';
+import { combineLatest, map, Observable, take } from 'rxjs';
 import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
-import { FeatureInfoModel } from '../models/feature-info.model';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { setLoadedEditFeature } from '../../edit/state/edit.actions';
+import {
+  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
+} from '@tailormap-viewer/api';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { AttachmentService } from '../../../services/attachment.service';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -28,10 +32,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class FeatureInfoDialogComponent {
+  private store$ = inject(Store);
+  public breakpointObserver = inject(BreakpointObserver);
+  private destroyRef = inject(DestroyRef);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  public attachmentHelper = inject(AttachmentService);
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
-  public currentFeature$: Observable<FeatureInfoModel | null>;
+  public currentFeature = toSignal(this.store$.select(selectCurrentlySelectedFeature), { initialValue: null });
   public selectedLayer$: Observable<FeatureInfoLayerModel | null>;
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
@@ -43,19 +52,30 @@ export class FeatureInfoDialogComponent {
   private bodyMargin = CssHelper.getCssVariableValueNumeric('--body-margin');
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width') + (this.bodyMargin * 2);
 
+  public config = ComponentConfigHelper.componentConfigSignal<FeatureInfoConfigModel>(this.store$, BaseComponentTypeEnum.FEATURE_INFO);
+  public editComponentEnabled= ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
+  private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
+  private in3DView = this.store$.selectSignal(selectIn3dView);
+
+  public isEditPossible = computed(() => {
+    const showEditButton = !(this.config()?.showEditButton === false);
+    return showEditButton
+        && this.currentFeature()?.layer?.editable
+        && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
+        && this.editComponentEnabled()
+        && !this.in3DView();
+  });
+
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
   public attributesCollapsed = signal<boolean>(false);
-  public toggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
+  public attachmentsCollapsed = signal<boolean>(false);
+  public attachmentsToggleIcon = computed(() => this.attachmentsCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
-  constructor(
-    private store$: Store,
-    public breakpointObserver: BreakpointObserver,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
     this.dialogCollapsed$ = this.store$.select(selectFeatureInfoDialogCollapsed);
-    this.currentFeature$ = this.store$.select(selectCurrentlySelectedFeature);
     this.selectedLayer$ = this.store$.select(selectSelectedFeatureInfoLayer);
     this.selectedSingleLayer$ = combineLatest([
       this.store$.select(selectSelectedFeatureInfoLayer),
@@ -66,8 +86,10 @@ export class FeatureInfoDialogComponent {
       }
       return null;
     }));
+
     this.isPrevButtonDisabled$ = this.store$.select(selectIsPrevButtonDisabled);
     this.isNextButtonDisabled$ = this.store$.select(selectIsNextButtonDisabled);
+
     combineLatest([
       this.store$.select(selectFeatureInfoLayerListCollapsed),
       this.breakpointObserver.observe('(max-width: 600px)'),
@@ -124,4 +146,22 @@ export class FeatureInfoDialogComponent {
     this.attributesCollapsed.set(!this.attributesCollapsed());
   }
 
+  public toggleAttachments() {
+    this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
+  }
+
+  public editFeature() {
+    this.store$.select(selectCurrentFeatureForEdit)
+      .pipe(take(1))
+      .subscribe(featureWithMetadata => {
+        if (featureWithMetadata) {
+          this.store$.dispatch(setLoadedEditFeature({
+            feature: featureWithMetadata.feature,
+            columnMetadata: featureWithMetadata.columnMetadata,
+            openedFromFeatureInfo: true,
+          }));
+        }
+      });
+
+  }
 }

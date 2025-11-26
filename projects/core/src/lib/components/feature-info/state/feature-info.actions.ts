@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
+import { FeatureInfoFeatureModel } from '../models';
 
 const featureInfoActionsPrefix = '[Feature Info]';
 
@@ -19,8 +20,14 @@ export const setSelectedFeatureInfoLayer = createAction(
   props<{ layer: string }>(),
 );
 
+export const updateFeatureInFeatureInfo = createAction(
+  `${featureInfoActionsPrefix} Update Feature In Feature Info`,
+  props<{ feature: FeatureInfoFeatureModel }>(),
+);
+
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
 export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);
 export const expandCollapseFeatureInfoLayerList = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Layer List`);
 export const showNextFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Next Feature Info Feature`);
 export const showPreviousFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Previous Feature Info Feature`);
+export const reopenFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Reopen Feature Info Dialog`);

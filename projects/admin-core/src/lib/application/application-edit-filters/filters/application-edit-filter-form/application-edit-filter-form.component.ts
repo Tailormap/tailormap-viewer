@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output,
+} from '@angular/core';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
@@ -10,8 +12,7 @@ import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
-  AttributeFilterModel, FilterToolEnum, AttributeType, FilterConditionEnum, UpdateSliderFilterModel, CheckboxFilterModel,
-  UpdateSwitchFilterModel, UpdateDatePickerFilterModel, FilterTypeEnum,
+  AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -22,6 +23,11 @@ import {
   standalone: false,
 })
 export class ApplicationEditFilterFormComponent implements OnInit {
+  private applicationEditFilterService = inject(ApplicationEditFilterService);
+  private destroyRef = inject(DestroyRef);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   public filterData: InputFilterData = {
     condition: undefined,
@@ -31,9 +37,6 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   };
 
   public filterToolOptions = [{
-    label: $localize`:@@admin-core.application.filters.preset:Preset`,
-    value: FilterToolEnum.PRESET_STATIC,
-  }, {
     label: $localize`:@@admin-core.application.filters.checkbox:Checkbox`,
     value: FilterToolEnum.CHECKBOX,
   }, {
@@ -43,8 +46,14 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.switch:Switch`,
     value: FilterToolEnum.SWITCH,
   }, {
-    label: $localize`:@@admin-core.application.filters.date-picker:Date Picker`,
+    label: $localize`:@@admin-core.application.filters.date-picker:Date picker`,
     value: FilterToolEnum.DATE_PICKER,
+  }, {
+    label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
+    value: FilterToolEnum.DROPDOWN_LIST,
+  }, {
+    label: $localize`:@@admin-core.application.filters.preset:Preset`,
+    value: FilterToolEnum.PRESET_STATIC,
   }];
 
   private static readonly MAX_CHECKBOX_VALUES = 50;
@@ -57,6 +66,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
   private _filter: AttributeFilterModel | null | undefined;
+  private currentFilterId: string | null = null;
+  public initialEditConfiguration: EditFilterConfigurationModel | null = null;
 
   @Input()
   public newFilter: boolean = false;
@@ -65,6 +76,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public set filter(updateFilter: AttributeFilterModel | null | undefined) {
     this._filter = updateFilter;
     this.initForm(updateFilter);
+    if (this.currentFilterId !== updateFilter?.id) {
+      this.currentFilterId = updateFilter?.id || null;
+      if (!updateFilter?.editConfiguration) {
+        this.initialEditConfiguration = null;
+        return;
+      }
+      this.initialEditConfiguration = updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX
+        && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
+        ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
+        : { ...updateFilter.editConfiguration };
+    }
   }
   public get filter() {
     return this._filter;
@@ -76,23 +98,16 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
 
-  constructor(
-    private applicationEditFilterService: ApplicationEditFilterService,
-    private destroyRef: DestroyRef,
-    private adminSnackbarService: AdminSnackbarService,
-    private cdr: ChangeDetectorRef,
-  ) { }
-
   public filterForm = new FormGroup({
     id: new FormControl(''),
-    tool: new FormControl<FilterToolEnum>(FilterToolEnum.PRESET_STATIC),
+    tool: new FormControl<FilterToolEnum | null>(null),
     attribute: new FormControl(''),
     attributeType: new FormControl<AttributeType | null>(null),
     condition: new FormControl<FilterConditionEnum | null>(null),
     value: new FormControl<string[]>([]),
     caseSensitive: new FormControl(false),
     invertCondition: new FormControl(false),
-    editFilterConfiguration: new FormControl<UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null>(null),
+    editFilterConfiguration: new FormControl<EditFilterConfigurationModel | null>(null),
   });
 
   public ngOnInit(): void {
@@ -185,6 +200,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       && formValues.attributeType !== null
       && formValues.condition !== null
       && validFilterValues
+      && formValues.tool !== null
       && this.filterForm.dirty;
   }
 
@@ -238,17 +254,23 @@ export class ApplicationEditFilterFormComponent implements OnInit {
 
   }
 
-  public setEditFilterConfiguration(
-    $event: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel,
-  ) {
+  public setEditFilterConfiguration($event: EditFilterConfigurationModel) {
     let value: string[] = [];
     if ($event.filterTool === FilterToolEnum.SLIDER) {
-      value = $event.initialValue?.toString()
-        ? [$event.initialValue.toString()]
-        : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
-    } else if ($event.filterTool === FilterToolEnum.CHECKBOX) {
+      if (
+        ($event.initialValue === undefined || $event.initialValue === null)
+        && ($event.initialLowerValue === undefined || $event.initialLowerValue === null)
+        && ($event.initialUpperValue === undefined || $event.initialUpperValue === null)
+      ) {
+        value = [];
+      } else {
+        value = $event.initialValue?.toString()
+          ? [$event.initialValue.toString()]
+          : [ $event.initialLowerValue?.toString() ?? '', $event.initialUpperValue?.toString() ?? '' ];
+      }
+    } else if ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST) {
       value = $event.attributeValuesSettings
-        .filter(setting => setting.initiallySelected)
+        .filter(setting => setting.initiallySelected && !setting.useAsIlikeSubstringFilter)
         .map(setting => setting.value);
     } else if ($event.filterTool === FilterToolEnum.SWITCH && $event.value1 !== undefined && $event.value2 !== undefined) {
       value = $event.startWithValue2 ? [$event.value2] : [$event.value1];
@@ -257,7 +279,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         ? [$event.initialDate ?? '']
         : [ $event.initialLowerDate ?? '', $event.initialUpperDate ?? '' ];
     }
-    const condition = $event.filterTool === FilterToolEnum.CHECKBOX
+    const condition = ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST)
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
       : $event.condition;
     this.filterForm.patchValue({

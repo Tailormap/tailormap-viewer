@@ -1,5 +1,5 @@
 import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { TailormapAdminApiV1Service, UserModel } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
@@ -9,22 +9,22 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectUsers, selectUsersLoadStatus } from '../state/user.selectors';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
+import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private securityApiService = inject(TailormapSecurityApiV1Service);
+  private store$ = inject(Store);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+  private destroyRef = inject(DestroyRef);
+
 
   private selectedUser: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   public selectedUser$: Observable<string | null> = this.selectedUser.asObservable();
-
-  public constructor(
-    private adminApiService: TailormapAdminApiV1Service,
-    private store$: Store,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public listenForUserChanges() {
     this.sseService.listenForEvents$<UserModel>('User')
@@ -113,7 +113,7 @@ export class UserService {
   }
 
   public validatePasswordStrength$(password: string) {
-    return this.adminApiService.validatePasswordStrength$(password);
+    return this.securityApiService.validatePasswordStrength$(password);
   }
 
   private updateUserState(

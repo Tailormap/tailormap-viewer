@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ApiResponseHelper,
   CatalogItemKindEnum, CatalogModelHelper, FeatureSourceModel, FeatureTypeModel,
@@ -28,14 +28,12 @@ import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
   providedIn: 'root',
 })
 export class FeatureSourceService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private catalogService = inject(CatalogService);
+  private sseService = inject(AdminSseService);
 
-  constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private catalogService: CatalogService,
-    private sseService: AdminSseService,
-  ) { }
 
   public getFeatureTypes$(): Observable<ExtendedFeatureTypeModel[]> {
     return this.store$.select(selectCatalogLoadStatus)

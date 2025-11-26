@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UploadInUseItem } from '../models/upload-remove-service.model';
 
@@ -10,11 +10,10 @@ import { UploadInUseItem } from '../models/upload-remove-service.model';
   standalone: false,
 })
 export class UploadInUseDialogComponent {
-
-  constructor(
-    private dialogRef: MatDialogRef<UploadInUseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { items: UploadInUseItem[] },
-  ) { }
+  public data = inject<{
+    items: UploadInUseItem[];
+  }>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<UploadInUseDialogComponent>>(MatDialogRef);
 
   public onConfirm() {
     this.dialogRef.close(true);

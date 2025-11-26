@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseComponentConfigComponent } from './base-component-config/base-component-config.component';
 import { ComponentConfigRendererComponent } from './component-config-renderer/component-config-renderer.component';
 import { ComponentsListComponent } from './components-list/components-list.component';
 import { ConfigurationComponentRegistryService } from '../services/configuration-component-registry.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent, SharedModule } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
@@ -13,6 +13,11 @@ import { SimpleSearchComponentConfigComponent } from './simple-search-config/sim
 import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
 import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
+import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
+import { InfoConfigComponent } from './info-config/info-config.component';
+import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
+import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
+import { SharedAdminComponentsModule } from '../../shared/components';
 
 @NgModule({
   declarations: [
@@ -24,26 +29,32 @@ import { EditComponentConfigComponent } from './edit-config/edit-component-confi
     SimpleSearchComponentConfigComponent,
     HeaderComponentConfigComponent,
     EditComponentConfigComponent,
+    GeolocationConfigComponent,
+    InfoConfigComponent,
+    DrawingConfigComponent,
+    TocComponentConfigComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    BaseComponentConfigComponent,
-    SelectUploadModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        BaseComponentConfigComponent,
+        SelectUploadModule,
+        MarkdownEditorComponent,
+        SharedAdminComponentsModule,
+    ],
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
   ],
 })
 export class ComponentsModule {
-  constructor(
-    configurationComponentService: ConfigurationComponentRegistryService,
-  ) {
+  constructor() {
+    const configurationComponentService = inject(ConfigurationComponentRegistryService);
+
     /* eslint-disable max-len */
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TOC, $localize `:@@admin-core.application.component-table-of-contents:Table of contents`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.LEGEND, $localize `:@@admin-core.application.component-legend:Legend`, BaseComponentConfigComponent);
-    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.DRAWING, $localize `:@@admin-core.application.component-drawing:Drawing`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.DRAWING, $localize `:@@admin-core.application.component-drawing:Drawing`, DrawingConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.PRINT, $localize `:@@admin-core.application.component-print:Print`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FILTER, $localize `:@@admin-core.application.component-filter:Filter`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.FEATURE_INFO, $localize `:@@admin-core.application.component-feature-info:Feature info`, FeatureInfoComponentConfigComponent);
@@ -57,5 +68,8 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SIMPLE_SEARCH, $localize `:@@admin-core.application.component-simple-search:Search`, SimpleSearchComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE, $localize `:@@admin-core.application.component-terrain-layer-toggle:Terrain layer toggle`, BaseComponentConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.HEADER, $localize `:@@admin-core.application.component-header:Header`, HeaderComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.INFO, $localize `:@@admin-core.application.component-info:Info`, InfoConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_OPACITY, $localize `:@@admin-core.application.component-terrain-opacity:Terrain opacity`, BaseComponentConfigComponent);
   }
 }

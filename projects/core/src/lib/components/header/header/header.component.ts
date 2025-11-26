@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, ComponentModel, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel } from '@tailormap-viewer/api';
@@ -13,6 +13,8 @@ import { HeaderHelper } from './header.helper';
   standalone: false,
 })
 export class HeaderComponent implements OnDestroy {
+  private store$ = inject(Store);
+
 
   public config: Signal<ComponentModel<HeaderComponentConfigModel> | null>;
   public headerContainer = viewChild<ElementRef<HTMLDivElement>>('headerContainer');
@@ -21,9 +23,7 @@ export class HeaderComponent implements OnDestroy {
   public useDropdownMenu = signal(false);
   private resizeObserver: ResizeObserver | null = null;
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.config = this.store$.selectSignal(selectComponentsConfigForType(BaseComponentTypeEnum.HEADER));
 
     effect(() => {

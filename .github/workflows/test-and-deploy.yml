@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
 env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "22.17.0"
+  NODE_VERSION: "22.21.1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
@@ -20,9 +20,9 @@ jobs:
     name: 'Lint'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -41,9 +41,9 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -56,7 +56,7 @@ jobs:
         run: npm run test:ci
 
       - name: 'Upload test results'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: Test Results
@@ -80,9 +80,9 @@ jobs:
     name: "Build Angular libraries"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Upload'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Event File
           path: ${{ github.event_path }}
@@ -120,7 +120,7 @@ jobs:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot
       COMPOSE_FILE: docker-compose.yml:docker-compose.traefik.yml:ci/docker-compose.snapshot.yml
-      COMPOSE_PROFILES: solr
+      COMPOSE_PROFILES: solr,prometheus
       BASE_HREF: /
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
       API_SENTRY_DSN: ${{ vars.API_SENTRY_DSN }}
@@ -134,9 +134,15 @@ jobs:
       SOURCE_MAP_AUTH: ${{ vars.SOURCE_MAP_AUTH }}
       MAP5_URL: ${{ vars.MAP5_URL }}
       BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+      COMPOSE_BAKE: 1
+      SPRING_MAIL_HOST: ${{ secrets.SPRING_MAIL_HOST }}
+      SPRING_MAIL_PORT: ${{ secrets.SPRING_MAIL_PORT }}
+      SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
+      SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+      TAILORMAPAPI_PASSWORDRESET_ENABLED: ${{ secrets.TAILORMAPAPI_PASSWORDRESET_ENABLED }}
     needs: [ lint, test, build_libraries ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with: # If tags aren't fetched the bin/post-build-version-info.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
           fetch-depth: 0
@@ -168,6 +174,18 @@ jobs:
           docker build --progress plain --build-arg BASE_HREF=${BASE_HREF} --build-arg VERSION=${VERSION} --build-arg API_VERSION=snapshot -t ghcr.io/tailormap/tailormap:${VERSION} .
           docker save ghcr.io/tailormap/tailormap:${VERSION} > image.tar
 
+      - name: 'Log in to GitHub container registry'
+        if: ${{ env.VERSION == 'snapshot' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Push Docker image'
+        if: ${{ env.VERSION == 'snapshot' }}
+        run: docker push ghcr.io/tailormap/tailormap:${VERSION}
+
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
         with:
@@ -185,17 +203,6 @@ jobs:
         run: |
           cat image.tar | docker load
 
-      # Latest Docker Compose version needed for ci/docker-compose.pr.yml to use !reset to remove
-      # a service when merging Compose files
-      #      - name: Install latest Docker Compose
-      #        env:
-      #          COMPOSE_VERSION: "2.27.2"
-      #        run: |
-      #          DOCKER_CONFIG=/usr/local/lib/docker
-      #          sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-      #          sudo curl -sSL https://github.com/docker/compose/releases/download/v${COMPOSE_VERSION}/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-      #          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-      #          docker compose version
       - name: 'Update deployment using Docker Compose'
         run: |
           docker compose up -d --remove-orphans
@@ -221,11 +228,9 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/dependency-review-action@v4
-        # skip the jsts license check which fails on EDL-1.0, see https://github.com/actions/dependency-review-action/issues/575
         with:
           deny-licenses: GPL-2.0+, AGPL-3.0+
           comment-summary-in-pr: on-failure
-          allow-dependencies-licenses: 'pkg:npm/jsts@2.12.1'

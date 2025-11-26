@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
@@ -18,17 +18,14 @@ export interface FeatureSourceFormDialogData {
   standalone: false,
 })
 export class FeatureSourceFormDialogComponent {
+  public data = inject<FeatureSourceFormDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<FeatureSourceFormDialogComponent, FeatureSourceModel | null>>(MatDialogRef);
+  private featureSourceService = inject(FeatureSourceService);
 
   public featureSource: FeatureSourceCreateModel | null = null;
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: FeatureSourceFormDialogData,
-    private dialogRef: MatDialogRef<FeatureSourceFormDialogComponent, FeatureSourceModel | null>,
-    private featureSourceService: FeatureSourceService,
-  ) { }
 
   public static open(
     dialog: MatDialog,

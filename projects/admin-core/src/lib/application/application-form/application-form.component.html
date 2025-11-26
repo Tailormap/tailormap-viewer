@@ -2,13 +2,17 @@
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.name">Name</mat-label>
     <input matInput
-           tmAutoFocus
-           placeholder="Name"
-           i18n-placeholder="@@admin-core.common.name"
-           formControlName="name"
-    />
-    <mat-hint *ngIf="applicationForm.get('name')?.hasError('pattern')" class="error" i18n="@@admin-core.application.invalid-name-error">Name can only contain letters, numbers, underscores and dashes.</mat-hint>
-    <mat-hint *ngIf="applicationForm.get('name')?.hasError('nonUniqueName')" class="error" i18n="@@admin-core.application.non-unique-name-error">Name should be unique.</mat-hint>
+      tmAutoFocus
+      placeholder="Name"
+      i18n-placeholder="@@admin-core.common.name"
+      formControlName="name"
+      />
+    @if (applicationForm.get('name')?.hasError('pattern')) {
+      <mat-hint class="error" i18n="@@admin-core.application.invalid-name-error">Name can only contain letters, numbers, underscores and dashes.</mat-hint>
+    }
+    @if (applicationForm.get('name')?.hasError('nonUniqueName')) {
+      <mat-hint class="error" i18n="@@admin-core.application.non-unique-name-error">Name should be unique.</mat-hint>
+    }
   </mat-form-field>
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.title">Title</mat-label>
@@ -22,39 +26,43 @@
     <mat-form-field>
       <mat-label i18n="@@admin-core.application.projection">Projection</mat-label>
       <mat-select formControlName="crs" placeholder="Projection" i18n-placeholder="@@admin-core.application.projection">
-        <mat-option *ngFor="let projection of projections" [value]="projection.code">
-          {{ projection.label }}
-        </mat-option>
+        @for (projection of projections; track projection) {
+          <mat-option [value]="projection.code">
+            {{ projection.label }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <tm-admin-bounds-form-field formControlName="initialExtent"
-                                i18n-label="@@admin-core.application.initial-extent"
-                                label="Initial extent"
-                                [projection]="projection"></tm-admin-bounds-form-field>
+      i18n-label="@@admin-core.application.initial-extent"
+      label="Initial extent"
+    [projection]="projection"></tm-admin-bounds-form-field>
     <tm-admin-bounds-form-field formControlName="maxExtent"
-                                i18n-label="@@admin-core.application.max-extent"
-                                label="Max extent"
-                                [projection]="projection"></tm-admin-bounds-form-field>
+      i18n-label="@@admin-core.application.max-extent"
+      label="Max extent"
+    [projection]="projection"></tm-admin-bounds-form-field>
 
     <mat-form-field>
       <mat-label i18n="@@admin-core.application.default-language">Default language</mat-label>
       <mat-select formControlName="defaultLanguage" placeholder="Default language" i18n-placeholder="@@admin-core.application.default-language">
         <mat-option value="" i18n="@@admin-core.application.no-default-language">No default language</mat-option>
-        <mat-option *ngFor="let language of availableLanguages" [value]="language.code">
-          <mat-icon [svgIcon]="language.icon"></mat-icon>
-          {{ language.localizedLabel }}
-        </mat-option>
+        @for (language of availableLanguages; track language) {
+          <mat-option [value]="language.code">
+            <mat-icon [svgIcon]="language.icon"></mat-icon>
+            {{ language.localizedLabel }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <mat-slide-toggle formControlName="hideLoginButton"
-                      i18n="@@admin-core.application.hide-login-button">Hide login button in viewer</mat-slide-toggle>
+    i18n="@@admin-core.application.hide-login-button">Hide login button in viewer</mat-slide-toggle>
 
     <mat-slide-toggle formControlName="hideLanguageSwitcher"
-                      i18n="@@admin-core.application.hide-language-switcher">Hide language switcher in viewer</mat-slide-toggle>
+    i18n="@@admin-core.application.hide-language-switcher">Hide language switcher in viewer</mat-slide-toggle>
 
     <mat-slide-toggle formControlName="enable3d"
-                    i18n="@@admin-core.application.enable-3D">Enable 3D viewing</mat-slide-toggle>
+    i18n="@@admin-core.application.enable-3D">Enable 3D viewing</mat-slide-toggle>
     @if ( applicationForm.get('crs')?.value !== 'EPSG:3857' && applicationForm.get('enable3d')?.value ) {
       <div class="hint" i18n="@@admin-core.application.enable-3D-hint">Only the layers that are available in EPSG:3857 are visible in 3D</div>
     }

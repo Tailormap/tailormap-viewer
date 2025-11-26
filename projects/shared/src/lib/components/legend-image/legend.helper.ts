@@ -27,7 +27,7 @@ export class LegendHelper {
       const u = new URL(url);
       u.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
       return u.toString();
-    } catch(e) {
+    } catch (e) {
       return url;
     }
   }

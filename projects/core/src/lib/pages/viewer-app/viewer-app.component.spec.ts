@@ -12,9 +12,7 @@ import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
   return { provide: ActivatedRoute, useValue: {
-      // eslint-disable-next-line rxjs/finnish
       url: of(segments.map(s => new UrlSegment(s, {}))),
-      // eslint-disable-next-line rxjs/finnish
       fragment: of(fragment),
     } };
 };

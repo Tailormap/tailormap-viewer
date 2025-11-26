@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
@@ -10,12 +10,9 @@ import { LegendInfoModel } from '../models/legend-info.model';
   providedIn: 'root',
 })
 export class LegendService {
+  private mapService = inject(MapService);
+  private localeId = inject(LOCALE_ID);
 
-  constructor(
-    private mapService: MapService,
-    @Inject(LOCALE_ID) private localeId: string,
-  ) {
-  }
 
   public getLegendInfo$(appLayers$: Observable<Array<ExtendedAppLayerModel | null> | ExtendedAppLayerModel | null>, mapResolution$?: Observable<MapViewDetailsModel>):
     Observable<LegendInfoModel[]> {
@@ -36,7 +33,7 @@ export class LegendService {
                     urlObject.searchParams.set('LANGUAGE', this.localeId);
                   }
                   url = urlObject.toString();
-                } catch(_ignored) {
+                } catch (_ignored) {
                   // Ignore errors
                 }
               }

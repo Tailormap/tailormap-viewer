@@ -1,0 +1,32 @@
+.choose-values {
+  margin-top: 8px;
+}
+
+.attribute-chip ::ng-deep .mdc-evolution-chip__text-label {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.attribute-chip ::ng-deep .mdc-evolution-chip__cell {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.attribute-chip ::ng-deep .mdc-evolution-chip__action {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.attribute-chip ::ng-deep .mat-mdc-chip-action-label {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attribute-option ::ng-deep .mdc-list-item__primary-text {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

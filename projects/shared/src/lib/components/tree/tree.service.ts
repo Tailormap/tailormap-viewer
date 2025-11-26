@@ -39,11 +39,13 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     nodes: FlatTreeModel<T, TypeDef>[];
   }>({ tree: [], nodes:  [] });
 
+  private readonly dataSource$ = this.dataSource.asObservable().pipe(map(source => source.tree));
+
   public constructor() {
   }
 
   public getTreeDataSource$() {
-    return this.dataSource.asObservable().pipe(map(source => source.tree));
+    return this.dataSource$;
   }
 
   public hasNode(nodeId: string) {
@@ -186,7 +188,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public toggleNodeExpanded(node: FlatTreeModel<T, TypeDef>) {
-    // this.treeControl.toggle(node);
     this.nodeExpansionChangedSource.next({ expanded: node.expanded, node });
   }
 
@@ -252,6 +253,10 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   public getNode(nodeId: string): FlatTreeModel<T, TypeDef> | undefined {
     return this.nodesMap.get(nodeId);
+  }
+
+  public getRootNodeId(): string | null {
+    return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
   }
 
 }

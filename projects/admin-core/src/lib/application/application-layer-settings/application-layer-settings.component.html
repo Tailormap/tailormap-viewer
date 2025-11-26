@@ -10,7 +10,7 @@
       <mat-label i18n="@@admin-core.common.title">Title</mat-label>
       <input matInput formControlName="title" />
     </mat-form-field>
-    @if (!layerIs3D) {
+    @if (!layerIs3d) {
       <div class="form-field form-field__slider">
         <strong i18n="@@admin-core.application.opacity">Opacity</strong>
         <tm-slider formControlName="opacity"></tm-slider>
@@ -30,7 +30,7 @@
                 cdkAutosizeMinRows="4"
                 cdkAutosizeMaxRows="10"></textarea>
     </mat-form-field>
-    @if (!layerIs3D) {
+    @if (!layerIs3d) {
       <mat-form-field>
         <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>
         <input type="number" matInput formControlName="autoRefreshInSeconds" />
@@ -53,7 +53,7 @@
           <div class="edit-layer-attributes">
             <button mat-stroked-button
                     (click)="editAppLayerAttribute($event, featureSourceAndType)">
-              Edit attribute columns for application layer
+              <span i18n="@@admin-core.application.edit-application-layer-attributes">Edit application layer attributes</span>
               <mat-icon svgIcon="edit_square" iconPositionEnd></mat-icon>
             </button>
           </div>
@@ -106,5 +106,26 @@
         }
       }
     }
+    @if (layerIs3dTiles) {
+      <div class="set-tileset-style">
+        <strong class="set-tileset-style-label" i18n="@@admin-core.application.set-tileset-style">Set a style for the 3D Tileset</strong>
+        @if (tilesetStyleErrorMessage) {
+          <div class="tileset-style-error-message">
+            <tm-error-message [message]="tilesetStyleErrorMessage" [friendlyError]="true">
+            </tm-error-message>
+          </div>
+        }
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.application.tileset-style">Tileset style</mat-label>
+          <textarea matInput formControlName="tileset3dStyle"
+                    [cdkTextareaAutosize]="true"
+                    cdkAutosizeMinRows="4"
+                    cdkAutosizeMaxRows="12">
+          </textarea>
+        </mat-form-field>
+        <div class="hint" i18n="@@admin-core.application.tileset-style-hint">Fill in a tileset style in json format according to the <a href="https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45" target="_blank" rel="noopener">OGC 3D Tiles Styling Language</a>. Note: The structure of the style is validated, but not the style expressions.</div>
+      </div>
+    }
+
   </form>
 }

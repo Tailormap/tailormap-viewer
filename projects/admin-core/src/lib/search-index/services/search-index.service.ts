@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { SearchIndexModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
@@ -6,21 +6,22 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebounceHelper } from '@tailormap-viewer/shared';
 import { addSearchIndex, deleteSearchIndex, updateSearchIndex } from '../state/search-index.actions';
-import { catchError, concatMap, map, of } from 'rxjs';
+import { catchError, concatMap, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectDraftSearchIndex } from '../state/search-index.selectors';
+import { selectTask } from '../../tasks/state/tasks.selectors';
+import { TaskMonitoringService } from '../../tasks/services/task-monitoring.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchIndexService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+  private destroyRef = inject(DestroyRef);
+  private taskMonitoringService = inject(TaskMonitoringService);
 
-  public constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public listenForSearchIndexChanges() {
     this.sseService.listenForEvents$<SearchIndexModel>('SearchIndex')
@@ -44,7 +45,7 @@ export class SearchIndexService {
         takeUntilDestroyed(this.destroyRef),
         concatMap(searchIndex => {
           if (searchIndex) {
-            return this.updateSearchIndex$(searchIndex.id, searchIndex);
+            return this.updateSearchIndexAndTask$(searchIndex.id, searchIndex);
           }
           return of(null);
         }),
@@ -69,7 +70,31 @@ export class SearchIndexService {
       );
   }
 
-  public updateSearchIndex$(id: number, searchIndex: Partial<SearchIndexModel>) {
+  public updateSearchIndexAndTask$(id: number, searchIndex: Partial<SearchIndexModel>): Observable<SearchIndexModel | null> {
+    // If the schedule is being removed, delete the associated task.
+    // The search index should only be updated after the task is successfully deleted.
+    if (!searchIndex.schedule || searchIndex.schedule.cronExpression || !searchIndex.schedule.uuid) {
+      return this.updateSearchIndex$(id, searchIndex);
+    }
+    return this.store$.select(selectTask(searchIndex.schedule.uuid)).pipe(
+      take(1),
+      switchMap(task => {
+        if (!task) {
+          return of(null);
+        }
+        return this.taskMonitoringService.deleteTask$(task.uuid, task.type);
+      }),
+      switchMap((response) => {
+        if (response) {
+          const searchIndexEmptySchedule: Partial<SearchIndexModel> = { ...searchIndex, schedule: undefined };
+          return this.updateSearchIndex$(id, searchIndexEmptySchedule);
+        }
+        return of(null);
+      }),
+    );
+  }
+
+  private updateSearchIndex$(id: number, searchIndex: Partial<SearchIndexModel>): Observable<SearchIndexModel | null> {
     return this.adminApiService.updateSearchIndex$({ id, searchIndex })
       .pipe(
         catchError(() => {

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "isolatedModules": true,
     "baseUrl": "./",
     "paths": {
       "@tailormap-viewer/api": [
@@ -35,7 +36,7 @@
     "declarationMap": false,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,

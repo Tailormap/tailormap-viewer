@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { catchError, concatMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
@@ -6,7 +6,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import {
-  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, AttributeTypeHelper,
+  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -21,18 +21,18 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
   providedIn: 'root',
 })
 export class AttributeListDataService implements OnDestroy {
+  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private store$ = inject(Store);
+  private filterService = inject(FilterService);
+  private featureUpdatedService = inject(FeatureUpdatedService);
+
 
   private destroyed = new Subject();
 
   public static DEFAULT_ERROR_MESSAGE = $localize `:@@core.attribute-list.failed-loading-data:Failed to load attribute list data`;
   private static FILTER_GEOMETRY_COLUMNS = true;
 
-  constructor(
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-    private store$: Store,
-    private filterService: FilterService,
-    private featureUpdatedService: FeatureUpdatedService,
-  ) {
+  constructor() {
     this.registerDataUpdateListener(
       this.filterService.getChangedFilters$(),
       (filters, layerId) => filters.has(layerId),
@@ -132,10 +132,10 @@ export class AttributeListDataService implements OnDestroy {
         return !AttributeTypeHelper.isGeometryType(column.type);
       })
       .map<AttributeListColumnModel>(column => ({
-        id: column.key,
+        id: column.name,
         visible: true,
         type: column.type,
-        label: column.alias || column.key,
+        label: column.alias || column.name,
       }));
   }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
 import { setFilterTerm } from '../state/toc.actions';
@@ -13,14 +13,12 @@ import { selectFilterTerm } from '../state/toc.selectors';
   standalone: false,
 })
 export class TocFilterInputComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+
 
   public filterControl = new FormControl<string>('', { nonNullable: true });
 
   private destroyed = new Subject();
-  constructor(
-    private store$: Store,
-  ) {
-  }
 
   public ngOnDestroy() {
     this.destroyed.next(null);

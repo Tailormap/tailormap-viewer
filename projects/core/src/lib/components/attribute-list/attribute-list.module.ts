@@ -48,6 +48,7 @@ import { CoreSharedModule } from '../../shared';
 export class AttributeListModule {
   public constructor(
     // Service is instantiated here, watches changes to visible layers to create tabs
+    //eslint-disable-next-line @angular-eslint/prefer-inject
     public attributeListManagerService: AttributeListManagerService,
   ) {}
 }

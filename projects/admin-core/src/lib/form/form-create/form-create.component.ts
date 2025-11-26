@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
@@ -14,19 +14,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class FormCreateComponent {
+  private formService = inject(FormService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private destroyRef = inject(DestroyRef);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
   public formCreateModel: { form: Omit<FormModel, 'id'> } | null = null;
 
   public formValid: boolean = true;
-
-  constructor(
-    private formService: FormService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-    private destroyRef: DestroyRef,
-  ) { }
 
   public updateForm($event: { form: Omit<FormModel, 'id'> }) {
     this.formCreateModel = $event;

@@ -1,26 +1,35 @@
-<ng-container *ngIf="userDetails$ | async as userDetails">
+@if (userDetails$ | async; as userDetails) {
   <tm-menubar-button [menuTrigger]="userMenu"
-                     [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
-
+  [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
     <button mat-menu-item (click)="showAbout()">
       <span i18n="@@core.profile.about">About</span>
     </button>
-    <tm-language-toggle *ngIf="showLanguageToggle$ | async"></tm-language-toggle>
-    <button mat-menu-item disabled *ngIf="userDetails.isAuthenticated && userDetails.username">
-      <span i18n="@@core.profile.logged-in-as">Logged in as</span>
-      <span>{{' '}}{{userDetails.username}}</span>
-    </button>
-    <button mat-menu-item *ngIf="userIsAdmin$ | async" routerLink="/admin">
-      <span i18n="@@core.profile.go-to-admin">Go to admin</span>
-    </button>
-    <button mat-menu-item (click)="logout()" *ngIf="userDetails.isAuthenticated && userDetails.username">
-      <span i18n="@@core.profile.logout">Logout</span>
-    </button>
-    <ng-container *ngIf="showLoginButton$ | async">
-      <button mat-menu-item (click)="login()" *ngIf="!userDetails.isAuthenticated">
-        <span i18n="@@core.profile.login">Login</span>
+    @if (showLanguageToggle$ | async) {
+      <tm-language-toggle></tm-language-toggle>
+    }
+    @if (userDetails.isAuthenticated && userDetails.username) {
+      <button mat-menu-item disabled>
+        <span i18n="@@core.profile.logged-in-as">Logged in as</span>
+        <span>{{' '}}{{userDetails.username}}</span>
       </button>
-    </ng-container>
+    }
+    @if (userIsAdmin$ | async) {
+      <button mat-menu-item routerLink="/admin">
+        <span i18n="@@core.profile.go-to-admin">Go to admin</span>
+      </button>
+    }
+    @if (userDetails.isAuthenticated && userDetails.username) {
+      <button mat-menu-item (click)="logout()">
+        <span i18n="@@core.profile.logout">Logout</span>
+      </button>
+    }
+    @if (showLoginButton$ | async) {
+      @if (!userDetails.isAuthenticated) {
+        <button mat-menu-item (click)="login()">
+          <span i18n="@@core.profile.login">Login</span>
+        </button>
+      }
+    }
   </mat-menu>
-</ng-container>
+}

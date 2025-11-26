@@ -2,25 +2,19 @@
 
 <ng-template #formTemplate let-availableLayers>
 
-  <ng-template #noLayers>
-    <div i18n="@@core.filter.no-layers-available">No layers available to filter on</div>
-  </ng-template>
 
-  <ng-container *ngIf="availableLayers.length > 0; else: noLayers">
-
+  @if (availableLayers.length > 0) {
     <div class="form-section form-section--with-form-field">
       <div i18n="@@core.filter.select-layer-to-filter" class="form-section-label">Select the layer(s) you want to filter</div>
       <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
     </div>
-
-    <ng-container *ngIf="selectedLayersCount$ | async as layerCount">
-      <ng-container *ngIf="layerCount > 0">
+    @if (selectedLayersCount$ | async; as layerCount) {
+      @if (layerCount > 0) {
         <div class="form-section-label">
           <ng-template #layerLabel><ng-container i18n="@@core.filter.layerPlural">{layerCount, plural, =1 {layer} other {layers}}</ng-container></ng-template>
           <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected <ng-container [ngTemplateOutlet]="layerLabel" /> can be done by drawing geometry and/or selecting a reference layer.</p>
           <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected <ng-container [ngTemplateOutlet]="layerLabel" />.</p>
         </div>
-
         <div class="form-section">
           @if (( in3dView$ | async ) === false) {
             <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
@@ -29,52 +23,54 @@
             <div i18n="@@core.filter.draw-message-3D" class="draw-message-3d">Switch to 2D to draw</div>
           }
         </div>
-
         <div class="form-section">
           <div i18n="@@core.filter.select-reference-layer" class="form-section-label">Select reference layer</div>
           <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
-          <div *ngIf="isLoadingReferenceGeometry$ | async" class="loading-reference-geometry">
-            <div i18n="@@core.filter.loading-reference-layer">Loading reference geometry</div>
-            <mat-spinner color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
-          </div>
+          @if (isLoadingReferenceGeometry$ | async) {
+            <div class="loading-reference-geometry">
+              <div i18n="@@core.filter.loading-reference-layer">Loading reference geometry</div>
+              <mat-spinner color="primary" [diameter]="20" mode="indeterminate"></mat-spinner>
+            </div>
+          }
         </div>
-      </ng-container>
-    </ng-container>
-
-    <tm-error-message *ngIf="currentGroupError$ | async as currentGroupError"
-                      [message]="currentGroupError"
-                      [friendlyError]="true"></tm-error-message>
-
-    <div class="form-section form-section--with-form-field" *ngIf="hasSelectedLayersAndGeometry$ | async">
-      <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>
-      <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
-    </div>
-
+      }
+    }
+    @if (currentGroupError$ | async; as currentGroupError) {
+      <tm-error-message
+        [message]="currentGroupError"
+      [friendlyError]="true"></tm-error-message>
+    }
+    @if (hasSelectedLayersAndGeometry$ | async) {
+      <div class="form-section form-section--with-form-field">
+        <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>
+        <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
+      </div>
+    }
     <div class="form-section buttons">
-
-      <ng-template #cancelButton>
+      @if (currentGroup$ | async; as currentGroup) {
         <button mat-stroked-button
-                (click)="cancel()"
-                tmTooltip="Close filter form"
-                i18n-tmTooltip="@@core.filter.close-filter-form"
-                i18n="@@core.common.cancel">Cancel</button>
-      </ng-template>
-      <ng-container *ngIf="currentGroup$ | async as currentGroup; else cancelButton">
-        <button mat-stroked-button
-                color="warn"
-                (click)="remove(currentGroup)"
-                tmTooltip="Delete this filter"
-                i18n-tmTooltip="@@core.filter.delete-this-filter"
-                i18n="@@core.common.delete">Delete</button>
+          color="warn"
+          (click)="remove(currentGroup)"
+          tmTooltip="Delete this filter"
+          i18n-tmTooltip="@@core.filter.delete-this-filter"
+        i18n="@@core.common.delete">Delete</button>
         <button mat-flat-button
-                color="primary"
-                (click)="save()"
-                tmTooltip="Save filter"
-                i18n-tmTooltip="@@core.filter.save-filter"
-                i18n="@@core.common.save">Save</button>
-      </ng-container>
+          color="primary"
+          (click)="save()"
+          tmTooltip="Save filter"
+          i18n-tmTooltip="@@core.filter.save-filter"
+        i18n="@@core.common.save">Save</button>
+      } @else {
+        <button mat-stroked-button
+          (click)="cancel()"
+          tmTooltip="Close filter form"
+          i18n-tmTooltip="@@core.filter.close-filter-form"
+        i18n="@@core.common.cancel">Cancel</button>
+      }
     </div>
-  </ng-container>
+  } @else {
+    <div i18n="@@core.filter.no-layers-available">No layers available to filter on</div>
+  }
 </ng-template>
 
 <ng-container *ngTemplateOutlet="formTemplate; context: { $implicit: availableLayers$ | async }"></ng-container>

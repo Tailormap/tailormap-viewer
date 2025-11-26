@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { AdditionalPropertyModel, GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
-import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
+import { ValidatorsHelper } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-group-form',
@@ -15,11 +15,15 @@ import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration
   standalone: false,
 })
 export class GroupFormComponent implements OnInit, OnDestroy {
+  private adminFieldRegistryService = inject(AdminFieldRegistrationService);
+  private groupDetailsService = inject(GroupService);
+  private oidcConfigurationService = inject(OIDCConfigurationService);
+
 
   public groupForm = new FormGroup({
     name: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(ValidatorsHelper.NAME_REGEX) ],
     }),
     description: new FormControl<string>('', { nonNullable: false }),
     aliasForGroup: new FormControl<string>('', { nonNullable: false }),
@@ -62,11 +66,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
   private groupSubject = new BehaviorSubject<GroupModel | null>(null);
   public additionalProperties: AdditionalPropertyModel[] = [];
 
-  constructor(
-    private adminFieldRegistryService: AdminFieldRegistrationService,
-    private groupDetailsService: GroupService,
-    private oidcConfigurationService: OIDCConfigurationService,
-  ) {
+  constructor() {
     this.groups$ = this.groupDetailsService.getGroups$();
   }
 
@@ -81,28 +81,22 @@ export class GroupFormComponent implements OnInit, OnDestroy {
         this.readForm();
       });
 
-    this.groupSubject.asObservable().pipe(takeUntil(this.destroyed)).subscribe(group => console.log('group set', group));
-
     this.oidcConfigurations$ =
       combineLatest( [ this.groupSubject.asObservable(), this.oidcConfigurationService.getOIDCConfigurations$() ] ).pipe(
         takeUntil(this.destroyed),
         map(([ group, oidcConfigurations ]) => {
-          if (group == null) {
+          if (group == null || !group.oidcInfo || group.oidcInfo.clientIds.length === 0) {
             return [];
           }
-          const oidcClientIdsProperty = group?.additionalProperties?.find(value => value.key === 'oidcClientIds');
-          const oidcClientIds = oidcClientIdsProperty && Array.isArray(oidcClientIdsProperty.value) ? oidcClientIdsProperty.value as string[] : [];
-          const oidcLastSeenProperty = group?.additionalProperties?.find(value => value.key === 'oidcLastSeen');
-          const oidcLastSeen = oidcLastSeenProperty && typeof oidcLastSeenProperty.value === 'object' ? oidcLastSeenProperty.value as { [key: string]: string } : {};
-
-          return oidcConfigurations.filter(oidcConfiguration => {
-            return oidcClientIds.includes(oidcConfiguration.clientId);
-          }).map(oidcConfiguration => {
-            return {
-              ...oidcConfiguration,
-              lastSeen: oidcLastSeen[oidcConfiguration.clientId] ? new Date(oidcLastSeen[oidcConfiguration.clientId]) : null,
-            };
-          });
+          return oidcConfigurations.filter(oidcConfiguration => group.oidcInfo?.clientIds.includes(oidcConfiguration.clientId))
+            .map(oidcConfiguration => {
+              const lastSeenValue = group.oidcInfo?.lastSeenByClientId[oidcConfiguration.clientId];
+              const lastSeen = lastSeenValue ? new Date(lastSeenValue) : null;
+              return {
+                ...oidcConfiguration,
+                lastSeen,
+              };
+            });
         }),
       );
   }

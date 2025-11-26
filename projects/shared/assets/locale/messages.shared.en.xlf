@@ -23,6 +23,9 @@
       <trans-unit id="shared.color-picker.color-required" datatype="html">
         <source>Color is required</source>
       </trans-unit>
+      <trans-unit id="shared.color-picker.copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
       </trans-unit>
@@ -43,6 +46,9 @@
       </trans-unit>
       <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
         <source>Failed to load legend for</source>
+      </trans-unit>
+      <trans-unit id="shared.login-form.forgot-password" datatype="html">
+        <source>Forgot your password?</source>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
@@ -127,6 +133,21 @@
       </trans-unit>
       <trans-unit id="shared.overlay-helper.windows" datatype="html">
         <source>Use ctrl + scroll to zoom the map</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
+        <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.email" datatype="html">
+        <source>Email</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.error-message" datatype="html">
+        <source>An error occurred processing your request.</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.submit" datatype="html">
+        <source>Request password reset</source>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.title" datatype="html">
+        <source>Reset Password</source>
       </trans-unit>
     </body>
   </file>

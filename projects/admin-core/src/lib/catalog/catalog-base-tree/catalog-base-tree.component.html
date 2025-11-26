@@ -1,8 +1,10 @@
-<mat-spinner mode="indeterminate" diameter="20" color="primary" *ngIf="isLoading$ | async"></mat-spinner>
-<ng-container *ngIf="errorMessage$ | async as message">
+@if (isLoading$ | async) {
+  <mat-spinner mode="indeterminate" diameter="20" color="primary"></mat-spinner>
+}
+@if (errorMessage$ | async; as message) {
   <tm-error-message [message]="message"></tm-error-message>
   <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
-</ng-container>
+}
 <tm-tree [treeNodeTemplate]="treeNodeTemplate"
-         [scrollToItem]="scrollToItem"
-         [getDropZones]="getDropZones"></tm-tree>
+  [scrollToItem]="scrollToItem"
+[getDropZones]="getDropZones"></tm-tree>

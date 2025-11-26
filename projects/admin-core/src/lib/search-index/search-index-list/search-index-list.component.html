@@ -1,28 +1,31 @@
 <h2 i18n="@@admin-core.search-index.search-indexes">Search Indexes</h2>
-<ng-container *ngIf="searchIndexesLoadStatus$ | async as searchIndexesLoadStatus">
-  <mat-spinner *ngIf="searchIndexesLoadStatus === 'LOADING'" diameter="20" mode="indeterminate"></mat-spinner>
-  <ng-container *ngIf="errorMessage$ | async as message">
+@if (searchIndexesLoadStatus$ | async; as searchIndexesLoadStatus) {
+  @if (searchIndexesLoadStatus === 'LOADING') {
+    <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
+  }
+  @if (errorMessage$ | async; as message) {
     <tm-error-message [message]="message"></tm-error-message>
     <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
-  </ng-container>
-  <div *ngIf="searchIndexesLoadStatus === 'LOADED'"
-       class="form-group has-search">
-    <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
-                          label="Filter search indexes"
-                          i18n-label="@@admin-core.search-index.filter-search-indexes"></tm-admin-list-filter>
-    <mat-selection-list>
-      @for (searchIndex of searchIndexes$ | async; track searchIndex.id) {
-        <mat-list-item [class.selected]="searchIndex.selected"
-                       [routerLink]="['/admin/search-indexes/search-index', searchIndex.id]"
-                       matTooltip="{{ (searchIndex.summary?.total ?? 0) ? (searchIndex?.summary?.total + ' features') : null }}">
-          <span class="detail">{{searchIndex.name}}</span>
-          @if (searchIndex.featureType) {
-            <span class="subtitle"> - {{searchIndex.featureType.name}}</span>
-          }
-        </mat-list-item>
-      }
-    </mat-selection-list>
-
-  </div>
-</ng-container>
+  }
+  @if (searchIndexesLoadStatus === 'LOADED') {
+    <div
+      class="form-group has-search">
+      <tm-admin-list-filter [formControl]="filter"
+        [filterTerm]="filterTerm$ | async"
+        label="Filter search indexes"
+      i18n-label="@@admin-core.search-index.filter-search-indexes"></tm-admin-list-filter>
+      <mat-selection-list>
+        @for (searchIndex of searchIndexes$ | async; track searchIndex.id) {
+          <mat-list-item [class.selected]="searchIndex.selected"
+            [routerLink]="['/admin/search-indexes/search-index', searchIndex.id]"
+            matTooltip="{{ (searchIndex.summary?.total ?? 0) ? (searchIndex?.summary?.total + ' features') : null }}">
+            <span class="detail">{{searchIndex.name}}</span>
+            @if (searchIndex.featureType) {
+              <span class="subtitle"> - {{searchIndex.featureType.name}}</span>
+            }
+          </mat-list-item>
+        }
+      </mat-selection-list>
+    </div>
+  }
+}

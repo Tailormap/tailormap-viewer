@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AttributeType, getAppLayerModel, getFeatureModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -15,14 +15,16 @@ import { of } from 'rxjs';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { EditMapToolService } from '../services/edit-map-tool.service';
+import { coreStateKey, initialCoreState, selectViewerLoadingState, ViewerState } from '../../../state';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
     feature: { ...getFeatureModel(), layerId: '1' },
     columnMetadata: [
-      { layerId: '1', key: 'prop', alias: 'Property', type: AttributeType.STRING },
-      { layerId: '1', key: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-      { layerId: '1', key: 'fid', alias: 'fid', type: AttributeType.STRING },
+      { layerId: '1', name: 'prop', alias: 'Property', type: AttributeType.STRING },
+      { layerId: '1', name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
+      { layerId: '1', name: 'fid', alias: 'fid', type: AttributeType.STRING },
     ],
   };
 };
@@ -40,11 +42,15 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
         provide: ApplicationLayerService,
         useValue: getLayerDetails ? { getLayerDetails$: () => of(({ layer: getAppLayerModel(), details: {} })) } : {},
       },
-      { provide: EditFeatureService, useValue: {} },
+      { provide: EditFeatureService, useValue: { listAttachments$: () => [] } },
       getMapServiceMock().provider,
-      provideMockStore({ initialState: { [editStateKey]: { ...initialEditState } }, selectors }),
+      provideMockStore({ initialState: {
+        [editStateKey]: { ...initialEditState },
+        [coreStateKey]: { ...initialCoreState, viewer: { components: [] } as ViewerState },
+      }, selectors }),
       { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
       { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+      { provide: EditMapToolService, useValue: { allEditGeometry$: of() } },
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });
@@ -63,7 +69,7 @@ describe('EditDialogComponent', () => {
       { selector: selectSelectedEditFeature, value: getFeatureInfo() },
       { selector: selectEditDialogVisible, value: true },
     ]);
-    expect(await screen.findByText('Edit')).toBeInTheDocument();
+    expect(await screen.findByText('Edit feature')).toBeInTheDocument();
     expect(await screen.findByText('Close')).toBeInTheDocument();
     expect(await screen.findByText('Save')).toBeInTheDocument();
     expect(await screen.findByText('Delete')).toBeInTheDocument();

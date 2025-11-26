@@ -3,6 +3,7 @@ name: tailormap
 volumes:
   db:
   solr-data:
+  prometheus-data:
 
 services:
   tailormap:
@@ -27,6 +28,10 @@ services:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
       - "SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}"
+      - "SPRING_MAIL_HOST=${SPRING_MAIL_HOST:-}"
+      - "SPRING_MAIL_PORT=${SPRING_MAIL_PORT:-25}"
+      - "SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME:-}"
+      - "SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD:-}"
       - "ADMIN_HASHED_PASSWORD=${ADMIN_HASHED_PASSWORD:-}"
       # The container binds to localhost for running the tailormap container by itself in host network mode
       # Change to 0.0.0.0, so it is reachable by a reverse proxy such as Traefik
@@ -46,20 +51,21 @@ services:
       - "VIEWER_SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
       # Session timeout can be changed. Default is 30 minutes. You can use values like "60m" or "4h".
       - "SERVER_SERVLET_SESSION_TIMEOUT=${SERVER_SERVLET_SESSION_TIMEOUT:-}"
+      - "TAILORMAPAPI_PASSWORDRESET_ENABLED=${TAILORMAPAPI_PASSWORDRESET_ENABLED:-false}"
     restart: unless-stopped
     depends_on:
       - db
 
   db:
     container_name: ${COMPOSE_PROJECT_NAME}-db
-    image: postgis/postgis:17-3.5-alpine
+    image: postgis/postgis:18-3.6-alpine
     environment:
       POSTGRES_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
       POSTGRES_USER: tailormap
       POSTGRES_DB: tailormap
       PGUSER: postgres # for pg_isready
     volumes:
-      - db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql
     healthcheck:
       test: 'pg_isready -U tailormap'
     restart: unless-stopped
@@ -67,7 +73,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:9.8.1
+    image: ghcr.io/tailormap/solr:9.10.0
     profiles:
       - solr
     environment:
@@ -102,7 +108,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: ghcr.io/tailormap/solr:9.8.1
+    image: ghcr.io/tailormap/solr:9.10.0
     profiles:
       - solr
     environment:
@@ -114,3 +120,51 @@ services:
     command:
       # this script should be in the path for the current (solr) user
       - solr-exporter
+
+
+  prometheus:
+    container_name: ${COMPOSE_PROJECT_NAME}-prometheus
+    image: prom/prometheus:v3.7.3
+    profiles:
+      - prometheus
+    environment:
+      TZ: Europe/Amsterdam
+      # Prometheus scrape/configuration file is created on startup from this environment variable
+      PROM_CONFIG: |-
+        global:
+          scrape_interval: '1m'
+        scrape_configs:
+          - job_name: 'tailormap-api'
+            scheme: 'http'
+            static_configs:
+              - targets:
+                  - 'tailormap:8080'
+            metrics_path: '/api/actuator/prometheus'
+            metric_relabel_configs:
+              - source_labels: [__name__]
+                regex: '^tailormap_.*'
+                action: keep
+      # see: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
+      # and  https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects
+      # keep data for 2 years or 1GB by default
+      CMD: >-
+        --config.file=/etc/prometheus/prometheus.yml
+        --web.enable-admin-api
+        --storage.tsdb.retention.time=${TSDB_RETENTION_TIME:-2y}
+        --storage.tsdb.retention.size=${TSDB_RETENTION_SIZE:-1GB}
+        --log.level=debug
+    entrypoint: /bin/sh -c 'echo "$$PROM_CONFIG" > /etc/prometheus/prometheus.yml && /bin/prometheus $$CMD'
+    volumes:
+      - prometheus-data:/prometheus
+    labels:
+      traefik.enable: false
+    # uncomment the following line when running on localhost
+    # extra_hosts:
+    #   - "tailormap:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: 'wget --server-response --spider http://localhost:9090/query?query=up || exit 1'
+      start_period: 60s
+      interval: 15s
+      timeout: 5s
+      retries: 3

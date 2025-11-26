@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 import { SearchIndexModel, SearchIndexStatusEnum } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, take } from 'rxjs';
 import { Router } from '@angular/router';
@@ -12,18 +12,15 @@ import { SearchIndexService } from '../services/search-index.service';
   standalone: false,
 })
 export class SearchIndexCreateComponent {
+  private searchIndexService = inject(SearchIndexService);
+  private router = inject(Router);
+
 
   public saveEnabled = signal(false);
   private updatedSearch: Pick<SearchIndexModel, 'name' | 'featureTypeId'> | undefined;
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
-
-  constructor(
-    private searchIndexService: SearchIndexService,
-    private router: Router,
-  ) {
-  }
 
   public validFormChanged($event: boolean) {
     this.saveEnabled.set($event);

@@ -6,8 +6,6 @@ export type ComparableValuesArray = Array<[ValueType, ValueType]>;
 
 export class FormHelper {
 
-  public static NAME_REGEX = /^[a-zA-Z0-9\-_]+$/;
-
   public static isValidValue(value: string | undefined | null) {
     return typeof value !== 'undefined' && value !== null && value.length > 0;
   }

@@ -1,44 +1,46 @@
 <mat-table [dataSource]="rows"
-           [trackBy]="trackByRowId"
-           multiTemplateDataRows>
+  [trackBy]="trackByRowId"
+  multiTemplateDataRows>
 
   <!-- Columns with data -->
-  <ng-container *ngFor="let col of columns; trackBy: trackByColumnId" matColumnDef="{{col.label || col.id}}">
-    <!-- Header -->
-    <mat-header-cell *matHeaderCellDef
-                     class="header-cell--with-resizer header-cell--with-sort"
-                     [class.header-cell--with-filter]="setFilter"
-                     (click)="onSortClick(col.id)"
-                     [style.flexBasis]="getColumnWidth(col)">
-      <span [title]="col.label">{{col.label}}</span>
-      <mat-icon *ngIf="setFilter"
-                svgIcon="filter_outline"
-                class="filter"
-                [class.filter-active]="hasFilter(col.id)"
-                [class.filter-disabled]="hasDisabledFilter(col.id)"
-                (click)="onFilterClick($event, col)"></mat-icon>
-      <mat-icon class="sort"
-                [class.sort-active]="sort?.column === col.id"
-                [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
-      <tm-panel-resize class="resizer"
-                       (mousedown)="stopEvent($event)"
-                       (positionChanged)="columnWidthChanged($event, col)"
-                       orientation="vertical"></tm-panel-resize>
-    </mat-header-cell>
-
-    <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)">
-      <div class="cell-content"
-           [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
-    </mat-cell>
-
-  </ng-container>
+  @for (col of columns; track trackByColumnId($index, col)) {
+    <ng-container matColumnDef="{{col.label || col.id}}">
+      <!-- Header -->
+      <mat-header-cell *matHeaderCellDef
+        class="header-cell--with-resizer header-cell--with-sort"
+        [class.header-cell--with-filter]="setFilter"
+        (click)="onSortClick(col.id)"
+        [style.flexBasis]="getColumnWidth(col)">
+        <span [title]="col.label">{{col.label}}</span>
+        @if (setFilter) {
+          <mat-icon
+            svgIcon="filter_outline"
+            class="filter"
+            [class.filter-active]="hasFilter(col.id)"
+            [class.filter-disabled]="hasDisabledFilter(col.id)"
+          (click)="onFilterClick($event, col)"></mat-icon>
+        }
+        <mat-icon class="sort"
+          [class.sort-active]="sort?.column === col.id"
+        [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
+        <tm-panel-resize class="resizer"
+          (mousedown)="stopEvent($event)"
+          (positionChanged)="columnWidthChanged($event, col)"
+        orientation="vertical"></tm-panel-resize>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)">
+        <div class="cell-content"
+        [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
+      </mat-cell>
+    </ng-container>
+  }
 
   <!-- Columns with related details data -->
   <mat-header-row *matHeaderRowDef="columnNames; sticky: true;"></mat-header-row>
 
   <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
-           (click)="onRowClick($event, row);"
-           [class.even_row]="dataIndex % 2 === 1"
-           [class.selected_row]="isSelected(row)"></mat-row>
+    (click)="onRowClick($event, row);"
+    [class.even_row]="dataIndex % 2 === 1"
+  [class.selected_row]="isSelected(row)"></mat-row>
 
 </mat-table>

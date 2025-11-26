@@ -1,40 +1,52 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeFormComponent } from './feature-type-form.component';
 import { of } from 'rxjs';
-import { getFeatureTypeSummary } from '@tailormap-admin/admin-api';
+import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
-import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { Store } from '@ngrx/store';
+import {
+  FeatureTypeAttachmentAttributesComponent,
+} from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
   const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
-  const featureTypeModel: ExtendedFeatureTypeModel = {
-    ...getFeatureTypeSummary({ name: 'ft_1', title: 'some table' }),
+  const featureTypeModel: FeatureTypeModel = {
+    attributes: [],
+    defaultGeometryAttribute: null,
+    primaryKeyAttribute: null,
+    settings: {
+      attributeSettings: {},
+    },
     id: '1_ft_1',
-    originalId: 'ft_1',
-    featureSourceId: '1',
-    catalogNodeId: 'node-1',
-    type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
+    name: 'ft_1',
+    title: 'some table',
   };
   const mockStore = createMockStore({
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureTypeFormComponent, {
-    declarations: [ FeatureTypeAttributesComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [SharedModule],
+    declarations: [
+      FeatureTypeAttributesComponent,
+      FeatureTypeAttachmentAttributesComponent,
+      SaveButtonComponent,
+      SpinnerButtonComponent,
+    ],
+    imports: [ SharedModule, MatIconTestingModule ],
     inputs: {
       featureType: featureTypeModel,
     },
     providers: [
       { provide: FeatureSourceService, useValue: featureSourceService },
       { provide: Store, useValue: mockStore },
+      provideHttpClient(),
     ],
   });
   return { featureSourceService, featureTypeModel };

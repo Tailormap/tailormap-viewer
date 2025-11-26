@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
@@ -29,12 +29,25 @@ export class TocNodeLayerComponent {
   @Input()
   public filteredLayerIds: string[] = [];
 
+  @Input()
+  public editableLayerIds: string[] = [];
+
+  @Output()
+  public zoomToScale = new EventEmitter<number>();
+
+  @Output()
+  public editLayer = new EventEmitter<string>();
+
   public isLevel() {
     return this.node?.type === 'level';
   }
 
   public isLayerHiddenOnMap() {
-    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale) || this.isLayerHiddenIn2d();
+    return !this.isInScale() || this.isLayerHiddenIn2d();
+  }
+
+  public isInScale() {
+    return ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale);
   }
 
   public isLayerHiddenIn2d() {
@@ -49,4 +62,27 @@ export class TocNodeLayerComponent {
     return this.filteredLayerIds.includes(this.node?.id || '');
   }
 
+  public isLayerEditable() {
+    return this.editableLayerIds.includes(this.node?.id || '');
+  }
+
+  public zoomToLayer($event: MouseEvent, node: TreeModel<AppLayerModel>) {
+    $event.stopPropagation();
+    const scales: number[] = [];
+    if (typeof node?.metadata?.minScale === 'number') {
+      scales.push(node?.metadata?.minScale * 1.001);
+    }
+    if (typeof node?.metadata?.maxScale === 'number') {
+      scales.push(node?.metadata?.maxScale * 0.999);
+    }
+    if (scales.length === 0) {
+      return;
+    }
+    const zoomToScale = Math.min(...scales);
+    this.zoomToScale.emit(zoomToScale);
+  }
+
+  public editLayerClicked(node: TreeModel<AppLayerModel>) {
+    this.editLayer.emit(node.id);
+  }
 }

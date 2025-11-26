@@ -29,6 +29,10 @@
         <source>Color is required</source>
         <target>Kleur is vereist</target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopiëren</target>
+      </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
         <target>Sluiten</target>
@@ -56,6 +60,10 @@
       <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
         <source>Failed to load legend for</source>
         <target>Legenda niet geladen voor</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.forgot-password" datatype="html">
+        <source>Forgot your password?</source>
+        <target>Wachtwoord vergeten?</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
@@ -168,6 +176,26 @@
       <trans-unit id="shared.overlay-helper.windows" datatype="html">
         <source>Use ctrl + scroll to zoom the map</source>
         <target>Gebruik ctrl + scroll om in te zoomen op de kaart.</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
+        <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
+        <target>Uw verzoek is geaccepteerd. Als het opgegeven e-mailadres geregistreerd is, ontvangt u een e-mail met instructies om uw wachtwoord opnieuw in te stellen.</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.email" datatype="html">
+        <source>Email</source>
+        <target>E-Mail</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.error-message" datatype="html">
+        <source>An error occurred processing your request.</source>
+        <target>Er is een fout opgetreden bij het verwerken van uw verzoek.</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.submit" datatype="html">
+        <source>Request password reset</source>
+        <target>Wachtwoord opnieuw instellen</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.title" datatype="html">
+        <source>Reset Password</source>
+        <target>Wachtwoord opnieuw instellen</target>
       </trans-unit>
     </body>
   </file>

@@ -1,8 +1,8 @@
 import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
-import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { ExtendedAppTreeLayerNodeModel } from './extended-app-tree-layer-node.model';
 
 export interface ExtendedFilterGroupModel {
   filterGroup: FilterGroupModel<AttributeFilterModel>;
-  layers: ExtendedGeoServiceLayerModel[];
+  layers: ExtendedAppTreeLayerNodeModel[];
   isSelected: boolean;
 }

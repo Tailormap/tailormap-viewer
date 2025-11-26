@@ -227,6 +227,9 @@
       <trans-unit id="core.drawing.halo" datatype="html">
         <source>Halo</source>
       </trans-unit>
+      <trans-unit id="core.drawing.icon" datatype="html">
+        <source>Icon</source>
+      </trans-unit>
       <trans-unit id="core.drawing.insert-area-label" datatype="html">
         <source>Insert area as label</source>
       </trans-unit>
@@ -248,14 +251,17 @@
       <trans-unit id="core.drawing.line-thickness" datatype="html">
         <source>Line thickness</source>
       </trans-unit>
+      <trans-unit id="core.drawing.locked-style" datatype="html">
+        <source>The style for this drawing object cannot be changed.</source>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
       </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
       </trans-unit>
-      <trans-unit id="core.drawing.rectangle-height" datatype="html">
-        <source>Height (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+      <trans-unit id="core.drawing.rectangle-length" datatype="html">
+        <source>Length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
       <trans-unit id="core.drawing.rectangle-width" datatype="html">
         <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
@@ -281,6 +287,9 @@
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
       </trans-unit>
+      <trans-unit id="core.drawing.square-length" datatype="html">
+        <source>Side length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+      </trans-unit>
       <trans-unit id="core.drawing.striped-fill" datatype="html">
         <source>Striped fill</source>
       </trans-unit>
@@ -299,8 +308,26 @@
       <trans-unit id="core.edit.add-new-feature" datatype="html">
         <source>Add new feature</source>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+      </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -312,9 +339,6 @@
         <source>Delete feature failed</source>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
-        <source>Edit</source>
-      </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
       </trans-unit>
       <trans-unit id="core.edit.error-getting-features" datatype="html">
@@ -334,6 +358,9 @@
       </trans-unit>
       <trans-unit id="core.edit.hover-to-highlight" datatype="html">
         <source>Hover over the buttons to highlight the feature on the map</source>
+      </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
       </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
@@ -356,6 +383,12 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
       </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
+        <source>Edit feature</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
       </trans-unit>
@@ -370,9 +403,6 @@
       </trans-unit>
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
-      </trans-unit>
-      <trans-unit id="core.filter.add-filter" datatype="html">
-        <source>Add filter</source>
       </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
@@ -403,6 +433,9 @@
       </trans-unit>
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
+      </trans-unit>
+      <trans-unit id="core.filter.choose-value" datatype="html">
+        <source>Choose value</source>
       </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
@@ -460,6 +493,9 @@
       </trans-unit>
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
+      </trans-unit>
+      <trans-unit id="core.filter.filter" datatype="html">
+        <source>Filter</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -563,6 +599,15 @@
       <trans-unit id="core.filter.or" datatype="html">
         <source>or</source>
       </trans-unit>
+      <trans-unit id="core.filter.reset-filters" datatype="html">
+        <source>Reset filters</source>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
+        <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-filters-tooltip" datatype="html">
+        <source>Reset filters to their original state</source>
+      </trans-unit>
       <trans-unit id="core.filter.save-filter" datatype="html">
         <source>Save filter</source>
       </trans-unit>
@@ -620,6 +665,9 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
       </trans-unit>
+      <trans-unit id="core.info.info" datatype="html">
+        <source>Info</source>
+      </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>
@@ -631,6 +679,48 @@
       </trans-unit>
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
+        <source>Confirm Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
+        <source>Error resetting password: <x id="PH" equiv-text="error?.error?.message || error?.message || error.toString())"/></source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
+        <source>Error saving password, please check your token, username and password and try again.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
+        <source>Passwords need to match</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
+        <source>Password too short or too easily guessable</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
+        <source>Your password reset token is invalid or has expired.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
+        <source>Username is invalid</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
+        <source>New Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.return" datatype="html">
+        <source>Return to Login</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.save" datatype="html">
+        <source>Save new password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.success" datatype="html">
+        <source>Password successfully reset, you can now log in with your new password.</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.title" datatype="html">
+        <source>Reset Password</source>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.username" datatype="html">
+        <source>Username</source>
       </trans-unit>
       <trans-unit id="core.print.a3" datatype="html">
         <source>A3</source>
@@ -752,6 +842,12 @@
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
       </trans-unit>
+      <trans-unit id="core.terrain-controls.model" datatype="html">
+        <source>Terrain model</source>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls.opacity" datatype="html">
+        <source>Terrain opacity</source>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
       </trans-unit>
@@ -769,6 +865,10 @@
       </trans-unit>
       <trans-unit id="core.toc.details-for" datatype="html">
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
+      </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
@@ -797,6 +897,9 @@
       </trans-unit>
       <trans-unit id="core.toc.toggle-layers-on" datatype="html">
         <source>Toggle all layers on</source>
+      </trans-unit>
+      <trans-unit id="core.toc.zoom-to-scale" datatype="html">
+        <source>Click to zoom in to make this layer visible</source>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { map, take } from 'rxjs';
 import { UploadInUseItem, UploadRemoveServiceModel } from '../../../shared/components';
 import { Routes } from '../../../routes';
@@ -7,11 +7,8 @@ import { BaseComponentTypeEnum, HeaderComponentConfigModel } from '@tailormap-vi
 
 @Injectable()
 export class HeaderComponentLogoRemoveService implements UploadRemoveServiceModel {
+  private applicationService = inject(ApplicationService);
 
-  constructor(
-    private applicationService: ApplicationService,
-  ) {
-  }
 
   public isImageInUse$(imageId: string) {
     return this.applicationService.getApplications$()

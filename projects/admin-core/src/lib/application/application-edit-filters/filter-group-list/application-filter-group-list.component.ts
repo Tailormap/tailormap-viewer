@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, OnInit, DestroyRef, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, OnInit, DestroyRef, signal, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableFilterGroups, selectSelectedApplicationId } from '../../state/application.selectors';
 import { FormControl } from '@angular/forms';
@@ -15,6 +15,9 @@ import { deleteApplicationAttributeFilterGroup } from '../../state/application.a
   standalone: false,
 })
 export class ApplicationFilterGroupListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public filterGroups: Signal<ExtendedFilterGroupModel[]> = this.store$.selectSignal(selectFilterableFilterGroups);
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
@@ -27,17 +30,12 @@ export class ApplicationFilterGroupListComponent implements OnInit {
     const filterGroups = this.filterGroups();
     if (filterTerm) {
       return FilterHelper.filterByTerm(filterGroups, filterTerm, filterGroup => {
-        const layerNames = filterGroup.layers.map(layer => layer.name);
-        return layerNames.join(' ');
+        const layerLabels = filterGroup.layers.map(layer => layer.label);
+        return layerLabels.join(' ');
       });
     }
     return filterGroups;
   });
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    ) { }
 
   public ngOnInit() {
     this.layerFilter.valueChanges

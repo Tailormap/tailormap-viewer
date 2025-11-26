@@ -20,10 +20,13 @@ import {
   SpatialFilterFormSelectReferenceLayerComponent,
 } from './spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters/edit-attribute-filters.component';
-import { SliderFilterComponent } from './slider-filter/slider-filter.component';
-import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
-import { SwitchFilterComponent } from './switch-filter/switch-filter.component';
-import { DatePickerFilterComponent } from './date-picker-filter/date-picker-filter.component';
+import { SliderFilterComponent } from './edit-attribute-filters/slider-filter/slider-filter.component';
+import { CheckboxFilterComponent } from './edit-attribute-filters/checkbox-filter/checkbox-filter.component';
+import { SwitchFilterComponent } from './edit-attribute-filters/switch-filter/switch-filter.component';
+import { DatePickerFilterComponent } from './edit-attribute-filters/date-picker-filter/date-picker-filter.component';
+import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-list-filter/dropdown-list-filter.component';
+import { ResetFiltersButtonComponent } from './reset-filters-button/reset-filters-button.component';
+import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometries/map-drawing-buttons/map-drawing-buttons.component';
 
 
 
@@ -44,6 +47,9 @@ import { DatePickerFilterComponent } from './date-picker-filter/date-picker-filt
     CheckboxFilterComponent,
     SwitchFilterComponent,
     DatePickerFilterComponent,
+    DropdownListFilterComponent,
+    ResetFiltersButtonComponent,
+    MapDrawingButtonsComponent,
   ],
   imports: [
     CommonModule,

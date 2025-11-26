@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@angular/core';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { FormControl } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
@@ -16,6 +16,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class SimpleSearchComponentConfigComponent implements ConfigurationComponentModel<SimpleSearchConfigModel> {
+  private componentConfigService = inject(ComponentConfigurationService);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -39,10 +42,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   public municipalityControl = new FormControl<string | MunicipalityModel>('', { nonNullable: true });
   public filteredMunicipalityOptions$: Observable<MunicipalityModel[]>;
 
-  constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     const municipalities = MunicipalityHelper.getDutchMunicipalities();
     this.filteredMunicipalityOptions$ = this.municipalityControl.valueChanges
       .pipe(

@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MapService, CoordinateHelper } from '@tailormap-viewer/map';
-import { Subject, takeUntil, take } from 'rxjs';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
+import { Subject, take, takeUntil } from 'rxjs';
+import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 
 @Component({
   selector: 'tm-geolocation',
@@ -13,6 +15,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   standalone: false,
 })
 export class GeolocationComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+
   private destroyed = new Subject();
   private featureGeom = new Subject<FeatureModel[]>();
 
@@ -20,16 +27,25 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private activeWatchTimeout = -1;
 
   private static GEOLOCATION_TIMEOUT_MS = 12 * 1000;
+  private static MAX_ZOOM_EPSG_28992 = 19;
+  private static MAX_ZOOM_DEFAULT = 18;
 
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
   public hasFix = false;
+  private noTimeout = false;
 
-  constructor(
-    private mapService: MapService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-  ) { }
+  constructor() {
+    const store$ = this.store$;
+
+    ComponentConfigHelper.useInitialConfigForComponent<GeolocationConfigModel>(
+      store$,
+      BaseComponentTypeEnum.GEOLOCATION,
+      config => {
+        this.noTimeout = config.noTimeout ?? false;
+      },
+    );
+  }
 
   public ngOnInit(): void {
     this.mapService.renderFeatures$('geolocation-layer', this.featureGeom.asObservable(), f => {
@@ -82,8 +98,13 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
           if (!this.hasFix) {
             this.hasFix = true;
-            this.mapService.zoomTo(circleWkt, projectionCode);
-            this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
+            const maxZoom = projectionCode === 'EPSG:28992'
+              ? GeolocationComponent.MAX_ZOOM_EPSG_28992
+              : GeolocationComponent.MAX_ZOOM_DEFAULT;
+            this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
+            if (!this.noTimeout) {
+              this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
+            }
             this.cdr.detectChanges();
           }
       });

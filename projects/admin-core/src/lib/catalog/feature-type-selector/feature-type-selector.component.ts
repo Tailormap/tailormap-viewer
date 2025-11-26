@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFeatureSources, selectFeatureTypesForSource } from '../state/catalog.selectors';
 import { Observable, of, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
@@ -18,6 +18,8 @@ import { FeatureSourceProtocolEnum } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+
 
   private destroyed = new Subject();
 
@@ -71,10 +73,6 @@ export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
     featureSourceId: new FormControl<string | null>(null),
     featureTypeName: new FormControl<string | null>(null),
   });
-
-  constructor(
-    private store$: Store,
-  ) { }
 
   public ngOnInit(): void {
     this.featureSources$ = this.store$.select(selectFeatureSources)

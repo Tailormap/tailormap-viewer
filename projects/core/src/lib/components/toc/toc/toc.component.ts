@@ -1,22 +1,24 @@
-import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
+import { Component, computed, inject, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
-  TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
-  select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
+  select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, toggleSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
-import { selectFilteredLayerIds } from '../../../filter/state/filter.selectors';
+import { moveLayerTreeNode, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId } from '../../../map/state/map.actions';
+import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
+import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
+import { ComponentConfigHelper } from '../../../shared';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -31,6 +33,13 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
   standalone: false,
 })
 export class TocComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private treeService = inject<TreeService<AppLayerModel>>(TreeService);
+  private treeDragDropService = inject(TreeDragDropService);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+  private ngZone = inject(NgZone);
+  private authenticatedUserService = inject(AuthenticatedUserService);
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
@@ -48,14 +57,23 @@ export class TocComponent implements OnInit, OnDestroy {
   public tiles3DLayerIds: Signal<string[]> = signal([]);
   public filteredLayerIds: Signal<string[]> = signal([]);
 
-  constructor(
-    private store$: Store,
-    private treeService: TreeService<AppLayerModel>,
-    private treeDragDropService: TreeDragDropService,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-    private ngZone: NgZone,
-  ) {}
+  private config = ComponentConfigHelper.componentConfigSignal<TocConfigModel>(this.store$, BaseComponentTypeEnum.TOC);
+
+  private editComponentEnabled = ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
+  private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
+
+  private editableLayerIds = computed(() => {
+    const editableLayers = this.store$.selectSignal(selectEditableLayers);
+    return editableLayers().map(layer => layer.id);
+  });
+
+  public getCurrentlyEditableLayerIds = computed(() => {
+    return this.config()?.showEditLayerIcon
+        && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
+        && this.editComponentEnabled()
+      ? this.editableLayerIds()
+      : [];
+  });
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
@@ -135,5 +153,14 @@ export class TocComponent implements OnInit, OnDestroy {
   public toggleReordering() {
     this.dragDropEnabled = !this.dragDropEnabled;
     this.treeDragDropService.setDragDropEnabled(this.dragDropEnabled);
+  }
+
+  public zoomToScale(minScale: number) {
+    this.mapService.zoomToScale(minScale);
+  }
+
+  public editLayer(layer: string) {
+    this.store$.dispatch(setSelectedEditLayer( { layer }));
+    this.store$.dispatch(setEditActive({ active: true }));
   }
 }

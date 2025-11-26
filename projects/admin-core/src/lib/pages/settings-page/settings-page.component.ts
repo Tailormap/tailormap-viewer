@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { Routes } from '../../routes';
 import { AdminSettingsRouterService } from '../../settings/services/admin-settings-router.service';
 
@@ -16,12 +16,10 @@ interface SubmenuLink {
   standalone: false,
 })
 export class SettingsPageComponent implements OnInit {
+  private adminSettingsRouterService = inject(AdminSettingsRouterService);
+
 
   public submenuLinks: SubmenuLink[] = [];
-
-  constructor(
-    private adminSettingsRouterService: AdminSettingsRouterService,
-  ) {}
 
   public ngOnInit() {
     this.adminSettingsRouterService.activateRegisteredRoutes();

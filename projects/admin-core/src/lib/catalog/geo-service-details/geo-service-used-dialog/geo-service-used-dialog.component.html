@@ -3,10 +3,12 @@
 <div mat-dialog-content>
   <p class="content" i18n="@@admin-core.catalog.service-used-body">The service {{data.service.title}} is used in the following applications.</p>
   <ul>
-    <li *ngFor="let app of data.applications">
-      <a [routerLink]="'/admin/applications/application/'+app.id"
-         (click)="onConfirm()">{{app.title || app.name}}</a>
-    </li>
+    @for (app of data.applications; track app) {
+      <li>
+        <a [routerLink]="'/admin/applications/application/'+app.id"
+        (click)="onConfirm()">{{app.title || app.name}}</a>
+      </li>
+    }
   </ul>
   <p class="content" i18n="@@admin-core.catalog.remove-layers-first">Please remove the layers from this service from the applications first</p>
 </div>

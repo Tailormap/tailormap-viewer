@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
@@ -14,6 +14,8 @@ import { AttributeTypeHelper, FilterToolEnum, AttributeType } from '@tailormap-v
   standalone: false,
 })
 export class ApplicationFilterAttributeListComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
@@ -43,14 +45,9 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
   private filterToolSubject$ = new BehaviorSubject<FilterToolEnum>(FilterToolEnum.PRESET_STATIC);
 
   public featureTypes$ = this.featureTypesSubject$.asObservable();
-  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean }>> = of([]);
+  public attributes$: Observable<Array<AttributeDescriptorModel & { selected: boolean } & { alias?: string }>> = of([]);
 
   public filterTerm$ = this.attributeFilter$.asObservable();
-
-  constructor(
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges
@@ -71,7 +68,8 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
             return [];
           }
           const attributeSets = featureTypes.map(ft =>
-            new Set((ft.attributes || []).map(attr => `${attr.name}::${attr.type}`)),
+            new Set((ft.attributes.filter(attr => !ft.settings.hideAttributes?.includes(attr.name)) || [])
+              .map(attr => `${attr.name}::${attr.type}`)),
           );
           const commonAttributeKeys = Array.from(
             attributeSets.reduce((a, b) => new Set([...a].filter(x => b.has(x)))),
@@ -93,9 +91,10 @@ export class ApplicationFilterAttributeListComponent implements OnInit {
               }
               return !AttributeTypeHelper.isGeometryType(att.type);
             })
-            .map((att: AttributeDescriptorModel) => ({
+            .map((att) => ({
               ...att,
               selected: selectedAttribute === att.name,
+              alias: featureTypes[0].settings.attributeSettings?.[att.name]?.title,
             }));
           if (filterStr) {
             return FilterHelper.filterByTerm(attributes, filterStr, a => a.name);

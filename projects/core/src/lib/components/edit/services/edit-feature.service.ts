@@ -1,6 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import {
+  AttachmentMetadataModel, ErrorResponseModel, FeatureModel, TAILORMAP_API_V1_SERVICE,
+} from '@tailormap-viewer/api';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { HttpStatusCode } from '@angular/common/http';
@@ -9,12 +11,9 @@ import { HttpStatusCode } from '@angular/common/http';
   providedIn: 'root',
 })
 export class EditFeatureService {
+  private snackBar = inject(MatSnackBar);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
-  constructor(
-    private snackBar: MatSnackBar,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {
-  }
 
   private showSnackbarMessage(msg: string, e?: ErrorResponseModel | any) {
     if (e && e.error && e.error.message) {
@@ -41,6 +40,20 @@ export class EditFeatureService {
           this.showSnackbarMessage($localize `:@@core.edit.feature-deleted:Feature deleted`);
         }
         return of(true);
+      }),
+    );
+  }
+
+  public getFeature$(applicationId: string, layerId: string, __fid: string): Observable<FeatureModel | null> {
+    return this.api.getFeatures$({ applicationId, layerId, __fid, geometryInAttributes: true }).pipe(
+      catchError((_e) => {
+        return of(null);
+      }),
+      map(response => {
+        if (response && response.features.length > 0) {
+          return response.features[0];
+        }
+        return null;
       }),
     );
   }
@@ -74,5 +87,26 @@ export class EditFeatureService {
         }
       }),
     );
+  }
+
+  public addAttachment$(applicationId: string, layerId: string, featureId: string, attribute: string, file: File, description?: string): Observable<boolean> {
+    return this.api.addAttachment$({ applicationId, layerId, featureId, attribute, file, description }).pipe(
+      catchError((_e) => {
+        this.showSnackbarMessage($localize `:@@core.edit.upload-attachment-failed:Uploading attachment "${file.name}" failed: `, _e);
+        return of(false);
+      }),
+    );
+  }
+
+  public listAttachments$(applicationId: string, layerId: string, featureId: string): Observable<AttachmentMetadataModel[]> {
+    return this.api.listAttachments$({ applicationId, layerId, featureId });
+  }
+
+  public getAttachmentUrl(applicationId: string, layerId: string, attachmentId: string) {
+    return this.api.getAttachmentUrl({ applicationId, layerId, attachmentId });
+  }
+
+  public deleteAttachment$(viewerId: string, layerId: string, attachmentId: string) {
+    return this.api.deleteAttachment$({ applicationId: viewerId, layerId, attachmentId });
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, NgZone, OnInit, inject } from '@angular/core';
 import { DropZoneOptions, RouterHistoryService, TreeDragDropService, TreeService } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { selectCatalogFilterTerm, selectCatalogTree } from '../state/catalog.selectors';
@@ -21,6 +21,14 @@ import { FormControl } from '@angular/forms';
   standalone: false,
 })
 export class CatalogTreeComponent implements OnInit {
+  private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
+  private treeDragDropService = inject(TreeDragDropService);
+  private store$ = inject(Store);
+  private history = inject(RouterHistoryService);
+  private destroyRef = inject(DestroyRef);
+  private catalogService = inject(CatalogService);
+  private ngZone = inject(NgZone);
+
 
   private selectedNodeId = new BehaviorSubject<string>('');
 
@@ -31,16 +39,6 @@ export class CatalogTreeComponent implements OnInit {
   public scrollToItem$ = this.scrollToItem.asObservable();
 
   private hasFilter= false;
-
-  constructor(
-    private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
-    private treeDragDropService: TreeDragDropService,
-    private store$: Store,
-    private history: RouterHistoryService,
-    private destroyRef: DestroyRef,
-    private catalogService: CatalogService,
-    private ngZone: NgZone,
-  ) { }
 
   public ngOnInit(): void {
     const catalogTree$ = this.store$.select(selectCatalogTree);

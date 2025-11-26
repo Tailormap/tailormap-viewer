@@ -1,13 +1,13 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
-import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../state/filter.selectors';
+import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../../state/filter-state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { SpatialFilterGeometry, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { updateFilterGroup } from '../state/filter.actions';
+import { updateFilterGroup } from '../../state/filter-state/filter.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ import { updateFilterGroup } from '../state/filter.actions';
 export class SpatialFilterReferenceLayerService implements OnDestroy {
 
   private store$ = inject(Store);
-  private api = inject<TailormapApiV1ServiceModel>(TAILORMAP_API_V1_SERVICE);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
   private destroyed = new Subject();
   private geometriesLoaded: Map<string, string> = new Map();

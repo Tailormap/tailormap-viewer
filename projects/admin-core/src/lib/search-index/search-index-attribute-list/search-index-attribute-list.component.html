@@ -6,14 +6,16 @@
   <h2>{{title}}</h2>
   <div class="form-group has-search flex">
     <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
-                          label="Filter attributes"
-                          i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
+      [filterTerm]="filterTerm$ | async"
+      label="Filter attributes"
+    i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
     <mat-selection-list>
-      <mat-list-item *ngFor="let attribute of attributes$ | async" (click)="attributeClicked(attribute)">
-        <mat-checkbox [checked]="attribute.selected"></mat-checkbox>
-        <span class="detail">{{attribute.name}}</span>
-      </mat-list-item>
+      @for (attribute of attributes$ | async; track attribute) {
+        <mat-list-item (click)="attributeClicked(attribute)">
+          <mat-checkbox [checked]="attribute.selected"></mat-checkbox>
+          <span class="detail">{{attribute.name}}</span>
+        </mat-list-item>
+      }
     </mat-selection-list>
   </div>
 }

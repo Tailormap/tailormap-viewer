@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Output, signal, inject } from '@angular/core';
 import {
-  AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, UpdateSwitchFilterModel, UpdateSliderFilterModel,
-  UpdateDatePickerFilterModel,
+  AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,39 +13,46 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class ApplicationCheckboxFilterFormComponent {
+  private destroyRef = inject(DestroyRef);
 
-  public attributeValuesSettings: AttributeValueSettings[] = [];
+
+  public attributeValuesSettings = signal<AttributeValueSettings[]>([]);
   public columnLabels = [ 'value', 'initially-selected', 'selectable', 'alias' ];
 
   private checkboxFilter: CheckboxFilterModel = { attributeValuesSettings: [], filterTool: FilterToolEnum.CHECKBOX };
 
   public aliasForm: FormGroup = new FormGroup({});
+  public newValueControl = new FormControl<string>('');
+  public useAsIlikeSubstringFilterControl = new FormControl<boolean>(false);
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
-    this.attributeValuesSettings = [];
-    if (uniqueValues) {
-      uniqueValues.forEach((value) => {
-        this.attributeValuesSettings.push({ value: value, initiallySelected: true, selectable: true });
-        this.aliasForm.addControl(value, new FormControl<string>(''));
-      });
+    if (!uniqueValues) {
+      return;
     }
-    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
+    const newSettings: AttributeValueSettings[] = [];
+    uniqueValues.forEach((value) => {
+      newSettings.push({ value: value, initiallySelected: true, selectable: true });
+      this.aliasForm.addControl(value, new FormControl<string>(''));
+    });
+    this.attributeValuesSettings.set(newSettings);
+    this.checkboxFilter.attributeValuesSettings = newSettings;
     this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
   @Input()
   public set checkboxFilterSettings(
-    checkboxFilterSettings: UpdateSliderFilterModel | CheckboxFilterModel | UpdateSwitchFilterModel | UpdateDatePickerFilterModel | null,
+    checkboxFilterSettings: EditFilterConfigurationModel | null,
   ) {
-    this.attributeValuesSettings = [];
+    const newSettings: AttributeValueSettings[] = [];
     if (checkboxFilterSettings && checkboxFilterSettings.filterTool === FilterToolEnum.CHECKBOX) {
-      this.attributeValuesSettings = checkboxFilterSettings.attributeValuesSettings;
+      newSettings.push(...checkboxFilterSettings.attributeValuesSettings);
       checkboxFilterSettings.attributeValuesSettings.forEach((setting) => {
         this.aliasForm.addControl(setting.value, new FormControl<string>(setting.alias || ''), { emitEvent: false });
       });
     }
-    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings;
+    this.attributeValuesSettings.set(newSettings);
+    this.checkboxFilter.attributeValuesSettings = newSettings;
   }
 
   @Input()
@@ -55,7 +61,7 @@ export class ApplicationCheckboxFilterFormComponent {
   @Output()
   public updateCheckboxFilter = new EventEmitter<CheckboxFilterModel>();
 
-  constructor(private destroyRef: DestroyRef) {
+  constructor() {
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {
@@ -80,16 +86,43 @@ export class ApplicationCheckboxFilterFormComponent {
   }
 
   public changeAlias(value: string, alias?: string) {
-    if (!alias) {
+    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
+    if (!attributeValueSettings || attributeValueSettings.alias === alias) {
       return;
     }
-    const attributeValueSettings = this.checkboxFilter.attributeValuesSettings.find((s) => s.value === value);
-    if (attributeValueSettings) {
-      const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
-      this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
-        oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
-      this.updateCheckboxFilter.emit(this.checkboxFilter);
-    }
+    const newAttributeValueSettings = { ...attributeValueSettings, alias: alias };
+    this.checkboxFilter.attributeValuesSettings = this.checkboxFilter.attributeValuesSettings.map(oldAttributeValueSettings =>
+      oldAttributeValueSettings.value === value ? newAttributeValueSettings : oldAttributeValueSettings);
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
+  public addNewValue() {
+    const value = this.newValueControl.value;
+    const useAsPartialValue = this.useAsIlikeSubstringFilterControl.value;
+    if (!value || this.attributeValuesSettings().some(setting =>
+      setting.value === value && setting.useAsIlikeSubstringFilter === useAsPartialValue)) {
+      return;
+    }
+    const currentSettings = this.attributeValuesSettings();
+    const newSetting: AttributeValueSettings = {
+      value: value,
+      initiallySelected: true,
+      selectable: true,
+      useAsIlikeSubstringFilter: useAsPartialValue ?? false,
+    };
+    const updatedSettings = [ ...currentSettings, newSetting ];
+    this.attributeValuesSettings.set(updatedSettings);
+    this.aliasForm.addControl(value, new FormControl<string>(''));
+    this.checkboxFilter.attributeValuesSettings = updatedSettings;
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
+  }
+
+  public removeValue(value: string): void {
+    this.attributeValuesSettings.update(attributeValues =>
+      attributeValues.filter(attribute => attribute.value !== value),
+    );
+    this.aliasForm.removeControl(value);
+    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings();
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
+  }
 }

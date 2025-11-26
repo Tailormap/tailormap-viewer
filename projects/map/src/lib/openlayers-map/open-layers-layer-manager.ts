@@ -359,6 +359,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const updateWhileAnimating = layer.updateWhileAnimating ?? false;
     const source = new VectorSource({ wrapX: true });
     const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });
+    // Set altitudeMode to clampToGround to display the layer on the terrain in 3D view
+    vectorLayer.set('altitudeMode', 'clampToGround');
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
   }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as FilterActions from '../state/filter.actions';
-import { selectEnabledFilterGroups, selectFilterGroupForType } from '../state/filter.selectors';
+import * as FilterActions from '../../state/filter-state/filter.actions';
+import { selectEnabledFilterGroups, selectFilterGroupForType } from '../../state/filter-state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
@@ -14,6 +14,8 @@ import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicati
   standalone: false,
 })
 export class ApplicationEditFiltersComponent {
+  private store$ = inject(Store);
+
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public noFilterableLayers: Signal<boolean> = this.store$.selectSignal(selectNoFilterableLayersForSelectedApplication);
   public createFilterTooltip = computed(() => {
@@ -23,9 +25,7 @@ export class ApplicationEditFiltersComponent {
     return $localize `:@@admin-core.application.filters.create-filter:Create filter`;
   });
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {

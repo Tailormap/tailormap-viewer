@@ -1,4 +1,3 @@
-/* eslint-disable rxjs/finnish */
 import { Map as OlMap } from 'ol';
 import { Projection } from 'ol/proj';
 import { View } from 'ol';
@@ -8,7 +7,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -24,8 +23,8 @@ import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
-import { OpenLayersHelper } from './helpers/open-layers.helper';
 import { CesiumManager } from './cesium-map/cesium-manager';
+import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -174,6 +173,19 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public zoomToScale(scale: number) {
+    this.executeMapAction(olMap => {
+      const view = olMap.getView();
+      const resolution = OlMapScaleHelper.getResolutionForScale(view.getProjection(), scale);
+      if (resolution) {
+        const zoom = view.getZoomForResolution(resolution);
+        if (zoom) {
+          view.setZoom(zoom);
+        }
+      }
+    });
+  }
+
   private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {
     if (olFeatures.length === 0) {
       return;
@@ -217,16 +229,16 @@ export class OpenLayersMap implements MapViewerModel {
     this.zoomToExtent(totalExtent);
   }
 
-  public zoomToGeometry(geom?: Geometry) {
+  public zoomToGeometry(geom?: Geometry, maxZoom?: number) {
     if (!geom) {
       return;
     }
-    this.zoomToExtent(geom.getExtent());
+    this.zoomToExtent(geom.getExtent(), maxZoom);
   }
 
-  private zoomToExtent(extent: Extent) {
+  private zoomToExtent(extent: Extent, maxZoom?: number) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding });
+      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
     });
   }
 
@@ -289,7 +301,7 @@ export class OpenLayersMap implements MapViewerModel {
       .pipe(
         map(olMap => {
           const view = olMap.getView();
-          const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(view);
+          const { scale, resolution } = OlMapScaleHelper.getResolutionAndScale(view);
           return {
             zoomLevel: view.getZoom() || 0,
             minZoomLevel: view.getMinZoom() || 0,
@@ -409,6 +421,18 @@ export class OpenLayersMap implements MapViewerModel {
       cesiumManager.switch3d();
     });
     this.in3d.next(!this.in3d.value);
+  }
+
+  public set3dTerrainOpacity(opacity: number) {
+    this.executeCesiumAction(cesiumManager => {
+      cesiumManager.setTerrainOpacity(opacity);
+    });
+  }
+
+  public get3dTerrainOpacity$(): Observable<number> {
+    return this.getCesiumManager$().pipe(
+      switchMap(cesiumManager => cesiumManager.getTerrainOpacity$()),
+    );
   }
 
 }

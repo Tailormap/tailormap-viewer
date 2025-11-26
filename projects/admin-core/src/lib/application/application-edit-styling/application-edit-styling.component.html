@@ -1,16 +1,17 @@
-<div *ngIf="stylingConfig$ | async as stylingConfig">
-  <div class="form-row">
-    <strong i18n="@@admin-core.application.primary-color">Primary color used in application</strong>
-    <tm-color-picker
-      [dropdownPosition]="dropdownPosition"
-      [color]="stylingConfig.primaryColor || DEFAULT_PRIMARY_COLOR"
+@if (stylingConfig$ | async; as stylingConfig) {
+  <div>
+    <div class="form-row">
+      <strong i18n="@@admin-core.application.primary-color">Primary color used in application</strong>
+      <tm-color-picker
+        [dropdownPosition]="dropdownPosition"
+        [color]="stylingConfig.primaryColor || DEFAULT_PRIMARY_COLOR"
       (colorChange)="onPrimaryColorChange($event)"></tm-color-picker>
+    </div>
+    <div class="form-row">
+      <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
+      <tm-admin-select-upload [category]="appLogoCategory"
+        (fileSelected)="onImageChanged($event)"
+      [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
+    </div>
   </div>
-
-  <div class="form-row">
-    <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
-    <tm-admin-select-upload [category]="appLogoCategory"
-                            (fileSelected)="onImageChanged($event)"
-                            [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
-  </div>
-</div>
+}

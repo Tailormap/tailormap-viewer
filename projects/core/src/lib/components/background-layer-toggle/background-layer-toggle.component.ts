@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Signal, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Signal, signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable, combineLatest } from 'rxjs';
 import {
@@ -16,6 +16,7 @@ import { setSelectedBackgroundNodeId } from '../../map/state/map.actions';
   standalone: false,
 })
 export class BackgroundLayerToggleComponent {
+  private store$ = inject(Store);
 
   public selectedBackgroundNodeId$: Observable<string | undefined>;
   public backgroundLayers$: Observable<SplitButtonOptionModel[]>;
@@ -26,9 +27,7 @@ export class BackgroundLayerToggleComponent {
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     this.selectedBackgroundNodeId$ = combineLatest([
       this.store$.select(selectInitiallySelectedBackgroundNodes),
       this.store$.select(selectSelectedBackgroundNodeId),

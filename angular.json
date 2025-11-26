@@ -97,7 +97,13 @@
               "color-convert",
               "lodash.debounce",
               "lodash.throttle",
-              "extend"
+              "extend",
+              "protobufjs",
+              "urijs",
+              "mersenne-twister",
+              "bitmap-sdf",
+              "grapheme-splitter",
+              "nosleep.js"
             ],
             "i18nMissingTranslation": "error",
             "browser": "projects/app/src/main.ts"
@@ -179,7 +185,8 @@
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
-            ]
+            ],
+            "prettyNestedTags": true
           }
         },
         "lint": {
@@ -388,6 +395,32 @@
           }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

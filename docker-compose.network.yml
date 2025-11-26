@@ -19,3 +19,7 @@ services:
   solr-metrics:
     networks:
       - geodata
+
+  prometheus:
+    labels:
+      - geodata

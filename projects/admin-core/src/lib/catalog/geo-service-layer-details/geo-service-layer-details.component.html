@@ -1,24 +1,24 @@
-<ng-container *ngIf="geoServiceLayerSettings$ | async as geoServiceSettings">
+@if (geoServiceLayerSettings$ | async; as geoServiceSettings) {
   <h2 class="page-details-title" i18n="@@admin-core.catalog.edit-settings-for-layer">Edit settings for layer {{ geoServiceSettings.layerTitle }}</h2>
   <div class="geo-service-layer-settings">
     <div class="settings">
       <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
-                                    [protocol]="geoServiceSettings.protocol"
-                                    [layerName]="geoServiceSettings.layerName"
-                                    [serviceId]="geoServiceSettings.serviceId"
-                                    [isLayerSpecific]="true"
-                                    [isLeaf]="isLeaf$ | async"
-                                    [projectionAvailability$]="projectionAvailability$"
-                                    (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
+        [protocol]="geoServiceSettings.protocol"
+        [layerName]="geoServiceSettings.layerName"
+        [serviceId]="geoServiceSettings.serviceId"
+        [isLayerSpecific]="true"
+        [isLeaf]="isLeaf$ | async"
+        [projectionAvailability$]="projectionAvailability$"
+      (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
     </div>
     <div class="legend-settings">
       <strong i18n="@@admin-core.catalog.override-legend">Override service default legend</strong>
       <tm-admin-select-upload [category]="legendCategory"
-                              (fileSelected)="onLegendImageChanged($event)"
-                              [selectedFile]="legendImageId || null"></tm-admin-select-upload>
+        (fileSelected)="onLegendImageChanged($event)"
+      [selectedFile]="legendImageId || null"></tm-admin-select-upload>
     </div>
   </div>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedLayerSettings" (save)="save(geoServiceSettings.serviceId, geoServiceSettings.layerName)"></tm-admin-save-button>
   </div>
-</ng-container>
+}

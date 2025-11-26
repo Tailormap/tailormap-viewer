@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectDataIdForSelectedTab } from '../state/attribute-list.selectors';
 import { take } from 'rxjs';
@@ -7,10 +7,8 @@ import { take } from 'rxjs';
   providedIn: 'root',
 })
 export class AttributeListStateService {
+  private store$ = inject(Store);
 
-  constructor(
-    private store$: Store,
-  ) {}
 
   public executeActionForCurrentData(callback: (dataId: string) => void) {
     this.store$.select(selectDataIdForSelectedTab)

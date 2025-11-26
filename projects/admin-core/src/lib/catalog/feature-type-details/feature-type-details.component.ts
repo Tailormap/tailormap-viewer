@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { concatMap, distinctUntilChanged, map, Observable, of, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
@@ -15,14 +15,12 @@ import { selectFeatureSourceByFeatureTypeId } from '../state/catalog.selectors';
   standalone: false,
 })
 export class FeatureTypeDetailsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private featureSourceService = inject(FeatureSourceService);
+
 
   public featureType$: Observable<FeatureTypeModel | null> = of(null);
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private featureSourceService: FeatureSourceService,
-  ) { }
 
   public ngOnInit(): void {
     this.featureType$ = this.route.paramMap.pipe(

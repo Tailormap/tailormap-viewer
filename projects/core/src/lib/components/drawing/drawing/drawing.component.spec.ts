@@ -4,21 +4,24 @@ import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  selectDrawingFeaturesIncludingSelected, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingStyle,
+  selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature, selectSelectedDrawingType,
 } from '../state/drawing.selectors';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DrawingFeatureModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { DrawingHelper } from '../helpers/drawing.helper';
+import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
-import { ConfirmDialogService, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
+import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
-  const mapServiceMock = createMapServiceMock();
+  const mapServiceMock = createMapServiceMockWithDrawingTools();
   const menubarServiceMock = {
     isComponentVisible$: jest.fn(() => of(isComponentVisible)),
     registerComponent: jest.fn(),
@@ -32,7 +35,15 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [DrawingStyleFormComponent],
     providers: [
-      provideMockStore({ selectors: [{ selector: selectDrawingFeaturesIncludingSelected, value: [] }, ...selectors ] }),
+      provideMockStore({
+        initialState: { [drawingStateKey]: initialDrawingState },
+        selectors: [
+          { selector: selectDrawingFeaturesForMapRendering, value: [] },
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [{ type: BaseComponentTypeEnum.DRAWING, enabled: true }] },
+          ...selectors,
+        ],
+      }),
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
@@ -60,9 +71,9 @@ describe('DrawingComponent', () => {
   });
 
   test('removes all / selected features', async () => {
-    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getDefaultStyle() } };
+    const selectedFeature: DrawingFeatureModel = { __fid: '1', geometry: '', attributes: { type: DrawingFeatureTypeEnum.POINT, style: DrawingHelper.getUpdatedDefaultStyle() } };
     const { confirmServiceMock } = await setup(true, [
-      { selector: selectSelectedDrawingStyle, value: null },
+      { selector: selectSelectedDrawingType, value: null },
       { selector: selectSelectedDrawingFeature, value: selectedFeature },
       { selector: selectHasDrawingFeatures, value: true },
     ]);

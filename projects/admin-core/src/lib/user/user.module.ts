@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { UserListComponent } from './user-list/user-list.component';
@@ -48,10 +48,10 @@ import { GroupService } from './services/group.service';
   ],
 })
 export class UserModule {
-  constructor(
-    userService: UserService,
-    groupService: GroupService,
-  ) {
+  constructor() {
+    const userService = inject(UserService);
+    const groupService = inject(GroupService);
+
     userService.listenForUserChanges();
     groupService.listenForGroupChanges();
   }

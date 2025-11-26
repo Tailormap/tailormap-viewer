@@ -33,3 +33,9 @@
 .secondary-navigation a + a {
   margin-left: 16px;
 }
+
+.application-metadata {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-style: italic;
+}

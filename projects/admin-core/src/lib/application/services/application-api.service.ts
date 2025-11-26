@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ApplicationService } from './application.service';
 
 /*
@@ -8,11 +8,8 @@ import { ApplicationService } from './application.service';
   providedIn: 'root',
 })
 export class ApplicationApiService {
+  private applicationService = inject(ApplicationService);
 
-  constructor(
-    private applicationService: ApplicationService,
-  ) {
-  }
 
   public getApplications$() {
     return this.applicationService.getApplications$();

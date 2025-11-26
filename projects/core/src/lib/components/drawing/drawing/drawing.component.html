@@ -1,5 +1,51 @@
 @if (active$ | async) {
   <div class="drawing-form">
+    <ng-template #aboveDrawingButtonsContainer></ng-template>
+    <div class="icon-button-list split-buttons">
+      <div class="selected_feature_buttons">
+        <button [class.button--active]="selectToolActive$ | async"
+                i18n-tmTooltip="@@core.draw.select-modify-move-feature"
+                tmTooltip="Select, modify size and/or move feature"
+                mat-stroked-button
+                color="primary"
+                (click)="enableSelectAndModify()">
+          <mat-icon svgIcon="tools_cursor"></mat-icon>
+        </button>
+        @if (selectedFeature) {
+          <button mat-stroked-button
+                  (click)="removeSelectedFeature()"
+                  color="warn"
+                  i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
+                  tmTooltip="Delete selected drawing object">
+            <mat-icon svgIcon="remove"></mat-icon>
+          </button>
+          <button mat-stroked-button
+                  (click)="duplicateSelectedFeature()"
+                  i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
+                  tmTooltip="Duplicate selected drawing object">
+            <mat-icon svgIcon="copy"></mat-icon>
+          </button>
+        }
+      </div>
+      @if (hasFeatures$ | async) {
+        <div class="drawing_buttons">
+          <button mat-stroked-button
+                  (click)="removeAllFeatures()"
+                  color="warn"
+                  i18n-tmTooltip="@@core.drawing.delete-drawing"
+                  tmTooltip="Delete complete drawing">
+            <mat-icon svgIcon="close"></mat-icon>
+          </button>
+          <button mat-stroked-button
+                  (click)="zoomToEntireDrawing()"
+                  i18n-tmTooltip="@@core.drawing.zoom-to-entire-drawing"
+                  tmTooltip="Zoom to show entire drawing">
+            <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
     <p class="label" i18n="@@core.drawing.draw-shape">Draw shape</p>
     <div class="icon-button-list">
       <button [class.button--active]="activeTool === 'POINT'"
@@ -26,12 +72,12 @@
               (click)="draw(drawingTypes.POLYGON)">
         <mat-icon svgIcon="tools_draw_polygon"></mat-icon>
       </button>
-      <button [class.button--active]="activeTool === 'SQUARE'"
+      <button [class.button--active]="activeTool === 'SQUARE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE'"
               i18n-tmTooltip="@@core.draw.draw-square"
               tmTooltip="Draw square"
               mat-stroked-button
               color="primary"
-              (click)="draw(drawingTypes.SQUARE)">
+              (click)="drawSquare()">
         <mat-icon svgIcon="tools_draw_square"></mat-icon>
       </button>
       <button [class.button--active]="activeTool === 'RECTANGLE' || activeTool === 'RECTANGLE_SPECIFIED_SIZE'"
@@ -92,15 +138,27 @@
                  [max]="SIZE_MIN">
         </mat-form-field>
         <mat-form-field appearance="outline" class="rectangle-size-input__height">
-          <mat-label i18n="@@core.drawing.rectangle-height">Height ({{mapUnits$ | async}})</mat-label>
+          <mat-label i18n="@@core.drawing.rectangle-length">Length ({{mapUnits$ | async}})</mat-label>
           <input matInput
                  type="number"
-                 [(ngModel)]="customRectangleHeight"
+                 [(ngModel)]="customRectangleLength"
                  [min]="SIZE_MAX"
                  [max]="SIZE_MIN">
         </mat-form-field>
         <button mat-icon-button (click)="clearRectangleSize()"><mat-icon svgIcon="close"></mat-icon></button>
       </div>
+    }
+
+    @if(activeTool === 'SQUARE' || activeTool === 'SQUARE_SPECIFIED_LENGTH') {
+      <mat-form-field appearance="outline" class="circle-input__radius">
+        <mat-label i18n="@@core.drawing.square-length">Side length ({{mapUnits$ | async}})</mat-label>
+        <input matInput
+               type="number"
+               [(ngModel)]="customSquareLength"
+               [min]="SIZE_MAX"
+               [max]="SIZE_MIN">
+        <button mat-icon-button matSuffix (click)="clearSquareLength()"><mat-icon svgIcon="close"></mat-icon></button>
+      </mat-form-field>
     }
 
     @if (activeTool === 'CIRCLE' || activeTool === 'CIRCLE_SPECIFIED_RADIUS') {
@@ -115,58 +173,19 @@
       </mat-form-field>
     }
 
-    <div class="horizontal-line"></div>
-    <div class="icon-button-list split-buttons">
-      <div class="selected_feature_buttons">
-        <button [class.button--active]="selectToolActive$ | async"
-                i18n-tmTooltip="@@core.draw.select-modify-move-feature"
-                tmTooltip="Select, modify size and/or move feature"
-                mat-stroked-button
-                color="primary"
-                (click)="enableSelectAndModify()">
-          <mat-icon svgIcon="tools_cursor"></mat-icon>
-        </button>
-        @if (selectedFeature) {
-          <button mat-stroked-button
-                  (click)="removeSelectedFeature()"
-                  color="warn"
-                  i18n-tmTooltip="@@core.drawing.delete-selected-drawing-object"
-                  tmTooltip="Delete selected drawing object">
-            <mat-icon svgIcon="remove"></mat-icon>
-          </button>
-          <button mat-stroked-button
-                  (click)="duplicateSelectedFeature()"
-                  i18n-tmTooltip="@@core.drawing.duplicate-selected-drawing-object"
-                  tmTooltip="Duplicate selected drawing object">
-            <mat-icon svgIcon="copy"></mat-icon>
-          </button>
-        }
-      </div>
-      @if (hasFeatures$ | async) {
-        <div class="drawing_buttons">
-          <button mat-stroked-button
-                  (click)="removeAllFeatures()"
-                  color="warn"
-                  i18n-tmTooltip="@@core.drawing.delete-drawing"
-                  tmTooltip="Delete complete drawing">
-            <mat-icon svgIcon="close"></mat-icon>
-          </button>
-          <button mat-stroked-button
-                  (click)="zoomToEntireDrawing()"
-                  i18n-tmTooltip="@@core.drawing.zoom-to-entire-drawing"
-                  tmTooltip="Zoom to show entire drawing">
-            <mat-icon class="zoom_max" svgIcon="zoom_max"></mat-icon>
-          </button>
-        </div>
-      }
-    </div>
+    <ng-template #belowDrawingButtonsContainer></ng-template>
 
-    <tm-drawing-objects-list [drawingLayerId]="drawingLayerId"></tm-drawing-objects-list>
-    @if (selectedDrawingStyle) {
+    <tm-drawing-objects-list [drawingLayerId]="drawingLayerId" (featureSelected)="featureSelected($event)"></tm-drawing-objects-list>
+    @if (selectedDrawingType) {
       <tm-drawing-style-form
-        [type]="selectedDrawingStyle"
-        [style]="style"
-        (styleUpdated)="featureStyleUpdates($event)"></tm-drawing-style-form>
+        [type]="selectedDrawingType"
+        [style]="style()"
+        [onlyLabelSettings]="lockedStyle()"
+        (styleUpdated)="featureStyleUpdates($event)"
+        (labelStyleUpdated)="featureLabelStyleUpdates($event)"></tm-drawing-style-form>
+      @if (lockedStyle()) {
+        <div class="locked-style" i18n="@@core.drawing.locked-style">The style for this drawing object cannot be changed.</div>
+      }
     }
   </div>
 }

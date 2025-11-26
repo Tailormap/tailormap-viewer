@@ -138,3 +138,11 @@ mat-checkbox {
   box-shadow: 0 0 6px var(--primary-color-0_5);
   border-radius: 3px;
 }
+
+.extended-dropzone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+}

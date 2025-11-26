@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import { catchError, map, Observable, of } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
-import { ApiHelper, TailormapApiConstants } from '@tailormap-viewer/api';
+import { ApiHelper, TailormapApiConstants, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -18,13 +18,10 @@ type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSour
   providedIn: 'root',
 })
 export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceModel {
+  private httpClient = inject(HttpClient);
+
 
   public static BASE_URL = `${TailormapApiConstants.BASE_URL}/admin`;
-
-  constructor(
-    private httpClient: HttpClient,
-  ) {
-  }
 
   public getCatalog$(): Observable<CatalogNodeModel[]> {
     return this.httpClient.get<{ nodes: CatalogNodeModel[] }>(`${TailormapAdminApiV1Service.BASE_URL}/catalogs/main`)
@@ -208,12 +205,6 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     }).pipe(
       map(response => response.status === 204),
     );
-  }
-
-  public validatePasswordStrength$(password: string): Observable<boolean> {
-    const body = new HttpParams().set('password', password);
-    return this.httpClient.post<{ result: boolean }>(`${TailormapAdminApiV1Service.BASE_URL}/validate-password`, body)
-      .pipe(map(response => response.result));
   }
 
   public getApplications$(): Observable<ApplicationModel[]> {
@@ -418,4 +409,34 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public getUniqueValues$(params: {
+    featureTypeId: string;
+    attribute: string;
+    filter?: string;
+  }): Observable<UniqueValuesResponseModel> {
+    return this.httpClient.get<UniqueValuesResponseModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/unique-values/${params.featureTypeId}/${params.attribute}`,
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: params.filter
+          ? this.getQueryParams({ filter: params.filter })
+          : undefined,
+      },
+    );
+  }
+
+  private getQueryParams(params: Record<string, string | number | boolean | undefined>): HttpParams {
+    let queryParams = new HttpParams();
+    Object.keys(params).forEach(key => {
+      const value = params[key];
+      if (typeof value !== 'undefined') {
+        queryParams = queryParams = queryParams.set(key, value);
+      }
+    });
+    return queryParams;
+  }
+
+  public getServerConfig$(): Observable<AdminServerConfigModel> {
+    return this.httpClient.get<AdminServerConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/server/config`);
+  }
 }

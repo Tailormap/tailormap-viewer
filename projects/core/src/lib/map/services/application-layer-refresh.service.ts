@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectAutoRefreshableLayers } from '../state/map.selectors';
 import { Subscription, timer } from 'rxjs';
@@ -15,15 +15,15 @@ interface RefreshableLayer extends ExtendedAppLayerModel {
   providedIn: 'root',
 })
 export class ApplicationLayerRefreshService {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private mapService = inject(MapService);
+
 
   private refreshingLayers = new Map<string, Subscription>();
   private layerManager: LayerManagerModel | undefined;
 
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private mapService: MapService,
-  ) {
+  constructor() {
     this.mapService.getLayerManager$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(layerManager => this.layerManager = layerManager);

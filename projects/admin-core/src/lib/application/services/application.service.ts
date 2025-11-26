@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TailormapAdminApiV1Service,
@@ -20,6 +20,11 @@ type ApplicationEditModel = Partial<ApplicationCreateModel>;
   providedIn: 'root',
 })
 export class ApplicationService implements OnDestroy {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+
 
   public static ROOT_NODE_TITLE = $localize `:@@admin-core.application.application-layers:Application layers`;
   public static ROOT_BASE_NODE_TITLE = $localize `:@@admin-core.application.base-maps:Basemaps`;
@@ -27,12 +32,7 @@ export class ApplicationService implements OnDestroy {
 
   private destroyed = new Subject<null>();
 
-  public constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-  ) {
+  public constructor() {
     this.store$.select(selectDraftApplication)
       .pipe(
         takeUntil(this.destroyed),

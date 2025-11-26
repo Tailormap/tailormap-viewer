@@ -2,8 +2,9 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
+import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
@@ -36,7 +37,6 @@ export interface TailormapAdminApiV1ServiceModel {
   createUser$(params: { user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel>;
   updateUser$(params: { username: string; user: Partial<Omit<UserModel, 'groupNames'>> & { groups: string[] } }): Observable<UserModel>;
   deleteUser$(username: string): Observable<boolean>;
-  validatePasswordStrength$(password: string): Observable<boolean>;
   getApplications$(): Observable<ApplicationModel[]>;
   createApplication$(params: { application: Partial<Omit<ApplicationModel, 'id'>> }): Observable<ApplicationModel>;
   updateApplication$(params: { id: string; application: Partial<ApplicationModel> }): Observable<ApplicationModel>;
@@ -71,4 +71,12 @@ export interface TailormapAdminApiV1ServiceModel {
   getTasks$(): Observable<TaskModel[]>;
   getTaskDetails$(uuid: string, type: string): Observable<TaskDetailsModel>;
   deleteTask$(uuid: string, type: string): Observable<boolean>;
+
+  getUniqueValues$(params: {
+    featureTypeId: string;
+    attribute: string;
+    filter?: string;
+  }): Observable<UniqueValuesResponseModel>;
+
+  getServerConfig$(): Observable<AdminServerConfigModel>;
 }

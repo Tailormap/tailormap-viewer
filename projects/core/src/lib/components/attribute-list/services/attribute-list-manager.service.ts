@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { concatMap, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, forkJoin, Observable, of, Subject } from 'rxjs';
@@ -20,6 +20,8 @@ interface TabFromLayerResult {
   providedIn: 'root',
 })
 export class AttributeListManagerService implements OnDestroy {
+  private store$ = inject(Store);
+
 
   public static readonly EMPTY_ATTRIBUTE_LIST_TAB: AttributeListTabModel = {
     id: '',
@@ -42,9 +44,7 @@ export class AttributeListManagerService implements OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectAttributeListVisible),

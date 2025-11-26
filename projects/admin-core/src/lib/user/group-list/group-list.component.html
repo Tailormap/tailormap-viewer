@@ -2,16 +2,18 @@
 <div class="grouplist-wrapper form-group has-search">
 
   <tm-admin-list-filter class="grouplist-filter"
-                        [formControl]="groupFilter"
-                        [filterTerm]="filterString$ | async"
-                        label="Filter groups"
-                        i18n-label="@@admin-core.groups.filter-groups"></tm-admin-list-filter>
+    [formControl]="groupFilter"
+    [filterTerm]="filterString$ | async"
+    label="Filter groups"
+  i18n-label="@@admin-core.groups.filter-groups"></tm-admin-list-filter>
   <mat-selection-list class="grouplist">
-    <mat-list-item *ngFor="let group of filteredGroups$ | async"
-                   [class.selected]="group.selected"
-                   [routerLink]="['/admin/groups/group', group.name]">
-      <span class="detail">{{group.name}}</span>
-    </mat-list-item>
+    @for (group of filteredGroups$ | async; track group) {
+      <mat-list-item
+        [class.selected]="group.selected"
+        [routerLink]="['/admin/groups/group', group.name]">
+        <span class="detail">{{group.name}}</span>
+      </mat-list-item>
+    }
   </mat-selection-list>
 
 </div>

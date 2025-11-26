@@ -2,6 +2,9 @@ import * as CoreActions from './core.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { CoreState, initialCoreState } from './core.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import * as FilterActions from './filter-state/filter.actions';
+import * as FilterReducer from './filter-state/filter.reducer';
+import { FilterState } from './filter-state/filter.state';
 
 const onLoadViewer = (state: CoreState): CoreState => ({
   ...state,
@@ -70,6 +73,13 @@ const onSetComponentEnabled = (
   };
 };
 
+const reduceFilters = <P>(reducer: (state: FilterState, payload: P) => FilterState) => {
+  return (state: CoreState, payload: P): CoreState => ({
+    ...state,
+    filters: reducer(state.filters, payload),
+  });
+};
+
 const coreReducerImpl = createReducer<CoreState>(
   initialCoreState,
   on(CoreActions.loadViewer, onLoadViewer),
@@ -77,6 +87,16 @@ const coreReducerImpl = createReducer<CoreState>(
   on(CoreActions.loadViewerFailed, onViewerLoadFailed),
   on(CoreActions.updateViewerStyle, onUpdateViewerStyle),
   on(CoreActions.setComponentEnabled, onSetComponentEnabled),
+  on(FilterActions.addAllFilterGroupsInConfig, reduceFilters(FilterReducer.onAddAllFilterGroupsInConfig)),
+  on(FilterActions.addFilterGroup, reduceFilters(FilterReducer.onAddFilterGroup)),
+  on(FilterActions.removeFilterGroup, reduceFilters(FilterReducer.onRemoveFilterGroup)),
+  on(FilterActions.updateFilterGroup, reduceFilters(FilterReducer.onUpdateFilterGroup)),
+  on(FilterActions.addFilter, reduceFilters(FilterReducer.onAddFilter)),
+  on(FilterActions.removeFilter, reduceFilters(FilterReducer.onRemoveFilter)),
+  on(FilterActions.updateFilter, reduceFilters(FilterReducer.onUpdateFilter)),
+  on(FilterActions.toggleFilterDisabled, reduceFilters(FilterReducer.onToggleFilterDisabled)),
+  on(FilterActions.setSingleFilterDisabled, reduceFilters(FilterReducer.onSetSingleFilterDisabled)),
+  on(FilterActions.addLayerIdsToFilterGroup, reduceFilters(FilterReducer.onAddLayerIdsToFilterGroup)),
+  on(FilterActions.resetAttributeFilters, reduceFilters(FilterReducer.onResetAttributeFilters)),
 );
 export const coreReducer = (state: CoreState | undefined, action: Action) => coreReducerImpl(state, action);
-

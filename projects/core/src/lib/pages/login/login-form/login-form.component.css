@@ -23,16 +23,29 @@
   height: 40px;
 }
 
-.login-form__sso,
-.login-form__body {
+.login-form__sso {
   padding: 14px 17px 24px 17px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.login-form__body {
+  padding: 0 17px 24px 17px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.login-form-no-sso {
+  padding-top: 14px;
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
+}
+
+.tailormap-account-title {
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .login-form__sso {
@@ -56,14 +69,51 @@ label {
 .buttons {
   display: flex;
   justify-content: flex-end;
-  padding: 16px;
+  padding: 16px 0 16px 16px;
 }
 
-.buttons > * {
-  margin-left: 8px;
-  margin-right: 8px;
+.login-form-no-sso .buttons {
+ padding-right: 16px;
 }
 
 button mat-spinner {
   margin: 8px;
+}
+
+.login-form__sso button {
+  height: auto;
+  min-height: 48px;
+  font-size: 20px;
+}
+
+.login-form__sso button ::ng-deep .mdc-button__label {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+}
+
+.login-form-panel-header {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.sso-image {
+  position: absolute;
+  left: 0;
+  max-height: 30px;
+  max-width: 100px;
+}
+
+.sso-button-text {
+  padding: 0 105px;
+  width: 100%;
+  display: block;
+}
+
+.password-reset {
+  padding-bottom: 4px;
+  padding-right: 4px;
+  text-align: right;
+  cursor: pointer;
 }

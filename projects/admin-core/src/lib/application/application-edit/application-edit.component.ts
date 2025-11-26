@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
@@ -24,6 +24,14 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: false,
 })
 export class ApplicationEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private applicationService = inject(ApplicationService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private dialog = inject(MatDialog);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -43,17 +51,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
     APPLICATION_DETAILS_COMPONENTS: Routes.APPLICATION_DETAILS_COMPONENTS,
     APPLICATION_DETAILS_FILTERS: Routes.APPLICATION_DETAILS_FILTERS,
   };
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private applicationService: ApplicationService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-    private dialog: MatDialog,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.store$.select(selectApplicationsLoadStatus).pipe(

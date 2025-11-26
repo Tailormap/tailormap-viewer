@@ -7,9 +7,12 @@ export const editStateKey = 'edit';
 
 export interface EditState {
   isActive: boolean;
+  isCopyOtherLayerFeaturesActive: boolean;
   isCreateNewFeatureActive: boolean;
   newGeometryType: DrawingType | null;
   selectedLayer: string | null;
+  selectedCopyLayer: string | null;
+  copiedFeatures: FeatureInfoFeatureModel[];
   mapCoordinates?: [number, number];
   dialogVisible: boolean;
   dialogCollapsed: boolean;
@@ -18,10 +21,18 @@ export interface EditState {
   columnMetadata: FeatureInfoColumnMetadataModel[];
   selectedFeature: string | null;
   errorMessage?: string;
+  openedFromFeatureInfo?: boolean;
 }
+
+export const initialEditCopyState = {
+  isCopyOtherLayerFeaturesActive: false,
+  selectedCopyLayer: null,
+  copiedFeatures: [],
+};
 
 export const initialEditState: EditState = {
   isActive: false,
+  ...initialEditCopyState,
   isCreateNewFeatureActive: false,
   newGeometryType: null,
   selectedLayer: null,

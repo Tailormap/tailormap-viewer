@@ -7,7 +7,7 @@
                              [minBufferPx]="200"
                              [maxBufferPx]="400"
                              class="mat-tree tree-wrapper">
-  <ng-container *cdkVirtualFor="let node of getDataSource(); trackBy: treeTrackBy">
+  <ng-container *cdkVirtualFor="let node of dataSource$; trackBy: treeTrackBy">
     <div [class.tree-node--selected]="selectedNodeId === node.id"
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
@@ -63,3 +63,7 @@
     </div>
   </ng-container>
 </cdk-virtual-scroll-viewport>
+
+@if (extendedDropzone) {
+  <div [class]="extendedDropzoneClass" #extendedDropzone></div>
+}

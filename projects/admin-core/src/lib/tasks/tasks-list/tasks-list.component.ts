@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { interval, Observable, of } from 'rxjs';
 import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
@@ -16,15 +16,17 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class TasksListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public tasks$: Observable<TaskModel[]> = of([]);
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public tasksLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
 
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const destroyRef = this.destroyRef;
+
     interval(5000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
       () => {
         this.store$.dispatch(loadTasks());

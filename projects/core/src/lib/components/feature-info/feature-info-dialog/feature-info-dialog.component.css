@@ -69,6 +69,7 @@ tm-feature-info-layer-dropdown {
 .content {
   flex: 1;
   overflow: auto;
+  min-height: 150px;
 }
 
 .content h2 {
@@ -120,6 +121,31 @@ tm-feature-info-layer-dropdown {
   display: none;
 }
 
+.attachments-toggle {
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.attachments-toggle .label {
+  font-weight: bold;
+}
+
+.attachments-collapsed {
+  display: none;
+}
+
+.attachments-list {
+  overflow: auto;
+  padding: 10px;
+}
+
+.attachment-row,
+.attachment-attribute {
+  padding: 5px 0;
+}
+
 .buttons {
   display: flex;
   box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.09);
@@ -131,5 +157,10 @@ tm-feature-info-layer-dropdown {
 }
 
 .buttons button + button {
+  margin-left: 14px;
+}
+
+.edit-feature-button {
+  flex: 0 0 36px;
   margin-left: 14px;
 }

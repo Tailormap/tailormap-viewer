@@ -15,15 +15,17 @@ export class LabelStyleHelper {
 
   public static createLabelStyle(
     styleConfig: MapStyleModel,
+    symbolSize: number,
     defaultSymbolSize: number,
     feature?: Feature<Geometry>,
+    zIndex?: number,
   ) {
-    const symbolSize = UnitsHelper.getNumberValue(styleConfig.pointSize, defaultSymbolSize);
     const geom = feature?.getGeometry();
     const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
     const labelSize = UnitsHelper.getNumberValue(styleConfig.labelSize, defaultSymbolSize);
     const scale = 1 + (labelSize / LabelStyleHelper.DEFAULT_FONT_SIZE);
-    const offsetY = styleConfig.pointType === 'label'
+    const isPolygonLabel = [ "Polygon", "MultiPolygon", "Circle" ].includes(geom?.getType() || '');
+    const offsetY = (isPolygonLabel || styleConfig.pointType === 'label')
       ? 0
       : 14 + (symbolSize - defaultSymbolSize) + (scale * 2);
 
@@ -43,7 +45,7 @@ export class LabelStyleHelper {
       : (styleConfig.pointType ? offsetY + symbolSize + DEFAULT_SELECTION_PADDING : 0);
 
     const baseLabelStyle = new Style({
-      zIndex: styleConfig.zIndex,
+      zIndex,
       text: new Text({
         placement: GeometryTypeHelper.isLineGeometry(geom) ? 'line' : undefined,
         text: label,

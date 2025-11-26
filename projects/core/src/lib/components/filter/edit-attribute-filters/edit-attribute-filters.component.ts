@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, LOCALE_ID } from '@angular/core';
 import {
-  AttributeFilterModel, AttributeType, CheckboxFilterModel, FilterConditionEnum, FilterToolEnum,
-  SwitchFilterModel, SliderFilterModel, DatePickerFilterModel, SliderFilterInputModeEnum,
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum, UniqueValuesService,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { updateFilter } from '../../../filter/state/filter.actions';
+import { setSingleFilterDisabled, updateFilter } from '../../../state/filter-state/filter.actions';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
+import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
+import { selectViewerId } from '../../../state';
+
 
 @Component({
   selector: 'tm-edit-attribute-filter',
@@ -16,58 +18,43 @@ import { DateTime } from 'luxon';
   standalone: false,
 })
 export class EditAttributeFiltersComponent {
+  private store$ = inject(Store);
+  private uniqueValuesService = inject(UniqueValuesService);
+  private locale = inject(LOCALE_ID);
+
 
   public editableFilters = input<AttributeFilterModel[]>([]);
   public filterGroupId = input<string | null>(null);
+  public layerIds = input<string[]>([]);
+  public expanded = input<boolean>(false);
 
-  constructor(private store$: Store) { }
-
-  public getSliderFilterConfiguration(filter: AttributeFilterModel): SliderFilterModel | null {
-    const editConfiguration = filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER ? { ...filter.editConfiguration } : null;
-    if (editConfiguration && editConfiguration.initialValue !== null) {
-      editConfiguration.initialValue = Number(filter.value[0]);
-    } else if (editConfiguration && editConfiguration.initialLowerValue !== null && editConfiguration.initialUpperValue !== null) {
-      editConfiguration.initialLowerValue = Number(filter.value[0]);
-      editConfiguration.initialUpperValue = Number(filter.value[1]);
-    }
-    return editConfiguration;
+  public isSliderFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER;
   }
 
-  public getCheckboxFilterConfiguration(filter: AttributeFilterModel): CheckboxFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX) {
-      return null;
-    }
-    return {
-      ...filter.editConfiguration,
-      attributeValuesSettings: filter.editConfiguration.attributeValuesSettings.map(valueSettings => ({
-        ...valueSettings,
-        initiallySelected: filter.value.includes(valueSettings.value),
-      })),
-    };
+  public isCheckboxFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.CHECKBOX;
   }
 
-  public getSwitchFilterConfiguration(filter: AttributeFilterModel): SwitchFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.SWITCH) {
-      return null;
-    }
-    return filter.editConfiguration;
+  public isSwitchFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SWITCH;
   }
 
-  public getDatePickerFilterConfiguration(filter: AttributeFilterModel): DatePickerFilterModel | null {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DATE_PICKER) {
-      return null;
-    }
-    const editConfiguration: DatePickerFilterModel = { ...filter.editConfiguration };
-    if (editConfiguration.initialDate) {
-      editConfiguration.initialDate = filter.value[0];
-    } else if (editConfiguration.initialLowerDate && editConfiguration.initialUpperDate) {
-      editConfiguration.initialLowerDate = filter.value[0];
-      editConfiguration.initialUpperDate = filter.value[1];
-    }
-    return editConfiguration;
+  public isDatePickerFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DATE_PICKER;
   }
 
-  public updateSliderFilterValue($event: number, filter: AttributeFilterModel) {
+  public isDropdownListFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.DROPDOWN_LIST;
+  }
+
+  public getSubstringFilters(filter: AttributeFilterModel): { id: string; disabled: boolean }[] {
+    return this.editableFilters()
+      .filter(f => f.id.startsWith(`${filter.id}-substring-`))
+      .map(f => ({ id: f.id, disabled: f.disabled ?? false }));
+  }
+
+  public updateSliderFilterValue($event: number | null, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [`${$event}`],
@@ -77,7 +64,7 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateBetweenSliderFilterValues($event: { lower: number; upper: number }, filter: AttributeFilterModel) {
+  public updateBetweenSliderFilterValues($event: { lower: number | null; upper: number | null }, filter: AttributeFilterModel) {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [ `${$event.lower}`, `${$event.upper}` ],
@@ -87,7 +74,15 @@ export class EditAttributeFiltersComponent {
     }
   }
 
-  public updateCheckboxFilterValue(value: string, checked: boolean, filter: AttributeFilterModel) {
+  public updateCheckboxFilterValue(value: string, checked: boolean, substringFilter: boolean, filter: AttributeFilterModel) {
+    if (substringFilter) {
+      this.store$.dispatch(setSingleFilterDisabled({
+        filterGroupId: this.filterGroupId() ?? '',
+        filterId: `${filter.id}-substring-${value}`,
+        disabled: !checked,
+      }));
+      return;
+    }
     let newValue: string[];
     if (checked && !filter.value.includes(value)) {
       newValue = [ ...filter.value, value ];
@@ -112,13 +107,17 @@ export class EditAttributeFiltersComponent {
   public getSliderFilterLabel(filter: AttributeFilterModel): string {
     if (filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER
       && filter.editConfiguration.inputMode !== SliderFilterInputModeEnum.SLIDER) {
-      return `${filter.attribute} ${filter.condition}`;
+      return `${filter.attributeAlias ?? filter.attribute} ${filter.condition}`;
     }
     const formattedValues = filter.value.map(value => {
       const num = Number(value);
-      return isNaN(num) ? value : num.toPrecision(5);
+      if (isNaN(num)) {
+        return value;
+      } else {
+        return new Intl.NumberFormat(this.locale, { maximumSignificantDigits: 5 }).format(num);
+      }
     });
-    return `${filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
+    return `${filter.attributeAlias ?? filter.attribute} ${filter.condition} ${formattedValues.join($localize `:@@core.filter.slider-and: and `)}`;
   }
 
   public updateSwitchFilterValue(change: boolean, filter: AttributeFilterModel) {
@@ -161,6 +160,36 @@ export class EditAttributeFiltersComponent {
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
     }
+  }
+
+  public getUniqueValues$(attribute: string): Observable<string[]> {
+    const layerIds = this.layerIds();
+    return this.store$.select(selectViewerId).pipe(
+      take(1),
+      switchMap(viewerId => {
+        if (!layerIds || layerIds.length === 0 || !viewerId) {
+          return [];
+        }
+        return forkJoin(
+          layerIds.map(layerId =>
+            this.uniqueValuesService.getUniqueValues$({
+              attribute: attribute,
+              layerId: layerId,
+              applicationId: viewerId,
+            }).pipe(
+              take(1),
+              map(response => response.values.map(v => `${v}`) || []),
+            ),
+          ),
+        ).pipe(
+          map((allLayerValues: string[][]) => Array.from(new Set(allLayerValues.flat()))),
+        );
+      }),
+    );
+  }
+
+  public isSliderFilterDisabled(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.SLIDER && filter.value.length === 0;
   }
 
 }

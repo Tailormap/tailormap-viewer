@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,12 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   standalone: false,
 })
 export class GroupEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private groupService = inject(GroupService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -21,14 +27,6 @@ export class GroupEditComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public group$: Observable<GroupModel | null> = of(null);
   public updatedGroup: GroupModel | null = null;
-
-  constructor(
-    private route: ActivatedRoute,
-    private groupService: GroupService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnInit(): void {
     this.group$ = this.route.paramMap

@@ -14,7 +14,6 @@ module.exports = {
       'jest-preset-angular',
       {
         stringifyContentPathRegex: '\\.(html|svg)$',
-        isolatedModules: true,
       },
     ],
   },

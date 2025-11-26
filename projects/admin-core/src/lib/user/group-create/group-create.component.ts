@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { Router } from '@angular/router';
@@ -13,18 +13,16 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   standalone: false,
 })
 export class GroupCreateComponent implements OnDestroy {
+  private groupDetailsService = inject(GroupService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
 
   public saving$ = this.savingSubject.asObservable();
   public group: Omit<GroupModel, 'id'> | null = null;
-
-  constructor(
-    private groupDetailsService: GroupService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

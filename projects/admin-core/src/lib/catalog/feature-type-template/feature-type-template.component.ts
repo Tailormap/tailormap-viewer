@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, signal, inject } from '@angular/core';
 import {
   AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
 } from '@tailormap-admin/admin-api';
@@ -14,6 +14,8 @@ import { Observable } from 'rxjs';
   standalone: false,
 })
 export class FeatureTypeTemplateComponent implements OnInit {
+  private uploadService = inject(TailormapAdminUploadService);
+
 
   private _attributes: AttributeDescriptorModel[] = [];
   private _featureTypeSettings: FeatureTypeSettingsModel | null | undefined;
@@ -37,11 +39,6 @@ export class FeatureTypeTemplateComponent implements OnInit {
   public templatePicklistConfig = signal<TemplatePicklistConfig | undefined>(undefined);
 
   public templateContent = signal<string | undefined>('');
-
-  constructor(
-    private uploadService: TailormapAdminUploadService,
-  ) {
-  }
 
   public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => {
     return this.uploadService.uploadImage$(file);

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 
@@ -14,11 +14,8 @@ export interface FeatureTypeFormDialogData {
   standalone: false,
 })
 export class FeatureTypeFormDialogComponent {
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: FeatureTypeFormDialogData,
-    private dialogRef: MatDialogRef<FeatureTypeFormDialogComponent, FeatureTypeModel | null>,
-  ) {}
+  public data = inject<FeatureTypeFormDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<FeatureTypeFormDialogComponent, FeatureTypeModel | null>>(MatDialogRef);
 
   public static open(
     dialog: MatDialog,

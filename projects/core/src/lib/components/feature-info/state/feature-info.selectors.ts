@@ -4,8 +4,9 @@ import { ArrayHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { selectLayersWithServices } from '../../../map/state/map.selectors';
-import { AttributeTypeHelper } from '@tailormap-viewer/api';
+import { AttributeType, AttributeTypeHelper } from '@tailormap-viewer/api';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
+import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
 
 const selectFeatureInfoState = createFeatureSelector<FeatureInfoState>(featureInfoStateKey);
 
@@ -16,7 +17,7 @@ export const selectFeatureInfoDialogCollapsed = createSelector(selectFeatureInfo
 export const selectFeatureInfoLayerListCollapsed = createSelector(selectFeatureInfoState, (state): boolean => state.layerListCollapsed);
 
 export const selectFeatureInfoFeatures = createSelector(selectFeatureInfoState, state => state.features);
-export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => state.columnMetadata);
+export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => ({ columnMetadata: state.columnMetadata, attachmentMetadata: state.attachmentMetadata }));
 export const selectFeatureInfoLayers = createSelector(selectFeatureInfoState, state => state.layers);
 
 export const selectFeatureInfoList = createSelector(
@@ -30,8 +31,8 @@ export const selectFeatureInfoList = createSelector(
       if (!layer) {
         return;
       }
-      const columnMetadata = metadata.filter(m => m.layerId === feature.layerId);
-      const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.key, c ]));
+      const columnMetadata = metadata.columnMetadata.filter(m => m.layerId === feature.layerId);
+      const columnMetadataDict = new Map((columnMetadata || []).map(c => [ c.name, c ]));
       const attributes: Array<{ label: string; attributeValue: any; key: string }> = [];
       Object.keys(feature.attributes).forEach(key => {
         const attMetadata = columnMetadataDict.get(key);
@@ -40,12 +41,24 @@ export const selectFeatureInfoList = createSelector(
         }
         attributes.push({ label: attMetadata?.alias || key, attributeValue: feature.attributes[key], key });
       });
-      const attributeOrder = columnMetadata.map(c => c.key);
+      const attributeOrder = columnMetadata.map(c => c.name);
+
+      const attachmentMetadata = metadata.attachmentMetadata.filter(m => m.layerId === feature.layerId);
+      const sortedAttachmentsByAttribute = attachmentMetadata.map(m => {
+        const attachments = (feature.attachments || [])
+          .filter(a => a.attributeName === m.attributeName)
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        return { attributeName: m.attributeName, attachments };
+      });
+      const attachmentCount = sortedAttachmentsByAttribute.reduce((acc, cur) => acc + cur.attachments.length, 0);
+
       featureInfoModels.push({
         __fid: feature.__fid,
         layer,
         sortedAttributes: attributes.sort(ArrayHelper.getArraySorter('key', attributeOrder)),
         geometry: FeatureInfoHelper.getGeometryForFeatureInfoFeature(feature, columnMetadata) || null,
+        sortedAttachmentsByAttribute,
+        attachmentCount,
       });
     });
     return featureInfoModels;
@@ -133,5 +146,36 @@ export const selectFeatureInfoLayerListItems = createSelector(
       selected: l.id === selectedLayerId,
       disabled: FeatureInfoHelper.isLayerDisabled(l),
     }));
+  },
+);
+
+export const selectCurrentFeatureForEdit = createSelector(
+  selectFeatureInfoFeatures,
+  selectSelectedFeatureInfoLayer,
+  selectFeatureInfoMetadata,
+  (features, selectedLayer, featureInfoMetadata) => {
+    if (!selectedLayer || !selectedLayer.selectedFeatureId) {
+      return null;
+    }
+    const feature = features.find(f => f.__fid === selectedLayer.selectedFeatureId);
+    if (feature && featureInfoMetadata) {
+      const filteredMetadata = featureInfoMetadata.columnMetadata.filter(m => m.layerId === feature.layerId);
+      const geometryAttributeName = filteredMetadata.find(m => m.layerId === feature.layerId && m.type === AttributeType.GEOMETRY)?.name;
+      if (!geometryAttributeName) {
+        return null;
+      }
+      const newAttributes = { ...feature.attributes };
+      newAttributes[geometryAttributeName] = feature.geometry;
+      const newFeature: FeatureInfoFeatureModel = {
+        ...feature,
+        attributes: newAttributes,
+      };
+      return {
+        feature: newFeature,
+        columnMetadata: filteredMetadata,
+        attachmentMetadata: featureInfoMetadata.attachmentMetadata.filter(m => m.layerId === feature.layerId),
+      };
+    }
+    return null;
   },
 );

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, NgZone, inject } from '@angular/core';
 import {
   DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
@@ -17,6 +17,10 @@ import { FormControl } from '@angular/forms';
   standalone: false,
 })
 export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
+  private treeService = inject(TreeService);
+  private dialog = inject(MatDialog);
+  private ngZone = inject(NgZone);
+
 
   private destroyed = new Subject();
 
@@ -58,11 +62,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
 
   public treeFilter = new FormControl('');
 
-  constructor(
-    private treeService: TreeService,
-    private dialog: MatDialog,
-    private ngZone: NgZone,
-  ) {
+  constructor() {
     this.treeService.nodePositionChangedSource$
       .pipe(takeUntil(this.destroyed))
       .subscribe((evt) => this.handleNodePositionChanged(evt));

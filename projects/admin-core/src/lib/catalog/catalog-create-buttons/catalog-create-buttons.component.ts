@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,6 +21,11 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   standalone: false,
 })
 export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
+  private dialog = inject(MatDialog);
+  private store$ = inject(Store);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   @Input()
   public node: ExtendedCatalogNodeModel | null = null;
@@ -28,13 +33,6 @@ export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   private rootNodeId: string | null = null;
-
-  constructor(
-    private dialog: MatDialog,
-    private store$: Store,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnInit(): void {
     this.store$.select(selectCatalogRootNodeId)

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
@@ -15,11 +15,11 @@ export class FormPageComponent {
 
   public className$: Observable<string>;
 
-  constructor(
-    route: ActivatedRoute,
-    router: Router,
-    destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const route = inject(ActivatedRoute);
+    const router = inject(Router);
+    const destroyRef = inject(DestroyRef);
+
     this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'className')
       .pipe(takeUntilDestroyed(destroyRef));
   }

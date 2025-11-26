@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectCQLFilters } from '../state/filter.selectors';
+import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
 import { take, toArray } from 'rxjs';
 
 describe('FilterService', () => {

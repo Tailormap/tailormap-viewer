@@ -7,17 +7,18 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectEnable3d } from '../../../state/core.selectors';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { selectActiveTool } from '../state/toolbar.selectors';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import userEvent from '@testing-library/user-event';
 import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
 
-const setup = async (enable3d: boolean) => {
-  const mapServiceMock = getMapServiceMock();
+const setup = async (enable3d: boolean, toolsEnabled = false) => {
+  const mapServiceMock = getMapServiceMock(undefined, undefined, {
+    someToolsEnabled$: jest.fn(() => of(toolsEnabled)),
+  });
   const mockStore = createMockStore({
     selectors: [
       { selector: selectEnable3d, value: enable3d },
-      { selector: selectActiveTool, value: null },
       { selector: selectIn3dView, value: false },
     ],
   });
@@ -44,6 +45,11 @@ describe('Switch3dComponent', () => {
 
   test('should not render', async () => {
     await setup(false);
+    expect(screen.queryByLabelText('Switch to 3D')).not.toBeInTheDocument();
+  });
+
+  test('should render when (measure) tool is enabled', async () => {
+    await setup(true, true);
     expect(screen.queryByLabelText('Switch to 3D')).not.toBeInTheDocument();
   });
 

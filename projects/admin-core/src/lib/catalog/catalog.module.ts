@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarkdownEditorComponent, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
@@ -41,6 +41,9 @@ import { FeatureTypeFormDialogComponent } from './feature-type-form-dialog/featu
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons/catalog-shortcut-buttons.component';
 import { FeatureTypeTemplateComponent } from './feature-type-template/feature-type-template.component';
 import { ProjectionAvailabilityComponent } from './projection-availability/projection-availability.component';
+import {
+  FeatureTypeAttachmentAttributesComponent,
+} from './feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 
 
 @NgModule({
@@ -71,6 +74,7 @@ import { ProjectionAvailabilityComponent } from './projection-availability/proje
     FeatureSourceUsedDialogComponent,
     CatalogItemsInFolderDialogComponent,
     FeatureTypeAttributesComponent,
+    FeatureTypeAttachmentAttributesComponent,
     CatalogShortcutButtonsComponent,
     FeatureTypeTemplateComponent,
     ProjectionAvailabilityComponent,
@@ -95,11 +99,11 @@ import { ProjectionAvailabilityComponent } from './projection-availability/proje
   ],
 })
 export class CatalogModule {
-  constructor(
-    geoServiceService: GeoServiceService,
-    featureSourceService: FeatureSourceService,
-    catalogService: CatalogService,
-  ) {
+  constructor() {
+    const geoServiceService = inject(GeoServiceService);
+    const featureSourceService = inject(FeatureSourceService);
+    const catalogService = inject(CatalogService);
+
     geoServiceService.listenForGeoServiceChanges();
     featureSourceService.listenForFeatureSourceChanges();
     catalogService.listenForCatalogChanges();

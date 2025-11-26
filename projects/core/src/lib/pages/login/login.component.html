@@ -1,9 +1,18 @@
 <div class="login-page-wrapper">
-  <tm-login-form [login$]="login$"
-                 [loginConfiguration]="loginConfiguration$ | async"
-                 [redirectUrl]="routeBeforeLogin"
-                 (loggedIn)="loggedIn($event)"
-                 [insufficientRightsErrorMessage]="insufficientRightsMessage"
-                 loginErrorMessage="Login failed, please try again"
-                 i18n-loginErrorMessage="@@core.login.error"></tm-login-form>
+
+  @if (!showPasswordResetForm) {
+    <tm-login-form (loggedIn)="loggedIn($event)"
+                   (requestPasswordReset)="onRequestPasswordReset()"
+                   [insufficientRightsErrorMessage]="insufficientRightsMessage"
+                   [login$]="login$"
+                   [loginConfiguration]="loginConfiguration$ | async"
+                   [redirectUrl]="routeBeforeLogin"
+                   i18n-loginErrorMessage="@@core.login.error"
+                   loginErrorMessage="Login failed, please try again"></tm-login-form>
+  }
+
+  @if (showPasswordResetForm) {
+    <tm-password-reset-request-form [requestReset$]="requestPasswordReset$">
+    </tm-password-reset-request-form>
+  }
 </div>

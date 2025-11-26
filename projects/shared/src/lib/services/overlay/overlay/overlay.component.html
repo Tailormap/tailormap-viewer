@@ -1,4 +1,6 @@
-<div *ngIf="contentType === 'string'" [innerHTML]="getStringContent()"></div>
-<ng-container *ngIf="contentType === 'template'">
+@if (contentType === 'string') {
+  <div [innerHTML]="getStringContent()"></div>
+}
+@if (contentType === 'template') {
   <ng-container *ngTemplateOutlet="getTemplateContent(); context: context"></ng-container>
-</ng-container>
+}

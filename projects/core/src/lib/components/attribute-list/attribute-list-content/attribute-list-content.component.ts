@@ -98,6 +98,10 @@ export class AttributeListContentComponent implements OnInit {
             this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
             of(layerId),
             of(applicationId),
+            this.columns$.pipe(
+              take(1),
+              map(columns => columns.find(col => col.id === $event.columnId)?.label || undefined),
+            ),
           ]);
         }),
       )
@@ -105,7 +109,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, otherFilters, layerId, applicationId ] = result;
+        const [ attributeFilterModel, otherFilters, layerId, applicationId, attributeAlias ] = result;
         if (applicationId === null) {
           return;
         }
@@ -116,6 +120,7 @@ export class AttributeListContentComponent implements OnInit {
           columnType: $event.attributeType,
           cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
           applicationId,
+          attributeAlias,
         };
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });

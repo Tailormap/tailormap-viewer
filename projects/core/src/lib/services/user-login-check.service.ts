@@ -1,14 +1,19 @@
 import { Router } from '@angular/router';
 import { interval, switchMap, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef, Inject, Injectable } from '@angular/core';
-import { TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel } from '@tailormap-viewer/api';
+import { DestroyRef, Injectable, inject } from '@angular/core';
+import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserLoginCheckService {
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
+  private destroyRef = inject(DestroyRef);
+  private dialogService = inject(ConfirmDialogService);
+  private router = inject(Router);
+
 
   private isAuthenticated = false;
   private confirmOpen = false;
@@ -17,14 +22,6 @@ export class UserLoginCheckService {
   private messageTitle = $localize `:@@core.user-login-check-title:You are logged out`;
   private viewerMessageBody = $localize `:@@core.user-login-check-viewer-message:You are logged out and might need to login again`;
   private adminMessageBody = $localize `:@@core.user-login-check-admin-message:You are logged out and need to log in first before continuing`;
-
-  constructor(
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-    private destroyRef: DestroyRef,
-    private dialogService: ConfirmDialogService,
-    private router: Router,
-  ) {
-  }
 
   public pingUserLoggedIn() {
     interval(1000 * 50)

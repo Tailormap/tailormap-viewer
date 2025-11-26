@@ -1,4 +1,4 @@
-import { Inject, Injectable, NgZone, OnDestroy, Optional } from '@angular/core';
+import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 import { nanoid } from 'nanoid';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel, TailormapApiConstants } from '@tailormap-viewer/api';
 import { distinctUntilChanged, filter, Observable, Subject } from 'rxjs';
@@ -42,6 +42,9 @@ export enum EventType {
   providedIn: 'root',
 })
 export class AdminSseService implements OnDestroy {
+  private ngZone = inject(NgZone);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+
 
   private eventSource: EventSource | null = null;
   private retryTimeout = 5000;
@@ -64,11 +67,9 @@ export class AdminSseService implements OnDestroy {
   private progressEvents = new Subject<SSETaskProgressEvent>();
   private progressEvents$ = this.progressEvents.asObservable();
 
-  constructor(
-    private ngZone: NgZone,
-    private authenticatedUserService: AuthenticatedUserService,
-    @Optional() @Inject(ENVIRONMENT_CONFIG) config?: EnvironmentConfigModel,
-  ) {
+  constructor() {
+    const config = inject<EnvironmentConfigModel>(ENVIRONMENT_CONFIG, { optional: true });
+
     this.authenticatedUserService.getUserDetails$()
       .pipe(takeUntilDestroyed(), distinctUntilChanged())
       .subscribe(userDetails => {

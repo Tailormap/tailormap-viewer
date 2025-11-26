@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
@@ -16,6 +16,9 @@ import { selectDraftFormAttributes } from '../state/form.selectors';
   standalone: false,
 })
 export class FormAttributeListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
@@ -33,12 +36,6 @@ export class FormAttributeListComponent implements OnInit {
   public attributes$: Observable<AttributeDescriptorModel[]> = of([]);
 
   public filterTerm$ = this.attributeFilter.asObservable();
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

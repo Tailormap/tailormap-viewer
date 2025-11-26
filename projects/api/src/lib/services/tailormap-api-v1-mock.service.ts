@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel,
+  SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
 import { delay, Observable, of, throwError } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -133,5 +133,28 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
           statusText: 'Not Found',
         }));
     }
+  }
+
+  public addAttachment$(_params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    return of({ id: crypto.randomUUID() });
+  }
+
+  public listAttachments$(_params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]> {
+    return of([]);
+  }
+
+  public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
+    return 'url-to-attachment/' + params.attachmentId;
+  }
+
+  public deleteAttachment$(_params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return of();
   }
 }

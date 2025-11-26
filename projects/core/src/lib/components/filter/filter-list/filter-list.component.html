@@ -1,3 +1,4 @@
-@for (filter of (filters$ | async); track filter.id) {
-  <tm-filter-list-item [filterGroup]="filter"></tm-filter-list-item>
+@let filters = filters$ | async;
+@for (filter of filters; track filter.id) {
+  <tm-filter-list-item [filterGroup]="filter" [editFiltersExpanded]="filters?.length === 1"></tm-filter-list-item>
 }
