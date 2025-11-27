@@ -240,7 +240,7 @@ export class BookmarkService {
       } else if (isBookmarkProtoFragmentDescriptor(descriptor)) {
         // Only if binary value was changed
         if (binaryFragmentsBase64 === null) {
-          const bytes = descriptor.serialize(value) as Uint8Array;
+          const bytes = descriptor.serialize(value) as Uint8Array<ArrayBuffer>;
           if (bytes.length > 0) {
             binaryFragments.fragments.push(new BookmarkFragment({
               identifier: descriptor.identifier,
@@ -255,7 +255,7 @@ export class BookmarkService {
       // Use cached value because only string fragments were updated
       outputs.push(BookmarkService.FRAGMENT_SEPARATOR, binaryFragmentsBase64);
     } else if (binaryFragments.fragments.length > 0) {
-      const protobuf = binaryFragments.toBinary();
+      const protobuf = binaryFragments.toBinary() as Uint8Array<ArrayBuffer>;
       const compressed = deflate(protobuf, { format: 'deflate', level: 9 });
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       outputs.push(BookmarkService.FRAGMENT_SEPARATOR, base64);
@@ -267,7 +267,7 @@ export class BookmarkService {
 
   private static decodeBinaryFragments(s: string): BinaryBookmarkFragments | null {
     try {
-      const bytes = UrlHelper.urlBase64ToBytes(s);
+      const bytes = UrlHelper.urlBase64ToBytes(s) as Uint8Array<ArrayBuffer>;
       const decompressed = inflate(bytes);
       return BinaryBookmarkFragments.fromBinary(decompressed);
     } catch (_e) {
