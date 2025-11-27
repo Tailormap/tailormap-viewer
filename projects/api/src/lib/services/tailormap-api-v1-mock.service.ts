@@ -84,7 +84,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getFeatureModel({ "__fid": params.feature.__fid }));
   }
 
-  public deleteFeature$(_params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+  public deleteFeature$(_params: { applicationId: string; layerId: string; fid: string }): Observable<HttpStatusCode> {
     return of(HttpStatusCode.NoContent);
   }
 
