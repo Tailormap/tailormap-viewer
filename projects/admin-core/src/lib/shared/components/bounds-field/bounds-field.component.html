@@ -8,10 +8,12 @@
         <ng-container i18n="@@admin-core.common.bounds">Bounds</ng-container>
       }
     </mat-label>
-    @if (projection) {
-      <button mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
-    }
-    <button mat-stroked-button color="accent" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+    <div class="bounds-buttons">
+      @if (projection) {
+        <button mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
+      }
+      <button mat-stroked-button color="accent" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+    </div>
   </div>
   <div class="fields">
     <mat-form-field>
