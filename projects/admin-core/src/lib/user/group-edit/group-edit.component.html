@@ -6,6 +6,6 @@
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedGroup" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(group)" i18n="@@admin-core.common.delete">Delete</button>
-    <button mat-flat-button (click)="clearSelectedGroup()" routerLink="/admin/groups" i18n="@@admin-core.common.close">Close</button>
+    <button mat-flat-button tmCancelCloseButton (cancelClose)="clearSelectedGroup()" routerLink="/admin/groups" i18n="@@admin-core.common.close">Close</button>
   </div>
 }
