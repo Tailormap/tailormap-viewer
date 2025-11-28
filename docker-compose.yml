@@ -27,6 +27,8 @@ services:
     environment:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
+      # use this to enable/disable Envers auditing
+      - "SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED=${SPRING_JPA_PROPERTIES_ORG_HIBERNATE_ENVERS_ENABLED:-false}"
       - "SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}"
       - "SPRING_MAIL_HOST=${SPRING_MAIL_HOST:-}"
       - "SPRING_MAIL_PORT=${SPRING_MAIL_PORT:-25}"
