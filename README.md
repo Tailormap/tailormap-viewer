@@ -62,6 +62,11 @@ eg. [Guide to Spring Email](https://www.baeldung.com/spring-email).
 To enable user password resets, set the `TAILORMAPAPI_PASSWORDRESET_ENABLED` environment variable to the value `true` in the `.env` file or with
 `-e` arguments to `docker run`. Make sure SMTP is configured as described above.
 
+### Enabling Envers auditing
+To enable auditing of changes to entities in the configuration database, set the `SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED`
+environment variable to the value `true` in the `.env` file or with `-e` arguments to `docker run`.
+This will store changes to configuration entities such as users, groups, feature sources and maps in the `history` schema of the configuration
+database.
 
 ## Default admin account
 
