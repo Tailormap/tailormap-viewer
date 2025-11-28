@@ -46,3 +46,12 @@ fieldset.layer-functionality mat-checkbox {
   text-align: left;
   padding: 0 16px;
 }
+
+.form-selection-and-message {
+  margin-bottom: 16px;
+}
+
+.available-crs {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
