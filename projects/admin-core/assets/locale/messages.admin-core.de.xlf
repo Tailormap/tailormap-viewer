@@ -702,6 +702,10 @@
         <source>Allow</source>
         <target>Gestatten</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.accept-header" datatype="html">
+        <source>Accepted files</source>
+        <target>Akzeptierte Dateien</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
         <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
         <target>Da dieser Dienst eine Authentifizierung erfordert und über einen Proxy läuft, ist er ohne Anmeldung nicht zugänglich. Dies ist eine Sicherheitsmaßnahme, um zu verhindern, dass eine Ebene mit sensiblen Daten versehentlich für jeden freigegeben wird.</target>
@@ -721,6 +725,22 @@
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
         <target>Kartendienst hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.all" datatype="html">
+        <source>All files</source>
+        <target>Alle Dateien</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.docs" datatype="html">
+        <source>Documents (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</source>
+        <target>Dokumente (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.images" datatype="html">
+        <source>Images</source>
+        <target>Bilder</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.pdfs" datatype="html">
+        <source>PDFs</source>
+        <target>PDFs</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
         <source>Attachment attributes</source>
@@ -1077,14 +1097,6 @@
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
         <target>Maximales Zoomniveau</target>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.mime-type-header" datatype="html">
-        <source>MIME Type</source>
-        <target>MIME-Typ</target>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.mime-type-placeholder" datatype="html">
-        <source>e.g. application/pdf</source>
-        <target>z.B. application/pdf</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.min-zoom-level" datatype="html">
         <source>Minimum zoom level</source>
@@ -2188,6 +2200,7 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
         <source>Selected attributes used to index</source>
+        <target>Selektierte Attribute zur Indexierung</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.summary" datatype="html">
         <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex?.summary?.startedAt | date:&apos;medium&apos; }}"/> and took <x id="INTERPOLATION_1" equiv-text="{{ searchIndex?.summary?.duration | number: &apos;1.1-2&apos; }}"/> seconds, skipped <x id="INTERPOLATION_2" equiv-text="{{ searchIndex?.summary?.skippedCounter }}"/> of <x id="INTERPOLATION_3" equiv-text="{{ searchIndex?.summary?.total }}"/> features.</source>
