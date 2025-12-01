@@ -74,7 +74,7 @@ export class PasswordResetComponent implements OnInit {
             } else {
               this.infoMessageSubject.next('');
               this.errorMessageSubject.next(
-                $localize`:@@core.password-reset-form.error-saving:Error saving password, please check your token, username and password and try again.`);
+                $localize`:@@core.password-reset-form.error-saving:Error saving password, please check the validity of your reset link, username and password and try again.`);
             }
             this.passwordResetForm.reset();
           }, error: (error) => {

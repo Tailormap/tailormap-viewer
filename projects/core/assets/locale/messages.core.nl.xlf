@@ -915,8 +915,8 @@
         <target>Fout bij het opnieuw instellen van het wachtwoord: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-saving" datatype="html">
-        <source>Error saving password, please check your token, username and password and try again.</source>
-        <target>Fout bij het opslaan van het wachtwoord, controleer uw token, gebruikersnaam en wachtwoord en probeer het opnieuw.</target>
+        <source>Error saving password, please check the validity of your reset link, username and password and try again.</source>
+        <target>Fout bij het opslaan van het wachtwoord, controleer de geldigheid van uw inloglink, gebruikersnaam en wachtwoord en probeer het opnieuw.</target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
         <source>Passwords need to match</source>
