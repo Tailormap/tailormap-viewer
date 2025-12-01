@@ -14,10 +14,6 @@
   height: 100%;
 }
 
-.edit-application-tree ::ng-deep .tree-wrapper {
-  max-height: calc(var(--100vh) - var(--other-content-height));
-}
-
 .catalog-tree-wrapper,
 .application-layer-settings {
   display: none;
