@@ -31,7 +31,7 @@
   @let oidcConfigurations = oidcConfigurations$ | async;
   @if (oidcConfigurations && oidcConfigurations.length > 0) {
     <div class="oidc-table">
-      <h4 i18n="@@admin-core.groups.oidc-header">OIDC registrations</h4>
+      <h4 class="oidc-table-header" i18n="@@admin-core.groups.oidc-header">OIDC registrations</h4>
       <p i18n="@@admin-core.groups.oidc-description">A role named <b>{{group?.name}}</b> was received from the following OIDC registration{{ oidcConfigurations.length > 1 ? 's' : ''}}. Users logged in via an OIDC registration with that role get the authorizations of this group.</p>
       <mat-table [dataSource]="oidcConfigurations" class="mat-elevation-z1">
         <ng-container matColumnDef="name">

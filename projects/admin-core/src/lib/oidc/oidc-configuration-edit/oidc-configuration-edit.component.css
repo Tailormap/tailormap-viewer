@@ -14,6 +14,10 @@ tm-admin-oidc-configuration-edit-settings {
   max-width: 600px;
 }
 
+.linked-groups-header {
+  margin-top: 0;
+}
+
 mat-header-cell {
   font-weight: bold;
 }

@@ -5,7 +5,7 @@
     @let groups = groups$ | async;
     @if (groups && groups.length > 0) {
       <div class="linked-groups">
-        <h4 i18n="@@admin-core.oidc.groups-header">OIDC roles mapped to groups</h4>
+        <h4 class="linked-groups-header" i18n="@@admin-core.oidc.groups-header">OIDC roles mapped to groups</h4>
         <p i18n="@@admin-core.oidc.groups-description">When a user logins with this OIDC registration, roles received are mapped to groups which are automatically created if they don't yet exist. The user gets the authorizations of the group and also any aliased group. The following roles have been received from this registration.</p>
         <mat-table [dataSource]="groups" class="mat-elevation-z1">
           <ng-container matColumnDef="name">

@@ -14,6 +14,10 @@ form {
   max-width: 500px;
 }
 
+.oidc-table-header {
+  margin-top: 0;
+}
+
 mat-header-cell {
   font-weight: bold;
 }
