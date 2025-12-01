@@ -14,6 +14,10 @@
   height: 100%;
 }
 
+.edit-application-tree ::ng-deep .tree-wrapper {
+  max-height: calc(var(--100vh) - var(--other-content-height));
+}
+
 .catalog-tree-wrapper,
 .application-layer-settings {
   display: none;
@@ -22,6 +26,11 @@
 
 .has-selected-layer .application-layer-settings {
   display: block;
+  height: 100%;
+}
+
+.application-layer-settings tm-admin-application-layer-settings {
+  height: 100%;
 }
 
 .has-catalog-tree-visible .catalog-tree-wrapper {
