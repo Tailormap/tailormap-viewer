@@ -62,3 +62,8 @@ tm-admin-edit-field {
   flex: 1;
   overflow: auto;
 }
+
+tm-admin-form-warning-message {
+  display: block;
+  max-width: 750px;
+}
