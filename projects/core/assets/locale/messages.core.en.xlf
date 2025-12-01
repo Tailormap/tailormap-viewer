@@ -687,7 +687,7 @@
         <source>Error resetting password: <x id="PH" equiv-text="error?.error?.message || error?.message || error.toString())"/></source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-saving" datatype="html">
-        <source>Error saving password, please check your token, username and password and try again.</source>
+        <source>Error saving password, please check the validity of your reset link, username and password and try again.</source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
         <source>Passwords need to match</source>
