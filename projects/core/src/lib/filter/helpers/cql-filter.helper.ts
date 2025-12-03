@@ -2,32 +2,9 @@ import { AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEn
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
+import { INVERSE_NUMBER_CONDITIONS } from './inverse-filter-conditions.const';
 
 export class CqlFilterHelper {
-
-  private static INVERSE_NUMBER_CONDITIONS: Map<FilterConditionEnum, FilterConditionEnum> = new Map([
-    [ FilterConditionEnum.NUMBER_EQUALS_KEY, FilterConditionEnum.NUMBER_NOT_EQUALS_KEY ],
-    [ FilterConditionEnum.NUMBER_LARGER_THAN_KEY, FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY ],
-    [ FilterConditionEnum.NUMBER_SMALLER_THAN_KEY, FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY ],
-    [ FilterConditionEnum.NUMBER_LARGER_EQUALS_THAN_KEY, FilterConditionEnum.NUMBER_SMALLER_THAN_KEY ],
-    [ FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY, FilterConditionEnum.NUMBER_LARGER_THAN_KEY ],
-  ]);
-
-  public static getFilters(filterGroups: FilterGroupModel[]): Map<string, string> {
-    const cqlDict = new Map<string, string>();
-    const layerIdList = filterGroups.reduce<string[]>((ids, f) => {
-      return [ ...ids, ...f.layerIds ];
-    }, []);
-    const layerIds = new Set<string>(layerIdList);
-    layerIds.forEach(layerId => {
-      const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
-      const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
-      if (cqlFilter) {
-        cqlDict.set(layerId, cqlFilter);
-      }
-    });
-    return cqlDict;
-  }
 
   public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: string): string {
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
@@ -166,13 +143,13 @@ export class CqlFilterHelper {
   }
 
   private static getQueryForNumber(filter: AttributeFilterModel) {
-    if (filter.invertCondition && CqlFilterHelper.INVERSE_NUMBER_CONDITIONS.get(filter.condition)) {
-      return `${filter.attribute} ${CqlFilterHelper.INVERSE_NUMBER_CONDITIONS.get(filter.condition)} ${filter.value[0]}`;
+    if (filter.invertCondition && INVERSE_NUMBER_CONDITIONS.get(filter.condition)) {
+      return `${filter.attribute} ${INVERSE_NUMBER_CONDITIONS.get(filter.condition)} ${filter.value[0]}`;
     }
     return `${filter.attribute} ${filter.condition} ${filter.value[0]}`;
   }
 
-  public static getExpression(value: string | number | boolean, attributeType: AttributeType): string {
+  private static getExpression(value: string | number | boolean, attributeType: AttributeType): string {
     if (attributeType === AttributeType.STRING || CqlFilterHelper.isDate(attributeType)) {
       if (typeof value === 'string') {
         value = value.replace(/'/g, '\'\'');
