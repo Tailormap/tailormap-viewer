@@ -1,15 +1,14 @@
-import { Injectable, inject } from '@angular/core';
-import {
-  TAILORMAP_API_V1_SERVICE,
-} from '@tailormap-viewer/api';
+import { inject, Injectable } from '@angular/core';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { HttpResponse } from '@angular/common/http';
 import { DateTime } from 'luxon';
+import { AttributeListManagerService } from './attribute-list-manager.service';
+import { GetLayerExportResponse } from '../models/attribute-list-api-service.model';
+import { Sortorder } from '@tailormap-viewer/api';
 
 export enum SupportedExportFormats {
   CSV = 'csv',
@@ -26,7 +25,7 @@ export enum SupportedExportFormats {
 export class AttributeListExportService {
   private store$ = inject(Store);
   private snackBar = inject(MatSnackBar);
-  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private managerService = inject(AttributeListManagerService);
   private dateLocale = inject(MAT_DATE_LOCALE);
   private static CSV_FORMATS = [ 'csv', 'text/csv' ];
   private static XLSX_FORMATS = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'excel2007' ];
@@ -37,8 +36,8 @@ export class AttributeListExportService {
 
   private cachedFormats: Map<string, string[]> = new Map();
 
-  public getExportFormats$(layerId: string): Observable<SupportedExportFormats[]> {
-    return this.getExportCapabilities$(layerId).pipe(
+  public getExportFormats$(tabSourceId: string, layerId: string): Observable<SupportedExportFormats[]> {
+    return this.getExportCapabilities$(tabSourceId, layerId).pipe(
       map(formats => {
         const supportedFormats: SupportedExportFormats[] = [];
         if (this.hasSupport(formats, AttributeListExportService.CSV_FORMATS)) {
@@ -65,6 +64,7 @@ export class AttributeListExportService {
   }
 
   public export$(params: {
+    tabSourceId: string;
     layerId: string;
     serviceLayerName: string;
     format: SupportedExportFormats;
@@ -73,7 +73,7 @@ export class AttributeListExportService {
     attributes: string[];
   }): Observable<boolean> {
     return combineLatest([
-      this.getOutputFormat$(params.layerId, params.format),
+      this.getOutputFormat$(params.tabSourceId, params.layerId, params.format),
       this.store$.select(selectViewerId),
     ]).pipe(
       take(1),
@@ -83,12 +83,14 @@ export class AttributeListExportService {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
         }
-        return this.api.getLayerExport$({
+        const sortOrder: Sortorder = params.sort?.direction === 'asc' ? Sortorder.ASC : Sortorder.DESC;
+        return this.managerService.getLayerExport$(params.tabSourceId, {
           applicationId,
           layerId: params.layerId,
           outputFormat,
           filter: params.filter,
-          sort: params.sort,
+          sortBy: params.sort ? params.sort.column : undefined,
+          sortOrder: params.sort ? sortOrder : undefined,
           attributes: params.attributes,
         })
           .pipe(
@@ -98,17 +100,16 @@ export class AttributeListExportService {
             }),
           );
       }),
-      tap((response: HttpResponse<Blob> | null) => {
-        if (!response || !response.body) {
+      tap((response: GetLayerExportResponse | null) => {
+        if (!response || !response.file) {
           return;
         }
         const date = DateTime.now().setLocale((this.dateLocale as string)).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
         const defaultFilename = [ $localize `:@@core.attribute-list.export:Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
-        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
-        FileHelper.saveAsFile(response.body, fileName);
+        FileHelper.saveAsFile(response.file, response.fileName || defaultFilename);
       }),
-      map((response: HttpResponse<Blob> | null) => {
-        return !!(response && response.body);
+      map((response: GetLayerExportResponse | null) => {
+        return !!(response && response.file);
       }),
     );
   }
@@ -123,8 +124,8 @@ export class AttributeListExportService {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
-  private getOutputFormat$(layerId: string, format: SupportedExportFormats): Observable<string | null> {
-    return this.getExportCapabilities$(layerId)
+  private getOutputFormat$(tabSourceId: string, layerId: string, format: SupportedExportFormats): Observable<string | null> {
+    return this.getExportCapabilities$(tabSourceId, layerId)
       .pipe(
         take(1),
         map(formats => {
@@ -169,7 +170,7 @@ export class AttributeListExportService {
     return 'txt';
   }
 
-  private getExportCapabilities$(layerId: string): Observable<string[]> {
+  private getExportCapabilities$(tabSourceId: string, layerId: string): Observable<string[]> {
     return this.store$.select(selectViewerId).pipe(
       take(1),
       switchMap(applicationId => {
@@ -181,7 +182,7 @@ export class AttributeListExportService {
         if (cached) {
           return of(cached);
         }
-        return this.api.getLayerExportCapabilities$({ applicationId, layerId })
+        return this.managerService.getLayerExportCapabilities$(tabSourceId, { applicationId, layerId })
           .pipe(
             catchError(() => of({ exportable: false, outputFormats: [] })),
             tap(capabilities => {

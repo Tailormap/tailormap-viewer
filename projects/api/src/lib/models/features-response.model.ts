@@ -5,7 +5,7 @@ import { AttachmentAttributeModel } from './attachment-attribute.model';
 export interface FeaturesResponseModel {
   features: FeatureModel[];
   columnMetadata: ColumnMetadataModel[];
-  attachmentMetadata: AttachmentAttributeModel[];
+  attachmentMetadata?: AttachmentAttributeModel[];
   template: string | null;
   total: number | null;
   page: number | null;
