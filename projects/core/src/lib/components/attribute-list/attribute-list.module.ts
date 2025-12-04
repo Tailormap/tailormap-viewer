@@ -50,5 +50,7 @@ export class AttributeListModule {
     // Service is instantiated here, watches changes to visible layers to create tabs
     //eslint-disable-next-line @angular-eslint/prefer-inject
     public attributeListManagerService: AttributeListManagerService,
-  ) {}
+  ) {
+    this.attributeListManagerService.initDefaultAttributeListSource();
+  }
 }

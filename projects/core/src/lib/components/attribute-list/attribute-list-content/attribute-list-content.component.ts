@@ -92,11 +92,10 @@ export class AttributeListContentComponent implements OnInit {
           if (!selectedTab || !selectedTab.layerId) {
             return of(null);
           }
-          const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            of(layerId),
+            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, selectedTab.layerId, $event.columnId).pipe(take(1)),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, selectedTab.layerId, $event.columnId).pipe(take(1)),
+            of(selectedTab),
             of(applicationId),
             this.columns$.pipe(
               take(1),
@@ -109,16 +108,17 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, otherFilters, layerId, applicationId, attributeAlias ] = result;
-        if (applicationId === null) {
+        const [ attributeFilterModel, otherFilters, selectedTab, applicationId, attributeAlias ] = result;
+        if (applicationId === null || !selectedTab.layerId) {
           return;
         }
         const data: FilterDialogData = {
+          tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
-          layerId,
+          layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
+          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId),
           applicationId,
           attributeAlias,
         };

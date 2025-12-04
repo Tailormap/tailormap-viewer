@@ -1,12 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
-import { BaseComponentTypeEnum, AttributeType, UniqueValuesService } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 
 export interface FilterDialogData {
+  tabSourceId: string;
   columnName: string;
   layerId: string;
   filter: AttributeFilterModel | null;
@@ -38,7 +40,7 @@ export class AttributeListFilterComponent implements OnInit {
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private dialogRef = inject(MatDialogRef<AttributeListFilterComponent>);
   private data: FilterDialogData = inject(MAT_DIALOG_DATA);
-  private uniqueValuesService = inject(UniqueValuesService);
+  private managerService = inject(AttributeListManagerService);
 
   public ngOnInit(): void {
     this.uniqueValues$ = this.getUniqueValues$();
@@ -73,7 +75,7 @@ export class AttributeListFilterComponent implements OnInit {
   }
 
   public getUniqueValues$(): Observable<string[]> {
-    return this.uniqueValuesService.getUniqueValues$({
+    return this.managerService.getUniqueValues$(this.data.tabSourceId, {
       attribute: this.data.columnName,
       layerId: this.data.layerId,
       filter: this.data.cqlFilter,

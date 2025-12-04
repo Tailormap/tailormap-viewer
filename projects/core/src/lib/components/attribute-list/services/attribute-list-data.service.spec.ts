@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { selectAttributeListData, selectAttributeListTabs } from '../state/attribute-list.selectors';
+import { selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
-  AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TailormapApiV1ServiceModel,
-  TAILORMAP_API_V1_SERVICE,
+  AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { FilterService } from '../../../filter/services/filter.service';
@@ -14,6 +13,9 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { MapService } from '@tailormap-viewer/map';
+import { selectVisibleLayersWithAttributes } from '../../../map';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { AttributeListManagerService } from './attribute-list-manager.service';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -25,8 +27,8 @@ const setup = (
   } as unknown as TailormapApiV1ServiceModel;
 
   const tabs: AttributeListTabModel[] = [
-    { id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', loadingData: false, initialDataLoaded: false },
-    { id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', loadingData: false, initialDataLoaded: false },
+    { tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE, id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', loadingData: false, initialDataLoaded: false },
+    { tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE, id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', loadingData: false, initialDataLoaded: false },
   ];
   const data: AttributeListDataModel[] = [
     { id: '1', columns: [], tabId: '1', pageIndex: 0, pageSize: 10, rows: [], totalCount: null, sortDirection: '' },
@@ -34,9 +36,11 @@ const setup = (
   ];
   const store = createMockStore({
     selectors: [
+      { selector: selectAttributeListVisible, value: fillStore },
       { selector: selectAttributeListTabs, value: fillStore ? tabs : [] },
       { selector: selectAttributeListData, value: fillStore ? data : [] },
       { selector: selectViewerId, value: '1' },
+      { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
     ],
   }) as Store;
 
@@ -101,6 +105,8 @@ describe('AttributeListDataService', () => {
       template: null,
     };
     const { service, api } = setup(response, true);
+    const managerService = TestBed.inject(AttributeListManagerService);
+    managerService.initDefaultAttributeListSource();
     service.loadDataForTab$('1').subscribe(result => {
       expect(api.getFeatures$).toHaveBeenCalledWith({
         layerId: '1',
