@@ -80,7 +80,7 @@
     "@bufbuild/protoc-gen-es": "^2.2.3",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.17",
-    "@tailormap-viewer/tools": "^0.0.22",
+    "@tailormap-viewer/tools": "^0.0.23",
     "@testing-library/angular": "^17.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
@@ -108,5 +108,8 @@
     "ts-jest": "^29.2.6",
     "tsutils-etc": "^1.4.2",
     "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }
