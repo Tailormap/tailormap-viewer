@@ -4,9 +4,11 @@
   </div>
 }
 @if (legendInfo$ | async; as legendInfo) {
-  <div
-    class="toc-node-details-panel-section layer-legend">
-    <h3 i18n="@@core.toc.legend">Legend</h3>
-    <tm-legend-layer [legendInfo]="legendInfo" [showTitle]="false"></tm-legend-layer>
-  </div>
+  @if (legendInfo.isInScale) {
+    <div
+      class="toc-node-details-panel-section layer-legend">
+      <h3 i18n="@@core.toc.legend">Legend</h3>
+      <tm-legend-layer [legendInfo]="legendInfo" [showTitle]="false"></tm-legend-layer>
+    </div>
+  }
 }

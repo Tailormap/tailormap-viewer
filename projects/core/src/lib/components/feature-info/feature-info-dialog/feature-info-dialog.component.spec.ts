@@ -8,7 +8,7 @@ import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { AuthenticatedUserService, getAppLayerModel } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
@@ -17,12 +17,15 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { CoreSharedModule } from '../../../shared';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
     __fid: '1',
     geometry: null,
     layer: getAppLayerModel(),
+    attachments: [],
     sortedAttributes: [
       { key: 'prop', attributeValue: 'test', label: 'Property' },
       { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
@@ -51,9 +54,13 @@ const setup = async (withState = false) => {
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectIsPrevButtonDisabled, value: false },
           { selector: selectIsNextButtonDisabled, value: false },
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [] },
+          { selector: selectIn3dView, value: false },
         ] : [],
       }),
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
     ],
   });
 };

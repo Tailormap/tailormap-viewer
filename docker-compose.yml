@@ -27,6 +27,8 @@ services:
     environment:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
+      # use this to enable/disable Envers auditing
+      - "SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED=${SPRING_JPA_PROPERTIES_ORG_HIBERNATE_ENVERS_ENABLED:-false}"
       - "SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}"
       - "SPRING_MAIL_HOST=${SPRING_MAIL_HOST:-}"
       - "SPRING_MAIL_PORT=${SPRING_MAIL_PORT:-25}"
@@ -73,7 +75,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:9.9.0
+    image: ghcr.io/tailormap/solr:9.10.0
     profiles:
       - solr
     environment:
@@ -108,7 +110,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: ghcr.io/tailormap/solr:9.9.0
+    image: ghcr.io/tailormap/solr:9.10.0
     profiles:
       - solr
     environment:

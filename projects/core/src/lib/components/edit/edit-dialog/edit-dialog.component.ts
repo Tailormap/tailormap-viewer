@@ -1,25 +1,26 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
+import { from, Observable, toArray } from 'rxjs';
 import {
-  selectEditCreateNewFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
+  selectEditCreateNewOrCopyFeatureActive, selectEditDialogCollapsed, selectEditDialogVisible, selectEditFeatures, selectEditMapCoordinates,
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
 import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
-import { BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, UniqueValuesService } from '@tailormap-viewer/api';
+import {
+  AttachmentMetadataModel, BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, LayerDetailsModel, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { EditFeatureService } from '../services/edit-feature.service';
 import { selectViewerId } from '../../../state/core.selectors';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { withLatestFrom } from 'rxjs/operators';
-import { activateTool } from '../../toolbar/state/toolbar.actions';
-import { ToolbarComponentEnum } from '../../toolbar/models/toolbar-component.enum';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -39,11 +40,12 @@ export class EditDialogComponent {
   private uniqueValuesService = inject(UniqueValuesService);
   private cdr = inject(ChangeDetectorRef);
 
-
+  private viewerId = toSignal(this.store$.select(selectViewerId).pipe(map(id => id || '')), { initialValue: '' });
   public dialogOpen$;
   public dialogCollapsed$;
   public isCreateFeature$;
   public currentFeature$;
+  public dialogTitle$;
   public layerDetails$;
   public selectableFeature$;
 
@@ -59,6 +61,10 @@ export class EditDialogComponent {
 
   public updatedAttributes: FeatureModelAttributes | null = null;
 
+  private newAttachments = new Map<string, File[]>();
+  private deletedAttachmentIds = new Set<string>();
+  public attachments$: Observable<Map<string, Array<AttachmentMetadataModel & { url: string }>>>;
+
   public formValid: boolean = false;
 
   private clearCacheValuesAfterSave = new Set<string>();
@@ -70,7 +76,11 @@ export class EditDialogComponent {
     this.loadingEditFeatureInfo$ = this.store$.select(selectLoadingEditFeatures);
     this.editCoordinates$ = this.store$.select(selectEditMapCoordinates);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
-    this.isCreateFeature$ = this.store$.select(selectEditCreateNewFeatureActive);
+    this.dialogTitle$ = this.currentFeature$.pipe(
+      map(feature => feature?.feature.__fid !== 'new'
+        ? $localize `:@@core.edit.edit:Edit feature`
+        : $localize `:@@core.edit.add-new-feature:Add new feature`));
+    this.isCreateFeature$ = this.store$.select(selectEditCreateNewOrCopyFeatureActive);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),
       this.store$.select(selectSelectedEditFeature),
@@ -95,13 +105,30 @@ export class EditDialogComponent {
         this.store$.dispatch(hideFeatureInfoDialog());
         this.resetChanges();
       });
+    this.attachments$ = this.currentFeature$.pipe(
+      map(feature => {
+        if (!feature || feature.feature.__fid === 'new') {
+          return new Map();
+        } else {
+          return (feature.feature.attachments || []).map(attachment => ({
+            ...attachment,
+            url: this.editFeatureService.getAttachmentUrl(this.viewerId(), feature.feature.layerId, attachment.attachmentId),
+          })).reduce((attachmentsByAttributeName, attachment) => {
+            if (attachmentsByAttributeName.has(attachment.attributeName)) {
+              attachmentsByAttributeName.get(attachment.attributeName)?.push(attachment);
+            } else {
+              attachmentsByAttributeName.set(attachment.attributeName, [attachment]);
+            }
+            return attachmentsByAttributeName;
+          }, new Map<string, Array<AttachmentMetadataModel & { url: string }>>());
+        }
+      }),
+    );
 
-    this.editMapToolService.editedGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
+    this.editMapToolService.allEditGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
       this.geometryChanged(geometry, false);
     });
-    this.editMapToolService.createdGeometry$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(geometry => {
-      this.geometryChanged(geometry, true);
-    });
+
     ComponentConfigHelper.useInitialConfigForComponent<EditConfigModel>(
       this.store$,
       BaseComponentTypeEnum.EDIT,
@@ -112,6 +139,8 @@ export class EditDialogComponent {
   }
 
   private resetChanges() {
+    this.newAttachments = new Map();
+    this.deletedAttachmentIds = new Set();
     this.updatedAttributes = null;
     this.formValid = false;
     this.clearCacheValuesAfterSave = new Set();
@@ -129,7 +158,6 @@ export class EditDialogComponent {
     this.store$.select(selectEditOpenedFromFeatureInfo).pipe(take(1)).subscribe(openedFromFeatureInfo => {
       if (openedFromFeatureInfo && reopenFeatureInfo) {
         this.store$.dispatch(setEditActive({ active: false }));
-        this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
         this.store$.dispatch(reopenFeatureInfoDialog());
       }
     });
@@ -139,111 +167,145 @@ export class EditDialogComponent {
     this.store$.dispatch(expandCollapseEditDialog());
   }
 
-  public save(layerId: string, currentFeature: FeatureWithMetadataModel) {
+  public attachmentsUpdated() {
+    // Files could have been selected and then deselected, resulting in an empty array value
+    return Array.from(this.newAttachments.values()).some(files => files.length !== 0)
+      || this.deletedAttachmentIds.size !== 0;
+  }
+
+  public addOrSaveDisabled() {
+    return !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
+  }
+
+  public save(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel })  {
+    const currentFeature = info.feature;
     const updatedFeature = this.updatedAttributes;
-    if (!updatedFeature) {
+    if (!updatedFeature && !this.attachmentsUpdated()) {
+      this.resetChanges();
       return;
     }
     this.uniqueValuesService.clearCaches(Array.from(this.clearCacheValuesAfterSave));
     this.creatingSavingFeature.set(true);
-    this.store$.select(selectViewerId)
-      .pipe(
-        take(1),
-        concatMap(viewerId => {
-          if (!viewerId) {
-            return of(null);
-          }
-          return this.editFeatureService.updateFeature$(viewerId, layerId, {
-            __fid: currentFeature.feature.__fid,
-            attributes: updatedFeature,
-          });
-        }),
-        withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
-      )
-      .subscribe(([ feature, openedFromFeatureInfo ]) => {
-        if (feature) {
-          this.store$.dispatch(updateEditFeature({ feature, layerId }));
-          this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
-          this.resetChanges();
-          if (openedFromFeatureInfo) {
-            this.store$.dispatch(setEditActive({ active: false }));
-            this.store$.dispatch(activateTool({ tool: ToolbarComponentEnum.FEATURE_INFO }));
-            this.store$.dispatch(reopenFeatureInfoDialog());
-          }
+
+    const updateFeature$ = updatedFeature
+      ? this.editFeatureService.updateFeature$(this.viewerId(), layerId, {
+          __fid: currentFeature.feature.__fid,
+          attributes: updatedFeature,
+        })
+      : of(null);
+
+    updateFeature$.pipe(
+      concatMap(() => this.uploadAttachments$(this.viewerId(), layerId, currentFeature.feature.__fid, info.details)),
+      concatMap(() => this.deleteAttachments$(this.viewerId(), layerId, this.deletedAttachmentIds)),
+      concatMap(() => this.editFeatureService.getFeature$(this.viewerId(), layerId, currentFeature.feature.__fid)),
+      withLatestFrom(this.store$.select(selectEditOpenedFromFeatureInfo)),
+    ).subscribe(([ feature, openedFromFeatureInfo ]) => {
+      if (feature) {
+        this.store$.dispatch(updateEditFeature({ feature, layerId }));
+        this.featureUpdatedService.updatedFeature(layerId, feature.__fid);
+        this.resetChanges();
+        if (openedFromFeatureInfo) {
+          this.store$.dispatch(setEditActive({ active: false }));
+          this.store$.dispatch(reopenFeatureInfoDialog());
         }
-        this.creatingSavingFeature.set(false);
-      });
+      }
+      this.creatingSavingFeature.set(false);
+    });
   }
 
-  public add(layerId: string) {
+  public add(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel }) {
     const updatedFeature = this.updatedAttributes;
     if (!updatedFeature) {
       return;
     }
     this.creatingSavingFeature.set(true);
-    this.store$.select(selectViewerId)
-        .pipe(
-            take(1),
-            concatMap(viewerId => {
-              if (!viewerId) {
-                return of({ success: false, feature: null });
-              }
-              return this.editFeatureService.createFeature$(viewerId, layerId, {
-                __fid: '',
-                attributes: updatedFeature,
-              });
-            }),
-        )
-        .subscribe(result => {
-          this.creatingSavingFeature.set(false);
-          if (!result.success) {
-            return;
-          }
-          this.featureUpdatedService.updatedFeature(layerId, result.feature?.__fid);
-          this.resetChanges();
-          if (this.closeDialogAfterAddingFeature || !result.feature) {
-            this.closeDialog();
-          } else {
-            this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...result.feature, layerId } }));
-          }
-        });
+
+    this.editFeatureService.createFeature$(this.viewerId(), layerId, {
+      __fid: '',
+      attributes: updatedFeature,
+    }).pipe(
+      concatMap(result => {
+        if (!result.success || !result.feature || !this.attachmentsUpdated()) {
+          return of(result);
+        } else {
+          const fid = result.feature.__fid;
+          return this.uploadAttachments$(this.viewerId(), layerId, result.feature.__fid, info.details).pipe(
+            concatMap(() => this.editFeatureService.getFeature$(this.viewerId(), layerId, fid)),
+            map(feature => ({ ...result, feature })),
+          );
+        }
+      })).subscribe(result => {
+        this.creatingSavingFeature.set(false);
+        if (!result.success) {
+          return;
+        }
+        this.featureUpdatedService.updatedFeature(layerId, result.feature?.__fid);
+        this.resetChanges();
+        if (this.closeDialogAfterAddingFeature || !result.feature) {
+          this.closeDialog();
+        } else {
+          this.store$.dispatch(editNewlyCreatedFeature({ feature: { ...result.feature, layerId } }));
+        }
+      });
+  }
+
+  private uploadAttachments$(viewerId: string, layerId: string, featureId: string, details: LayerDetailsModel) {
+    const uploads = Array.from(this.newAttachments.entries()).flatMap(([ attribute, files ]) =>
+      files.map(file => ({ attribute, file })),
+    ).filter(({ attribute, file }) => {
+      const attachmentAttribute = details.attachmentAttributes.find(att => att.attributeName === attribute);
+      if (!attachmentAttribute) {
+        return false;
+      }
+      return !(attachmentAttribute.maxAttachmentSize && file.size > attachmentAttribute.maxAttachmentSize);
+
+    });
+    if (uploads.length === 0) {
+      return of(true);
+    }
+    return from(uploads).pipe(
+      concatMap(upload => this.editFeatureService.addAttachment$(
+        viewerId,
+        layerId,
+        featureId,
+        upload.attribute,
+        upload.file,
+      )),
+      toArray(),
+      map(() => true),
+    );
+  }
+
+  private deleteAttachments$(viewerId: string, layerId: string, attachmentIds: Set<string>) {
+    if (attachmentIds.size === 0) {
+      return of(null);
+    }
+    return from(attachmentIds.values()).pipe(
+      concatMap(attachmentId => this.editFeatureService.deleteAttachment$(viewerId, layerId, attachmentId)),
+      toArray(),
+      map(() => null),
+    );
   }
 
   public delete(layerId: string, currentFeature: FeatureWithMetadataModel) {
-    this.removingFeature.set(true);
     const featureId = currentFeature.feature.__fid;
-    this.store$.select(selectViewerId)
-      .pipe(
-        take(1),
-        concatMap(viewerId => {
-          if (!viewerId) {
-            return of(null);
-          }
-          return this.confirmService.confirm$(
-            $localize `:@@core.edit.delete-feature-confirm:Delete feature`,
-            $localize `:@@core.edit.delete-feature-confirm-message:Are you sure you want to delete this feature? This cannot be undone.`,
-            true,
-          ).pipe(
-            take(1),
-            concatMap(confirm => {
-              if (!confirm) {
-                return of(null);
-              }
-              return this.editFeatureService.deleteFeature$(viewerId, layerId, {
-                __fid: featureId,
-                attributes: currentFeature.feature.attributes,
-              });
-            }),
-          );
-        }),
-      )
-      .subscribe(success => {
-        if (success) {
-          this.featureUpdatedService.updatedFeature(layerId, featureId);
-          this.closeDialog(false);
-        }
-        this.removingFeature.set(false);
-      });
+    this.confirmService.confirm$(
+      $localize `:@@core.edit.delete-feature-confirm:Delete feature`,
+      $localize `:@@core.edit.delete-feature-confirm-message:Are you sure you want to delete this feature? This cannot be undone.`,
+      true,
+    ).pipe(
+      filter(confirm => confirm),
+      concatMap(() => {
+        this.removingFeature.set(true);
+        return this.editFeatureService.deleteFeature$(this.viewerId(), layerId, currentFeature.feature.__fid);
+      }),
+    ).subscribe(success => {
+      if (success) {
+        this.featureUpdatedService.updatedFeature(layerId, featureId);
+        this.closeDialog(false);
+      }
+      this.removingFeature.set(false);
+    });
   }
 
   public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
@@ -279,4 +341,11 @@ export class EditDialogComponent {
     this.clearCacheValuesAfterSave.add(uniqueValueCacheKey);
   }
 
+  public onNewAttachmentsChanged(newAttachments: Map<string, File[]>) {
+    this.newAttachments = newAttachments;
+  }
+
+  public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
+    this.deletedAttachmentIds = deletedAttachmentIds;
+  }
 }

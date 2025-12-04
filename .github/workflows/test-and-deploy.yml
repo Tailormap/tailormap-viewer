@@ -20,7 +20,7 @@ jobs:
     name: 'Lint'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -41,7 +41,7 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -80,7 +80,7 @@ jobs:
     name: "Build Angular libraries"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -140,9 +140,10 @@ jobs:
       SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
       SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
       TAILORMAPAPI_PASSWORDRESET_ENABLED: ${{ secrets.TAILORMAPAPI_PASSWORDRESET_ENABLED }}
+      SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED: ${{ vars.SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED }}
     needs: [ lint, test, build_libraries ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with: # If tags aren't fetched the bin/post-build-version-info.js script will leave fields in generated/version.json empty
           # https://github.com/actions/checkout/issues/701
           fetch-depth: 0
@@ -228,7 +229,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/dependency-review-action@v4
         with:

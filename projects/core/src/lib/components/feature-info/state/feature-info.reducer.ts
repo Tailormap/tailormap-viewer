@@ -14,6 +14,7 @@ const onLoadFeatureInfo = (
   dialogVisible: payload.layers.length > 0,
   features: [],
   columnMetadata: [],
+  attachmentMetadata: [],
   layers: payload.layers,
   selectedLayerId: payload.layers.length === 1 ? payload.layers[0].id : state.selectedLayerId,
 });
@@ -57,6 +58,10 @@ const onFeatureInfoLoaded = (
     columnMetadata: [
       ...state.columnMetadata,
       ...payload.featureInfo.columnMetadata,
+    ],
+    attachmentMetadata: [
+      ...state.attachmentMetadata,
+      ...payload.featureInfo.attachmentMetadata,
     ],
     layers: updatedLayers,
     selectedLayerId,

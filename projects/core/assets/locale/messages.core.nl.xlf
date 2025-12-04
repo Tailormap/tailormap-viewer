@@ -410,9 +410,33 @@
         <source>Add new feature</source>
         <target>Nieuw object toevoegen</target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+        <target>Toegevoegd op <x id="PH" equiv-text="createdAt"/> door <x id="PH_1" equiv-text="attachment.createdBy"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+        <target>Omschrijving: <x id="PH" equiv-text="attachment.description"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+        <target>Bestandsgrootte (<x id="PH" equiv-text="fileSizeMB"/> MB) is groter dan de maximaal toegestane <x id="PH_1" equiv-text="maxSizeMB"/> MB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+        <target>Bestandsgrootte: <x id="PH" equiv-text="sizeKB"/> KB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+        <target>Bijlagen</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Aanmaken van object mislukt</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
+        <target>Verwijder bijlage</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -427,10 +451,6 @@
         <target>Object verwijderen mislukt</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
-        <source>Edit</source>
-        <target>Bewerken</target>
-      </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
         <source>Edit feature</source>
         <target>Object bewerken</target>
       </trans-unit>
@@ -458,6 +478,10 @@
         <source>Hover over the buttons to highlight the feature on the map</source>
         <target>Beweeg de muis over de knoppen om het object op de kaart te markeren</target>
       </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
+        <target>Bijlage behouden</target>
+      </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
         <target>Er zijn geen bewerkbare lagen. Activeer een laag om te beginnen met bewerken.</target>
@@ -472,11 +496,11 @@
       </trans-unit>
       <trans-unit id="core.edit.select-feature-to-edit" datatype="html">
         <source>Select which feature to edit</source>
-        <target>Selecteer een object om te bewerken</target>
+        <target>Object om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
-        <target>Selecteer een laag om te bewerken</target>
+        <target>Laag om te bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
@@ -485,6 +509,10 @@
       <trans-unit id="core.edit.update-feature-failed" datatype="html">
         <source>Update feature failed</source>
         <target>Object bijwerken mislukt</target>
+      </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+        <target>Uploaden van bijlage &quot;<x id="PH" equiv-text="file.name"/>&quot; mislukt: </target>
       </trans-unit>
       <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
@@ -887,8 +915,8 @@
         <target>Fout bij het opnieuw instellen van het wachtwoord: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error-saving" datatype="html">
-        <source>Error saving password, please check your token, username and password and try again.</source>
-        <target>Fout bij het opslaan van het wachtwoord, controleer uw token, gebruikersnaam en wachtwoord en probeer het opnieuw.</target>
+        <source>Error saving password, please check the validity of your reset link, username and password and try again.</source>
+        <target>Fout bij het opslaan van het wachtwoord, controleer de geldigheid van uw inloglink, gebruikersnaam en wachtwoord en probeer het opnieuw.</target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
         <source>Passwords need to match</source>
@@ -1125,6 +1153,11 @@
       <trans-unit id="core.toc.details-for" datatype="html">
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
         <target>Details voor <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></target>
+      </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+        <target>Laag bewerken</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

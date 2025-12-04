@@ -6,7 +6,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel,
   GeoServiceSummaryWithLayersModel, FeatureSourceSummaryWithFeatureTypesModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
 import { ApiHelper, TailormapApiConstants, UniqueValuesResponseModel } from '@tailormap-viewer/api';
@@ -436,4 +436,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return queryParams;
   }
 
+  public getServerConfig$(): Observable<AdminServerConfigModel> {
+    return this.httpClient.get<AdminServerConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/server/config`);
+  }
 }

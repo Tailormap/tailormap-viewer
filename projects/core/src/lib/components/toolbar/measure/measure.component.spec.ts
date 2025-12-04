@@ -2,8 +2,6 @@ import { render, screen } from '@testing-library/angular';
 import { MeasureComponent } from './measure.component';
 import { Subject } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { selectActiveTool } from '../state/toolbar.selectors';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -20,7 +18,6 @@ const setup = async () => {
   const mapServiceMock = getMapServiceMock(() => mockTool);
   const mockStore = createMockStore({
     selectors: [
-      { selector: selectActiveTool, value: ToolbarComponentEnum.MEASURE },
       { selector: selectComponentsConfig, value: [] },
     ],
   });

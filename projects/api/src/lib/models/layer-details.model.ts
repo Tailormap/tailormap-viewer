@@ -2,6 +2,7 @@ import { GeometryType } from './geometry-type.enum';
 import { AttributeModel } from './attribute.model';
 import { FormOptionsModel } from './form-options.model';
 import { FormFieldModel } from './form-field.model';
+import { AttachmentAttributeModel } from './attachment-attribute.model';
 
 export interface LayerDetailsModel {
     id: string;
@@ -13,4 +14,5 @@ export interface LayerDetailsModel {
     editable: boolean;
     form?: { options: FormOptionsModel; fields: FormFieldModel[] } | null;
     attributes: AttributeModel[];
+    attachmentAttributes: AttachmentAttributeModel[];
 }

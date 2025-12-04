@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
 import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -77,4 +77,6 @@ export interface TailormapAdminApiV1ServiceModel {
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
+
+  getServerConfig$(): Observable<AdminServerConfigModel>;
 }

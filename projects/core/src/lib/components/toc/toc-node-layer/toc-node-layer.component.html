@@ -31,5 +31,14 @@
                 matListItemMeta>
       </mat-icon>
     }
+    @if (isInScale() && isLayerEditable() && node.checked && !in3D) {
+      <mat-icon class="icon"
+                (click)="editLayerClicked(node)"
+                svgIcon="edit"
+                tmTooltip="Edit layer"
+                i18n-tmTooltip=":@@core.toc.edit-layer"
+                matListItemMeta>
+      </mat-icon>
+    }
   </div>
 }

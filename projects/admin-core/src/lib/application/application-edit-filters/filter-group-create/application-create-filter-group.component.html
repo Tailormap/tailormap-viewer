@@ -13,9 +13,9 @@
                           i18n-label="@@admin-core.application.filters.filter-layers"
                           label="Filter layers"></tm-admin-list-filter>
     <mat-selection-list (selectionChange)="onLayerSelectionChange($event)">
-      @for (layer of layerList(); track layer.appLayerId) {
-        <mat-list-option [value]="layer.appLayerId" [selected]="layer.selected">
-          <div class="layer-label">{{ layer.geoServiceLayer.layerSettings?.title || layer.geoServiceLayer.title }}</div>
+      @for (layer of layerList(); track layer.id) {
+        <mat-list-option [value]="layer.id" [selected]="layer.selected">
+          <div class="layer-label">{{ layer.label }}</div>
         </mat-list-option>
       }
     </mat-selection-list>
