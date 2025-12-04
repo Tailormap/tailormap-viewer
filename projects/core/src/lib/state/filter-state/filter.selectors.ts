@@ -1,6 +1,5 @@
 import { createSelector } from '@ngrx/store';
 import { CqlFilterHelper } from '../../filter/helpers/cql-filter.helper';
-import { CreateFilterHelper } from '../../filter/helpers/create-filter.helper';
 import { selectLayersWithServices, selectVisibleLayersWithServices } from '../../map/state/map.selectors';
 import { ExtendedFilterGroupModel } from '../../filter/models/extended-filter-group.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
@@ -63,7 +62,7 @@ export const selectEnabledFilterGroups = createSelector(
 
 export const selectCQLFilters = createSelector(
   selectEnabledFilterGroups,
-  (groups): Map<string, string> => CreateFilterHelper.getFilters(groups, 'CQL'),
+  (groups): Map<string, string> => CqlFilterHelper.getFilters(groups),
 );
 
 export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
