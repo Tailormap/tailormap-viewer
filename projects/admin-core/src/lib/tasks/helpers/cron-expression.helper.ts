@@ -18,9 +18,13 @@ export class CronExpressionHelper {
     }
     const hours = parseInt(parts[2], 10);
     const minutes = parseInt(parts[1], 10);
+    const seconds = parseInt(parts[0], 10);
+    const partialCronExpression = parts.slice(3).join(' ');
+    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+      return { time: null, partialCronExpression: partialCronExpression };
+    }
     const time = new Date();
     time.setHours(hours, minutes, 0);
-    const partialCronExpression = parts.slice(3).join(' ');
     return { time, partialCronExpression };
   }
 
@@ -35,7 +39,7 @@ export class CronExpressionHelper {
       : '';
     const schedule = CronExpressionHelper.SCHEDULE_OPTIONS
       .find(option => option.cronExpression === partialCronExpression);
-    if (schedule) {
+    if (schedule && timeString) {
       return timeString ? $localize `:@@admin-core.tasks.time:${schedule.viewValue} at ${timeString}` : schedule.viewValue;
     }
     return cronExpression;
