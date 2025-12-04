@@ -16,7 +16,7 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
-import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
+import { CreateFilterHelper } from '../../../filter/helpers/create-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
 
 @Component({
@@ -118,7 +118,7 @@ export class AttributeListContentComponent implements OnInit {
           layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
+          cqlFilter: CreateFilterHelper.getFilters(otherFilters, 'CQL').get(layerId),
           applicationId,
           attributeAlias,
         };
