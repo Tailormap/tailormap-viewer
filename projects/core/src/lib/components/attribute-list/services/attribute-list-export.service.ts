@@ -1,13 +1,14 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, combineLatest, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { HttpResponse } from '@angular/common/http';
 import { DateTime } from 'luxon';
 import { AttributeListManagerService } from './attribute-list-manager.service';
+import { GetLayerExportResponse } from '../models/attribute-list-api-service.model';
+import { Sortorder } from '@tailormap-viewer/api';
 
 export enum SupportedExportFormats {
   CSV = 'csv',
@@ -82,12 +83,14 @@ export class AttributeListExportService {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
         }
+        const sortOrder: Sortorder = params.sort?.direction === 'asc' ? Sortorder.ASC : Sortorder.DESC;
         return this.managerService.getLayerExport$(params.tabSourceId, {
           applicationId,
           layerId: params.layerId,
           outputFormat,
           filter: params.filter,
-          sort: params.sort,
+          sortBy: params.sort ? params.sort.column : undefined,
+          sortOrder: params.sort ? sortOrder : undefined,
           attributes: params.attributes,
         })
           .pipe(
@@ -97,17 +100,16 @@ export class AttributeListExportService {
             }),
           );
       }),
-      tap((response: HttpResponse<Blob> | null) => {
-        if (!response || !response.body) {
+      tap((response: GetLayerExportResponse | null) => {
+        if (!response || !response.file) {
           return;
         }
         const date = DateTime.now().setLocale((this.dateLocale as string)).toLocaleString(DateTime.DATETIME_SHORT).replace(/,? /g, '_');
         const defaultFilename = [ $localize `:@@core.attribute-list.export:Export`, params.serviceLayerName, date ].join('_') + '.' + this.getExtensionForFormat(params.format);
-        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', defaultFilename);
-        FileHelper.saveAsFile(response.body, fileName);
+        FileHelper.saveAsFile(response.file, response.fileName || defaultFilename);
       }),
-      map((response: HttpResponse<Blob> | null) => {
-        return !!(response && response.body);
+      map((response: GetLayerExportResponse | null) => {
+        return !!(response && response.file);
       }),
     );
   }

@@ -1,5 +1,6 @@
 export * from './state/attribute-list.selectors';
 export * from './state/attribute-list.actions';
+export * from './services/attribute-list-manager.service';
 export * from './models/attribute-list-api-service.model';
 export * from './models/attribute-list-column.model';
 export * from './models/attribute-list-config.model';

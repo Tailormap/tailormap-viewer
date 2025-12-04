@@ -288,7 +288,7 @@ describe('AttributeList', () => {
     };
 
     const managerService = TestBed.inject(AttributeListManagerService);
-    managerService.addAttributeListSource$(source);
+    managerService.addAttributeListSource(source);
 
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();

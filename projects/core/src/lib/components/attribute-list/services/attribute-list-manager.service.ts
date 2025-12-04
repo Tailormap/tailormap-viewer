@@ -15,7 +15,9 @@ import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.m
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import { AttributeListApiService } from './attribute-list-api.service';
 import { HttpResponse } from '@angular/common/http';
-import { GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams } from '../models/attribute-list-api-service.model';
+import {
+  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse,
+} from '../models/attribute-list-api-service.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
 interface TabModelWithTabSourceId extends TabModel {
@@ -120,7 +122,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getLayerExportCapabilities$(params);
   }
 
-  public getLayerExport$(tabSourceId: string, params: GetLayerExportParams): Observable<HttpResponse<Blob> | null> {
+  public getLayerExport$(tabSourceId: string, params: GetLayerExportParams): Observable<GetLayerExportResponse | null> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of(null);
@@ -136,7 +138,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getUniqueValues$(params);
   }
 
-  public addAttributeListSource$(source: AttributeListSourceModel): void {
+  public addAttributeListSource(source: AttributeListSourceModel): void {
     this.sources$.next([
       ...this.sources$.getValue(),
       source,
@@ -144,7 +146,7 @@ export class AttributeListManagerService implements OnDestroy {
   }
 
   public initDefaultAttributeListSource(): void {
-    this.addAttributeListSource$({
+    this.addAttributeListSource({
       id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
       tabs$: this.store$.select(selectVisibleLayersWithAttributes).pipe(
         map(layers => {

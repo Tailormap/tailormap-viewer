@@ -2,7 +2,6 @@ import {
   FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValueParams, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
 
 export interface GetFeaturesParams {
   applicationId: string;
@@ -25,9 +24,15 @@ export interface GetLayerExportParams {
   layerId: string;
   outputFormat: string;
   filter?: string;
-  sort: { column: string; direction: string} | null;
+  sortBy?: string;
+  sortOrder?: Sortorder;
   attributes?: string[];
   crs?: string;
+}
+
+export interface GetLayerExportResponse {
+  file: Blob;
+  fileName: string;
 }
 
 export interface AttributeListApiServiceModel {
@@ -36,7 +41,7 @@ export interface AttributeListApiServiceModel {
 
   getLayerExportCapabilities$(params: GetLayerExportCapabilitiesParams): Observable<LayerExportCapabilitiesModel>;
 
-  getLayerExport$(params: GetLayerExportParams): Observable<HttpResponse<Blob>>;
+  getLayerExport$(params: GetLayerExportParams): Observable<GetLayerExportResponse | null>;
 
   getUniqueValues$(params: UniqueValueParams): Observable<UniqueValuesResponseModel>;
 
