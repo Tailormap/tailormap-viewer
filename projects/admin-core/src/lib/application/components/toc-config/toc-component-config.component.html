@@ -1,0 +1,10 @@
+<tm-admin-base-component-config [type]="type"
+                                [label]="label"
+                                [config]="config"
+                                i18n-titleLabel="@@admin-core.application.component-table-of-contents"
+                                titleLabel="Table of contents">
+  <div [formGroup]="formGroup">
+    <mat-checkbox formControlName="showEditLayerIcon"
+                  i18n="@@admin-core.components.toc-show-edit-layer-icon">Show edit layer icon</mat-checkbox>
+  </div>
+</tm-admin-base-component-config>

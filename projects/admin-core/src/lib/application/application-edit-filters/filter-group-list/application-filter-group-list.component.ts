@@ -30,8 +30,8 @@ export class ApplicationFilterGroupListComponent implements OnInit {
     const filterGroups = this.filterGroups();
     if (filterTerm) {
       return FilterHelper.filterByTerm(filterGroups, filterTerm, filterGroup => {
-        const layerNames = filterGroup.layers.map(layer => layer.name);
-        return layerNames.join(' ');
+        const layerLabels = filterGroup.layers.map(layer => layer.label);
+        return layerLabels.join(' ');
       });
     }
     return filterGroups;

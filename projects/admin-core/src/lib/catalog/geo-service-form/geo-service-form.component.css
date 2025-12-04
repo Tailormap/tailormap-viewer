@@ -3,6 +3,6 @@
     margin-top: 16px;
 }
 
-mat-expansion-panel {
-  margin: 4px;
+.authorization-panel {
+  margin: 16px 4px;
 }

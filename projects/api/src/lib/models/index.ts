@@ -58,3 +58,5 @@ export * from './edit-filter-configuration.model';
 export * from './unique-values-response.model';
 export * from './tileset-3d-style.model';
 export * from './layer-export-capabilities.model';
+export * from './attachment-attribute.model';
+export * from './attachment-metadata.model';

@@ -20,6 +20,7 @@ export class ExtendedCatalogModelHelper {
       authorizationRules: service.authorizationRules,
       title: service.title,
       layers: service.layers,
+      resolvedServerType: service.resolvedServerType,
     };
   }
 

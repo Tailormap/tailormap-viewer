@@ -69,6 +69,7 @@ tm-feature-info-layer-dropdown {
 .content {
   flex: 1;
   overflow: auto;
+  min-height: 150px;
 }
 
 .content h2 {
@@ -118,6 +119,31 @@ tm-feature-info-layer-dropdown {
 
 .attributes-collapsed .attributes-list {
   display: none;
+}
+
+.attachments-toggle {
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.attachments-toggle .label {
+  font-weight: bold;
+}
+
+.attachments-collapsed {
+  display: none;
+}
+
+.attachments-list {
+  overflow: auto;
+  padding: 10px;
+}
+
+.attachment-row,
+.attachment-attribute {
+  padding: 5px 0;
 }
 
 .buttons {

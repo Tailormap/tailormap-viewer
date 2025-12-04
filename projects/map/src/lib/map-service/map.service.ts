@@ -1,7 +1,7 @@
 import { inject, Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
-import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
+import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
   ToolConfigModel, ToolModel,
@@ -22,6 +22,7 @@ import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
+import { ToolsStatusModel } from '../models/tools-status.model';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -42,9 +43,10 @@ export interface MapExportOptions {
 export class MapService {
 
   private readonly map: OpenLayersMap;
-  private ngZone =inject( NgZone);
-  private httpXsrfTokenExtractor=inject(HttpXsrfTokenExtractor);
-  constructor(      ) {
+  private ngZone = inject(NgZone);
+  private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
+
+  constructor() {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
 
@@ -85,6 +87,38 @@ export class MapService {
         map(manager => ({ tool: manager.addTool<T, C>(tool), manager })),
         tap(({ tool: createdTool }) => toolId = createdTool?.id || ''),
       );
+  }
+
+  public getToolStatusChanged$(): Observable<ToolsStatusModel> {
+    return this.getToolManager$().pipe(switchMap(manager => manager.getToolStatusChanged$()));
+  }
+
+  public someToolsEnabled$(owners: string[]): Observable<boolean> {
+    return this.getToolStatusChanged$()
+      .pipe(
+        map(({ enabledTools }) => {
+          const ownerSet = new Set(owners);
+          return enabledTools.some(t => ownerSet.has(t.owner));
+        }),
+      );
+  }
+
+  public enableTool<T = Record<string, unknown>>(toolId?: string, disableOtherTools?: boolean, enableArgs?: T, forceEnableIfActivated?: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.enableTool<T>(toolId, disableOtherTools, enableArgs, forceEnableIfActivated);
+    });
+  }
+
+  public disableTool(toolId?: string, preventAutoEnableTools?: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.disableTool(toolId, preventAutoEnableTools);
+    });
+  }
+
+  public executeToolManagerAction(callback: (manager: ToolManagerModel) => void) {
+    this.getToolManager$()
+      .pipe(take(1))
+      .subscribe(manager => callback(manager));
   }
 
   public createVectorLayer$<T extends FeatureModelAttributes = FeatureModelAttributes>(

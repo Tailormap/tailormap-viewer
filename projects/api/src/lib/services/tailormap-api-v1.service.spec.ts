@@ -85,7 +85,7 @@ describe('TailormapApiV1Service', () => {
 
   test('queries API for deleteFeature$', () => {
     const feat : FeatureModel = { __fid: '1', attributes: {} };
-    service.deleteFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
+    service.deleteFeature$({ applicationId: 'app/default', layerId: '1', fid: feat.__fid } ).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/edit/feature/1', method: 'DELETE' });
     req.flush(null);
   });

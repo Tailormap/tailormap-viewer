@@ -8,26 +8,59 @@ import { OpenLayersMousePositionTool } from './tools/open-layers-mouse-position-
 import { OpenLayersScaleBarTool } from './tools/open-layers-scale-bar-tool';
 import { OpenLayersSelectTool } from './tools/open-layers-select-tool';
 import { OpenLayersModifyTool } from "./tools/open-layers-modify-tool";
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
 import { debounceTime } from 'rxjs/operators';
+import { ToolsStatusModel } from '../models/tools-status.model';
+
+const TOOL_STATUS_DEBOUNCE_TIME = 10;
 
 export class OpenLayersToolManager implements ToolManagerModel {
 
   private static toolIdCount = 0;
-  private tools: Map<string, ToolModel> = new Map();
+  private tools: Map<string, { tool: ToolModel; owner: string }> = new Map();
 
   private autoEnabledTools = new Set<string>();
   private alwaysEnabledTools = new Set<string>();
 
   private switchedTool = false;
 
-  public toolsDisabled = new Subject();
+  private toolsStatusChanged = new Subject();
+  private toolsStatusChanged$ = this.toolsStatusChanged.asObservable()
+    .pipe(
+      debounceTime(TOOL_STATUS_DEBOUNCE_TIME),
+      map(() => ({
+        disabledTools: Array.from(this.tools.values())
+          .filter(t => !t.tool.isActive)
+          .map(t => ({ toolId: t.tool.id, owner: t.owner })),
+        enabledTools: Array.from(this.tools.values())
+          .filter(t => t.tool.isActive)
+          .map(t => ({ toolId: t.tool.id, owner: t.owner })),
+      })));
+
+  private debugLogging = false;
+  private destroyed = new Subject<void>();
 
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
   ) {
+    if (this.debugLogging) {
+      this.getToolStatusChanged$().pipe(takeUntil(this.destroyed)).subscribe(() => {
+        console.log('[OpenLayersToolManager] Tools status changed');
+        const toolStatus: Array<{ id: string; owner: string; active: boolean }> = [];
+        this.tools.forEach(tool => {
+          toolStatus.push({ id: tool.tool.id, owner: tool.owner, active: tool.tool.isActive });
+        });
+        toolStatus.sort((a, b) => {
+          if (a.active === b.active) {
+            return 0;
+          }
+          return a.active ? -1 : 1;
+        });
+        console.table(toolStatus);
+      });
+    }
   }
 
   public destroy() {
@@ -35,31 +68,33 @@ export class OpenLayersToolManager implements ToolManagerModel {
     this.autoEnabledTools = new Set();
     this.alwaysEnabledTools = new Set();
     toolIds.forEach(id => this.removeTool(id));
-    this.toolsDisabled.complete();
+    this.toolsStatusChanged.complete();
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMapClickTool(toolId, tool));
+      this.tools.set(toolId, { tool: new OpenLayersMapClickTool(toolId, tool), owner: tool.owner });
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
-      this.tools.set(toolId, new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, { tool: new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isMousePositionTool(tool)) {
-      this.tools.set(toolId, new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, { tool: new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isScaleBarTool(tool)) {
-      this.tools.set(toolId, new OpenLayersScaleBarTool(toolId, tool, this.olMap));
+      this.tools.set(toolId, { tool: new OpenLayersScaleBarTool(toolId, tool, this.olMap), owner: tool.owner });
     }
     if (ToolTypeHelper.isSelectTool(tool)) {
-      this.tools.set(toolId, new OpenLayersSelectTool(toolId, tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, { tool: new OpenLayersSelectTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isModifyTool(tool)) {
-      this.tools.set(toolId, new OpenLayersModifyTool(toolId, tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, { tool: new OpenLayersModifyTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isExtTransformTool(tool)) {
-      this.tools.set(toolId, new OpenLayersExtTransformTool(toolId, tool, this.olMap, this.ngZone));
+      this.tools.set(toolId, { tool: new OpenLayersExtTransformTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);
@@ -82,51 +117,62 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (!tool) {
       return null;
     }
-    return tool as T;
+    return tool.tool as T;
   }
 
-  public disableTool(toolId: string, preventAutoEnableTools?: boolean): ToolManagerModel {
-    if (!preventAutoEnableTools && !this.switchedTool) {
+  public disableTool(toolId?: string, preventAutoEnableTools?: boolean): ToolManagerModel {
+    if (!toolId) {
+      return this;
+    }
+    if (this.debugLogging) {
+      console.log(`[OpenLayersToolManager] Disabling tool ${toolId} (owner=${this.tools.get(toolId)?.owner}, preventAutoEnableTools=${preventAutoEnableTools})`);
+    }
+    if (!preventAutoEnableTools) {
       this.enableAutoEnabledTools();
     }
-    if (!this.tools.get(toolId)?.isActive) {
+    if (!this.tools.get(toolId)?.tool.isActive) {
      return this;
     }
-    this.tools.get(toolId)?.disable();
-    this.toolsDisabled.next(null);
+    this.tools.get(toolId)?.tool.disable();
+    this.toolsStatusChanged.next(null);
     return this;
   }
 
-  public getToolsDisabled$(): Observable<{ disabledTools: string[]; enabledTools: string[] }> {
-    return this.toolsDisabled.asObservable()
-      .pipe(
-        debounceTime(10),
-        map(() => ({
-        disabledTools: Array.from(this.tools.values()).filter(t => !t.isActive).map(t => t.id),
-        enabledTools: Array.from(this.tools.values()).filter(t => t.isActive).map(t => t.id),
-      })));
+  public getToolStatusChanged$(): Observable<ToolsStatusModel> {
+    return this.toolsStatusChanged$;
   }
 
   public enableTool(
-    toolId: string,
+    toolId?: string,
     disableOtherTools?: boolean,
     enableArgs?: any,
     forceEnableIfActivated?: boolean,
   ): ToolManagerModel {
+    if (!toolId) {
+      return this;
+    }
+    if (this.debugLogging) {
+      console.log(`[OpenLayersToolManager] Enabling tool ${toolId} ` +
+       `(owner=${this.tools.get(toolId)?.owner}, disableOtherTools=${disableOtherTools}, forceEnableIfActivated=${forceEnableIfActivated})`, enableArgs);
+    }
     if (disableOtherTools) {
       this.disableAllTools();
     }
     const tool = this.tools.get(toolId);
-    if (tool && (!tool.isActive || forceEnableIfActivated)) {
-      tool.enable(enableArgs);
+    if (tool && (!tool.tool.isActive || forceEnableIfActivated)) {
+      tool.tool.enable(enableArgs);
       this.switchedTool = true;
-      window.setTimeout(() => this.switchedTool = false, 0);
+      window.setTimeout(() => this.switchedTool = false, TOOL_STATUS_DEBOUNCE_TIME + 5);
     }
+    this.toolsStatusChanged.next(null);
     return this;
   }
 
-  public removeTool(toolId: string): ToolManagerModel {
-    this.tools.get(toolId)?.destroy();
+  public removeTool(toolId?: string): ToolManagerModel {
+    if (!toolId) {
+      return this;
+    }
+    this.tools.get(toolId)?.tool.destroy();
     this.tools.delete(toolId);
     this.autoEnabledTools.delete(toolId);
     this.alwaysEnabledTools.delete(toolId);
@@ -136,15 +182,18 @@ export class OpenLayersToolManager implements ToolManagerModel {
 
   private disableAllTools() {
     this.tools.forEach((tool) => {
-      if (tool.isActive && !this.alwaysEnabledTools.has(tool.id)) {
-        tool.disable();
+      if (tool.tool.isActive && !this.alwaysEnabledTools.has(tool.tool.id)) {
+        tool.tool.disable();
       }
     });
-    this.toolsDisabled.next(null);
+    this.toolsStatusChanged.next(null);
   }
 
   private enableAutoEnabledTools() {
-    if (this.autoEnabledTools.size === 0) {
+    if (this.debugLogging) {
+      console.log(`[OpenLayersToolManager] ${this.switchedTool ? '[Ignore because switching tools]' : ''} Enabling auto-enabled tools`, Array.from(this.autoEnabledTools));
+    }
+    if (this.switchedTool || this.autoEnabledTools.size === 0) {
       return;
     }
     this.autoEnabledTools.forEach(tool => this.enableTool(tool));

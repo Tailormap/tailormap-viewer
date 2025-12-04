@@ -29,8 +29,14 @@ export class TocNodeLayerComponent {
   @Input()
   public filteredLayerIds: string[] = [];
 
+  @Input()
+  public editableLayerIds: string[] = [];
+
   @Output()
   public zoomToScale = new EventEmitter<number>();
+
+  @Output()
+  public editLayer = new EventEmitter<string>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -56,6 +62,10 @@ export class TocNodeLayerComponent {
     return this.filteredLayerIds.includes(this.node?.id || '');
   }
 
+  public isLayerEditable() {
+    return this.editableLayerIds.includes(this.node?.id || '');
+  }
+
   public zoomToLayer($event: MouseEvent, node: TreeModel<AppLayerModel>) {
     $event.stopPropagation();
     const scales: number[] = [];
@@ -72,4 +82,7 @@ export class TocNodeLayerComponent {
     this.zoomToScale.emit(zoomToScale);
   }
 
+  public editLayerClicked(node: TreeModel<AppLayerModel>) {
+    this.editLayer.emit(node.id);
+  }
 }
