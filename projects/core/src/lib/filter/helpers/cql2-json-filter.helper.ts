@@ -182,7 +182,7 @@ export class Cql2JsonFilterHelper {
     }
 
     // Handle AFTER/BEFORE
-    let operator: NumberComparisonOperator = '=';
+    let operator: NumberComparisonOperator;
     let dateValue = '';
 
     if (filter.condition === FilterConditionEnum.DATE_AFTER_KEY) {
