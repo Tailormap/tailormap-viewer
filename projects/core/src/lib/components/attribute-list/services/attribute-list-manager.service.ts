@@ -14,7 +14,6 @@ import {
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import { AttributeListApiService } from './attribute-list-api.service';
-import { HttpResponse } from '@angular/common/http';
 import {
   GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse,
 } from '../models/attribute-list-api-service.model';
