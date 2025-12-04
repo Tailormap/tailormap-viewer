@@ -107,7 +107,7 @@ export class AttributeListManagerService implements OnDestroy {
   public getFeatures$(tabSourceId: string, params: GetFeaturesParams): Observable<FeaturesResponseModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
-      return of({ features: [], columnMetadata: [], total: null, page: null, pageSize: null, template: null, attachmentMetadata: [] });
+      return of({ features: [], columnMetadata: [], total: null, page: null, pageSize: null, template: null });
     }
     return source.dataLoader.getFeatures$(params);
   }
