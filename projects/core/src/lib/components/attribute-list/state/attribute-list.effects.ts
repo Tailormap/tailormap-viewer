@@ -7,9 +7,9 @@ import { AttributeListDataService } from '../services/attribute-list-data.servic
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 
 @Injectable()
 export class AttributeListEffects {
@@ -17,7 +17,7 @@ export class AttributeListEffects {
   private store$ = inject(Store);
   private attributeListDataService = inject(AttributeListDataService);
   private mapService = inject(MapService);
-  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private managerService = inject(AttributeListManagerService);
 
 
   public loadDataForTab$ = createEffect(() => {
@@ -53,7 +53,7 @@ export class AttributeListEffects {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
-        return this.api.getFeatures$({
+        return this.managerService.getFeatures$(tab.tabSourceId, {
           applicationId,
           layerId: tab.layerId,
           __fid: row.__fid,

@@ -6,7 +6,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import {
-  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, AttributeTypeHelper,
+  ColumnMetadataModel, FeatureModel, Sortorder, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -16,12 +16,13 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import { FilterService } from '../../../filter/services/filter.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { AttributeListManagerService } from './attribute-list-manager.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttributeListDataService implements OnDestroy {
-  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private api = inject(AttributeListManagerService);
   private store$ = inject(Store);
   private filterService = inject(FilterService);
   private featureUpdatedService = inject(FeatureUpdatedService);
@@ -81,7 +82,7 @@ export class AttributeListDataService implements OnDestroy {
     return this.store$.select(selectViewerId)
       .pipe(
         filter(TypesHelper.isDefined),
-        concatMap(applicationId => this.api.getFeatures$({
+        concatMap(applicationId => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
           applicationId,
           page: start,
@@ -92,7 +93,7 @@ export class AttributeListDataService implements OnDestroy {
             : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
       ).pipe(
-      catchError(() => of(null)),
+      catchError(_e => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
           // eslint-disable-next-line max-len
@@ -104,6 +105,7 @@ export class AttributeListDataService implements OnDestroy {
           success: true,
           columns: AttributeListDataService.getColumns(response.columnMetadata),
           rows: AttributeListDataService.decorateFeatures(response.features, selectedData),
+          pageSize: response.pageSize || selectedData.pageSize,
         };
       }),
     );
@@ -147,6 +149,7 @@ export class AttributeListDataService implements OnDestroy {
       columns: [],
       success: false,
       errorMessage: message || AttributeListDataService.DEFAULT_ERROR_MESSAGE,
+      pageSize: 0,
     };
   }
 
