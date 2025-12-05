@@ -14,28 +14,31 @@ import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 import { HeaderModule } from './header';
 import { InfoModule } from './info';
+import { MobileMenubarBottomModule } from './mobile-menubar-bottom/mobile-menubar-bottom.module';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
   ],
-  exports: [
-    FeatureInfoModule,
-    MenubarModule,
-    TocModule,
-    ToolbarModule,
-    LegendModule,
-    BackgroundLayerToggleModule,
-    DrawingModule,
-    AttributeListModule,
-    PrintModule,
-    FilterComponentModule,
-    EditComponentModule,
-    HeaderModule,
-    RegisteredComponentsModule,
-    InfoModule,
-  ],
+    exports: [
+        FeatureInfoModule,
+        MenubarModule,
+        TocModule,
+        ToolbarModule,
+        LegendModule,
+        BackgroundLayerToggleModule,
+        DrawingModule,
+        AttributeListModule,
+        PrintModule,
+        FilterComponentModule,
+        EditComponentModule,
+        HeaderModule,
+        RegisteredComponentsModule,
+        InfoModule,
+        MobileMenubarBottomModule,
+    ],
 })
 export class ComponentsModule {}

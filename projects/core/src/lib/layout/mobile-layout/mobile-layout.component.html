@@ -1,0 +1,21 @@
+@let layoutConfig = layoutService.componentsConfig$ | async;
+@if (layoutConfig) {
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
+  <div class="viewer">
+    <div class="map">
+      <tm-map></tm-map>
+      <div class="map-controls-left map-controls-left--on-bottom">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SCALE_BAR)) { <tm-scale-bar></tm-scale-bar> }
+        <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left-bottom"></tm-registered-components-renderer>
+      </div>
+    </div>
+    <div class="mobile-menubar-panel">
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
+    </div>
+    <div class="mobile-menubar-buttons">
+      <tm-mobile-menubar-bottom [config]="layoutConfig.config"></tm-mobile-menubar-bottom>
+    </div>
+  </div>
+}

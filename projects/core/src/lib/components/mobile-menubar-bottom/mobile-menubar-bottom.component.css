@@ -1,0 +1,21 @@
+.mobile-menubar {
+  height: 100%;
+}
+
+.mobile-menubar ::ng-deep button {
+  height: 100%;
+}
+
+.mobile-menubar ::ng-deep mat-icon {
+  height: 100%;
+}
+
+.mobile-menubar ::ng-deep tm-registered-components-renderer {
+  height: 100%;
+  display: inline-block;
+}
+
+.mobile-menubar ::ng-deep tm-toc-menu-button, tm-legend-menu-button, tm-info-menu-button {
+  height: 100%;
+  display: inline-block;
+}
