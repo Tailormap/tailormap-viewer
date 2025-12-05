@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal, inject } from '@angular/core';
-import { map, Observable, combineLatest, take } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal, inject, signal } from '@angular/core';
+import { map, combineLatest, take } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectEnable3d } from '../../../state/core.selectors';
@@ -39,7 +39,7 @@ export class Switch3dComponent {
   ];
 
   public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3d);
-  public allowSwitch$: Observable<boolean>;
+  public allowSwitch = signal(false);
 
   public in3dView: Signal<boolean> = this.store$.selectSignal(selectIn3dView);
   public tooltip: Signal<string> = computed(() => {
@@ -52,7 +52,7 @@ export class Switch3dComponent {
   });
 
   constructor() {
-    this.allowSwitch$ = combineLatest([
+    combineLatest([
       this.menubarService.getActiveComponent$().pipe(
         map(
           component => !this.componentsPreventingSwitching.some(disallowingComponent => disallowingComponent === component?.componentId),
@@ -62,7 +62,7 @@ export class Switch3dComponent {
     ]).pipe(
       takeUntilDestroyed(this.destroyRef),
       map(([ componentBoolean, toolBoolean ]) => componentBoolean && !toolBoolean),
-    );
+    ).subscribe(allowSwitch => this.allowSwitch.set(allowSwitch));
   }
 
   public toggle() {
