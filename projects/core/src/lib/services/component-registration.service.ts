@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { RegisteredComponent } from '@tailormap-viewer/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export type AreaType = 'panel' | 'menu' | 'map' | 'map-controls-left' | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | string;
+export type AreaType = 'panel' | 'menu' | 'map' | 'map-controls-left'
+  | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | 'mobile-menu-bottom' | string;
 
 @Injectable({
   providedIn: 'root',
