@@ -1,5 +1,4 @@
 import { signal, Type } from '@angular/core';
-import { AttributeListMenuButtonComponent } from "../components/attribute-list/attribute-list-menu-button/attribute-list-menu-button.component";
 
 export interface AdditionalFeatureModel {
   component: Type<any>;
