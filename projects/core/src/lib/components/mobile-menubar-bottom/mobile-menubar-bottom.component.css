@@ -4,18 +4,39 @@
 
 .mobile-menubar ::ng-deep button {
   height: 100%;
+  width: 10vh;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .mobile-menubar ::ng-deep mat-icon {
-  height: 100%;
+  height: 90%;
+  width: 10vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .mobile-menubar ::ng-deep tm-registered-components-renderer {
   height: 100%;
-  display: inline-block;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.mobile-menubar ::ng-deep tm-toc-menu-button, tm-legend-menu-button, tm-info-menu-button {
+.mobile-menubar ::ng-deep tm-toc-menu-button,
+.mobile-menubar ::ng-deep tm-legend-menu-button,
+.mobile-menubar ::ng-deep tm-info-menu-button,
+.mobile-menubar ::ng-deep tm-mobile-menubar-home-button {
   height: 100%;
+  width: 10vh;
   display: inline-block;
+  margin: 1vh 3vw;
+}
+
+.mobile-menubar ::ng-deep mat-icon svg {
+  height: 100%;
+  width: 100%;
 }
