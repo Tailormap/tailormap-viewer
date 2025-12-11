@@ -20,8 +20,9 @@
 }
 
 .mobile-menubar-buttons {
-  height: 8vh;
-  z-index: 3;
+  height: var(--mobile-menubar-height);
+  z-index: 1000;
+  background-color: #FFFFFF;
 }
 
 .map-controls-left--on-bottom {

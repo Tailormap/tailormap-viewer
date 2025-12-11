@@ -1,0 +1,94 @@
+.container {
+  position: absolute;
+  bottom: var(--mobile-menubar-height);
+  left: 0;
+  right: 0;
+  z-index: calc(var(--overlay-panel-z-index) - 2);
+  transition: left ease-in-out 0.15s;
+}
+
+::ng-deep .body--has-dialog-left .bottom-panel-container {
+  left: var(--dialog-width-left);
+  border-left: 1px solid #e1e1e1;
+}
+
+.panel {
+  box-shadow: var(--box-shadow-top);
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  font-size: 15px;
+  background-color: #fff;
+  max-height: calc(var(--100vh) - var(--header-component-height));
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.panel-content {
+  overflow: auto;
+}
+
+.panel--minimized {
+  height: auto;
+}
+
+.panel--maximized {
+  height: calc(var(--100vh) - var(--header-component-height));
+}
+
+.size-18 + .size-18 {
+  margin-left: 12px;
+}
+
+button mat-icon ::ng-deep svg {
+  transition: transform 250ms ease-in-out;
+}
+
+.close-button:hover ::ng-deep svg {
+  transform: rotate(90deg);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  height: 45px;
+  background: #fff;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.mat-toolbar span {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.enter-animation {
+  animation: slide-in 255ms;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(350px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.leave-animation {
+  animation: slide-out 255ms;
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(350px);
+  }
+}
