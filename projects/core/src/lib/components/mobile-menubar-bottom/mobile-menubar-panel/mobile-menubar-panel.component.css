@@ -7,11 +7,6 @@
   transition: left ease-in-out 0.15s;
 }
 
-::ng-deep .body--has-dialog-left .bottom-panel-container {
-  left: var(--dialog-width-left);
-  border-left: 1px solid #e1e1e1;
-}
-
 .panel {
   box-shadow: var(--box-shadow-top);
   width: 100%;
@@ -34,16 +29,8 @@
   height: auto;
 }
 
-.size-18 + .size-18 {
-  margin-left: 12px;
-}
-
 button mat-icon ::ng-deep svg {
   transition: transform 250ms ease-in-out;
-}
-
-.close-button:hover ::ng-deep svg {
-  transform: rotate(90deg);
 }
 
 .spacer {

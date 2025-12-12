@@ -1,5 +1,6 @@
 .mobile-menubar {
   height: 100%;
+  border-top: 1px solid var(--border-color);
 }
 
 .mobile-menubar ::ng-deep button {
@@ -31,9 +32,10 @@
 .mobile-menubar ::ng-deep tm-info-menu-button,
 .mobile-menubar ::ng-deep tm-mobile-menubar-home-button {
   height: 100%;
-  width: 10vh;
-  display: inline-block;
-  margin: 1vh 3vw;
+  width: 100%;
+  display: flex;
+  padding: 1vh 3vw;
+  justify-content: center;
 }
 
 .mobile-menubar ::ng-deep mat-icon svg {
