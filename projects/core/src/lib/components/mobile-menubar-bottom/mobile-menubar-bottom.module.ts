@@ -26,6 +26,7 @@ import { MobileMenubarPanelComponent } from './mobile-menubar-panel/mobile-menub
   exports: [
     MobileMenubarBottomComponent,
     MobileMenubarHomeComponent,
+    MobileMenubarHomeButtonComponent,
     MobileMenubarPanelComponent,
   ],
 })
