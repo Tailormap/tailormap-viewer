@@ -47,6 +47,7 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.LEGEND);
+    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.LEGEND);
   }
 
 }

@@ -29,6 +29,7 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME);
+    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.MOBILE_MENUBAR_HOME);
   }
 
 }
