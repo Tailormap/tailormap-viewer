@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MenubarService } from '../../menubar/menubar.service';
+import { BrowserHelper, CssHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-mobile-menubar-panel',
@@ -13,8 +14,6 @@ import { MenubarService } from '../../menubar/menubar.service';
 export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private menubarService = inject(MenubarService);
 
-  @Input()
-  public initialHeight = 350;
 
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
   public dialogTitle$: Observable<string>;
@@ -34,7 +33,7 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
-    this.heightSubject.next(this.initialHeight || 350);
+    this.heightSubject.next(this.getInitialHeightPx());
   }
 
   public ngOnDestroy() {
@@ -43,14 +42,6 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
 
   public sizeChanged(changedHeight: number) {
     let initialHeight = this.heightSubject.value;
-    if (this.isMinimized) {
-      initialHeight = 0;
-    }
-    if (this.isMaximized) {
-      initialHeight = window.innerHeight;
-    }
-    this.isMinimized = false;
-    this.isMaximized = false;
     const height = initialHeight - changedHeight;
     this.heightSubject.next(height);
   }
@@ -64,6 +55,12 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
 
   public closeDialog() {
     this.menubarService.closePanel();
+  }
+
+  private getInitialHeightPx(): number {
+    const screenHeight = BrowserHelper.getScreenHeight();
+    const mobileMenubarHeight = CssHelper.getCssVariableValueNumeric('--mobile-menubar-height');
+    return Math.max(0, (screenHeight - mobileMenubarHeight) * 0.5);
   }
 
 }
