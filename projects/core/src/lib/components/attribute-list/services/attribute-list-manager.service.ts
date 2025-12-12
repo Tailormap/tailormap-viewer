@@ -18,6 +18,7 @@ import {
   GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse,
 } from '../models/attribute-list-api-service.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { BaseFeatureRegistrationService } from '../../../services';
 
 interface TabModelWithTabSourceId extends TabModel {
   tabSourceId: string;
@@ -31,7 +32,7 @@ interface TabFromLayerResult {
 @Injectable({
   providedIn: 'root',
 })
-export class AttributeListManagerService implements OnDestroy {
+export class AttributeListManagerService extends BaseFeatureRegistrationService implements OnDestroy {
 
   private store$ = inject(Store);
   private defaultApiService = inject(AttributeListApiService);
@@ -56,6 +57,7 @@ export class AttributeListManagerService implements OnDestroy {
     id: '',
     label: '',
     selectedDataId: '',
+    initialDataId: '',
     initialDataLoaded: false,
     loadingData: false,
     tabSourceId: '',
@@ -75,6 +77,7 @@ export class AttributeListManagerService implements OnDestroy {
   private destroyed = new Subject();
 
   constructor() {
+    super();
     combineLatest([
       this.tabsFromSources$,
       this.store$.select(selectAttributeListVisible),
@@ -194,6 +197,7 @@ export class AttributeListManagerService implements OnDestroy {
         layerId: tabModel.id,
         label: tabModel.label,
         selectedDataId: dataId,
+        initialDataId: dataId,
         tabSourceId: tabModel.tabSourceId,
       };
       const data: AttributeListDataModel = {

@@ -1,15 +1,16 @@
-import { inject, Injectable, OnDestroy } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { map, Observable, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FilterService implements OnDestroy {
+export class FilterService {
 
-  private destroyed = new Subject();
+  private destroyRef = inject(DestroyRef);
   private store$ = inject(Store);
   private currentFilters: Map<string, string | null> = new Map();
 
@@ -17,11 +18,6 @@ export class FilterService implements OnDestroy {
 
   public constructor() {
     this.initChangedFilters$();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
   public getChangedFilters$(): Observable<Map<string, string | null>> {
@@ -35,7 +31,7 @@ export class FilterService implements OnDestroy {
   private initChangedFilters$() {
     this.store$.select(selectCQLFilters)
       .pipe(
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         map((filters) => {
           const newFilters: Array<[ string, string ]> = Array.from(filters.keys())
             .filter((key) => !this.currentFilters.has(key))

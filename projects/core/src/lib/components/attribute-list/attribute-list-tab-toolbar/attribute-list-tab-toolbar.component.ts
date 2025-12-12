@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
@@ -11,6 +11,7 @@ import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dia
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -24,7 +25,9 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private popoverService = inject(PopoverService);
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private attributeListFeatureRegistrationService = inject(AttributeListManagerService);
 
+  private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -32,6 +35,20 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
+
+  constructor() {
+    effect(() => {
+      const components = this.attributeListFeatureRegistrationService.registeredAdditionalFeatures();
+      const attributeListFeaturesContainer = this.attributeListFeaturesContainer();
+      if (!attributeListFeaturesContainer) {
+        return;
+      }
+      attributeListFeaturesContainer.clear();
+      components.forEach(component => {
+        attributeListFeaturesContainer.createComponent(component.component);
+      });
+    });
+  }
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);

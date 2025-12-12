@@ -4,6 +4,7 @@
     @if (hasFilters$ | async) {
       <button mat-flat-button color="primary" (click)="clearFilter()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
     }
+    <ng-template #attributeListFeaturesContainer></ng-template>
     <tm-attribute-list-export-button></tm-attribute-list-export-button>
     @if (loadingData$ | async) {
       <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>

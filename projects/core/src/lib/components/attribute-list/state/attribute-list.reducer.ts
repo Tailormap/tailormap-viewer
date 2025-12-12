@@ -240,6 +240,18 @@ const onToggleColumnVisible = (
   ),
 });
 
+const onSetSelectedDataId = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.setSelectedDataId>,
+): AttributeListState => ({
+  ...state,
+  tabs: AttributeListStateHelper.updateTab(
+    state.tabs,
+    payload.tabId,
+    tab => ({ ...tab, selectedDataId: payload.dataId }),
+  ),
+});
+
 const attributeListReducerImpl = createReducer<AttributeListState>(
   initialAttributeListState,
   on(AttributeListActions.setAttributeListVisibility, onSetAttributeListVisibility),
@@ -254,5 +266,6 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.changeColumnPosition, onChangeColumnPosition),
   on(AttributeListActions.toggleColumnVisible, onToggleColumnVisible),
   on(AttributeListActions.setHighlightedFeature, onSetHighlightedFeature),
+  on(AttributeListActions.setSelectedDataId, onSetSelectedDataId),
 );
 export const attributeListReducer = (state: AttributeListState | undefined, action: Action) => attributeListReducerImpl(state, action);
