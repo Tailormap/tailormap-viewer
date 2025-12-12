@@ -28,12 +28,14 @@ services:
       - "HOST=${HOST:-localhost}"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://db/tailormap"
       # use this to enable/disable Envers auditing
-      - "SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED=${SPRING_JPA_PROPERTIES_ORG_HIBERNATE_ENVERS_ENABLED:-false}"
+      - "SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED=${ENVERS_ENABLED:-false}"
       - "SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-default}"
       - "SPRING_MAIL_HOST=${SPRING_MAIL_HOST:-}"
       - "SPRING_MAIL_PORT=${SPRING_MAIL_PORT:-25}"
       - "SPRING_MAIL_USERNAME=${SPRING_MAIL_USERNAME:-}"
       - "SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD:-}"
+      - "MAIL_FROM=${MAIL_FROM:-}"
+      - "TAILORMAPAPI_PASSWORDRESET_ENABLED=${PASSWORD_RESET_ENABLED:-false}"
       - "ADMIN_HASHED_PASSWORD=${ADMIN_HASHED_PASSWORD:-}"
       # The container binds to localhost for running the tailormap container by itself in host network mode
       # Change to 0.0.0.0, so it is reachable by a reverse proxy such as Traefik
@@ -53,7 +55,6 @@ services:
       - "VIEWER_SENTRY_DSN=${VIEWER_SENTRY_DSN:-}"
       # Session timeout can be changed. Default is 30 minutes. You can use values like "60m" or "4h".
       - "SERVER_SERVLET_SESSION_TIMEOUT=${SERVER_SERVLET_SESSION_TIMEOUT:-}"
-      - "TAILORMAPAPI_PASSWORDRESET_ENABLED=${TAILORMAPAPI_PASSWORDRESET_ENABLED:-false}"
     restart: unless-stopped
     depends_on:
       - db
@@ -126,7 +127,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.7.3
+    image: prom/prometheus:v3.8.0
     profiles:
       - prometheus
     environment:

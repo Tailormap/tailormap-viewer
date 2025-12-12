@@ -1,7 +1,7 @@
 name: 'Test and deploy'
 
-env: # Keep this in sync with Dockerfile version
-  NODE_VERSION: "22.21.1"
+env: # Keep this in sync with Dockerfile version, Krypton (== 24)
+  NODE_VERSION: "lts/Krypton"
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' ) && format('ci-main-{0}', github.sha) || format('ci-main-{0}', github.ref) }}
@@ -139,8 +139,9 @@ jobs:
       SPRING_MAIL_PORT: ${{ secrets.SPRING_MAIL_PORT }}
       SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
       SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
-      TAILORMAPAPI_PASSWORDRESET_ENABLED: ${{ secrets.TAILORMAPAPI_PASSWORDRESET_ENABLED }}
-      SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED: ${{ vars.SPRING_JPA_PROPERTIES_HIBERNATE_INTEGRATION_ENVERS_ENABLED }}
+      MAIL_FROM: ${{ vars.MAIL_FROM }}
+      PASSWORD_RESET_ENABLED: ${{ vars.PASSWORD_RESET_ENABLED }}
+      ENVERS_ENABLED: ${{ vars.ENVERS_ENABLED }}
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v6
