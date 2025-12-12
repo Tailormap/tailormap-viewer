@@ -34,10 +34,6 @@
   height: auto;
 }
 
-.panel--maximized {
-  height: calc(var(--100vh) - var(--header-component-height));
-}
-
 .size-18 + .size-18 {
   margin-left: 12px;
 }
@@ -73,7 +69,7 @@ button mat-icon ::ng-deep svg {
 
 @keyframes slide-in {
   from {
-    transform: translateY(350px);
+    transform: translateY(100%);
   }
   to {
     transform: translateY(0);
@@ -89,6 +85,6 @@ button mat-icon ::ng-deep svg {
     transform: translateY(0);
   }
   to {
-    transform: translateY(350px);
+    transform: translateY(100%);
   }
 }
