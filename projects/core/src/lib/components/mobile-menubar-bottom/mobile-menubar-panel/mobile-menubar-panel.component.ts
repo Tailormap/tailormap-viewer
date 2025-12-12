@@ -41,7 +41,7 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   }
 
   public sizeChanged(changedHeight: number) {
-    let initialHeight = this.heightSubject.value;
+    const initialHeight = this.heightSubject.value;
     const height = initialHeight - changedHeight;
     this.heightSubject.next(height);
   }

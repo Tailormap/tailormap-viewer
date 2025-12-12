@@ -24,7 +24,7 @@ const setup = async (ac: { componentId: string; dialogTitle: string } | null) =>
 describe('MobileMenubarPanelComponent', () => {
 
   test('should render', async () => {
-    await setup({componentId: 'testpanel', dialogTitle: 'test panel'});
+    await setup({ componentId: 'testpanel', dialogTitle: 'test panel' });
     expect(screen.queryByText('test panel')).toBeInTheDocument();
   });
 

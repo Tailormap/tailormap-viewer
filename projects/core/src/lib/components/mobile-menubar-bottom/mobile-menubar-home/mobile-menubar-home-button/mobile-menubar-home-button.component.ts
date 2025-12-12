@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { selectComponentTitle } from 'projects/core/src/lib/state/core.selectors';
+import { selectComponentTitle } from '../../../../state/core.selectors';
 
 @Component({
   selector: 'tm-mobile-menubar-home-button',
