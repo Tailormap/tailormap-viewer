@@ -15,6 +15,7 @@ import { RegisteredComponentsModule } from './registered-components-renderer/reg
 import { HeaderModule } from './header';
 import { InfoModule } from './info';
 import { MobileMenubarBottomModule } from './mobile-menubar-bottom/mobile-menubar-bottom.module';
+import { MobileMenubarHomeModule } from './mobile-menubar-home';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { MobileMenubarBottomModule } from './mobile-menubar-bottom/mobile-menuba
         RegisteredComponentsModule,
         InfoModule,
         MobileMenubarBottomModule,
+        MobileMenubarHomeModule,
     ],
 })
 export class ComponentsModule {}

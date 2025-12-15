@@ -10,6 +10,7 @@ const setup = async (ac: { componentId: string; dialogTitle: string } | null) =>
   const mockMenubarService = {
     getActiveComponent$: () => of(ac),
     closePanel: () => {},
+    getMobilePanelHeight$: () => of(null),
   };
 
   await render(MobileMenubarPanelComponent, {

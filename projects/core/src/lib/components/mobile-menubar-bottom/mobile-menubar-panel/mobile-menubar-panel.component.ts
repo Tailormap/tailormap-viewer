@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MenubarService } from '../../menubar/menubar.service';
 import { BrowserHelper, CssHelper } from '@tailormap-viewer/shared';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-mobile-menubar-panel',
@@ -13,6 +14,7 @@ import { BrowserHelper, CssHelper } from '@tailormap-viewer/shared';
 })
 export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private menubarService = inject(MenubarService);
+  private destroyRef = inject(DestroyRef);
 
 
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
@@ -34,6 +36,13 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     this.heightSubject.next(this.getInitialHeightPx());
+    this.menubarService.getMobilePanelHeight$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(height => {
+        if (height !== null) {
+          this.heightSubject.next(height);
+        }
+    });
   }
 
   public ngOnDestroy() {

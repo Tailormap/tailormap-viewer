@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, inject, OnDestroy } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from "@tailormap-viewer/api";
 import { InfoMenuButtonComponent } from "../info-menu-button/info-menu-button.component";
 import { ComponentConfigHelper } from "../../../shared/helpers/component-config.helper";
@@ -7,6 +7,7 @@ import { MenubarService } from '../../menubar';
 import { MarkdownHelper } from '@tailormap-viewer/shared';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Observable, take } from 'rxjs';
+import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 @Component({
   selector: 'tm-info',
@@ -15,11 +16,11 @@ import { Observable, take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class InfoComponent implements OnInit {
-
+export class InfoComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   private sanitizer = inject(DomSanitizer);
+  private componentRegistrationService = inject(ComponentRegistrationService);
 
   public visible$: Observable<boolean>;
 
@@ -47,9 +48,15 @@ export class InfoComponent implements OnInit {
 
   public ngOnInit(): void {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.INFO, component: InfoMenuButtonComponent });
+    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.INFO, component: InfoMenuButtonComponent });
     if (this.openOnStartup) {
       this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.INFO, this.dialogTitle);
     }
+  }
+
+  public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.INFO);
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.INFO);
   }
 
 }

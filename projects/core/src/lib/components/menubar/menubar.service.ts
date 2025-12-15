@@ -13,6 +13,7 @@ export class MenubarService {
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public panelWidth = 300;
+  private mobilePanelHeight$ = new BehaviorSubject<number | null>(null);
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
@@ -40,6 +41,14 @@ export class MenubarService {
 
   public deregisterComponent(type: string) {
     this.componentRegistrationService.deregisterComponent('menu', type);
+  }
+
+  public setMobilePanelHeight(height: number | null) {
+    this.mobilePanelHeight$.next(height);
+  }
+
+  public getMobilePanelHeight$() {
+    return this.mobilePanelHeight$.asObservable();
   }
 
 }

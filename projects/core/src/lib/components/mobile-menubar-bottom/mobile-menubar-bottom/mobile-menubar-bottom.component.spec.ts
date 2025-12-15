@@ -3,10 +3,10 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
-import { ComponentRegistrationService } from '../../services/component-registration.service';
+import { RegisteredComponentsRendererComponent } from '../../registered-components-renderer/registered-components-renderer.component';
+import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectIn3dView } from '../../map/state/map.selectors';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileMenubarBottomComponent } from './mobile-menubar-bottom.component';
 
 @Component({

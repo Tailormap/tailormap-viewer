@@ -21,6 +21,7 @@
 
 .panel-content {
   overflow: auto;
+  height: 100%;
 }
 
 button mat-icon ::ng-deep svg {

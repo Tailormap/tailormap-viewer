@@ -3,7 +3,7 @@ import { RegisteredComponent } from '@tailormap-viewer/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export type AreaType = 'panel' | 'menu' | 'map' | 'map-controls-left'
-  | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | 'mobile-menu-bottom' | string;
+  | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | 'mobile-menu-bottom' | 'mobile-menu-home' | string;
 
 @Injectable({
   providedIn: 'root',

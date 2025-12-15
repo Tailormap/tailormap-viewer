@@ -1,0 +1,20 @@
+.mobile-menubar-home {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mobile-panel-content {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+.mobile-menubar-home-buttons {
+  flex: 0 0 auto;
+  height: 6vh;
+  border-top: 1px solid var(--border-color);
+}
+
+.mobile-menubar-home-buttons ::ng-deep button {
+  height: 5vh;
+}
