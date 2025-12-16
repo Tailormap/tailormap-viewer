@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 class ProfileComponent { }
 
 
-const setup = async() => {
+const setup = async () => {
   const mockMenubarService = {
     getActiveComponent$: () => of({ componentId: 'MOBILE_MENUBAR_HOME' }),
     setMobilePanelHeight: () => {},
@@ -45,7 +45,7 @@ const setup = async() => {
       RegisteredComponentsRendererComponent,
     ],
   });
-}
+};
 
 describe('MobileMenubarHomeComponent', () => {
 
