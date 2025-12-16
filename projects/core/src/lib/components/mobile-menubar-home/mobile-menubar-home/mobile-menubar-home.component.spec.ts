@@ -4,16 +4,16 @@ import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { LayoutService } from '../../../layout/layout.service';
-import { ProfileComponent } from '../../menubar/profile/profile.component';
 import { RegisteredComponentsRendererComponent } from '../../registered-components-renderer/registered-components-renderer.component';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'tm-profile',
   standalone: false,
-  template: '<tm-menubar-button icon="test">Click me</tm-menubar-button>',
+  template: '<button>Click me</button>',
 })
-class TmTestingComponent { }
+class ProfileComponent { }
+
 
 const setup = async() => {
   const mockMenubarService = {
