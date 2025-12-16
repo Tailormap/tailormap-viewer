@@ -665,6 +665,9 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
       </trans-unit>
+      <trans-unit id="core.home.home" datatype="html">
+        <source>Home</source>
+      </trans-unit>
       <trans-unit id="core.info.info" datatype="html">
         <source>Info</source>
       </trans-unit>
