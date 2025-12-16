@@ -1,11 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MobileMenubarHomeButtonComponent } from '../mobile-menubar-home-button/mobile-menubar-home-button.component';
-import { combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
 import { MenubarService } from '../../menubar/menubar.service';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LayoutService } from '../../../layout/layout.service';
 
 @Component({
   selector: 'tm-mobile-menubar-home',
@@ -17,37 +14,7 @@ import { LayoutService } from '../../../layout/layout.service';
 export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
   private componentRegistrationService = inject(ComponentRegistrationService);
   private menubarService = inject(MenubarService);
-  public layoutService = inject(LayoutService);
-  private destroyRef = inject(DestroyRef);
 
-  public visible$: Observable<boolean>;
-
-  constructor() {
-    this.visible$ = combineLatest([
-      this.menubarService.getActiveComponent$(),
-      this.componentRegistrationService.getRegisteredComponents$('mobile-menu-home'),
-    ]).pipe(
-      takeUntilDestroyed(this.destroyRef),
-      map(([ activeComponent, registeredComponents ]) => {
-        if (!activeComponent) {
-          return false;
-        }
-        return activeComponent.componentId === BaseComponentTypeEnum.MOBILE_MENUBAR_HOME
-          || registeredComponents.some(c => c.type === activeComponent.componentId);
-      }),
-    );
-
-    this.visible$
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        distinctUntilChanged(),
-      )
-      .subscribe(visible => {
-        if (visible) {
-          this.menubarService.setMobilePanelHeight(100);
-        }
-      });
-  }
 
   public ngOnInit(): void {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, component: MobileMenubarHomeButtonComponent });

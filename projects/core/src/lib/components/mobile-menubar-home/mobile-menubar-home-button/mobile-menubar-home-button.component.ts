@@ -14,5 +14,5 @@ export class MobileMenubarHomeButtonComponent {
   private store$ = inject(Store);
 
   public componentType = BaseComponentTypeEnum.MOBILE_MENUBAR_HOME;
-  public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.home.home:Home`));
+  public panelTitle$ = this.store$.select(selectComponentTitle(this.componentType, $localize `:@@core.home.menu:Menu`));
 }

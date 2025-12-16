@@ -886,9 +886,9 @@
         <source>Value</source>
         <target>Waarde</target>
       </trans-unit>
-      <trans-unit id="core.home.home" datatype="html">
-        <source>Home</source>
-        <target>Home</target>
+      <trans-unit id="core.home.menu" datatype="html">
+        <source>Menu</source>
+        <target>Menu</target>
       </trans-unit>
       <trans-unit id="core.info.info" datatype="html">
         <source>Info</source>
