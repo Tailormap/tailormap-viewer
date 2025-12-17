@@ -24,10 +24,10 @@ import { MatBadge } from '@angular/material/badge';
     CoreSharedModule,
     MatBadge,
   ],
-    exports: [
-        MenubarComponent,
-        MenubarButtonComponent,
-        MenubarPanelComponent,
-    ],
+  exports: [
+    MenubarComponent,
+    MenubarButtonComponent,
+    MenubarPanelComponent,
+  ],
 })
 export class MenubarModule { }
