@@ -30,7 +30,6 @@
 
 .mobile-menubar ::ng-deep tm-toc-menu-button,
 .mobile-menubar ::ng-deep tm-legend-menu-button,
-.mobile-menubar ::ng-deep tm-info-menu-button,
 .mobile-menubar ::ng-deep tm-mobile-menubar-home-button {
   height: 100%;
   width: 100%;

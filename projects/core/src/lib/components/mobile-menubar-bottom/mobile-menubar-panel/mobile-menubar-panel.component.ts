@@ -22,9 +22,7 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   public isVisible$: Observable<boolean>;
 
   private heightSubject = new BehaviorSubject(350);
-
-  public isMinimized = false;
-  public isMaximized = false;
+  public height$ = this.heightSubject.asObservable();
 
   constructor() {
     this.activeComponent$ = this.menubarService.getActiveComponent$().pipe(
@@ -53,13 +51,6 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
     const initialHeight = this.heightSubject.value;
     const height = initialHeight - changedHeight;
     this.heightSubject.next(height);
-  }
-
-  public getHeight() {
-    if (this.isMaximized || this.isMinimized) {
-      return '';
-    }
-    return `${this.heightSubject.value}px`;
   }
 
   public closeDialog() {

@@ -7,7 +7,6 @@ import { MenubarService } from '../../menubar';
 import { MarkdownHelper } from '@tailormap-viewer/shared';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Observable, take } from 'rxjs';
-import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 @Component({
   selector: 'tm-info',
@@ -20,7 +19,6 @@ export class InfoComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   private sanitizer = inject(DomSanitizer);
-  private componentRegistrationService = inject(ComponentRegistrationService);
 
   public visible$: Observable<boolean>;
 
@@ -48,7 +46,6 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.INFO, component: InfoMenuButtonComponent });
-    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.INFO, component: InfoMenuButtonComponent });
     if (this.openOnStartup) {
       this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.INFO, this.dialogTitle);
     }
@@ -56,7 +53,6 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.INFO);
-    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.INFO);
   }
 
 }

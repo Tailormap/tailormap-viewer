@@ -2,7 +2,7 @@
   <div class="container bottom-panel-container" animate.enter="enter-animation" animate.leave="leave-animation">
     <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
     <div class="panel"
-         [ngStyle]="{ 'height': getHeight() }">
+         [ngStyle]="{ 'height': height$ }">
       <mat-toolbar>
         <span>{{dialogTitle$ | async}}</span>
         <span class="spacer"></span>

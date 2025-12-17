@@ -19,8 +19,7 @@ import { MobileMenubarHomeModule } from './mobile-menubar-home';
 
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     CommonModule,
   ],

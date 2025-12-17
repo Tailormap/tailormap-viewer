@@ -28,7 +28,6 @@ import { MatBadge } from '@angular/material/badge';
         MenubarComponent,
         MenubarButtonComponent,
         MenubarPanelComponent,
-        ProfileComponent,
     ],
 })
 export class MenubarModule { }
