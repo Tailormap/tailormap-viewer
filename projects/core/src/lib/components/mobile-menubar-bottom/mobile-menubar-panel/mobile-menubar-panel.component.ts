@@ -22,7 +22,6 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   public isVisible$: Observable<boolean>;
 
   private heightSubject = new BehaviorSubject(350);
-  public height$ = this.heightSubject.asObservable();
 
   constructor() {
     this.activeComponent$ = this.menubarService.getActiveComponent$().pipe(
@@ -45,6 +44,10 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
 
   public ngOnDestroy() {
     this.menubarService.closePanel();
+  }
+
+  public getHeightPx(): string {
+    return `${this.heightSubject.value}px`;
   }
 
   public sizeChanged(changedHeight: number) {
