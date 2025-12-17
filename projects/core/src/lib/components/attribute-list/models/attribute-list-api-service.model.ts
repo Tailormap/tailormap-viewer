@@ -20,7 +20,9 @@ export interface GetFeaturesParams {
    */
   __fid?: string;
   /**
-   * Optional filters (grouped by featuretype) to filter features.
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
    */
   filter?: Map<string | symbol, string> | null;
   /**
@@ -72,7 +74,9 @@ export interface GetLayerExportParams {
    */
   outputFormat: string;
   /**
-   * Optional filters (grouped by featuretype) to filter features.
+   * Optional filters to apply when exporting features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
    */
   filter?: Map<string | symbol, string> | null;
   /**
