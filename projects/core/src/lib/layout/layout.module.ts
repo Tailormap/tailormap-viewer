@@ -23,10 +23,10 @@ import { MobileLayoutComponent } from './mobile-layout/mobile-layout.component';
     ShareViewerModule,
     Switch3dModule,
   ],
-    exports: [
-        BaseLayoutComponent,
-        EmbeddedLayoutComponent,
-        MobileLayoutComponent,
-    ],
+  exports: [
+    BaseLayoutComponent,
+    EmbeddedLayoutComponent,
+    MobileLayoutComponent,
+  ],
 })
 export class LayoutModule { }

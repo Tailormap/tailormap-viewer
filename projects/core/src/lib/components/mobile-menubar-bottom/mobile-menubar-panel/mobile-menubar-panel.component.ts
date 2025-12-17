@@ -63,7 +63,7 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private getInitialHeightPx(): number {
     const screenHeight = BrowserHelper.getScreenHeight();
     const mobileMenubarHeight = CssHelper.getCssVariableValueNumeric('--mobile-menubar-height');
-    return Math.max(0, (screenHeight - mobileMenubarHeight) * 0.5);
+    return (screenHeight - mobileMenubarHeight) * 0.5;
   }
 
 }
