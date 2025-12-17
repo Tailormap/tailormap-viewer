@@ -112,10 +112,7 @@ export class CqlFilterHelper {
     const result = new Map<FeatureTypeName, BaseFilterModel[]>();
     filters.forEach(filter => {
       const key = filter.featureType || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
-      if (!result.has(key)) {
-        result.set(key, []);
-      }
-      result.get(key)!.push(filter);
+      result.set(key, [ ...(result.get(key) || []), filter ]);
     });
     return result;
   }

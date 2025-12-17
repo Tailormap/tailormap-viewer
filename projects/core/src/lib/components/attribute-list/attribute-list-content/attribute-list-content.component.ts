@@ -114,15 +114,13 @@ export class AttributeListContentComponent implements OnInit {
           return;
         }
         const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
-        // Use the filter for the layerId key (default featureType key when featureType is not set)
-        const cqlFilter = FeaturesFilterHelper.getFilter(filtersForLayer, selectedTab.featureType);
         const data: FilterDialogData = {
           tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
           layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: cqlFilter ? cqlFilter : undefined,
+          cqlFilters: filtersForLayer,
           applicationId,
           attributeAlias,
           featureType: selectedTab.featureType,

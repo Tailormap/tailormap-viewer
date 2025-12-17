@@ -1,8 +1,8 @@
 import {
-  AttributeListApiServiceModel, GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams,
+  AttributeListApiServiceModel, GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { inject, Injectable } from '@angular/core';
-import { TAILORMAP_API_V1_SERVICE, UniqueValueParams, UniqueValuesService } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE, UniqueValuesService } from '@tailormap-viewer/api';
 import { map } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
 import { FeaturesFilterHelper } from '../../../filter';
@@ -17,7 +17,8 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
 
   public getFeatures$(params: GetFeaturesParams) {
     const { filter, ...getFeatureParams } = params;
-    // Convert filter to CQL - TM currently supports layer filters only, not related feature types
+    // Convert filter to CQL
+    // Currently TM only supports filters on the layer itself, not related feature types
     const cqlFilter = filter
       ? FeaturesFilterHelper.getFilter(filter) || undefined
       : undefined;
@@ -31,7 +32,8 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   public getLayerExport$(params: GetLayerExportParams) {
     const { sortBy, sortOrder, filter, ...exportParams } = params;
     const sort = sortBy && sortOrder ? { column: sortBy, direction: sortOrder } : null;
-    // Convert filter to CQL - TM currently supports layer filters only, not related feature types
+    // Convert filter to CQL
+    // Currently TM only supports filters on the layer itself, not related feature types
     const cqlFilter = filter
       ? FeaturesFilterHelper.getFilter(filter) || undefined
       : undefined;
@@ -48,8 +50,14 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
       }));
   }
 
-  public getUniqueValues$(params: UniqueValueParams) {
-    return this.uniqueValuesService.getUniqueValues$(params);
+  public getUniqueValues$(params: GetUniqueValuesParams) {
+    const { filter, ...getUniqueValueParams } = params;
+    // Convert filter to CQL
+    // Currently TM only supports filters on the layer itself, not related feature types
+    const cqlFilter = filter
+      ? FeaturesFilterHelper.getFilter(filter) || undefined
+      : undefined;
+    return this.uniqueValuesService.getUniqueValues$({ ...getUniqueValueParams, filter: cqlFilter });
   }
 
 }

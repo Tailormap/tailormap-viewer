@@ -15,7 +15,7 @@ import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.m
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import { AttributeListApiService } from './attribute-list-api.service';
 import {
-  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse,
+  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
@@ -129,7 +129,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getLayerExport$(params);
   }
 
-  public getUniqueValues$(tabSourceId: string, params: UniqueValueParams): Observable<UniqueValuesResponseModel> {
+  public getUniqueValues$(tabSourceId: string, params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of({ values: [], filterApplied: false });
