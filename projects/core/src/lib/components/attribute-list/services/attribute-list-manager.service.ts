@@ -195,6 +195,7 @@ export class AttributeListManagerService implements OnDestroy {
         label: tabModel.label,
         selectedDataId: dataId,
         tabSourceId: tabModel.tabSourceId,
+        featureType: tabModel.featureType,
       };
       const data: AttributeListDataModel = {
         ...AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_DATA,

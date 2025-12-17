@@ -4,11 +4,12 @@ import { AttributeListApiServiceModel } from './attribute-list-api-service.model
 export interface TabModel {
   id: string;
   label: string;
+  featureType?: string;
 }
 
 /**
  * Configuration for an attribute list data source.
- * 
+ *
  * Sources implementing this interface can be registered to provide tabs and data
  * to the attribute list component. Each source is responsible for defining its
  * own tabs and providing a data loader implementation for those tabs.

@@ -19,7 +19,7 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
     const { filter, ...getFeatureParams } = params;
     // Convert filter to CQL - TM currently supports layer filters only, not related feature types
     const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(params.layerId, filter) || undefined
+      ? FeaturesFilterHelper.getFilter(filter) || undefined
       : undefined;
     return this.api.getFeatures$({ ...getFeatureParams, filter: cqlFilter });
   }
@@ -33,7 +33,7 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
     const sort = sortBy && sortOrder ? { column: sortBy, direction: sortOrder } : null;
     // Convert filter to CQL - TM currently supports layer filters only, not related feature types
     const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(params.layerId, filter) || undefined
+      ? FeaturesFilterHelper.getFilter(filter) || undefined
       : undefined;
     return this.api.getLayerExport$({ ...exportParams, sort, filter: cqlFilter })
       .pipe(map(response => {

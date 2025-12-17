@@ -38,7 +38,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           if (!referenceLayer) {
             return;
           }
-          const cqlFilter = FeaturesFilterHelper.getFilter(referenceLayer, allFilters.get(referenceLayer)) || '';
+          const cqlFilter = FeaturesFilterHelper.getFilter(allFilters.get(referenceLayer)) || '';
           const loadedKey = `${referenceLayer}-${cqlFilter}`;
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(group.id, loadedKey);

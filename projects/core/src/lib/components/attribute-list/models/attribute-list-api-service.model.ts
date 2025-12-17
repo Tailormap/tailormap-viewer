@@ -22,7 +22,7 @@ export interface GetFeaturesParams {
   /**
    * Optional filters (grouped by featuretype) to filter features.
    */
-  filter?: Map<string, string> | null;
+  filter?: Map<string | symbol, string> | null;
   /**
    * Optional page number for paginated results (0-based).
    */
@@ -74,7 +74,7 @@ export interface GetLayerExportParams {
   /**
    * Optional filters (grouped by featuretype) to filter features.
    */
-  filter?: Map<string, string> | null;
+  filter?: Map<string | symbol, string> | null;
   /**
    * Optional attribute name to sort by.
    */

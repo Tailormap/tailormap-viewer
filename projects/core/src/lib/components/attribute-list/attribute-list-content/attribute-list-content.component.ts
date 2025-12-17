@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
+import { FeaturesFilterHelper } from '../../../filter';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -114,16 +115,17 @@ export class AttributeListContentComponent implements OnInit {
         }
         const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
         // Use the filter for the layerId key (default featureType key when featureType is not set)
-        const cqlFilter = filtersForLayer?.get(selectedTab.layerId);
+        const cqlFilter = FeaturesFilterHelper.getFilter(filtersForLayer, selectedTab.featureType);
         const data: FilterDialogData = {
           tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
           layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter,
+          cqlFilter: cqlFilter ? cqlFilter : undefined,
           applicationId,
           attributeAlias,
+          featureType: selectedTab.featureType,
         };
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });

@@ -16,6 +16,7 @@ export interface FilterDialogData {
   cqlFilter?: string;
   applicationId: string;
   attributeAlias?: string;
+  featureType?: string;
 }
 
 interface FilterType {
@@ -126,6 +127,7 @@ export class AttributeListFilterComponent implements OnInit {
         ? this.updatedFilter.invertCondition
         : false,
       attributeAlias: this.data.attributeAlias,
+      featureType: this.data.featureType,
     };
   }
 

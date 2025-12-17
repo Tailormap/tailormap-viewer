@@ -172,7 +172,7 @@ export class FeatureInfoService {
       simplify: false,
       geometryInAttributes: geometryInAttributes,
       withAttachments: true,
-      filter: FeaturesFilterHelper.getFilter(layerId, layerFilter) || undefined,
+      filter: FeaturesFilterHelper.getFilter(layerFilter) || undefined,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

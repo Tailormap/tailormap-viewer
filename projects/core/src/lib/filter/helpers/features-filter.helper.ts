@@ -5,15 +5,16 @@ import { LayerFeaturesFilters } from '../models/feature-filter.model';
 
 export class FeaturesFilterHelper {
 
+  public static readonly DEFAULT_FEATURE_TYPE_NAME = Symbol('default');
+
   public static getFilter(
-    layerId: string,
     filters?: LayerFeaturesFilters | null,
     featureTypeName?: string | null,
   ): string | null {
     if (!filters) {
       return null;
     }
-    const key = featureTypeName || layerId;
+    const key = featureTypeName || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
     return filters?.get(key) ?? null;
   }
 

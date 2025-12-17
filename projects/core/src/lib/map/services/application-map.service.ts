@@ -119,7 +119,7 @@ export class ApplicationMapService implements OnDestroy {
       map(([ layers, filters ]) => {
         return layers.map(l => ({
           ...l,
-          filter: FeaturesFilterHelper.getFilter(l.id, filters.get(l.id)),
+          filter: FeaturesFilterHelper.getFilter(filters.get(l.id)),
         }));
       }),
     );

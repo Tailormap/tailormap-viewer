@@ -3,6 +3,7 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 import { FeaturesFilters, FeatureTypeName, LayerFeaturesFilters } from '../models/feature-filter.model';
+import { FeaturesFilterHelper } from './features-filter.helper';
 
 export class CqlFilterHelper {
 
@@ -59,9 +60,9 @@ export class CqlFilterHelper {
         && !(FilterTypeHelper.isAttributeFilter(f) && (f.generatedByFilterId || CqlFilterHelper.isNumericFilterWithNoValue(f))));
 
     // Group filters by their featureType key
-    const filtersByFeatureType = this.groupFiltersByFeatureType(originalFilters, layerId);
+    const filtersByFeatureType = this.groupFiltersByFeatureType(originalFilters);
     // Also group generated filters
-    const generatedFiltersByFeatureType = this.groupFiltersByFeatureType(generatedFilters, layerId);
+    const generatedFiltersByFeatureType = this.groupFiltersByFeatureType(generatedFilters);
 
     // Process each featureType group
     filtersByFeatureType.forEach((filters, featureTypeKey) => {
@@ -107,10 +108,10 @@ export class CqlFilterHelper {
     return result;
   }
 
-  private static groupFiltersByFeatureType(filters: BaseFilterModel[], layerId: string): Map<FeatureTypeName, BaseFilterModel[]> {
+  private static groupFiltersByFeatureType(filters: BaseFilterModel[]): Map<FeatureTypeName, BaseFilterModel[]> {
     const result = new Map<FeatureTypeName, BaseFilterModel[]>();
     filters.forEach(filter => {
-      const key = filter.featureType || layerId;
+      const key = filter.featureType || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
       if (!result.has(key)) {
         result.set(key, []);
       }
