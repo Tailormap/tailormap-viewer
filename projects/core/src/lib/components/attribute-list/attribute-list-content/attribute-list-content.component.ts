@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
-import { FeaturesFilterHelper } from '../../../filter';
 
 @Component({
   selector: 'tm-attribute-list-content',
