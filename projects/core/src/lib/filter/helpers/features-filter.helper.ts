@@ -15,7 +15,7 @@ export class FeaturesFilterHelper {
       return null;
     }
     const key = featureTypeName || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
-    return filters?.get(key) ?? null;
+    return filters.get(key) ?? null;
   }
 
   public static separateSubstringFiltersInCheckboxFilters(

@@ -53,7 +53,7 @@ export class CqlFilterHelper {
   private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
     const result: LayerFeaturesFilters = new Map();
 
-    // Group filters by featureType (or layerId if no featureType)
+    // Group filters by featureType (or default feature type if no featureType)
     const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
     const originalFilters = filterGroup.filters
       .filter(f => !f.disabled

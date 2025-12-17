@@ -41,7 +41,7 @@ export class FilterService {
             .filter((key) => !filters.has(key))
             .map((key) => [ key, null ]);
           const changedFilters: Array<[ string, LayerFeaturesFilters ]> = Array.from(filters.keys())
-            .filter((key) => this.currentFilters.get(key) !== filters.get(key))
+            .filter((key) => FilterService.hasFilterChanges(this.currentFilters.get(key), filters.get(key)))
             .map((key) => [ key, filters.get(key) || new Map() ]);
           return [
             filters,
@@ -53,6 +53,30 @@ export class FilterService {
         filter((filters) => filters.size > 0),
       )
       .subscribe((filters) => this.changedFiltersSubject$.next(filters));
+  }
+
+  private static hasFilterChanges(
+    currentFilter: LayerFeaturesFilters | null | undefined,
+    newFilter: LayerFeaturesFilters | undefined,
+  ): boolean {
+    if (!currentFilter && !newFilter) {
+      return false;
+    }
+    if ((currentFilter && !newFilter) || (!currentFilter && newFilter)) {
+      return true;
+    }
+    if (currentFilter?.size !== newFilter?.size) {
+      return true;
+    }
+    const curFilter: LayerFeaturesFilters = currentFilter || new Map();
+    const newFilt: LayerFeaturesFilters = newFilter || new Map();
+    for (const [ key, value ] of curFilter) {
+      const newValue = newFilt.get(key);
+      if (!newValue || value !== newValue) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
