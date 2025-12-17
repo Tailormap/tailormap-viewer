@@ -8,7 +8,6 @@ import { selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.sel
 import { MapService } from '@tailormap-viewer/map';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 @Component({
   selector: 'tm-legend',
@@ -22,7 +21,6 @@ export class LegendComponent implements OnInit, OnDestroy {
   private legendService = inject(LegendService);
   private menubarService = inject(MenubarService);
   private mapService = inject(MapService);
-  private componentRegistrationService = inject(ComponentRegistrationService);
 
 
   public visible$: Observable<boolean>;
@@ -42,12 +40,10 @@ export class LegendComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.LEGEND, component: LegendMenuButtonComponent });
-    this.componentRegistrationService.registerComponent('mobile-menu-bottom', { type: BaseComponentTypeEnum.LEGEND, component: LegendMenuButtonComponent });
   }
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.LEGEND);
-    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.LEGEND);
   }
 
 }

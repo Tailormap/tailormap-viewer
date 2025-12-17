@@ -77,7 +77,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.isSmallScreen = BrowserHelper.getScreenWith() < 1200;
+    this.isSmallScreen = BrowserHelper.isMobile;
   }
 
   public ngOnDestroy() {

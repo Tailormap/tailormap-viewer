@@ -19,7 +19,6 @@ import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selec
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -41,7 +40,7 @@ export class TocComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private ngZone = inject(NgZone);
   private authenticatedUserService = inject(AuthenticatedUserService);
-  private componentRegistrationService = inject(ComponentRegistrationService);
+
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
@@ -115,7 +114,6 @@ export class TocComponent implements OnInit, OnDestroy {
       .subscribe((evt) => this.handleNodePositionChanged(evt));
 
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
-    this.componentRegistrationService.registerComponent('mobile-menu-bottom', { type: BaseComponentTypeEnum.TOC, component: TocMenuButtonComponent });
 
     this.in3D = this.store$.selectSignal(selectIn3dView);
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
@@ -130,7 +128,6 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.TOC);
-    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.TOC);
     this.destroyed.next(null);
     this.destroyed.complete();
   }
