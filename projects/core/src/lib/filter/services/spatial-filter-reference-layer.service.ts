@@ -8,6 +8,7 @@ import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../state/core.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { updateFilterGroup } from '../../state/filter-state/filter.actions';
+import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +38,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           if (!referenceLayer) {
             return;
           }
-          const cqlFilter = allFilters.get(referenceLayer) || '';
+          const cqlFilter = FeaturesFilterHelper.getFilter(referenceLayer, allFilters.get(referenceLayer)) || '';
           const loadedKey = `${referenceLayer}-${cqlFilter}`;
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(group.id, loadedKey);

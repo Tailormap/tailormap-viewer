@@ -5,6 +5,7 @@ import { inject, Injectable } from '@angular/core';
 import { TAILORMAP_API_V1_SERVICE, UniqueValueParams, UniqueValuesService } from '@tailormap-viewer/api';
 import { map } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
+import { FeaturesFilterHelper } from '../../../filter';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,12 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   private uniqueValuesService = inject(UniqueValuesService);
 
   public getFeatures$(params: GetFeaturesParams) {
-    return this.api.getFeatures$(params);
+    const { filter, ...getFeatureParams } = params;
+    // Convert filter to CQL - TM currently supports layer filters only, not related feature types
+    const cqlFilter = filter
+      ? FeaturesFilterHelper.getFilter(params.layerId, filter) || undefined
+      : undefined;
+    return this.api.getFeatures$({ ...getFeatureParams, filter: cqlFilter });
   }
 
   public getLayerExportCapabilities$(params: GetLayerExportCapabilitiesParams) {
@@ -23,9 +29,13 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   }
 
   public getLayerExport$(params: GetLayerExportParams) {
-    const { sortBy, sortOrder, ...exportParams } = params;
+    const { sortBy, sortOrder, filter, ...exportParams } = params;
     const sort = sortBy && sortOrder ? { column: sortBy, direction: sortOrder } : null;
-    return this.api.getLayerExport$({ ...exportParams, sort })
+    // Convert filter to CQL - TM currently supports layer filters only, not related feature types
+    const cqlFilter = filter
+      ? FeaturesFilterHelper.getFilter(params.layerId, filter) || undefined
+      : undefined;
+    return this.api.getLayerExport$({ ...exportParams, sort, filter: cqlFilter })
       .pipe(map(response => {
         if (!response || !response.body) {
           return null;

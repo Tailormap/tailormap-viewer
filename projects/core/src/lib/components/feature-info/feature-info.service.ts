@@ -16,6 +16,7 @@ import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadFeatureInfo, updateFeatureInFeatureInfo } from './state/feature-info.actions';
 import { FeatureInfoFeatureModel } from './models/feature-info-feature.model';
+import { FeaturesFilterHelper } from '../../filter';
 
 @Injectable({
   providedIn: 'root',
@@ -171,7 +172,7 @@ export class FeatureInfoService {
       simplify: false,
       geometryInAttributes: geometryInAttributes,
       withAttachments: true,
-      filter: layerFilter,
+      filter: FeaturesFilterHelper.getFilter(layerId, layerFilter) || undefined,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
         features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),

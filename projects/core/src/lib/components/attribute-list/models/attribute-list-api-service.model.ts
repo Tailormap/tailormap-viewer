@@ -20,9 +20,9 @@ export interface GetFeaturesParams {
    */
   __fid?: string;
   /**
-   * Optional filter expression to filter features.
+   * Optional filters (grouped by featuretype) to filter features.
    */
-  filter?: string;
+  filter?: Map<string, string> | null;
   /**
    * Optional page number for paginated results (0-based).
    */
@@ -72,9 +72,9 @@ export interface GetLayerExportParams {
    */
   outputFormat: string;
   /**
-   * Optional filter expression to filter exported features.
+   * Optional filters (grouped by featuretype) to filter features.
    */
-  filter?: string;
+  filter?: Map<string, string> | null;
   /**
    * Optional attribute name to sort by.
    */
