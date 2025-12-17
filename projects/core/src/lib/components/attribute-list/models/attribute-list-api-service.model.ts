@@ -1,5 +1,5 @@
 import {
-  FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValueParams, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 

@@ -9,7 +9,7 @@ import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
-  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValueParams, UniqueValuesResponseModel,
+  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
