@@ -66,7 +66,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data.featureType);
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
         }),
       );
     this.hasFiltersForMultipleFeatureTypes$ = this.store$.select(selectSelectedTab)
