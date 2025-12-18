@@ -36,9 +36,11 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public hasFilter$(source: string, layerId: string) {
+  public hasFilter$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
-      .pipe(map(group => !!group && group.filters.length > 0));
+      .pipe(map(group => {
+        return !!group && group.filters.length > 0 && (!featureType || group.filters.some(f => f.featureType === featureType));
+      }));
   }
 
   public hasFiltersForMultipleFeatureTypes$(source: string, layerId: string) {

@@ -57,13 +57,16 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
     this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
-    this.hasFilters$ = this.store$.select(selectSelectedTab)
+    this.hasFilters$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
       .pipe(
-        switchMap(tab => {
+        switchMap(([ tab, data ]) => {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data.featureType);
         }),
       );
     this.hasFiltersForMultipleFeatureTypes$ = this.store$.select(selectSelectedTab)
