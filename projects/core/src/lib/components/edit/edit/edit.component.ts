@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import {
   selectCopiedFeatures,
   selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectSelectedCopyLayer,
@@ -21,6 +21,8 @@ import {
 } from '@tailormap-viewer/api';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
+import { ComponentRegistrationService } from '../../../services';
+import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 
 @Component({
   selector: 'tm-edit',
@@ -29,12 +31,13 @@ import { ComponentConfigHelper } from '../../../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
   private applicationLayerService = inject(ApplicationLayerService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private mapService = inject(MapService);
+  private componentRegistrationService = inject(ComponentRegistrationService);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -117,6 +120,12 @@ export class EditComponent implements OnInit {
           this.store$.dispatch(setEditActive({ active: false }));
         }
       });
+
+    this.componentRegistrationService.registerComponent('mobile-menu-bottom', { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent });
+  }
+
+  public ngOnDestroy(): void {
+    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
   }
 
   public isLine() {
