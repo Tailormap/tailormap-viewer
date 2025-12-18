@@ -5,8 +5,7 @@
     animate.enter="enter-animation"
     animate.leave="leave-animation">
     <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
-    <div [class.panel]="!mobile"
-         [class.mobile-panel]="mobile"
+    <div [ngClass]="mobile ? 'mobile-panel' : 'panel'"
          [ngStyle]="{ 'height': getHeight() }"
          [class.panel--minimized]="isMinimized"
          [class.panel--maximized]="isMaximized">
@@ -28,7 +27,8 @@
           </button>
         }
         <button mat-icon-button
-                class="size-18 close-button"
+                class="close-button"
+                [ngClass]="mobile ? 'size-24' : 'size-18'"
                 [tmTooltip]="tooltips.close"
                 (click)="onCloseClick();">
           <mat-icon svgIcon="close"></mat-icon>
