@@ -3,7 +3,6 @@ export interface AttributeListTabModel {
   label: string;
   tabSourceId: string;
   layerId?: string;
-  featureType?: string;
   selectedDataId: string;
   initialDataId: string;
   initialDataLoaded: boolean;

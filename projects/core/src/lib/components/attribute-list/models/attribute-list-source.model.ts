@@ -4,7 +4,6 @@ import { AttributeListApiServiceModel } from './attribute-list-api-service.model
 export interface TabModel {
   id: string;
   label: string;
-  featureType?: string;
 }
 
 /**

@@ -48,7 +48,12 @@ export class SimpleAttributeFilterService {
       }));
   }
 
-  public getFiltersExcludingAttribute$(source: string, layerId: string, attribute: string) {
+  public getFiltersExcludingAttribute$(
+    source: string,
+    layerId: string,
+    attribute: string,
+    featureType?: string,
+  ) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
@@ -57,7 +62,15 @@ export class SimpleAttributeFilterService {
           }
           return {
             ...group,
-            filters: group.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.attribute !== attribute),
+            filters: group.filters.filter(f => {
+              if (!FilterTypeHelper.isAttributeFilter(f)) {
+                return false;
+              }
+              if (featureType) {
+                return f.attribute !== attribute || f.featureType !== featureType;
+              }
+              return f.attribute !== attribute;
+            }),
           };
         });
       }));
@@ -67,12 +80,18 @@ export class SimpleAttributeFilterService {
     source: string,
     layerId: string,
     attribute: string,
+    featureType?: string,
   ): Observable<AttributeFilterModel | null> {
     return this.getGroup$(source, layerId)
       .pipe(
         map(group => {
           return group
-            ? group.filters.find(f => f.attribute === attribute) || null
+            ? group.filters.find(f => {
+            if (featureType) {
+              return f.attribute === attribute && f.featureType === featureType;
+            }
+            return f.attribute === attribute;
+          }) || null
             : null;
         }),
       );

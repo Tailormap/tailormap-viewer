@@ -199,7 +199,6 @@ export class AttributeListManagerService extends BaseFeatureRegistrationService 
         selectedDataId: dataId,
         initialDataId: dataId,
         tabSourceId: tabModel.tabSourceId,
-        featureType: tabModel.featureType,
       };
       const data: AttributeListDataModel = {
         ...AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_DATA,
