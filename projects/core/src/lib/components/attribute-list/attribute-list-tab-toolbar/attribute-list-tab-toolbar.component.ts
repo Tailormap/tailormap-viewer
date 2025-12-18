@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChil
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
-import { Observable, of, switchMap, take } from 'rxjs';
-import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
+import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
+import {
+  selectDataForSelectedTab, selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab,
+} from '../state/attribute-list.selectors';
 import { PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
@@ -12,6 +14,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -35,6 +38,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
+  public hasFiltersForMultipleFeatureTypes$: Observable<boolean> = of(false);
 
   constructor() {
     effect(() => {
@@ -60,6 +64,15 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
             return of(false);
           }
           return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        }),
+      );
+    this.hasFiltersForMultipleFeatureTypes$ = this.store$.select(selectSelectedTab)
+      .pipe(
+        switchMap(tab => {
+          if (!tab?.layerId) {
+            return of(false);
+          }
+          return this.simpleAttributeFilterService.hasFiltersForMultipleFeatureTypes$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
         }),
       );
   }
@@ -98,7 +111,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearFilter() {
+  public clearAllFilters() {
     this.store$.select(selectSelectedTab)
       .pipe(take(1))
       .subscribe(tab => {
@@ -106,6 +119,20 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           return;
         }
         return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+      });
+  }
+
+  public clearFilter() {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(take(1))
+      .subscribe(([ tab, data ]) => {
+        if (!tab?.layerId) {
+          return;
+        }
+        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       });
   }
 

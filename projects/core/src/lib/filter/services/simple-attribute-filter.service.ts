@@ -38,7 +38,14 @@ export class SimpleAttributeFilterService {
 
   public hasFilter$(source: string, layerId: string) {
     return this.getGroup$(source, layerId)
-      .pipe(map(group => !!group));
+      .pipe(map(group => !!group && group.filters.length > 0));
+  }
+
+  public hasFiltersForMultipleFeatureTypes$(source: string, layerId: string) {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => {
+        return !!group && new Set(group.filters.map(f => f.featureType)).size > 1;
+      }));
   }
 
   public getFilters$(source: string, layerId: string): Observable<AttributeFilterModel[]> {
@@ -121,10 +128,28 @@ export class SimpleAttributeFilterService {
   public removeFiltersForLayer(
     source: string,
     layerId: string,
+    featureType?: string,
   ) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
+      }
+      if (featureType) {
+        const filtersToKeep = group.filters.filter(f => {
+          if (!FilterTypeHelper.isAttributeFilter(f)) {
+            return true;
+          }
+          return f.featureType !== featureType;
+        });
+        if (filtersToKeep.length > 0) {
+          this.store$.dispatch(FilterActions.updateFilterGroup({
+            filterGroup: {
+              ...group,
+              filters: filtersToKeep,
+            },
+          }));
+          return;
+        }
       }
       this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
     });
