@@ -5,6 +5,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
+import { BottomPanelComponent } from '../../../shared';
 
 const setup = async (ac: { componentId: string; dialogTitle: string } | null) => {
   const mockMenubarService = {
@@ -19,6 +20,7 @@ const setup = async (ac: { componentId: string; dialogTitle: string } | null) =>
       getMapServiceMock().provider,
       { provide: MenubarService, useValue: mockMenubarService },
     ],
+    declarations: [BottomPanelComponent],
   });
 };
 

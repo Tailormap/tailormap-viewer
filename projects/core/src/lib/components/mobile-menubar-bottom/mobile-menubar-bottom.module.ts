@@ -24,6 +24,7 @@ import { MobileMenubarHomeModule } from '../mobile-menubar-home/mobile-menubar-h
     TocModule,
     InfoModule,
     MobileMenubarHomeModule,
+    CoreSharedModule,
   ],
   exports: [
     MobileMenubarBottomComponent,
