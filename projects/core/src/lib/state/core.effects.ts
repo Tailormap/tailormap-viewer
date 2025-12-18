@@ -7,7 +7,7 @@ import { LoadViewerService } from '../services/load-viewer.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { UrlHelper } from '@tailormap-viewer/shared';
-import { AttributeFilterHelper } from '../filter/helpers/attribute-filter.helper';
+import { FeaturesFilterHelper } from '../filter/helpers/features-filter.helper';
 
 @Injectable()
 export class CoreEffects {
@@ -41,7 +41,7 @@ export class CoreEffects {
     return this.actions$.pipe(
       ofType(CoreActions.loadViewerSuccess),
       map(action => action.viewer.filterGroups || []),
-      map(groups => AttributeFilterHelper.separateSubstringFiltersInCheckboxFilters(groups)),
+      map(groups => FeaturesFilterHelper.separateSubstringFiltersInCheckboxFilters(groups)),
       map(filterGroups => FilterActions.addAllFilterGroupsInConfig({ filterGroups })),
     );
   });

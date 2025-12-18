@@ -13,9 +13,10 @@ export interface FilterDialogData {
   layerId: string;
   filter: AttributeFilterModel | null;
   columnType: AttributeType;
-  cqlFilter?: string;
+  cqlFilters?: Map<string | symbol, string>;
   applicationId: string;
   attributeAlias?: string;
+  featureType?: string;
 }
 
 interface FilterType {
@@ -78,7 +79,7 @@ export class AttributeListFilterComponent implements OnInit {
     return this.managerService.getUniqueValues$(this.data.tabSourceId, {
       attribute: this.data.columnName,
       layerId: this.data.layerId,
-      filter: this.data.cqlFilter,
+      filter: this.data.cqlFilters,
       applicationId: this.data.applicationId,
     })
       .pipe(
@@ -126,6 +127,7 @@ export class AttributeListFilterComponent implements OnInit {
         ? this.updatedFilter.invertCondition
         : false,
       attributeAlias: this.data.attributeAlias,
+      featureType: this.data.featureType,
     };
   }
 

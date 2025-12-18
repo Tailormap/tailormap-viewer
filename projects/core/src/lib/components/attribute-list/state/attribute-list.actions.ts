@@ -69,3 +69,8 @@ export const toggleColumnVisible = createAction(
   `${attributeListActionsPrefix} Toggle Column Visibility`,
   props<{ dataId: string; columnId: string }>(),
 );
+
+export const setSelectedDataId = createAction(
+  `${attributeListActionsPrefix} Set Selected Data Id`,
+  props<{ tabId: string; dataId: string }>(),
+);

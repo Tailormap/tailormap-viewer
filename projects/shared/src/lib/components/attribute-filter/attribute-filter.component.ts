@@ -210,6 +210,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
       && (
         this._attributeType === AttributeType.STRING ||
         this._attributeType === AttributeType.INTEGER ||
+        this._attributeType === AttributeType.NUMBER ||
         this._attributeType === AttributeType.DOUBLE
       );
   }
@@ -222,6 +223,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
     return this._attributeType === AttributeType.STRING ||
       this._attributeType === AttributeType.INTEGER ||
       this._attributeType === AttributeType.DOUBLE ||
+      this._attributeType === AttributeType.NUMBER ||
       this.isDateLikeAttributeType();
   }
 

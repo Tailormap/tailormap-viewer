@@ -4,6 +4,7 @@ export interface AttributeListTabModel {
   tabSourceId: string;
   layerId?: string;
   selectedDataId: string;
+  initialDataId: string;
   initialDataLoaded: boolean;
   loadingData: boolean;
   loadingError?: string;

@@ -6,6 +6,7 @@ import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SpatialFilterModel } from '@tailormap-viewer/api';
+import { FeaturesFilterHelper } from './features-filter.helper';
 
 export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
   const group = getFilterGroup<SpatialFilterModel>([{
@@ -28,7 +29,7 @@ const simpleNumberFilter = (condition?: FilterConditionEnum, value?: string[], i
   filterGroup.filters[0].value = value || ['1'];
   filterGroup.filters[0].invertCondition = invertCondition;
   const filters = CqlFilterHelper.getFilters([filterGroup]);
-  return filters.get('1');
+  return filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME);
 };
 
 describe('CQLFilterHelper', () => {
@@ -36,7 +37,7 @@ describe('CQLFilterHelper', () => {
   test('should create a basic CQL filter', () => {
     const filterGroup = getFilterGroup();
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('(attribute ILIKE \'%value%\')');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute ILIKE \'%value%\')');
   });
 
   test('should create a basic number CQL filter', () => {
@@ -56,45 +57,45 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)']);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, POINT(1 2))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, POINT(1 2))');
   });
 
   test('should create a spatial filter for circle', () => {
     const filterGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)']);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 3))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 3))');
   });
 
   test('should create a spatial filter for multiple geometries', () => {
     const filterGroup = getSpatialFilterGroup([ 'POINT(1 2)', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))' ]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
   });
 
   test('should create a spatial filters for multiple layers', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: ['the_geom'] }, { layerId: '2', column: ['geom'] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.size).toBe(2);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, POINT(1 2))');
-    expect(filters.get('2')).toBe('INTERSECTS(geom, POINT(1 2))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, POINT(1 2))');
+    expect(filters.get('2')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(geom, POINT(1 2))');
   });
 
   test('should create a spatial filter for multiple geometry columns', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: [ 'the_geom', 'some_other_geom_column' ] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(some_other_geom_column, POINT(1 2)))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(some_other_geom_column, POINT(1 2)))');
   });
 
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 10))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 10))');
   });
 
   test('should create a spatial filter for a circle with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 13))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 13))');
   });
 
   test('combine multiple filters into a CQL filter', () => {
@@ -136,7 +137,7 @@ describe('CQLFilterHelper', () => {
         value: [],
       }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')).toBe('((attribute ILIKE \'%value%\') ' +
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('((attribute ILIKE \'%value%\') ' +
       'AND (attribute2 = true) ' +
       'AND (attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
       'AND (attribute4 IS NOT NULL))');
@@ -221,7 +222,56 @@ describe('CQLFilterHelper', () => {
       parentGroup: '2',
     }];
     const filters = CqlFilterHelper.getFilters(filterGroups);
-    expect(filters.get('1')).toBe('((attribute LIKE \'%value%\') AND ((((attribute2 > 5) OR (attribute3 < 10)) OR (attribute5 IS NULL)) AND (attribute4 BETWEEN 5 AND 10)))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toBe('(((attribute LIKE \'%value%\') AND (((attribute2 > 5) OR (attribute3 < 10)) OR (attribute5 IS NULL))) AND (attribute4 BETWEEN 5 AND 10))');
+  });
+
+  test('combine multiple filters with multiple related types into a CQL filter', () => {
+    const filterGroup = getFilterGroup([{
+      id: '1',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute',
+      attributeType: AttributeType.STRING,
+      condition: FilterConditionEnum.STRING_LIKE_KEY,
+      value: ['value'],
+    }, {
+      id: '2',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute2',
+      attributeType: AttributeType.BOOLEAN,
+      condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
+      value: [],
+    }, {
+      id: '3',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute3',
+      featureType: 'related',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.DATE_ON_KEY,
+      value: ['2020-01-01'],
+    }, {
+      id: '4',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: true,
+      attribute: 'attribute4',
+      featureType: 'related',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.NULL_KEY,
+      value: [],
+    }]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get('1')?.size).toBe(2);
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('((attribute ILIKE \'%value%\') ' +
+      'AND (attribute2 = true))');
+    expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
+      'AND (attribute4 IS NOT NULL))');
   });
 
 });

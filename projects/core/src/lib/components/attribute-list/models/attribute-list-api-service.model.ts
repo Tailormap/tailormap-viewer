@@ -1,5 +1,5 @@
 import {
-  FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValueParams, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 
@@ -20,9 +20,12 @@ export interface GetFeaturesParams {
    */
   __fid?: string;
   /**
-   * Optional filter expression to filter features.
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
    */
-  filter?: string;
+  filter?: Map<string | symbol, string> | null;
   /**
    * Optional page number for paginated results (0-based).
    */
@@ -72,9 +75,12 @@ export interface GetLayerExportParams {
    */
   outputFormat: string;
   /**
-   * Optional filter expression to filter exported features.
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
    */
-  filter?: string;
+  filter?: Map<string | symbol, string> | null;
   /**
    * Optional attribute name to sort by.
    */
@@ -105,6 +111,28 @@ export interface GetLayerExportResponse {
    * The suggested file name for the exported file.
    */
   fileName: string;
+}
+
+export interface GetUniqueValuesParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer.
+   */
+  layerId: string;
+  /**
+   * The attribute name for which to retrieve unique values.
+   */
+  attribute: string;
+  /**
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
+   */
+  filter?: Map<string | symbol, string> | null;
 }
 
 /**
@@ -138,5 +166,5 @@ export interface AttributeListApiServiceModel {
    * @param params Parameters specifying the layer, attribute, and optional filter.
    * @returns Observable emitting the unique values response.
    */
-  getUniqueValues$(params: UniqueValueParams): Observable<UniqueValuesResponseModel>;
+  getUniqueValues$(params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel>;
 }

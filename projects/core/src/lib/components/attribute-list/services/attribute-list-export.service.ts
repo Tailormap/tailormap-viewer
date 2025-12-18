@@ -9,6 +9,7 @@ import { DateTime } from 'luxon';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { GetLayerExportResponse } from '../models/attribute-list-api-service.model';
 import { Sortorder } from '@tailormap-viewer/api';
+import { LayerFeaturesFilters } from '../../../filter';
 
 export enum SupportedExportFormats {
   CSV = 'csv',
@@ -68,7 +69,7 @@ export class AttributeListExportService {
     layerId: string;
     serviceLayerName: string;
     format: SupportedExportFormats;
-    filter: string | undefined;
+    filter: LayerFeaturesFilters | undefined;
     sort: { column: string; direction: string } | null;
     attributes: string[];
   }): Observable<boolean> {
