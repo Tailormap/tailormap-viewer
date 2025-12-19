@@ -17,6 +17,10 @@ export class MenubarService {
     BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
   ];
 
+  private static readonly MOBILE_MENUBAR_HOME_COMPONENTS: string[] = [
+    BaseComponentTypeEnum.INFO,
+  ];
+
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public panelWidth = 300;
@@ -47,12 +51,18 @@ export class MenubarService {
     if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(component.type) && BrowserHelper.isMobile) {
       this.componentRegistrationService.registerComponent('mobile-menu-bottom', component);
     }
+    if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(component.type) && BrowserHelper.isMobile) {
+      this.componentRegistrationService.registerComponent('mobile-menu-home', component);
+    }
   }
 
   public deregisterComponent(type: string) {
     this.componentRegistrationService.deregisterComponent('menu', type);
     if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(type) && BrowserHelper.isMobile) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', type);
+    }
+    if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(type) && BrowserHelper.isMobile) {
+      this.componentRegistrationService.deregisterComponent('mobile-menu-home', type);
     }
   }
 
