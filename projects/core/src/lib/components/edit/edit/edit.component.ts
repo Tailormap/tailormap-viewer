@@ -23,6 +23,7 @@ import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
 import { ComponentRegistrationService } from '../../../services';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
+import { BrowserHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-edit',
@@ -56,6 +57,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public tooltip = this.defaultTooltip;
   public disabled = false;
+  public isMobile = BrowserHelper.isMobile;
 
   private selectedCopyLayerIds: string[] = [];
 
