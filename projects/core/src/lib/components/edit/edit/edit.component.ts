@@ -123,7 +123,16 @@ export class EditComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.componentRegistrationService.registerComponent('mobile-menu-bottom', { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent });
+    this.authenticatedUserService.getUserDetails$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((userDetails) => {
+        if (userDetails.isAuthenticated) {
+          this.componentRegistrationService.registerComponent(
+            'mobile-menu-bottom',
+            { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent },
+          );
+        }
+      });
   }
 
   public ngOnDestroy(): void {

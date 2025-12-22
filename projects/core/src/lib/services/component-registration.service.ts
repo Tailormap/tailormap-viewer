@@ -42,7 +42,9 @@ export class ComponentRegistrationService {
       this.registeredComponents[area] = [];
     }
     this.registeredComponents[area] = this.registeredComponents[area].filter(c => c.type !== componentType);
-    this.componentRegistry[area].next([...this.registeredComponents[area]]);
+    if (this.componentRegistry[area]) {
+      this.componentRegistry[area].next([...this.registeredComponents[area]]);
+    }
   }
 
   public getRegisteredComponents$(area: AreaType): Observable<RegisteredComponent[]> {
