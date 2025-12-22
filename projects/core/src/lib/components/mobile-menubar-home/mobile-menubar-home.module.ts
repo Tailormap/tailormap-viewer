@@ -3,8 +3,6 @@ import { MobileMenubarHomeButtonComponent } from './mobile-menubar-home-button/m
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RegisteredComponentsModule } from '../registered-components-renderer/registered-components.module';
 import { MatBadge } from '@angular/material/badge';
-import { TocModule } from '../toc';
-import { InfoModule } from '../info';
 import { MobileMenubarHomeComponent } from './mobile-menubar-home/mobile-menubar-home.component';
 import { CoreSharedModule } from '../../shared/core-shared.module';
 import { MenubarModule } from '../menubar/menubar.module';
@@ -21,8 +19,6 @@ import { MenubarModule } from '../menubar/menubar.module';
     CoreSharedModule,
     MatBadge,
     MenubarModule,
-    TocModule,
-    InfoModule,
   ],
   exports: [
     MobileMenubarHomeComponent,
