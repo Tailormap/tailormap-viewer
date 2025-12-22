@@ -45,6 +45,8 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
       .subscribe(visible => {
         if (visible) {
           this.menubarService.setMobilePanelHeight(110);
+        } else {
+          this.menubarService.setMobilePanelHeight(400);
         }
       });
   }
