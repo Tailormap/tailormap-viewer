@@ -41,6 +41,13 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
           this.heightSubject.next(height);
         }
     });
+    this.activeComponent$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(activeComponent => {
+        if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(activeComponent?.componentId ?? '')) {
+          this.menubarService.setMobilePanelHeight(400);
+        }
+    });
   }
 
   public ngOnDestroy() {

@@ -17,6 +17,11 @@ export class MenubarService {
     BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
   ];
 
+  public static readonly MOBILE_MENUBAR_HOME_COMPONENTS: string[] = [
+    BaseComponentTypeEnum.INFO,
+    BaseComponentTypeEnum.FILTER,
+  ];
+
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public panelWidth = 300;
@@ -43,16 +48,22 @@ export class MenubarService {
   }
 
   public registerComponent(component: RegisteredComponent) {
-    this.componentRegistrationService.registerComponent('menu', component);
-    if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(component.type) && BrowserHelper.isMobile) {
+    if (!BrowserHelper.isMobile) {
+      this.componentRegistrationService.registerComponent('menu', component);
+    } else if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(component.type)) {
       this.componentRegistrationService.registerComponent('mobile-menu-bottom', component);
+    } else if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(component.type)) {
+      this.componentRegistrationService.registerComponent('mobile-menu-home', component);
     }
   }
 
   public deregisterComponent(type: string) {
-    this.componentRegistrationService.deregisterComponent('menu', type);
-    if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(type) && BrowserHelper.isMobile) {
+    if (!BrowserHelper.isMobile) {
+      this.componentRegistrationService.deregisterComponent('menu', type);
+    } else if (MenubarService.MOBILE_MENUBAR_COMPONENTS.includes(type)) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', type);
+    } else if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(type)) {
+      this.componentRegistrationService.deregisterComponent('mobile-menu-home', type);
     }
   }
 
