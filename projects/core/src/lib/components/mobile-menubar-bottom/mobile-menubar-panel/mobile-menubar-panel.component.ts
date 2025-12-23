@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, pairwise, tap } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MenubarService } from '../../menubar/menubar.service';
 import { BrowserHelper, CssHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-mobile-menubar-panel',
@@ -26,6 +27,7 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
 
   constructor() {
     this.activeComponent$ = this.menubarService.getActiveComponent$().pipe(
+      tap(ac => console.debug('ac:', ac)),
       debounceTime(0),
     );
     this.dialogTitle$ = this.activeComponent$.pipe(map(ac => ac ? ac.dialogTitle : ''));
@@ -42,12 +44,15 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
         }
     });
     this.activeComponent$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(activeComponent => {
-        if (MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(activeComponent?.componentId ?? '')) {
-          this.menubarService.setMobilePanelHeight(400);
+      .pipe(
+        pairwise(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(([ prev, curr ]) => {
+        if (prev !== null && curr === null && MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(prev.componentId)) {
+          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`);
         }
-    });
+      });
   }
 
   public ngOnDestroy() {
