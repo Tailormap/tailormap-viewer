@@ -21,9 +21,9 @@ import {
 } from '@tailormap-viewer/api';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
-import { ComponentRegistrationService } from '../../../services';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { BrowserHelper } from '@tailormap-viewer/shared';
+import { MenubarService } from '../../menubar';
 
 @Component({
   selector: 'tm-edit',
@@ -38,7 +38,7 @@ export class EditComponent implements OnInit, OnDestroy {
   private applicationLayerService = inject(ApplicationLayerService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private mapService = inject(MapService);
-  private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -127,16 +127,13 @@ export class EditComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((userDetails) => {
         if (userDetails.isAuthenticated) {
-          this.componentRegistrationService.registerComponent(
-            'mobile-menu-bottom',
-            { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent },
-          );
+          this.menubarService.registerComponent({ type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent }, false);
         }
       });
   }
 
   public ngOnDestroy(): void {
-    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.EDIT);
   }
 
   public isLine() {

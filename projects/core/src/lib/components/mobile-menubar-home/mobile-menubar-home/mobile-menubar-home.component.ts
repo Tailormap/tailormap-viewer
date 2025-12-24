@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MobileMenubarHomeButtonComponent } from '../mobile-menubar-home-button/mobile-menubar-home-button.component';
-import { combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { MenubarService } from '../../menubar/menubar.service';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -38,10 +38,7 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
     );
 
     this.visible$
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        distinctUntilChanged(),
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(visible => {
         if (visible) {
           this.menubarService.setMobilePanelHeight(110);
