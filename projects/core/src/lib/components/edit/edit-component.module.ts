@@ -15,6 +15,8 @@ import { SelectFieldComponent } from './fields/select-field/select-field.compone
 import { CoreSharedModule } from '../../shared';
 import { MatBadge } from '@angular/material/badge';
 import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attachments-form.component';
+import { EditMenuButtonComponent } from './edit-menu-button/edit-menu-button.component';
+import { MenubarModule } from "../menubar";
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attac
     EditAttachmentsFormComponent,
     EditSelectFeatureComponent,
     SelectFieldComponent,
+    EditMenuButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +36,7 @@ import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attac
     ApplicationMapModule,
     CoreSharedModule,
     MatBadge,
+    MenubarModule,
   ],
   exports: [
     EditComponent,
