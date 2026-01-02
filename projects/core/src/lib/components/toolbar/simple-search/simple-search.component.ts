@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchResultModel, SearchResultItemModel } from './models';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
+import { BrowserHelper } from '@tailormap-viewer/shared';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -43,6 +44,8 @@ export class SimpleSearchComponent implements OnInit {
   private isPanelOpen: boolean = false;
   private config: SimpleSearchConfigModel | undefined;
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
+  public isMobile = BrowserHelper.isMobile;
+
 
   constructor() {
     afterEveryRender(() => {

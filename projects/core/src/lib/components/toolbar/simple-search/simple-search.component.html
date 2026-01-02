@@ -1,5 +1,8 @@
-<div class="simple-search-container map-control-button-container"
-     [class.simple-search-container--is-active]="active()"
+<div class="map-control-button-container"
+     [class.simple-search-container]="!isMobile"
+     [class.simple-search-container--is-active]="active() && !isMobile"
+     [class.simple-search-container--mobile]="isMobile"
+     [class.simple-search-container--full-screen]="isMobile && (searchStatus$ | async) !== 'empty' && (searchStatus$ | async) !== null && active()"
      (keyup.escape)="toggle(true)">
 
   <button mat-flat-button
