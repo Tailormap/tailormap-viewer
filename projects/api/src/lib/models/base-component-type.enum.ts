@@ -22,4 +22,5 @@ export enum BaseComponentTypeEnum {
   HEADER = 'HEADER',
   INFO = 'INFO',
   TERRAIN_OPACITY = 'TERRAIN_OPACITY',
+  MOBILE_MENUBAR_HOME = 'MOBILE_MENUBAR_HOME',
 }
