@@ -24,6 +24,18 @@
   max-height: calc(var(--100vh) - var(--header-component-height));
 }
 
+.mobile-panel {
+  box-shadow: var(--box-shadow-top);
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  background-color: #fff;
+  max-height: calc(var(--100vh) - var(--header-component-height) - var(--mobile-menubar-height));
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
 .panel--minimized {
   height: auto;
 }
@@ -48,7 +60,7 @@ button mat-icon ::ng-deep svg {
   flex: 1 1 auto;
 }
 
-.mat-toolbar {
+.panel.mat-toolbar {
   height: 45px;
   background: #fff;
   padding: 10px 16px;
@@ -61,6 +73,13 @@ button mat-icon ::ng-deep svg {
   line-height: 24px;
 }
 
+.mobile-panel.mat-toolbar {
+  height: 4.5vh;
+  background: #fff;
+  padding: 10px 30px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
 .panel-content {
   overflow: hidden;
   display: flex;
@@ -68,6 +87,36 @@ button mat-icon ::ng-deep svg {
   flex-flow: column nowrap;
 }
 
+.mobile-panel .panel-content {
+  overflow: auto;
+}
+
 .panel--minimized .panel-content {
   display: none;
+}
+
+.enter-animation {
+  animation: slide-in 255ms;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.leave-animation {
+  animation: slide-out 255ms;
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
 }

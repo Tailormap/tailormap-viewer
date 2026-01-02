@@ -41,6 +41,16 @@ export class BottomPanelComponent implements OnInit {
     this.isMinimized = minimized;
   }
 
+  @Input()
+  public mobile = false;
+
+  @Input()
+  public set height(height: number | null) {
+    if (height) {
+      this.heightSubject.next(height);
+    }
+  }
+
   @Output()
   public heightChanged = new EventEmitter<number>();
 
