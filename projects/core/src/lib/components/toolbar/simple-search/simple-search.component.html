@@ -2,6 +2,7 @@
      [class.simple-search-container]="!isMobile"
      [class.simple-search-container--is-active]="active() && !isMobile"
      [class.simple-search-container--mobile]="isMobile"
+     [class.simple-search-container--mobile-is-active]="isMobile && active() && ((searchStatus$ | async) === 'empty' || (searchStatus$ | async) === null)"
      [class.simple-search-container--full-screen]="isMobile && (searchStatus$ | async) !== 'empty' && (searchStatus$ | async) !== null && active()"
      (keyup.escape)="toggle(true)">
 
@@ -17,20 +18,73 @@
     <div class="simple-search-field-wrapper">
       <mat-form-field appearance="outline">
         <mat-label>{{label}}</mat-label>
-        <input matInput
-               type="text"
-               tmAutoFocus
-               class="search-field"
-               (keydown.enter)="search()"
-               [placeholder]="label"
-               [formControl]="searchControl"
-               [matAutocomplete]="auto" />
-        <mat-autocomplete autoActiveFirstOption
-                          class="search-panel"
-                          (opened)="panelOpen(true)"
-                          (closed)="panelOpen(false)"
-                          #auto="matAutocomplete"
-                          [displayWith]="displayLabel">
+        @if (isMobile) {
+          <input matInput
+                 type="text"
+                 tmAutoFocus
+                 class="search-field"
+                 (keydown.enter)="search()"
+                 [placeholder]="label"
+                 [formControl]="searchControl" />
+        } @else {
+          <input matInput
+                 type="text"
+                 tmAutoFocus
+                 class="search-field"
+                 (keydown.enter)="search()"
+                 [placeholder]="label"
+                 [formControl]="searchControl"
+                 [matAutocomplete]="auto" />
+          <mat-autocomplete autoActiveFirstOption
+                            class="search-panel"
+                            (opened)="panelOpen(true)"
+                            (closed)="panelOpen(false)"
+                            #auto="matAutocomplete"
+                            [displayWith]="displayLabel">
+            @if (searchResults$ | async; as searchResults) {
+              @if (searchResults.length > 1) {
+                <div class="result-summary">
+                  @for (searchResult of searchResults; track searchResult.id) {
+                    <a href="" (pointerdown)="scrollTo($event, searchResult.id)" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
+                  }
+                </div>
+              }
+            }
+            @if (searchStatus$ | async; as searchStatus) {
+              @if (searchStatus === 'belowMinLength') {
+                <mat-option disabled
+                            class="hint"
+                            i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching or press &lt;Enter&gt;</mat-option>
+              }
+              @if (searchStatus === 'no_results') {
+                <mat-option disabled class="hint" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
+              }
+              @if (searchStatus === 'searching') {
+                <mat-option disabled class="hint">
+                  <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+                </mat-option>
+              }
+            }
+            @if (searchResults$ | async; as searchResults) {
+              @for (searchResult of searchResults; track searchResult.id) {
+                @if (searchResult && searchResult.results.length > 0) {
+                  <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
+                    @for(option of searchResult.results; track option.id) {
+                      <mat-option [value]="option" (click)="searchControl.setValue(option)">{{option.label}}</mat-option>
+                    }
+                    @if (searchResult.attribution) {
+                      <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+                    }
+                  </mat-optgroup>
+                }
+              }
+            }
+          </mat-autocomplete>
+        }
+
+      </mat-form-field>
+      @if (isMobile && (searchStatus$ | async) !== 'empty') {
+        <div class="inline-search-results">
           @if (searchResults$ | async; as searchResults) {
             @if (searchResults.length > 1) {
               <div class="result-summary">
@@ -60,7 +114,7 @@
               @if (searchResult && searchResult.results.length > 0) {
                 <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
                   @for(option of searchResult.results; track option.id) {
-                    <mat-option [value]="option">{{option.label}}</mat-option>
+                    <mat-option [value]="option" (click)="searchControl.setValue(option)">{{option.label}}</mat-option>
                   }
                   @if (searchResult.attribution) {
                     <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
@@ -69,9 +123,13 @@
               }
             }
           }
-        </mat-autocomplete>
-      </mat-form-field>
+        </div>
+      }
+
     </div>
   }
 
+
+
 </div>
+

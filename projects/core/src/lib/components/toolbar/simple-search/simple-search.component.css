@@ -22,6 +22,15 @@
   z-index: 3;
 }
 
+.simple-search-container--mobile-is-active {
+  border-radius: 30px;
+}
+
+.simple-search-container--mobile-is-active .map-control-button {
+  align-self: center;
+}
+
+
 .simple-search-container--mobile mat-form-field {
   width: 100%;
   padding-top: 6px;
@@ -37,6 +46,7 @@
   height: calc(100vh - var(--mobile-menubar-height));
   background-color: #fff;
   z-index: 10;
+  border-radius: 0;
 }
 
 .simple-search-container button {
