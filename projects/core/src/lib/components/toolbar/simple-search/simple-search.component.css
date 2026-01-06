@@ -57,8 +57,23 @@
   flex: 1;
 }
 
+.mobile-search-field-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
 .simple-search-container--mobile .simple-search-field-wrapper {
   padding: 9px;
+}
+
+.mobile-search-field {
+  height: 30px;
+  width: calc(70 * var(--vw));
+  display: flex;
+  align-items: center;
 }
 
 .simple-search-container mat-form-field {
