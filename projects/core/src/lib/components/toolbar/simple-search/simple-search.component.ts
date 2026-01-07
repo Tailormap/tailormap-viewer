@@ -88,8 +88,8 @@ export class SimpleSearchComponent implements OnInit {
           this.searchStatus.set(searchStr.length > 0 ? 'belowMinLength' : 'empty');
         }
       }),
-      filter(searchStr => (searchStr || '').length >= this.minLength),
       debounceTime(SimpleSearchComponent.SEARCH_DEBOUNCE_TIME),
+      filter(searchStr => (searchStr || '').length >= this.minLength),
       switchMap(searchStr => this.search$(searchStr)),
     ).subscribe(searchResults => this.applySearchResults(searchResults));
 
