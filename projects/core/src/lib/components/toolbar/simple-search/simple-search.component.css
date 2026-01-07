@@ -49,6 +49,15 @@
   border-radius: 0;
 }
 
+.simple-search-container--full-screen button {
+  margin-top: var(--body-margin);
+  margin-left: var(--body-margin);
+}
+
+.simple-search-container--full-screen .mobile-search-field {
+  margin-top: 14px;
+}
+
 .simple-search-container button {
   border-radius: 3px;
 }

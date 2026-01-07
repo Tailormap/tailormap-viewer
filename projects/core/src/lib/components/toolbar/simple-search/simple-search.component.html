@@ -24,7 +24,7 @@
                  (keydown.enter)="search()"
                  [placeholder]="label"
                  [value]="displayLabel(searchControl.value)"
-                 [formControl]="searchControl">
+                 (input)="searchControl.setValue($any($event.target).value)">
         </div>
       } @else {
         <mat-form-field appearance="outline">
