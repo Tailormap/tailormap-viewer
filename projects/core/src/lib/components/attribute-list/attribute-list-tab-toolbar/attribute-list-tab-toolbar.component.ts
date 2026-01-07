@@ -13,7 +13,7 @@ import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dia
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private popoverService = inject(PopoverService);
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
-  private attributeListFeatureRegistrationService = inject(AttributeListManagerService);
+  private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
 
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 

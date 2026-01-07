@@ -1,6 +1,4 @@
-import {
-  FilterConditionEnum, FilterToolEnum, FilterTypeEnum, AttributeType, FilterGroupModel, CheckboxFilterModel, AttributeFilterModel,
-} from '@tailormap-viewer/api';
+import { FilterConditionEnum, FilterToolEnum, FilterTypeEnum, AttributeType, CheckboxFilterModel } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper } from './features-filter.helper';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
 import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
@@ -126,7 +124,7 @@ describe('FeaturesFilterHelper', () => {
     it('should only create substring filters for values marked with useAsIlikeSubstringFilter', () => {
       const editConfiguration: CheckboxFilterModel = {
         filterTool: FilterToolEnum.CHECKBOX,
-          attributeValuesSettings: [
+        attributeValuesSettings: [
           { value: 'active', alias: 'Active', selectable: true, initiallySelected: true, useAsIlikeSubstringFilter: true },
           { value: 'pending', alias: 'Pending', selectable: true, initiallySelected: false, useAsIlikeSubstringFilter: false },
           { value: 'completed', alias: 'Completed', selectable: true, initiallySelected: true, useAsIlikeSubstringFilter: true },
