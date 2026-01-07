@@ -51,6 +51,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
+  private prevNodeId?: string;
 
   private destroyed = new Subject();
 
@@ -77,6 +78,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this._node = node;
     this.initForm(this._node);
     this.setTitle();
+    this.prevNodeId = node?.id;
   }
   public get node(): TreeModel<AppTreeLayerNodeModel> | null {
     return this._node;
@@ -325,7 +327,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
     }, { emitEvent: false });
 
-    if (nodeSettings.tileset3dStyle && !this.layerSettingsForm.get('tileset3dStyle')?.dirty) {
+    if (this.prevNodeId !== node.id) {
       this.layerSettingsForm.patchValue({
         tileset3dStyle: nodeSettings.tileset3dStyle ? JSON.stringify(nodeSettings.tileset3dStyle, null, 2) : null,
       }, { emitEvent: false });
