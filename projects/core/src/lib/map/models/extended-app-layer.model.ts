@@ -12,5 +12,5 @@ export interface AppLayerWithInitialValuesModel extends AppLayerModel {
 
 export interface ExtendedAppLayerModel extends AppLayerWithInitialValuesModel {
   service?: ServiceModel;
-  filter?: string;
+  filter?: string | null;
 }

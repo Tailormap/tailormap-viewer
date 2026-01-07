@@ -36,9 +36,18 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public hasFilter$(source: string, layerId: string) {
+  public hasFilter$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
-      .pipe(map(group => !!group));
+      .pipe(map(group => {
+        return !!group && group.filters.length > 0 && (!featureType || group.filters.some(f => f.featureType === featureType));
+      }));
+  }
+
+  public hasFiltersForMultipleFeatureTypes$(source: string, layerId: string) {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => {
+        return !!group && new Set(group.filters.map(f => f.featureType)).size > 1;
+      }));
   }
 
   public getFilters$(source: string, layerId: string): Observable<AttributeFilterModel[]> {
@@ -48,7 +57,12 @@ export class SimpleAttributeFilterService {
       }));
   }
 
-  public getFiltersExcludingAttribute$(source: string, layerId: string, attribute: string) {
+  public getFiltersExcludingAttribute$(
+    source: string,
+    layerId: string,
+    attribute: string,
+    featureType?: string,
+  ) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
@@ -57,7 +71,15 @@ export class SimpleAttributeFilterService {
           }
           return {
             ...group,
-            filters: group.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.attribute !== attribute),
+            filters: group.filters.filter(f => {
+              if (!FilterTypeHelper.isAttributeFilter(f)) {
+                return false;
+              }
+              if (featureType) {
+                return f.attribute !== attribute || f.featureType !== featureType;
+              }
+              return f.attribute !== attribute;
+            }),
           };
         });
       }));
@@ -67,12 +89,18 @@ export class SimpleAttributeFilterService {
     source: string,
     layerId: string,
     attribute: string,
+    featureType?: string,
   ): Observable<AttributeFilterModel | null> {
     return this.getGroup$(source, layerId)
       .pipe(
         map(group => {
           return group
-            ? group.filters.find(f => f.attribute === attribute) || null
+            ? group.filters.find(f => {
+            if (featureType) {
+              return f.attribute === attribute && f.featureType === featureType;
+            }
+            return f.attribute === attribute;
+          }) || null
             : null;
         }),
       );
@@ -102,10 +130,28 @@ export class SimpleAttributeFilterService {
   public removeFiltersForLayer(
     source: string,
     layerId: string,
+    featureType?: string,
   ) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
+      }
+      if (featureType) {
+        const filtersToKeep = group.filters.filter(f => {
+          if (!FilterTypeHelper.isAttributeFilter(f)) {
+            return true;
+          }
+          return f.featureType !== featureType;
+        });
+        if (filtersToKeep.length > 0) {
+          this.store$.dispatch(FilterActions.updateFilterGroup({
+            filterGroup: {
+              ...group,
+              filters: filtersToKeep,
+            },
+          }));
+          return;
+        }
       }
       this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
     });
