@@ -47,6 +47,7 @@
   background-color: #fff;
   z-index: 10;
   border-radius: 0;
+  flex-direction: column;
 }
 
 .simple-search-container--full-screen button {
@@ -60,6 +61,12 @@
 
 .simple-search-container button {
   border-radius: 3px;
+}
+
+.button-and-form-field {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .simple-search-field-wrapper {
@@ -76,10 +83,11 @@
 
 .simple-search-container--mobile .simple-search-field-wrapper {
   padding: 9px;
+  height: 40px;
 }
 
 .mobile-search-field {
-  height: 30px;
+  height: 22px;
   width: calc(70 * var(--vw));
   display: flex;
   align-items: center;
