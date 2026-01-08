@@ -21,12 +21,12 @@
   width: 40px;
   height: 40px;
   z-index: 3;
+  transition: width 0.2s ease-in-out;
 }
 
 .simple-search-container--mobile-is-active {
-  width: 100%;
+  width: calc(80 * var(--vw));
   border-radius: 30px;
-  transition: all 0.2s ease-in-out;
 }
 
 .simple-search-container--mobile-is-active .map-control-button {
@@ -93,6 +93,11 @@
   font-size: 16px;
 }
 
+.simple-search-container--full-screen .simple-search-field-wrapper {
+  padding: 9px;
+  height: 40px;
+}
+
 .simple-search-container--mobile .simple-search-field-wrapper {
   padding: 9px;
   height: 40px;
@@ -100,7 +105,7 @@
 
 .mobile-search-field {
   height: 22px;
-  width: calc(70 * var(--vw));
+  flex: 1;
   display: flex;
   align-items: center;
 }
