@@ -890,6 +890,10 @@
         <source>Value</source>
         <target>Wert</target>
       </trans-unit>
+      <trans-unit id="core.home.menu" datatype="html">
+        <source>Menu</source>
+        <target>Menü</target>
+      </trans-unit>
       <trans-unit id="core.info.info" datatype="html">
         <source>Info</source>
         <target>Info</target>

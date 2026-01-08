@@ -41,6 +41,7 @@ export class TocComponent implements OnInit, OnDestroy {
   private ngZone = inject(NgZone);
   private authenticatedUserService = inject(AuthenticatedUserService);
 
+
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
