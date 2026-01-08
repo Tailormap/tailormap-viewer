@@ -18,12 +18,15 @@
   justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
-  transition: all 0.2s ease-in-out;
+  width: 40px;
+  height: 40px;
   z-index: 3;
 }
 
 .simple-search-container--mobile-is-active {
+  width: 100%;
   border-radius: 30px;
+  transition: all 0.2s ease-in-out;
 }
 
 .simple-search-container--mobile-is-active .map-control-button {
@@ -45,18 +48,9 @@
   width: 100vw;
   height: calc(100vh - var(--mobile-menubar-height));
   background-color: #fff;
-  z-index: 10;
+  z-index: 20;
   border-radius: 0;
   flex-direction: column;
-}
-
-.simple-search-container--full-screen button {
-  margin-top: var(--body-margin);
-  margin-left: var(--body-margin);
-}
-
-.simple-search-container--full-screen .mobile-search-field {
-  margin-top: 14px;
 }
 
 .simple-search-container button {
@@ -66,8 +60,26 @@
 .button-and-form-field {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: calc(100% - var(--body-margin));
 }
+
+.simple-search-container--full-screen .button-and-form-field {
+  margin-top: var(--body-margin);
+  margin-left: var(--body-margin);
+  width: calc(100% - var(--body-margin) * 5);
+  background-color: #e8e8e8;
+  border-radius: 30px;
+}
+
+.simple-search-container--full-screen .button-and-form-field button {
+  border-radius: 30px;
+  background-color: #e8e8e8;
+}
+
+.simple-search-container--full-screen .button-and-form-field .mobile-search-field-input {
+  background-color: #e8e8e8;
+}
+
 
 .simple-search-field-wrapper {
   flex: 1;
