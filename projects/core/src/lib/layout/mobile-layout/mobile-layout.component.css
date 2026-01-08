@@ -1,0 +1,35 @@
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  flex: 1;
+}
+
+.map {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-menubar-buttons {
+  height: var(--mobile-menubar-height);
+  z-index: 1000;
+  background-color: #FFFFFF;
+}
+
+.map-controls-left--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
+  position: absolute;
+  left: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+  display: flex;
+}
