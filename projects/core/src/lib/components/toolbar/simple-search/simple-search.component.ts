@@ -41,6 +41,7 @@ export class SimpleSearchComponent implements OnInit {
 
   public searchStatus = signal<SearchStatusType>('empty');
   private closeFullScreen = signal<boolean>(false);
+  public disableTransition = signal<boolean>(false);
   private isPanelOpen: boolean = false;
   private config: SimpleSearchConfigModel | undefined;
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
@@ -84,8 +85,13 @@ export class SimpleSearchComponent implements OnInit {
           this.closeFullScreen.set(false);
         }
         if (searchStr.length < this.minLength) {
+          const wasNotEmpty = this.searchStatus() !== 'empty';
           this.searchResultsSubject.next(null);
           this.searchStatus.set(searchStr.length > 0 ? 'belowMinLength' : 'empty');
+          if (wasNotEmpty && searchStr.length === 0 && this.isMobile) {
+            this.disableTransition.set(true);
+            setTimeout(() => this.disableTransition.set(false), 0);
+          }
         }
       }),
       debounceTime(SimpleSearchComponent.SEARCH_DEBOUNCE_TIME),
@@ -159,6 +165,8 @@ export class SimpleSearchComponent implements OnInit {
       takeUntil(timer(5000))).subscribe();
 
     if (this.isMobile) {
+      this.disableTransition.set(true);
+      setTimeout(() => this.disableTransition.set(false), 0);
       this.closeFullScreen.set(true);
     }
   }

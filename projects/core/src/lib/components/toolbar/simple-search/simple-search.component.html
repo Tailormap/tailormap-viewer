@@ -4,6 +4,7 @@
      [class.simple-search-container--mobile]="isMobile && !fullScreen()"
      [class.simple-search-container--mobile-is-active]="isMobile && active() && !fullScreen()"
      [class.simple-search-container--full-screen]="fullScreen()"
+     [class.no-transition]="disableTransition()"
      (keyup.escape)="toggle(true)">
 
   <div class="button-and-form-field">

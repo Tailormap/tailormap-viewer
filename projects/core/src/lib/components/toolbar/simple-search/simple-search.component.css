@@ -33,6 +33,9 @@
   align-self: center;
 }
 
+.no-transition {
+  transition: none !important;
+}
 
 .simple-search-container--mobile mat-form-field {
   width: 100%;
