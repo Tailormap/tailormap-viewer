@@ -15,7 +15,6 @@
 }
 
 .simple-search-container--mobile {
-  justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
   width: 40px;
@@ -34,7 +33,7 @@
 }
 
 .no-transition {
-  transition: none !important;
+  transition: none;
 }
 
 .simple-search-container--mobile mat-form-field {
@@ -51,7 +50,6 @@
   width: 100vw;
   height: calc(100vh - var(--mobile-menubar-height));
   background-color: #fff;
-  z-index: 20;
   border-radius: 0;
   flex-direction: column;
 }
@@ -63,7 +61,7 @@
 .button-and-form-field {
   display: flex;
   flex-direction: row;
-  width: calc(100% - var(--body-margin));
+  width: 100%;
 }
 
 .simple-search-container--full-screen .button-and-form-field {

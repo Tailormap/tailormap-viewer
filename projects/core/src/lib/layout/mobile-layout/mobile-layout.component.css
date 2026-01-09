@@ -29,7 +29,7 @@
   position: absolute;
   padding-top: var(--body-margin);
   padding-left: var(--body-margin);
-  z-index: 3;
+  z-index: 20;
 }
 
 .map-controls-left--on-bottom {
