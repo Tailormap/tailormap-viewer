@@ -205,16 +205,23 @@ export class CqlFilterHelper {
         query.push('NOT');
       }
       query.push('BETWEEN');
-      query.push(`${dateFrom}T00:00:00Z AND ${dateUntil}T23:59:59Z`);
+      query.push(`${CqlFilterHelper.addTimePartToDate(dateFrom, true)} AND ${CqlFilterHelper.addTimePartToDate(dateUntil, false)}`);
       return `${query.join(' ')}`;
     }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
       : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
     query.push(cond);
-    const value = cond === 'AFTER' ? `${filter.value[0]}T23:59:59Z` : `${filter.value[0]}T00:00:00Z`;
+    const value = CqlFilterHelper.addTimePartToDate(filter.value[0], cond !== 'AFTER');
     query.push(value);
     return query.join(' ');
+  }
+
+  private static addTimePartToDate(filterValue: string, isStart: boolean): string {
+    if (filterValue.includes('T')) {
+      return (filterValue.endsWith('Z')|| filterValue.includes('+')) ? filterValue : `${filterValue}Z`;
+    }
+    return isStart ? `${filterValue}T00:00:00Z` : `${filterValue}T23:59:59Z`;
   }
 
   private static getQueryForNumber(filter: AttributeFilterModel) {
