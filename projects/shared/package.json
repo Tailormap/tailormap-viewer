@@ -5,13 +5,13 @@
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/animations": "^20.3.15",
+    "@angular/animations": "^20.3.16",
     "@angular/cdk": "^20.2.14",
-    "@angular/common": "^20.3.15",
-    "@angular/core": "^20.3.15",
-    "@angular/forms": "^20.3.15",
+    "@angular/common": "^20.3.16",
+    "@angular/core": "^20.3.16",
+    "@angular/forms": "^20.3.16",
     "@angular/material": "^20.2.14",
-    "@angular/platform-browser": "^20.3.15",
+    "@angular/platform-browser": "^20.3.16",
     "@ctrl/tinycolor": "^4.1.0",
     "@milkdown/core": "^7.15.2",
     "@milkdown/crepe": "^7.15.2",
