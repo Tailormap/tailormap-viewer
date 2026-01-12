@@ -863,6 +863,9 @@
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
       </trans-unit>
+      <trans-unit id="core.toc.backgroundLayers" datatype="html">
+        <source>Background layers</source>
+      </trans-unit>
       <trans-unit id="core.toc.close-details" datatype="html">
         <source>Close details</source>
       </trans-unit>
@@ -886,6 +889,9 @@
         <source>A filter is applied to this layer</source>
         <note priority="1" from="description">:</note>
       </trans-unit>
+      <trans-unit id="core.toc.layers" datatype="html">
+        <source>Layers</source>
+      </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
       </trans-unit>
@@ -897,6 +903,9 @@
       </trans-unit>
       <trans-unit id="core.toc.reset-opacity" datatype="html">
         <source>Reset opacity</source>
+      </trans-unit>
+      <trans-unit id="core.toc.terrainLayers" datatype="html">
+        <source>Terrain layers</source>
       </trans-unit>
       <trans-unit id="core.toc.toggle-layers-off" datatype="html">
         <source>Toggle all layers off</source>

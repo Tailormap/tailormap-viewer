@@ -1,0 +1,39 @@
+<div class="layer-tree-buttons">
+  <div class="layer-button">
+    <button mat-icon-button (click)="currentTree.set('layers')" class="layer-btn">
+      <div class="btn-content">
+        <mat-icon svgIcon="components_table_of_contents"></mat-icon>
+        <span i18n="@@core.toc.layers">Layers</span>
+      </div>
+    </button>
+  </div>
+
+  <div class="layer-button">
+    <button mat-icon-button (click)="currentTree.set('backgroundLayers')" class="layer-btn">
+      <div class="btn-content">
+        <mat-icon svgIcon="components_table_of_contents"></mat-icon>
+        <span i18n="@@core.toc.backgroundLayers">Background layers</span>
+      </div>
+    </button>
+  </div>
+
+  <div class="layer-button">
+    <button mat-icon-button (click)="currentTree.set('terrainLayers')" class="layer-btn">
+      <div class="btn-content">
+        <mat-icon svgIcon="tools_terrain"></mat-icon>
+        <span i18n="@@core.toc.terrainLayers">Terrain layers</span>
+      </div>
+    </button>
+  </div>
+</div>
+
+
+<div class="layer-tree">
+  @if (currentTree() === "layers") {
+    <tm-toc></tm-toc>
+  } @else if (currentTree() === "backgroundLayers") {
+    <tm-background-layer-toggle></tm-background-layer-toggle>
+  } @else if (currentTree() === "terrainLayers") {
+    <tm-terrain-controls></tm-terrain-controls>
+  }
+</div>

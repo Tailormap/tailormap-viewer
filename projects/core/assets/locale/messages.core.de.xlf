@@ -1150,6 +1150,10 @@
         <source>Available layers</source>
         <target>Verfügbare Ebenen</target>
       </trans-unit>
+      <trans-unit id="core.toc.backgroundLayers" datatype="html">
+        <source>Background layers</source>
+        <target state="new">Background layers</target>
+      </trans-unit>
       <trans-unit id="core.toc.close-details" datatype="html">
         <source>Close details</source>
         <target>Details schließen</target>
@@ -1180,6 +1184,10 @@
         <target>Auf diese Ebene wird ein Filter angewendet</target>
         <note priority="1" from="description">:</note>
       </trans-unit>
+      <trans-unit id="core.toc.layers" datatype="html">
+        <source>Layers</source>
+        <target state="new">Layers</target>
+      </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
         <target>Legende</target>
@@ -1195,6 +1203,10 @@
       <trans-unit id="core.toc.reset-opacity" datatype="html">
         <source>Reset opacity</source>
         <target>Deckkraft zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.terrainLayers" datatype="html">
+        <source>Terrain layers</source>
+        <target state="new">Terrain layers</target>
       </trans-unit>
       <trans-unit id="core.toc.toggle-layers-off" datatype="html">
         <source>Toggle all layers off</source>

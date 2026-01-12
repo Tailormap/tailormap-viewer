@@ -1,0 +1,44 @@
+:host {
+  height: 100%;
+}
+
+.layer-tree {
+  height: 100%;
+}
+
+.layer-tree-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+
+.layer-button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px dashed #e1e1e1;
+}
+
+.layer-button + .layer-button {
+  border-left: 2px dashed #e1e1e1;
+}
+
+.layer-btn {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-content span {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.75;
+  white-space: nowrap;
+}

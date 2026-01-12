@@ -14,6 +14,9 @@ import { StoreModule } from '@ngrx/store';
 import { tocStateKey } from './state/toc.state';
 import { tocReducer } from './state/toc.reducer';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
+import { MobileTocComponent } from './mobile-toc/mobile-toc.component';
+import { BackgroundLayerToggleModule } from '../background-layer-toggle';
+import { TerrainControlsModule } from '../toolbar/terrain-controls/terrain-controls.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.com
     LayerTransparencyComponent,
     LayerDetailsComponent,
     TocFilterInputComponent,
+    MobileTocComponent,
   ],
   imports: [
     CommonModule,
@@ -32,9 +36,12 @@ import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.com
     MenubarModule,
     LegendModule,
     StoreModule.forFeature(tocStateKey, tocReducer),
+    BackgroundLayerToggleModule,
+    TerrainControlsModule,
   ],
   exports: [
     TocComponent,
+    MobileTocComponent,
   ],
 })
 export class TocModule { }
