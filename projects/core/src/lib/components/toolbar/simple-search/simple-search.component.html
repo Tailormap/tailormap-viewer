@@ -74,7 +74,7 @@
                   @if (searchResult && searchResult.results.length > 0) {
                     <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
                       @for(option of searchResult.results; track option.id) {
-                        <mat-option [value]="option" (click)="searchControl.setValue(option)">{{option.label}}</mat-option>
+                        <mat-option [value]="option">{{option.label}}</mat-option>
                       }
                       @if (searchResult.attribution) {
                         <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
