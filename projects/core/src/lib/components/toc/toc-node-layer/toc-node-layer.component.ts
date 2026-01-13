@@ -32,6 +32,9 @@ export class TocNodeLayerComponent {
   @Input()
   public editableLayerIds: string[] = [];
 
+  @Input()
+  public showInfoIcon: boolean = false;
+
   @Output()
   public zoomToScale = new EventEmitter<number>();
 
@@ -84,5 +87,9 @@ export class TocNodeLayerComponent {
 
   public editLayerClicked(node: TreeModel<AppLayerModel>) {
     this.editLayer.emit(node.id);
+  }
+
+  public showMobileInfo(node: TreeModel<AppLayerModel>) {
+
   }
 }

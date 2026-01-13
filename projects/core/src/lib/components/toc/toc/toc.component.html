@@ -7,6 +7,7 @@
     [tiles3DLayerIds]="tiles3DLayerIds()"
     [filteredLayerIds]="filteredLayerIds()"
     [editableLayerIds]="getCurrentlyEditableLayerIds()"
+    [showInfoIcon]="mobileToc()"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
   ></tm-toc-node-layer>
@@ -50,7 +51,7 @@
       [expandOnGroupClick]="true"
     [getDropZones]="getDropZoneConfig()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
-      @if (infoVisible()) {
+      @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
       }
     }

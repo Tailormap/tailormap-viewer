@@ -1,4 +1,4 @@
-import { Component, computed, inject, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService,
@@ -41,6 +41,8 @@ export class TocComponent implements OnInit, OnDestroy {
   private ngZone = inject(NgZone);
   private authenticatedUserService = inject(AuthenticatedUserService);
 
+
+  public mobileToc = input(false);
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
