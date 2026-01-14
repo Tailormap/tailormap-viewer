@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, DOCUMENT, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DOCUMENT, inject, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { BrowserHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
 
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
+import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -23,6 +24,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   private applicationBookmarkService = inject(ApplicationBookmarkService);
   private appStyleService = inject(ApplicationStyleService);
   private document = inject<Document>(DOCUMENT);
+  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
 
 
   private static DEFAULT_TITLE = 'Tailormap';
@@ -33,6 +35,11 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public isEmbedded$: Observable<boolean> = of(false);
   public isSmallScreen = false;
+  public isMobileLayoutEnabled$: Observable<boolean>;
+
+  constructor() {
+    this.isMobileLayoutEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT);
+  }
 
   public ngOnInit(): void {
     this.route.url
