@@ -9,9 +9,6 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 })
 export class MobileTocComponent {
 
-
-  currentTree = signal<'layers' | 'backgroundLayers' | 'terrainLayers'>('layers');
-
   constructor() { }
 
 }

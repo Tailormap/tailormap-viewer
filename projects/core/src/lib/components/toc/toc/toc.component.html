@@ -8,6 +8,7 @@
     [filteredLayerIds]="filteredLayerIds()"
     [editableLayerIds]="getCurrentlyEditableLayerIds()"
     [showInfoIcon]="mobileToc()"
+    [infoTreeNode]="infoTreeNode$ | async"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
   ></tm-toc-node-layer>
