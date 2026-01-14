@@ -1,0 +1,12 @@
+@if (node) {
+  <div class="toc-node-details-in-node">
+    @if ((node.layer?.description || node.description); as description) {
+      <div class="toc-node-description" [innerHTML]="description | htmlify"></div>
+    }
+    @if (node.appLayerId) {
+      <div class="toc-node-details-transparency">
+        <tm-layer-transparency [layer]="node.appLayerId"></tm-layer-transparency>
+      </div>
+    }
+  </div>
+}

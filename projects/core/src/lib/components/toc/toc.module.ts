@@ -17,6 +17,7 @@ import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.com
 import { MobileTocComponent } from './mobile-toc/mobile-toc.component';
 import { BackgroundLayerToggleModule } from '../background-layer-toggle';
 import { TerrainControlsModule } from '../toolbar/terrain-controls/terrain-controls.module';
+import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-node-details-mobile.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { TerrainControlsModule } from '../toolbar/terrain-controls/terrain-contr
     LayerDetailsComponent,
     TocFilterInputComponent,
     MobileTocComponent,
+    TocNodeDetailsMobileComponent,
   ],
   imports: [
     CommonModule,

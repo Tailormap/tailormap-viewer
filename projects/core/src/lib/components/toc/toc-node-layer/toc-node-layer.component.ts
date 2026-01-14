@@ -95,7 +95,11 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  public showMobileInfo(node: TreeModel<AppLayerModel>) {
+  public showMobileInfo() {
     this.showInfo.set(true);
+  }
+
+  public layerInfoClosed() {
+    this.showInfo.set(false);
   }
 }

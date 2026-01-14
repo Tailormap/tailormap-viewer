@@ -42,13 +42,13 @@
     }
     @if (showInfoIcon && !isLevel()) {
       <mat-icon class="icon"
-                (click)="showMobileInfo(node)"
+                (click)="showMobileInfo()"
                 svgIcon="components_info_menu_button">
       </mat-icon>
     }
-    @if (showInfo()) {
+    @if (showInfo() && infoTreeNode?.id === node.id) {
       <div class="layer-info-mobile">
-
+        <tm-toc-node-details-mobile [node]="infoTreeNode"></tm-toc-node-details-mobile>
       </div>
     }
 
