@@ -17,13 +17,16 @@ import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import {
-  AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum, EditConfigModel, GeometryType,
+  AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum,
+  EditConfigModel,
+  GeometryType,
 } from '@tailormap-viewer/api';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
+import { ComponentRegistrationService } from '../../../services';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { BrowserHelper } from '@tailormap-viewer/shared';
-import { MenubarService } from '../../menubar';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-edit',
@@ -38,7 +41,8 @@ export class EditComponent implements OnInit, OnDestroy {
   private applicationLayerService = inject(ApplicationLayerService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private mapService = inject(MapService);
-  private menubarService = inject(MenubarService);
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -48,6 +52,7 @@ export class EditComponent implements OnInit, OnDestroy {
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
+  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
 
@@ -57,7 +62,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public tooltip = this.defaultTooltip;
   public disabled = false;
-  public isMobile = BrowserHelper.isMobile;
 
   private selectedCopyLayerIds: string[] = [];
 
@@ -127,13 +131,16 @@ export class EditComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((userDetails) => {
         if (userDetails.isAuthenticated) {
-          this.menubarService.registerComponent({ type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent }, false);
+          this.componentRegistrationService.registerComponent(
+            'mobile-menu-bottom',
+            { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent },
+          );
         }
       });
   }
 
   public ngOnDestroy(): void {
-    this.menubarService.deregisterComponent(BaseComponentTypeEnum.EDIT);
+    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
   }
 
   public isLine() {
