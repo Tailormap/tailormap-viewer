@@ -4,7 +4,7 @@ import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { loadViewer } from '../../state/core.actions';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
-import { BrowserHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
@@ -33,7 +33,6 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   public isLoaded = false;
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public isEmbedded$: Observable<boolean> = of(false);
-  public isSmallScreen = false;
   public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
 
@@ -80,7 +79,6 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.isSmallScreen = BrowserHelper.isMobile;
   }
 
   public ngOnDestroy() {
