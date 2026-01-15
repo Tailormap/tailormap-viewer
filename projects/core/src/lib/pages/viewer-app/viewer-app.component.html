@@ -16,6 +16,8 @@
 @if (isLoaded) {
   @if(isEmbedded$ | async) {
     <tm-embedded-layout aria-label="Tailormap viewer page"></tm-embedded-layout>
+  } @else if (isMobileLayoutEnabled$ | async) {
+    <tm-mobile-layout aria-label="Tailormap viewer page"></tm-mobile-layout>
   } @else {
     <tm-base-layout aria-label="Tailormap viewer page"></tm-base-layout>
   }

@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CoreSharedModule } from '../../../shared';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 describe('InfoComponent', () => {
   test('should render template content', async () => {
@@ -17,6 +18,12 @@ describe('InfoComponent', () => {
       isComponentVisible$: jest.fn(() => of(true)),
       registerComponent: jest.fn(),
       toggleActiveComponent: jest.fn(),
+      deregisterComponent: jest.fn(),
+    };
+
+    const mockComponentRegistrationService = {
+      registerComponent: jest.fn(),
+      deregisterComponent: jest.fn(),
     };
 
     const mockConfig: ComponentModel<InfoComponentConfigModel> = {
@@ -44,6 +51,7 @@ describe('InfoComponent', () => {
           ],
         }),
         { provide: MenubarService, useValue: mockMenubarService },
+        { provide: ComponentRegistrationService, useValue: mockComponentRegistrationService },
       ],
     });
     expect(mockMenubarService.toggleActiveComponent).toHaveBeenCalled();

@@ -14,6 +14,7 @@ import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 import { HeaderModule } from './header';
 import { InfoModule } from './info';
+import { MobileMenubarModule } from './mobile-menubar/mobile-menubar.module';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { InfoModule } from './info';
     HeaderModule,
     RegisteredComponentsModule,
     InfoModule,
+    MobileMenubarModule,
   ],
 })
 export class ComponentsModule {}

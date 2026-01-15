@@ -2,14 +2,16 @@
   <div class="edit-container map-control-button-container"
     [class.edit-container--is-active]="active$ | async"
     (keyup.escape)="toggle(true)">
-    <button mat-flat-button
-      class="map-control-button"
-      [class.disabled]="disabled"
-      [class.toggle-button--active]="active$ | async"
-      [tmTooltip]="tooltip"
-      (click)="!disabled ? toggle() : null">
-      <mat-icon svgIcon="edit"></mat-icon>
-    </button>
+    @if ((isMobileLayoutEnabled$ | async) === false) {
+      <button mat-flat-button
+              class="map-control-button"
+              [class.disabled]="disabled"
+              [class.toggle-button--active]="active$ | async"
+              [tmTooltip]="tooltip"
+              (click)="!disabled ? toggle() : null">
+        <mat-icon svgIcon="edit"></mat-icon>
+      </button>
+    }
     @if (active$ | async) {
       <div class="edit-wrapper">
         <ng-container>

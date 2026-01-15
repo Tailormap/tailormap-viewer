@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, inject, OnDestroy } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from "@tailormap-viewer/api";
 import { InfoMenuButtonComponent } from "../info-menu-button/info-menu-button.component";
 import { ComponentConfigHelper } from "../../../shared/helpers/component-config.helper";
@@ -15,8 +15,7 @@ import { Observable, take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class InfoComponent implements OnInit {
-
+export class InfoComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   private sanitizer = inject(DomSanitizer);
@@ -50,6 +49,10 @@ export class InfoComponent implements OnInit {
     if (this.openOnStartup) {
       this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.INFO, this.dialogTitle);
     }
+  }
+
+  public ngOnDestroy() {
+    this.menubarService.deregisterComponent(BaseComponentTypeEnum.INFO);
   }
 
 }

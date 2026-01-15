@@ -16,6 +16,7 @@
   --100vh: calc(100 * var(--vh));
   --100vw: calc(100 * var(--vw));
   --header-component-height: 0px;
+  --mobile-menubar-height: 80px;
 
   --dark-primary-text: rgb(0, 10, 30);
   --light-primary-text: rgb(255, 255, 255);
