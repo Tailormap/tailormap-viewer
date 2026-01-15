@@ -95,8 +95,9 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  public showMobileInfo() {
-    this.showInfo.set(true);
+  public toggleShowMobileInfo() {
+    const showInfo = this.showInfo();
+    this.showInfo.set(!showInfo);
   }
 
   public layerInfoClosed() {

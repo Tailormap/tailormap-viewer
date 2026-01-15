@@ -47,10 +47,12 @@
         <tm-toc-filter-input></tm-toc-filter-input>
       </div>
     }
-    <tm-tree class="toc-tree"
+    <tm-tree
+      class="toc-tree"
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
-    [getDropZones]="getDropZoneConfig()"></tm-tree>
+      [isMobileToc]="mobileToc()"
+      [getDropZones]="getDropZoneConfig()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
       @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>

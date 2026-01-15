@@ -65,6 +65,9 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input()
   public extendedDropzone?: boolean;
 
+  @Input()
+  public isMobileToc = false;
+
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
   private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });
