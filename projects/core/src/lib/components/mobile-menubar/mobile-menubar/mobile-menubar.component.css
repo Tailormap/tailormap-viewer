@@ -9,15 +9,14 @@
   margin-top: 0;
   margin-bottom: 0;
   border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mobile-menubar ::ng-deep mat-icon {
-  height: 85%;
+  height: 100%;
   width: 20vw;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .mobile-menubar ::ng-deep tm-registered-components-renderer {

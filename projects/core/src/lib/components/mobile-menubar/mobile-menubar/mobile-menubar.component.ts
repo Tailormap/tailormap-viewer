@@ -3,12 +3,12 @@ import { ComponentModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-mobile-menubar-bottom',
-  templateUrl: './mobile-menubar-bottom.component.html',
-  styleUrls: ['./mobile-menubar-bottom.component.css'],
+  templateUrl: './mobile-menubar.component.html',
+  styleUrls: ['./mobile-menubar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class MobileMenubarBottomComponent {
+export class MobileMenubarComponent {
 
   private _config: ComponentModel[] = [];
 

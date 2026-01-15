@@ -7,7 +7,7 @@ import { RegisteredComponentsRendererComponent } from '../../registered-componen
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../../map/state/map.selectors';
-import { MobileMenubarBottomComponent } from './mobile-menubar-bottom.component';
+import { MobileMenubarComponent } from './mobile-menubar.component';
 
 @Component({
   selector: 'tm-menu-button-test',
@@ -27,7 +27,7 @@ const mockedControlsService = {
 describe('MenubarComponent', () => {
 
   test('should render', async () => {
-    await render(MobileMenubarBottomComponent, {
+    await render(MobileMenubarComponent, {
       declarations: [RegisteredComponentsRendererComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
