@@ -158,6 +158,36 @@ describe('CQLFilterHelper', () => {
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute AFTER 2020-01-01T12:00:00+01)');
   });
 
+  test('after date with full zoned timestamp filter with colon separator', () => {
+    const filterGroup = getFilterGroup([{
+      id: '1',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.DATE_AFTER_KEY,
+      value: ['2020-01-01T12:00:00+01:00'],
+    }]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute AFTER 2020-01-01T12:00:00+01:00)');
+  });
+
+  test('after date with full zoned timestamp filter with minutes', () => {
+    const filterGroup = getFilterGroup([{
+      id: '1',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.DATE_AFTER_KEY,
+      value: ['2020-01-01T12:00:00+01:30'],
+    }]);
+    const filters = CqlFilterHelper.getFilters([filterGroup]);
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute AFTER 2020-01-01T12:00:00+01:30)');
+  });
+
   test('before date without timestamp filter', () => {
     const filterGroup = getFilterGroup([{
       id: '1',
