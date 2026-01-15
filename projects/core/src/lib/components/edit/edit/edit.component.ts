@@ -5,7 +5,7 @@ import {
   selectSelectedEditLayer,
 } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, Observable, of, take } from 'rxjs';
+import { combineLatest, map, of, take } from 'rxjs';
 import {
   setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
   setSelectedEditLayer,
@@ -17,7 +17,7 @@ import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import {
-  AppLayerModel, ApplicationFeature, ApplicationFeatureSwitchService, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum,
+  AppLayerModel, AttributeType, AuthenticatedUserService, BaseComponentTypeEnum,
   EditConfigModel,
   GeometryType,
 } from '@tailormap-viewer/api';
@@ -26,6 +26,7 @@ import { ComponentConfigHelper } from '../../../shared';
 import { ComponentRegistrationService } from '../../../services';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { BrowserHelper } from '@tailormap-viewer/shared';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-edit',
@@ -41,7 +42,7 @@ export class EditComponent implements OnInit, OnDestroy {
   private authenticatedUserService = inject(AuthenticatedUserService);
   private mapService = inject(MapService);
   private componentRegistrationService = inject(ComponentRegistrationService);
-  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -51,7 +52,7 @@ export class EditComponent implements OnInit, OnDestroy {
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
-  public isMobileLayoutEnabled$: Observable<boolean>;
+  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
 
@@ -64,10 +65,6 @@ export class EditComponent implements OnInit, OnDestroy {
   public isMobile = BrowserHelper.isMobile;
 
   private selectedCopyLayerIds: string[] = [];
-
-  constructor() {
-    this.isMobileLayoutEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT);
-  }
 
   public ngOnInit(): void {
     this.store$.select(selectSelectedEditLayer)

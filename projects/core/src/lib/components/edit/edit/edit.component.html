@@ -2,7 +2,7 @@
   <div class="edit-container map-control-button-container"
     [class.edit-container--is-active]="active$ | async"
     (keyup.escape)="toggle(true)">
-    @if (!isMobile || (isMobileLayoutEnabled$ | async) === false) {
+    @if ((isMobileLayoutEnabled$ | async) === false) {
       <button mat-flat-button
               class="map-control-button"
               [class.disabled]="disabled"

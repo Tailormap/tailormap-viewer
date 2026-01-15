@@ -6,9 +6,8 @@ import { loadViewer } from '../../state/core.actions';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { BrowserHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
-
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
-import { ApplicationFeature, ApplicationFeatureSwitchService } from '@tailormap-viewer/api';
+import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -24,7 +23,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   private applicationBookmarkService = inject(ApplicationBookmarkService);
   private appStyleService = inject(ApplicationStyleService);
   private document = inject<Document>(DOCUMENT);
-  private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private static DEFAULT_TITLE = 'Tailormap';
@@ -35,11 +34,8 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public isEmbedded$: Observable<boolean> = of(false);
   public isSmallScreen = false;
-  public isMobileLayoutEnabled$: Observable<boolean>;
+  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
-  constructor() {
-    this.isMobileLayoutEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT);
-  }
 
   public ngOnInit(): void {
     this.route.url
