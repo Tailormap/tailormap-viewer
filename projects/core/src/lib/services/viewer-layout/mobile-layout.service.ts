@@ -11,7 +11,7 @@ export class MobileLayoutService {
   private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
 
 
-  private static readonly MOBILE_MENUBAR_COMPONENTS: string[] = [
+  public static readonly MOBILE_MENUBAR_COMPONENTS: string[] = [
     BaseComponentTypeEnum.TOC,
     BaseComponentTypeEnum.LEGEND,
     BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
@@ -20,8 +20,4 @@ export class MobileLayoutService {
   public isMobileLayoutEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT)
       .pipe(map(enabled => enabled && BrowserHelper.isMobile));
 
-  public isMobileMenubarComponent$(componentType: string) {
-    return this.isMobileLayoutEnabled$
-      .pipe(map(enabled => enabled && MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(componentType)));
-  }
 }
