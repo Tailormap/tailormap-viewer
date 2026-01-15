@@ -219,7 +219,8 @@ export class CqlFilterHelper {
 
   private static addTimePartToDate(filterValue: string, isStart: boolean): string {
     if (filterValue.includes('T')) {
-      return (filterValue.endsWith('Z')|| filterValue.includes('+')) ? filterValue : `${filterValue}Z`;
+      const hasTimezoneOffset = /[+-]\d{2}(:?\d{2})?$/.test(filterValue);
+      return (filterValue.endsWith('Z') || hasTimezoneOffset) ? filterValue : `${filterValue}Z`;
     }
     return isStart ? `${filterValue}T00:00:00Z` : `${filterValue}T23:59:59Z`;
   }
