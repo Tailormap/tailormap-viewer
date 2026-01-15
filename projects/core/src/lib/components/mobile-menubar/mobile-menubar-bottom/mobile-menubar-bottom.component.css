@@ -8,7 +8,7 @@
   width: 20vw;
   margin-top: 0;
   margin-bottom: 0;
-  border-radius: 9999px;
+  border-radius: 50px;
 }
 
 .mobile-menubar ::ng-deep mat-icon {
