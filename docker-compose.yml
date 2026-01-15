@@ -128,7 +128,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.8.1
+    image: prom/prometheus:v3.9.1
     profiles:
       - prometheus
     environment:
