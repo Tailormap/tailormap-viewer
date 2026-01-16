@@ -19,9 +19,12 @@
       [sort]="sort$ | async"
       [filters]="filters$ | async"
       [selectedRowId]="selectedRowId$ | async"
+      [canExpandRows]="canExpandRows$ | async"
+      [featureDetails]="featureDetails$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
-    (setFilter)="onSetFilter($event)"></tm-attribute-list-table>
+      (setFilter)="onSetFilter($event)"
+      (loadFeatureDetailsForFeature)="loadFeatureDetailsForFeature($event)"></tm-attribute-list-table>
   }
 
 </div>

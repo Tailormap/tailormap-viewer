@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
+import { forkJoin, Observable, of, pipe, take, combineLatest, BehaviorSubject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
@@ -19,6 +19,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { FeatureDetailsModel, GetFeatureDetailsParams } from '../models/attribute-list-api-service.model';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -28,6 +30,11 @@ import { CssHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class AttributeListContentComponent implements OnInit {
+  private store$ = inject(Store);
+  private attributeListStateService = inject(AttributeListStateService);
+  private attributeListManagerService = inject(AttributeListManagerService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private dialog = inject(MatDialog);
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
@@ -38,11 +45,28 @@ export class AttributeListContentComponent implements OnInit {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
-
-  private store$ = inject(Store);
-  private attributeListStateService = inject(AttributeListStateService);
-  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
-  private dialog = inject(MatDialog);
+  public canExpandRows$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
+    map(([ applicationId, tab ]) => {
+      if (!applicationId || !tab || !tab.layerId) {
+        return false;
+      }
+      return this.attributeListManagerService.canExpandRow(tab.tabSourceId, { layerId: tab.layerId, applicationId });
+    }),
+  );
+  public featureDetails = new BehaviorSubject<Map<string, Map<string, FeatureDetailsModel>>>(new Map());
+  public featureDetails$ = combineLatest([
+    this.featureDetails.asObservable(),
+    this.store$.select(selectViewerId),
+    this.store$.select(selectSelectedTab),
+  ]).pipe(
+    map(([ featureDetailsMap, applicationId, tab ]) => {
+      if (!applicationId || !tab || !tab.layerId) {
+        return new Map<string, FeatureDetailsModel>();
+      }
+      const key = this.getFeatureDetailsKey(applicationId, tab.layerId);
+      return featureDetailsMap.get(key) || new Map<string, FeatureDetailsModel>();
+    }),
+  );
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -150,6 +174,40 @@ export class AttributeListContentComponent implements OnInit {
         }
         this.store$.dispatch(loadData({ tabId: tab.id }));
       });
+  }
+
+  public loadFeatureDetailsForFeature($event: string) {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+      this.store$.select(selectViewerId),
+    ])
+      .pipe(
+        take(1),
+        switchMap(([ selectedTab, selectedData, applicationId ]) => {
+          if (!selectedTab || !selectedTab.layerId || applicationId === null || !selectedData) {
+            return of(null);
+          }
+          const params = { layerId: selectedTab.layerId, applicationId, __fid: $event };
+          return this.attributeListManagerService.getFeatureDetails$(selectedTab.tabSourceId, params)
+            .pipe(map(featureDetails => ({ featureDetails, params } )));
+        }),
+      )
+      .subscribe((featureDetails: { params: GetFeatureDetailsParams; featureDetails: FeatureDetailsModel | null } | null) => {
+        if (!featureDetails || !featureDetails.featureDetails) {
+          return;
+        }
+        const key = this.getFeatureDetailsKey(featureDetails.params.applicationId, featureDetails.params.layerId);
+        const currentDetails = this.featureDetails.value.get(key) || new Map<string, FeatureDetailsModel>();
+        currentDetails.set(featureDetails.params.__fid, featureDetails.featureDetails);
+        const newFeatureDetailsMap = new Map(this.featureDetails.value);
+        newFeatureDetailsMap.set(key, currentDetails);
+        this.featureDetails.next(newFeatureDetailsMap);
+      });
+  }
+
+  private getFeatureDetailsKey(applicationId: string, layerId: string) {
+    return `${applicationId}_${layerId}`;
   }
 
 }

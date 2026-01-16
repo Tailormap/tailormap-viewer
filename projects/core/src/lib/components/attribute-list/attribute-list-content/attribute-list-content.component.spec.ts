@@ -9,6 +9,8 @@ import { PanelResizerComponent } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { getMockApiService } from '../../../services/load-viewer.service.spec';
 
 describe('AttributeListContent', () => {
 
@@ -17,6 +19,7 @@ describe('AttributeListContent', () => {
     await render(AttributeListContentComponent, {
       imports: [ MatProgressSpinnerModule, MatDialogModule ],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
           initialState: store,
         }),
@@ -31,6 +34,7 @@ describe('AttributeListContent', () => {
     await render(AttributeListContentComponent, {
       imports: [MatDialogModule],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
           initialState: store,
         }),
@@ -45,6 +49,7 @@ describe('AttributeListContent', () => {
       imports: [ MatTableModule, MatIconModule, MatIconTestingModule, MatDialogModule ],
       declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent ],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
           initialState: {
             ...store,

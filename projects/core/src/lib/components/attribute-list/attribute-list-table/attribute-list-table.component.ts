@@ -1,8 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output, input, computed, signal } from '@angular/core';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeType } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { FeatureDetailsModel } from '../models/attribute-list-api-service.model';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
@@ -27,18 +28,7 @@ export class AttributeListTableComponent {
     return this._rows;
   }
 
-  @Input()
-  public set columns(columns: AttributeListColumnModel[] | null) {
-    if (columns === null) {
-      return;
-    }
-    this._columns = columns;
-    this.columnNames = this.getColumnNames();
-  }
-
-  public get columns() {
-    return this._columns;
-  }
+  public columns = input<AttributeListColumnModel[] | null>([]);
 
   @Input()
   public sort: { column: string; direction: string } | null = null;
@@ -54,6 +44,10 @@ export class AttributeListTableComponent {
   @Input()
   public selectedRowId: string | undefined | null;
 
+  public canExpandRows = input<boolean | null>(false);
+
+  public featureDetails = input<Map<string, FeatureDetailsModel> | null>(new Map());
+
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
 
@@ -63,13 +57,22 @@ export class AttributeListTableComponent {
   @Output()
   public setFilter = new EventEmitter<{ columnId: string; attributeType: AttributeType }>();
 
+  @Output()
+  public loadFeatureDetailsForFeature = new EventEmitter<string>();
+
   private _rows: AttributeListRowModel[] = [];
-  private _columns: AttributeListColumnModel[] = [];
-  public columnNames: string[] = [];
+  public columnNames = computed(() => {
+    return this.getColumnNames(this.columns(), this.canExpandRows());
+  });
   private filtersDictionary: Map<string, AttributeFilterModel> = new Map();
 
   private columnWidths: Map<string, number> = new Map();
   private isResizing = false;
+
+  public expandedRows = signal<Set<string>>(new Set());
+
+  public readonly EXPAND_DETAILS_COLUMN_NAME = '__tm_attribute_list_expand_details__';
+  public readonly EXPAND_DETAILS_ROW_NAME = '__tm_attribute_list_expand_details_row__';
 
   public trackByRowId(idx: number, row: AttributeListRowModel) {
     return row.id;
@@ -79,11 +82,15 @@ export class AttributeListTableComponent {
     return column.id;
   }
 
-  private getColumnNames(): string[] {
-    if (!this.columns) {
+  private getColumnNames(columns: AttributeListColumnModel[] | null, canExpandRows?: boolean | null): string[] {
+    if (!columns) {
       return [];
     }
-    return this.columns.map(c => c.label || c.id);
+    const names = columns.map(c => c.label || c.id);
+    if (canExpandRows) {
+      names.unshift(this.EXPAND_DETAILS_COLUMN_NAME);
+    }
+    return names;
   }
 
   public columnWidthChanged(widthDelta: number, col: AttributeListColumnModel) {
@@ -135,6 +142,23 @@ export class AttributeListTableComponent {
 
   public isSelected(row: AttributeListRowModel) {
     return this.selectedRowId === row.id;
+  }
+
+  protected onRowExpandClick($event: PointerEvent, row: AttributeListRowModel) {
+    $event.stopPropagation();
+    const rowId = row.id;
+    const featureId = row.__fid;
+    if (!featureId) {
+      return;
+    }
+    const expandedRows = new Set(this.expandedRows());
+    if (expandedRows.has(rowId)) {
+      expandedRows.delete(rowId);
+    } else {
+      expandedRows.add(rowId);
+      this.loadFeatureDetailsForFeature.emit(featureId);
+    }
+    this.expandedRows.set(expandedRows);
   }
 
 }

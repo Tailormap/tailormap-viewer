@@ -1,9 +1,20 @@
+@let expandedRowsIds = expandedRows();
+
 <mat-table [dataSource]="rows"
   [trackBy]="trackByRowId"
   multiTemplateDataRows>
 
+  <ng-container [matColumnDef]="EXPAND_DETAILS_COLUMN_NAME">
+    <mat-header-cell class="column_small" *matHeaderCellDef></mat-header-cell>
+    <mat-cell class="column_small" *matCellDef="let row;">
+      <mat-icon [svgIcon]="expandedRowsIds.has(row.id) ? 'expand_close' : 'expand_open'"
+                (click)="onRowExpandClick($event, row);"></mat-icon>
+    </mat-cell>
+    <mat-footer-cell class="column_small" *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+
   <!-- Columns with data -->
-  @for (col of columns; track trackByColumnId($index, col)) {
+  @for (col of columns(); track trackByColumnId($index, col)) {
     <ng-container matColumnDef="{{col.label || col.id}}">
       <!-- Header -->
       <mat-header-cell *matHeaderCellDef
@@ -35,12 +46,25 @@
     </ng-container>
   }
 
-  <!-- Columns with related details data -->
-  <mat-header-row *matHeaderRowDef="columnNames; sticky: true;"></mat-header-row>
+  @let colNames = columnNames();
 
-  <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
+  <ng-container [matColumnDef]="EXPAND_DETAILS_ROW_NAME">
+    <mat-cell *matCellDef="let currRow" [attr.colspan]="colNames.length">
+      @if (expandedRowsIds.has(currRow.id) && featureDetails()?.has(currRow.__fid)) {
+        <tm-attribute-list-feature-details [featureDetails]="featureDetails()?.get(currRow.__fid)!"></tm-attribute-list-feature-details>
+      }
+    </mat-cell>
+  </ng-container>
+
+  <!-- Columns with related details data -->
+  <mat-header-row *matHeaderRowDef="colNames; sticky: true;"></mat-header-row>
+
+  <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: colNames;"
     (click)="onRowClick($event, row);"
     [class.even_row]="dataIndex % 2 === 1"
-  [class.selected_row]="isSelected(row)"></mat-row>
+    [class.selected_row]="isSelected(row)"></mat-row>
+
+  <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"
+           [ngClass]="expandedRowsIds.has(row.id) ? 'expanded' : 'collapsed'"></mat-row>
 
 </mat-table>

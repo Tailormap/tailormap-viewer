@@ -19,6 +19,7 @@ import { AttributeListFilterComponent } from './attribute-list-filter/attribute-
 import { FilterModule } from '../../filter/filter.module';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button/attribute-list-export-button.component';
 import { CoreSharedModule } from '../../shared';
+import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details/attribute-list-feature-details.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { CoreSharedModule } from '../../shared';
     AttributeListPagingDialogComponent,
     AttributeListFilterComponent,
     AttributeListExportButtonComponent,
+    AttributeListFeatureDetailsComponent,
   ],
   imports: [
     CommonModule,

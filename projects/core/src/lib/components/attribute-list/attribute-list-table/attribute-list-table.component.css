@@ -219,3 +219,8 @@ mat-mdc-footer-cell {
   background-clip: content-box;
   transform: none;
 }
+
+.details-row.collapsed {
+  height: 0;
+  min-height: 0;
+}

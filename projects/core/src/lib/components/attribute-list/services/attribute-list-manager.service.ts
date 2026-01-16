@@ -15,6 +15,7 @@ import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.m
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import { AttributeListApiService } from './attribute-list-api.service';
 import {
+  CanExpandRowParams, FeatureDetailsModel, GetFeatureDetailsParams,
   GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
@@ -136,6 +137,22 @@ export class AttributeListManagerService implements OnDestroy {
       return of({ values: [], filterApplied: false });
     }
     return source.dataLoader.getUniqueValues$(params);
+  }
+
+  public canExpandRow(tabSourceId: string, params: CanExpandRowParams): boolean {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return false;
+    }
+    return source.dataLoader.canExpandRow ? source.dataLoader.canExpandRow(params) : false;
+  }
+
+  public getFeatureDetails$(tabSourceId: string, params: GetFeatureDetailsParams): Observable<FeatureDetailsModel | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source || !source.dataLoader.getFeatureDetails$) {
+      return of(null);
+    }
+    return source.dataLoader.getFeatureDetails$(params);
   }
 
   public addAttributeListSource(source: AttributeListSourceModel): void {
