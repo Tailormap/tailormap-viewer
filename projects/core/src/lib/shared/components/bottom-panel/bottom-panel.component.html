@@ -8,7 +8,8 @@
     <div [ngClass]="mobile ? 'mobile-panel' : 'panel'"
          [ngStyle]="{ 'height': getHeight() }"
          [class.panel--minimized]="isMinimized"
-         [class.panel--maximized]="isMaximized">
+         [class.panel--maximized]="isMaximized"
+         [class.no-transition]="isUserResizing">
       <mat-toolbar>
         <span>{{title$ | async}}</span>
         <span class="spacer"></span>

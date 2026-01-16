@@ -15,6 +15,12 @@ export class MobileLayoutService {
     BaseComponentTypeEnum.TOC,
     BaseComponentTypeEnum.LEGEND,
     BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
+    BaseComponentTypeEnum.EDIT,
+  ];
+
+  public static readonly MOBILE_MENUBAR_HOME_COMPONENTS: string[] = [
+    BaseComponentTypeEnum.INFO,
+    BaseComponentTypeEnum.FILTER,
   ];
 
   public isMobileLayoutEnabled$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT)

@@ -61,6 +61,7 @@ export class BottomPanelComponent implements OnInit {
 
   public isMinimized = false;
   public isMaximized = false;
+  public isUserResizing = false;
 
   public ngOnInit(): void {
     this.heightSubject.next(this.initialHeight || 350);
@@ -85,8 +86,10 @@ export class BottomPanelComponent implements OnInit {
     this.isMinimized = false;
     this.isMaximized = false;
     const height = initialHeight - changedHeight;
+    this.isUserResizing = true;
     this.heightSubject.next(height);
     this.heightChanged.emit(height);
+    setTimeout(() => { this.isUserResizing = false; }, 0);
   }
 
   public getHeight() {
