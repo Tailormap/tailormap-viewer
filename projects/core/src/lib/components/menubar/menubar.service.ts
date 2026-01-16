@@ -12,11 +12,6 @@ export class MenubarService {
   private componentRegistrationService = inject(ComponentRegistrationService);
 
 
-  public static readonly MOBILE_MENUBAR_HOME_COMPONENTS: string[] = [
-    BaseComponentTypeEnum.INFO,
-    BaseComponentTypeEnum.FILTER,
-  ];
-
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public panelWidth = 300;
@@ -24,7 +19,7 @@ export class MenubarService {
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
-      if (BrowserHelper.isMobile && MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
+      if (BrowserHelper.isMobile && MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
         this.activeComponent$.next({
           componentId: BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
           dialogTitle: $localize `:@@core.home.menu:Menu`,
@@ -50,21 +45,25 @@ export class MenubarService {
   }
 
   public registerComponent(component: RegisteredComponent, standardMenubarComponent = true) {
-    if (!BrowserHelper.isMobile && standardMenubarComponent) {
+    if (standardMenubarComponent) {
       this.componentRegistrationService.registerComponent('menu', component);
-    } else if (BrowserHelper.isMobile && MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(component.type)) {
+    }
+    if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(component.type)) {
       this.componentRegistrationService.registerComponent('mobile-menu-bottom', component);
-    } else if (BrowserHelper.isMobile && MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(component.type)) {
+    }
+    if (MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(component.type)) {
       this.componentRegistrationService.registerComponent('mobile-menu-home', component);
     }
   }
 
   public deregisterComponent(type: string, standardMenubarComponent = true) {
-    if (!BrowserHelper.isMobile && standardMenubarComponent) {
+    if (standardMenubarComponent) {
       this.componentRegistrationService.deregisterComponent('menu', type);
-    } else if (BrowserHelper.isMobile && MobileLayoutService..MOBILE_MENUBAR_COMPONENTS.includes(type)) {
+    }
+    if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(type)) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', type);
-    } else if (BrowserHelper.isMobile && MenubarService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(type)) {
+    }
+    if (MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(type)) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-home', type);
     }
   }
