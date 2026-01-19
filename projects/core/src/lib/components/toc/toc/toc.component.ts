@@ -109,7 +109,6 @@ export class TocComponent implements OnInit, OnDestroy {
         tap(() => this.infoVisible.set(true)),
       )
       .subscribe(layerId => {
-        console.debug('layer selected', layerId);
         this.store$.dispatch(toggleSelectedLayerId({ layerId }));
       });
 
@@ -170,7 +169,6 @@ export class TocComponent implements OnInit, OnDestroy {
   }
 
   public setShowMobileInfo(visible: boolean, node: FlatTreeModel) {
-    console.log('setShowMobileInfo', visible, node);
     this.treeService.selectionStateChanged(node);
     this.showMobileInfo.set(visible);
   }

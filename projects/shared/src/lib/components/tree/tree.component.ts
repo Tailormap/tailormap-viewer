@@ -172,6 +172,9 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public setNodeSelected(node: FlatTreeModel) {
+    if (this.isMobileToc) {
+      return;
+    }
     this.treeService.selectionStateChanged(node);
     if (this.expandOnGroupClick && FlatTreeHelper.isExpandable(node)) {
       this.treeService.toggleNodeExpanded(node);
