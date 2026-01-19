@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
-import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 
 @Component({
   selector: 'tm-toc-node-layer',
@@ -36,14 +35,14 @@ export class TocNodeLayerComponent {
   @Input()
   public showInfoIcon: boolean = false;
 
-  @Input()
-  public infoTreeNode: LayerTreeNodeWithLayerModel | null | undefined = null;
-
   @Output()
   public zoomToScale = new EventEmitter<number>();
 
   @Output()
   public editLayer = new EventEmitter<string>();
+
+  @Output()
+  public emitShowInfo= new EventEmitter<boolean>();
 
   public showInfo= signal(false);
 
@@ -98,9 +97,11 @@ export class TocNodeLayerComponent {
   public toggleShowMobileInfo() {
     const showInfo = this.showInfo();
     this.showInfo.set(!showInfo);
+    this.emitShowInfo.emit(this.showInfo());
   }
 
   public layerInfoClosed() {
     this.showInfo.set(false);
+    this.emitShowInfo.emit(false);
   }
 }

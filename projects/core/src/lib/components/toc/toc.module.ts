@@ -44,6 +44,7 @@ import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-nod
   exports: [
     TocComponent,
     MobileTocComponent,
+    TocNodeDetailsMobileComponent,
   ],
 })
 export class TocModule { }

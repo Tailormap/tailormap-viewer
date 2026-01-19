@@ -9,6 +9,7 @@ import { FlatTreeModel } from './models';
 import { distinctUntilChanged, filter, Subject, take } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { LayerTreeNodeWithLayerModel } from '@tailormap-viewer/core';
 
 @Component({
   selector: 'tm-tree',
@@ -67,6 +68,15 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   @Input()
   public isMobileToc = false;
+
+  @Input()
+  public nodeInfoMobileTemplate?: TemplateRef<any>;
+
+  @Input()
+  public infoTreeNode: LayerTreeNodeWithLayerModel | null | undefined;
+
+  @Input()
+  public showMobileInfo = false;
 
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 

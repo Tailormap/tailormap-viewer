@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -50,6 +50,7 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public infoVisible = signal(false);
   public infoTreeNode$ = this.store$.select(selectSelectedNode);
+  public showMobileInfo = signal(false);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
@@ -108,6 +109,7 @@ export class TocComponent implements OnInit, OnDestroy {
         tap(() => this.infoVisible.set(true)),
       )
       .subscribe(layerId => {
+        console.debug('layer selected', layerId);
         this.store$.dispatch(toggleSelectedLayerId({ layerId }));
       });
 
@@ -165,5 +167,11 @@ export class TocComponent implements OnInit, OnDestroy {
   public editLayer(layer: string) {
     this.store$.dispatch(setSelectedEditLayer( { layer }));
     this.store$.dispatch(setEditActive({ active: true }));
+  }
+
+  public setShowMobileInfo(visible: boolean, node: FlatTreeModel) {
+    console.log('setShowMobileInfo', visible, node);
+    this.treeService.selectionStateChanged(node);
+    this.showMobileInfo.set(visible);
   }
 }

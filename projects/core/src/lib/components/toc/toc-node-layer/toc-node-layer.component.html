@@ -46,11 +46,6 @@
                 svgIcon="components_info_menu_button">
       </mat-icon>
     }
-    @if (showInfo() && infoTreeNode?.id === node.id) {
-      <div class="layer-info-mobile">
-        <tm-toc-node-details-mobile [node]="infoTreeNode"></tm-toc-node-details-mobile>
-      </div>
-    }
 
   </div>
 }

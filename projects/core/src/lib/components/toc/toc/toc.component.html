@@ -8,10 +8,14 @@
     [filteredLayerIds]="filteredLayerIds()"
     [editableLayerIds]="getCurrentlyEditableLayerIds()"
     [showInfoIcon]="mobileToc()"
-    [infoTreeNode]="infoTreeNode$ | async"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
+    (emitShowInfo)="setShowMobileInfo($event, node)"
   ></tm-toc-node-layer>
+</ng-template>
+
+<ng-template #nodeInfoMobile let-node>
+  <tm-toc-node-details-mobile [node]="node"></tm-toc-node-details-mobile>
 </ng-template>
 
 @if (visible$ | async) {
@@ -52,7 +56,10 @@
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
       [isMobileToc]="mobileToc()"
-      [getDropZones]="getDropZoneConfig()"></tm-tree>
+      [infoTreeNode]="infoTreeNode$ | async"
+      [nodeInfoMobileTemplate]="nodeInfoMobile"
+      [getDropZones]="getDropZoneConfig()"
+      [showMobileInfo]="showMobileInfo()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
       @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>

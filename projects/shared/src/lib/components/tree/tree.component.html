@@ -15,6 +15,7 @@
          (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"
+           [class.tree-node--selected]="selectedNodeId === node.id && isMobileToc"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         @if (!hasChild(node)) {
           @if (node.checkbox && !useRadioInputs) {
@@ -60,6 +61,11 @@
           }
         </div>
       </div>
+      @if (showMobileInfo && infoTreeNode?.id === node.id) {
+        <div class="layer-info-mobile">
+          <ng-container *ngTemplateOutlet="nodeInfoMobileTemplate ? nodeInfoMobileTemplate : null; context: {$implicit: infoTreeNode}"></ng-container>
+        </div>
+      }
     </div>
   </ng-container>
 </cdk-virtual-scroll-viewport>
