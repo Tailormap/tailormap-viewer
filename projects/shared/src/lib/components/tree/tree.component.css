@@ -37,8 +37,12 @@ mat-checkbox {
 }
 
 .tree-node-mobile--selected {
-  background-color: var(--primary-color-0_2);
-  border-radius: 6px;
+  background-color: var(--primary-color-0_1);
+  border-radius: 8px;
+}
+
+.tree-node-mobile--selected .tree-node--selected {
+  border-radius: 8px 8px 0 0;
 }
 
 .tree-node-wrapper {
