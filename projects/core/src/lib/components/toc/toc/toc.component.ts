@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
-import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeService,
 } from '@tailormap-viewer/shared';
@@ -123,6 +123,16 @@ export class TocComponent implements OnInit, OnDestroy {
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
     this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
+
+    if (this.mobileToc()) {
+      this.visible$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(visible => {
+          if (visible) {
+            this.menubarService.setMobilePanelHeight(500);
+          }
+      });
+    }
   }
 
   public getDropZoneConfig() {
@@ -168,8 +178,17 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setEditActive({ active: true }));
   }
 
-  public setShowMobileInfo(visible: boolean, node: FlatTreeModel) {
-    this.treeService.selectionStateChanged(node);
-    this.showMobileInfo.set(visible);
+  public setShowMobileInfo(node: FlatTreeModel) {
+    this.infoTreeNode$
+      .pipe(take(1))
+      .subscribe(current => {
+        if (current?.id === node.id) {
+          const visible = this.showMobileInfo();
+          this.showMobileInfo.set(!visible);
+        } else {
+          this.showMobileInfo.set(true);
+        }
+        this.treeService.selectionStateChanged(node);
+      });
   }
 }

@@ -36,6 +36,11 @@ mat-checkbox {
   color: var(--primary-color);
 }
 
+.tree-node-mobile--selected {
+  background-color: var(--primary-color-0_2);
+  border-radius: 6px;
+}
+
 .tree-node-wrapper {
   display: flex;
   align-items: center;
@@ -145,4 +150,8 @@ mat-checkbox {
   left: 0;
   right: 0;
   height: 0;
+}
+
+.layer-info-mobile {
+  margin: 0 8px 0 8px;
 }

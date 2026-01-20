@@ -9,6 +9,7 @@
                              class="mat-tree tree-wrapper">
   <ng-container *cdkVirtualFor="let node of dataSource$; trackBy: treeTrackBy">
     <div [class.tree-node--selected]="selectedNodeId === node.id && !isMobileToc"
+         [class.tree-node-mobile--selected]="selectedNodeId === node.id && isMobileToc"
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.padding-left]="depth(node) * 20 + 'px'"

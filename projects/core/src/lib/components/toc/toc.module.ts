@@ -14,7 +14,6 @@ import { StoreModule } from '@ngrx/store';
 import { tocStateKey } from './state/toc.state';
 import { tocReducer } from './state/toc.reducer';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
-import { MobileTocComponent } from './mobile-toc/mobile-toc.component';
 import { BackgroundLayerToggleModule } from '../background-layer-toggle';
 import { TerrainControlsModule } from '../toolbar/terrain-controls/terrain-controls.module';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-node-details-mobile.component';
@@ -29,7 +28,6 @@ import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-nod
     LayerTransparencyComponent,
     LayerDetailsComponent,
     TocFilterInputComponent,
-    MobileTocComponent,
     TocNodeDetailsMobileComponent,
   ],
   imports: [
@@ -43,7 +41,6 @@ import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-nod
   ],
   exports: [
     TocComponent,
-    MobileTocComponent,
     TocNodeDetailsMobileComponent,
   ],
 })

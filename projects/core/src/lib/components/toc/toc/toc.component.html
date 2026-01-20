@@ -10,7 +10,7 @@
     [showInfoIcon]="mobileToc()"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
-    (emitShowInfo)="setShowMobileInfo($event, node)"
+    (emitShowInfo)="setShowMobileInfo(node)"
   ></tm-toc-node-layer>
 </ng-template>
 
@@ -53,6 +53,7 @@
     }
     <tm-tree
       class="toc-tree"
+      [class.toc-tree--mobile]="mobileToc()"
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
       [isMobileToc]="mobileToc()"
