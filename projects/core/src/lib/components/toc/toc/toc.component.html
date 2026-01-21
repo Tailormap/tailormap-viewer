@@ -15,7 +15,7 @@
 </ng-template>
 
 <ng-template #nodeInfoMobile let-node>
-  <tm-toc-node-details-mobile [node]="node"></tm-toc-node-details-mobile>
+  <tm-toc-node-details-mobile [treeNode]="node"></tm-toc-node-details-mobile>
 </ng-template>
 
 @if (visible$ | async) {
@@ -57,10 +57,9 @@
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
       [isMobileToc]="mobileToc()"
-      [infoTreeNode]="infoTreeNode$ | async"
       [nodeInfoMobileTemplate]="nodeInfoMobile"
       [getDropZones]="getDropZoneConfig()"
-      [showMobileInfo]="showMobileInfo()"></tm-tree>
+      [activeMobileInfoNodes]="activeMobileInfoNodes()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
       @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>

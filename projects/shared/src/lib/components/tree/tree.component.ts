@@ -72,11 +72,14 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input()
   public nodeInfoMobileTemplate?: TemplateRef<any>;
 
-  @Input()
-  public infoTreeNode: LayerTreeNodeWithLayerModel | null | undefined;
+  // @Input()
+  // public infoTreeNode: LayerTreeNodeWithLayerModel | null | undefined;
+
+  // @Input()
+  // public showMobileInfo = false;
 
   @Input()
-  public showMobileInfo = false;
+  public activeMobileInfoNodes: string[] = [];
 
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
