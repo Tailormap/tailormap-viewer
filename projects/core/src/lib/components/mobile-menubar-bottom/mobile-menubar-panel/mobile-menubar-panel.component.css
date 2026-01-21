@@ -1,6 +1,0 @@
-.mobile-menubar-panel {
-  position: absolute;
-  bottom: var(--mobile-menubar-height);
-  left: 0;
-  right: 0;
-}
