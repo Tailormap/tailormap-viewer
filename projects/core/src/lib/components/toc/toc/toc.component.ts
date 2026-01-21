@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
-import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeService,
 } from '@tailormap-viewer/shared';

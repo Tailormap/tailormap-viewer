@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
-import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
-import { FlatTreeModel, TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { Observable, of, take } from 'rxjs';
+import { take } from 'rxjs';
 import { selectLayer } from '../../../map';
 
 @Component({
