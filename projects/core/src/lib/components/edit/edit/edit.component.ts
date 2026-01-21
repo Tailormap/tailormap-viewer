@@ -26,7 +26,6 @@ import { ComponentConfigHelper } from '../../../shared';
 import { ComponentRegistrationService } from '../../../services';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
-import { MenubarService } from '../../menubar';
 
 @Component({
   selector: 'tm-edit',
@@ -43,7 +42,6 @@ export class EditComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private componentRegistrationService = inject(ComponentRegistrationService);
   private mobileLayoutService = inject(MobileLayoutService);
-  private menubarService = inject(MenubarService);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -133,7 +131,10 @@ export class EditComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((userDetails) => {
         if (userDetails.isAuthenticated) {
-          this.menubarService.registerComponent({ type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent }, false);
+          this.componentRegistrationService.registerComponent(
+            'mobile-menu-bottom',
+            { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent },
+          );
         }
       });
   }

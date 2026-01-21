@@ -1,6 +1,6 @@
 @let editableLayers = editableLayers$ | async;
 
-@if (editableLayers && !(isMobileLayoutEnabled$ | async)) {
+@if (editableLayers && (isMobileLayoutEnabled$ | async) === false) {
   <div class="edit-container map-control-button-container"
        [class.edit-container--is-active]="active$ | async"
        (keyup.escape)="toggle(true)">
