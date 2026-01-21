@@ -5,7 +5,7 @@
     <h3>{{ detail.name }}</h3>
     <mat-table [dataSource]="detail.attributes">
       @for (col of detail.columns; track $index) {
-        <ng-container matColumnDef="{{col}}">
+        <ng-container matColumnDef="{{col.label}}">
           <mat-header-cell *matHeaderCellDef>
             <span [title]="col.label">{{col.label}}</span>
           </mat-header-cell>
