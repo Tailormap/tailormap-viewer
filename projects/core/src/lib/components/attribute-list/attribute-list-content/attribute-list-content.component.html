@@ -21,6 +21,7 @@
       [selectedRowId]="selectedRowId$ | async"
       [canExpandRows]="canExpandRows$ | async"
       [featureDetails]="featureDetails$ | async"
+      [loadingFeatureDetailsIds]="loadingFeatureDetailsIds$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"

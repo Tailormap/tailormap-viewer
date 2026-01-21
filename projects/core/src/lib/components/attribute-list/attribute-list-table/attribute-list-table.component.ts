@@ -47,6 +47,7 @@ export class AttributeListTableComponent {
   public canExpandRows = input<boolean | null>(false);
 
   public featureDetails = input<Map<string, FeatureDetailsModel> | null>(new Map());
+  public loadingFeatureDetailsIds = input<Set<string> | null>(new Set());
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { forkJoin, Observable, of, pipe, take, combineLatest, BehaviorSubject } from 'rxjs';
+import { forkJoin, Observable, of, pipe, take, combineLatest, BehaviorSubject, tap } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
@@ -53,20 +53,29 @@ export class AttributeListContentComponent implements OnInit {
       return this.attributeListManagerService.canExpandRow(tab.tabSourceId, { layerId: tab.layerId, applicationId });
     }),
   );
+
+  private featureDetailsKey$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
+    map(([ applicationId, tab ]) => {
+      if (!applicationId || !tab || !tab.layerId) {
+        return null;
+      }
+      return this.getFeatureDetailsKey(applicationId, tab.layerId);
+    }),
+  );
+
   private featureDetails = new BehaviorSubject<Map<string, Map<string, FeatureDetailsModel>>>(new Map());
   public featureDetails$ = combineLatest([
     this.featureDetails.asObservable(),
-    this.store$.select(selectViewerId),
-    this.store$.select(selectSelectedTab),
-  ]).pipe(
-    map(([ featureDetailsMap, applicationId, tab ]) => {
-      if (!applicationId || !tab || !tab.layerId) {
-        return new Map<string, FeatureDetailsModel>();
-      }
-      const key = this.getFeatureDetailsKey(applicationId, tab.layerId);
-      return featureDetailsMap.get(key) || new Map<string, FeatureDetailsModel>();
-    }),
-  );
+    this.featureDetailsKey$,
+  ]).pipe(map(([ featureDetailsMap, key ]) => {
+    return featureDetailsMap.get(key ?? '') || new Map<string, FeatureDetailsModel>();
+  }));
+
+  private loadingFeatureDetailsIds = new BehaviorSubject<Map<string, Set<string>>>(new Map());
+  public loadingFeatureDetailsIds$ = combineLatest([
+    this.loadingFeatureDetailsIds.asObservable(),
+    this.featureDetailsKey$,
+  ]).pipe(map(([ loadingIds, key ]) => loadingIds.get(key ?? '') || new Set<string>()));
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -195,8 +204,13 @@ export class AttributeListContentComponent implements OnInit {
             // already loaded
             return of(null);
           }
+          this.updateLoadingFeatureDetailsIds(key, params.__fid, true);
           return this.attributeListManagerService.getFeatureDetails$(selectedTab.tabSourceId, params)
-            .pipe(take(1), map(featureDetails => ({ featureDetails, params } )));
+            .pipe(
+              take(1),
+              map(featureDetails => ({ featureDetails, params } )),
+              tap(() => this.updateLoadingFeatureDetailsIds(key, params.__fid, false)),
+            );
         }),
       )
       .subscribe((featureDetails: { params: GetFeatureDetailsParams; featureDetails: FeatureDetailsModel | null } | null) => {
@@ -214,6 +228,19 @@ export class AttributeListContentComponent implements OnInit {
 
   private getFeatureDetailsKey(applicationId: string, layerId: string) {
     return `${applicationId}_${layerId}`;
+  }
+
+  private updateLoadingFeatureDetailsIds(key: string, __fid: string, isLoading: boolean) {
+    const currentLoadingIds = this.loadingFeatureDetailsIds.value.get(key) || new Set<string>();
+    const newLoadingIds = new Set(currentLoadingIds);
+    if (isLoading) {
+      newLoadingIds.add(__fid);
+    } else {
+      newLoadingIds.delete(__fid);
+    }
+    const newLoadingMap = new Map(this.loadingFeatureDetailsIds.value);
+    newLoadingMap.set(key, newLoadingIds);
+    this.loadingFeatureDetailsIds.next(newLoadingMap);
   }
 
 }
