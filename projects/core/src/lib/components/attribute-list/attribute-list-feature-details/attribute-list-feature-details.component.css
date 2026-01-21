@@ -1,3 +1,8 @@
+:host() {
+  padding: 16px;
+  background-color: #eee;
+}
+
 mat-table {
   min-width: min-content;
 }
@@ -9,7 +14,7 @@ mat-table {
 .mat-mdc-row:not(.details-row),
 .mat-mdc-header-row,
 mat-mdc-footer-row {
-  min-height: 45px;
+  min-height: 35px;
 }
 
 .mat-mdc-cell,
@@ -44,4 +49,13 @@ mat-mdc-footer-cell {
 
 .even_row {
   background-color: #f6f5f6;
+}
+
+h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+mat-table + h3 {
+  margin-top: 8px;
 }
