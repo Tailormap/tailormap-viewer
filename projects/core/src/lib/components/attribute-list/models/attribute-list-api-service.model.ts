@@ -167,7 +167,7 @@ export interface FeatureDetailModel {
    */
   name: string;
   /**
-   * The feature type.
+   * The column definitions (label and key for each attribute column).
    */
   columns: Array<{ label: string; key: string }>;
   /**

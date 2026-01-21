@@ -53,7 +53,7 @@ export class AttributeListContentComponent implements OnInit {
       return this.attributeListManagerService.canExpandRow(tab.tabSourceId, { layerId: tab.layerId, applicationId });
     }),
   );
-  public featureDetails = new BehaviorSubject<Map<string, Map<string, FeatureDetailsModel>>>(new Map());
+  private featureDetails = new BehaviorSubject<Map<string, Map<string, FeatureDetailsModel>>>(new Map());
   public featureDetails$ = combineLatest([
     this.featureDetails.asObservable(),
     this.store$.select(selectViewerId),

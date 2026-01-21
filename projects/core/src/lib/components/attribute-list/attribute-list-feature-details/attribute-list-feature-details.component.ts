@@ -10,7 +10,7 @@ import { FeatureDetailModel, FeatureDetailsModel } from '../models/attribute-lis
 })
 export class AttributeListFeatureDetailsComponent {
   public featureDetails = input<FeatureDetailsModel | null>(null);
-  public getColumnNames(detail: FeatureDetailModel) {
-    return detail.columns.map(c => c.label);
+  public getColumnKeys(detail: FeatureDetailModel) {
+    return detail.columns.map(c => c.key);
   }
 }
