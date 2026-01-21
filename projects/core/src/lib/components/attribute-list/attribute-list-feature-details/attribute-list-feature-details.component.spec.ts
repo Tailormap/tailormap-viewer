@@ -101,7 +101,7 @@ describe('AttributeListFeatureDetailsComponent', () => {
     };
 
     const columnNames = component.getColumnNames(mockDetail);
-    expect(columnNames).toEqual([ 'Column A', 'Column B', 'Column C' ]);
+    expect(columnNames).toEqual(['Column A', 'Column B', 'Column C']);
   });
 
   it('should not render anything when featureDetails is null', async () => {
