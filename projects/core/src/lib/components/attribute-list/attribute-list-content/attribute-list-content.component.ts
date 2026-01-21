@@ -189,8 +189,14 @@ export class AttributeListContentComponent implements OnInit {
             return of(null);
           }
           const params = { layerId: selectedTab.layerId, applicationId, __fid: $event };
+          const key = this.getFeatureDetailsKey(params.applicationId, params.layerId);
+          const currentDetails = this.featureDetails.value.get(key);
+          if (currentDetails && currentDetails.has(params.__fid)) {
+            // already loaded
+            return of(null);
+          }
           return this.attributeListManagerService.getFeatureDetails$(selectedTab.tabSourceId, params)
-            .pipe(map(featureDetails => ({ featureDetails, params } )));
+            .pipe(take(1), map(featureDetails => ({ featureDetails, params } )));
         }),
       )
       .subscribe((featureDetails: { params: GetFeatureDetailsParams; featureDetails: FeatureDetailsModel | null } | null) => {

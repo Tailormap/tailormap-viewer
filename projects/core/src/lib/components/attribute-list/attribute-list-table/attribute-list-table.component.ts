@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output, input, computed, signal } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output, input, computed, signal, effect } from '@angular/core';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeType } from '@tailormap-viewer/api';
@@ -73,6 +73,14 @@ export class AttributeListTableComponent {
 
   public readonly EXPAND_DETAILS_COLUMN_NAME = '__tm_attribute_list_expand_details__';
   public readonly EXPAND_DETAILS_ROW_NAME = '__tm_attribute_list_expand_details_row__';
+
+  constructor() {
+    effect(() => {
+      // reset column names and expanded rows when columns change
+      this.columns();
+      this.expandedRows.set(new Set());
+    });
+  }
 
   public trackByRowId(idx: number, row: AttributeListRowModel) {
     return row.id;
