@@ -13,4 +13,10 @@ export class AttributeListFeatureDetailsComponent {
   public getColumnKeys(detail: FeatureDetailModel) {
     return detail.columns.map(c => c.key);
   }
+
+  protected isSelectedDetailRow(idx: number, row: FeatureDetailModel) {
+    console.log(idx, row);
+    return true;
+  }
+
 }

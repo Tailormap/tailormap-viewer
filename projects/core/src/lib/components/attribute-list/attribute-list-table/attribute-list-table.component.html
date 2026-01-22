@@ -53,9 +53,9 @@
       @if (expandedRowsIds.has(currRow.id) && featureDetails()?.has(currRow.__fid)) {
         <tm-attribute-list-feature-details [featureDetails]="featureDetails()?.get(currRow.__fid)!"></tm-attribute-list-feature-details>
       }
-      @if (loadingFeatureDetailsIds()?.has(currRow.id)) {
+      @if (expandedRowsIds.has(currRow.id) && loadingFeatureDetailsIds()?.has(currRow.id)) {
         <div class="loading-details-spinner">
-          <mat-spinner diameter="24"></mat-spinner>
+          <mat-spinner diameter="18"></mat-spinner>
         </div>
       }
     </mat-cell>

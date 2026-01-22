@@ -39,7 +39,7 @@ describe('AttributeListManagerService', () => {
       getLayerExportCapabilities$: jest.fn(),
       getLayerExport$: jest.fn(),
       getUniqueValues$: jest.fn(),
-      canExpandRow: jest.fn(),
+      canExpandRow$: jest.fn(),
       getFeatureDetails$: jest.fn(),
     } as Record<keyof AttributeListApiServiceModel, jest.Mock>;
 
@@ -65,18 +65,20 @@ describe('AttributeListManagerService', () => {
   });
 
   describe('canExpandRow', () => {
-    it('should return false when source is not found', () => {
+    it('should return false when source is not found', (done) => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      const result = managerService.canExpandRow('non-existent-source', params);
-
-      expect(result).toBe(false);
+      managerService.canExpandRow$('non-existent-source', params)
+        .subscribe(result => {
+          expect(result).toBe(false);
+          done();
+        });
     });
 
-    it('should return false when source dataLoader does not have canExpandRow method', () => {
+    it('should return false when source dataLoader does not have canExpandRow method', (done) => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
@@ -97,18 +99,20 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      const result = managerService.canExpandRow('test-source', params);
-
-      expect(result).toBe(false);
+      managerService.canExpandRow$('test-source', params)
+        .subscribe(result => {
+          expect(result).toBe(false);
+          done();
+        });
     });
 
-    it('should return result from dataLoader canExpandRow when available', () => {
+    it('should return result from dataLoader canExpandRow when available', (done) => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      mockApiService.canExpandRow.mockReturnValue(true);
+      mockApiService.canExpandRow$.mockReturnValue(of(true));
 
       const source: AttributeListSourceModel = {
         id: 'test-source',
@@ -118,19 +122,21 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      const result = managerService.canExpandRow('test-source', params);
-
-      expect(result).toBe(true);
-      expect(mockApiService.canExpandRow).toHaveBeenCalledWith(params);
+      managerService.canExpandRow$('test-source', params)
+        .subscribe(result => {
+          expect(result).toBe(true);
+          expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
+          done();
+        });
     });
 
-    it('should return false from dataLoader canExpandRow when it returns false', () => {
+    it('should return false from dataLoader canExpandRow when it returns false', (done) => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      mockApiService.canExpandRow.mockReturnValue(false);
+      mockApiService.canExpandRow$.mockReturnValue(of(false));
 
       const source: AttributeListSourceModel = {
         id: 'test-source',
@@ -140,10 +146,12 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      const result = managerService.canExpandRow('test-source', params);
-
-      expect(result).toBe(false);
-      expect(mockApiService.canExpandRow).toHaveBeenCalledWith(params);
+      managerService.canExpandRow$('test-source', params)
+        .subscribe(result => {
+          expect(result).toBe(false);
+          expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
+          done();
+        });
     });
   });
 

@@ -15,8 +15,9 @@
         </ng-container>
       }
       <mat-header-row *matHeaderRowDef="columnNames"></mat-header-row>
-      <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
-               [class.even_row]="dataIndex % 2 === 1"></mat-row>
+      <mat-row *matRowDef="let row; let idx = index; columns: columnNames;"
+               [class.even_row]="idx % 2 === 1">
+      </mat-row>
     </mat-table>
   }
 }

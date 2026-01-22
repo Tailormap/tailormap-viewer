@@ -223,9 +223,9 @@ export interface AttributeListApiServiceModel {
   /**
    * Determines if rows in the specified layer can be expanded to show more details.
    * @param params Parameters specifying the application and layer ID.
-   * @returns True if rows can be expanded, false otherwise.
+   * @returns Observable emitting a boolean indicating if rows can be expanded.
    */
-  canExpandRow?(params: CanExpandRowParams): boolean;
+  canExpandRow$?(params: CanExpandRowParams): Observable<boolean>;
 
   /**
    * Retrieves detailed information for a specific feature. This is used when expanding rows.

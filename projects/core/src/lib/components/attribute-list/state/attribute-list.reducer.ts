@@ -248,7 +248,7 @@ const onSetSelectedDataId = (
   tabs: AttributeListStateHelper.updateTab(
     state.tabs,
     payload.tabId,
-    tab => ({ ...tab, selectedDataId: payload.dataId }),
+    tab => ({ ...tab, loadingData: true, selectedDataId: payload.dataId }),
   ),
 });
 

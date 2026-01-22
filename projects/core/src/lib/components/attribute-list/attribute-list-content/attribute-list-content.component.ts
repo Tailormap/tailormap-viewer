@@ -46,11 +46,11 @@ export class AttributeListContentComponent implements OnInit {
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
   public canExpandRows$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
-    map(([ applicationId, tab ]) => {
+    concatMap(([ applicationId, tab ]) => {
       if (!applicationId || !tab || !tab.layerId) {
-        return false;
+        return of(false);
       }
-      return this.attributeListManagerService.canExpandRow(tab.tabSourceId, { layerId: tab.layerId, applicationId });
+      return this.attributeListManagerService.canExpandRow$(tab.tabSourceId, { layerId: tab.layerId, applicationId });
     }),
   );
 

@@ -139,12 +139,12 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getUniqueValues$(params);
   }
 
-  public canExpandRow(tabSourceId: string, params: CanExpandRowParams): boolean {
+  public canExpandRow$(tabSourceId: string, params: CanExpandRowParams): Observable<boolean> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
-      return false;
+      return of(false);
     }
-    return source.dataLoader.canExpandRow ? source.dataLoader.canExpandRow(params) : false;
+    return source.dataLoader.canExpandRow$ ? source.dataLoader.canExpandRow$(params) : of(false);
   }
 
   public getFeatureDetails$(tabSourceId: string, params: GetFeatureDetailsParams): Observable<FeatureDetailsModel | null> {
