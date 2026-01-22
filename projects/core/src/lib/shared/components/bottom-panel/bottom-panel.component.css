@@ -34,6 +34,11 @@
   max-height: calc(var(--100vh) - var(--header-component-height) - var(--mobile-menubar-height));
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  transition: height ease-in-out 250ms;
+}
+
+.mobile-panel.no-transition {
+  transition: none !important;
 }
 
 .panel--minimized {

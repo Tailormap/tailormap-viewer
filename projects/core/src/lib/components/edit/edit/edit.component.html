@@ -1,17 +1,17 @@
-@if (editableLayers$ | async; as editableLayers) {
+@let editableLayers = editableLayers$ | async;
+
+@if (editableLayers && (isMobileLayoutEnabled$ | async) === false) {
   <div class="edit-container map-control-button-container"
-    [class.edit-container--is-active]="active$ | async"
-    (keyup.escape)="toggle(true)">
-    @if ((isMobileLayoutEnabled$ | async) === false) {
-      <button mat-flat-button
-              class="map-control-button"
-              [class.disabled]="disabled"
-              [class.toggle-button--active]="active$ | async"
-              [tmTooltip]="tooltip"
-              (click)="!disabled ? toggle() : null">
-        <mat-icon svgIcon="edit"></mat-icon>
-      </button>
-    }
+       [class.edit-container--is-active]="active$ | async"
+       (keyup.escape)="toggle(true)">
+    <button mat-flat-button
+            class="map-control-button"
+            [class.disabled]="disabled"
+            [class.toggle-button--active]="active$ | async"
+            [tmTooltip]="tooltip"
+            (click)="!disabled ? toggle() : null">
+      <mat-icon svgIcon="edit"></mat-icon>
+    </button>
     @if (active$ | async) {
       <div class="edit-wrapper">
         <ng-container>
@@ -32,12 +32,12 @@
       <div class="edit-controls">
         @if (!isLine() && !isPoint()) {
           <button [matMenuTriggerFor]="geometryTypeMenu"
-            [class.disabled]="layer.value === null"
-            tmTooltip="Add new feature"
-            i18n-tmTooltip="@@core.edit.add-new-feature"
-            class="map-control-button map-control-button--add-feature"
-            mat-flat-button
-            [class.toggle-button--active]="createNewFeatureActive$ | async">
+                  [class.disabled]="layer.value === null"
+                  tmTooltip="Add new feature"
+                  i18n-tmTooltip="@@core.edit.add-new-feature"
+                  class="map-control-button map-control-button--add-feature"
+                  mat-flat-button
+                  [class.toggle-button--active]="createNewFeatureActive$ | async">
             <mat-icon svgIcon="new_object"></mat-icon>
           </button>
           <mat-menu #geometryTypeMenu="matMenu" xPosition="after" yPosition="below">
@@ -55,12 +55,12 @@
           </mat-menu>
         } @else {
           <button [class.disabled]="layer.value === null"
-            tmTooltip="Add new feature"
-            i18n-tmTooltip="@@core.edit.add-new-feature"
-            class="map-control-button map-control-button--add-feature"
-            (click)="createFeatureIfSingleGeometryType()"
-            mat-flat-button
-            [class.toggle-button--active]="createNewFeatureActive$ | async">
+                  tmTooltip="Add new feature"
+                  i18n-tmTooltip="@@core.edit.add-new-feature"
+                  class="map-control-button map-control-button--add-feature"
+                  (click)="createFeatureIfSingleGeometryType()"
+                  mat-flat-button
+                  [class.toggle-button--active]="createNewFeatureActive$ | async">
             <mat-icon svgIcon="new_object"></mat-icon>
           </button>
         }
