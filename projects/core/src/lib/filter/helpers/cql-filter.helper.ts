@@ -2,6 +2,8 @@ import { AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEn
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
+import { FeaturesFilters, FeatureTypeName, LayerFeaturesFilters } from '../models/feature-filter.model';
+import { FeaturesFilterHelper } from './features-filter.helper';
 
 export class CqlFilterHelper {
 
@@ -13,56 +15,106 @@ export class CqlFilterHelper {
     [ FilterConditionEnum.NUMBER_SMALLER_EQUALS_THAN_KEY, FilterConditionEnum.NUMBER_LARGER_THAN_KEY ],
   ]);
 
-  public static getFilters(filterGroups: FilterGroupModel[]): Map<string, string> {
-    const cqlDict = new Map<string, string>();
+  public static getFilters(filterGroups: FilterGroupModel[]): FeaturesFilters {
+    const result: FeaturesFilters = new Map();
     const layerIdList = filterGroups.reduce<string[]>((ids, f) => {
       return [ ...ids, ...f.layerIds ];
     }, []);
     const layerIds = new Set<string>(layerIdList);
     layerIds.forEach(layerId => {
       const filtersForLayer = filterGroups.filter(f => f.layerIds.includes(layerId));
-      const cqlFilter = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
-      if (cqlFilter) {
-        cqlDict.set(layerId, cqlFilter);
+      const cqlFilters = CqlFilterHelper.getFilterForLayer(filtersForLayer, layerId);
+      if (cqlFilters.size > 0) {
+        result.set(layerId, cqlFilters);
       }
     });
-    return cqlDict;
+    return result;
   }
 
-  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: string): string {
+  public static getFilterForLayer(filterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
+    const result: LayerFeaturesFilters = new Map();
     const rootFilterGroups = filterGroups.filter(f => (typeof f.parentGroup === 'undefined' || f.parentGroup === null));
-    return rootFilterGroups
-      .map(f => CqlFilterHelper.getFilterForGroup(f, filterGroups, layerId))
-      .filter(f => !!f && f !== '()')
-      .join(' AND ');
+
+    rootFilterGroups.forEach(group => {
+      const groupResult = CqlFilterHelper.getFilterForGroup(group, filterGroups, layerId);
+      groupResult.forEach((cql, featureTypeKey) => {
+        const existingFilter = result.get(featureTypeKey);
+        if (existingFilter) {
+          result.set(featureTypeKey, CqlFilterHelper.wrapFilters([ existingFilter, cql ], 'AND'));
+        } else {
+          result.set(featureTypeKey, cql);
+        }
+      });
+    });
+
+    return result;
   }
 
-  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): string {
-    const filter: string[] = [];
+  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
+    const result: LayerFeaturesFilters = new Map();
+
+    // Group filters by featureType (or default feature type if no featureType)
     const generatedFilters = filterGroup.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.generatedByFilterId && !f.disabled);
     const originalFilters = filterGroup.filters
       .filter(f => !f.disabled
         && !(FilterTypeHelper.isAttributeFilter(f) && (f.generatedByFilterId || CqlFilterHelper.isNumericFilterWithNoValue(f))));
-    const baseFilter: string[] = originalFilters
-      .map(originalFilter => {
-        const cqlQueries = [
-          CqlFilterHelper.convertFilterToQuery(originalFilter, layerId),
-          ...generatedFilters.filter(
-            generatedFilter => FilterTypeHelper.isAttributeFilter(generatedFilter) && generatedFilter.generatedByFilterId === originalFilter.id,
-          ).map(generatedFilter => CqlFilterHelper.convertFilterToQuery(generatedFilter, layerId)),
-        ].filter(TypesHelper.isDefined);
-        return cqlQueries.length > 1
-          ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
-          : cqlQueries[0];
-      })
-      .filter(TypesHelper.isDefined);
-    filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
+
+    // Group filters by their featureType key
+    const filtersByFeatureType = this.groupFiltersByFeatureType(originalFilters);
+    // Also group generated filters
+    const generatedFiltersByFeatureType = this.groupFiltersByFeatureType(generatedFilters);
+
+    // Process each featureType group
+    filtersByFeatureType.forEach((filters, featureTypeKey) => {
+      const filter: string[] = [];
+      const baseFilter: string[] = filters
+        .map(originalFilter => {
+          const relevantGeneratedFilters = generatedFiltersByFeatureType.get(featureTypeKey) || [];
+          const cqlQueries = [
+            CqlFilterHelper.convertFilterToQuery(originalFilter, layerId),
+            ...relevantGeneratedFilters.filter(
+              generatedFilter => FilterTypeHelper.isAttributeFilter(generatedFilter) && generatedFilter.generatedByFilterId === originalFilter.id,
+            ).map(generatedFilter => CqlFilterHelper.convertFilterToQuery(generatedFilter, layerId)),
+          ].filter(TypesHelper.isDefined);
+          return cqlQueries.length > 1
+            ? CqlFilterHelper.wrapFilters(cqlQueries, 'OR')
+            : cqlQueries[0];
+        })
+        .filter(TypesHelper.isDefined);
+      filter.push(CqlFilterHelper.wrapFilters(baseFilter, filterGroup.operator));
+
+      const cqlFilter = CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
+      if (cqlFilter && cqlFilter !== '()') {
+        result.set(featureTypeKey, cqlFilter);
+      }
+    });
+
+    // Process child filter groups
     const childFilters = allFilterGroups.filter(f => f.parentGroup === filterGroup.id);
     if (childFilters.length > 0) {
-      const childCql = childFilters.map(f => CqlFilterHelper.getFilterForGroup(f, allFilterGroups, layerId));
-      filter.push(CqlFilterHelper.wrapFilters(childCql, filterGroup.operator));
+      childFilters.forEach(childGroup => {
+        const childResult = CqlFilterHelper.getFilterForGroup(childGroup, allFilterGroups, layerId);
+        childResult.forEach((childCql, featureTypeKey) => {
+          const existingFilter = result.get(featureTypeKey);
+          if (existingFilter) {
+            result.set(featureTypeKey, CqlFilterHelper.wrapFilters([ existingFilter, childCql ], filterGroup.operator));
+          } else {
+            result.set(featureTypeKey, childCql);
+          }
+        });
+      });
     }
-    return CqlFilterHelper.wrapFilters(filter, filterGroup.operator);
+
+    return result;
+  }
+
+  private static groupFiltersByFeatureType(filters: BaseFilterModel[]): Map<FeatureTypeName, BaseFilterModel[]> {
+    const result = new Map<FeatureTypeName, BaseFilterModel[]>();
+    filters.forEach(filter => {
+      const key = filter.featureType || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
+      result.set(key, [ ...(result.get(key) || []), filter ]);
+    });
+    return result;
   }
 
   private static convertFilterToQuery(filter: BaseFilterModel, layerId: string): string | null {
@@ -153,16 +205,24 @@ export class CqlFilterHelper {
         query.push('NOT');
       }
       query.push('BETWEEN');
-      query.push(`${dateFrom}T00:00:00Z AND ${dateUntil}T23:59:59Z`);
+      query.push(`${CqlFilterHelper.addTimePartToDate(dateFrom, true)} AND ${CqlFilterHelper.addTimePartToDate(dateUntil, false)}`);
       return `${query.join(' ')}`;
     }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
       : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
     query.push(cond);
-    const value = cond === 'AFTER' ? `${filter.value[0]}T23:59:59Z` : `${filter.value[0]}T00:00:00Z`;
+    const value = CqlFilterHelper.addTimePartToDate(filter.value[0], cond !== 'AFTER');
     query.push(value);
     return query.join(' ');
+  }
+
+  private static addTimePartToDate(filterValue: string, isStart: boolean): string {
+    if (filterValue.includes('T')) {
+      const hasTimezoneOffset = /[+-]\d{2}(:?\d{2})?$/.test(filterValue);
+      return (filterValue.endsWith('Z') || hasTimezoneOffset) ? filterValue : `${filterValue}Z`;
+    }
+    return isStart ? `${filterValue}T00:00:00Z` : `${filterValue}T23:59:59Z`;
   }
 
   private static getQueryForNumber(filter: AttributeFilterModel) {

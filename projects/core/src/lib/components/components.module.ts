@@ -14,8 +14,7 @@ import { EditComponentModule } from './edit/edit-component.module';
 import { RegisteredComponentsModule } from './registered-components-renderer/registered-components.module';
 import { HeaderModule } from './header';
 import { InfoModule } from './info';
-import { MobileMenubarBottomModule } from './mobile-menubar-bottom/mobile-menubar-bottom.module';
-import { MobileMenubarHomeModule } from './mobile-menubar-home';
+import { MobileMenubarModule } from './mobile-menubar/mobile-menubar.module';
 
 
 @NgModule({
@@ -38,8 +37,7 @@ import { MobileMenubarHomeModule } from './mobile-menubar-home';
     HeaderModule,
     RegisteredComponentsModule,
     InfoModule,
-    MobileMenubarBottomModule,
-    MobileMenubarHomeModule,
+    MobileMenubarModule,
   ],
 })
 export class ComponentsModule {}

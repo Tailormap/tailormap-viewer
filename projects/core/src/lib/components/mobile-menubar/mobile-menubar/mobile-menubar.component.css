@@ -1,0 +1,44 @@
+.mobile-menubar {
+  height: 100%;
+  border-top: 1px solid var(--border-color);
+}
+
+.mobile-menubar ::ng-deep button {
+  height: 100%;
+  width: 20vw;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-menubar ::ng-deep mat-icon {
+  height: 100%;
+  width: 20vw;
+}
+
+.mobile-menubar ::ng-deep tm-registered-components-renderer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-menubar ::ng-deep tm-toc-menu-button,
+.mobile-menubar ::ng-deep tm-legend-menu-button,
+.mobile-menubar ::ng-deep tm-mobile-menubar-home-button,
+.mobile-menubar ::ng-deep tm-edit-menu-button {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  padding: 1vh 2vw;
+  justify-content: center;
+}
+
+.mobile-menubar ::ng-deep mat-icon svg {
+  height: 100%;
+  width: 100%;
+}

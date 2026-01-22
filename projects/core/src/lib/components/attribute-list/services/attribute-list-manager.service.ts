@@ -9,13 +9,13 @@ import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
-  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValueParams, UniqueValuesResponseModel,
+  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import { AttributeListApiService } from './attribute-list-api.service';
 import {
-  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse,
+  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
@@ -56,6 +56,7 @@ export class AttributeListManagerService implements OnDestroy {
     id: '',
     label: '',
     selectedDataId: '',
+    initialDataId: '',
     initialDataLoaded: false,
     loadingData: false,
     tabSourceId: '',
@@ -129,7 +130,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getLayerExport$(params);
   }
 
-  public getUniqueValues$(tabSourceId: string, params: UniqueValueParams): Observable<UniqueValuesResponseModel> {
+  public getUniqueValues$(tabSourceId: string, params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of({ values: [], filterApplied: false });
@@ -194,6 +195,7 @@ export class AttributeListManagerService implements OnDestroy {
         layerId: tabModel.id,
         label: tabModel.label,
         selectedDataId: dataId,
+        initialDataId: dataId,
         tabSourceId: tabModel.tabSourceId,
       };
       const data: AttributeListDataModel = {

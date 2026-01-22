@@ -76,7 +76,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:9.10.0
+    image: ghcr.io/tailormap/solr:9.10.1
     profiles:
       - solr
     environment:
@@ -88,6 +88,7 @@ services:
       # SOLR_HEAP: 512m
       SOLR_OPTS: '${SOLR_OPTS:-} -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
       SOLR_DELETE_UNKNOWN_CORES: true
+      SOLR_MODE: user-managed
     mem_swappiness: 0
     volumes:
       - solr-data:/var/solr
@@ -111,7 +112,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: ghcr.io/tailormap/solr:9.10.0
+    image: ghcr.io/tailormap/solr:9.10.1
     profiles:
       - solr
     environment:
@@ -127,7 +128,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.8.1
+    image: prom/prometheus:v3.9.1
     profiles:
       - prometheus
     environment:

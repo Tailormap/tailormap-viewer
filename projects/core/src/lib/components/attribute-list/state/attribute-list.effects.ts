@@ -19,10 +19,17 @@ export class AttributeListEffects {
   private mapService = inject(MapService);
   private managerService = inject(AttributeListManagerService);
 
-
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
+      filter(action => !!action.tabId),
+      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+    );
+  });
+
+  public loadDataAfterSelectedDataIdChange$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
       mergeMap(action => this.loadDataForTabId$(action.tabId)),
     );
