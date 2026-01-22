@@ -7,11 +7,11 @@ import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureHelper } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum, FeatureModel, SimpleSearchConfigModel } from '@tailormap-viewer/api';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SearchResultModel, SearchResultItemModel } from './models';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
-import { BrowserHelper } from '@tailormap-viewer/shared';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -27,6 +27,7 @@ export class SimpleSearchComponent implements OnInit {
   private searchService = inject(SimpleSearchService);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private static readonly SEARCH_DEBOUNCE_TIME = 1000;
@@ -45,13 +46,17 @@ export class SimpleSearchComponent implements OnInit {
   private isPanelOpen: boolean = false;
   private config: SimpleSearchConfigModel | undefined;
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
-  public isMobile = BrowserHelper.isMobile;
+  public readonly isMobile = toSignal(
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+    { initialValue: false }
+  );
 
   public fullScreen = computed(() => {
     const active = this.active();
     const searchStatus = this.searchStatus();
     const closeFullScreen = this.closeFullScreen();
-    return active && searchStatus !== 'empty' && !closeFullScreen && this.isMobile;
+    const isMobile = this.isMobile();
+    return active && searchStatus !== 'empty' && !closeFullScreen && isMobile;
   });
 
   constructor() {
@@ -88,7 +93,7 @@ export class SimpleSearchComponent implements OnInit {
           const wasNotEmpty = this.searchStatus() !== 'empty';
           this.searchResultsSubject.next(null);
           this.searchStatus.set(searchStr.length > 0 ? 'belowMinLength' : 'empty');
-          if (wasNotEmpty && searchStr.length === 0 && this.isMobile) {
+          if (wasNotEmpty && searchStr.length === 0 && this.isMobile()) {
             this.disableTransition.set(true);
             setTimeout(() => this.disableTransition.set(false), 0);
           }
@@ -164,7 +169,7 @@ export class SimpleSearchComponent implements OnInit {
       }),
       takeUntil(timer(5000))).subscribe();
 
-    if (this.isMobile) {
+    if (this.isMobile()) {
       this.disableTransition.set(true);
       setTimeout(() => this.disableTransition.set(false), 0);
       this.closeFullScreen.set(true);

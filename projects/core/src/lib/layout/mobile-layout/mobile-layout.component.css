@@ -47,3 +47,7 @@
   right: var(--body-margin);
   z-index: 3;
 }
+
+.map-controls-right ::ng-deep .geolocation-buttons {
+  margin-top: 0;
+}
