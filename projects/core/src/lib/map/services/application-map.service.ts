@@ -20,6 +20,7 @@ import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
+import { FeaturesFilterHelper } from '../../filter';
 
 @Injectable({
    providedIn: 'root',
@@ -118,7 +119,10 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
-        return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
+        return layers.map(l => ({
+          ...l,
+          filter: FeaturesFilterHelper.getFilter(filters.get(l.id)),
+        }));
       }),
     );
   }
@@ -190,7 +194,7 @@ export class ApplicationMapService implements OnDestroy {
         serverType: service.serverType,
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
-        filter: extendedAppLayer.filter,
+        filter: typeof extendedAppLayer.filter === 'string' ? extendedAppLayer.filter : undefined,
         language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
         webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
       };

@@ -71,6 +71,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.backgroundLayers.set(layer.id, olLayer);
     this.backgroundLayerGroup.getLayers().push(olLayer);
     olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
+    this.moveDrawingLayersToTop();
   }
 
   private removeBackgroundLayer(layerId: string) {

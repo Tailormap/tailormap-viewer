@@ -5,7 +5,8 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
-  selectColumnsForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab, selectLoadingDataSelectedTab,
+  selectColumnsForSelectedTab, selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab,
+  selectLoadingDataSelectedTab,
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
@@ -84,18 +85,30 @@ export class AttributeListContentComponent implements OnInit {
   public onSetFilter($event: { columnId: string; attributeType: AttributeType }) {
     combineLatest([
       this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
       this.store$.select(selectViewerId),
     ])
       .pipe(
         pipe(take(1)),
-        concatMap(([ selectedTab, applicationId ]) => {
+        concatMap(([ selectedTab, selectedData, applicationId ]) => {
           if (!selectedTab || !selectedTab.layerId) {
             return of(null);
           }
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, selectedTab.layerId, $event.columnId).pipe(take(1)),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, selectedTab.layerId, $event.columnId).pipe(take(1)),
+            this.simpleAttributeFilterService.getFilterForAttribute$(
+              BaseComponentTypeEnum.ATTRIBUTE_LIST,
+              selectedTab.layerId,
+              $event.columnId,
+              selectedData?.featureType,
+            ).pipe(take(1)),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(
+              BaseComponentTypeEnum.ATTRIBUTE_LIST,
+              selectedTab.layerId,
+              $event.columnId,
+              selectedData?.featureType,
+            ).pipe(take(1)),
             of(selectedTab),
+            of(selectedData),
             of(applicationId),
             this.columns$.pipe(
               take(1),
@@ -108,19 +121,21 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, otherFilters, selectedTab, applicationId, attributeAlias ] = result;
+        const [ attributeFilterModel, otherFilters, selectedTab, selectedData, applicationId, attributeAlias ] = result;
         if (applicationId === null || !selectedTab.layerId) {
           return;
         }
+        const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
         const data: FilterDialogData = {
           tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
           layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId),
+          cqlFilters: filtersForLayer,
           applicationId,
           attributeAlias,
+          featureType: selectedData?.featureType,
         };
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });

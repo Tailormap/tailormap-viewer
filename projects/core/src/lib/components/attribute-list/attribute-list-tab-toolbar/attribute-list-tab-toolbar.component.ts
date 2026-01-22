@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
-import { Observable, of, switchMap, take } from 'rxjs';
-import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
+import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
+import {
+  selectDataForSelectedTab, selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab,
+} from '../state/attribute-list.selectors';
 import { PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
@@ -11,6 +13,8 @@ import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dia
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
+
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -24,7 +28,9 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private popoverService = inject(PopoverService);
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
 
+  private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -32,17 +38,44 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
+  public hasFiltersForMultipleFeatureTypes$: Observable<boolean> = of(false);
+
+  constructor() {
+    effect(() => {
+      const components = this.attributeListFeatureRegistrationService.registeredAdditionalFeatures();
+      const attributeListFeaturesContainer = this.attributeListFeaturesContainer();
+      if (!attributeListFeaturesContainer) {
+        return;
+      }
+      attributeListFeaturesContainer.clear();
+      components.forEach(component => {
+        attributeListFeaturesContainer.createComponent(component.component);
+      });
+    });
+  }
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
     this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
-    this.hasFilters$ = this.store$.select(selectSelectedTab)
+    this.hasFilters$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(
+        switchMap(([ tab, data ]) => {
+          if (!tab?.layerId) {
+            return of(false);
+          }
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
+        }),
+      );
+    this.hasFiltersForMultipleFeatureTypes$ = this.store$.select(selectSelectedTab)
       .pipe(
         switchMap(tab => {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+          return this.simpleAttributeFilterService.hasFiltersForMultipleFeatureTypes$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
         }),
       );
   }
@@ -81,7 +114,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearFilter() {
+  public clearAllFilters() {
     this.store$.select(selectSelectedTab)
       .pipe(take(1))
       .subscribe(tab => {
@@ -89,6 +122,20 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           return;
         }
         return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+      });
+  }
+
+  public clearFilter() {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(take(1))
+      .subscribe(([ tab, data ]) => {
+        if (!tab?.layerId) {
+          return;
+        }
+        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       });
   }
 

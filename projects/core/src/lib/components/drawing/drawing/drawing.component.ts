@@ -83,7 +83,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const components = this.drawingFeatureRegistrationService.registeredAdditionalDrawingFeatures();
+      const components = this.drawingFeatureRegistrationService.registeredAdditionalFeatures();
       const belowButtonsContainer = this.belowDrawingButtonsContainer();
       const aboveButtonsContainer = this.aboveDrawingButtonsContainer();
       if (!belowButtonsContainer || !aboveButtonsContainer) {
