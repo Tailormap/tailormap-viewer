@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
-import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
+import { SharedModule, TreeModel } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
@@ -9,7 +9,22 @@ import { LayerDetailsComponent } from '../toc-node-details/layer-details/layer-d
 import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
 
 const setup = async (withLayer: boolean) => {
-  const node = getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false, description: 'layer description' });
+  const node: TreeModel<AppLayerModel> = {
+    id: 'applayer-1',
+    label: '',
+    metadata: {
+      id: '',
+      layerName: '',
+      title: '',
+      serviceId: '',
+      visible: false,
+      hasAttributes: false,
+      editable: false,
+      opacity: 0,
+      searchIndex: null,
+      description: 'layer description',
+    },
+  };
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   await render(TocNodeDetailsMobileComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
@@ -25,7 +40,7 @@ const setup = async (withLayer: boolean) => {
         },
       }),
     ],
-    inputs: { node: withLayer ? node : undefined },
+    inputs: { treeNode: withLayer ? node : undefined },
   });
 };
 
