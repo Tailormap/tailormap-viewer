@@ -33,3 +33,10 @@
   transition: transform ease-in-out 0.25s;
   display: flex;
 }
+
+.map-controls-right {
+  position: absolute;
+  top: var(--body-margin);
+  right: var(--body-margin);
+  z-index: 3;
+}
