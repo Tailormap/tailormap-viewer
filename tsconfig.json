@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "isolatedModules": true,
+    "preserveSymlinks": true,
     "baseUrl": "./",
     "paths": {
       "@tailormap-viewer/api": [
