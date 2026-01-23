@@ -48,7 +48,7 @@ export class SimpleSearchComponent implements OnInit {
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
   public readonly isMobile = toSignal(
     this.mobileLayoutService.isMobileLayoutEnabled$,
-    { initialValue: false }
+    { initialValue: false },
   );
 
   public fullScreen = computed(() => {
@@ -176,15 +176,8 @@ export class SimpleSearchComponent implements OnInit {
     }
   }
 
-  public scrollTo($event: MouseEvent, id: string) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    const targetGroup = `search-group-${id}`;
-    const target = document.getElementById(targetGroup);
+  public blurSearchField() {
     document.querySelector<HTMLInputElement>('.search-field')?.blur();
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }
 
   public panelOpen(isOpen: boolean) {
