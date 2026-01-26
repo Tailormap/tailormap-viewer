@@ -11,7 +11,6 @@ import { SearchResultModel } from './models';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
-import { SimpleSearchResultsComponent } from './simple-search-results/simple-search-results.component';
 
 const setup = async () => {
   const mockedSearchService = {
@@ -40,7 +39,6 @@ const setup = async () => {
         },
       } }),
     ],
-    declarations: [SimpleSearchResultsComponent],
   });
   return {
     searchService: TestBed.inject(SimpleSearchService),
@@ -63,7 +61,7 @@ describe('SimpleSearchComponent', () => {
       expect(screen.getByText('Test Searcher')).toBeInTheDocument();
       expect(screen.getByText('Better result')).toBeInTheDocument();
     }, { timeout: 1100 });
-    await userEvent.click(await screen.findByText('Better result'), { pointerEventsCheck: 0 });
+    await userEvent.click(await screen.findByText('Better result'));
     expect(mapService.renderFeatures$).toHaveBeenCalled();
     const renderFeaturesCall = (mapService.renderFeatures$ as jest.Mock).mock.calls[0];
     expect(renderFeaturesCall[0]).toEqual('search-result-highlight');

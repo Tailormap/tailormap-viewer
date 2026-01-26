@@ -45,11 +45,44 @@
                               (closed)="panelOpen(false)"
                               #auto="matAutocomplete"
                               [displayWith]="displayLabel">
-              <tm-simple-search-results
-                [searchResults]="searchResults$ | async"
-                [searchStatus]="searchStatus()"
-                (scrolledToGroup)="blurSearchField()">
-              </tm-simple-search-results>
+              @if (searchResults$ | async; as searchResults) {
+                @if (searchResults.length > 1) {
+                  <div class="result-summary">
+                    @for (searchResult of searchResults; track searchResult.id) {
+                      <a href="" (pointerdown)="scrollTo($event, searchResult.id)" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
+                    }
+                  </div>
+                }
+              }
+              @if (searchStatus(); as searchStatus) {
+                @if (searchStatus === 'belowMinLength') {
+                  <mat-option disabled
+                              class="hint"
+                              i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching or press &lt;Enter&gt;</mat-option>
+                }
+                @if (searchStatus === 'no_results') {
+                  <mat-option disabled class="hint" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
+                }
+                @if (searchStatus === 'searching') {
+                  <mat-option disabled class="hint">
+                    <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+                  </mat-option>
+                }
+              }
+              @if (searchResults$ | async; as searchResults) {
+                @for (searchResult of searchResults; track searchResult.id) {
+                  @if (searchResult && searchResult.results.length > 0) {
+                    <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
+                      @for(option of searchResult.results; track option.id) {
+                        <mat-option [value]="option">{{option.label}}</mat-option>
+                      }
+                      @if (searchResult.attribution) {
+                        <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+                      }
+                    </mat-optgroup>
+                  }
+                }
+              }
             </mat-autocomplete>
           </mat-form-field>
         }
@@ -59,11 +92,44 @@
 
   @if (fullScreen()) {
     <div class="inline-search-results">
-      <tm-simple-search-results
-        [searchResults]="searchResults$ | async"
-        [searchStatus]="searchStatus()"
-        (scrolledToGroup)="blurSearchField()">
-      </tm-simple-search-results>
+      @if (searchResults$ | async; as searchResults) {
+        @if (searchResults.length > 1) {
+          <div class="result-summary">
+            @for (searchResult of searchResults; track searchResult.id) {
+              <a href="" (pointerdown)="scrollTo($event, searchResult.id)" (click)="scrollTo($event, searchResult.id)">{{ searchResult.name}} ({{searchResult.results.length}})</a>
+            }
+          </div>
+        }
+      }
+      @if (searchStatus(); as searchStatus) {
+        @if (searchStatus === 'belowMinLength') {
+          <mat-option disabled
+                      class="hint"
+                      i18n="@@core.toolbar.type-at-least">Type at least {{ minLength }} characters to start searching or press &lt;Enter&gt;</mat-option>
+        }
+        @if (searchStatus === 'no_results') {
+          <mat-option disabled class="hint" i18n="@@core.toolbar.no-results-found">No results found</mat-option>
+        }
+        @if (searchStatus === 'searching') {
+          <mat-option disabled class="hint">
+            <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
+          </mat-option>
+        }
+      }
+      @if (searchResults$ | async; as searchResults) {
+        @for (searchResult of searchResults; track searchResult.id) {
+          @if (searchResult && searchResult.results.length > 0) {
+            <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
+              @for(option of searchResult.results; track option.id) {
+                <mat-option [value]="option" (click)="searchControl.setValue(option)">{{option.label}}</mat-option>
+              }
+              @if (searchResult.attribution) {
+                <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+              }
+            </mat-optgroup>
+          }
+        }
+      }
     </div>
   }
 

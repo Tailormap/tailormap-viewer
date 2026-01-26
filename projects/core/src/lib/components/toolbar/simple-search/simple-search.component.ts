@@ -176,8 +176,15 @@ export class SimpleSearchComponent implements OnInit {
     }
   }
 
-  public blurSearchField() {
+  public scrollTo($event: MouseEvent, id: string) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    const targetGroup = `search-group-${id}`;
+    const target = document.getElementById(targetGroup);
     document.querySelector<HTMLInputElement>('.search-field')?.blur();
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   public panelOpen(isOpen: boolean) {
