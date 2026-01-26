@@ -74,8 +74,8 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: junit.xml
-          report-type: test_results
+          files: junit.xml
+          report_type: test_results
 
   build_libraries:
     name: "Build Angular libraries"
