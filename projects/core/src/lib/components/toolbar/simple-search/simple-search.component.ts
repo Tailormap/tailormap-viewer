@@ -63,7 +63,7 @@ export class SimpleSearchComponent implements OnInit {
     afterEveryRender(() => {
       // This is a bit of a hack, since we cannot define a header or something like that for an Autocomplete component
       // We manually move the search summary up to the panel itself, making the list scrollable, without the summary
-      if (this.isPanelOpen) {
+      if (this.isPanelOpen || this.fullScreen()) {
         this.moveSummeryUp();
       }
     });
@@ -197,6 +197,7 @@ export class SimpleSearchComponent implements OnInit {
   private moveSummeryUp() {
     const summary = document.querySelector('.result-summary');
     const panel = document.querySelector('.search-panel');
+    console.debug('Moving summary up', summary, panel);
     if (!summary || !panel || summary.parentElement !== panel) {
       return;
     }

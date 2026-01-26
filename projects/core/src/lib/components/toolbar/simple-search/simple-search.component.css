@@ -163,6 +163,10 @@
   padding-left: 3px;
 }
 
+.mobile-search-results {
+  overflow-y: auto;
+}
+
 @media screen and (max-width: 730px) {
   .simple-search-container--is-active {
     padding: 0;

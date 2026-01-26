@@ -91,7 +91,7 @@
   </div>
 
   @if (fullScreen()) {
-    <div class="inline-search-results">
+    <div class="mobile-search-results search-panel">
       @if (searchResults$ | async; as searchResults) {
         @if (searchResults.length > 1) {
           <div class="result-summary">
