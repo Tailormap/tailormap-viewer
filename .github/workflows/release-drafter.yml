@@ -7,7 +7,7 @@ on:
 
 jobs:
   update_release_draft:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions: # write permission is required to create a github release
       contents: write
     name: Update release Draft
@@ -18,7 +18,7 @@ jobs:
 
 
   contributors:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: 'Update Contributors'
     permissions:
       pull-requests: write
