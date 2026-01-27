@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "12.4.1",
+  "version": "12.4.2",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -11,7 +11,7 @@
     "ol": "^10.7.0",
     "ol-ext": "^4.0.37",
     "olcs": "^2.22.1",
-    "proj4": "^2.19.3",
+    "proj4": "^2.20.2",
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
     "rxjs": "^7.8.2",
