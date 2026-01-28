@@ -60,3 +60,7 @@ lcov.info
 /generated
 
 tailormap-bundle-stats.json
+
+# link-modules.sh state and backups
+.linked-modules.json
+.link-modules-backup/

@@ -21,7 +21,8 @@
     "extract-locale": "npm run extract-locale-shared && npm run extract-locale-core && npm run extract-locale-admin-core",
     "extract-locale-shared": "tm-extract-i18n --library=shared",
     "extract-locale-core": "tm-extract-i18n --library=core",
-    "extract-locale-admin-core": "tm-extract-i18n --library=admin-core"
+    "extract-locale-admin-core": "tm-extract-i18n --library=admin-core",
+    "link-libraries": "tm-link-libraries"
   },
   "private": true,
   "dependencies": {
@@ -80,7 +81,7 @@
     "@bufbuild/protoc-gen-es": "^2.2.3",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.17",
-    "@tailormap-viewer/tools": "^0.0.23",
+    "@tailormap-viewer/tools": "^0.0.25",
     "@testing-library/angular": "^17.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
