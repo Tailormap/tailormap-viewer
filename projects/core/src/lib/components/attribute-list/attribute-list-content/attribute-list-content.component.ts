@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { concatMap, map, switchMap } from 'rxjs/operators';
-import { forkJoin, Observable, of, pipe, take, combineLatest, BehaviorSubject, tap } from 'rxjs';
+import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
@@ -19,8 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
-import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { FeatureDetailsModel, GetFeatureDetailsParams } from '../models/attribute-list-api-service.model';
+import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -32,7 +31,7 @@ import { FeatureDetailsModel, GetFeatureDetailsParams } from '../models/attribut
 export class AttributeListContentComponent implements OnInit {
   private store$ = inject(Store);
   private attributeListStateService = inject(AttributeListStateService);
-  private attributeListManagerService = inject(AttributeListManagerService);
+  private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private dialog = inject(MatDialog);
 
@@ -45,37 +44,10 @@ export class AttributeListContentComponent implements OnInit {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
-  public canExpandRows$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
-    concatMap(([ applicationId, tab ]) => {
-      if (!applicationId || !tab || !tab.layerId) {
-        return of(false);
-      }
-      return this.attributeListManagerService.canExpandRow$(tab.tabSourceId, { layerId: tab.layerId, applicationId });
-    }),
-  );
 
-  private featureDetailsKey$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
-    map(([ applicationId, tab ]) => {
-      if (!applicationId || !tab || !tab.layerId) {
-        return null;
-      }
-      return this.getFeatureDetailsKey(applicationId, tab.layerId);
-    }),
-  );
-
-  private featureDetails = new BehaviorSubject<Map<string, Map<string, FeatureDetailsModel>>>(new Map());
-  public featureDetails$ = combineLatest([
-    this.featureDetails.asObservable(),
-    this.featureDetailsKey$,
-  ]).pipe(map(([ featureDetailsMap, key ]) => {
-    return featureDetailsMap.get(key ?? '') || new Map<string, FeatureDetailsModel>();
-  }));
-
-  private loadingFeatureDetailsIds = new BehaviorSubject<Map<string, Set<string>>>(new Map());
-  public loadingFeatureDetailsIds$ = combineLatest([
-    this.loadingFeatureDetailsIds.asObservable(),
-    this.featureDetailsKey$,
-  ]).pipe(map(([ loadingIds, key ]) => loadingIds.get(key ?? '') || new Set<string>()));
+  public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
+  public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
+  public loadingFeatureDetailsIds$ = this.attributeListFeatureDetailsService.loadingFeatureDetailsIds$;
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -186,61 +158,7 @@ export class AttributeListContentComponent implements OnInit {
   }
 
   public loadFeatureDetailsForFeature($event: string) {
-    combineLatest([
-      this.store$.select(selectSelectedTab),
-      this.store$.select(selectDataForSelectedTab),
-      this.store$.select(selectViewerId),
-    ])
-      .pipe(
-        take(1),
-        switchMap(([ selectedTab, selectedData, applicationId ]) => {
-          if (!selectedTab || !selectedTab.layerId || applicationId === null || !selectedData) {
-            return of(null);
-          }
-          const params = { layerId: selectedTab.layerId, applicationId, __fid: $event };
-          const key = this.getFeatureDetailsKey(params.applicationId, params.layerId);
-          const currentDetails = this.featureDetails.value.get(key);
-          if (currentDetails && currentDetails.has(params.__fid)) {
-            // already loaded
-            return of(null);
-          }
-          this.updateLoadingFeatureDetailsIds(key, params.__fid, true);
-          return this.attributeListManagerService.getFeatureDetails$(selectedTab.tabSourceId, params)
-            .pipe(
-              take(1),
-              map(featureDetails => ({ featureDetails, params } )),
-              tap(() => this.updateLoadingFeatureDetailsIds(key, params.__fid, false)),
-            );
-        }),
-      )
-      .subscribe((featureDetails: { params: GetFeatureDetailsParams; featureDetails: FeatureDetailsModel | null } | null) => {
-        if (!featureDetails || !featureDetails.featureDetails) {
-          return;
-        }
-        const key = this.getFeatureDetailsKey(featureDetails.params.applicationId, featureDetails.params.layerId);
-        const currentDetails = this.featureDetails.value.get(key) || new Map<string, FeatureDetailsModel>();
-        currentDetails.set(featureDetails.params.__fid, featureDetails.featureDetails);
-        const newFeatureDetailsMap = new Map(this.featureDetails.value);
-        newFeatureDetailsMap.set(key, currentDetails);
-        this.featureDetails.next(newFeatureDetailsMap);
-      });
-  }
-
-  private getFeatureDetailsKey(applicationId: string, layerId: string) {
-    return `${applicationId}_${layerId}`;
-  }
-
-  private updateLoadingFeatureDetailsIds(key: string, __fid: string, isLoading: boolean) {
-    const currentLoadingIds = this.loadingFeatureDetailsIds.value.get(key) || new Set<string>();
-    const newLoadingIds = new Set(currentLoadingIds);
-    if (isLoading) {
-      newLoadingIds.add(__fid);
-    } else {
-      newLoadingIds.delete(__fid);
-    }
-    const newLoadingMap = new Map(this.loadingFeatureDetailsIds.value);
-    newLoadingMap.set(key, newLoadingIds);
-    this.loadingFeatureDetailsIds.next(newLoadingMap);
+    this.attributeListFeatureDetailsService.loadFeatureDetailsForFeature($event);
   }
 
 }
