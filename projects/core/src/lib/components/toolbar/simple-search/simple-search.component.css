@@ -18,6 +18,94 @@
   border-radius: 3px;
 }
 
+.button-and-form-field {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.simple-search-container--mobile {
+  overflow: hidden;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  z-index: 3;
+  transition: width 0.2s ease-in-out;
+}
+
+.simple-search-container--mobile mat-form-field {
+  width: 100%;
+  padding-top: 6px;
+}
+
+.simple-search-container--mobile .simple-search-field-wrapper {
+  padding: 9px;
+  height: 40px;
+}
+
+.simple-search-container--mobile-is-active {
+  width: calc(80 * var(--vw));
+  border-radius: 30px;
+}
+
+.simple-search-container--mobile-is-active .map-control-button {
+  align-self: center;
+}
+
+.no-transition {
+  transition: none;
+}
+
+.simple-search-container--full-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--mobile-menubar-height);
+  width: 100vw;
+  height: calc(100vh - var(--mobile-menubar-height));
+  background-color: #fff;
+  border-radius: 0;
+  flex-direction: column;
+}
+
+.simple-search-container--full-screen .button-and-form-field {
+  margin-top: var(--body-margin);
+  margin-left: var(--body-margin);
+  width: calc(100% - var(--body-margin) * 5);
+  background-color: #e8e8e8;
+  border-radius: 30px;
+}
+
+.simple-search-container--full-screen .button-and-form-field button {
+  border-radius: 30px;
+  background-color: #e8e8e8;
+}
+
+.simple-search-container--full-screen .button-and-form-field .mobile-search-field-input {
+  background-color: #e8e8e8;
+}
+
+.simple-search-container--full-screen .simple-search-field-wrapper {
+  padding: 9px;
+  height: 40px;
+}
+
+.mobile-search-field-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+.mobile-search-field {
+  height: 22px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .simple-search-field-wrapper {
   flex: 1;
 }
@@ -74,6 +162,10 @@
   padding-left: 3px;
 }
 
+.mobile-search-results {
+  overflow-y: auto;
+}
+
 @media screen and (max-width: 730px) {
   .simple-search-container--is-active {
     padding: 0;
@@ -81,7 +173,7 @@
     height: var(--map-control-size);
   }
 
-  .simple-search-field-wrapper {
+  .simple-search-container.simple-search-field-wrapper {
     position: absolute;
     top: calc(var(--map-control-size) + 9px);
     left: 0;
@@ -94,7 +186,7 @@
 }
 
 @media screen and (max-width: 425px) {
-  .simple-search-field-wrapper {
+  .simple-search-container.simple-search-field-wrapper {
     width: var(--max-control-width);
   }
 }
