@@ -75,3 +75,7 @@ export const updateLayerTreeNodes = createAction(
 export const toggleIn3dView = createAction(
   `${mapActionsPrefix} Toggle In3dView`,
 );
+export const updateTemporaryLayerName = createAction(
+  `${mapActionsPrefix} Update Temporary Layer Name`,
+  props<{ id: string; temporaryLayerName: string }>(),
+);

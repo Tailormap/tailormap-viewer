@@ -2,8 +2,8 @@ import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection, Projection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes } from '../models';
-import { OlLayerHelper } from '../helpers/ol-layer.helper';
+import { LayerManagerModel, LayerTypes, WMSLayerModel } from '../models';
+import { LayerProperties, OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
@@ -138,6 +138,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
           this.updateFilterIfChanged(layer, existingLayer);
+          this.updateLayerNameIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -172,7 +173,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   // Create an identifier for each layer to quickly check if something changed and requires re-rendering
   private createLayerIdentifiers(layers: LayerModel[]): string[] {
     return layers.map(layer => {
-      const changingProps = [layer.opacity ? `${layer.opacity}` : undefined];
+      const changingProps = [ layer.name, layer.opacity ? `${layer.opacity}` : undefined ];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
       }
@@ -193,13 +194,25 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
       return;
     }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter');
+  }
+
+  private updateLayerNameIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    // For now WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer)) {
+      return;
+    }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name');
+  }
+
+  private updateWmsLayerPropIfChanged(layer: WMSLayerModel, olLayer: BaseLayer, paramName: keyof WmsServiceParamsModel, layerPropName: keyof LayerProperties) {
     const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps.filter === layer.filter) {
+    if (existingProps[layerPropName] === layer[layerPropName]) {
       return;
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
     if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ CQL_FILTER: layer.filter });
+      olLayer.getSource()?.updateParams({ [paramName]: layer[layerPropName] });
     }
   }
 

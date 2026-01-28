@@ -34,7 +34,7 @@ export interface LayerProperties {
   language?: string;
 }
 
-interface WmsServiceParamsModel {
+export interface WmsServiceParamsModel {
   LAYERS: string;
   VERSION: string;
   QUERY_LAYERS?: string;

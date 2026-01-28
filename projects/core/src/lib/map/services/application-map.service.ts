@@ -6,7 +6,8 @@ import {
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
-  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
+  combineLatest, concatMap, debounceTime, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take,
+  takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
@@ -118,6 +119,7 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectOrderedVisibleLayersWithServices),
       this.store$.select(selectCQLFilters),
     ]).pipe(
+      debounceTime(0),
       map(([ layers, filters ]) => {
         return layers.map(l => ({
           ...l,
@@ -158,7 +160,7 @@ export class ApplicationMapService implements OnDestroy {
     const service = extendedAppLayer.service;
     const defaultLayerProps: ServiceLayerModel = {
       id: `${extendedAppLayer.id}`,
-      name: extendedAppLayer.layerName,
+      name: extendedAppLayer.temporaryLayerName || extendedAppLayer.layerName,
       url: extendedAppLayer.url || service.url,
       layerType: LayerTypesEnum.WMS,
       visible: extendedAppLayer.visible,
@@ -190,7 +192,7 @@ export class ApplicationMapService implements OnDestroy {
       const layer: WMSLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.WMS,
-        layers: extendedAppLayer.layerName,
+        layers: extendedAppLayer.temporaryLayerName || extendedAppLayer.layerName,
         serverType: service.serverType,
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
