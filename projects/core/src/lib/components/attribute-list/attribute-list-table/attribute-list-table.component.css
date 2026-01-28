@@ -225,3 +225,12 @@ mat-mdc-footer-cell {
   min-height: 0;
   overflow: hidden;
 }
+
+.row-expand-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.row-expand-icon:hover {
+  color: var(--primary-color);
+}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -32,7 +32,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
 
   public isVisible$: Observable<boolean>;
 
-  public tabs: AttributeListTabModel[] = [];
+  public tabs = signal<AttributeListTabModel[]>([]);
   private destroyed = new Subject();
 
   public selectedTab?: string;
@@ -45,7 +45,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
     this.store$.select(selectAttributeListTabs)
       .pipe(takeUntil(this.destroyed))
       .subscribe(tabs => {
-        this.tabs = tabs;
+        this.tabs.set(tabs);
       });
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
@@ -81,7 +81,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   }
 
   public onSelectedTabChange($event: MatTabChangeEvent): void {
-    this.store$.dispatch(setSelectedTab({ tabId: this.tabs[$event.index].id }));
+    this.store$.dispatch(setSelectedTab({ tabId: this.tabs()[$event.index].id }));
   }
 
   public trackByTabId(idx: number, layer: AttributeListTabModel) {

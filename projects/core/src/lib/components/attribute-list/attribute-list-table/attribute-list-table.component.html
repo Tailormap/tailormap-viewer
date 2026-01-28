@@ -7,7 +7,8 @@
   <ng-container [matColumnDef]="EXPAND_DETAILS_COLUMN_NAME">
     <mat-header-cell class="column_small" *matHeaderCellDef></mat-header-cell>
     <mat-cell class="column_small" *matCellDef="let row;">
-      <mat-icon [svgIcon]="expandedRowsIds.has(row.id) ? 'expand_close' : 'expand_open'"
+      <mat-icon class="row-expand-icon"
+                [svgIcon]="expandedRowsIds.has(row.id) ? 'expand_close' : 'expand_open'"
                 (click)="onRowExpandClick($event, row);"></mat-icon>
     </mat-cell>
     <mat-footer-cell class="column_small" *matFooterCellDef></mat-footer-cell>

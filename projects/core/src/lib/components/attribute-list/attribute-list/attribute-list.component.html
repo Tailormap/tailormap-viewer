@@ -1,6 +1,6 @@
 <tm-bottom-panel [isVisible$]="isVisible$" [title$]="title$" (closed)="onCloseClick()">
 
-  @if (tabs.length === 0) {
+  @if (tabs().length === 0) {
     <span class="no-tabs">
       @if (hasLayersWithAttributes$ | async) {
         <span>
@@ -12,12 +12,12 @@
     </span>
   }
 
-  @if (tabs.length > 0) {
+  @if (tabs().length > 0) {
     <mat-tab-group class="tab-group"
       mat-stretch-tabs="false"
       animationDuration="0ms"
       (selectedTabChange)="onSelectedTabChange($event);">
-      @for (tab of tabs; track trackByTabId(index, tab); let index = $index) {
+      @for (tab of tabs(); track trackByTabId(index, tab); let index = $index) {
         <mat-tab
           [label]="tab.label">
           <ng-template mat-tab-label>
@@ -26,8 +26,6 @@
         </mat-tab>
       }
     </mat-tab-group>
-  }
-  @if (tabs.length > 0) {
     <tm-attribute-list-tab [id]="selectedTab"></tm-attribute-list-tab>
   }
 
