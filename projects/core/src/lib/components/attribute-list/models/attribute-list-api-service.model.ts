@@ -163,7 +163,7 @@ export interface GetFeatureDetailsParams {
 
 export interface FeatureDetailModel {
   /**
-   * The feature details name.
+   * The feature detail name.
    */
   name: string;
   /**
