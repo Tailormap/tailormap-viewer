@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
-import { RegisteredComponent } from '@tailormap-viewer/shared';
+import { BrowserHelper, RegisteredComponent } from '@tailormap-viewer/shared';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,14 @@ export class MenubarService {
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
-      this.closePanel();
+      if (BrowserHelper.isMobile && MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
+        this.activeComponent$.next({
+          componentId: BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
+          dialogTitle: $localize `:@@core.home.menu:Menu`,
+        });
+      } else {
+        this.closePanel();
+      }
       return;
     }
     this.activeComponent$.next({ componentId, dialogTitle });
@@ -41,12 +49,18 @@ export class MenubarService {
     if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(component.type)) {
       this.componentRegistrationService.registerComponent('mobile-menu-bottom', component);
     }
+    if (MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(component.type)) {
+      this.componentRegistrationService.registerComponent('mobile-menu-home', component);
+    }
   }
 
   public deregisterComponent(type: string) {
     this.componentRegistrationService.deregisterComponent('menu', type);
     if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(type)) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', type);
+    }
+    if (MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(type)) {
+      this.componentRegistrationService.deregisterComponent('mobile-menu-home', type);
     }
   }
 

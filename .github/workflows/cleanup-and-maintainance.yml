@@ -7,7 +7,7 @@ on:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: 'Close Stale PRs'
     permissions:
       pull-requests: write
@@ -19,7 +19,7 @@ jobs:
 
 
   workflows:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     name: 'Cleanup old workflow runs'
     permissions:
       actions: write
@@ -35,7 +35,7 @@ jobs:
 
   dockercleanup:
     name: 'Pruning Untagged Images'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       packages: write
     steps:

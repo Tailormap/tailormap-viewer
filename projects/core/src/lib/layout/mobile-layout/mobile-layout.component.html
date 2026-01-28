@@ -4,7 +4,13 @@
   <div class="viewer">
     <div class="map">
       <tm-map></tm-map>
-      <div class="map-controls-left map-controls-left--on-bottom">
+      <div class="map-controls-left">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
+      </div>
+      <div class="map-controls-right">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.GEOLOCATION)) { <tm-geolocation></tm-geolocation> }
+      </div>
+      <div class="map-controls-left--on-bottom">
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SCALE_BAR)) { <tm-scale-bar></tm-scale-bar> }
         <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left-bottom"></tm-registered-components-renderer>
       </div>

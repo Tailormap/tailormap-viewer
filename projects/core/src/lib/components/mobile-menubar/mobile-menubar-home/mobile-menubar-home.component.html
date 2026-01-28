@@ -1,0 +1,12 @@
+@let layoutConfig = layoutService.componentsConfig$ | async;
+@if ((visible$ | async) && layoutConfig) {
+  <div class="mobile-menubar-home">
+    <div class="mobile-panel-content">
+      <ng-content></ng-content>
+    </div>
+    <div class="mobile-menubar-home-buttons">
+      <tm-profile></tm-profile>
+      <tm-registered-components-renderer [config]="layoutConfig?.config ?? []" area="mobile-menu-home"></tm-registered-components-renderer>
+    </div>
+  </div>
+}
