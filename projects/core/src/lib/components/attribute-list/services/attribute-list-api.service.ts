@@ -1,5 +1,6 @@
 import {
-  AttributeListApiServiceModel, GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetUniqueValuesParams,
+  AttributeListApiServiceModel, GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams,
+  GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { inject, Injectable } from '@angular/core';
 import { TAILORMAP_API_V1_SERVICE, UniqueValuesService } from '@tailormap-viewer/api';
