@@ -32,7 +32,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
 
   public isVisible$: Observable<boolean>;
 
-  public tabs = signal<AttributeListTabModel[]>([]);
+  public tabs = this.store$.selectSignal(selectAttributeListTabs);
   private destroyed = new Subject();
 
   public selectedTab?: string;
@@ -42,11 +42,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.title$ = this.store$.select(selectAttributeListPanelTitle);
-    this.store$.select(selectAttributeListTabs)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(tabs => {
-        this.tabs.set(tabs);
-      });
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);

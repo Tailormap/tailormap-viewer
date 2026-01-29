@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { map, switchMap, take } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, concatMap, of, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, concatMap, forkJoin, Observable, of, tap } from 'rxjs';
 import { selectViewerId } from '../../../state';
 import { FeatureDetailsModel, GetFeatureDetailsParams } from '../models/attribute-list-api-service.model';
 
@@ -15,13 +15,32 @@ export class AttributeListFeatureDetailsService {
   private store$ = inject(Store);
   private attributeListManagerService = inject(AttributeListManagerService);
 
-  public canExpandRows$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
-    concatMap(([ applicationId, tab ]) => {
+  private canExpandRowsCache = new Map<string, boolean>();
+
+  public canExpandRows$ = combineLatest([
+    this.store$.select(selectViewerId),
+    this.store$.select(selectSelectedTab),
+  ]).pipe(
+    concatMap(([ applicationId, tab ]): Observable<[ boolean, string ]> => {
       if (!applicationId || !tab || !tab.layerId) {
-        return of(false);
+        return of([ false, '' ]);
       }
-      return this.attributeListManagerService.canExpandRow$(tab.tabSourceId, { layerId: tab.layerId, applicationId });
+      const key = `${applicationId}_${tab?.layerId}`;
+      const canExpandCached = this.canExpandRowsCache.get(key);
+      if (typeof canExpandCached === 'boolean') {
+        return of([ canExpandCached, key ]);
+      }
+      return forkJoin([
+        this.attributeListManagerService.canExpandRow$(tab.tabSourceId, { layerId: tab.layerId, applicationId }),
+        of(key),
+      ]);
     }),
+    tap(([ canExpand, key ]) => {
+      if (key) {
+        this.canExpandRowsCache.set(key, canExpand);
+      }
+    }),
+    map(([ canExpand, _key ]) => canExpand),
   );
 
   private featureDetailsKey$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
