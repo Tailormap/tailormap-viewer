@@ -19,7 +19,7 @@
 }
 
 <mat-menu #dropdownMenu="matMenu" class="options-menu">
-  @for (option of optionsList; track option) {
+  @for (option of optionsList; track option.id) {
     <button mat-menu-item
       class="split-button-menu-item"
       [tmTooltip]="option.label"

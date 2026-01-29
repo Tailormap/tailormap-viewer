@@ -13,7 +13,7 @@ permissions: { }
 jobs:
   test-results:
     name: 'Process Test Results'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: github.event.workflow_run.conclusion != 'skipped'
 
     permissions:

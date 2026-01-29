@@ -1,4 +1,4 @@
-import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal, inject } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal, inject, computed } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
@@ -7,10 +7,11 @@ import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { FeatureHelper } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum, FeatureModel, SimpleSearchConfigModel } from '@tailormap-viewer/api';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SearchResultModel, SearchResultItemModel } from './models';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -26,6 +27,7 @@ export class SimpleSearchComponent implements OnInit {
   private searchService = inject(SimpleSearchService);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private static readonly SEARCH_DEBOUNCE_TIME = 1000;
@@ -38,17 +40,30 @@ export class SimpleSearchComponent implements OnInit {
   private searchResultsSubject = new Subject<SearchResultModel[] | null>();
   public searchResults$: Observable<SearchResultModel[] | null> = this.searchResultsSubject.asObservable();
 
-  private searchStatusSubject = new Subject<SearchStatusType>();
-  public searchStatus$: Observable<SearchStatusType> = this.searchStatusSubject.asObservable();
+  public searchStatus = signal<SearchStatusType>('empty');
+  private closeFullScreen = signal<boolean>(false);
+  public disableTransition = signal<boolean>(false);
   private isPanelOpen: boolean = false;
   private config: SimpleSearchConfigModel | undefined;
   public label: string = $localize `:@@core.toolbar.search-location:Search location`;
+  public readonly isMobile = toSignal(
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+    { initialValue: false },
+  );
+
+  public fullScreen = computed(() => {
+    const active = this.active();
+    const searchStatus = this.searchStatus();
+    const closeFullScreen = this.closeFullScreen();
+    const isMobile = this.isMobile();
+    return active && searchStatus !== 'empty' && !closeFullScreen && isMobile;
+  });
 
   constructor() {
     afterEveryRender(() => {
       // This is a bit of a hack, since we cannot define a header or something like that for an Autocomplete component
       // We manually move the search summary up to the panel itself, making the list scrollable, without the summary
-      if (this.isPanelOpen) {
+      if (this.isPanelOpen || this.fullScreen()) {
         this.moveSummeryUp();
       }
     });
@@ -68,17 +83,24 @@ export class SimpleSearchComponent implements OnInit {
       filter(() => this.active()),
       filter((value): value is string => typeof value === 'string'));
 
-    this.searchStatusSubject.next('empty');
     searchTerm$.pipe(
       takeUntilDestroyed(this.destroyRef),
       tap(searchStr => {
+        if (this.closeFullScreen()) {
+          this.closeFullScreen.set(false);
+        }
         if (searchStr.length < this.minLength) {
+          const wasNotEmpty = this.searchStatus() !== 'empty';
           this.searchResultsSubject.next(null);
-          this.searchStatusSubject.next(searchStr.length > 0 ? 'belowMinLength' : 'empty');
+          this.searchStatus.set(searchStr.length > 0 ? 'belowMinLength' : 'empty');
+          if (wasNotEmpty && searchStr.length === 0 && this.isMobile()) {
+            this.disableTransition.set(true);
+            setTimeout(() => this.disableTransition.set(false), 0);
+          }
         }
       }),
-      filter(searchStr => (searchStr || '').length >= this.minLength),
       debounceTime(SimpleSearchComponent.SEARCH_DEBOUNCE_TIME),
+      filter(searchStr => (searchStr || '').length >= this.minLength),
       switchMap(searchStr => this.search$(searchStr)),
     ).subscribe(searchResults => this.applySearchResults(searchResults));
 
@@ -104,20 +126,23 @@ export class SimpleSearchComponent implements OnInit {
     this.active.set(close ? false : !this.active());
   }
 
-  public displayLabel(result: SearchResultItemModel): string {
+  public displayLabel(result: string | SearchResultItemModel | null): string {
+    if (typeof result === 'string') {
+      return result;
+    }
     return result && result.label ? result.label : '';
   }
 
   private search$(searchStr: string) {
     return this.mapService.getProjectionCode$().pipe(
-      tap(() => this.searchStatusSubject.next('searching')),
+      tap(() => this.searchStatus.set('searching')),
       switchMap(projectionCode => this.searchService.search$(projectionCode, searchStr, this.config)),
     );
   }
 
   private applySearchResults(searchResults: SearchResultModel[]) {
     this.searchResultsSubject.next(searchResults);
-    this.searchStatusSubject.next(searchResults.every(r => r.results.length === 0) ? 'no_results' : 'complete');
+    this.searchStatus.set(searchResults.every(r => r.results.length === 0) ? 'no_results' : 'complete');
   }
 
   private showResult(searchResult: SearchResultItemModel) {
@@ -143,6 +168,12 @@ export class SimpleSearchComponent implements OnInit {
         return this.mapService.renderFeatures$('search-result-highlight', of(feature), style, { zoomToFeature: true, updateWhileAnimating: true });
       }),
       takeUntil(timer(5000))).subscribe();
+
+    if (this.isMobile()) {
+      this.disableTransition.set(true);
+      setTimeout(() => this.disableTransition.set(false), 0);
+      this.closeFullScreen.set(true);
+    }
   }
 
   public scrollTo($event: MouseEvent, id: string) {
@@ -166,6 +197,7 @@ export class SimpleSearchComponent implements OnInit {
   private moveSummeryUp() {
     const summary = document.querySelector('.result-summary');
     const panel = document.querySelector('.search-panel');
+    console.debug('Moving summary up', summary, panel);
     if (!summary || !panel || summary.parentElement !== panel) {
       return;
     }

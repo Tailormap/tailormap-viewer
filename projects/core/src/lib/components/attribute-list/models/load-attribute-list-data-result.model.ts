@@ -10,4 +10,5 @@ export interface LoadAttributeListDataResultModel {
   columns: AttributeListColumnModel[];
   rows: AttributeListRowModel[];
   pageSize: number;
+  pageIndex?: number;
 }

@@ -89,6 +89,7 @@ const onLoadDataSuccess = (
         errorMessage: payload.data.errorMessage,
         totalCount: payload.data.totalCount,
         pageSize: payload.data.pageSize,
+        pageIndex: typeof payload.data.pageIndex !== 'undefined' ? payload.data.pageIndex : data.pageIndex,
         rows: payload.data.rows,
         columns: data.columns.length > 0 ? data.columns : payload.data.columns,
         selectedRowId: undefined,
@@ -248,7 +249,7 @@ const onSetSelectedDataId = (
   tabs: AttributeListStateHelper.updateTab(
     state.tabs,
     payload.tabId,
-    tab => ({ ...tab, selectedDataId: payload.dataId }),
+    tab => ({ ...tab, loadingData: true, selectedDataId: payload.dataId }),
   ),
 });
 

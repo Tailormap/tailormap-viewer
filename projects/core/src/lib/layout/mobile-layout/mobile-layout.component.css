@@ -25,6 +25,13 @@
   background-color: #FFFFFF;
 }
 
+.map-controls-left {
+  position: absolute;
+  padding-top: var(--body-margin);
+  padding-left: var(--body-margin);
+  z-index: 20;
+}
+
 .map-controls-left--on-bottom {
   bottom: var(--body-margin);
   top: auto;
@@ -32,4 +39,15 @@
   left: var(--body-margin);
   transition: transform ease-in-out 0.25s;
   display: flex;
+}
+
+.map-controls-right {
+  position: absolute;
+  top: var(--body-margin);
+  right: var(--body-margin);
+  z-index: 3;
+}
+
+.map-controls-right ::ng-deep .geolocation-buttons {
+  margin-top: 0;
 }

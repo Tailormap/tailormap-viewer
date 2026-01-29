@@ -126,6 +126,7 @@ export class EditComponent implements OnInit, OnDestroy {
         }
       });
 
+
     this.authenticatedUserService.getUserDetails$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((userDetails) => {

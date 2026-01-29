@@ -27,7 +27,7 @@ export interface GetFeaturesParams {
    */
   filter?: Map<string | symbol, string> | null;
   /**
-   * Optional page number for paginated results (0-based).
+   * Optional page number for paginated results (1, 2, 3, ...).
    */
   page?: number;
   /**
@@ -135,6 +135,58 @@ export interface GetUniqueValuesParams {
   filter?: Map<string | symbol, string> | null;
 }
 
+export interface CanExpandRowParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer.
+   */
+  layerId: string;
+}
+
+export interface GetFeatureDetailsParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer.
+   */
+  layerId: string;
+  /**
+   * The feature ID.
+   */
+  __fid: string;
+}
+
+export interface FeatureDetailModel {
+  /**
+   * The feature detail name.
+   */
+  name: string;
+  /**
+   * The column definitions (label and key for each attribute column).
+   */
+  columns: Array<{ label: string; key: string }>;
+  /**
+   * The attribute values.
+   */
+  attributes: Array<{ [key: string]: any }>;
+}
+
+export interface FeatureDetailsModel {
+  /**
+   * The feature ID.
+   */
+  __fid: string;
+  /**
+   * The attributes of the feature.
+   */
+  details: FeatureDetailModel[];
+}
+
 /**
  * Interface for implementing custom attribute list data loaders.
  * Implementations of this interface can be registered as data sources for the attribute list.
@@ -167,4 +219,18 @@ export interface AttributeListApiServiceModel {
    * @returns Observable emitting the unique values response.
    */
   getUniqueValues$(params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel>;
+
+  /**
+   * Determines if rows in the specified layer can be expanded to show more details.
+   * @param params Parameters specifying the application and layer ID.
+   * @returns Observable emitting a boolean indicating if rows can be expanded.
+   */
+  canExpandRow$?(params: CanExpandRowParams): Observable<boolean>;
+
+  /**
+   * Retrieves detailed information for a specific feature. This is used when expanding rows.
+   * @param params Parameters specifying the application, layer ID, and feature ID.
+   * @returns Observable emitting the feature details model or null if not found.
+   */
+  getFeatureDetails$?(params: GetFeatureDetailsParams): Observable<FeatureDetailsModel | null>;
 }

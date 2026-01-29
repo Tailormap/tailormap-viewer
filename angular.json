@@ -42,11 +42,15 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "preserveSymlinks": true,
             "outputPath": {
               "base": "dist/app"
             },
             "index": "projects/app/src/index.html",
-            "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
+            "polyfills": [
+              "projects/app/src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -110,7 +114,9 @@
           },
           "configurations": {
             "nl": {
-              "localize": ["nl"]
+              "localize": [
+                "nl"
+              ]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",

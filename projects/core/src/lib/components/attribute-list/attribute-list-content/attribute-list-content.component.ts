@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper } from '@tailormap-viewer/shared';
+import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -28,6 +29,11 @@ import { CssHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class AttributeListContentComponent implements OnInit {
+  private store$ = inject(Store);
+  private attributeListStateService = inject(AttributeListStateService);
+  private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private dialog = inject(MatDialog);
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
@@ -39,10 +45,9 @@ export class AttributeListContentComponent implements OnInit {
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
 
-  private store$ = inject(Store);
-  private attributeListStateService = inject(AttributeListStateService);
-  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
-  private dialog = inject(MatDialog);
+  public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
+  public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
+  public loadingFeatureDetailsIds$ = this.attributeListFeatureDetailsService.loadingFeatureDetailsIds$;
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -150,6 +155,10 @@ export class AttributeListContentComponent implements OnInit {
         }
         this.store$.dispatch(loadData({ tabId: tab.id }));
       });
+  }
+
+  public loadFeatureDetailsForFeature($event: string) {
+    this.attributeListFeatureDetailsService.loadFeatureDetailsForFeature($event);
   }
 
 }

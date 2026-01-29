@@ -219,3 +219,18 @@ mat-mdc-footer-cell {
   background-clip: content-box;
   transform: none;
 }
+
+.details-row.collapsed {
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.row-expand-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.row-expand-icon:hover {
+  color: var(--primary-color);
+}
