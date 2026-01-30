@@ -13,6 +13,7 @@ import { MapPdfPrintOptions, MapPdfService } from '../../services/map-pdf/map-pd
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectViewerLogo } from '../../state/core.selectors';
+import type { jsPDF } from 'jspdf';
 
 export interface PrintableLayers {
   layers: LayerModel[];
@@ -34,6 +35,7 @@ export interface PrintPdfOptions extends PrintOptions {
   autoPrint: boolean;
   legendLayer: string;
   showBookmark: boolean;
+  addDrawingLegendFunction?: (doc: jsPDF, width: number, height: number) => Observable<void>;
 }
 
 export interface PrintImageOptions extends PrintOptions {
@@ -114,6 +116,7 @@ export class PrintService implements OnDestroy {
             filename,
             logo,
             bookmarkUrl: options.showBookmark ? `${window.location}` : null,
+            addDrawingLegendFunction: options.addDrawingLegendFunction,
           };
           return this.mapPdfService.create$({
             printOptions,
@@ -278,5 +281,4 @@ export class PrintService implements OnDestroy {
       take(1),
     );
   }
-
 }
