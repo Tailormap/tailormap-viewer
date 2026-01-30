@@ -36,12 +36,13 @@ mat-checkbox {
   color: var(--primary-color);
 }
 
-.tree-node-mobile--selected {
+.tree-node--selected-with-info {
   background-color: var(--primary-color-0_1);
   border-radius: 8px;
 }
 
-.tree-node-mobile--selected .tree-node--selected {
+.tree-node--selected-with-info .tree-node-wrapper--leaf {
+  background-color: var(--primary-color-0_1);
   border-radius: 8px 8px 0 0;
 }
 

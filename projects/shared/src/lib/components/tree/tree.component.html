@@ -8,15 +8,14 @@
                              [maxBufferPx]="400"
                              class="mat-tree tree-wrapper">
   <ng-container *cdkVirtualFor="let node of dataSource$; trackBy: treeTrackBy">
-    <div [class.tree-node--selected]="selectedNodeId === node.id && !isMobileToc"
-         [class.tree-node-mobile--selected]="activeMobileInfoNodes.includes(node.id) && isMobileToc"
+    <div [class.tree-node--selected]="selectedNodeId === node.id && !openInfoInTree"
+         [class.tree-node--selected-with-info]="activeInTreeInfoNodes.includes(node.id) && openInfoInTree"
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.padding-left]="depth(node) * 20 + 'px'"
          (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"
-           [class.tree-node--selected]="activeMobileInfoNodes.includes(node.id) && isMobileToc"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         @if (!hasChild(node)) {
           @if (node.checkbox && !useRadioInputs) {
@@ -62,9 +61,9 @@
           }
         </div>
       </div>
-      @if (activeMobileInfoNodes.includes(node.id)) {
+      @if (activeInTreeInfoNodes.includes(node.id)) {
         <div class="layer-info-mobile">
-          <ng-container *ngTemplateOutlet="nodeInfoMobileTemplate ? nodeInfoMobileTemplate : null; context: {$implicit: node}"></ng-container>
+          <ng-container *ngTemplateOutlet="nodeInfoInTreeTemplate ? nodeInfoInTreeTemplate : null; context: {$implicit: node}"></ng-container>
         </div>
       }
     </div>

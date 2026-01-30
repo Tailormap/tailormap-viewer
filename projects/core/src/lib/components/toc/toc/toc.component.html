@@ -56,10 +56,10 @@
       [class.toc-tree--mobile]="mobileToc()"
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
-      [isMobileToc]="mobileToc()"
-      [nodeInfoMobileTemplate]="nodeInfoMobile"
+      [openInfoInTree]="mobileToc()"
+      [nodeInfoInTreeTemplate]="nodeInfoMobile"
       [getDropZones]="getDropZoneConfig()"
-      [activeMobileInfoNodes]="activeMobileInfoNodes()"></tm-tree>
+      [activeInTreeInfoNodes]="activeMobileInfoNodes()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
       @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>

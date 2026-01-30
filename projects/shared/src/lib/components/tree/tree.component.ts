@@ -66,19 +66,13 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   public extendedDropzone?: boolean;
 
   @Input()
-  public isMobileToc = false;
+  public openInfoInTree = false;
 
   @Input()
-  public nodeInfoMobileTemplate?: TemplateRef<any>;
-
-  // @Input()
-  // public infoTreeNode: LayerTreeNodeWithLayerModel | null | undefined;
-
-  // @Input()
-  // public showMobileInfo = false;
+  public nodeInfoInTreeTemplate?: TemplateRef<any>;
 
   @Input()
-  public activeMobileInfoNodes: string[] = [];
+  public activeInTreeInfoNodes: string[] = [];
 
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
@@ -174,7 +168,7 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public setNodeSelected(node: FlatTreeModel) {
-    if (this.isMobileToc) {
+    if (this.openInfoInTree) {
       return;
     }
     this.treeService.selectionStateChanged(node);
