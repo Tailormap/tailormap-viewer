@@ -41,8 +41,13 @@ mat-checkbox {
   border-radius: 8px;
 }
 
+.tree-node--selected-with-info + .tree-node--selected-with-info {
+  margin-top: 4px;
+}
+
 .tree-node--selected-with-info .tree-node-wrapper--leaf {
   background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
   border-radius: 8px 8px 0 0;
 }
 

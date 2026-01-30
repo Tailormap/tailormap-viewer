@@ -17,7 +17,6 @@ export class MenubarService {
   public panelWidth = 300;
   private mobilePanelHeight$ = new BehaviorSubject<number | null>(null);
 
-
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
       if (BrowserHelper.isMobile && MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
