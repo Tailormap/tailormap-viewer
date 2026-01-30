@@ -25,9 +25,6 @@ export class TocNodeDetailsMobileComponent {
     if (value && value.metadata?.id) {
       this.store$.select(selectLayer(value.metadata?.id)).pipe(take(1)).subscribe(layer => this.layer = layer);
     }
-
   }
-
-  constructor() { }
 
 }

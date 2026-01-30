@@ -50,7 +50,6 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public infoVisible = signal(false);
   public infoTreeNode$ = this.store$.select(selectSelectedNode);
-  // public showMobileInfo = signal(false);
   public activeMobileInfoNodes = signal<string[]>([]);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
@@ -186,17 +185,5 @@ export class TocComponent implements OnInit, OnDestroy {
     } else {
       this.activeMobileInfoNodes.set([ ...activeMobileInfoNodes, node.id ]);
     }
-    console.debug('setShowMobileInfo', node.id, this.activeMobileInfoNodes());
-    // this.infoTreeNode$
-    //   .pipe(take(1))
-    //   .subscribe(current => {
-    //     if (current?.id === node.id) {
-    //       const visible = this.showMobileInfo();
-    //       this.showMobileInfo.set(!visible);
-    //     } else {
-    //       this.showMobileInfo.set(true);
-    //     }
-    //     this.treeService.selectionStateChanged(node);
-    //   });
   }
 }

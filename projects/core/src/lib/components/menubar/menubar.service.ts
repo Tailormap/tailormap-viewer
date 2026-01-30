@@ -45,10 +45,8 @@ export class MenubarService {
     return this.activeComponent$.asObservable().pipe(map(c => c !== null && c.componentId === componentId));
   }
 
-  public registerComponent(component: RegisteredComponent, standardMenubarComponent = true) {
-    if (standardMenubarComponent) {
-      this.componentRegistrationService.registerComponent('menu', component);
-    }
+  public registerComponent(component: RegisteredComponent) {
+    this.componentRegistrationService.registerComponent('menu', component);
     if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(component.type)) {
       this.componentRegistrationService.registerComponent('mobile-menu-bottom', component);
     }
@@ -57,10 +55,8 @@ export class MenubarService {
     }
   }
 
-  public deregisterComponent(type: string, standardMenubarComponent = true) {
-    if (standardMenubarComponent) {
-      this.componentRegistrationService.deregisterComponent('menu', type);
-    }
+  public deregisterComponent(type: string) {
+    this.componentRegistrationService.deregisterComponent('menu', type);
     if (MobileLayoutService.MOBILE_MENUBAR_COMPONENTS.includes(type)) {
       this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', type);
     }

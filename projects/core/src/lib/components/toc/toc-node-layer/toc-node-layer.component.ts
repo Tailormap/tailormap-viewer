@@ -92,7 +92,7 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  public toggleShowMobileInfo() {
+  public showInfo() {
     this.emitShowInfo.emit(true);
   }
 
