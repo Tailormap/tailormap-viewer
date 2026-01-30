@@ -8,6 +8,10 @@
   padding-right: var(--toc-side-padding);
 }
 
+.toc-tree--mobile ::ng-deep .tree-wrapper {
+  padding-right: 0;
+}
+
 .toc-tree ::ng-deep .mat-tree-node {
   height: fit-content;
 }
@@ -53,6 +57,10 @@
   flex: 1;
   overflow: hidden;
   padding: 6px 0 0 var(--toc-side-padding);
+}
+
+.toc-tree--mobile {
+  padding: 0 6px;
 }
 
 tm-toc-filter-input {

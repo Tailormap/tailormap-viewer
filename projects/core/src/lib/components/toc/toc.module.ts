@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { tocStateKey } from './state/toc.state';
 import { tocReducer } from './state/toc.reducer';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
+import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-node-details-mobile.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.com
     LayerTransparencyComponent,
     LayerDetailsComponent,
     TocFilterInputComponent,
+    TocNodeDetailsMobileComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +37,7 @@ import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.com
   ],
   exports: [
     TocComponent,
+    TocNodeDetailsMobileComponent,
   ],
 })
 export class TocModule { }
