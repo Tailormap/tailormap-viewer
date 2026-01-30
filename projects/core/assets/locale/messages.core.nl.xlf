@@ -1150,10 +1150,6 @@
         <source>Available layers</source>
         <target>Beschikbare lagen</target>
       </trans-unit>
-      <trans-unit id="core.toc.backgroundLayers" datatype="html">
-        <source>Background layers</source>
-        <target>Achtergrond lagen</target>
-      </trans-unit>
       <trans-unit id="core.toc.close-details" datatype="html">
         <source>Close details</source>
         <target>Details sluiten</target>
@@ -1184,10 +1180,6 @@
         <target>Er is een filter toegepast op deze laag</target>
         <note priority="1" from="description">:</note>
       </trans-unit>
-      <trans-unit id="core.toc.layers" datatype="html">
-        <source>Layers</source>
-        <target>Lagen</target>
-      </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
         <target>Legenda</target>
@@ -1203,10 +1195,6 @@
       <trans-unit id="core.toc.reset-opacity" datatype="html">
         <source>Reset opacity</source>
         <target>Ondoorzichtigheid terugzetten</target>
-      </trans-unit>
-      <trans-unit id="core.toc.terrainLayers" datatype="html">
-        <source>Terrain layers</source>
-        <target>Terrein lagen</target>
       </trans-unit>
       <trans-unit id="core.toc.toggle-layers-off" datatype="html">
         <source>Toggle all layers off</source>
