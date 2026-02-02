@@ -4,6 +4,9 @@
 
 .tree-node {
   padding: 5px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .tree-node__label {
@@ -42,4 +45,8 @@
 
 .not-visible-on-map .icon {
   color: var(--text-color);
+}
+
+.layer-info-mobile {
+  flex-basis: 100%;
 }
