@@ -1,20 +1,18 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import {
-  BehaviorSubject, combineLatest, finalize, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
-} from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, combineLatest, finalize, map, Observable, of, startWith, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenubarService } from '../../menubar';
 import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button.component';
 import { ExtentHelper, MapService } from '@tailormap-viewer/map';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
-import {
-  selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend,
-} from '../../../map/state/map.selectors';
+import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.selectors';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { PrintImageOptions, PrintOptions, PrintPdfOptions, PrintResult, PrintService } from '../print.service';
+import { DrawingLegendPrintService } from '../../drawing/services/drawing-legend-print-service';
+import type { jsPDF } from 'jspdf';
 
 const DEFAULT_IMAGE_OPTIONS: PrintImageOptions = {
   type: 'image',
@@ -48,7 +46,7 @@ export class PrintComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private applicationMapService = inject(ApplicationMapService);
   private printService = inject(PrintService);
-
+  private drawingLegendPrintService = inject(DrawingLegendPrintService);
 
   private busySubject = new BehaviorSubject(false);
   public busy$ = this.busySubject.asObservable();
@@ -134,7 +132,7 @@ export class PrintComponent implements OnInit, OnDestroy {
       return options;
     }
     if (this.exportType.value === 'pdf' && this.exportPdfForm.valid) {
-      const options: PrintPdfOptions = {
+      return {
         type: 'pdf',
         orientation: this.exportPdfForm.value.orientation || DEFAULT_PDF_OPTIONS.orientation,
         title: this.exportPdfForm.value.title || DEFAULT_PDF_OPTIONS.title,
@@ -145,10 +143,14 @@ export class PrintComponent implements OnInit, OnDestroy {
         legendLayer: this.exportPdfForm.value.legendLayer || DEFAULT_PDF_OPTIONS.legendLayer,
         dpi: this.exportPdfForm.value.dpi || DEFAULT_PDF_OPTIONS.dpi,
         includeDrawing: this.includeDrawing.value ?? undefined,
+        addDrawingLegendFunction: this.addDrawingLegend.bind(this),
       };
-      return options;
     }
     return null;
+  }
+
+  public addDrawingLegend(doc: jsPDF, width: number, height: number) {
+    return this.drawingLegendPrintService.addDrawingLegend(doc, width, height);
   }
 
   public ngOnDestroy(): void {
