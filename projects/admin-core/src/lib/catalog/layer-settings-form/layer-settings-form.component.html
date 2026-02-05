@@ -116,6 +116,29 @@
         <input matInput type="number" formControlName="tilingGutter" />
       </mat-form-field>
     }
+
+    @if (availableStyles.length > 1) {
+      <!-- show a list of available styles to choose from when the layer has more than one style.
+      When only one style is available that is the default style which does not need to be specified -->
+      <div class="form-control">
+        <strong i18n="@@admin-core.catalog.available-styles">Available styles</strong>
+        <mat-list class="styles-list">
+          @for (style of availableStyles; track style) {
+            <ng-container>
+              <mat-list-item class="styles-list-item">
+                <mat-checkbox [checked]="isStyleSelected(style)"
+                              [tmTooltip]="style.abstractText ?? style.title ?? style.name"
+                              (change)="toggleStyle(style, $event.checked)"
+                >
+                  {{ style.name }} ({{ style.title }})
+                </mat-checkbox>
+              </mat-list-item>
+            </ng-container>
+          }
+        </mat-list>
+      </div>
+    }
+
   }
   @if ( (isWMS || isWMTS || isXYZ) && (projectionAvailability$ | async); as projectionAvailability) {
     <div class="available-crs">

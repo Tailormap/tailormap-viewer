@@ -6,7 +6,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GeoServiceService } from '../services/geo-service.service';
-import { LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { LayerSettingsModel, WmsStyleModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
@@ -40,6 +40,7 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public updatedLayerSettings: Partial<LayerSettingsModel> | null = null;
   public legendImageId: string | null | undefined = null;
+  public availableStyles$: Observable<WmsStyleModel[]> = of([]);
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
@@ -63,6 +64,17 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
           this.updatedLayerSettings = null;
           this.legendImageId = layerSettings.settings.legendImageId;
         }
+      }),
+    );
+
+    this.availableStyles$ = layerId$.pipe(
+      switchMap(layerId => {
+        if (typeof layerId !== 'string') {
+          return of([]);
+        }
+        return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId)).pipe(
+          map(info => info?.layer.styles || []),
+        );
       }),
     );
 
