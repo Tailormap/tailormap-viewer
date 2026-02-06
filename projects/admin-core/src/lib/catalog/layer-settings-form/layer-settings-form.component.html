@@ -122,20 +122,20 @@
       When only one style is available that is the default style which does not need to be specified -->
       <div class="form-control">
         <strong i18n="@@admin-core.catalog.available-styles">Available styles</strong>
-        <mat-list class="styles-list">
+        <mat-selection-list class="styles-list">
           @for (style of availableStyles; track style) {
-            <ng-container>
-              <mat-list-item class="styles-list-item">
-                <mat-checkbox [checked]="isStyleSelected(style)"
-                              [tmTooltip]="style.abstractText ?? style.title ?? style.name"
-                              (change)="toggleStyle(style, $event.checked)"
-                >
-                  {{ style.name }} ({{ style.title }})
-                </mat-checkbox>
-              </mat-list-item>
-            </ng-container>
+            <mat-list-option
+              (selectedChange)="toggleStyle(style, $event)"
+              [selected]="isStyleSelected(style)"
+              [tmTooltip]="style.abstractText ?? style.title ?? style.name"
+              [value]="style"
+              class="styles-list-item"
+            >
+              <span matListItemTitle>{{ style.name }}</span>
+              <span matListItemLine>{{ style.title }}</span>
+            </mat-list-option>
           }
-        </mat-list>
+        </mat-selection-list>
       </div>
     }
 
