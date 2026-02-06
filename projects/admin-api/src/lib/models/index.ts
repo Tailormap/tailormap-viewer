@@ -52,3 +52,4 @@ export * from './taskschedule.model';
 export * from './task.model';
 export * from './task-details.model';
 export * from './admin-server-config.model';
+export * from './wms-style.model';

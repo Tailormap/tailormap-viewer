@@ -1262,6 +1262,10 @@
         <source>Tiling gutter</source>
         <target>Kachel-Zwischenraum</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+        <target>Verfügbare Stile</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>
         <target>Leer lassen, um den Titel zu verwenden, wie er vom Dienst bereitgestellt wird.</target>

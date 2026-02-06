@@ -77,6 +77,7 @@ export class ExtendedCatalogModelHelper {
         parentId: parent ? `${geoServiceId}_${parent.id}` : undefined,
         layerSettings: layerSettings?.[layer.name],
         protocol: protocol,
+        styles: layer.styles,
       };
     });
   }
