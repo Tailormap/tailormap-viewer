@@ -16,8 +16,16 @@
 .mobile-menubar-home-buttons {
   flex: 0 0 6vh;
   border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: row;
 }
 
 .mobile-menubar-home-buttons ::ng-deep button {
   height: 5vh;
+}
+
+.mobile-menubar-home-buttons tm-switch3-d {
+  display: flex;
+  height: 40px;
+  width: 40px;
 }

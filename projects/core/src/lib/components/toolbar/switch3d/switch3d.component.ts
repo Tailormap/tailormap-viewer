@@ -39,7 +39,7 @@ export class Switch3dComponent {
   ];
 
   public enable: Signal<boolean> = this.store$.selectSignal(selectEnable3d);
-  public allowSwitch = signal(false);
+  public allowSwitch = signal(true);
 
   public in3dView: Signal<boolean> = this.store$.selectSignal(selectIn3dView);
   public tooltip: Signal<string> = computed(() => {

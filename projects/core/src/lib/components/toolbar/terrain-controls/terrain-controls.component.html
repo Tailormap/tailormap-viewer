@@ -1,5 +1,5 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
-@if (layoutConfig) {
+@if (layoutConfig && !noExpansionPanel()) {
   <div class="terrain-controls map-control-button-container">
     <mat-expansion-panel
       [style.width.px]="panelWidth"
@@ -18,4 +18,11 @@
       </div>
     </mat-expansion-panel>
   </div>
+} @else if (layoutConfig) {
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
+    <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
+  }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
+    <tm-terrain-layer-toggle class="terrain-layer-toggle" [label]="layerToggleLabel"></tm-terrain-layer-toggle>
+  }
 }

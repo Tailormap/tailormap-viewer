@@ -1,10 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, DestroyRef, ElementRef, OnDestroy, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, DestroyRef, ElementRef, OnDestroy, viewChild, OnInit, input } from '@angular/core';
 import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { LayoutService } from '../../../layout/layout.service';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest } from 'rxjs';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
+import { ComponentRegistrationService } from '../../../services';
 
 @Component({
   selector: 'tm-terrain-controls',
@@ -13,11 +15,14 @@ import { selectComponentsConfigForType } from '../../../state/core.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class TerrainControlsComponent implements OnDestroy {
+export class TerrainControlsComponent implements OnInit, OnDestroy {
   public layoutService = inject(LayoutService);
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private componentRegistrationService = inject(ComponentRegistrationService);
 
+
+  public noExpansionPanel = input<boolean>(false);
 
   public tooltip: string = '';
   public opacityLabel: string = $localize `:@@core.terrain-controls.opacity:Terrain opacity`;
@@ -70,8 +75,13 @@ export class TerrainControlsComponent implements OnDestroy {
     this.panelWidth = el.scrollWidth + 48;
   }
 
+  public ngOnInit(): void {
+    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.TERRAIN_CONTROLS, component: TerrainControlsMenuButtonComponent });
+  }
+
   public ngOnDestroy() {
     this.resizeObserver?.disconnect();
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.TERRAIN_CONTROLS);
   }
 
 }
