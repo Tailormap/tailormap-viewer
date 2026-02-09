@@ -154,7 +154,6 @@ export class MapPdfService {
           return of();
         }
       }),
-      map(() => console.log('hallo')),
       map(() => doc.output('dataurlstring', { filename: options.printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
     );
   }

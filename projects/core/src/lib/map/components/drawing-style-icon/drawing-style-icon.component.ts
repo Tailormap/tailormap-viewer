@@ -71,7 +71,7 @@ export class DrawingStyleIconComponent {
 
   private static defaultRgb = 'rgb(30,30,30)';
 
-  private static getRgbStyleForColor(color?: string) {
+  public static getRgbStyleForColor(color?: string) {
     return color ? ColorHelper.getRgbStyleForColor(color) : DrawingStyleIconComponent.defaultRgb;
   }
 
