@@ -7,7 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel } from '@tailormap-viewer/api';
+import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
@@ -163,5 +163,13 @@ export class TocComponent implements OnInit, OnDestroy {
   public editLayer(layer: string) {
     this.store$.dispatch(setSelectedEditLayer( { layer }));
     this.store$.dispatch(setEditActive({ active: true }));
+  }
+
+  protected changeStyle({ layerId, style }: {layerId: string; style: WmsStyleModel}) {
+    // TODO: implement style change
+    //    - emit event with changed style (maybe only the title of the style, or the whole style object)
+    //    - update the layer url in the map component with the new style and refresh map/layer
+    //    - update the legend url in the map component with the new style and refresh legend
+    console.debug('TODO: Style changed on layer', layerId, ' to style:', style);
   }
 }
