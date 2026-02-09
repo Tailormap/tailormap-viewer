@@ -48,6 +48,21 @@
   z-index: 3;
 }
 
+.map-controls-right--on-bottom {
+  bottom: var(--body-margin);
+  top: auto;
+  position: absolute;
+  right: var(--body-margin);
+  transition: transform ease-in-out 0.25s;
+  display: flex;
+  z-index: 3;
+}
+
 .map-controls-right ::ng-deep .geolocation-buttons {
   margin-top: 0;
+}
+
+.map ::ng-deep .ol-attribution {
+  right: auto;
+  left: calc(var(--body-margin) - 8px);
 }
