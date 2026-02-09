@@ -27,7 +27,7 @@ export interface GetFeaturesParams {
    */
   filter?: Map<string | symbol, string> | null;
   /**
-   * Optional page number for paginated results (0-based).
+   * Optional page number for paginated results (1, 2, 3, ...).
    */
   page?: number;
   /**

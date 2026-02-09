@@ -2,13 +2,15 @@
   <h2 class="page-details-title" i18n="@@admin-core.catalog.edit-settings-for-layer">Edit settings for layer {{ geoServiceSettings.layerTitle }}</h2>
   <div class="geo-service-layer-settings">
     <div class="settings">
-      <tm-admin-layer-settings-form [layerSettings]="geoServiceSettings.settings"
+      <tm-admin-layer-settings-form
+        [layerSettings]="geoServiceSettings.settings"
         [protocol]="geoServiceSettings.protocol"
         [layerName]="geoServiceSettings.layerName"
         [serviceId]="geoServiceSettings.serviceId"
         [isLayerSpecific]="true"
         [isLeaf]="isLeaf$ | async"
         [projectionAvailability$]="projectionAvailability$"
+        [availableStyles]="(availableStyles$ | async) ?? []"
       (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
     </div>
     <div class="legend-settings">
