@@ -4,14 +4,14 @@ import { FormControl, FormGroup } from '@angular/forms';
 import {
   AuthorizationGroups,
   AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
-  WmsStyleModel,
+
 } from '@tailormap-admin/admin-api';
 import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
-import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
+import { BoundsModel, TileLayerHiDpiModeEnum, WmsStyleModel } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
 

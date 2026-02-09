@@ -43,3 +43,7 @@
 .not-visible-on-map .icon {
   color: var(--text-color);
 }
+
+.style-radio-button {
+  font-style: italic;
+}
