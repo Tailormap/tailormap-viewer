@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import {
   AuthorizationGroups,
   AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
+  WmsStyleModel,
 } from '@tailormap-admin/admin-api';
 import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
@@ -99,6 +100,9 @@ export class LayerSettingsFormComponent implements OnInit {
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');
 
+  @Input()
+  public availableStyles: WmsStyleModel[] = [];
+
   public isWMS = false;
   public isWMTS = false;
   public isXYZ = false;
@@ -124,6 +128,7 @@ export class LayerSettingsFormComponent implements OnInit {
     tileGridExtent: new FormControl<BoundsModel | null>(null),
     tileSize: new FormControl<number | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
+    selectedStyles: new FormControl<WmsStyleModel[]>([]),
   });
 
   constructor() {
@@ -175,6 +180,7 @@ export class LayerSettingsFormComponent implements OnInit {
         ...settings,
         tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.tilingEnabled, undefined),
         tilingGutter: value.tilingGutter || undefined,
+        selectedStyles: value.selectedStyles ?? [],
       };
       return wmsSettings;
     }
@@ -247,6 +253,7 @@ export class LayerSettingsFormComponent implements OnInit {
     if (this.isWmsSettingsModel(this.layerSettings)) {
       patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : false);
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
+      patchValue.selectedStyles = this.layerSettings?.selectedStyles || [];
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {
       patchValue.minZoom = this.layerSettings?.minZoom || null;
@@ -306,5 +313,31 @@ export class LayerSettingsFormComponent implements OnInit {
 
   public onLegendImageChanged($event: string | null) {
     this.layerSettingsForm.patchValue({ legendImageId: $event });
+  }
+
+  public isStyleSelected(style: WmsStyleModel): boolean {
+    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value;
+    if (!Array.isArray(selectedStyles)) {
+      return false;
+    }
+    return selectedStyles.some((s: WmsStyleModel) => s.name === style.name);
+  }
+
+  public toggleStyle(style: WmsStyleModel, checked: boolean): void {
+    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value || [];
+    let updatedStyles: WmsStyleModel[];
+    if (checked) {
+      // Add style if not already present
+      if (!selectedStyles.some((s: WmsStyleModel) => s.name === style.name)) {
+        updatedStyles = [ ...selectedStyles, style ];
+      } else {
+        updatedStyles = selectedStyles;
+      }
+    } else {
+      // Remove style
+      updatedStyles = selectedStyles.filter((s: WmsStyleModel) => s.name !== style.name);
+    }
+    this.layerSettingsForm.get('selectedStyles')?.setValue(updatedStyles);
+    this.layerSettingsForm.get('selectedStyles')?.markAsDirty();
   }
 }
