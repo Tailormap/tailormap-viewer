@@ -35,6 +35,7 @@ export interface LayerProperties {
 }
 
 interface WmsServiceParamsModel {
+  STYLES: string;
   LAYERS: string;
   VERSION: string;
   QUERY_LAYERS?: string;
@@ -385,6 +386,7 @@ export class OlLayerHelper {
       VERSION: '1.3.0',
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
+      STYLES: '',
     };
     if (layer.filter && layer.serverType === TMServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver (transform CQL to SLD for SLD_BODY param)
@@ -395,6 +397,9 @@ export class OlLayerHelper {
     }
     if (addCacheBust) {
       params.CACHE = Date.now();
+    }
+    if (layer.styles && layer.selectedStyleName) {
+      params.STYLES = layer.selectedStyleName;
     }
     return params;
   }

@@ -37,4 +37,5 @@ export interface AppLayerModel {
   tileset3dStyle?: Tileset3dStyle;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
   styles?: WmsStyleModel[] | null;
+  selectedStyleName?: string | null;
 }

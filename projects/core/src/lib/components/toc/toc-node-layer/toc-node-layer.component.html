@@ -52,7 +52,7 @@
           <mat-radio-button [checked]="style === node.metadata?.styles?.[0]"
                             [value]="style"
                             class="style-radio-button"
-                            tmTooltip="{{style.abstractText??''}}"
+                            tmTooltip="{{ style.abstractText ?? '' }}"
           >
             {{ style.title ?? style.name }}
           </mat-radio-button>

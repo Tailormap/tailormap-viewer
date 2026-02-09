@@ -9,4 +9,5 @@ export interface WMSLayerModel extends ServiceLayerModel {
   tilingGutter?: number;
   language?: string;
   styles?: WmsStyleModel[] | null;
+  selectedStyleName?: string | null;
 }

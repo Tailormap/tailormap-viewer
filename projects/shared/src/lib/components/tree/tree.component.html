@@ -22,13 +22,15 @@
                           [checked]="isChecked(node)"
                           [disabled]="readOnlyMode"
                           (click)="$event.stopPropagation()"
-                          (change)="toggleLeafChecked(node)"></mat-checkbox>
+                          (change)="toggleLeafChecked(node)"
+                          class="tree-node-checkbox"></mat-checkbox>
           } @else if (useRadioInputs) {
             <mat-radio-button [disabled]="readOnlyMode"
                               [checked]="isChecked(node)"
                               [aria-label]="'toggle ' + node.label"
                               (click)="handleRadioChange(node, $event)"
-                              [value]="node"></mat-radio-button>
+                              [value]="node"
+                              class="tree-radio-button"></mat-radio-button>
           }
         } @else {
           @if (!hideRootCollapseArrow || node.level !== 0) {
@@ -45,7 +47,8 @@
                           (click)="$event.stopPropagation()"
                           (change)="toggleGroupChecked(node)"
                           [checked]="isChecked(node)"
-                          [indeterminate]="isIndeterminate(node)"></mat-checkbox>
+                          [indeterminate]="isIndeterminate(node)"
+                          class="tree-node-checkbox"></mat-checkbox>
           }
         }
         <div class="tree-node__drag-container"
