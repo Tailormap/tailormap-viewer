@@ -42,7 +42,7 @@ export class TocNodeLayerComponent {
   public editLayer = new EventEmitter<string>();
 
   @Output()
-  public emitShowInfo= new EventEmitter<boolean>();
+  public emitShowInfo= new EventEmitter<void>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -93,7 +93,7 @@ export class TocNodeLayerComponent {
   }
 
   public showInfo() {
-    this.emitShowInfo.emit(true);
+    this.emitShowInfo.emit();
   }
 
 }
