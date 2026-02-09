@@ -273,6 +273,15 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
+  public setLayerStyle(layerId: string, styleName: string) {
+    const layer = this.layers.get(layerId);
+    if (!layer || !isOpenLayersWMSLayer(layer)) {
+      return;
+    }
+    layer.getSource()?.updateParams({ STYLES: styleName });
+    this.refreshLayer(layerId);
+  }
+
   public getLegendUrl(layerId: string): string {
     const layer = this.layers.get(layerId);
     if (!layer) {

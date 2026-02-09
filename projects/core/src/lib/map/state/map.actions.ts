@@ -64,6 +64,12 @@ export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
   props<{ opacity: Array<{ id: string; opacity: number }> }>(),
 );
+
+export const setLayerStyle = createAction(
+  `${mapActionsPrefix} Set Layer Style`,
+  props<{ layerId: string; selectedStyleName: string }>(),
+);
+
 export const addLayerDetails = createAction(
   `${mapActionsPrefix} Add Layer Details`,
   props<{ layerDetails: LayerDetailsModel }>(),

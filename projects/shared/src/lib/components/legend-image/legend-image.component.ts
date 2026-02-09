@@ -78,6 +78,7 @@ export class LegendImageComponent {
         legendSettings.srcset = u.toString() + ' 2x';
       }
     }
+    console.debug('Legend settings', legendSettings);
     this.legendSettings.set(legendSettings);
   }
 

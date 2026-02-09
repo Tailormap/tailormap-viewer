@@ -39,7 +39,7 @@ export class TocNodeLayerComponent {
   public editLayer = new EventEmitter<string>();
 
   @Output()
-  public changeStyle = new EventEmitter<{ layerId: string; style: WmsStyleModel }>();
+  public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -94,6 +94,6 @@ export class TocNodeLayerComponent {
   }
 
   protected styleChanged(style: WmsStyleModel) {
-    this.changeStyle.emit({ layerId: this.node?.id || '', style });
+    this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
   }
 }

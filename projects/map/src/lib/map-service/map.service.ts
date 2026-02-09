@@ -65,6 +65,13 @@ export class MapService {
       });
   }
 
+  public setLayerStyle(layerId: string, styleName: string) {
+    this.getLayerManager$().pipe(take(1))
+      .subscribe(manager => {
+        manager.setLayerStyle(layerId, styleName);
+      });
+  }
+
   public getLayerManager$(): Observable<LayerManagerModel> {
     return this.map.getLayerManager$();
   }

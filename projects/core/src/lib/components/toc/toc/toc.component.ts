@@ -14,7 +14,9 @@ import { toggleFilterEnabled } from '../state/toc.actions';
 import {
   select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId } from '../../../map/state/map.actions';
+import {
+  moveLayerTreeNode, setLayerStyle, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId,
+} from '../../../map/state/map.actions';
 import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
@@ -165,11 +167,8 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setEditActive({ active: true }));
   }
 
-  protected changeStyle({ layerId, style }: {layerId: string; style: WmsStyleModel}) {
-    // TODO: implement style change
-    //    - emit event with changed style (maybe only the title of the style, or the whole style object)
-    //    - update the layer url in the map component with the new style and refresh map/layer
-    //    - update the legend url in the map component with the new style and refresh legend
-    console.debug('TODO: Style changed on layer', layerId, ' to style:', style);
+  protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
+    this.store$.dispatch(setLayerStyle({ layerId, selectedStyleName: selectedStyle.name }));
+    this.mapService.setLayerStyle(layerId, selectedStyle.name);
   }
 }
