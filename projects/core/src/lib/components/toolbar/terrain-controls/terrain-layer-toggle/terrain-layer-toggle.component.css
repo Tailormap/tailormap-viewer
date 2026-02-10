@@ -1,3 +1,9 @@
 .terrain-layer-toggle-label {
   margin-bottom: 8px;
 }
+
+.terrain-layer-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

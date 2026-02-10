@@ -3,8 +3,36 @@
     {{ label() }}
   </strong>
 </div>
-<tm-split-button small_screens_icon="layers_filled"
-                 [options]="terrainLayers$ | async"
-                 [emptyLabel]="initiallyCheckedLabels$ | async"
-                 [selectedOption]="selectedTerrainNodeId$ | async"
-                 (optionSelected)="terrainChanged($event)"></tm-split-button>
+@if (isMobileLayoutEnabled$ | async) {
+  @let terrainLayers = terrainLayers$ | async;
+  @let selectedId = selectedTerrainNodeId$ | async;
+  @let emptyLabel = initiallyCheckedLabels$ | async;
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ emptyLabel }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    @if (terrainLayers) {
+      <mat-radio-group
+        class="terrain-layer-radio-group"
+        [value]="selectedId"
+        (change)="terrainChanged($event.value)">
+        @for (option of terrainLayers; track option.id) {
+          <mat-radio-button [value]="option.id">
+            {{ option.label }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    }
+  </mat-expansion-panel>
+} @else {
+  <tm-split-button small_screens_icon="layers_filled"
+                   [options]="terrainLayers$ | async"
+                   [emptyLabel]="initiallyCheckedLabels$ | async"
+                   [selectedOption]="selectedTerrainNodeId$ | async"
+                   (optionSelected)="terrainChanged($event)"></tm-split-button>
+}
+

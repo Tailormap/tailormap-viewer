@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, Signal, inject, signal } from '@angular/core';
-import { map, combineLatest, take } from 'rxjs';
+import { map, combineLatest, take, Observable } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectEnable3d } from '../../../state/core.selectors';
@@ -12,6 +12,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 
 @Component({
@@ -27,8 +28,10 @@ export class Switch3dComponent {
   private menubarService = inject(MenubarService);
   private snackBar = inject(MatSnackBar);
   private destroyRef = inject(DestroyRef);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
+  public isMobileLayoutEnabled$: Observable<boolean> = this.mobileLayoutService.isMobileLayoutEnabled$;
   private componentsPreventingSwitching = [
     BaseComponentTypeEnum.PRINT,
     BaseComponentTypeEnum.DRAWING,
