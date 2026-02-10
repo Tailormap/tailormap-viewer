@@ -253,7 +253,11 @@ export class LayerSettingsFormComponent implements OnInit {
     if (this.isWmsSettingsModel(this.layerSettings)) {
       patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : false);
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
-      patchValue.selectedStyles = this.layerSettings?.selectedStyles || [];
+      // Ensure that all selected styles are present in the available styles
+      // (e.g. when a layer has a style that is no longer present in the GetCapabilities response).
+      const availableStyleNames = new Set(this.availableStyles.map(style => style.name));
+      patchValue.selectedStyles = (this.layerSettings?.selectedStyles || [])
+        .filter(style => availableStyleNames.has(style.name));
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {
       patchValue.minZoom = this.layerSettings?.minZoom || null;
