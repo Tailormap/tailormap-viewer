@@ -157,6 +157,14 @@ export class DrawingLegendPrintService {
     }
     const svgEl = element.querySelector('svg');
     if (svgEl) {
+      const viewBox = svgEl.getAttribute('viewBox');
+      const svgWidth = svgEl.getAttribute('width');
+      const svgHeight = svgEl.getAttribute('height');
+
+      if (viewBox == null && svgWidth != null && svgHeight != null) {
+        svgEl.setAttribute('viewBox', `0 0 ${parseFloat(svgWidth)} ${parseFloat(svgHeight)}`);
+      }
+
       const options: Svg2pdfOptions = {
         x,
         y,
