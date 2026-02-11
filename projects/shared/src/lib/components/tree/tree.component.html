@@ -62,7 +62,7 @@
         </div>
       </div>
       @if (activeInTreeInfoNodes.includes(node.id)) {
-        <div class="layer-info-mobile">
+        <div class="tree-node__info">
           <ng-container *ngTemplateOutlet="nodeInfoInTreeTemplate ? nodeInfoInTreeTemplate : null; context: {$implicit: node}"></ng-container>
         </div>
       }

@@ -47,6 +47,6 @@
   color: var(--text-color);
 }
 
-.layer-info-mobile {
+.tree-node__info {
   flex-basis: 100%;
 }
