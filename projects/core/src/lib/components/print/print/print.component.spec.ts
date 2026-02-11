@@ -6,6 +6,9 @@ import { PrintService } from '../print.service';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { MapService } from '@tailormap-viewer/map';
 import { of } from 'rxjs';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { IconService } from "@tailormap-viewer/shared";
+import { provideHttpClient } from '@angular/common/http';
 
 describe('PrintComponent', () => {
   let component: PrintComponent;
@@ -43,6 +46,9 @@ describe('PrintComponent', () => {
         { provide: PrintService, useValue: { cancel: () => {}, getMapExtent$: () => of(null), downloadPdf$: () => of(null), downloadMapImage$: () => of(null) } },
         { provide: ApplicationMapService, useValue: { selectOrderedVisibleLayersWithFilters$: () => of([]) } },
         { provide: MapService, useValue: { renderFeatures$: () => of(null) } },
+        { provide: IconService, useValue: { } },
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ],
     }).compileComponents();
 
