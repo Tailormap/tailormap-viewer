@@ -1,5 +1,5 @@
 @if (enable() && allowSwitch()){
-  <div [class.map-control-button-container]="!(isMobileLayoutEnabled$ | async)">
+  <div [class.map-control-button-container]="(isMobileLayoutEnabled$ | async) === false">
     <button mat-flat-button
             class="map-control-button toggle-button"
             [tmTooltip]="tooltip()"

@@ -7,6 +7,7 @@ import { combineLatest } from 'rxjs';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
+import { MenubarService } from '../../menubar';
 
 @Component({
   selector: 'tm-terrain-controls',
@@ -20,6 +21,7 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
   private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
 
 
   public noExpansionPanel = input<boolean>(false);
@@ -50,6 +52,14 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
           tooltipParts.push(this.layerToggleLabel);
         }
         this.tooltip = tooltipParts.join(' & ');
+      });
+
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(400);
+        }
       });
   }
 
