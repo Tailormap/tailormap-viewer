@@ -7,7 +7,7 @@ import {
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
 import { Observable, of, Subject } from 'rxjs';
-import {  takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
