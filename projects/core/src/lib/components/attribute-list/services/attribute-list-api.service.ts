@@ -7,6 +7,10 @@ import { FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, UniqueValuesService } 
 import { map, Observable } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
 import { FeaturesFilterHelper } from '../../../filter';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { Store } from '@ngrx/store';
+import { AttributeListManagerService } from './attribute-list-manager.service';
+import { selectHasTabsForVisibleLayers, selectTabsForVisibleLayers } from '../state/attribute-list.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +19,20 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
 
   private api = inject(TAILORMAP_API_V1_SERVICE);
   private uniqueValuesService = inject(UniqueValuesService);
+  private store$ = inject(Store);
+  private attributeListManagerService = inject(AttributeListManagerService);
+
+  public initDefaultAttributeListSource(): void {
+    this.attributeListManagerService.addAttributeListSource({
+      id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
+      tabs$: this.store$.select(selectTabsForVisibleLayers),
+      // For is loading we just check if there are layers with attributes.
+      // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
+      // since this property is only checked when there is no data yet.
+      isLoadingTabs$: this.store$.select(selectHasTabsForVisibleLayers),
+      dataLoader: this,
+    });
+  }
 
   public getFeatures$(params: GetFeaturesParams): Observable<FeaturesResponseModel> {
     const { filter, ...getFeatureParams } = params;

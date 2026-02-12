@@ -19,7 +19,7 @@ import { AttributeListTableComponent } from '../attribute-list-table/attribute-l
 import { AttributeListTabToolbarComponent } from '../attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
 import { AttributeListTabComponent } from '../attribute-list-tab/attribute-list-tab.component';
 import userEvent from '@testing-library/user-event';
-import { StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -39,11 +39,16 @@ import { TestBed } from '@angular/core/testing';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 import { EffectsModule } from '@ngrx/effects';
 import { AttributeListEffects } from '../state/attribute-list.effects';
+import { AttributeListApiService } from '../services/attribute-list-api.service';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { selectHasTabsForVisibleLayers } from '../state/attribute-list.selectors';
+
+type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState };
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
   layers: ExtendedAppLayerModel[] = [],
-): { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState } => {
+): StoreDef => {
   return {
     ...attributeListStore,
     [mapStateKey]: {
@@ -65,7 +70,7 @@ const getStore = (
   };
 };
 
-const setup = async (store: any) => {
+const setup = async (store: StoreDef) => {
   await render(AttributeListComponent, {
     imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, CoreSharedModule ],
     declarations: [ AttributeListComponent, PanelResizerComponent ],
@@ -104,8 +109,8 @@ const createDummyFeature = (
   ...(overrides || {}),
 });
 
-const setupWithActualState = async () => {
-  const store = getStore(
+const setupWithActualState = async (store?: StoreDef) => {
+  const initialState = store ? store : getStore(
     { [attributeListStateKey]: { ...initialAttributeListState, visible: true } },
       // : getLoadedStoreWithMultipleTabs(),
     [
@@ -169,7 +174,7 @@ const setupWithActualState = async () => {
       SharedImportsModule,
       NoopAnimationsModule,
       MatIconTestingModule,
-      StoreModule.forRoot(reducers, { initialState: store }),
+      StoreModule.forRoot(reducers, { initialState }),
       EffectsModule.forRoot([AttributeListEffects]),
     ],
     providers: [
@@ -192,8 +197,8 @@ const setupWithActualState = async () => {
       AttributeListExportButtonComponent,
     ],
   });
-  const managerService = TestBed.inject(AttributeListManagerService);
-  managerService.initDefaultAttributeListSource();
+  const apiService = TestBed.inject(AttributeListApiService);
+  apiService.initDefaultAttributeListSource();
   return renderResult;
 };
 
@@ -215,15 +220,19 @@ describe('AttributeList', () => {
   it('renders without tabs but with layers', async () => {
     const store = getStore(
       getLoadedStoreNoRows({ tabs: [], data: [] }),
-      [
-        getAppLayerModel({
-          hasAttributes: true,
-          visible: true,
-        }),
-      ],
+      [getAppLayerModel({ hasAttributes: true, visible: true })],
     );
     await setup(store);
-    expect(screen.queryByRole('progressbar')).toBeInTheDocument();
+    const managerService = TestBed.inject(AttributeListManagerService);
+    const storeService: Store = TestBed.inject(Store);
+    managerService.addAttributeListSource({
+      id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
+      tabs$: of([]),
+      // Same as actual service
+      isLoadingTabs$: storeService.select(selectHasTabsForVisibleLayers),
+      dataLoader: {} as any,
+    });
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
   });
 
   it('renders attribute list with multiple tabs and switches content after clicking tab', async () => {

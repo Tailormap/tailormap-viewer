@@ -7,18 +7,15 @@ import { changeAttributeListTabs } from '../state/attribute-list.actions';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
-  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
-import { AttributeListApiService } from './attribute-list-api.service';
 import {
   CanExpandRowParams, FeatureDetailsModel, GetFeatureDetailsParams,
   GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
-import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
 interface TabModelWithTabSourceId extends TabModel {
   tabSourceId: string;
@@ -35,7 +32,6 @@ interface TabFromLayerResult {
 export class AttributeListManagerService implements OnDestroy {
 
   private store$ = inject(Store);
-  private defaultApiService = inject(AttributeListApiService);
 
   private sources$ = new BehaviorSubject<AttributeListSourceModel[]>([]);
   private tabsFromSources$ = this.sources$.asObservable()
@@ -172,24 +168,6 @@ export class AttributeListManagerService implements OnDestroy {
       ...this.sources$.getValue(),
       source,
     ]);
-  }
-
-  public initDefaultAttributeListSource(): void {
-    const tabs$ = this.store$.select(selectVisibleLayersWithAttributes).pipe(
-      map(layers => {
-        return layers
-          .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
-          .map(l => ({ id: l.id, label: l.title || l.layerName }));
-      }));
-    this.addAttributeListSource({
-      id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
-      tabs$,
-      // For is loading we just check if there are layers with attributes.
-      // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
-      // since this property is only checked when there is no data yet.
-      isLoadingTabs$: tabs$.pipe(map(tabs => tabs.length > 0)),
-      dataLoader: this.defaultApiService,
-    });
   }
 
   private getClosedTabs(visibleTabs: TabModel[], currentTabs: AttributeListTabModel[]): string[] {

@@ -4,7 +4,9 @@ import { createMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { AttributeListApiService } from './attribute-list-api.service';
-import { selectAttributeListTabs, selectAttributeListVisible } from '../state/attribute-list.selectors';
+import {
+  selectAttributeListTabs, selectAttributeListVisible, selectHasTabsForVisibleLayers, selectTabsForVisibleLayers,
+} from '../state/attribute-list.selectors';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
   AttributeListApiServiceModel,
@@ -488,7 +490,15 @@ describe('AttributeListManagerService', () => {
 
   describe('initDefaultAttributeListSource', () => {
     it('should add default attribute list source', () => {
-      managerService.initDefaultAttributeListSource();
+      managerService.addAttributeListSource({
+        id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
+        tabs$: of([]),
+        // For is loading we just check if there are layers with attributes.
+        // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
+        // since this property is only checked when there is no data yet.
+        isLoadingTabs$: of(false),
+        dataLoader: TestBed.inject(AttributeListApiService),
+      });
 
       // Verify the default source is added by checking that it can be accessed
       // Since the default source uses the mock API service, we can test getFeatures$

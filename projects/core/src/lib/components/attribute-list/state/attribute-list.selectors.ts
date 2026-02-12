@@ -6,7 +6,8 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { selectComponentTitle } from '../../../state/core.selectors';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import { selectVisibleLayersWithAttributes } from '../../../map';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
@@ -15,6 +16,20 @@ export const selectAttributeListTabs = createSelector(selectAttributeListState, 
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
+
+export const selectTabsForVisibleLayers = createSelector(
+  selectVisibleLayersWithAttributes,
+  layers => {
+    return layers
+      .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
+      .map(l => ({ id: l.id, label: l.title || l.layerName }));
+  },
+);
+
+export const selectHasTabsForVisibleLayers = createSelector(
+  selectTabsForVisibleLayers,
+  tabs => tabs.length > 0,
+);
 
 export const selectAttributeListTab = (tabId: string) => createSelector(
   selectAttributeListTabs,

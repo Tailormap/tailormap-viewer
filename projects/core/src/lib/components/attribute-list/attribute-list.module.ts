@@ -8,7 +8,6 @@ import { MenubarModule } from '../menubar';
 import { StoreModule } from '@ngrx/store';
 import { attributeListStateKey } from './state/attribute-list.state';
 import { attributeListReducer } from './state/attribute-list.reducer';
-import { AttributeListManagerService } from './services/attribute-list-manager.service';
 import { AttributeListEffects } from './state/attribute-list.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { AttributeListContentComponent } from './attribute-list-content/attribute-list-content.component';
@@ -20,6 +19,7 @@ import { FilterModule } from '../../filter/filter.module';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button/attribute-list-export-button.component';
 import { CoreSharedModule } from '../../shared';
 import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details/attribute-list-feature-details.component';
+import { AttributeListApiService } from './services/attribute-list-api.service';
 
 @NgModule({
   declarations: [
@@ -51,8 +51,8 @@ export class AttributeListModule {
   public constructor(
     // Service is instantiated here, watches changes to visible layers to create tabs
     //eslint-disable-next-line @angular-eslint/prefer-inject
-    public attributeListManagerService: AttributeListManagerService,
+    public attributeListApiService: AttributeListApiService,
   ) {
-    this.attributeListManagerService.initDefaultAttributeListSource();
+    this.attributeListApiService.initDefaultAttributeListSource();
   }
 }
