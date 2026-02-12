@@ -26,9 +26,10 @@ export const selectTabsForVisibleLayers = createSelector(
   },
 );
 
-export const selectHasTabsForVisibleLayers = createSelector(
+export const selectIsLoadingTabs = createSelector(
   selectTabsForVisibleLayers,
-  tabs => tabs.length > 0,
+  selectAttributeListTabs,
+  (tabsForLayers, createdTabs) => tabsForLayers.length > 0 && createdTabs.length === 0,
 );
 
 export const selectAttributeListTab = (tabId: string) => createSelector(

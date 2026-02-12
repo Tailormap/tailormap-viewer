@@ -10,7 +10,7 @@ import { FeaturesFilterHelper } from '../../../filter';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
-import { selectHasTabsForVisibleLayers, selectTabsForVisibleLayers } from '../state/attribute-list.selectors';
+import { selectIsLoadingTabs, selectTabsForVisibleLayers } from '../state/attribute-list.selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,7 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
       // For is loading we just check if there are layers with attributes.
       // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
       // since this property is only checked when there is no data yet.
-      isLoadingTabs$: this.store$.select(selectHasTabsForVisibleLayers),
+      isLoadingTabs$: this.store$.select(selectIsLoadingTabs),
       dataLoader: this,
     });
   }

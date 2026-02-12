@@ -41,7 +41,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { AttributeListEffects } from '../state/attribute-list.effects';
 import { AttributeListApiService } from '../services/attribute-list-api.service';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
-import { selectHasTabsForVisibleLayers } from '../state/attribute-list.selectors';
+import { selectIsLoadingTabs } from '../state/attribute-list.selectors';
 
 type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState };
 
@@ -229,7 +229,7 @@ describe('AttributeList', () => {
       id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
       tabs$: of([]),
       // Same as actual service
-      isLoadingTabs$: storeService.select(selectHasTabsForVisibleLayers),
+      isLoadingTabs$: storeService.select(selectIsLoadingTabs),
       dataLoader: {} as any,
     });
     expect(await screen.findByRole('progressbar')).toBeInTheDocument();
