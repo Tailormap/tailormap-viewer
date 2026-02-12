@@ -32,9 +32,11 @@ export interface LayerProperties {
   name: string;
   filter?: string;
   language?: string;
+  style?: string | null;
 }
 
 interface WmsServiceParamsModel {
+  STYLES: string;
   LAYERS: string;
   VERSION: string;
   QUERY_LAYERS?: string;
@@ -54,6 +56,7 @@ export class OlLayerHelper {
       visible: layer.visible,
       name: layer.name,
       filter: LayerTypesHelper.isServiceLayer(layer) ? layer.filter : undefined,
+      style: LayerTypesHelper.isWmsLayer(layer) ? layer.selectedStyleName : undefined,
     };
     olLayer.setProperties(layerProps);
   }
@@ -68,6 +71,7 @@ export class OlLayerHelper {
       visible: props['visible'],
       name: props['name'],
       filter: props['filter'],
+      style: props['style'],
     };
   }
 
@@ -385,6 +389,7 @@ export class OlLayerHelper {
       VERSION: '1.3.0',
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
+      STYLES: '',
     };
     if (layer.filter && layer.serverType === TMServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver (transform CQL to SLD for SLD_BODY param)
@@ -395,6 +400,9 @@ export class OlLayerHelper {
     }
     if (addCacheBust) {
       params.CACHE = Date.now();
+    }
+    if (layer.styles && layer.selectedStyleName) {
+      params.STYLES = layer.selectedStyleName;
     }
     return params;
   }

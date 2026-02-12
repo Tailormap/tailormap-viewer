@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { LegendImageModel } from '@tailormap-viewer/shared';
+import { ServerType } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-legend-layer',
@@ -16,9 +17,10 @@ export class LegendLayerComponent {
   public showTitle = true;
 
   public getLegend(legendInfo: LegendInfoModel): LegendImageModel {
+    const selectedStyle = legendInfo.layer.styles?.find(s => s.name === legendInfo.layer.selectedStyleName);
     return {
-      url: legendInfo.url,
-      serverType: legendInfo.layer.service?.serverType ?? 'generic',
+      url: selectedStyle?.legendUrl ?? legendInfo.url,
+      serverType: legendInfo.layer.service?.serverType ?? ServerType.GENERIC,
       legendType: legendInfo.layer.legendType ?? 'static',
       title: legendInfo.layer.title,
     };

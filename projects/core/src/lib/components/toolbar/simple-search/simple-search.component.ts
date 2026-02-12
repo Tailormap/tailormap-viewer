@@ -197,7 +197,6 @@ export class SimpleSearchComponent implements OnInit {
   private moveSummeryUp() {
     const summary = document.querySelector('.result-summary');
     const panel = document.querySelector('.search-panel');
-    console.debug('Moving summary up', summary, panel);
     if (!summary || !panel || summary.parentElement !== panel) {
       return;
     }
