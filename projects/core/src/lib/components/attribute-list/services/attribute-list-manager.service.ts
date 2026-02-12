@@ -107,6 +107,18 @@ export class AttributeListManagerService implements OnDestroy {
     this.destroyed.complete();
   }
 
+  public isLoadingTabs$(): Observable<boolean> {
+    return this.sources$.asObservable().pipe(switchMap(sources => {
+      if (sources.length === 0) {
+        return of(false);
+      }
+      const loadingTabsObservables$ = sources.map(s => s.isLoadingTabs$ ?? of(false));
+      return combineLatest(loadingTabsObservables$).pipe(map(s => {
+        return s.some(isLoading => isLoading);
+      }));
+    }));
+  }
+
   public getFeatures$(tabSourceId: string, params: GetFeaturesParams): Observable<FeaturesResponseModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
@@ -163,14 +175,19 @@ export class AttributeListManagerService implements OnDestroy {
   }
 
   public initDefaultAttributeListSource(): void {
+    const tabs$ = this.store$.select(selectVisibleLayersWithAttributes).pipe(
+      map(layers => {
+        return layers
+          .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
+          .map(l => ({ id: l.id, label: l.title || l.layerName }));
+      }));
     this.addAttributeListSource({
       id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
-      tabs$: this.store$.select(selectVisibleLayersWithAttributes).pipe(
-        map(layers => {
-          return layers
-            .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
-            .map(l => ({ id: l.id, label: l.title || l.layerName }));
-        })),
+      tabs$,
+      // For is loading we just check if there are layers with attributes.
+      // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
+      // since this property is only checked when there is no data yet.
+      isLoadingTabs$: tabs$.pipe(map(tabs => tabs.length > 0)),
       dataLoader: this.defaultApiService,
     });
   }

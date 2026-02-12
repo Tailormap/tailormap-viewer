@@ -6,17 +6,17 @@ import {
   selectAttributeListVisible,
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
-import { map, Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {  takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
 import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/attribute-list-menu-button.component';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
-import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -28,7 +28,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   private store$ = inject<Store<AttributeListState>>(Store);
   private menubarService = inject(MenubarService);
   private mapService = inject(MapService);
-
+  public isLoadingTabs$ = inject(AttributeListManagerService).isLoadingTabs$();
 
   public isVisible$: Observable<boolean>;
 
@@ -36,7 +36,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public selectedTab?: string;
-  public hasLayersWithAttributes$: Observable<boolean>;
   public title$: Observable<string> = of('');
 
   constructor() {
@@ -45,10 +44,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);
-    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayersWithAttributes).pipe(
-      map(layers => layers.filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))),
-      map(layers => (layers || []).length > 0),
-    );
   }
 
   public ngOnInit() {
