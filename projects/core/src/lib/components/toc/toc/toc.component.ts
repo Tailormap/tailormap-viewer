@@ -169,6 +169,5 @@ export class TocComponent implements OnInit, OnDestroy {
 
   protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
     this.store$.dispatch(setLayerStyle({ layerId, selectedStyleName: selectedStyle.name }));
-    this.mapService.setLayerStyle(layerId, selectedStyle.name);
   }
 }
