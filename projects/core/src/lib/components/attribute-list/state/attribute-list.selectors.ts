@@ -29,7 +29,11 @@ export const selectTabsForVisibleLayers = createSelector(
 export const selectIsLoadingTabs = createSelector(
   selectTabsForVisibleLayers,
   selectAttributeListTabs,
-  (tabsForLayers, createdTabs) => tabsForLayers.length > 0 && createdTabs.length === 0,
+  (tabsForLayers, createdTabs) => {
+    // When we have layers with attributes but no tabs created yet, we are in the process of loading tabs, so we show a loading state.
+    // If we have tabs created, we assume loading is done.
+    return tabsForLayers.length > 0 && createdTabs.length === 0;
+  },
 );
 
 export const selectAttributeListTab = (tabId: string) => createSelector(

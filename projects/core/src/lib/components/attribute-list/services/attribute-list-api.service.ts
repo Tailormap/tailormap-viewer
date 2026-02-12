@@ -26,9 +26,6 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
     this.attributeListManagerService.addAttributeListSource({
       id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
       tabs$: this.store$.select(selectTabsForVisibleLayers),
-      // For is loading we just check if there are layers with attributes.
-      // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
-      // since this property is only checked when there is no data yet.
       isLoadingTabs$: this.store$.select(selectIsLoadingTabs),
       dataLoader: this,
     });
