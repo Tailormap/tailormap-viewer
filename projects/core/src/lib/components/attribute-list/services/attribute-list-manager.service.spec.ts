@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { AttributeListApiService } from './attribute-list-api.service';
 import {
-  selectAttributeListTabs, selectAttributeListVisible, selectHasTabsForVisibleLayers, selectTabsForVisibleLayers,
+  selectAttributeListTabs, selectAttributeListVisible,
 } from '../state/attribute-list.selectors';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
