@@ -204,6 +204,19 @@ const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapAction
   }),
 });
 
+const onSetLayerStyle = (state: MapState, payload: ReturnType<typeof MapActions.setLayerStyle>): MapState => ({
+  ...state,
+  layers: state.layers.map(layer => {
+    if (payload.layerId === layer.id) {
+      return {
+        ...layer,
+        selectedStyleName: payload.selectedStyleName,
+      };
+    }
+    return layer;
+  }),
+});
+
 const onAddLayerDetails = (
   state: MapState,
   payload: ReturnType<typeof MapActions.addLayerDetails>,
@@ -245,6 +258,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
   on(MapActions.setSelectedTerrainNodeId, onSetSelectedTerrainNodeId),
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
+  on(MapActions.setLayerStyle, onSetLayerStyle),
   on(MapActions.addLayerDetails, onAddLayerDetails),
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
   on(MapActions.toggleIn3dView, onToggleIn3DView),

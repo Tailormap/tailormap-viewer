@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
 
 @Component({
@@ -40,6 +40,9 @@ export class TocNodeLayerComponent {
 
   @Output()
   public editLayer = new EventEmitter<string>();
+
+  @Output()
+  public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
 
   @Output()
   public showInfo= new EventEmitter<TreeModel<AppLayerModel> | null>();
@@ -90,6 +93,14 @@ export class TocNodeLayerComponent {
 
   public editLayerClicked(node: TreeModel<AppLayerModel>) {
     this.editLayer.emit(node.id);
+  }
+
+  protected hasStyles() {
+    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 0;
+  }
+
+  protected styleChanged(style: WmsStyleModel) {
+    this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
   }
 
   public emitShowInfo() {

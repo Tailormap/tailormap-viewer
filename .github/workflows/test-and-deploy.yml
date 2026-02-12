@@ -116,7 +116,7 @@ jobs:
       attestations: write
       id-token: write
       deployments: write
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       VERSION: snapshot
       COMPOSE_PROJECT_NAME: tailormap-snapshot

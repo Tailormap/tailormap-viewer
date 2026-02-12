@@ -47,6 +47,10 @@
   color: var(--text-color);
 }
 
+.style-radio-button {
+  font-style: italic;
+}
+
 .tree-node__info {
   flex-basis: 100%;
 }

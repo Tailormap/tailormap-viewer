@@ -1,4 +1,4 @@
-import { WmsStyleModel } from './wms-style.model';
+import { WmsStyleModel } from "@tailormap-viewer/api";
 
 export interface GeoServiceLayerModel {
   id: string;

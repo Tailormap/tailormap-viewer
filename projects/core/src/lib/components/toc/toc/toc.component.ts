@@ -7,14 +7,16 @@ import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel } from '@tailormap-viewer/api';
+import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
   select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId } from '../../../map/state/map.actions';
+import {
+  moveLayerTreeNode, setLayerStyle, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId,
+} from '../../../map/state/map.actions';
 import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
@@ -188,5 +190,9 @@ export class TocComponent implements OnInit, OnDestroy {
     } else {
       this.activeMobileInfoNodes.set([ ...activeMobileInfoNodes, node.id ]);
     }
+  }
+
+  protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
+    this.store$.dispatch(setLayerStyle({ layerId, selectedStyleName: selectedStyle.name }));
   }
 }
