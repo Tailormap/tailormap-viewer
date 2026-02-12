@@ -1,41 +1,30 @@
 @let terrainLayers = terrainLayers$ | async;
 @let selectedId = selectedTerrainNodeId$ | async;
-@let emptyLabel = initiallyCheckedLabels$ | async;
 
 <div class="terrain-layer-toggle-label">
   <strong>
     {{ label() }}
   </strong>
 </div>
-@if (isMobileLayoutEnabled$ | async) {
-  <mat-expansion-panel class="terrain-layer-expansion-panel" [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{ emptyLabel }}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    @if (terrainLayers) {
-      <mat-selection-list
-        class="terrain-layer-selection-list"
-        [multiple]="false"
-        [hideSingleSelectionIndicator]="true"
-        (selectionChange)="terrainChanged($event.options[0]?.value)">
-        @for (option of terrainLayers; track option.id) {
-          <mat-list-option
-            [value]="option.id"
-            [selected]="option.id === selectedId">
-            <span matListItemIcon>
-              @if (option.id === selectedId) {
-                <mat-icon svgIcon="check"></mat-icon>
-              }
-            </span>
-            <span matListItemTitle>{{ option.label }}</span>
-          </mat-list-option>
-        }
-      </mat-selection-list>
+@if ((isMobileLayoutEnabled$ | async) && terrainLayers) {
+  <mat-selection-list
+    class="terrain-layer-selection-list"
+    [multiple]="false"
+    [hideSingleSelectionIndicator]="true"
+    (selectionChange)="terrainChanged($event.options[0]?.value)">
+    @for (option of terrainLayers; track option.id) {
+      <mat-list-option
+        [value]="option.id"
+        [selected]="option.id === selectedId">
+        <span matListItemIcon>
+          @if (option.id === selectedId) {
+            <mat-icon svgIcon="check"></mat-icon>
+          }
+        </span>
+        <span matListItemTitle>{{ option.label }}</span>
+      </mat-list-option>
     }
-  </mat-expansion-panel>
+  </mat-selection-list>
 } @else {
   <tm-split-button small_screens_icon="layers_filled"
                    [options]="terrainLayers"

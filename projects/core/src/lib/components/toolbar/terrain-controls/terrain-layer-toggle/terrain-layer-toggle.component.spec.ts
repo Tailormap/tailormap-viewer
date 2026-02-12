@@ -10,6 +10,8 @@ import { getLayerTreeNode } from '@tailormap-viewer/api';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CommonModule } from '@angular/common';
+import { of } from 'rxjs';
+import { MobileLayoutService } from '../../../../services/viewer-layout/mobile-layout.service';
 
 const getMockedState = (initiallySelected = '') => {
   return provideMockStore({
@@ -21,25 +23,27 @@ const getMockedState = (initiallySelected = '') => {
   });
 };
 
+const setup = async (initiallySelected: string) => {
+  const mockStore = getMockedState(initiallySelected);
+  const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
+  await render(TerrainLayerToggleComponent, {
+    imports: [ SharedModule, CommonModule, MatIconTestingModule ],
+    providers: [
+      mockStore,
+      { provide: MobileLayoutService, useValue: mockMobileLayoutService },
+    ],
+  });
+}
+
 describe('TerrainLayerToggleComponent', () => {
 
-  test('should render', async () => {
-    await render(TerrainLayerToggleComponent, {
-      imports: [ SharedModule, CommonModule, MatIconTestingModule ],
-      providers: [
-        getMockedState(),
-      ],
-    });
-    expect(screen.getByText('Test, Test 2'));
+  test('should render default terrain name', async () => {
+    await setup('');
+    expect(screen.getByText('WGS84 Ellipsoid'));
   });
 
-  test('should render default selected', async () => {
-    await render(TerrainLayerToggleComponent, {
-      imports: [ SharedModule, CommonModule, MatIconTestingModule ],
-      providers: [
-        getMockedState('1'),
-      ],
-    });
+  test('should render selected', async () => {
+    await setup('1');
     expect(screen.getByText('AHN terrain'));
   });
 
