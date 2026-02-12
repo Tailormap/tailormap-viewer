@@ -3,11 +3,14 @@ import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigMo
 import { LayoutService } from '../../../layout/layout.service';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest } from 'rxjs';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { combineLatest, filter, of, switchMap } from 'rxjs';
+import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
 import { MenubarService } from '../../menubar';
+import { selectIn3dView } from '../../../map';
+import { withLatestFrom } from 'rxjs/operators';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-terrain-controls',
@@ -22,6 +25,7 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private componentRegistrationService = inject(ComponentRegistrationService);
   private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   public noExpansionPanel = input<boolean>(false);
@@ -58,9 +62,29 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(visible => {
         if (visible) {
-          this.menubarService.setMobilePanelHeight(400);
+          this.menubarService.setMobilePanelHeight(310);
         }
       });
+
+    // Switch back to Mobile Menu when switching to 2D view while terrain controls are open in mobile layout.
+    this.mobileLayoutService.isMobileLayoutEnabled$.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(mobileLayoutEnabled => {
+        if (!mobileLayoutEnabled) {
+          return of(null);
+        }
+        return this.store$.select(selectIn3dView)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            withLatestFrom(this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)))
+          )
+      }),
+      filter(tuple => !!tuple),
+    ).subscribe(([ in3dView, componentTitle ]) => {
+      if (!in3dView) {
+        this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
+      }
+    });
   }
 
   public onExpand() {
