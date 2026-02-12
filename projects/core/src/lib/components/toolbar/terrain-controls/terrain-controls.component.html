@@ -9,7 +9,7 @@
   }
 </ng-template>
 
-@if (layoutConfig && !noExpansionPanel()) {
+@if (layoutConfig && !noExpansionPanel() && (visible$ | async)) {
   <div class="terrain-controls map-control-button-container">
     <mat-expansion-panel
       [style.width.px]="panelWidth"
@@ -23,7 +23,7 @@
       </div>
     </mat-expansion-panel>
   </div>
-} @else if (layoutConfig) {
+} @else if (layoutConfig && (visible$ | async)) {
   <div class="terrain-controls-no-expansion-panel">
     <ng-container *ngTemplateOutlet="terrainControls; context: {$implicit: layoutConfig}"></ng-container>
   </div>

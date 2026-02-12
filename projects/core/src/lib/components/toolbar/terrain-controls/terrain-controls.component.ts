@@ -3,7 +3,7 @@ import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigMo
 import { LayoutService } from '../../../layout/layout.service';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest, filter, of, switchMap } from 'rxjs';
+import { combineLatest, filter, map, of, switchMap } from 'rxjs';
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
@@ -35,6 +35,13 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
   public layerToggleLabel: string = $localize `:@@core.terrain-controls.model:Terrain model`;
   public componentTypes = BaseComponentTypeEnum;
   private resizeObserver?: ResizeObserver;
+  public visible$ = combineLatest([
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS),
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+  ]).pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+  );
 
   private panelContent = viewChild<ElementRef<HTMLDivElement>>('panelContent');
 
@@ -67,17 +74,20 @@ export class TerrainControlsComponent implements OnInit, OnDestroy {
       });
 
     // Switch back to Mobile Menu when switching to 2D view while terrain controls are open in mobile layout.
-    this.mobileLayoutService.isMobileLayoutEnabled$.pipe(
+    combineLatest([
+      this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS),
+      this.mobileLayoutService.isMobileLayoutEnabled$,
+    ]).pipe(
       takeUntilDestroyed(this.destroyRef),
-      switchMap(mobileLayoutEnabled => {
-        if (!mobileLayoutEnabled) {
+      switchMap(([ visible, mobileLayoutEnabled ]) => {
+        if (!visible || !mobileLayoutEnabled) {
           return of(null);
         }
         return this.store$.select(selectIn3dView)
           .pipe(
             takeUntilDestroyed(this.destroyRef),
-            withLatestFrom(this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)))
-          )
+            withLatestFrom(this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`))),
+          );
       }),
       filter(tuple => !!tuple),
     ).subscribe(([ in3dView, componentTitle ]) => {

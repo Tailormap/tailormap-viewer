@@ -33,7 +33,7 @@ const setup = async (initiallySelected: string) => {
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
   });
-}
+};
 
 describe('TerrainLayerToggleComponent', () => {
 
