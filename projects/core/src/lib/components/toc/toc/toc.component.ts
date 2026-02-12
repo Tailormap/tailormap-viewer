@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -178,7 +178,10 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setEditActive({ active: true }));
   }
 
-  public setShowMobileInfo(node: FlatTreeModel) {
+  public setShowMobileInfo(node: TreeModel<AppLayerModel> | null) {
+    if (!node) {
+      return;
+    }
     const activeMobileInfoNodes = this.activeMobileInfoNodes();
     if (activeMobileInfoNodes.includes(node.id)) {
       this.activeMobileInfoNodes.set(activeMobileInfoNodes.filter(id => id !== node.id));
