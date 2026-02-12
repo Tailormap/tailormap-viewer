@@ -180,10 +180,7 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setEditActive({ active: true }));
   }
 
-  public setShowMobileInfo(node: TreeModel<AppLayerModel> | null) {
-    if (!node) {
-      return;
-    }
+  public setShowMobileInfo(node: TreeModel<AppLayerModel>) {
     const activeMobileInfoNodes = this.activeMobileInfoNodes();
     if (activeMobileInfoNodes.includes(node.id)) {
       this.activeMobileInfoNodes.set(activeMobileInfoNodes.filter(id => id !== node.id));

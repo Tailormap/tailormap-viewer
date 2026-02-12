@@ -45,7 +45,7 @@ export class TocNodeLayerComponent {
   public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
 
   @Output()
-  public showInfo= new EventEmitter<TreeModel<AppLayerModel> | null>();
+  public showInfo= new EventEmitter<TreeModel<AppLayerModel>>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -104,7 +104,9 @@ export class TocNodeLayerComponent {
   }
 
   public emitShowInfo() {
-    this.showInfo.emit(this.node);
+    if (this.node) {
+      this.showInfo.emit(this.node);
+    }
   }
 
 }
