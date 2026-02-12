@@ -4,7 +4,7 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { TerrainControlsComponent } from './terrain-controls.component';
 import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.component';
 import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
-import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
+import { TerrainControlsMenuButtonComponent } from './terrain-controls-menu-button/terrain-controls-menu-button.component';
 import { MenubarModule } from '../../menubar';
 
 

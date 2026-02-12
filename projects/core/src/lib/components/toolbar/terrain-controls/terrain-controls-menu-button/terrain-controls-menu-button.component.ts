@@ -4,7 +4,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../../state';
 
 @Component({
-  selector: 'tm-terrain-layer-toggle-menu-button',
+  selector: 'tm-terrain-controls-menu-button',
   templateUrl: './terrain-controls-menu-button.component.html',
   styleUrls: ['./terrain-controls-menu-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, filter, map, of, switchMap } from 'rxjs';
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
-import { TerrainControlsMenuButtonComponent } from './terrain-layer-toggle-menu-button/terrain-controls-menu-button.component';
+import { TerrainControlsMenuButtonComponent } from './terrain-controls-menu-button/terrain-controls-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
 import { MenubarService } from '../../menubar';
 import { selectIn3dView } from '../../../map';
