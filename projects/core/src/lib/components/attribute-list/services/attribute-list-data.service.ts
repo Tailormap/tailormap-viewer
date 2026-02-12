@@ -106,6 +106,7 @@ export class AttributeListDataService implements OnDestroy {
           columns: AttributeListDataService.getColumns(response.columnMetadata),
           rows: AttributeListDataService.decorateFeatures(response.features, selectedData),
           pageSize: response.pageSize || selectedData.pageSize,
+          pageIndex: response.page === null || typeof response.page === 'undefined' ? undefined : response.page,
         };
       }),
     );

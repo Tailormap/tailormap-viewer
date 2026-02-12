@@ -199,6 +199,8 @@ export class ApplicationMapService implements OnDestroy {
         filter: typeof extendedAppLayer.filter === 'string' ? extendedAppLayer.filter : undefined,
         language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
         webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
+        styles: extendedAppLayer.styles,
+        selectedStyleName: extendedAppLayer.selectedStyleName,
       };
       return of(layer);
     }

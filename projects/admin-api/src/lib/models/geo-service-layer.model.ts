@@ -1,3 +1,5 @@
+import { WmsStyleModel } from "@tailormap-viewer/api";
+
 export interface GeoServiceLayerModel {
   id: string;
   name: string;
@@ -9,4 +11,5 @@ export interface GeoServiceLayerModel {
   minScale?: number;
   abstractText: string;
   children: string[] | null;
+  styles?: WmsStyleModel[] | null;
 }

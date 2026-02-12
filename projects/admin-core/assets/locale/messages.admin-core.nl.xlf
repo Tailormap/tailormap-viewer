@@ -1261,6 +1261,10 @@
         <source>Tiling gutter</source>
         <target>Tegelraster overlap</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+        <target>Beschikbare stijlen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>
         <target>Laat leeg om de titel te gebruiken zoals aangeleverd door de service.</target>

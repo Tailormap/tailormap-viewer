@@ -947,6 +947,9 @@
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>
       </trans-unit>

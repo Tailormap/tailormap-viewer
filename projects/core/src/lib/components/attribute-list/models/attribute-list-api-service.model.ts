@@ -27,7 +27,7 @@ export interface GetFeaturesParams {
    */
   filter?: Map<string | symbol, string> | null;
   /**
-   * Optional page number for paginated results (0-based).
+   * Optional page number for paginated results (1, 2, 3, ...).
    */
   page?: number;
   /**
@@ -163,7 +163,7 @@ export interface GetFeatureDetailsParams {
 
 export interface FeatureDetailModel {
   /**
-   * The feature details name.
+   * The feature detail name.
    */
   name: string;
   /**

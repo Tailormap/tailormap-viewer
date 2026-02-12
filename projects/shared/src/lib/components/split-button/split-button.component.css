@@ -32,6 +32,7 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 
 .map-control-button-container {
   display: none;
+  overflow: hidden;
 }
 
 ::ng-deep .mat-mdc-menu-panel.options-menu {

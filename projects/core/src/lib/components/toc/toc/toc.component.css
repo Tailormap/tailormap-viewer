@@ -58,3 +58,7 @@
 tm-toc-filter-input {
   display: block;
 }
+
+.toc-tree ::ng-deep .tree-node-checkbox {
+  align-self: flex-start;
+}

@@ -4,6 +4,8 @@ import { LayerSearchIndexModel } from './layer-search-index.model';
 import { HiddenLayerFunctionality } from './hidden-layer-functionality.model';
 import { Tileset3dStyle } from './tileset-3d-style.model';
 
+import { WmsStyleModel } from './wms-style.model';
+
 export interface AppLayerModel {
   id: string;
   layerName: string;
@@ -34,4 +36,6 @@ export interface AppLayerModel {
   webMercatorAvailable?: boolean;
   tileset3dStyle?: Tileset3dStyle;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
+  styles?: WmsStyleModel[] | null;
+  selectedStyleName?: string | null;
 }

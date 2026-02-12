@@ -4,6 +4,9 @@ import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/
 export class LayerModelHelper {
 
   public static getLayerWithInitialValues(layer: AppLayerModel): AppLayerStateModel {
+    if (layer.styles?.length) {
+      layer.selectedStyleName ??= layer.styles[0].name;
+    }
     return {
       ...layer,
       initialValues: {

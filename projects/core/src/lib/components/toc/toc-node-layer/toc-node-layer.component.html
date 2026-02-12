@@ -41,4 +41,23 @@
       </mat-icon>
     }
   </div>
+
+  @if (hasStyles()) {
+    <div class="styles-list-container">
+      <mat-radio-group
+        (change)="styleChanged($event.value)"
+        class="styles-list"
+      >
+        @for (style of node.metadata?.styles || []; track style) {
+          <mat-radio-button [checked]="style === node.metadata?.styles?.[0]"
+                            [value]="style"
+                            class="style-radio-button"
+                            tmTooltip="{{ style.abstractText ?? '' }}"
+          >
+            {{ style.title ?? style.name }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    </div>
+  }
 }
