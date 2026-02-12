@@ -15,6 +15,5 @@ export interface LayerManagerModel {
   setLayerOpacity(layerId: string, opacity: number): void;
   setLayerOrder(layerIds: string[]): void;
   refreshLayer(layerId: string): void;
-  setLayerStyle(layerId: string, styleName: string): void;
   getLegendUrl(layerId: string): string;
 }

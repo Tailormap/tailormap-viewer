@@ -138,6 +138,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
           this.updateFilterIfChanged(layer, existingLayer);
+          this.updateLayerStyle(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -175,6 +176,9 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       const changingProps = [layer.opacity ? `${layer.opacity}` : undefined];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
+      }
+      if (LayerTypesHelper.isWmsLayer(layer) && layer.selectedStyleName) {
+        changingProps.push(layer.selectedStyleName);
       }
       return [ layer.id, ...changingProps.filter(Boolean) ].join('_');
     });
@@ -273,13 +277,18 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
   }
 
-  public setLayerStyle(layerId: string, styleName: string) {
-    const layer = this.layers.get(layerId);
-    if (!layer || !isOpenLayersWMSLayer(layer)) {
+  private updateLayerStyle(layer: LayerModel, olLayer: BaseLayer) {
+    if (!LayerTypesHelper.isWmsLayer(layer)) {
       return;
     }
-    layer.getSource()?.updateParams({ STYLES: styleName });
-    this.refreshLayer(layerId);
+    const existingProps = OlLayerHelper.getLayerProps(olLayer);
+    if (existingProps.style === layer.selectedStyleName) {
+      return;
+    }
+    OlLayerHelper.setLayerProps(layer, olLayer);
+    if (isOpenLayersWMSLayer(olLayer)) {
+      olLayer.getSource()?.updateParams({ STYLES: layer.selectedStyleName ?? '' });
+    }
   }
 
   public getLegendUrl(layerId: string): string {

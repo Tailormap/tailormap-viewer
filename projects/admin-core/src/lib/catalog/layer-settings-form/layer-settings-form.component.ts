@@ -1,10 +1,9 @@
-import {  ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  AuthorizationGroups,
-  AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
-
+  AuthorizationGroups, AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel,
+  LayerSettingsXyzModel,
 } from '@tailormap-admin/admin-api';
 import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
@@ -255,9 +254,15 @@ export class LayerSettingsFormComponent implements OnInit {
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
       // Ensure that all selected styles are present in the available styles
       // (e.g. when a layer has a style that is no longer present in the GetCapabilities response).
-      const availableStyleNames = new Set(this.availableStyles.map(style => style.name));
-      patchValue.selectedStyles = (this.layerSettings?.selectedStyles || [])
-        .filter(style => availableStyleNames.has(style.name));
+      const originalSelectedStyles = this.layerSettings?.selectedStyles || [];
+      if (this.availableStyles && this.availableStyles.length > 0) {
+        const availableStyleNames = new Set(this.availableStyles.map(style => style.name));
+        patchValue.selectedStyles = originalSelectedStyles.filter(style => availableStyleNames.has(style.name));
+      } else {
+        // If no available styles are loaded yet, keep the original selected styles
+        // to avoid clearing them before styles become available.
+        patchValue.selectedStyles = originalSelectedStyles;
+      }
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {
       patchValue.minZoom = this.layerSettings?.minZoom || null;
@@ -313,10 +318,6 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private isXyzSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsXyzModel {
     return !!settings && this.isXYZ;
-  }
-
-  public onLegendImageChanged($event: string | null) {
-    this.layerSettingsForm.patchValue({ legendImageId: $event });
   }
 
   public isStyleSelected(style: WmsStyleModel): boolean {
