@@ -15,7 +15,7 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
 import { MapService } from '@tailormap-viewer/map';
 import { selectVisibleLayersWithAttributes } from '../../../map';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
-import { AttributeListManagerService } from './attribute-list-manager.service';
+import { AttributeListApiService } from './attribute-list-api.service';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -105,8 +105,8 @@ describe('AttributeListDataService', () => {
       template: null,
     };
     const { service, api } = setup(response, true);
-    const managerService = TestBed.inject(AttributeListManagerService);
-    managerService.initDefaultAttributeListSource();
+    const apiService = TestBed.inject(AttributeListApiService);
+    apiService.initDefaultAttributeListSource();
     service.loadDataForTab$('1').subscribe(result => {
       expect(api.getFeatures$).toHaveBeenCalledWith({
         layerId: '1',

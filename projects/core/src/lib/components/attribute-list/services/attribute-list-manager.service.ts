@@ -7,18 +7,15 @@ import { changeAttributeListTabs } from '../state/attribute-list.actions';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
-  FeaturesResponseModel, HiddenLayerFunctionality, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
-import { AttributeListApiService } from './attribute-list-api.service';
 import {
   CanExpandRowParams, FeatureDetailsModel, GetFeatureDetailsParams,
   GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
-import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
 interface TabModelWithTabSourceId extends TabModel {
   tabSourceId: string;
@@ -35,7 +32,6 @@ interface TabFromLayerResult {
 export class AttributeListManagerService implements OnDestroy {
 
   private store$ = inject(Store);
-  private defaultApiService = inject(AttributeListApiService);
 
   private sources$ = new BehaviorSubject<AttributeListSourceModel[]>([]);
   private tabsFromSources$ = this.sources$.asObservable()
@@ -107,6 +103,18 @@ export class AttributeListManagerService implements OnDestroy {
     this.destroyed.complete();
   }
 
+  public isLoadingTabs$(): Observable<boolean> {
+    return this.sources$.asObservable().pipe(switchMap(sources => {
+      if (sources.length === 0) {
+        return of(false);
+      }
+      const loadingTabsObservables$ = sources.map(s => s.isLoadingTabs$ ?? of(false));
+      return combineLatest(loadingTabsObservables$).pipe(map(s => {
+        return s.some(isLoading => isLoading);
+      }));
+    }));
+  }
+
   public getFeatures$(tabSourceId: string, params: GetFeaturesParams): Observable<FeaturesResponseModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
@@ -160,19 +168,6 @@ export class AttributeListManagerService implements OnDestroy {
       ...this.sources$.getValue(),
       source,
     ]);
-  }
-
-  public initDefaultAttributeListSource(): void {
-    this.addAttributeListSource({
-      id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
-      tabs$: this.store$.select(selectVisibleLayersWithAttributes).pipe(
-        map(layers => {
-          return layers
-            .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
-            .map(l => ({ id: l.id, label: l.title || l.layerName }));
-        })),
-      dataLoader: this.defaultApiService,
-    });
   }
 
   private getClosedTabs(visibleTabs: TabModel[], currentTabs: AttributeListTabModel[]): string[] {
