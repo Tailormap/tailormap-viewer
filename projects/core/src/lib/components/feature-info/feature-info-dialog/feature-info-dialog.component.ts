@@ -23,6 +23,7 @@ import {
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { AttachmentService } from '../../../services/attachment.service';
 import { selectIn3dView } from '../../../map/state/map.selectors';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -37,6 +38,7 @@ export class FeatureInfoDialogComponent {
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
   public attachmentHelper = inject(AttachmentService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
@@ -45,6 +47,7 @@ export class FeatureInfoDialogComponent {
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
+  public isMobileLayoutEnabled$: Observable<boolean> = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
@@ -164,4 +167,7 @@ export class FeatureInfoDialogComponent {
       });
 
   }
+
+  protected readonly showNextFeatureInfoFeature = showNextFeatureInfoFeature;
+  protected readonly showPreviousFeatureInfoFeature = showPreviousFeatureInfoFeature;
 }

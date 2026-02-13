@@ -1,3 +1,5 @@
 <tm-map-spinner [coordinates$]="featureInfoCoordinates$"
                         [loading$]="loadingFeatureInfo$"></tm-map-spinner>
-<tm-feature-info-dialog></tm-feature-info-dialog>
+@if ((isMobileLayoutEnabled$ | async) === false) {
+  <tm-feature-info-dialog></tm-feature-info-dialog>
+}
