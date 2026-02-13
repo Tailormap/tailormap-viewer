@@ -1,10 +1,16 @@
-import { Component, ChangeDetectionStrategy, inject, DestroyRef, ElementRef, OnDestroy, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, DestroyRef, ElementRef, OnDestroy, viewChild, OnInit, input } from '@angular/core';
 import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { LayoutService } from '../../../layout/layout.service';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest } from 'rxjs';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { combineLatest, filter, map, of, switchMap } from 'rxjs';
+import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
+import { TerrainControlsMenuButtonComponent } from './terrain-controls-menu-button/terrain-controls-menu-button.component';
+import { ComponentRegistrationService } from '../../../services';
+import { MenubarService } from '../../menubar';
+import { selectIn3dView } from '../../../map';
+import { withLatestFrom } from 'rxjs/operators';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-terrain-controls',
@@ -13,17 +19,29 @@ import { selectComponentsConfigForType } from '../../../state/core.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class TerrainControlsComponent implements OnDestroy {
+export class TerrainControlsComponent implements OnInit, OnDestroy {
   public layoutService = inject(LayoutService);
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
+
+  public noExpansionPanel = input<boolean>(false);
 
   public tooltip: string = '';
   public opacityLabel: string = $localize `:@@core.terrain-controls.opacity:Terrain opacity`;
   public layerToggleLabel: string = $localize `:@@core.terrain-controls.model:Terrain model`;
   public componentTypes = BaseComponentTypeEnum;
   private resizeObserver?: ResizeObserver;
+  public visible$ = combineLatest([
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS),
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+  ]).pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+  );
 
   private panelContent = viewChild<ElementRef<HTMLDivElement>>('panelContent');
 
@@ -46,6 +64,37 @@ export class TerrainControlsComponent implements OnDestroy {
         }
         this.tooltip = tooltipParts.join(' & ');
       });
+
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(310);
+        }
+      });
+
+    // Switch back to Mobile Menu when switching to 2D view while terrain controls are open in mobile layout.
+    combineLatest([
+      this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TERRAIN_CONTROLS),
+      this.mobileLayoutService.isMobileLayoutEnabled$,
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      switchMap(([ visible, mobileLayoutEnabled ]) => {
+        if (!visible || !mobileLayoutEnabled) {
+          return of(null);
+        }
+        return this.store$.select(selectIn3dView)
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            withLatestFrom(this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`))),
+          );
+      }),
+      filter(tuple => !!tuple),
+    ).subscribe(([ in3dView, componentTitle ]) => {
+      if (!in3dView) {
+        this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
+      }
+    });
   }
 
   public onExpand() {
@@ -70,8 +119,13 @@ export class TerrainControlsComponent implements OnDestroy {
     this.panelWidth = el.scrollWidth + 48;
   }
 
+  public ngOnInit(): void {
+    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.TERRAIN_CONTROLS, component: TerrainControlsMenuButtonComponent });
+  }
+
   public ngOnDestroy() {
     this.resizeObserver?.disconnect();
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.TERRAIN_CONTROLS);
   }
 
 }

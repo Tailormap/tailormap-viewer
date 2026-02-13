@@ -6,6 +6,7 @@ import {
   selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList,
 } from '../../../../map/state/map.selectors';
 import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
+import { MobileLayoutService } from '../../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-terrain-layer-toggle',
@@ -16,12 +17,14 @@ import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
 })
 export class TerrainLayerToggleComponent {
   private store$ = inject(Store);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   public label = input<string>('');
   public selectedTerrainNodeId$: Observable<string | undefined>;
   public terrainLayers$: Observable<SplitButtonOptionModel[]>;
   public initiallyCheckedLabels$: Observable<string>;
+  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   constructor() {
     this.selectedTerrainNodeId$ = combineLatest([
@@ -32,7 +35,7 @@ export class TerrainLayerToggleComponent {
         return selectedTerrainNodeId ||
           (initiallySelectedTerrainNodes.length === 1
             ? initiallySelectedTerrainNodes[0].id
-            : undefined);
+            : this.getEmptyOption()[0].id);
       }));
     this.terrainLayers$ = this.store$.select(selectTerrainNodesList).pipe(
       map(nodes => this.getEmptyOption().concat([

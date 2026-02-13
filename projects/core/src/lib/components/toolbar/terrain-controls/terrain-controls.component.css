@@ -6,3 +6,8 @@
 .panel-content {
   display: inline-block;
 }
+
+.terrain-controls-no-expansion-panel {
+  margin: 8px;
+  padding-top: 14px;
+}

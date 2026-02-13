@@ -10,6 +10,7 @@ import { SimpleSearchModule } from './simple-search';
 import { StreetviewModule } from './streetview/streetview.module';
 import { CoordinateLinkWindowModule } from './coordinate-link-window/coordinate-link-window.module';
 import { TerrainControlsModule } from './terrain-controls/terrain-controls.module';
+import { Switch3dModule } from './switch3d/switch3d.module';
 
 @NgModule({
   declarations: [],
@@ -25,6 +26,7 @@ import { TerrainControlsModule } from './terrain-controls/terrain-controls.modul
     StreetviewModule,
     CoordinateLinkWindowModule,
     TerrainControlsModule,
+    Switch3dModule,
   ],
 })
 export class ToolbarModule { }

@@ -848,6 +848,9 @@
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
       </trans-unit>
+      <trans-unit id="core.terrain-controls" datatype="html">
+        <source>Terrain controls</source>
+      </trans-unit>
       <trans-unit id="core.terrain-controls.model" datatype="html">
         <source>Terrain model</source>
       </trans-unit>

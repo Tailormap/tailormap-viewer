@@ -1130,6 +1130,10 @@
         <source>Restore panel height</source>
         <target>Paneelhoogte herstellen</target>
       </trans-unit>
+      <trans-unit id="core.terrain-controls" datatype="html">
+        <source>Terrain controls</source>
+        <target>Terreinbediening</target>
+      </trans-unit>
       <trans-unit id="core.terrain-controls.model" datatype="html">
         <source>Terrain model</source>
         <target>Terreinmodel</target>

@@ -1,5 +1,15 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
-@if (layoutConfig) {
+
+<ng-template #terrainControls let-layoutConfig>
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
+    <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
+  }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
+    <tm-terrain-layer-toggle class="terrain-layer-toggle" [label]="layerToggleLabel"></tm-terrain-layer-toggle>
+  }
+</ng-template>
+
+@if (layoutConfig && !noExpansionPanel() && (visible$ | async)) {
   <div class="terrain-controls map-control-button-container">
     <mat-expansion-panel
       [style.width.px]="panelWidth"
@@ -9,13 +19,12 @@
         <mat-icon svgIcon="tools_terrain"></mat-icon>
       </mat-expansion-panel-header>
       <div #panelContent class="panel-content">
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
-          <tm-terrain-opacity [label]="opacityLabel"></tm-terrain-opacity>
-        }
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)) {
-          <tm-terrain-layer-toggle class="terrain-layer-toggle" [label]="layerToggleLabel"></tm-terrain-layer-toggle>
-        }
+        <ng-container *ngTemplateOutlet="terrainControls; context: {$implicit: layoutConfig}"></ng-container>
       </div>
     </mat-expansion-panel>
+  </div>
+} @else if (layoutConfig && (visible$ | async)) {
+  <div class="terrain-controls-no-expansion-panel">
+    <ng-container *ngTemplateOutlet="terrainControls; context: {$implicit: layoutConfig}"></ng-container>
   </div>
 }
