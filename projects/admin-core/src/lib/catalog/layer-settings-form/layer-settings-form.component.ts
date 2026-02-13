@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
@@ -10,9 +10,10 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
-import { BoundsModel, TileLayerHiDpiModeEnum, WmsStyleModel } from '@tailormap-viewer/api';
+import { BoundsModel, FormFieldModel, TileLayerHiDpiModeEnum, WmsStyleModel } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'tm-admin-layer-settings-form',
@@ -23,13 +24,12 @@ import { ProjectionAvailability } from '../../application/helpers/admin-projecti
 })
 export class LayerSettingsFormComponent implements OnInit {
   private store$ = inject(Store);
-
-
   private destroyed = new Subject();
   private _layerSettings: LayerSettingsModel | null | undefined;
   private _isLayerSpecific = false;
   private _serviceId: string | undefined = undefined;
   private _protocol: GeoServiceProtocolEnum | undefined;
+  protected availableStyles: WmsStyleModel[]  = [];
 
   @Input()
   public set protocol(protocol: GeoServiceProtocolEnum) {
@@ -46,6 +46,7 @@ export class LayerSettingsFormComponent implements OnInit {
     this._isLayerSpecific = !!isLayerSpecific;
     this.patchForm();
   }
+
   public get isLayerSpecific() {
     return this._isLayerSpecific;
   }
@@ -68,6 +69,7 @@ export class LayerSettingsFormComponent implements OnInit {
       this.xyzProjection$ = this.store$.select(selectGeoServiceById(serviceId)).pipe(takeUntil(this.destroyed), map((settings) => settings?.settings?.xyzCrs ?? ''));
     }
   }
+
   public get serviceId() {
     return this._serviceId;
   }
@@ -77,6 +79,7 @@ export class LayerSettingsFormComponent implements OnInit {
     this._layerSettings = layerSettings;
     this.patchForm();
   }
+
   public get layerSettings() {
     return this._layerSettings;
   }
@@ -100,7 +103,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public xyzProjection$: Observable<string> = of('');
 
   @Input()
-  public availableStyles: WmsStyleModel[] = [];
+  public availableStyles$?: Observable<WmsStyleModel[]>;
 
   public isWMS = false;
   public isWMTS = false;
@@ -137,6 +140,16 @@ export class LayerSettingsFormComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+
+    if (this.availableStyles$) {
+      this.availableStyles$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(styles => {
+          this.availableStyles = styles ?? [];
+          this.patchForm();
+        });
+    }
+
     this.patchForm();
     this.layerSettingsForm.valueChanges
       .pipe(
@@ -215,6 +228,7 @@ export class LayerSettingsFormComponent implements OnInit {
       comparableValues.push(
         [ values.tilingDisabled, this._layerSettings.tilingDisabled ],
         [ values.tilingGutter, this._layerSettings.tilingGutter ],
+        [ values.selectedStyles, this._layerSettings.selectedStyles ],
       );
     }
     if (this.isXyzSettingsModel(values) && this.isXyzSettingsModel(this._layerSettings)) {
@@ -254,15 +268,19 @@ export class LayerSettingsFormComponent implements OnInit {
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
       // Ensure that all selected styles are present in the available styles
       // (e.g. when a layer has a style that is no longer present in the GetCapabilities response).
-      const originalSelectedStyles = this.layerSettings?.selectedStyles || [];
-      if (this.availableStyles && this.availableStyles.length > 0) {
-        const availableStyleNames = new Set(this.availableStyles.map(style => style.name));
-        patchValue.selectedStyles = originalSelectedStyles.filter(style => availableStyleNames.has(style.name));
-      } else {
-        // If no available styles are loaded yet, keep the original selected styles
-        // to avoid clearing them before styles become available.
-        patchValue.selectedStyles = originalSelectedStyles;
-      }
+      // const availableStyleNames = new Set(this.availableStyles.map(style => style.name));
+      // patchValue.selectedStyles = (this.layerSettings?.selectedStyles || [])
+      //   .filter(style => availableStyleNames.has(style.name));
+
+      // Map selected styles to the exact instances in availableStyles
+      const selectedStyleNames = new Set((this.layerSettings?.selectedStyles || []).map(s => s.name));
+      console.debug('Selected style names', selectedStyleNames);
+      console.debug('Available styles', this.availableStyles);
+
+      const filteredStyles = this.availableStyles.filter(style => selectedStyleNames.has(style.name));
+      console.debug('Filtered styles', filteredStyles);
+
+      patchValue.selectedStyles = filteredStyles;
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {
       patchValue.minZoom = this.layerSettings?.minZoom || null;
@@ -270,6 +288,9 @@ export class LayerSettingsFormComponent implements OnInit {
       patchValue.tileGridExtent = this.layerSettings?.tileGridExtent || null;
       patchValue.tileSize = this.layerSettings?.tileSize || null;
     }
+
+    console.debug('Patching form with value', patchValue);
+
     this.layerSettingsForm.patchValue(patchValue, { emitEvent: false, onlySelf: true });
     this.layerSettingsForm.markAsUntouched();
     this.updateDisabledState();
@@ -320,29 +341,7 @@ export class LayerSettingsFormComponent implements OnInit {
     return !!settings && this.isXYZ;
   }
 
-  public isStyleSelected(style: WmsStyleModel): boolean {
-    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value;
-    if (!Array.isArray(selectedStyles)) {
-      return false;
-    }
-    return selectedStyles.some((s: WmsStyleModel) => s.name === style.name);
-  }
-
-  public toggleStyle(style: WmsStyleModel, checked: boolean): void {
-    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value || [];
-    let updatedStyles: WmsStyleModel[];
-    if (checked) {
-      // Add style if not already present
-      if (!selectedStyles.some((s: WmsStyleModel) => s.name === style.name)) {
-        updatedStyles = [ ...selectedStyles, style ];
-      } else {
-        updatedStyles = selectedStyles;
-      }
-    } else {
-      // Remove style
-      updatedStyles = selectedStyles.filter((s: WmsStyleModel) => s.name !== style.name);
-    }
-    this.layerSettingsForm.get('selectedStyles')?.setValue(updatedStyles);
-    this.layerSettingsForm.get('selectedStyles')?.markAsDirty();
+  protected updateListOrder($event: CdkDragDrop<WmsStyleModel[], any>) {
+    console.debug('TODO Updating style order', $event);
   }
 }

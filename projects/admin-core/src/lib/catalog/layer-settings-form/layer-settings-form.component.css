@@ -27,3 +27,8 @@ mat-slide-toggle + mat-slide-toggle {
   font-weight: bold;
   margin-top: 16px;
 }
+
+.styles-list-drag-handle {
+  cursor: move;
+  float: right;
+}

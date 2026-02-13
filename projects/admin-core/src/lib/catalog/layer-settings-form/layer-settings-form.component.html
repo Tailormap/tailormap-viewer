@@ -122,17 +122,27 @@
       When only one style is available that is the default style which does not need to be specified -->
       <div class="form-control">
         <strong i18n="@@admin-core.catalog.available-styles">Available styles</strong>
-        <mat-selection-list class="styles-list">
-          @for (style of availableStyles; track style) {
+        <mat-selection-list (cdkDropListDropped)="updateListOrder($event)"
+                            [cdkDropListData]="availableStyles"
+                            cdkDropList
+                            class="styles-list"
+                            [formControlName]="'selectedStyles'"
+        >
+          @for (style of availableStyles; track style.name) {
             <mat-list-option
-              (selectedChange)="toggleStyle(style, $event)"
-              [selected]="isStyleSelected(style)"
+              [cdkDragData]="style"
+              [lines]="3"
               [tmTooltip]="style.abstractText ?? style.title ?? style.name"
               [value]="style"
+              cdkDrag
               class="styles-list-item"
+              togglePosition="before"
             >
               <span matListItemTitle>{{ style.name }}</span>
-              <span matListItemLine>{{ style.title }}</span>
+              <p matListItemLine>
+                <span>{{ style.title }}</span>
+                <mat-icon cdkDragHandle class="styles-list-drag-handle" svgIcon="reorder"></mat-icon>
+              </p>
             </mat-list-option>
           }
         </mat-selection-list>

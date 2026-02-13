@@ -10,7 +10,7 @@
         [isLayerSpecific]="true"
         [isLeaf]="isLeaf$ | async"
         [projectionAvailability$]="projectionAvailability$"
-        [availableStyles]="(availableStyles$ | async) ?? []"
+        [availableStyles$]="availableStyles$"
       (changed)="updateSettings($event)"></tm-admin-layer-settings-form>
     </div>
     <div class="legend-settings">
