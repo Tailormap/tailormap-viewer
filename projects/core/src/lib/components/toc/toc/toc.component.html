@@ -7,10 +7,16 @@
     [tiles3DLayerIds]="tiles3DLayerIds()"
     [filteredLayerIds]="filteredLayerIds()"
     [editableLayerIds]="getCurrentlyEditableLayerIds()"
+    [showInfoIcon]="mobileToc()"
     (zoomToScale)="zoomToScale($event)"
     (editLayer)="editLayer($event)"
     (changeStyle)="changeStyle($event)"
+    (showInfo)="setShowMobileInfo($event)"
   ></tm-toc-node-layer>
+</ng-template>
+
+<ng-template #nodeInfoMobile let-node>
+  <tm-toc-node-details-mobile [treeNode]="node"></tm-toc-node-details-mobile>
 </ng-template>
 
 @if (visible$ | async) {
@@ -46,12 +52,17 @@
         <tm-toc-filter-input></tm-toc-filter-input>
       </div>
     }
-    <tm-tree class="toc-tree"
+    <tm-tree
+      class="toc-tree"
+      [class.toc-tree--mobile]="mobileToc()"
       [treeNodeTemplate]="treeNode"
       [expandOnGroupClick]="true"
-    [getDropZones]="getDropZoneConfig()"></tm-tree>
+      [getDropZones]="getDropZoneConfig()"
+      [openInfoInTree]="mobileToc()"
+      [nodeInfoInTreeTemplate]="nodeInfoMobile"
+      [activeInTreeInfoNodes]="activeMobileInfoNodes()"></tm-tree>
     @if (infoTreeNode$ | async; as infoTreeNode) {
-      @if (infoVisible()) {
+      @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
       }
     }

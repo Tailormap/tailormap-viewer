@@ -20,7 +20,7 @@
     </div>
     <div class="mobile-menubar-panel">
       <tm-mobile-menubar-panel>
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc [mobileToc]="true"></tm-toc> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOBILE_MENUBAR_HOME)) {
