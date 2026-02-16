@@ -79,7 +79,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.initForm(this._node);
     this.setTitle();
     this.prevNodeId = node?.id;
-    // Apply filtering and sorting when node is set after serviceLayer
+    // Apply filtering and sorting now that both node and serviceLayer are available
     if (this._serviceLayer) {
       this.applyStyleFilteringAndSorting();
     }
