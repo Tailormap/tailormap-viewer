@@ -19,13 +19,15 @@ import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/featur
 import { of } from 'rxjs';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { selectIn3dView } from '../../../map/state/map.selectors';
+import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
     __fid: '1',
     geometry: null,
     layer: getAppLayerModel(),
-    attachments: [],
+    sortedAttachmentsByAttribute: [],
+    attachmentCount: 0,
     sortedAttributes: [
       { key: 'prop', attributeValue: 'test', label: 'Property' },
       { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
@@ -42,7 +44,7 @@ const setup = async (withState = false) => {
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
-    declarations: [FeatureInfoLayerListComponent],
+    declarations: [ FeatureInfoLayerListComponent, FeatureInfoContentComponent ],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       provideMockStore({
@@ -50,14 +52,22 @@ const setup = async (withState = false) => {
         selectors: withState ? [
           { selector: selectSelectedFeatureInfoLayer, value: { id: '1', title: 'test', loading: LoadingStateEnum.LOADED } },
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
-          { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectIsPrevButtonDisabled, value: false },
           { selector: selectIsNextButtonDisabled, value: false },
           { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
           { selector: selectComponentsConfig, value: [] },
           { selector: selectIn3dView, value: false },
-        ] : [],
+        ] : [
+          { selector: selectSelectedFeatureInfoLayer, value: null },
+          { selector: selectCurrentlySelectedFeature, value: null },
+          { selector: selectFeatureInfoDialogVisible, value: true },
+          { selector: selectIsPrevButtonDisabled, value: false },
+          { selector: selectIsNextButtonDisabled, value: false },
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [] },
+          { selector: selectIn3dView, value: false },
+        ],
       }),
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },

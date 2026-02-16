@@ -11,8 +11,8 @@
     [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
     [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
     [isEditPossible]="isEditPossible() ?? false"
-    (showNextFeatureInfoFeature)="showNextFeatureInfoFeature()"
-    (showPreviousFeatureInfoFeature)="showPreviousFeatureInfoFeature()"
+    (showNextFeatureInfoFeature)="next()"
+    (showPreviousFeatureInfoFeature)="back()"
     (editFeature)="editFeature()">
   </tm-feature-info-content>
 } @else {
@@ -52,8 +52,8 @@
         [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
         [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
         [isEditPossible]="isEditPossible() ?? false"
-        (showNextFeatureInfoFeature)="showNextFeatureInfoFeature()"
-        (showPreviousFeatureInfoFeature)="showPreviousFeatureInfoFeature()"
+        (showNextFeatureInfoFeature)="next()"
+        (showPreviousFeatureInfoFeature)="back()"
         (editFeature)="editFeature()">
       </tm-feature-info-content>
     </div>

@@ -185,7 +185,4 @@ export class FeatureInfoDialogComponent {
       });
 
   }
-
-  protected readonly showNextFeatureInfoFeature = showNextFeatureInfoFeature;
-  protected readonly showPreviousFeatureInfoFeature = showPreviousFeatureInfoFeature;
 }
