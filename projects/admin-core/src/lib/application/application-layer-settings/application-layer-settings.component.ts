@@ -462,7 +462,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
    * This method can be called from either the node or serviceLayer setter.
    */
   private applyStyleFilteringAndSorting() {
-    if (!this.isWMS || !this.node || this.availableStyles.length <= 1) {
+    // Early return if any required dependency is missing or if there's only one style (nothing to filter/sort)
+    if (!this.isWMS || !this.node || !this._serviceLayer || this.availableStyles.length <= 1) {
       return;
     }
     // remove any styles from the previously configured styles that are not/no longer in the available styles, to prevent invalid style selections
