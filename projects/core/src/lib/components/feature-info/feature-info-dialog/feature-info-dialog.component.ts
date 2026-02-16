@@ -118,10 +118,13 @@ export class FeatureInfoDialogComponent {
         }
       });
 
-    this.menuBarService.isComponentVisible$(BaseComponentTypeEnum.FEATURE_INFO)
+    combineLatest([
+      this.menuBarService.isComponentVisible$(BaseComponentTypeEnum.FEATURE_INFO),
+      this.isMobileLayoutEnabled$,
+    ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(visible => {
-        if (!visible) {
+      .subscribe(([ visible, isMobileLayoutEnabled ]) => {
+        if (!visible && isMobileLayoutEnabled) {
           this.closeDialog();
         }
       });
