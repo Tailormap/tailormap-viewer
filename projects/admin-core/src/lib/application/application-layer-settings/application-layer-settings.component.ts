@@ -79,6 +79,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     this.initForm(this._node);
     this.setTitle();
     this.prevNodeId = node?.id;
+    // Call applyStyleFilteringAndSorting if serviceLayer was already set (method has its own guards)
+    if (this._serviceLayer) {
+      this.applyStyleFilteringAndSorting();
+    }
   }
   public get node(): TreeModel<AppTreeLayerNodeModel> | null {
     return this._node;
@@ -450,26 +454,36 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   private setAvailableStyles(serviceLayer: ExtendedGeoServiceAndLayerModel) {
     this.availableStyles = serviceLayer.layer.styles || [];
-    if (this.isWMS && this.node && this.availableStyles.length > 1) {
-      // remove any styles from the previously configured styles that are not/no longer in the available styles, to prevent invalid style selections
-      const currentSelectedStyles: WmsStyleModel[] = this.layerSettings[this.node.id]?.selectedStyles || [];
-      const validSelectedStyles = currentSelectedStyles.filter(style => this.availableStyles.some(s => s.name === style.name));
-      if (currentSelectedStyles.length !== validSelectedStyles.length) {
-        const currentSettingsForNode = this.layerSettings[this.node.id];
-        if (currentSettingsForNode) {
-          this.layerSettings = {
-            ...this.layerSettings, [this.node.id]: {
-              ...currentSettingsForNode, selectedStyles: validSelectedStyles,
-            },
-          };
-          this.layerSettingsSubject.next(this.layerSettings);
-        }
-      }
-      // sort the available styles using the configured/selected styles order first (if any)
-      const ordering = Object.fromEntries(validSelectedStyles.map((s, i) => [ s.name, i + 1 ]));
-      this.availableStyles = this.availableStyles
-        .toSorted((a, b) => (ordering[a.name] || Number.MAX_VALUE) - (ordering[b.name] || Number.MAX_VALUE));
-      this.initForm(this._node);
+    this.applyStyleFilteringAndSorting();
+  }
+
+  /**
+   * Apply filtering and sorting logic for WMS styles when both node and serviceLayer are available.
+   * This method can be called from either the node or serviceLayer setter.
+   */
+  private applyStyleFilteringAndSorting() {
+    // Early return if any required dependency is missing or if there's only one style (nothing to filter/sort)
+    if (!this.isWMS || !this.node || !this._serviceLayer || this.availableStyles.length <= 1) {
+      return;
     }
+    // remove any styles from the previously configured styles that are not/no longer in the available styles, to prevent invalid style selections
+    const currentSelectedStyles: WmsStyleModel[] = this.layerSettings[this.node.id]?.selectedStyles || [];
+    const validSelectedStyles = currentSelectedStyles.filter(style => this.availableStyles.some(s => s.name === style.name));
+    if (currentSelectedStyles.length !== validSelectedStyles.length) {
+      const currentSettingsForNode = this.layerSettings[this.node.id];
+      if (currentSettingsForNode) {
+        this.layerSettings = {
+          ...this.layerSettings, [this.node.id]: {
+            ...currentSettingsForNode, selectedStyles: validSelectedStyles,
+          },
+        };
+        this.layerSettingsSubject.next(this.layerSettings);
+      }
+    }
+    // sort the available styles using the configured/selected styles order first (if any)
+    const ordering = Object.fromEntries(validSelectedStyles.map((s, i) => [ s.name, i + 1 ]));
+    this.availableStyles = this.availableStyles
+      .toSorted((a, b) => (ordering[a.name] || Number.MAX_VALUE) - (ordering[b.name] || Number.MAX_VALUE));
+    this.initForm(this._node);
   }
 }
