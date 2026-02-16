@@ -24,7 +24,7 @@ import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
 import {
-  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality, Tileset3dStyle,
+  ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality, Tileset3dStyle, WmsStyleModel,
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
@@ -48,11 +48,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private formService = inject(FormService);
   private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
 
-
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
   private prevNodeId?: string;
-
   private destroyed = new Subject();
 
   private layerSettingsSubject = new BehaviorSubject<Record<string, AppLayerSettingsModel>>({});
@@ -65,6 +63,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public searchIndexEnabled$: Observable<boolean>;
 
   public layerIs3d = false;
+  protected isWMS = false;
+  protected availableStyles: WmsStyleModel[] = [];
   public layerIs3dTiles = false;
 
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
@@ -93,6 +93,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     if (serviceLayer?.service) {
       this.layerIs3d = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
       this.layerIs3dTiles = serviceLayer.service.protocol === GeoServiceProtocolEnum.TILES3D;
+      this.isWMS = serviceLayer.service.protocol === GeoServiceProtocolEnum.WMS;
+      this.setAvailableStyles(serviceLayer);
     }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
@@ -127,6 +129,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     showInAttributeList: new FormControl<boolean>(true),
     showExport: new FormControl<boolean>(true),
     tileset3dStyle: new FormControl<string | null>(null),
+    selectedStyles: new FormControl<WmsStyleModel[]>([]),
   });
 
   public formWarningMessageData$: Observable<{ featureType: FeatureTypeModel; layerSetting: AppLayerSettingsModel; form: FormModel } | null> = of(null);
@@ -137,7 +140,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   private setFormFieldEnabled(field: string, enabled: boolean) {
     const control = this.layerSettingsForm.get(field);
-    if(control) {
+    if (control) {
       if (enabled) {
         control.enable();
       } else {
@@ -204,6 +207,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
             ...showExport ? [] : [HiddenLayerFunctionality.export],
           ],
+          selectedStyles: this.isWMS && this.availableStyles.length > 1 ? value.selectedStyles : [],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -313,6 +317,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const nodeSettings = this.layerSettings[node.id] || {};
+    const selectedStyleNames = new Set((nodeSettings.selectedStyles || []).map(s => s.name));
+    const selectedStyles = this.availableStyles.filter(style => selectedStyleNames.has(style.name));
+
     this.layerSettingsForm.patchValue({
       title: nodeSettings.title || null,
       opacity: nodeSettings.opacity || 100,
@@ -325,6 +332,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
       showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
+      selectedStyles: selectedStyles,
     }, { emitEvent: false });
 
     if (this.prevNodeId !== node.id) {
@@ -440,4 +448,28 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  private setAvailableStyles(serviceLayer: ExtendedGeoServiceAndLayerModel) {
+    this.availableStyles = serviceLayer.layer.styles || [];
+    if (this.isWMS && this.node && this.availableStyles.length > 1) {
+      // remove any styles from the previously configured styles that are not/no longer in the available styles, to prevent invalid style selections
+      const currentSelectedStyles: WmsStyleModel[] = this.layerSettings[this.node.id]?.selectedStyles || [];
+      const validSelectedStyles = currentSelectedStyles.filter(style => this.availableStyles.some(s => s.name === style.name));
+      if (currentSelectedStyles.length !== validSelectedStyles.length) {
+        const currentSettingsForNode = this.layerSettings[this.node.id];
+        if (currentSettingsForNode) {
+          this.layerSettings = {
+            ...this.layerSettings, [this.node.id]: {
+              ...currentSettingsForNode, selectedStyles: validSelectedStyles,
+            },
+          };
+          this.layerSettingsSubject.next(this.layerSettings);
+        }
+      }
+      // sort the available styles using the configured/selected styles order first (if any)
+      const ordering = Object.fromEntries(validSelectedStyles.map((s, i) => [ s.name, i + 1 ]));
+      this.availableStyles = this.availableStyles
+        .toSorted((a, b) => (ordering[a.name] || Number.MAX_VALUE) - (ordering[b.name] || Number.MAX_VALUE));
+      this.initForm(this._node);
+    }
+  }
 }
