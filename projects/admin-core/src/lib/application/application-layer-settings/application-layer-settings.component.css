@@ -66,3 +66,12 @@ fieldset.layer-functionality mat-checkbox {
   overflow-y: scroll;
   flex: 1;
 }
+
+.form-control {
+  margin-top: 16px;
+}
+
+.form-control strong {
+  display: block;
+  margin-bottom: 8px;
+}
