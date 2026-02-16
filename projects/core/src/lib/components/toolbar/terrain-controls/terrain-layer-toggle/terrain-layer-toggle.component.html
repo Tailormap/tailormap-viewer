@@ -1,10 +1,35 @@
+@let terrainLayers = terrainLayers$ | async;
+@let selectedId = selectedTerrainNodeId$ | async;
+
 <div class="terrain-layer-toggle-label">
   <strong>
     {{ label() }}
   </strong>
 </div>
-<tm-split-button small_screens_icon="layers_filled"
-                 [options]="terrainLayers$ | async"
-                 [emptyLabel]="initiallyCheckedLabels$ | async"
-                 [selectedOption]="selectedTerrainNodeId$ | async"
-                 (optionSelected)="terrainChanged($event)"></tm-split-button>
+@if ((isMobileLayoutEnabled$ | async) && terrainLayers) {
+  <mat-selection-list
+    class="terrain-layer-selection-list"
+    [multiple]="false"
+    [hideSingleSelectionIndicator]="true"
+    (selectionChange)="terrainChanged($event.options[0]?.value)">
+    @for (option of terrainLayers; track option.id) {
+      <mat-list-option
+        [value]="option.id"
+        [selected]="option.id === selectedId">
+        <span matListItemIcon>
+          @if (option.id === selectedId) {
+            <mat-icon svgIcon="check"></mat-icon>
+          }
+        </span>
+        <span matListItemTitle>{{ option.label }}</span>
+      </mat-list-option>
+    }
+  </mat-selection-list>
+} @else {
+  <tm-split-button small_screens_icon="layers_filled"
+                   [options]="terrainLayers"
+                   [emptyLabel]="initiallyCheckedLabels$ | async"
+                   [selectedOption]="selectedId"
+                   (optionSelected)="terrainChanged($event)"></tm-split-button>
+}
+

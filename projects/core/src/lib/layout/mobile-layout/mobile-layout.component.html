@@ -21,12 +21,13 @@
     </div>
     <div class="mobile-menubar-panel">
       <tm-mobile-menubar-panel>
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc [mobileToc]="true"></tm-toc> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOBILE_MENUBAR_HOME)) {
           <tm-mobile-menubar-home>
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
           </tm-mobile-menubar-home>
         }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }

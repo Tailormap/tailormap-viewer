@@ -16,8 +16,28 @@
 .mobile-menubar-home-buttons {
   flex: 0 0 6vh;
   border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: row;
+}
+
+.mobile-menubar-home-buttons * {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menubar-home-buttons ::ng-deep tm-menubar-button {
+  display: flex;
+  height: 100%;
+  align-items: center;
 }
 
 .mobile-menubar-home-buttons ::ng-deep button {
   height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+tm-switch3-d ::ng-deep mat-icon {
+  color: rgba(19, 9, 54, 0.4);
 }

@@ -40,6 +40,13 @@
                 matListItemMeta>
       </mat-icon>
     }
+    @if (showInfoIcon && !isLevel()) {
+      <mat-icon class="icon"
+                (click)="emitShowInfo()"
+                svgIcon="components_info_menu_button">
+      </mat-icon>
+    }
+
   </div>
 
   @if (hasStyles()) {
