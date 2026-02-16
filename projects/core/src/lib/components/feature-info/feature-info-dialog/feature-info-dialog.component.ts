@@ -114,9 +114,17 @@ export class FeatureInfoDialogComponent {
       .subscribe(([ dialogOpen, isMobileLayoutEnabled ]) => {
         if (dialogOpen && isMobileLayoutEnabled) {
           this.menuBarService.toggleActiveComponent(BaseComponentTypeEnum.FEATURE_INFO, $localize`:@@core.feature-info.feature-info-menu-item:Feature info`);
-          this.menuBarService.setMobilePanelHeight(450)
+          this.menuBarService.setMobilePanelHeight(450);
         }
-      })
+      });
+
+    this.menuBarService.isComponentVisible$(BaseComponentTypeEnum.FEATURE_INFO)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (!visible) {
+          this.closeDialog();
+        }
+      });
   }
 
   public next() {
