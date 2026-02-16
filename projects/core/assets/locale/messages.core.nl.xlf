@@ -530,6 +530,10 @@
         <source>Could not load feature info</source>
         <target>Kon objectinformatie niet laden</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
+        <source>Feature info</source>
+        <target>Objectinformatie</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
         <target>Geen objecten gevonden</target>
