@@ -41,3 +41,9 @@
 tm-switch3-d ::ng-deep mat-icon {
   color: rgba(19, 9, 54, 0.4);
 }
+
+.mobile-menubar-home-buttons ::ng-deep .mat-badge-content {
+  transform: translateY(4px);
+}
+
+
