@@ -5,6 +5,6 @@
   right: 0;
 }
 
-tm-bottom-panel ::ng-deep .panel-content  > :has(*) {
+tm-bottom-panel ::ng-deep .panel-content > :has(*) {
   height: 100%;
 }
