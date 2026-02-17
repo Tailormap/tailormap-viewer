@@ -13,7 +13,6 @@ import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
-import { WmsStyleModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',
@@ -41,7 +40,6 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
 
   public updatedLayerSettings: Partial<LayerSettingsModel> | null = null;
   public legendImageId: string | null | undefined = null;
-  public availableStyles$: Observable<WmsStyleModel[]> = of([]);
 
   public isLeaf$: Observable<boolean | null> = of(true);
 
@@ -65,17 +63,6 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
           this.updatedLayerSettings = null;
           this.legendImageId = layerSettings.settings.legendImageId;
         }
-      }),
-    );
-
-    this.availableStyles$ = layerId$.pipe(
-      switchMap(layerId => {
-        if (typeof layerId !== 'string') {
-          return of([]);
-        }
-        return this.store$.select(selectGeoServiceAndLayerByLayerId(layerId)).pipe(
-          map(info => info?.layer.styles || []),
-        );
       }),
     );
 
