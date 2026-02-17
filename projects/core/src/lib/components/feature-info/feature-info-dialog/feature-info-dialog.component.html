@@ -1,9 +1,6 @@
 @if ((isMobileLayoutEnabled$ | async) === true) {
   @if (dialogOpen$ | async) {
     <div class="layer-list-dropdown-wrapper">
-      @if (isWideScreen()) {
-        <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
-      }
       <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
     </div>
     <tm-feature-info-content
