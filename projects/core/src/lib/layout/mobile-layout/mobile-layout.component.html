@@ -27,6 +27,7 @@
           <tm-mobile-menubar-home>
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
           </tm-mobile-menubar-home>
         }
       </tm-mobile-menubar-panel>

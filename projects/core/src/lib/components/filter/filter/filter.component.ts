@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
 import { MenubarService } from '../../menubar';
 import { FilterMenuButtonComponent } from '../filter-menu-button/filter-menu-button.component';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectSpatialFormVisible } from '../state/filter-component.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-filter',
@@ -14,15 +15,23 @@ import { selectSpatialFormVisible } from '../state/filter-component.selectors';
   standalone: false,
 })
 export class FilterComponent implements OnInit, OnDestroy {
-
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   public visible$: Observable<boolean>;
   public spatialFormVisible$: Observable<boolean> = of(false);
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.FILTER);
     this.spatialFormVisible$ = this.store$.select(selectSpatialFormVisible);
+
+    this.visible$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(450);
+        }
+      });
   }
 
   public ngOnInit() {
