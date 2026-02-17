@@ -3,6 +3,7 @@
   @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
   <div class="viewer">
     <div class="map">
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
       <tm-map></tm-map>
       <div class="map-controls-left">
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
@@ -29,6 +30,7 @@
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
           </tm-mobile-menubar-home>
         }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }
       </tm-mobile-menubar-panel>
     </div>
     <div class="mobile-menubar-buttons">

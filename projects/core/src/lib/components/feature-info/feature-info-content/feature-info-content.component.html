@@ -1,0 +1,61 @@
+@if(selectedLayer(); as layer) {
+  @if (layer.error) {
+    <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
+  }
+  @if(currentFeature(); as feature) {
+    <div class="feature-info" [class.attributes-collapsed]="attributesCollapsed() && !!layer.template">
+      @if (layer.template) {
+        <div class="row template-row">
+          <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
+        </div>
+        <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="attributesToggleIcon()"></mat-icon></div>
+      }
+      <div class="content attributes-list">
+        @for (att of feature.sortedAttributes; track att) {
+          <div class="row">
+            <strong>{{att.label}}</strong>
+            <div [innerHTML]="att.attributeValue | htmlify"></div>
+          </div>
+        }
+      </div>
+      @if(feature.attachmentCount > 0) {
+        <div class="toggle attachments-toggle" (click)="toggleAttachments()">
+          <div class="label">
+            <span i18n="@@core.edit.attachments">Attachments</span>&nbsp;({{feature.attachmentCount}})
+          </div>
+          <mat-icon [svgIcon]="attachmentsToggleIcon()"></mat-icon>
+        </div>
+        <div class="attachments-list" [class.attachments-collapsed]="attachmentsCollapsed()">
+          @for(attachmentsForAttribute of feature.sortedAttachmentsByAttribute; track attachmentsForAttribute) {
+            <div class="attachment-attribute">{{attachmentsForAttribute.attributeName}} ({{attachmentsForAttribute.attachments.length}})</div>
+            @for(attachment of attachmentsForAttribute.attachments; track attachment) {
+              <div class="attachment-row">
+                <a [href]="attachmentHelper.getAttachmentUrl(layer.id, attachment)"
+                   matTooltipClass="tooltip-pre-line"
+                   [matTooltip]="attachmentHelper.getAttachmentTooltip(attachment)"
+                   target="_blank">
+                  {{attachment.fileName}}
+                </a>
+              </div>
+
+            }
+          }
+        </div>
+      }
+      <div class="buttons">
+        <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled()">Back</button>
+        <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled()">Next</button>
+        @if (isEditPossible()) {
+          <div class="edit-feature-button">
+            <button mat-icon-button
+                    tmTooltip="Edit feature"
+                    i18n-tmTooltip="@@core.feature-info.edit-feature"
+                    (click)="editFeatureClicked()">
+              <mat-icon svgIcon="edit"></mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+}
