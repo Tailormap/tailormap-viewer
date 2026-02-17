@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, filter, of, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
 import {
@@ -15,6 +15,7 @@ import {
 import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-feature-info',
@@ -28,12 +29,14 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
   private featureInfoService = inject(FeatureInfoService);
   private store$ = inject(Store);
   private featureUpdatedService = inject(FeatureUpdatedService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private destroyed = new Subject();
 
   public loadingFeatureInfo$ = this.store$.select(selectLoadingFeatureInfo);
   public featureInfoCoordinates$ = this.store$.select(selectMapCoordinates);
+  public isMobileLayoutEnabled$: Observable<boolean> = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.feature-info.error-loading-feature-info:Something went wrong while getting feature info, please try again`;
   private static DEFAULT_NO_FEATURES_FOUND_MESSAGE = $localize `:@@core.feature-info.no-features-found:No features found`;
