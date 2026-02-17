@@ -1,20 +1,22 @@
 @if ((isMobileLayoutEnabled$ | async) === true) {
-  <div class="layer-list-dropdown-wrapper">
-    @if (isWideScreen()) {
-      <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
-    }
-    <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
-  </div>
-  <tm-feature-info-content
-    [selectedLayer]="selectedLayer$ | async"
-    [currentFeature]="currentFeature()"
-    [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
-    [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
-    [isEditPossible]="isEditPossible() ?? false"
-    (showNextFeatureInfoFeature)="next()"
-    (showPreviousFeatureInfoFeature)="back()"
-    (editFeature)="editFeature()">
-  </tm-feature-info-content>
+  @if (dialogOpen$ | async) {
+    <div class="layer-list-dropdown-wrapper">
+      @if (isWideScreen()) {
+        <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
+      }
+      <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
+    </div>
+    <tm-feature-info-content
+      [selectedLayer]="selectedLayer$ | async"
+      [currentFeature]="currentFeature()"
+      [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
+      [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
+      [isEditPossible]="isEditPossible() ?? false"
+      (showNextFeatureInfoFeature)="next()"
+      (showPreviousFeatureInfoFeature)="back()"
+      (editFeature)="editFeature()">
+    </tm-feature-info-content>
+  }
 } @else {
   <tm-dialog [open]="dialogOpen$ | async"
              [openFromRight]="true"
