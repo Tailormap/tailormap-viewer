@@ -72,10 +72,14 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
       'mobile-menu-home',
       { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent },
     );
-    this.visible$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(visible => {
-        if (visible) {
+
+    this.mobileLayoutService.isMobileLayoutEnabled$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(enabled => enabled),
+        switchMap(() => this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW)),
+      ).subscribe(visibleInMobileLayout => {
+        if (visibleInMobileLayout) {
           this.menubarService.setMobilePanelHeight(230);
           this.toggle(false);
         } else {
@@ -85,6 +89,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   }
 
   public toggle(close?: boolean) {
+    console.debug('Toggle coordinate link window', close);
     if (close === true || this.toolActive()) {
       this.mapService.disableTool(this.tool);
       return;
