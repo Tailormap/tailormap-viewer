@@ -43,7 +43,7 @@ tm-switch3-d ::ng-deep mat-icon {
 }
 
 .mobile-menubar-home-buttons ::ng-deep .mat-badge-content {
-  transform: translateY(4px);
+  transform: translateY(4px) translateX(-4px);
 }
 
 

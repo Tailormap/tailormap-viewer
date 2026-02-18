@@ -12,4 +12,5 @@ import { LayoutService } from '../layout.service';
 export class MobileLayoutComponent {
   public layoutService = inject(LayoutService);
   public componentTypes = BaseComponentTypeEnum;
+  protected readonly BaseComponentTypeEnum = BaseComponentTypeEnum;
 }
