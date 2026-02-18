@@ -73,6 +73,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
       { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent },
     );
 
+    // Toggle the CLW map tool when the CLW menu button is clicked in the mobile layout.
     this.mobileLayoutService.isMobileLayoutEnabled$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -89,7 +90,6 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   }
 
   public toggle(close?: boolean) {
-    console.debug('Toggle coordinate link window', close);
     if (close === true || this.toolActive()) {
       this.mapService.disableTool(this.tool);
       return;
