@@ -170,6 +170,10 @@
         <source>URL</source>
         <target>URL</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+        <target>Koordinaten-Link-Fenster</target>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
         <target>Link zum Öffnen auswählen</target>
