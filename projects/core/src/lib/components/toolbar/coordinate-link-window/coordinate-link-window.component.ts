@@ -11,9 +11,6 @@ import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap }
 import { FormControl } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import {
-  TerrainControlsMenuButtonComponent
-} from '../terrain-controls/terrain-controls-menu-button/terrain-controls-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
 import { MenubarService } from '../../menubar';
@@ -71,7 +68,20 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent });
+    this.componentRegistrationService.registerComponent(
+      'mobile-menu-home',
+      { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent },
+    );
+    this.visible$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(230);
+          this.toggle(false);
+        } else {
+          this.toggle(true);
+        }
+      });
   }
 
   public toggle(close?: boolean) {
