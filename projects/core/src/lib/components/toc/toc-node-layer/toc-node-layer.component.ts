@@ -95,8 +95,8 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  protected hasStyles() {
-    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 0;
+  protected hasStylesToShow() {
+    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 1;
   }
 
   protected styleChanged(style: WmsStyleModel) {

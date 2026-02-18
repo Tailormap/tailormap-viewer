@@ -42,7 +42,10 @@
                 [value]="style"
                 class="styles-list-item"
               >
-                <span matListItemTitle>{{ style.name }}</span>
+                <span matListItemTitle>
+                  {{ style.name }}
+                  {{ style.name === defaultStyleName ? ' (default)' : '' }}
+                </span>
                 <span matListItemLine>{{ style.title }}</span>
               </mat-list-option>
             }
