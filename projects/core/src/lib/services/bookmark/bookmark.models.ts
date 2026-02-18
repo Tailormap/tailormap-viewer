@@ -1,7 +1,5 @@
-import { Message, AnyMessage, MessageType } from '@bufbuild/protobuf';
-
 export type BookmarkID = string;
-export type BookmarkType = 'string' | 'binary';
+export type BookmarkType = 'string' | 'json';
 
 export interface BookmarkFragmentDescriptor {
   readonly identifier: BookmarkID;
@@ -22,32 +20,19 @@ export class BookmarkStringFragmentDescriptor implements BookmarkFragmentDescrip
   }
 }
 
-export const isBookmarkProtoFragmentDescriptor = (fragment: BookmarkFragmentDescriptor): fragment is BookmarkProtoFragmentDescriptor =>
-  fragment.type === 'binary';
+export const isBookmarkJsonFragmentDescriptor = (fragment: BookmarkFragmentDescriptor): fragment is BookmarkJsonFragmentDescriptor<any> =>
+  fragment.type === 'json';
 
-export class BookmarkProtoFragmentDescriptor<T extends Message<T> = AnyMessage> implements BookmarkFragmentDescriptor {
+export class BookmarkJsonFragmentDescriptor<T> implements BookmarkFragmentDescriptor {
 
   public readonly identifier: BookmarkID;
-  public readonly type: BookmarkType = 'binary';
-  private readonly _messageType: MessageType<T>;
+  public readonly type: BookmarkType = 'json';
 
-  constructor(identifier: BookmarkID, messageType: MessageType<T>) {
+  constructor(identifier: BookmarkID) {
     this.identifier = identifier;
-    this._messageType = messageType;
   }
 
-  public getInitialValue(): T {
-    return new this._messageType();
-  }
-
-  public equals(one: T, other: T) {
-    return this._messageType.equals(one, other);
-  }
-
-  public serialize(value: T): Uint8Array {
-    return value.toBinary();
-  }
-  public deserialize(value: Uint8Array): T {
-    return this._messageType.fromBinary(value);
+  public getInitialValue(): T | any {
+    return null;
   }
 }

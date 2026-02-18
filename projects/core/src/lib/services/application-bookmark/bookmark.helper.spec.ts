@@ -1,7 +1,6 @@
 import { MapBookmarkHelper } from './bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { TristateBoolean, LayerVisibilityBookmarkFragment } from './bookmark_pb';
 import { AppLayerWithInitialValuesModel } from '../../map/models';
 
 const getAppLayerWithInitialValuesModel =
@@ -109,61 +108,49 @@ describe('MapBookmarkHelper', () => {
 
 
   test('visibilityDataFromFragment generates expected data', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '1', visible: TristateBoolean.FALSE },
-            { appLayerId: '256', visible: TristateBoolean.TRUE },
-        ],
-    }), initialLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '256', checked: true }], opacityChanges: [] });
+    expect(MapBookmarkHelper.visibilityDataFromFragment([
+        { id: '1', v: 0 },
+        { id: '256', v: 1 },
+    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '256', checked: true }], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment skips unknown IDs', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '3', visible: TristateBoolean.TRUE },
-        ],
-    }), initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
+    expect(MapBookmarkHelper.visibilityDataFromFragment([
+        { id: '3', v: 1 },
+    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment skips unset bookmarks', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '1', visible: TristateBoolean.UNSET },
-            { appLayerId: '256', visible: TristateBoolean.TRUE },
-        ],
-    }), initialLayers)).toEqual({ visibilityChanges: [{ id: '256', checked: true }], opacityChanges: [] });
+    expect(MapBookmarkHelper.visibilityDataFromFragment([
+        { id: '1' },
+        { id: '256', v: 1 },
+    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '256', checked: true }], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment does not change already-changed visibility flags', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '1', visible: TristateBoolean.TRUE },
-        ],
-    }), initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
+    expect(MapBookmarkHelper.visibilityDataFromFragment([
+        { id: '1', v: 1 },
+    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
   });
 
   test('visibilityDataFromFragment resets layers back to initial value when not referenced', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment(new LayerVisibilityBookmarkFragment({
-    }), twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '2', checked: true }], opacityChanges: [] });
+    expect(MapBookmarkHelper.visibilityDataFromFragment([],
+      twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '2', checked: true }], opacityChanges: [] });
   });
 
   test('fragmentFromVisibilityData serializes changes', () => {
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(initialLayers)).toEqual(new LayerVisibilityBookmarkFragment());
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(twoFlippedLayers)).toEqual(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '1', visible: TristateBoolean.TRUE },
-            { appLayerId: '2', visible: TristateBoolean.FALSE },
-        ],
-    }));
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(allFlippedLayers)).toEqual(new LayerVisibilityBookmarkFragment({
-        layers: [
-            { appLayerId: '1', visible: TristateBoolean.TRUE },
-            { appLayerId: '2', visible: TristateBoolean.FALSE },
-            { appLayerId: '3', visible: TristateBoolean.TRUE },
-            { appLayerId: '9', visible: TristateBoolean.TRUE },
-            { appLayerId: '256', visible: TristateBoolean.FALSE },
-            { appLayerId: '512', visible: TristateBoolean.TRUE },
-        ],
-    }));
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(initialLayers)).toEqual(undefined);
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(twoFlippedLayers)).toEqual([
+        { id: '1', v: 1 },
+        { id: '2', v: 0 },
+    ]);
+    expect(MapBookmarkHelper.fragmentFromVisibilityData(allFlippedLayers)).toEqual([
+      { id: '1', v: 1 },
+      { id: '2', v: 0 },
+      { id: '3', v: 1 },
+      { id: '9', v: 1 },
+      { id: '256', v: 0 },
+      { id: '512', v: 1 },
+    ]);
   });
 });
