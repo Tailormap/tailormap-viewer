@@ -86,7 +86,7 @@ describe('TocNodeLayerComponent', () => {
 
   test('does not render styles UI when layer has only one style', async () => {
     const appLayer = getAppLayerModel({ 
-      styles: [{ name: 'default', title: 'Default Style' }] 
+      styles: [{ name: 'default', title: 'Default Style' }], 
     });
     const layer: TreeModel<AppLayerModel> = {
       id: `${appLayer.id}`,
@@ -102,8 +102,8 @@ describe('TocNodeLayerComponent', () => {
     const appLayer = getAppLayerModel({ 
       styles: [
         { name: 'default', title: 'Default Style' },
-        { name: 'alternate', title: 'Alternate Style' }
-      ] 
+        { name: 'alternate', title: 'Alternate Style' },
+      ], 
     });
     const layer: TreeModel<AppLayerModel> = {
       id: `${appLayer.id}`,
