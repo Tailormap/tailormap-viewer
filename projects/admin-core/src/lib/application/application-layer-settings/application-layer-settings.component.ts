@@ -28,6 +28,7 @@ import {
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -307,6 +308,19 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  protected updateListOrder($event: CdkDragDrop<WmsStyleModel[], any>) {
+    moveItemInArray(this.availableStyles, $event.previousIndex, $event.currentIndex);
+    // Reorder selectedStyles to match the new order in availableStyles and update the form control value
+    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value || [];
+    const selectedNames = new Set(selectedStyles.map(s => s.name));
+    const reorderedSelectedStyles = this.availableStyles.filter(s => selectedNames.has(s.name));
+    this.layerSettingsForm.get('selectedStyles')?.setValue(reorderedSelectedStyles);
+  }
+
+  protected getStyleTooltip(style: WmsStyleModel): string {
+    return style.name === this.defaultStyleName ? `${style.abstractText ?? style.title ?? style.name} (default)` : style.abstractText ?? style.title ?? style.name;
   }
 
   private initForm(node?: TreeModel<AppTreeLayerNodeModel> | null) {
