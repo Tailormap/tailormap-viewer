@@ -47,28 +47,22 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private featureSourceService = inject(FeatureSourceService);
   private formService = inject(FormService);
   private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
-
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
   private prevNodeId?: string;
   private destroyed = new Subject();
-
   private layerSettingsSubject = new BehaviorSubject<Record<string, AppLayerSettingsModel>>({});
   private layerSettings: Record<string, AppLayerSettingsModel> = {};
-
   // eslint-disable-next-line max-len
   private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
-
   public layerTitle = '';
   public searchIndexEnabled$: Observable<boolean>;
-
   public layerIs3d = false;
   protected isWMS = false;
+  protected defaultStyleName: string = '';
   protected availableStyles: WmsStyleModel[] = [];
   public layerIs3dTiles = false;
-
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
-
   public tilesetStyleErrorMessage: string = '';
   private tilesetStyleJSONErrorMessage = $localize `:@@admin-core.application.invalid-json:Invalid JSON: `;
   private tilesetStyleConformErrorMessage = $localize `:@@admin-core.application.invalid-tileset-style:The style does not conform to the 3D Tileset Styling Language structure`;
@@ -454,6 +448,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
 
   private setAvailableStyles(serviceLayer: ExtendedGeoServiceAndLayerModel) {
     this.availableStyles = serviceLayer.layer.styles || [];
+    if (this.availableStyles.length > 0) {
+      this.defaultStyleName = this.availableStyles[0].name;
+    }
     this.applyStyleFilteringAndSorting();
   }
 

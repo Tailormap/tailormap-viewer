@@ -95,7 +95,6 @@ describe('GeoServiceDetailsComponent', () => {
         legendImageId: undefined,
         tilingDisabled: true,
         tilingGutter: undefined,
-        selectedStyles: [],
       },
     });
     expect(await screen.queryByText('Refresh service?')).not.toBeInTheDocument();

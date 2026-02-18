@@ -49,7 +49,7 @@
 
   </div>
 
-  @if (hasStyles()) {
+  @if (hasStylesToShow()) {
     <div class="styles-list-container">
       <mat-radio-group
         (change)="styleChanged($event.value)"
