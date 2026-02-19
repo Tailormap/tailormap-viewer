@@ -128,6 +128,9 @@
       <trans-unit id="core.common.url" datatype="html">
         <source>URL</source>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
       </trans-unit>
