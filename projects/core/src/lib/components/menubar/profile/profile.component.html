@@ -13,7 +13,7 @@
       <span>{{' '}}{{userDetails.username}}</span>
     </button>
   }
-  @if (userIsAdmin$ | async) {
+  @if ((userIsAdmin$ | async) && !noExpansionPanel()) {
     <button mat-menu-item routerLink="/admin">
       <span i18n="@@core.profile.go-to-admin">Go to admin</span>
     </button>

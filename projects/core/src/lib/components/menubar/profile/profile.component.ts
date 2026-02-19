@@ -7,9 +7,6 @@ import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
-import {
-  TerrainControlsMenuButtonComponent
-} from '../../toolbar/terrain-controls/terrain-controls-menu-button/terrain-controls-menu-button.component';
 import { ProfileMenuButtonComponent } from './profile-menu-button/profile-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
 
