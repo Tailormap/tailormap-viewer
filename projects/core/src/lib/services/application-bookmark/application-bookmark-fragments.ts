@@ -26,4 +26,8 @@ export class ApplicationBookmarkFragments {
     'layers',
   );
 
+  public static MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
+    'mobile',
+  );
+
 }

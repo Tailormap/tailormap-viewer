@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, debounceTime, filter, map, skip, Subject, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, filter, map, Observable, skip, Subject, takeUntil } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
@@ -54,6 +54,19 @@ export class ApplicationBookmarkService implements OnDestroy {
   public isEmbeddedApplication$() {
     return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR)
       .pipe(map(embedded => embedded === '1'));
+  }
+
+  public getMobileLayoutOption$(): Observable<'enabled' | 'disabled' | 'auto'> {
+    return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR)
+      .pipe(map(mobile => {
+        if (mobile === '1') {
+          return 'enabled';
+        } else if (mobile === '0') {
+          return 'disabled';
+        } else {
+          return 'auto';
+        }
+      }));
   }
 
   private updateBookmarkOnChanges() {
