@@ -1,5 +1,8 @@
 name: 'Test and deploy'
 
+permissions:
+  contents: read
+
 env: # Keep this in sync with Dockerfile version, Krypton (== 24)
   NODE_VERSION: "lts/Krypton"
 
