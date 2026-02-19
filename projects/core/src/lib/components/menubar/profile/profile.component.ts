@@ -1,12 +1,17 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject, OnInit, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { combineLatest, map, Observable, Subject } from 'rxjs';
-import { SecurityModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
+import {
+  TerrainControlsMenuButtonComponent
+} from '../../toolbar/terrain-controls/terrain-controls-menu-button/terrain-controls-menu-button.component';
+import { ProfileMenuButtonComponent } from './profile-menu-button/profile-menu-button.component';
+import { ComponentRegistrationService } from '../../../services';
 
 @Component({
   selector: 'tm-profile',
@@ -15,12 +20,15 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ProfileComponent implements OnDestroy {
+export class ProfileComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private authenticatedUserService = inject(AuthenticatedUserService);
+  private componentRegistrationService = inject(ComponentRegistrationService);
 
+
+  public noExpansionPanel = input<boolean>(false);
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
@@ -46,7 +54,12 @@ export class ProfileComponent implements OnDestroy {
     }));
   }
 
+  public ngOnInit(): void {
+    this.componentRegistrationService.registerComponent('mobile-menu-home', { type: BaseComponentTypeEnum.PROFILE, component: ProfileMenuButtonComponent });
+  }
+
   public ngOnDestroy() {
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.PROFILE);
     this.destroyed.next(null);
     this.destroyed.complete();
   }
