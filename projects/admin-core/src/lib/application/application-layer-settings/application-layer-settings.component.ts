@@ -93,7 +93,11 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       this.layerIs3d = GeoServiceHelper.is3dProtocol(serviceLayer.service.protocol);
       this.layerIs3dTiles = serviceLayer.service.protocol === GeoServiceProtocolEnum.TILES3D;
       this.isWMS = serviceLayer.service.protocol === GeoServiceProtocolEnum.WMS;
-      this.setAvailableStyles(serviceLayer);
+      this.availableStyles = serviceLayer.layer.styles || [];
+      if (this.availableStyles.length > 0) {
+        this.defaultStyleName = this.availableStyles[0].name;
+      }
+      this.applyStyleFilteringAndSorting();
     }
   }
   public get serviceLayer(): ExtendedGeoServiceAndLayerModel | null {
@@ -167,6 +171,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         this.layerSettings = layerSettings;
         this.layerSettingsSubject.next(layerSettings);
         this.initForm(this.node);
+        this.patchSelectedStylesInForm(this.node);
       });
 
     this.store$.select(selectDisabledComponentsForSelectedApplication)
@@ -206,7 +211,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
             ...showInAttributeList ? [] : [HiddenLayerFunctionality.attributeList],
             ...showExport ? [] : [HiddenLayerFunctionality.export],
           ],
-          selectedStyles: this.isWMS && this.availableStyles.length > 1 ? value.selectedStyles : [],
+          selectedStyles: (this.isWMS && this.availableStyles.length > 1) ? value.selectedStyles : [],
         };
         this.layerSettingsChange.emit({ nodeId: this.node.id, settings });
       });
@@ -329,8 +334,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       return;
     }
     const nodeSettings = this.layerSettings[node.id] || {};
-    const selectedStyleNames = new Set((nodeSettings.selectedStyles || []).map(s => s.name));
-    const selectedStyles = this.availableStyles.filter(style => selectedStyleNames.has(style.name));
 
     this.layerSettingsForm.patchValue({
       title: nodeSettings.title || null,
@@ -344,7 +347,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       showFeatureInfo: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo),
       showInAttributeList: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList),
       showExport: !nodeSettings.hiddenFunctionality?.includes(HiddenLayerFunctionality.export),
-      selectedStyles: selectedStyles,
     }, { emitEvent: false });
 
     if (this.prevNodeId !== node.id) {
@@ -460,14 +462,6 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  private setAvailableStyles(serviceLayer: ExtendedGeoServiceAndLayerModel) {
-    this.availableStyles = serviceLayer.layer.styles || [];
-    if (this.availableStyles.length > 0) {
-      this.defaultStyleName = this.availableStyles[0].name;
-    }
-    this.applyStyleFilteringAndSorting();
-  }
-
   /**
    * Apply filtering and sorting logic for WMS styles when both node and serviceLayer are available.
    * This method can be called from either the node or serviceLayer setter.
@@ -477,10 +471,10 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     if (!this.isWMS || !this.node || !this._serviceLayer || this.availableStyles.length <= 1) {
       return;
     }
+    const configuredSelectedStyles: WmsStyleModel[] = this.layerSettings[this.node.id]?.selectedStyles || [];
     // remove any styles from the previously configured styles that are not/no longer in the available styles, to prevent invalid style selections
-    const currentSelectedStyles: WmsStyleModel[] = this.layerSettings[this.node.id]?.selectedStyles || [];
-    const validSelectedStyles = currentSelectedStyles.filter(style => this.availableStyles.some(s => s.name === style.name));
-    if (currentSelectedStyles.length !== validSelectedStyles.length) {
+    const validSelectedStyles = configuredSelectedStyles.filter(style => this.availableStyles.some(s => s.name === style.name));
+    if (configuredSelectedStyles.length !== validSelectedStyles.length) {
       const currentSettingsForNode = this.layerSettings[this.node.id];
       if (currentSettingsForNode) {
         this.layerSettings = {
@@ -491,10 +485,21 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
         this.layerSettingsSubject.next(this.layerSettings);
       }
     }
+
     // sort the available styles using the configured/selected styles order first (if any)
     const ordering = Object.fromEntries(validSelectedStyles.map((s, i) => [ s.name, i + 1 ]));
     this.availableStyles = this.availableStyles
       .toSorted((a, b) => (ordering[a.name] || Number.MAX_VALUE) - (ordering[b.name] || Number.MAX_VALUE));
-    this.initForm(this._node);
+    this.patchSelectedStylesInForm(this._node);
+  }
+
+  private patchSelectedStylesInForm(node?: TreeModel<AppTreeLayerNodeModel> | null): void {
+    if (!node) {
+      return;
+    }
+    const nodeSettings = this.layerSettings[node.id] || {};
+    const selectedStyleNames = new Set((nodeSettings.selectedStyles || []).map(s => s.name));
+    const selectedStyles = this.availableStyles.filter(style => selectedStyleNames.has(style.name));
+    this.layerSettingsForm.patchValue({ selectedStyles: selectedStyles }, { emitEvent: false });
   }
 }
