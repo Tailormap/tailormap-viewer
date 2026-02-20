@@ -32,12 +32,12 @@
   }
 </ng-template>
 
-@if (userDetails && !noExpansionPanel()) {
+@if (userDetails && !noExpansionPanel() && (visible$ | async)) {
   <tm-menubar-button [menuTrigger]="userMenu"
   [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
     <ng-container *ngTemplateOutlet="profileMenuContent; context: { $implicit: userDetails }"></ng-container>
   </mat-menu>
-} @else if (userDetails) {
+} @else if (userDetails && (visible$ | async)) {
   <ng-container *ngTemplateOutlet="profileMenuContent; context: { $implicit: userDetails }"></ng-container>
 }

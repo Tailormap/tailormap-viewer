@@ -18,6 +18,8 @@
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .mobile-menubar-home-buttons * {

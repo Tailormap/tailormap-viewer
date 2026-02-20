@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, inject, OnInit, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject, OnInit, input, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { combineLatest, map, Observable, Subject } from 'rxjs';
@@ -9,6 +9,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { ProfileMenuButtonComponent } from './profile-menu-button/profile-menu-button.component';
 import { ComponentRegistrationService } from '../../../services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MenubarService } from '../menubar.service';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-profile',
@@ -23,7 +26,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private componentRegistrationService = inject(ComponentRegistrationService);
-
+  private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
+  private destroyRef = inject(DestroyRef);
 
   public noExpansionPanel = input<boolean>(false);
 
@@ -32,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public userIsAdmin$: Observable<boolean>;
   public showLoginButton$: Observable<boolean>;
   public icon$: Observable<string>;
+  public visible$: Observable<boolean>;
 
   private destroyed = new Subject();
 
@@ -40,6 +46,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userIsAdmin$ = this.authenticatedUserService.isAdminUser$();
     this.showLanguageToggle$ = this.store$.select(selectShowLanguageSwitcher);
     this.showLoginButton$ = this.store$.select(selectShowLoginButton);
+    this.visible$ = combineLatest([
+      this.menubarService.isComponentVisible$(BaseComponentTypeEnum.PROFILE),
+      this.mobileLayoutService.isMobileLayoutEnabled$,
+    ]).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+    );
+
     this.icon$ = combineLatest([
       this.userDetails$,
       this.showLoginButton$,
@@ -49,6 +63,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
       return showLoginButton ? 'login' : 'settings';
     }));
+
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.PROFILE)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(255);
+        }
+      });
   }
 
   public ngOnInit(): void {
