@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, take, tap } from 'rxjs';
 import { VersionModel } from './version.model';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'tm-about-dialog',
@@ -36,10 +36,11 @@ export class AboutDialogComponent {
       );
   }
 
-  public static open(dialog: MatDialog) {
+  public static open(dialog: MatDialog, options?: MatDialogConfig) {
     return dialog.open(AboutDialogComponent, {
       width: '375px',
       height: '400px',
+      ...options,
     });
   }
 

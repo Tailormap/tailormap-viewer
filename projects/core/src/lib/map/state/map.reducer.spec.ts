@@ -364,4 +364,18 @@ describe('MapReducer', () => {
     expect(updatedState.selectedBackgroundNode).toEqual('EMPTY');
   });
 
+  test('handles MapActions.updateTemporaryLayerName', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layers: [
+        getAppLayerModel({ id: '1', layerName: 'TEST' }),
+        getAppLayerModel({ id: '2', layerName: 'TEST2' }),
+      ],
+    };
+    const action = MapActions.updateTemporaryLayerName({ id: '1', temporaryLayerName: 'TEMP NAME' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers[0].temporaryLayerName).toEqual('TEMP NAME');
+    expect(updatedState.layers[1].temporaryLayerName).toEqual(undefined);
+  });
+
 });

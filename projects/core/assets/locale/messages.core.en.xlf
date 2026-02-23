@@ -824,6 +824,9 @@
       <trans-unit id="core.print.width-range" datatype="html">
         <source>Range: 50 - 600</source>
       </trans-unit>
+      <trans-unit id="core.profile" datatype="html">
+        <source>Profile</source>
+      </trans-unit>
       <trans-unit id="core.profile.about" datatype="html">
         <source>About</source>
       </trans-unit>

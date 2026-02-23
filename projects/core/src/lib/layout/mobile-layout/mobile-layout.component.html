@@ -26,6 +26,7 @@
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOBILE_MENUBAR_HOME)) {
           <tm-mobile-menubar-home>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.PROFILE)) { <tm-profile [inMobilePanel]="true"></tm-profile> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
