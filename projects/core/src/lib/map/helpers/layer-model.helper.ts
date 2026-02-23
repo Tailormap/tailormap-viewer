@@ -1,9 +1,9 @@
-import { AppLayerWithInitialValuesModel, ExtendedAppLayerModel } from '../models';
+import { AppLayerStateModel, ExtendedAppLayerModel } from '../models';
 import { AppLayerModel, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 
 export class LayerModelHelper {
 
-  public static getLayerWithInitialValues(layer: AppLayerModel): AppLayerWithInitialValuesModel {
+  public static getLayerWithInitialValues(layer: AppLayerModel): AppLayerStateModel {
     if (layer.styles?.length) {
       layer.selectedStyleName ??= layer.styles[0].name;
     }
@@ -20,7 +20,7 @@ export class LayerModelHelper {
     return l.service?.protocol === ServiceProtocol.WMS && !l.hasAttributes;
   }
 
-  public static filterLayersWithoutWebMercator(layers:  AppLayerWithInitialValuesModel[], services: ServiceModel[]): AppLayerWithInitialValuesModel[] {
+  public static filterLayersWithoutWebMercator(layers:  AppLayerStateModel[], services: ServiceModel[]): AppLayerStateModel[] {
     return layers.filter(l => {
       const service = services.find(s => s.id === l.serviceId);
       return service &&

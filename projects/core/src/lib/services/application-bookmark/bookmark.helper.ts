@@ -1,7 +1,7 @@
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
-import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../../map/models';
+import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map/models';
 import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
 import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
 import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
@@ -64,7 +64,7 @@ export class MapBookmarkHelper {
 
   public static visibilityDataFromFragment(
     fragment: LayerVisibilityBookmarkFragment,
-    layers: AppLayerWithInitialValuesModel[],
+    layers: AppLayerStateModel[],
     checkInitialValues = true,
   ): MapBookmarkContents {
     const checkedVisibilityValues = new Set();
@@ -125,7 +125,7 @@ export class MapBookmarkHelper {
     return { visibilityChanges: visibilityData, opacityChanges: opacityData };
   }
 
-  public static fragmentFromVisibilityData(layers: AppLayerWithInitialValuesModel[]): LayerVisibilityBookmarkFragment {
+  public static fragmentFromVisibilityData(layers: AppLayerStateModel[]): LayerVisibilityBookmarkFragment {
     const bookmarkData = new LayerVisibilityBookmarkFragment();
     for (const layer of layers) {
       const info = new LayerInformation({ appLayerId: layer.id });
