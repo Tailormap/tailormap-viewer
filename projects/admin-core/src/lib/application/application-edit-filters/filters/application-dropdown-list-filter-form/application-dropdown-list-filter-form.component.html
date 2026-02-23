@@ -73,6 +73,7 @@
             <mat-cell *matCellDef="let value">
               <button
                 mat-icon-button
+                type="button"
                 (click)="deleteAttributeValue(value.value)"
                 matTooltip="Remove"
                 i18n-matTooltip="@@admin-core.application.filter.remove">
