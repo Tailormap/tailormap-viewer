@@ -3,13 +3,13 @@ import { Store } from '@ngrx/store';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
 } from '@tailormap-viewer/api';
 import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { take, withLatestFrom } from 'rxjs/operators';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ComponentRegistrationService } from '../../../services';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
@@ -83,8 +83,23 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         if (visibleInMobileLayout) {
           this.menubarService.setMobilePanelHeight(230);
           this.toggle(false);
-        } else {
+        } else if (this.toolActive()) {
           this.toggle(true);
+        }
+      });
+
+    // Close the CLW when the mapTool is disabled by another component.
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        withLatestFrom(
+          this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW),
+          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)),
+          ),
+      )
+      .subscribe(([ enabledTool, visible, componentTitle ]) => {
+        if (!enabledTool && visible) {
+          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
         }
       });
   }
