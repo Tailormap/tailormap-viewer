@@ -24,6 +24,7 @@ export class MobileLayoutService {
     BaseComponentTypeEnum.INFO,
     BaseComponentTypeEnum.FILTER,
     BaseComponentTypeEnum.TERRAIN_CONTROLS,
+    BaseComponentTypeEnum.PROFILE,
     BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
   ];
 
