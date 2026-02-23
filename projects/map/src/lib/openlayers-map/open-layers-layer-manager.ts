@@ -138,7 +138,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
           this.updateFilterIfChanged(layer, existingLayer);
-          this.updateLayerStyle(layer, existingLayer);
+          this.updateLayerStyleIfChanged(layer, existingLayer);
           this.updateLayerNameIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
@@ -198,7 +198,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
       return;
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter');
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter', 'filter');
   }
 
   private updateLayerNameIfChanged(layer: LayerModel, olLayer: BaseLayer) {
@@ -206,17 +206,30 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!LayerTypesHelper.isWmsLayer(layer)) {
       return;
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name');
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name', 'name');
   }
 
-  private updateWmsLayerPropIfChanged(layer: WMSLayerModel, olLayer: BaseLayer, paramName: keyof WmsServiceParamsModel, layerPropName: keyof LayerProperties) {
+  private updateLayerStyleIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    if (!LayerTypesHelper.isWmsLayer(layer)) {
+      return;
+    }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'STYLES', 'style', 'selectedStyleName');
+  }
+
+  private updateWmsLayerPropIfChanged(
+    layer: WMSLayerModel,
+    olLayer: BaseLayer,
+    paramName: keyof WmsServiceParamsModel,
+    layerPropName: keyof LayerProperties,
+    layerKey: keyof WMSLayerModel,
+  ) {
     const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps[layerPropName] === layer[layerPropName]) {
+    if (existingProps[layerPropName] === layer[layerKey]) {
       return;
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
     if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ [paramName]: layer[layerPropName] });
+      olLayer.getSource()?.updateParams({ [paramName]: layer[layerKey] ?? '' });
     }
   }
 
@@ -287,20 +300,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         return u.toString();
       });
       source.setUrls(urls);
-    }
-  }
-
-  private updateLayerStyle(layer: LayerModel, olLayer: BaseLayer) {
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
-      return;
-    }
-    const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps.style === layer.selectedStyleName) {
-      return;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ STYLES: layer.selectedStyleName ?? '' });
     }
   }
 
