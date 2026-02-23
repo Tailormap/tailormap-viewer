@@ -1,3 +1,20 @@
 .terrain-layer-toggle-label {
   margin-bottom: 8px;
 }
+
+.terrain-layer-selection-list ::ng-deep .mdc-list-item--with-leading-icon {
+  height: 40px;
+}
+
+.terrain-layer-expansion-panel ::ng-deep .mat-expansion-panel-header {
+  height: 44px;
+}
+
+.terrain-layer-selection-list ::ng-deep .mdc-list-item--with-leading-icon .mdc-list-item__start {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.terrain-layer-selection-list ::ng-deep .mdc-list-item__primary-text {
+  font-size: 14px;
+}

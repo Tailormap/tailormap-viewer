@@ -10,6 +10,8 @@ import { TocModule } from '../toc';
 import { InfoModule } from '../info';
 import { MobileMenubarHomeComponent } from './mobile-menubar-home/mobile-menubar-home.component';
 import { MobileMenubarHomeButtonComponent } from './mobile-menubar-home-button/mobile-menubar-home-button.component';
+import { Switch3dModule } from "../toolbar/switch3d/switch3d.module";
+import { StreetviewModule } from "../toolbar/streetview/streetview.module";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { MobileMenubarHomeButtonComponent } from './mobile-menubar-home-button/m
     TocModule,
     InfoModule,
     CoreSharedModule,
+    Switch3dModule,
+    StreetviewModule,
   ],
   exports: [
     MobileMenubarComponent,

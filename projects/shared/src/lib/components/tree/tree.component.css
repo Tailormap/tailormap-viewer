@@ -36,6 +36,21 @@ mat-checkbox {
   color: var(--primary-color);
 }
 
+.tree-node--selected-with-info {
+  background-color: var(--primary-color-0_1);
+  border-radius: 8px;
+}
+
+.tree-node--selected-with-info + .tree-node--selected-with-info {
+  margin-top: 4px;
+}
+
+.tree-node--selected-with-info .tree-node-wrapper--leaf {
+  background-color: var(--primary-color-0_1);
+  color: var(--primary-color);
+  border-radius: 8px 8px 0 0;
+}
+
 .tree-node-wrapper {
   display: flex;
   align-items: center;
@@ -145,4 +160,8 @@ mat-checkbox {
   left: 0;
   right: 0;
   height: 0;
+}
+
+.tree-node__info {
+  margin: 0 8px 0 8px;
 }

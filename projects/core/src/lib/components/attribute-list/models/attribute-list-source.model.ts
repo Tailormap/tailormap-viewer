@@ -19,6 +19,10 @@ export interface AttributeListSourceModel {
    */
   id: string;
   /**
+   * Observable stream indicating whether this source is currently loading its tabs.
+   */
+  isLoadingTabs$?: Observable<boolean>;
+  /**
    * Observable stream of tabs that this source provides.
    * The attribute list component will subscribe to this to get the available tabs.
    */

@@ -128,6 +128,9 @@
       <trans-unit id="core.common.url" datatype="html">
         <source>URL</source>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
       </trans-unit>
@@ -397,6 +400,9 @@
       </trans-unit>
       <trans-unit id="core.feature-info.error-loading-features" datatype="html">
         <source>Could not load feature info</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
+        <source>Feature info</source>
       </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
@@ -818,6 +824,9 @@
       <trans-unit id="core.print.width-range" datatype="html">
         <source>Range: 50 - 600</source>
       </trans-unit>
+      <trans-unit id="core.profile" datatype="html">
+        <source>Profile</source>
+      </trans-unit>
       <trans-unit id="core.profile.about" datatype="html">
         <source>About</source>
       </trans-unit>
@@ -847,6 +856,9 @@
       </trans-unit>
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls" datatype="html">
+        <source>Terrain controls</source>
       </trans-unit>
       <trans-unit id="core.terrain-controls.model" datatype="html">
         <source>Terrain model</source>

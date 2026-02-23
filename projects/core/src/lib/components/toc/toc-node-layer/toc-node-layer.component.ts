@@ -32,6 +32,9 @@ export class TocNodeLayerComponent {
   @Input()
   public editableLayerIds: string[] = [];
 
+  @Input()
+  public showInfoIcon: boolean = false;
+
   @Output()
   public zoomToScale = new EventEmitter<number>();
 
@@ -40,6 +43,9 @@ export class TocNodeLayerComponent {
 
   @Output()
   public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
+
+  @Output()
+  public showInfo= new EventEmitter<TreeModel<AppLayerModel>>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -89,11 +95,18 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  protected hasStyles() {
-    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 0;
+  protected hasStylesToShow() {
+    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 1;
   }
 
   protected styleChanged(style: WmsStyleModel) {
     this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
   }
+
+  public emitShowInfo() {
+    if (this.node) {
+      this.showInfo.emit(this.node);
+    }
+  }
+
 }

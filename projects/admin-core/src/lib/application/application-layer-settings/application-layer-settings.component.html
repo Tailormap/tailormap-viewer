@@ -31,6 +31,36 @@
                   cdkAutosizeMinRows="4"
                   cdkAutosizeMaxRows="10"></textarea>
       </mat-form-field>
+
+      @if (isWMS && availableStyles.length > 1) {
+        <div class="available-styles-form-control">
+          <strong i18n="@@admin-core.catalog.available-styles" id="available-styles-label">Available styles</strong>
+          <mat-selection-list (cdkDropListDropped)="updateListOrder($event)" [cdkDropListData]="availableStyles"
+                              aria-labelledby="available-styles-label"
+                              cdkDropList
+                              class="styles-list"
+                              formControlName="selectedStyles">
+            @for (style of availableStyles; track style.name) {
+              <mat-list-option
+                [cdkDragData]="style"
+                [lines]="3"
+                [tmTooltip]="getStyleTooltip(style)"
+                [value]="style"
+                cdkDrag
+                class="styles-list-item"
+                togglePosition="before"
+              >
+                <span matListItemTitle>{{ style.name }}{{ style.name === defaultStyleName ? ' (default)' : '' }}</span>
+                <p matListItemLine>
+                  <span>{{ style.title }}</span>
+                  <mat-icon cdkDragHandle class="styles-list-drag-handle" svgIcon="reorder"></mat-icon>
+                </p>
+              </mat-list-option>
+            }
+          </mat-selection-list>
+        </div>
+      }
+
       @if (!layerIs3d) {
         <mat-form-field>
           <mat-label i18n="@@admin-core.application.autoRefreshInSeconds">Auto refresh the layer (seconds)</mat-label>

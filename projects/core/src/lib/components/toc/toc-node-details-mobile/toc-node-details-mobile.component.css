@@ -1,0 +1,11 @@
+.toc-node-details-in-node {
+  margin-top: 12px;
+}
+
+.toc-node-description {
+  margin: 0 0 12px 0;
+}
+
+.toc-node-details-transparency ::ng-deep h3 {
+  font-size: 14px;
+}

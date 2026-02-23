@@ -66,3 +66,17 @@ fieldset.layer-functionality mat-checkbox {
   overflow-y: scroll;
   flex: 1;
 }
+
+.available-styles-form-control {
+  margin-top: 16px;
+}
+
+.available-styles-form-control strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.available-styles-form-control .styles-list-drag-handle {
+  cursor: move;
+  float: right;
+}

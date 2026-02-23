@@ -21,8 +21,9 @@ import {
   AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
 } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
-import { AttachmentService } from '../../../services/attachment.service';
 import { selectIn3dView } from '../../../map/state/map.selectors';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { MenubarService } from '../../menubar';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -36,7 +37,8 @@ export class FeatureInfoDialogComponent {
   public breakpointObserver = inject(BreakpointObserver);
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
-  public attachmentHelper = inject(AttachmentService);
+  private mobileLayoutService = inject(MobileLayoutService);
+  private menuBarService = inject(MenubarService);
 
   public dialogOpen$: Observable<boolean>;
   public dialogCollapsed$: Observable<boolean>;
@@ -45,6 +47,7 @@ export class FeatureInfoDialogComponent {
   public selectedSingleLayer$: Observable<FeatureInfoLayerModel | null>;
   public isPrevButtonDisabled$: Observable<boolean>;
   public isNextButtonDisabled$: Observable<boolean>;
+  public isMobileLayoutEnabled$: Observable<boolean> = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   public panelWidth = 600;
   public panelWidthCollapsed = 300;
@@ -69,9 +72,7 @@ export class FeatureInfoDialogComponent {
   public isWideScreen = signal<boolean>(false);
   public expandedList = signal<boolean>(false);
   public attributesCollapsed = signal<boolean>(false);
-  public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
   public attachmentsCollapsed = signal<boolean>(false);
-  public attachmentsToggleIcon = computed(() => this.attachmentsCollapsed() ? 'chevron_top' : 'chevron_bottom');
 
   constructor() {
     this.dialogOpen$ = this.store$.select(selectFeatureInfoDialogVisible);
@@ -102,6 +103,29 @@ export class FeatureInfoDialogComponent {
         } else {
           this.isWideScreen.set(true);
           this.expandedList.set(!listCollapsed);
+        }
+      });
+
+    combineLatest([
+      this.dialogOpen$,
+      this.isMobileLayoutEnabled$,
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([ dialogOpen, isMobileLayoutEnabled ]) => {
+        if (dialogOpen && isMobileLayoutEnabled) {
+          this.menuBarService.toggleActiveComponent(BaseComponentTypeEnum.FEATURE_INFO, $localize`:@@core.feature-info.feature-info-menu-item:Feature info`);
+          this.menuBarService.setMobilePanelHeight(450);
+        }
+      });
+
+    combineLatest([
+      this.menuBarService.isComponentVisible$(BaseComponentTypeEnum.FEATURE_INFO),
+      this.isMobileLayoutEnabled$,
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([ visible, isMobileLayoutEnabled ]) => {
+        if (!visible && isMobileLayoutEnabled) {
+          this.closeDialog();
         }
       });
   }

@@ -65,6 +65,15 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input()
   public extendedDropzone?: boolean;
 
+  @Input()
+  public openInfoInTree = false;
+
+  @Input()
+  public nodeInfoInTreeTemplate?: TemplateRef<any>;
+
+  @Input()
+  public activeInTreeInfoNodes: string[] = [];
+
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
   private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });
@@ -159,6 +168,9 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   public setNodeSelected(node: FlatTreeModel) {
+    if (this.openInfoInTree) {
+      return;
+    }
     this.treeService.selectionStateChanged(node);
     if (this.expandOnGroupClick && FlatTreeHelper.isExpandable(node)) {
       this.treeService.toggleNodeExpanded(node);

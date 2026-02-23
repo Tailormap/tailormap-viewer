@@ -40,9 +40,16 @@
                 matListItemMeta>
       </mat-icon>
     }
+    @if (showInfoIcon && !isLevel()) {
+      <mat-icon class="icon"
+                (click)="emitShowInfo()"
+                svgIcon="components_info_menu_button">
+      </mat-icon>
+    }
+
   </div>
 
-  @if (hasStyles()) {
+  @if (hasStylesToShow()) {
     <div class="styles-list-container">
       <mat-radio-group
         (change)="styleChanged($event.value)"

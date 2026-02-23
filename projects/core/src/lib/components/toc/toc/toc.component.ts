@@ -1,7 +1,7 @@
-import { Component, computed, inject, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -44,12 +44,15 @@ export class TocComponent implements OnInit, OnDestroy {
   private authenticatedUserService = inject(AuthenticatedUserService);
 
 
+  public mobileToc = input(false);
+
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
   public scale: number | null = null;
 
   public infoVisible = signal(false);
   public infoTreeNode$ = this.store$.select(selectSelectedNode);
+  public activeMobileInfoNodes = signal<string[]>([]);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
@@ -122,6 +125,16 @@ export class TocComponent implements OnInit, OnDestroy {
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
     this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
+
+    if (this.mobileToc()) {
+      this.visible$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(visible => {
+          if (visible) {
+            this.menubarService.setMobilePanelHeight(500);
+          }
+      });
+    }
   }
 
   public getDropZoneConfig() {
@@ -167,8 +180,16 @@ export class TocComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setEditActive({ active: true }));
   }
 
+  public setShowMobileInfo(node: TreeModel<AppLayerModel>) {
+    const activeMobileInfoNodes = this.activeMobileInfoNodes();
+    if (activeMobileInfoNodes.includes(node.id)) {
+      this.activeMobileInfoNodes.set(activeMobileInfoNodes.filter(id => id !== node.id));
+    } else {
+      this.activeMobileInfoNodes.set([ ...activeMobileInfoNodes, node.id ]);
+    }
+  }
+
   protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
     this.store$.dispatch(setLayerStyle({ layerId, selectedStyleName: selectedStyle.name }));
-    this.mapService.setLayerStyle(layerId, selectedStyle.name);
   }
 }

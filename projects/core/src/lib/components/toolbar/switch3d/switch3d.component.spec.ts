@@ -11,6 +11,7 @@ import { selectIn3dView } from '../../../map/state/map.selectors';
 import userEvent from '@testing-library/user-event';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const setup = async (enable3d: boolean, toolsEnabled = false) => {
   const mapServiceMock = getMapServiceMock(undefined, undefined, {
@@ -24,6 +25,7 @@ const setup = async (enable3d: boolean, toolsEnabled = false) => {
   });
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
+  const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(Switch3dComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [ SharedModule, MatIconTestingModule ],
@@ -31,6 +33,7 @@ const setup = async (enable3d: boolean, toolsEnabled = false) => {
       { provide: MatSnackBar, useValue: { dismiss: jest.fn() } },
       mapServiceMock.provider,
       { provide: Store, useValue: mockStore },
+      { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
   });
   return { mapServiceMock, mockDispatch };

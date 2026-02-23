@@ -4,6 +4,9 @@
 
 .tree-node {
   padding: 5px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .tree-node__label {
@@ -46,4 +49,8 @@
 
 .style-radio-button {
   font-style: italic;
+}
+
+.tree-node__info {
+  flex-basis: 100%;
 }

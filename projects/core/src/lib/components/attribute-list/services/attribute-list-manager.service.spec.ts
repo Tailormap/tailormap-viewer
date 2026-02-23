@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { createMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { AttributeListApiService } from './attribute-list-api.service';
-import { selectAttributeListTabs, selectAttributeListVisible } from '../state/attribute-list.selectors';
+import {
+  selectAttributeListTabs, selectAttributeListVisible,
+} from '../state/attribute-list.selectors';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
   AttributeListApiServiceModel,
@@ -488,7 +490,15 @@ describe('AttributeListManagerService', () => {
 
   describe('initDefaultAttributeListSource', () => {
     it('should add default attribute list source', () => {
-      managerService.initDefaultAttributeListSource();
+      managerService.addAttributeListSource({
+        id: ATTRIBUTE_LIST_DEFAULT_SOURCE,
+        tabs$: of([]),
+        // For is loading we just check if there are layers with attributes.
+        // We assume here that the data for the tab is loading when there are layers/tabs with attributes,
+        // since this property is only checked when there is no data yet.
+        isLoadingTabs$: of(false),
+        dataLoader: TestBed.inject(AttributeListApiService),
+      });
 
       // Verify the default source is added by checking that it can be accessed
       // Since the default source uses the mock API service, we can test getFeatures$
@@ -510,6 +520,173 @@ describe('AttributeListManagerService', () => {
       });
 
       expect(sourceFound).toBe(true);
+    });
+  });
+
+  describe('isLoadingTabs$', () => {
+    it('should return false when there are no sources', (done) => {
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(false);
+        done();
+      });
+    });
+
+    it('should return false when single source is not loading', (done) => {
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(false),
+      };
+
+      managerService.addAttributeListSource(source);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(false);
+        done();
+      });
+    });
+
+    it('should return true when single source is loading', (done) => {
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(true),
+      };
+
+      managerService.addAttributeListSource(source);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(true);
+        done();
+      });
+    });
+
+    it('should return false when multiple sources are all not loading', (done) => {
+      const source1: AttributeListSourceModel = {
+        id: 'source-1',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(false),
+      };
+
+      const source2: AttributeListSourceModel = {
+        id: 'source-2',
+        tabs$: of([{ id: 'layer-2', label: 'Layer 2' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(false),
+      };
+
+      managerService.addAttributeListSource(source1);
+      managerService.addAttributeListSource(source2);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(false);
+        done();
+      });
+    });
+
+    it('should return true when one of multiple sources is loading', (done) => {
+      const source1: AttributeListSourceModel = {
+        id: 'source-1',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(false),
+      };
+
+      const source2: AttributeListSourceModel = {
+        id: 'source-2',
+        tabs$: of([{ id: 'layer-2', label: 'Layer 2' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(true),
+      };
+
+      managerService.addAttributeListSource(source1);
+      managerService.addAttributeListSource(source2);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(true);
+        done();
+      });
+    });
+
+    it('should return true when all sources are loading', (done) => {
+      const source1: AttributeListSourceModel = {
+        id: 'source-1',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(true),
+      };
+
+      const source2: AttributeListSourceModel = {
+        id: 'source-2',
+        tabs$: of([{ id: 'layer-2', label: 'Layer 2' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(true),
+      };
+
+      managerService.addAttributeListSource(source1);
+      managerService.addAttributeListSource(source2);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        expect(result).toBe(true);
+        done();
+      });
+    });
+
+    it('should handle sources without isLoadingTabs$ property (defaults to false)', (done) => {
+      const source1: AttributeListSourceModel = {
+        id: 'source-1',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        // No isLoadingTabs$ property
+      };
+
+      const source2: AttributeListSourceModel = {
+        id: 'source-2',
+        tabs$: of([{ id: 'layer-2', label: 'Layer 2' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: of(true),
+      };
+
+      managerService.addAttributeListSource(source1);
+      managerService.addAttributeListSource(source2);
+
+      managerService.isLoadingTabs$().subscribe(result => {
+        // Should be true because source2 is loading, and source1 defaults to false
+        expect(result).toBe(true);
+        done();
+      });
+    });
+
+    it('should reactively update when source loading state changes', (done) => {
+      const loadingState$ = new BehaviorSubject<boolean>(false);
+
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
+        dataLoader: mockApiService,
+        isLoadingTabs$: loadingState$.asObservable(),
+      };
+
+      managerService.addAttributeListSource(source);
+
+      const results: boolean[] = [];
+      managerService.isLoadingTabs$().subscribe(result => {
+        results.push(result);
+
+        if (results.length === 1) {
+          // First emission should be false
+          expect(result).toBe(false);
+          // Change loading state to true
+          loadingState$.next(true);
+        } else if (results.length === 2) {
+          // Second emission should be true
+          expect(result).toBe(true);
+          done();
+        }
+      });
     });
   });
 

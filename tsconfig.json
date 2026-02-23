@@ -41,11 +41,11 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "target": "ES2022",
-    "module": "es2020",
+    "target": "ES2023",
+    "module": "ES2020",
     "lib": [
-      "es2020",
-      "dom"
+      "ES2023",
+      "DOM"
     ],
     "useDefineForClassFields": false
   },

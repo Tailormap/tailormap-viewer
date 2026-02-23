@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, DestroyRef } from '@angular/core';
 import { LegendService } from '../services/legend.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { MenubarService } from '../../menubar';
@@ -8,6 +8,7 @@ import { selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.sel
 import { MapService } from '@tailormap-viewer/map';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-legend',
@@ -21,6 +22,7 @@ export class LegendComponent implements OnInit, OnDestroy {
   private legendService = inject(LegendService);
   private menubarService = inject(MenubarService);
   private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
 
 
   public visible$: Observable<boolean>;
@@ -36,6 +38,14 @@ export class LegendComponent implements OnInit, OnDestroy {
           : this.legendService.getLegendInfo$(this.store$.select(selectOrderedVisibleLayersWithLegend), this.mapService.getMapViewDetails$());
       }),
     );
+
+    this.visible$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
+        if (visible) {
+          this.menubarService.setMobilePanelHeight(400);
+        }
+      });
   }
 
   public ngOnInit() {

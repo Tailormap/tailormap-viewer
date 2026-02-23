@@ -2,7 +2,7 @@
 
   @if (tabs().length === 0) {
     <span class="no-tabs">
-      @if (hasLayersWithAttributes$ | async) {
+      @if (isLoadingTabs$ | async) {
         <span>
           <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
         </span>

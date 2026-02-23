@@ -3,6 +3,7 @@
   @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
   <div class="viewer">
     <div class="map">
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
       <tm-map></tm-map>
       <div class="map-controls-left">
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
@@ -20,14 +21,19 @@
     </div>
     <div class="mobile-menubar-panel">
       <tm-mobile-menubar-panel>
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc></tm-toc> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc [mobileToc]="true"></tm-toc> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOBILE_MENUBAR_HOME)) {
           <tm-mobile-menubar-home>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.PROFILE)) { <tm-profile [inMobilePanel]="true"></tm-profile> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)) { <tm-coordinate-link-window [noExpansionPanel]="true"></tm-coordinate-link-window> }
           </tm-mobile-menubar-home>
         }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }
       </tm-mobile-menubar-panel>
     </div>
     <div class="mobile-menubar-buttons">

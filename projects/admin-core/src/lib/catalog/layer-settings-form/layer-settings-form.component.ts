@@ -1,17 +1,16 @@
-import {  ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
-  AuthorizationGroups,
-  AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel, LayerSettingsXyzModel,
-
+  AuthorizationGroups, AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel,
+  LayerSettingsXyzModel,
 } from '@tailormap-admin/admin-api';
 import { ComparableValuesArray, FormHelper } from '../../helpers/form.helper';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../state/catalog.selectors';
-import { BoundsModel, TileLayerHiDpiModeEnum, WmsStyleModel } from '@tailormap-viewer/api';
+import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
 
@@ -99,10 +98,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');
-
-  @Input()
-  public availableStyles: WmsStyleModel[] = [];
-
   public isWMS = false;
   public isWMTS = false;
   public isXYZ = false;
@@ -128,12 +123,10 @@ export class LayerSettingsFormComponent implements OnInit {
     tileGridExtent: new FormControl<BoundsModel | null>(null),
     tileSize: new FormControl<number | null>(null),
     authorizationRules: new FormControl<AuthorizationRuleGroup[]>([]),
-    selectedStyles: new FormControl<WmsStyleModel[]>([]),
   });
 
   constructor() {
     const groupDetailsService = inject(GroupService);
-
     this.groups$ = groupDetailsService.getGroups$();
   }
 
@@ -180,7 +173,6 @@ export class LayerSettingsFormComponent implements OnInit {
         ...settings,
         tilingDisabled: LayerSettingsFormComponent.getInverseBooleanOrDefault(value.tilingEnabled, undefined),
         tilingGutter: value.tilingGutter || undefined,
-        selectedStyles: value.selectedStyles ?? [],
       };
       return wmsSettings;
     }
@@ -253,7 +245,6 @@ export class LayerSettingsFormComponent implements OnInit {
     if (this.isWmsSettingsModel(this.layerSettings)) {
       patchValue.tilingEnabled = LayerSettingsFormComponent.getInverseBooleanOrDefault(this.layerSettings?.tilingDisabled, this.isLayerSpecific ? null : false);
       patchValue.tilingGutter = this.layerSettings?.tilingGutter || null;
-      patchValue.selectedStyles = this.layerSettings?.selectedStyles || [];
     }
     if (this.isXyzSettingsModel(this.layerSettings)) {
       patchValue.minZoom = this.layerSettings?.minZoom || null;
@@ -309,35 +300,5 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private isXyzSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsXyzModel {
     return !!settings && this.isXYZ;
-  }
-
-  public onLegendImageChanged($event: string | null) {
-    this.layerSettingsForm.patchValue({ legendImageId: $event });
-  }
-
-  public isStyleSelected(style: WmsStyleModel): boolean {
-    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value;
-    if (!Array.isArray(selectedStyles)) {
-      return false;
-    }
-    return selectedStyles.some((s: WmsStyleModel) => s.name === style.name);
-  }
-
-  public toggleStyle(style: WmsStyleModel, checked: boolean): void {
-    const selectedStyles = this.layerSettingsForm.get('selectedStyles')?.value || [];
-    let updatedStyles: WmsStyleModel[];
-    if (checked) {
-      // Add style if not already present
-      if (!selectedStyles.some((s: WmsStyleModel) => s.name === style.name)) {
-        updatedStyles = [ ...selectedStyles, style ];
-      } else {
-        updatedStyles = selectedStyles;
-      }
-    } else {
-      // Remove style
-      updatedStyles = selectedStyles.filter((s: WmsStyleModel) => s.name !== style.name);
-    }
-    this.layerSettingsForm.get('selectedStyles')?.setValue(updatedStyles);
-    this.layerSettingsForm.get('selectedStyles')?.markAsDirty();
   }
 }
