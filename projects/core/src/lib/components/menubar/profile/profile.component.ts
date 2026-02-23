@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private mobileLayoutService = inject(MobileLayoutService);
   private destroyRef = inject(DestroyRef);
 
-  public noExpansionPanel = input<boolean>(false);
+  public inMobilePanel = input<boolean>(false);
 
   public showLanguageToggle$: Observable<boolean>;
   public userDetails$: Observable<SecurityModel | null>;
@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public showAbout() {
-    AboutDialogComponent.open(this.dialog);
+    AboutDialogComponent.open(this.dialog, { restoreFocus: false });
   }
 
 }

@@ -13,7 +13,7 @@
       <span>{{' '}}{{userDetails.username}}</span>
     </button>
   }
-  @if ((userIsAdmin$ | async) && !noExpansionPanel()) {
+  @if ((userIsAdmin$ | async) && !inMobilePanel()) {
     <button mat-menu-item routerLink="/admin">
       <span i18n="@@core.profile.go-to-admin">Go to admin</span>
     </button>
@@ -32,7 +32,7 @@
   }
 </ng-template>
 
-@if (userDetails && !noExpansionPanel() && (visible$ | async)) {
+@if (userDetails && !inMobilePanel() && (visible$ | async)) {
   <tm-menubar-button [menuTrigger]="userMenu"
   [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
