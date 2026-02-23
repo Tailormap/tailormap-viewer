@@ -174,7 +174,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   // Create an identifier for each layer to quickly check if something changed and requires re-rendering
   private createLayerIdentifiers(layers: LayerModel[]): string[] {
     return layers.map(layer => {
-      const changingProps = [ layer.name, layer.opacity ? `${layer.opacity}` : undefined ];
+      const opacity = layer.opacity !== undefined && layer.opacity !== null ? `${layer.opacity}` : undefined;
+      const changingProps = [ layer.name, opacity ];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
       }

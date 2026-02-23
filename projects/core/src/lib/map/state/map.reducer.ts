@@ -4,7 +4,6 @@ import { MapState, initialMapState } from './map.state';
 import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
-import { updateTemporaryLayerName } from './map.actions';
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
@@ -244,7 +243,7 @@ const onToggleIn3DView = (state: MapState): MapState => ({
 
 const onUpdateTemporaryLayerName = (
   state: MapState,
-  payload: ReturnType<typeof updateTemporaryLayerName>,
+  payload: ReturnType<typeof MapActions.updateTemporaryLayerName>,
 ): MapState => {
   const layerIdx = state.layers.findIndex(layer => layer.id === payload.id);
   if (layerIdx === -1) {

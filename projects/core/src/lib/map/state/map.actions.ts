@@ -83,5 +83,5 @@ export const toggleIn3dView = createAction(
 );
 export const updateTemporaryLayerName = createAction(
   `${mapActionsPrefix} Update Temporary Layer Name`,
-  props<{ id: string; temporaryLayerName: string }>(),
+  props<{ id: string; temporaryLayerName: string | undefined }>(),
 );
