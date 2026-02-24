@@ -1,6 +1,6 @@
 import { ArrayHelper } from '@tailormap-viewer/shared';
 import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { AppLayerWithInitialValuesModel, ExtendedLayerTreeNodeModel } from '../../map/models';
+import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map/models';
 import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
 import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
 import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
