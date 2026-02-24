@@ -18,6 +18,8 @@
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .mobile-menubar-home-buttons * {
@@ -48,7 +50,7 @@ tm-streetview ::ng-deep button:not(.toggle-button--active) {
 }
 
 .mobile-menubar-home-buttons ::ng-deep .mat-badge-content {
-  transform: translateY(4px);
+  transform: translateY(4px) translateX(-4px);
 }
 
 

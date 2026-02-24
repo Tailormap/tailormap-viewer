@@ -170,6 +170,10 @@
         <source>URL</source>
         <target>URL</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+        <target>Coördinatenlinkvenster</target>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
         <target>Selecteer een link</target>
@@ -1093,6 +1097,10 @@
       <trans-unit id="core.print.width-range" datatype="html">
         <source>Range: 50 - 600</source>
         <target>Bereik: 50 - 600</target>
+      </trans-unit>
+      <trans-unit id="core.profile" datatype="html">
+        <source>Profile</source>
+        <target>Profiel</target>
       </trans-unit>
       <trans-unit id="core.profile.about" datatype="html">
         <source>About</source>
