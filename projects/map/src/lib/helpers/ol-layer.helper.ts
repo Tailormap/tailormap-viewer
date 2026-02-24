@@ -35,7 +35,7 @@ export interface LayerProperties {
   style?: string | null;
 }
 
-interface WmsServiceParamsModel {
+export interface WmsServiceParamsModel {
   STYLES: string;
   LAYERS: string;
   VERSION: string;

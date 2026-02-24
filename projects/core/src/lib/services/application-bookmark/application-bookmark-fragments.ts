@@ -22,6 +22,11 @@ export class ApplicationBookmarkFragments {
   public static READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
     'layers',
   );
+
+  public static MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
+    'mobile',
+  );
+
 }
 
 export type LayerVisibilityBookmarkFragment = Array<BookmarkLayerInfo>;

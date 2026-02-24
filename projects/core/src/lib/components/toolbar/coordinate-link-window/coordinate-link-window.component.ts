@@ -1,16 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, OnDestroy, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
 } from '@tailormap-viewer/api';
-import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { take, withLatestFrom } from 'rxjs/operators';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { ComponentRegistrationService } from '../../../services';
+import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
+import { MenubarService } from '../../menubar';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -19,16 +23,28 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class CoordinateLinkWindowComponent implements OnInit {
+export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
+
+  public noExpansionPanel = input<boolean>(false);
 
   public toolActive = toSignal(this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW]));
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
   private tool: string | undefined;
+  public visible$ = combineLatest([
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW),
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+  ]).pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+  );
 
   public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
@@ -49,6 +65,41 @@ export class CoordinateLinkWindowComponent implements OnInit {
         if (urls && urls.length > 0) {
           this.urlControl.patchValue(urls[0]);
           this.createMapClickTool();
+        }
+      });
+
+    this.componentRegistrationService.registerComponent(
+      'mobile-menu-home',
+      { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent },
+    );
+
+    // Toggle the CLW map tool when the CLW menu button is clicked in the mobile layout.
+    this.mobileLayoutService.isMobileLayoutEnabled$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(enabled => enabled),
+        switchMap(() => this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW)),
+      ).subscribe(visibleInMobileLayout => {
+        if (visibleInMobileLayout) {
+          this.menubarService.setMobilePanelHeight(230);
+          this.toggle(false);
+        } else if (this.toolActive()) {
+          this.toggle(true);
+        }
+      });
+
+    // Close the CLW when the mapTool is disabled by another component.
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        withLatestFrom(
+          this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW),
+          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)),
+          ),
+      )
+      .subscribe(([ enabledTool, visible, componentTitle ]) => {
+        if (!enabledTool && visible) {
+          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
         }
       });
   }
@@ -93,6 +144,10 @@ export class CoordinateLinkWindowComponent implements OnInit {
         window.open(replaced, '_blank', 'popup=1, noopener, noreferrer');
       },
     );
+  }
+
+  public ngOnDestroy() {
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.COORDINATE_LINK_WINDOW);
   }
 
 }

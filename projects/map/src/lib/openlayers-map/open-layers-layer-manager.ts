@@ -2,8 +2,8 @@ import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection, Projection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes } from '../models';
-import { OlLayerHelper } from '../helpers/ol-layer.helper';
+import { LayerManagerModel, LayerTypes, WMSLayerModel } from '../models';
+import { LayerProperties, OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
@@ -138,7 +138,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
           this.updateFilterIfChanged(layer, existingLayer);
-          this.updateLayerStyle(layer, existingLayer);
+          this.updateLayerStyleIfChanged(layer, existingLayer);
+          this.updateLayerNameIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -173,7 +174,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   // Create an identifier for each layer to quickly check if something changed and requires re-rendering
   private createLayerIdentifiers(layers: LayerModel[]): string[] {
     return layers.map(layer => {
-      const changingProps = [layer.opacity ? `${layer.opacity}` : undefined];
+      const opacity = layer.opacity !== undefined && layer.opacity !== null ? `${layer.opacity}` : undefined;
+      const changingProps = [ layer.name, opacity ];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
       }
@@ -197,13 +199,38 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
       return;
     }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter', 'filter');
+  }
+
+  private updateLayerNameIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    // For now WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer)) {
+      return;
+    }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name', 'name');
+  }
+
+  private updateLayerStyleIfChanged(layer: LayerModel, olLayer: BaseLayer) {
+    if (!LayerTypesHelper.isWmsLayer(layer)) {
+      return;
+    }
+    this.updateWmsLayerPropIfChanged(layer, olLayer, 'STYLES', 'style', 'selectedStyleName');
+  }
+
+  private updateWmsLayerPropIfChanged(
+    layer: WMSLayerModel,
+    olLayer: BaseLayer,
+    paramName: keyof WmsServiceParamsModel,
+    layerPropName: keyof LayerProperties,
+    layerKey: keyof WMSLayerModel,
+  ) {
     const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps.filter === layer.filter) {
+    if (existingProps[layerPropName] === layer[layerKey]) {
       return;
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
     if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ CQL_FILTER: layer.filter });
+      olLayer.getSource()?.updateParams({ [paramName]: layer[layerKey] ?? '' });
     }
   }
 
@@ -274,20 +301,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         return u.toString();
       });
       source.setUrls(urls);
-    }
-  }
-
-  private updateLayerStyle(layer: LayerModel, olLayer: BaseLayer) {
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
-      return;
-    }
-    const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps.style === layer.selectedStyleName) {
-      return;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ STYLES: layer.selectedStyleName ?? '' });
     }
   }
 

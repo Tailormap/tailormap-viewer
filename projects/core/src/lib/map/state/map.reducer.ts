@@ -241,6 +241,27 @@ const onToggleIn3DView = (state: MapState): MapState => ({
   in3dView: !state.in3dView,
 });
 
+const onUpdateTemporaryLayerName = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.updateTemporaryLayerName>,
+): MapState => {
+  const layerIdx = state.layers.findIndex(layer => layer.id === payload.id);
+  if (layerIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    layers: [
+      ...state.layers.slice(0, layerIdx),
+      {
+        ...state.layers[layerIdx],
+        temporaryLayerName: payload.temporaryLayerName,
+      },
+      ...state.layers.slice(layerIdx + 1),
+    ],
+  };
+};
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -262,5 +283,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.addLayerDetails, onAddLayerDetails),
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
   on(MapActions.toggleIn3dView, onToggleIn3DView),
+  on(MapActions.updateTemporaryLayerName, onUpdateTemporaryLayerName),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

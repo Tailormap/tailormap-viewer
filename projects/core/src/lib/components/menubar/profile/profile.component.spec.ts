@@ -10,6 +10,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
+import { of } from 'rxjs';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const setup = async (loggedIn: boolean, showLoginButton = true) => {
   const navigateFn = jest.fn();
@@ -20,6 +22,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
     ],
   });
   const userService = AuthenticatedUserTestHelper.getAuthenticatedUserService(loggedIn, [], loggedIn ? 'testusername' : undefined);
+  const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(ProfileComponent, {
     declarations: [
       MenubarButtonComponent,
@@ -29,6 +32,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
       store,
       { provide: AuthenticatedUserService, useValue: userService },
       { provide: Router, useValue: { navigateByUrl: navigateFn } },
+      { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
     imports: [
       MatIconTestingModule,
