@@ -3,7 +3,14 @@
 } @else {
   <div class="checkbox-filter-table">
     <form [formGroup]="aliasForm">
-      <mat-table [dataSource]="attributeValuesSettings()">
+      <mat-table
+        [dataSource]="attributeValuesSettings()"
+        cdkDropList
+        [cdkDropListDisabled]="dragDropDisabled()"
+        [cdkDropListData]="attributeValuesSettings()"
+        (dragstart)="isDragging.set(true)"
+        (dragend)="isDragging.set(false)"
+        (cdkDropListDropped)="dropTable($event)">
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef>
             <div i18n="@@admin-core.application.filter.unique-value">Value</div>
@@ -46,6 +53,16 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="sort">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let value">
+            <mat-icon cdkDragHandle
+                      (mousedown)="dragDropDisabled.set(false)"
+                      (mouseup)="dragDropDisabled.set(true)"
+                      svgIcon="reorder"></mat-icon>
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="remove">
           <mat-header-cell *matHeaderCellDef>
           </mat-header-cell>
@@ -61,8 +78,12 @@
           </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="columnLabels.concat('remove')"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columnLabels.concat('remove')"></mat-row>
+        <mat-header-row *matHeaderRowDef="columnLabels.concat(['sort', 'remove'])"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnLabels.concat(['sort', 'remove'])"
+                 cdkDrag
+                 (cdkDragStarted)="dragStarted($event)"
+                 (cdkDragEnded)="isDragging.set(false)"
+                 [cdkDragData]="row"></mat-row>
       </mat-table>
     </form>
   </div>

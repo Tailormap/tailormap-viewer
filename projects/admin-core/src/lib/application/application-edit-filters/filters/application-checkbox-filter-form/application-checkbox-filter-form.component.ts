@@ -4,6 +4,7 @@ import {
 } from '@tailormap-viewer/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'tm-admin-application-checkbox-filter-form',
@@ -24,6 +25,9 @@ export class ApplicationCheckboxFilterFormComponent {
   public aliasForm: FormGroup = new FormGroup({});
   public newValueControl = new FormControl<string>('');
   public useAsIlikeSubstringFilterControl = new FormControl<boolean>(false);
+
+  public isDragging = signal(false);
+  public dragDropDisabled = signal(true);
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
@@ -124,5 +128,27 @@ export class ApplicationCheckboxFilterFormComponent {
     this.aliasForm.removeControl(value);
     this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings();
     this.updateCheckboxFilter.emit(this.checkboxFilter);
+  }
+
+  public dropTable($event: CdkDragDrop<AttributeValueSettings[]>) {
+    const attributeValuesSettings = [...this.attributeValuesSettings()];
+    const draggedItem = attributeValuesSettings[$event.previousIndex];
+    const dropIndex = $event.currentIndex;
+    const updatedAttributeValuesSettings = attributeValuesSettings.filter(item => draggedItem.value !== item.value);
+    updatedAttributeValuesSettings.splice(dropIndex, 0, draggedItem);
+    this.attributeValuesSettings.set(updatedAttributeValuesSettings);
+    this.checkboxFilter.attributeValuesSettings = this.attributeValuesSettings();
+    this.updateCheckboxFilter.emit(this.checkboxFilter);
+  }
+
+  public dragStarted($event: CdkDragStart) {
+    const dragRowClass = 'draggable-row-' + $event.source.data.name;
+    const container = $event.source.dropContainer.element.nativeElement;
+    container.querySelectorAll('.selected').forEach(e => {
+      if (!e.classList.contains(dragRowClass)) {
+        e.classList.add('hide-while-dragging');
+      }
+    });
+    this.isDragging.set(true);
   }
 }
