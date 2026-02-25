@@ -1,5 +1,9 @@
 import { BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor } from '../bookmark/bookmark.models';
 import { BookmarkService } from '../bookmark/bookmark.service';
+import {
+  AttributeFilterModel,
+  AttributeType, FilterConditionEnum, FilterGroupModel, SpatialFilterModel,
+} from '@tailormap-viewer/api';
 
 export class ApplicationBookmarkFragments {
 
@@ -13,6 +17,10 @@ export class ApplicationBookmarkFragments {
 
   public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<LayerTreeOrderBookmarkFragment>(
     'toc',
+  );
+
+  public static FILTER_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<FilterBookmarkFragment>(
+    'f',
   );
 
   public static EMBED_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
@@ -44,3 +52,41 @@ export interface BookmarkNodeChildrenOrder {
   id: string; // app layer id
   c: string[]; // children ids in (changed) order
 }
+
+// export type CompactFilterBookmarkFragment = {
+//   al?: Array<BookmarkFilterGroup<BookmarkAttributeFilterModel>>; // attribute layer filters
+//   s?: Array<BookmarkFilterGroup<BookmarkSpatialFilterModel>>; // spatial filters
+// };
+
+export type FilterBookmarkFragment = {
+  al?: Array<FilterGroupModel<AttributeFilterModel>>; // attribute layer filters
+  s?: Array<FilterGroupModel<SpatialFilterModel>>; // spatial filters
+};
+
+export type BookmarkFilterGroup<T> = {
+  id: string;
+  l: string[]; // layerIds
+  d?: boolean; // disabled
+  f: Array<T>;
+};
+
+export type BookmarkAttributeFilterModel = {
+  id: string;
+  d?: boolean; // disabled
+  a: string; // attribute
+  aT: AttributeType; // attributeType (could be numeric enum)
+  c: FilterConditionEnum; // condition (could be 1 char or numeric enum)
+  iC: boolean; // invertCondition
+  cS: boolean; // caseSensitive
+  v: string[]; // value
+  aA?: string; // attributeAlias
+};
+
+export type BookmarkSpatialFilterModel = {
+  id: string;
+  d?: boolean; // disabled
+  gC /* geometryColums */ : Array<{ l /* layerId */: string; c /* column*/: string[] }>;
+  g /* geometries */: Array<{ id: string; g /* geometry */: string; l? /* referenceLayerId*/: string }>;
+  l?: string; // baseLayerId
+  b?: number; // buffer
+};

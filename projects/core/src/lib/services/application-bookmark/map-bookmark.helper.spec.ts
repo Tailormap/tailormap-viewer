@@ -1,4 +1,4 @@
-import { MapBookmarkHelper } from './bookmark.helper';
+import { MapBookmarkHelper } from './map-bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { AppLayerWithInitialValuesModel } from '../../map/models';
