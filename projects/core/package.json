@@ -14,7 +14,6 @@
     "@angular/material-luxon-adapter": "^20.2.14",
     "@angular/platform-browser": "^20.3.16",
     "@angular/router": "^20.3.16",
-    "@bufbuild/protobuf": "^1.9.0",
     "@ngrx/effects": "^20.0.0",
     "@ngrx/operators": "^20.0.0",
     "@ngrx/store": "^20.0.0",

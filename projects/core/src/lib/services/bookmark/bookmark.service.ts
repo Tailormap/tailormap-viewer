@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter, Observable } from 'rxjs';
-import { Message } from '@bufbuild/protobuf';
 import {
-  BookmarkProtoFragmentDescriptor, BookmarkFragmentDescriptor, BookmarkID, BookmarkStringFragmentDescriptor,
-  isBookmarkProtoFragmentDescriptor,
+  BookmarkFragmentDescriptor, BookmarkID, BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor,
+  isBookmarkJsonFragmentDescriptor,
 } from './bookmark.models';
-import { BinaryBookmarkFragments, BookmarkFragment } from '../application-bookmark/bookmark_pb';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { deflate, inflate } from '@stardazed/zlib';
 
@@ -22,21 +20,24 @@ export class BookmarkService {
   public static LOCATION_IDENTIFIER = '@';
   private static STRING_SEPARATOR = ':';
 
-  private pendingFragments: Map<BookmarkID, string | Uint8Array> = new Map();
+  private pendingFragments: Map<BookmarkID, string | object> = new Map();
   private fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable> = new Map();
   private joinedBookmark = new BehaviorSubject<string | undefined>(undefined);
-  private binaryFragmentsBase64: string | null = null;
+  private compressedJsonBase64Fragments: string | null = null;
 
   public getBookmarkValue$(): Observable<string> {
     return this.joinedBookmark.asObservable().pipe(filter((v): v is string => typeof v === 'string'));
+  }
+
+  public registerJsonFragment$<T>(descriptor: BookmarkJsonFragmentDescriptor<T>): Observable<T> {
+    return this.registerFragment$(descriptor) as Observable<T>;
   }
 
   /*
   This method is used to register and also get the value for a certain fragment
   If the bookmark url is read before calling this method, the value for the fragment is kept in the pendingFragments map
    */
-  public registerFragment$<T extends Message<T>>(descriptor: BookmarkProtoFragmentDescriptor<T>): Observable<T>;
-  public registerFragment$(descriptor: BookmarkFragmentDescriptor): Observable<string>;
+  public registerFragment$(descriptor: BookmarkStringFragmentDescriptor): Observable<string>;
   public registerFragment$(descriptor: BookmarkFragmentDescriptor): Observable<any> {
     const existingFragment$ = this.fragments.get(descriptor);
     if (existingFragment$ !== undefined) {
@@ -52,10 +53,7 @@ export class BookmarkService {
     const pendingFragment = this.pendingFragments.get(descriptor.identifier);
 
     if (pendingFragment !== undefined) {
-      const value = isBookmarkProtoFragmentDescriptor(descriptor) && pendingFragment instanceof Uint8Array
-        ? descriptor.deserialize(pendingFragment)
-        : pendingFragment;
-      fragment$.next(value);
+      fragment$.next(pendingFragment);
       this.pendingFragments.delete(descriptor.identifier);
     }
 
@@ -66,9 +64,9 @@ export class BookmarkService {
   /*
   This method is used to update a single fragment. After that fragment has been updated, the bookmark URL is updated as a whole
    */
-  public updateFragment<T extends Message<T>>(descriptor: BookmarkProtoFragmentDescriptor<T>, message: T): void;
-  public updateFragment(descriptor: BookmarkStringFragmentDescriptor, message: string): void;
-  public updateFragment(descriptor: BookmarkFragmentDescriptor, message: any) {
+  public updateFragment<T>(descriptor: BookmarkJsonFragmentDescriptor<T>, value: T): void;
+  public updateFragment(descriptor: BookmarkStringFragmentDescriptor, value: string): void;
+  public updateFragment(descriptor: BookmarkFragmentDescriptor, value: any) {
     if (!this.fragments.has(descriptor)) {
       this.registerFragment$(descriptor as any);
     }
@@ -78,16 +76,16 @@ export class BookmarkService {
       return;
     }
 
-    if (isBookmarkProtoFragmentDescriptor(descriptor)) {
-      // Clear cached bookmark value of compressed binary fragments, so it gets updated
-      this.binaryFragmentsBase64 = null;
+    if (isBookmarkJsonFragmentDescriptor(descriptor)) {
+      // Clear cached bookmark value of compressed json fragments, so it gets updated
+      this.compressedJsonBase64Fragments = null;
     }
 
-    fragment$.next(message);
+    fragment$.next(value);
 
-    const [ outputs, binaryFragmentsBase64 ] = BookmarkService.createSerializedBookmark(this.fragments, this.binaryFragmentsBase64);
-    if (binaryFragmentsBase64) {
-      this.binaryFragmentsBase64 = binaryFragmentsBase64;
+    const [ outputs, compressedJsonBase64Fragments ] = BookmarkService.createSerializedBookmark(this.fragments, this.compressedJsonBase64Fragments);
+    if (compressedJsonBase64Fragments) {
+      this.compressedJsonBase64Fragments = compressedJsonBase64Fragments;
     }
     if (outputs.length === 0) {
       this.joinedBookmark.next('');
@@ -100,16 +98,16 @@ export class BookmarkService {
   This method is used to get the bookmark as a whole with a changed fragment
   This does not update the current bookmark URL and the change in the fragment is not persisted
    */
-  public getBookmark<T extends Message<T>>(descriptor: BookmarkProtoFragmentDescriptor<T>, message: T): string;
-  public getBookmark(descriptor: BookmarkStringFragmentDescriptor, message: string): string;
-  public getBookmark(descriptor: BookmarkFragmentDescriptor, message: any): string {
-    const fragment$ = new BehaviorSubject(message);
+  public getBookmark<T>(descriptor: BookmarkJsonFragmentDescriptor<T>, value: T): string;
+  public getBookmark(descriptor: BookmarkStringFragmentDescriptor, value: string): string;
+  public getBookmark(descriptor: BookmarkFragmentDescriptor, value: any): string {
+    const fragment$ = new BehaviorSubject(value);
     const fragments = new Map(this.fragments);
     fragments.set(descriptor, fragment$);
-    const binaryFragmentCache = isBookmarkProtoFragmentDescriptor(descriptor)
+    const compressedJsonBase64FragmentCache = isBookmarkJsonFragmentDescriptor(descriptor)
       ? null
-      : this.binaryFragmentsBase64;
-    const [outputs] = BookmarkService.createSerializedBookmark(fragments, binaryFragmentCache);
+      : this.compressedJsonBase64Fragments;
+    const [outputs] = BookmarkService.createSerializedBookmark(fragments, compressedJsonBase64FragmentCache);
     return outputs.join('');
   }
 
@@ -141,11 +139,13 @@ export class BookmarkService {
       const currentValue$ = fragment[1];
 
       // Proto fragment
-      if (isBookmarkProtoFragmentDescriptor(descriptor) && valueFromBookmark instanceof Uint8Array) {
-        const decodedValue = descriptor.deserialize(valueFromBookmark);
-        if (!descriptor.equals(currentValue$.value, decodedValue)) {
-          currentValue$.next(decodedValue);
-        }
+      if (isBookmarkJsonFragmentDescriptor(descriptor)) {
+        // TODO object equality test
+
+        //const decodedValue = descriptor.deserialize(valueFromBookmark);
+        //if (!descriptor.equals(currentValue$.value, decodedValue)) {
+          currentValue$.next(valueFromBookmark);
+        //}
         return;
       }
 
@@ -163,33 +163,28 @@ export class BookmarkService {
     });
   }
 
-  // Read the bookmark string and parse into fragments (string or binary)
-  private readBookmarkComponentsFromBookmark(bookmark: string | undefined | null): Map<BookmarkID, string | Uint8Array> {
-    if (!bookmark) {
-      return new Map();
+  // Read the bookmark string and parse into fragments (string or object)
+  private readBookmarkComponentsFromBookmark(bookmark: string | undefined | null): Map<BookmarkID, string | object> {
+    const components = new Map<string, string | object>();
+
+    bookmark = bookmark || '';
+
+    for(const component of bookmark.split(BookmarkService.FRAGMENT_SEPARATOR)) {
+      const stringSeparatorIdx = component.indexOf(BookmarkService.STRING_SEPARATOR);
+      if (component.startsWith(BookmarkService.LOCATION_IDENTIFIER)) {
+        components.set(BookmarkService.LOCATION_IDENTIFIER, component.substring(1));
+      } else if (stringSeparatorIdx > 0) {
+        // Fragment with type === 'string'
+        components.set(component.substring(0, stringSeparatorIdx), decodeURIComponent(component.substring(stringSeparatorIdx + 1)));
+      } else if (component.length > 0) {
+        // Compressed JSON fragments are at the end with no identifier and ':' after '!'
+        const jsonFragments = BookmarkService.decodeCompressedJsonFragments(component);
+        if (jsonFragments) {
+          jsonFragments.forEach((value, identifier) => components.set(identifier, value));
+        }
+      }
     }
-    const components: [ string, string | Uint8Array ][][] = bookmark
-      .split(BookmarkService.FRAGMENT_SEPARATOR)
-      .map(component => {
-        if (component.startsWith(BookmarkService.LOCATION_IDENTIFIER)) {
-          return [[ BookmarkService.LOCATION_IDENTIFIER, component.substring(1) ]];
-        }
-        const stringSeparatorIdx = component.indexOf(BookmarkService.STRING_SEPARATOR);
-        if (stringSeparatorIdx > 0) {
-          // Fragment with type === 'string'
-          return [[ component.substring(0, stringSeparatorIdx), decodeURIComponent(component.substring(stringSeparatorIdx + 1)) ]];
-        }
-        if (component.length === 0) {
-          return [];
-        }
-        // Binary fragments are at the end with no identifier and ':' after '!'
-        const binaryFragments = BookmarkService.decodeBinaryFragments(component);
-        if (!binaryFragments) {
-          return [];
-        }
-        return binaryFragments.fragments.map(fragment => [ fragment.identifier, fragment.bytes ]);
-      });
-    return new Map(components.flat());
+    return components;
   }
 
   private getFragmentById(identifier: string): [ BookmarkFragmentDescriptor, BookmarkFragmentValueObservable ] | undefined {
@@ -203,13 +198,13 @@ export class BookmarkService {
 
   private static createSerializedBookmark(
     fragments: Map<BookmarkFragmentDescriptor, BookmarkFragmentValueObservable>,
-    binaryFragmentsBase64: string | null,
+    compressedJsonBase64Fragments: string | null,
   ): [ string[], string | null ] {
     const outputs: string[] = [];
 
-    // Binary fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
+    // JSON fragments are appended at the end and compressed together, so that string ids used in multiple fragments can be efficiently
     // compressed
-    const binaryFragments = new BinaryBookmarkFragments();
+    const jsonFragments: { [identifier: string]: object } = {};
 
     const fragmentById = new Map<string, [BookmarkFragmentDescriptor, BookmarkFragmentValueObservable]>();
     for (const [ key, fragment ] of fragments) {
@@ -237,40 +232,39 @@ export class BookmarkService {
         }
         // Identifier does not need to be URL encoded, see regexp check in registerFragment$()
         outputs.push(`${BookmarkService.FRAGMENT_SEPARATOR}${descriptor.identifier}:`, encodeURIComponent(value));
-      } else if (isBookmarkProtoFragmentDescriptor(descriptor)) {
-        // Only if binary value was changed
-        if (binaryFragmentsBase64 === null) {
-          const bytes = descriptor.serialize(value) as Uint8Array<ArrayBuffer>;
-          if (bytes.length > 0) {
-            binaryFragments.fragments.push(new BookmarkFragment({
-              identifier: descriptor.identifier,
-              bytes,
-            }));
-          }
+      } else if (isBookmarkJsonFragmentDescriptor(descriptor)) {
+        // Only if the JSON base64 value was changed
+        if (compressedJsonBase64Fragments === null) {
+          jsonFragments[descriptor.identifier] = value;
         }
       }
     });
 
-    if (binaryFragmentsBase64 !== null) {
+    if (compressedJsonBase64Fragments !== null) {
       // Use cached value because only string fragments were updated
-      outputs.push(BookmarkService.FRAGMENT_SEPARATOR, binaryFragmentsBase64);
-    } else if (binaryFragments.fragments.length > 0) {
-      const protobuf = binaryFragments.toBinary() as Uint8Array<ArrayBuffer>;
-      const compressed = deflate(protobuf, { format: 'deflate', level: 9 });
+      outputs.push(BookmarkService.FRAGMENT_SEPARATOR, compressedJsonBase64Fragments);
+    } else if (Object.keys(jsonFragments).length > 0) {
+      const json = JSON.stringify(jsonFragments);
+      console.log('Compressing JSON bookmark fragments', json);
+      const encoded = new TextEncoder().encode(json);
+      const compressed = deflate(encoded, { format: 'deflate', level: 9 });
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
       outputs.push(BookmarkService.FRAGMENT_SEPARATOR, base64);
-      binaryFragmentsBase64 = base64;
+      compressedJsonBase64Fragments = base64;
     }
 
-    return [ outputs, binaryFragmentsBase64 ];
+    return [ outputs, compressedJsonBase64Fragments ];
   }
 
-  private static decodeBinaryFragments(s: string): BinaryBookmarkFragments | null {
+  private static decodeCompressedJsonFragments(s: string): Map<string, object> | null {
     try {
       const bytes = UrlHelper.urlBase64ToBytes(s) as Uint8Array<ArrayBuffer>;
       const decompressed = inflate(bytes);
-      return BinaryBookmarkFragments.fromBinary(decompressed);
+      const jsonString = new TextDecoder().decode(decompressed);
+      const json = JSON.parse(jsonString);
+      return new Map(Object.entries(json));
     } catch (_e) {
+      console.warn('Failed to decode compressed JSON bookmark fragments', s);
       return null;
     }
   }
@@ -284,5 +278,4 @@ export class BookmarkService {
     }
     return k1.localeCompare(k2);
   }
-
 }

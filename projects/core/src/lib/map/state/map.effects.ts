@@ -37,8 +37,8 @@ export class MapEffects {
                 return of(MapActions.loadMapFailed({ error: response }));
               }
               return combineLatest([
-                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
-                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
               ])
                 .pipe(
                   take(1),
