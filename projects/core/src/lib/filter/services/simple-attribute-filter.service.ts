@@ -159,12 +159,12 @@ export class SimpleAttributeFilterService {
 
   private createGroup(source: string, layerId: string, filter: Omit<AttributeFilterModel, 'id'>) {
     const filterGroup: FilterGroupModel<AttributeFilterModel> = {
-      id: nanoid(),
+      id: nanoid(6),
       source,
       type: FilterTypeEnum.ATTRIBUTE,
       layerIds: [layerId],
       filters: [{
-        id: nanoid(),
+        id: nanoid(6),
         ...filter,
       }],
       operator: 'AND',
@@ -176,7 +176,7 @@ export class SimpleAttributeFilterService {
     this.store$.dispatch(FilterActions.addFilter({
       filterGroupId: groupId,
       filter: {
-        id: nanoid(),
+        id: nanoid(6),
         ...filter,
       },
     }));
