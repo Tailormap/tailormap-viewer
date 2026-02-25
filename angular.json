@@ -102,7 +102,6 @@
               "lodash.debounce",
               "lodash.throttle",
               "extend",
-              "protobufjs",
               "urijs",
               "mersenne-twister",
               "bitmap-sdf",
