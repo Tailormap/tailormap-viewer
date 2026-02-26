@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.mobile-menubar ::ng-deep button .mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
+  border-radius: 0;
+}
+
 .mobile-menubar ::ng-deep mat-icon {
   height: 100%;
   width: 20vw;
