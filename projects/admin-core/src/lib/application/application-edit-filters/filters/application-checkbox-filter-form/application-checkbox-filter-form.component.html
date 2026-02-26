@@ -10,7 +10,7 @@
         [cdkDropListData]="attributeValuesSettings()"
         (dragstart)="isDragging.set(true)"
         (dragend)="isDragging.set(false)"
-        (cdkDropListDropped)="dropTable($event)">
+        (cdkDropListDropped)="onRowDropped($event)">
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef>
             <div i18n="@@admin-core.application.filter.unique-value">Value</div>

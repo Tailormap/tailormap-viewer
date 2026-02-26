@@ -130,7 +130,7 @@ export class ApplicationCheckboxFilterFormComponent {
     this.updateCheckboxFilter.emit(this.checkboxFilter);
   }
 
-  public dropTable($event: CdkDragDrop<AttributeValueSettings[]>) {
+  public onRowDropped($event: CdkDragDrop<AttributeValueSettings[]>) {
     const attributeValuesSettings = [...this.attributeValuesSettings()];
     const draggedItem = attributeValuesSettings[$event.previousIndex];
     const dropIndex = $event.currentIndex;
