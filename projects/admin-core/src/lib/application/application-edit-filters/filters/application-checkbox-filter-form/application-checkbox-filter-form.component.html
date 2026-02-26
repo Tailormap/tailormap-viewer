@@ -81,7 +81,7 @@
         <mat-header-row *matHeaderRowDef="columnLabels.concat(['sort', 'remove'])"></mat-header-row>
         <mat-row *matRowDef="let row; columns: columnLabels.concat(['sort', 'remove'])"
                  cdkDrag
-                 (cdkDragStarted)="dragStarted($event)"
+                 (cdkDragStarted)="isDragging.set(true)"
                  (cdkDragEnded)="isDragging.set(false)"
                  [cdkDragData]="row"></mat-row>
       </mat-table>
