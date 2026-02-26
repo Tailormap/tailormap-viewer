@@ -11,12 +11,12 @@ import { MenubarModule } from "../../menubar";
     ClickedCoordinatesComponent,
     ClickedCoordinatesMenuButtonComponent,
   ],
-    imports: [
-        CommonModule,
-        ClipboardModule,
-        SharedModule,
-        MenubarModule,
-    ],
+  imports: [
+    CommonModule,
+    ClipboardModule,
+    SharedModule,
+    MenubarModule,
+  ],
   exports: [
     ClickedCoordinatesComponent,
   ],
