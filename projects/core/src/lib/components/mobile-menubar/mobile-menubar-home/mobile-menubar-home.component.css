@@ -41,7 +41,8 @@
 }
 
 tm-switch3-d ::ng-deep mat-icon,
-tm-streetview ::ng-deep button:not(.toggle-button--active) {
+tm-streetview ::ng-deep button:not(.toggle-button--active),
+.zoom-to-extent-button button {
   color: rgba(19, 9, 54, 0.4);
 }
 

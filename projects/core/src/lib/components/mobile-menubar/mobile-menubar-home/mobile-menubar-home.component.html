@@ -8,6 +8,13 @@
       <tm-registered-components-renderer [config]="layoutConfig?.config ?? []" area="mobile-menu-home"></tm-registered-components-renderer>
       <tm-switch3-d></tm-switch3-d>
       <tm-streetview></tm-streetview>
+      <div class="zoom-to-extent-button">
+        <button mat-flat-button
+                class="zoom-initial-extent map-control-button"
+                (click)="zoomToInitialExtent()">
+          <mat-icon svgIcon="zoom_max"></mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 }
