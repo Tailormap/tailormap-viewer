@@ -65,6 +65,8 @@
 
   </div>
 } @else if (visible$ | async) {
-  <ng-container *ngTemplateOutlet="clickedCoordinatesContent"></ng-container>
+  <div class="clicked-coordinates-no-expansion-panel">
+    <ng-container *ngTemplateOutlet="clickedCoordinatesContent"></ng-container>
+  </div>
 }
 

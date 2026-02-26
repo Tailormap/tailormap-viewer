@@ -41,5 +41,7 @@
   height: calc(var(--map-control-size) - 10px);
 }
 
-
-
+.clicked-coordinates-no-expansion-panel {
+  margin-left: 8px;
+  margin-right: 8px;
+}

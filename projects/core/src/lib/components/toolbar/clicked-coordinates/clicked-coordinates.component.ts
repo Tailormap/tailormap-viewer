@@ -141,7 +141,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
       { type: BaseComponentTypeEnum.COORDINATE_PICKER, component: ClickedCoordinatesMenuButtonComponent },
     );
 
-    // Toggle the CLW map tool when the CLW menu button is clicked in the mobile layout.
+    // Toggle the coordinate picker map tool when the coordinate picker menu button is clicked in the mobile layout.
     this.mobileLayoutService.isMobileLayoutEnabled$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -149,14 +149,14 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         switchMap(() => this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_PICKER)),
       ).subscribe(visibleInMobileLayout => {
       if (visibleInMobileLayout) {
-        this.menubarService.setMobilePanelHeight(230);
+        this.menubarService.setMobilePanelHeight(190);
         this.toggle(false);
       } else if (this.toolActive()) {
         this.toggle(true);
       }
     });
 
-    // Close the CLW when the mapTool is disabled by another component.
+    // Close the coordinate picker when the mapTool is disabled by another component.
     this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_PICKER])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
