@@ -55,7 +55,9 @@
 
         <ng-container matColumnDef="sort">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let value">
+          <mat-cell *matCellDef="let value"
+                    matTooltip="Sort"
+                    i18n-matTooltip="@@admin-core.application.filter.sort">
             <mat-icon cdkDragHandle
                       (mousedown)="dragDropDisabled.set(false)"
                       (mouseup)="dragDropDisabled.set(true)"

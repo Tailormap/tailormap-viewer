@@ -282,6 +282,10 @@
         <source>Selectable</source>
         <target>Selecteerbaar</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.sort" datatype="html">
+        <source>Sort</source>
+        <target>Sorteer</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
         <source>Value</source>
         <target>Waarde</target>
@@ -777,6 +781,10 @@
         <source>Authentication and proxy</source>
         <target>Authenticatie en proxy</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+        <target>Beschikbare stijlen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
         <target>Catalogus</target>
@@ -1260,10 +1268,6 @@
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
         <target>Tegelraster overlap</target>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
-        <source>Available styles</source>
-        <target>Beschikbare stijlen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>
