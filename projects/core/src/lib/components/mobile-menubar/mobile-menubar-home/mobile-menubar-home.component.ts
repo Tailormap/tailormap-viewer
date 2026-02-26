@@ -6,6 +6,7 @@ import { MenubarService } from '../../menubar/menubar.service';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LayoutService } from '../../../layout/layout.service';
+import { MapService } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-mobile-menubar-home',
@@ -19,6 +20,7 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
   private menubarService = inject(MenubarService);
   public layoutService = inject(LayoutService);
   private destroyRef = inject(DestroyRef);
+  private mapService = inject(MapService);
 
   public visible$: Observable<boolean>;
 
@@ -53,6 +55,10 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME);
+  }
+
+  public zoomToInitialExtent() {
+    this.mapService.zoomToInitialExtent();
   }
 
 }
