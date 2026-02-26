@@ -26,6 +26,7 @@ export class MobileLayoutService {
     BaseComponentTypeEnum.TERRAIN_CONTROLS,
     BaseComponentTypeEnum.PROFILE,
     BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
+    BaseComponentTypeEnum.COORDINATE_PICKER,
   ];
 
   public isMobileLayoutEnabledAuto$ = this.applicationFeatureSwitchService.isFeatureEnabled$(ApplicationFeature.MOBILE_LAYOUT)
