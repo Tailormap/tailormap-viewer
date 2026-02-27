@@ -182,6 +182,10 @@
         <source>Coordinate Link Window</source>
         <target>Coordinate Link Window</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-picker" datatype="html">
+        <source>Coordinate Picker</source>
+        <target>Coördinaten selecteren</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Verwijder geselecteerd object</target>

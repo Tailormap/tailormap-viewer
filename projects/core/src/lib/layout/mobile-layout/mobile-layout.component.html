@@ -31,6 +31,7 @@
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)) { <tm-coordinate-link-window [noExpansionPanel]="true"></tm-coordinate-link-window> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)) { <tm-clicked-coordinates [noExpansionPanel]="true"></tm-clicked-coordinates> }
           </tm-mobile-menubar-home>
         }
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }
