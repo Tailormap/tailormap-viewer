@@ -188,7 +188,7 @@ export class SpatialFilterCrudService {
     referenceLayer?: string,
   ): FilterGroupModel<SpatialFilterModel> {
     const spatialFilter: SpatialFilterModel = {
-      id: nanoid(),
+      id: nanoid(6),
       type: FilterTypeEnum.SPATIAL,
       geometries,
       baseLayerId: referenceLayer,
@@ -199,7 +199,7 @@ export class SpatialFilterCrudService {
       })),
     };
     return {
-      id: nanoid(),
+      id: nanoid(6),
       type: FilterTypeEnum.SPATIAL,
       layerIds: layers.map(layer => layer.id),
       operator: 'AND',

@@ -44,7 +44,7 @@ export class SpatialFilterFormDrawGeometriesComponent {
   ];
 
   public drawingAdded($event: DrawingToolEvent) {
-    const id = nanoid();
+    const id = nanoid(6);
     const feature = { id, geometry: $event.geometry };
     this.filterCrudService.addGeometry(feature);
     this.store$.dispatch(setSelectedSpatialFilterFeatureId({ featureId: id }));

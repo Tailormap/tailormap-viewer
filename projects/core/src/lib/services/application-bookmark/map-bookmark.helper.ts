@@ -1,11 +1,13 @@
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { TristateBoolean, LayerVisibilityBookmarkFragment, LayerInformation, LayerTreeOrderBookmarkFragment, LayerTreeOrderInformation } from './bookmark_pb';
+import { MapSizeHelper, MapUnitEnum, MapViewDetailsModel } from '@tailormap-viewer/map';
 import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map/models';
 import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
 import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
 import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
 import { ExtendedMapResponseModel } from '../../map/models/extended-map-response.model';
+import {
+  BookmarkLayerInfo, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+} from './application-bookmark-fragments';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: string; checked: boolean }[];
@@ -73,24 +75,24 @@ export class MapBookmarkHelper {
     const visibilityData = [];
     const opacityData = [];
 
-    for (const layer of fragment.layers) {
-      const id = layer.appLayerId;
+    for (const layer of (fragment || [])) {
+      const id = layer.id;
 
       const currentLayer = layers.find(a => a.id === id);
       if (currentLayer === undefined) {
         continue;
       }
 
-      const isLayerVisible = layer.visible === TristateBoolean.TRUE;
-      if (layer.visible !== TristateBoolean.UNSET || (!checkInitialValues && isLayerVisible !== currentLayer.visible)) {
+      const isLayerVisible = layer.v === 1;
+      if (layer.v !== undefined || (!checkInitialValues && isLayerVisible !== currentLayer.visible)) {
         checkedVisibilityValues.add(id);
         if (isLayerVisible !== currentLayer.visible) {
           visibilityData.push({ id, checked: isLayerVisible });
         }
       }
 
-      const opacity = layer.opacity === 0 ? 100 : layer.opacity - 1;
-      if (layer.opacity !== 0 || (!checkInitialValues && opacity !== currentLayer.opacity)) {
+      const opacity = layer.o || 100;
+      if (layer.o !== undefined || (!checkInitialValues && opacity !== currentLayer.opacity)) {
         checkedOpacityValues.add(id);
         if (opacity !== currentLayer.opacity) {
           opacityData.push({ id, opacity });
@@ -101,7 +103,7 @@ export class MapBookmarkHelper {
     if (!checkInitialValues) {
       layers.forEach(currentLayer => {
         const id = currentLayer.id;
-        const layer = fragment.layers.find(l => l.appLayerId === id);
+        const layer = fragment.find(l => l.id === id);
         if (!layer && currentLayer.visible) {
           visibilityData.push({ id, checked: false });
         }
@@ -125,40 +127,40 @@ export class MapBookmarkHelper {
     return { visibilityChanges: visibilityData, opacityChanges: opacityData };
   }
 
-  public static fragmentFromVisibilityData(layers: AppLayerStateModel[]): LayerVisibilityBookmarkFragment {
-    const bookmarkData = new LayerVisibilityBookmarkFragment();
+  public static fragmentFromVisibilityData(layers: AppLayerStateModel[]): LayerVisibilityBookmarkFragment | undefined {
+    const bookmarkData = new Array<BookmarkLayerInfo>();
     for (const layer of layers) {
-      const info = new LayerInformation({ appLayerId: layer.id });
+      const info: BookmarkLayerInfo = { id: layer.id };
       let changed = false;
 
       if (layer.visible !== layer.initialValues?.visible) {
-          info.visible = layer.visible ? TristateBoolean.TRUE : TristateBoolean.FALSE;
+          info.v = layer.visible ? 1 : 0;
           changed = true;
       }
 
       if (layer.opacity !== layer.initialValues?.opacity) {
-          info.opacity = layer.opacity + 1;
+          info.o = layer.opacity;
           changed = true;
       }
 
       if (changed) {
-        bookmarkData.layers.push(info);
+        bookmarkData.push(info);
       }
     }
 
-    return bookmarkData;
+    return bookmarkData.length === 0 ? undefined : bookmarkData;
   }
 
-  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment {
-    const data: { [name: string]: LayerTreeOrderInformation } = {};
+  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment | undefined {
+    const layerOrderBookmark: LayerTreeOrderBookmarkFragment = [];
 
     for (const layer of tree) {
       if (!ArrayHelper.arrayEquals(layer.initialChildren, layer.childrenIds ?? [])) {
-       data[layer.id] = new LayerTreeOrderInformation({ children: layer.childrenIds ?? [] });
+        layerOrderBookmark.push({ id: layer.id, c: layer.childrenIds ?? [] });
       }
     }
 
-    return new LayerTreeOrderBookmarkFragment({ ordering: data });
+    return layerOrderBookmark.length === 0 ? undefined : layerOrderBookmark;
   }
 
   public static layerTreeOrderFromFragment(
@@ -170,7 +172,7 @@ export class MapBookmarkHelper {
     const missingChildren = new Set(layers.map(a => a.id));
 
     for (const layer of layers) {
-       const newChildren = fragment.ordering[layer.id]?.children?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
+       const newChildren = fragment?.find(l => l.id === layer.id)?.c?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
        for (const child of newChildren) {
          missingChildren.delete(child);
        }
