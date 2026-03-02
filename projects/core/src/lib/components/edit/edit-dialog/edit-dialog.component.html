@@ -1,13 +1,4 @@
-<tm-dialog [open]="dialogOpen$ | async"
-           [openFromRight]="true"
-           [width]="panelWidth"
-           [widthMargin]="panelWidthMargin"
-           class="edit-dialog"
-           (closeDialog)="closeDialog()"
-           [allowCollapse]="true"
-           [collapsed]="dialogCollapsed$ | async"
-           (expandCollapseDialog)="expandCollapseDialog()"
-           [dialogTitle]="dialogTitle$ | async">
+<ng-template #editDialogContent>
   @let currentFeature = currentFeature$ | async;
   @let layerDetails = layerDetails$ | async;
   @if (currentFeature && layerDetails) {
@@ -75,7 +66,24 @@
       <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
     </div>
   }
-</tm-dialog>
+</ng-template>
+
+@if (!inMobilePanel()) {
+  <tm-dialog [open]="dialogOpen$ | async"
+             [openFromRight]="true"
+             [width]="panelWidth"
+             [widthMargin]="panelWidthMargin"
+             class="edit-dialog"
+             (closeDialog)="closeDialog()"
+             [allowCollapse]="true"
+             [collapsed]="dialogCollapsed$ | async"
+             (expandCollapseDialog)="expandCollapseDialog()"
+             [dialogTitle]="dialogTitle$ | async">
+    <ng-container *ngTemplateOutlet="editDialogContent"></ng-container>
+  </tm-dialog>
+} @else {
+  <ng-container *ngTemplateOutlet="editDialogContent"></ng-container>
+}
 
 <tm-map-spinner [coordinates$]="editCoordinates$"
                 [loading$]="loadingEditFeatureInfo$"></tm-map-spinner>

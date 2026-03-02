@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, input, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import { from, Observable, toArray } from 'rxjs';
@@ -39,6 +39,9 @@ export class EditDialogComponent {
   private confirmService = inject(ConfirmDialogService);
   private uniqueValuesService = inject(UniqueValuesService);
   private cdr = inject(ChangeDetectorRef);
+
+
+  public inMobilePanel = input<boolean>(false);
 
   private viewerId = toSignal(this.store$.select(selectViewerId).pipe(map(id => id || '')), { initialValue: '' });
   public dialogOpen$;
