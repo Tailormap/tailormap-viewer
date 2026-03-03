@@ -76,6 +76,7 @@ export class EditComponent implements OnInit, OnDestroy {
         this.editGeometryType = layerDetails ? layerDetails.details.geometryType : null;
       });
     if (this.inMobilePanel()) {
+      this.store$.dispatch(hideFeatureInfoDialog());
       this.store$.dispatch(setEditActive({ active: true }));
     }
     combineLatest([
@@ -120,9 +121,9 @@ export class EditComponent implements OnInit, OnDestroy {
     this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(enabled => {
+        console.debug("edittool enabled:", enabled)
         if (!enabled) {
           // Maybe we should check for changes and then ask what the user wants to do?
-          console.debug('Edit tools disabled, closing edit mode');
           this.store$.dispatch(setEditActive({ active: false }));
         }
       });

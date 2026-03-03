@@ -6,7 +6,7 @@
       @if (editableLayers.length > 0) {
         <mat-form-field appearance="outline" color="primary">
           <mat-label i18n="@@core.edit.select-layer">Select layer to edit</mat-label>
-          <mat-select [formControl]="layer" tmAutoFocus>
+          <mat-select [formControl]="layer" [tmAutoFocus]="!inMobilePanel()">
             @for (layer of editableLayers; track layer) {
               <mat-option [value]="layer.id">
                 {{layer.title || layer.layerName}}
