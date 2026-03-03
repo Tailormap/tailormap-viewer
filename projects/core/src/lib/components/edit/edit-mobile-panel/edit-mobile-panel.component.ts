@@ -1,16 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
 import { MenubarService } from '../../menubar';
-import { filter, switchMap, take } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { AuthenticatedUserService, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { ComponentRegistrationService } from '../../../services';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
-import { withLatestFrom } from 'rxjs/operators';
-import { selectComponentTitle } from '../../../state';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { setEditActive } from '../state/edit.actions';
-import { selectEditActive } from '../state/edit.selectors';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { Store } from '@ngrx/store';
 
@@ -55,42 +52,13 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
       ).subscribe(visibleInMobileLayout => {
       if (visibleInMobileLayout) {
         this.menubarService.setMobilePanelHeight(450);
-        this.toggle(false);
-      } else if (this.toolActive()) {
-        this.toggle(true);
+        this.store$.dispatch(setEditActive({ active: true }));
+        this.store$.dispatch(hideFeatureInfoDialog());
+      } else {
+        this.store$.dispatch(setEditActive({ active: false }));
       }
     });
 
-    // Close the Edit when the mapTool is disabled by another component.
-    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        withLatestFrom(
-          this.menubarService.isComponentVisible$(BaseComponentTypeEnum.EDIT),
-          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)),
-        ),
-      )
-      .subscribe(([ enabledTool, visible, componentTitle ]) => {
-        if (!enabledTool && visible) {
-          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
-        }
-      });
-  }
-
-  public toggle(close?: boolean) {
-    if (close) {
-      this.store$.dispatch(setEditActive({ active: false }));
-      return;
-    }
-    this.store$.select(selectEditActive)
-      .pipe(take(1))
-      .subscribe(active => {
-        const editActive = !active; // toggle
-        this.store$.dispatch(setEditActive({ active: editActive }));
-        if (editActive) {
-          this.store$.dispatch(hideFeatureInfoDialog());
-        }
-      });
   }
 
   public ngOnDestroy(): void {
