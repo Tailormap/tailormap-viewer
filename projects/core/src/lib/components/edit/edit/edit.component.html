@@ -95,7 +95,7 @@
     }
   </div>
 } @else if (editableLayers && inMobilePanel()) {
-  <div class="edit-container" [class.edit-container--is-active]="active$ | async">
+  <div class="edit-container edit-container--is-active">
     <ng-container *ngTemplateOutlet="editContent; context: { $implicit: editableLayers }"></ng-container>
   </div>
 }

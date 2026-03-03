@@ -4,11 +4,9 @@ import { filter, switchMap } from 'rxjs';
 import { AuthenticatedUserService, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { ComponentRegistrationService } from '../../../services';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
-import { setEditActive } from '../state/edit.actions';
-import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -29,7 +27,6 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
 
 
   public visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.EDIT);
-  public toolActive = toSignal(this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT]));
 
   public ngOnInit(): void {
     this.authenticatedUserService.getUserDetails$()
@@ -52,10 +49,6 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
       ).subscribe(visibleInMobileLayout => {
       if (visibleInMobileLayout) {
         this.menubarService.setMobilePanelHeight(450);
-        this.store$.dispatch(setEditActive({ active: true }));
-        this.store$.dispatch(hideFeatureInfoDialog());
-      } else {
-        this.store$.dispatch(setEditActive({ active: false }));
       }
     });
 

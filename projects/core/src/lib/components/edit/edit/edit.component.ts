@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, input, OnDestroy } from '@angular/core';
 import {
   selectCopiedFeatures,
   selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectSelectedCopyLayer,
@@ -31,7 +31,7 @@ import { ComponentConfigHelper } from '../../../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
   private applicationLayerService = inject(ApplicationLayerService);
@@ -75,6 +75,9 @@ export class EditComponent implements OnInit {
         this.store$.dispatch(setSelectedEditLayer({ layer: layerDetails ? layerDetails.layer.id : null }));
         this.editGeometryType = layerDetails ? layerDetails.details.geometryType : null;
       });
+    if (this.inMobilePanel()) {
+      this.store$.dispatch(setEditActive({ active: true }));
+    }
     combineLatest([
       this.active$,
       this.editableLayers$,
@@ -119,9 +122,14 @@ export class EditComponent implements OnInit {
       .subscribe(enabled => {
         if (!enabled) {
           // Maybe we should check for changes and then ask what the user wants to do?
+          console.debug('Edit tools disabled, closing edit mode');
           this.store$.dispatch(setEditActive({ active: false }));
         }
       });
+  }
+
+  public ngOnDestroy(): void {
+    this.store$.dispatch(setEditActive({ active: false }));
   }
 
   public isLine() {
