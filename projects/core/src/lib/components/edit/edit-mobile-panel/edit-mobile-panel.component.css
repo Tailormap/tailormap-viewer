@@ -1,0 +1,14 @@
+.tm-edit-wrapper {
+  padding: 0 14px;
+  width: 100%;
+}
+
+tm-edit {
+  width: 100%;
+  display: inline-block;
+}
+
+tm-edit ::ng-deep .edit-container--is-active {
+  width: 100%;
+  max-width: 100%;
+}

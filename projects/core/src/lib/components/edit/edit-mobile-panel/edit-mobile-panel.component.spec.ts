@@ -52,14 +52,14 @@ describe('EditMobilePanelComponent', () => {
 
   test('should render edit panel contents when visible', async () => {
     const { container } = await setup(true);
-    expect(container.querySelector('tm-edit')).not.toBeNull();
-    expect(container.querySelector('tm-edit-dialog')).not.toBeNull();
+    expect(container.querySelector('tm-edit')).toBeInTheDocument();
+    expect(container.querySelector('tm-edit-dialog')).toBeInTheDocument();
   });
 
   test('should not render edit panel contents when not visible', async () => {
     const { container } = await setup(false);
-    expect(container.querySelector('tm-edit')).toBeNull();
-    expect(container.querySelector('tm-edit-dialog')).toBeNull();
+    expect(container.querySelector('tm-edit')).not.toBeInTheDocument();
+    expect(container.querySelector('tm-edit-dialog')).not.toBeInTheDocument();
   });
 
 });
