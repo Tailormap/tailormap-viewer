@@ -3,7 +3,7 @@ import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from '
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection, Projection } from 'ol/proj';
 import { LayerManagerModel, LayerTypes, WMSLayerModel } from '../models';
-import { LayerProperties, OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
+import { OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
@@ -137,9 +137,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
-          this.updateFilterIfChanged(layer, existingLayer);
-          this.updateLayerStyleIfChanged(layer, existingLayer);
-          this.updateLayerNameIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -192,46 +189,31 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (currentOpacity !== layerOpacity) {
       olLayer.setOpacity(layerOpacity);
     }
-  }
-
-  private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    // For now, GeoServer & WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
+    // For now, updating layer properties works for WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer) || !isOpenLayersWMSLayer(olLayer)) {
       return;
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter', 'filter');
-  }
-
-  private updateLayerNameIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    // For now WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
+    const checkPropChanges: Array<{ paramName: keyof WmsServiceParamsModel; layerKey: keyof WMSLayerModel }> = [
+      { paramName: 'LAYERS', layerKey: 'name' },
+      { paramName: 'STYLES', layerKey: 'selectedStyleName' },
+    ];
+    if (layer.serverType === ServerType.GEOSERVER) {
+      // CQL filter is only supported by GeoServer, so only check for changes if the server type is GeoServer
+      checkPropChanges.push({ paramName: 'CQL_FILTER', layerKey: 'filter' });
+    }
+    const currentParams: Partial<Record<keyof WmsServiceParamsModel, any>> = olLayer.getSource()?.getParams() || {};
+    const changedParams: Partial<Record<keyof WmsServiceParamsModel, any>> = {};
+    checkPropChanges
+      .filter(({ paramName, layerKey }) => {
+        return (currentParams[paramName] ?? '') !== (layer[layerKey] ?? '');
+      })
+      .forEach(({ paramName, layerKey }) => {
+        changedParams[paramName] = layer[layerKey] ?? '';
+      });
+    if (Object.keys(changedParams).length === 0) {
       return;
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name', 'name');
-  }
-
-  private updateLayerStyleIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
-      return;
-    }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'STYLES', 'style', 'selectedStyleName');
-  }
-
-  private updateWmsLayerPropIfChanged(
-    layer: WMSLayerModel,
-    olLayer: BaseLayer,
-    paramName: keyof WmsServiceParamsModel,
-    layerPropName: keyof LayerProperties,
-    layerKey: keyof WMSLayerModel,
-  ) {
-    const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps[layerPropName] === layer[layerKey]) {
-      return;
-    }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ [paramName]: layer[layerKey] ?? '' });
-    }
+    olLayer.getSource()?.updateParams(changedParams);
   }
 
   public removeLayer(id: string) {
