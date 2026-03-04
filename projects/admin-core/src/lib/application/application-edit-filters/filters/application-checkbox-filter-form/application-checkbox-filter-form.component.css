@@ -1,5 +1,9 @@
 .checkbox-filter-table {
-  width: 550px;
+  width: 560px;
+}
+
+.checkbox-filter-table ::ng-deep mat-cell:first-of-type {
+  padding: 0 8px 0 16px;
 }
 
 mat-header-cell {
@@ -7,19 +11,20 @@ mat-header-cell {
 }
 
 .mat-column-selectable {
-  flex: 0 0 120px;
+  flex: 0 0 115px;
 }
 
 .mat-column-initially-selected {
-  flex: 0 0 110px;
+  flex: 0 0 100px;
+  padding-left: 8px;
 }
 
 .mat-column-value {
-  max-width: 120px;
+  flex: 1 0 70px;
 }
 
 .mat-column-alias {
-  flex: 1 0 100px;
+  flex: 1 0 120px;
 }
 
 .mat-column-alias mat-form-field {
@@ -48,6 +53,18 @@ mat-header-cell {
 }
 
 .mat-column-remove {
+  flex: 0 0 30px;
+  padding-right: 8px;
+  padding-left: 0;
+}
+
+.mat-column-remove button {
+  padding-left: 0;
+  padding-right: 0;
+  width: 24px;
+}
+
+.mat-column-sort {
   flex: 0 0 30px;
   padding-right: 8px;
   padding-left: 0;

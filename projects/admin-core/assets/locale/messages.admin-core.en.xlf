@@ -212,6 +212,9 @@
       <trans-unit id="admin-core.application.filter.selectable" datatype="html">
         <source>Selectable</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.sort" datatype="html">
+        <source>Sort</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
         <source>Value</source>
       </trans-unit>
@@ -584,6 +587,9 @@
       <trans-unit id="admin-core.catalog.authentication-and-proxy" datatype="html">
         <source>Authentication and proxy</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
       </trans-unit>
@@ -946,9 +952,6 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.tiling-gutter" datatype="html">
         <source>Tiling gutter</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
-        <source>Available styles</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service.</source>

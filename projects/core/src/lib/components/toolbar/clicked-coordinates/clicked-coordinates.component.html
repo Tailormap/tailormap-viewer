@@ -1,61 +1,72 @@
-<div [class.clicked-coordinates-container--is-active]="toolActive()"
-  class="clicked-coordinates-container map-control-button-container"
-  (keyup.escape)="toggle()">
+<ng-template #clickedCoordinatesContent>
+  <div class="clicked-coordinates-field-wrapper">
 
-  <button (click)="toggle()"
-    [class.toggle-button--active]="toolActive()"
-    class="map-control-button toggle-button"
-    i18n-tmTooltip="@@core.toolbar.coordinate-picker"
-    mat-flat-button
-    tmTooltip="Coordinate picker">
-    <mat-icon svgIcon="tools_push_pin"></mat-icon>
-  </button>
+    <form [formGroup]="coordinatesForm" class="clicked-coordinates-inputs">
+      <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
+        <mat-label i18n="@@core.toolbar.coordinate-picker-x">X-coordinate</mat-label>
+        <input matInput type="number" formControlName="x"/>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
+        <mat-label i18n="@@core.toolbar.coordinate-picker-y">Y-coordinate</mat-label>
+        <input matInput type="number" formControlName="y"/>
+      </mat-form-field>
+      <input [hidden]="true" formControlName="minx" type="number"/>
+      <input [hidden]="true" formControlName="maxx" type="number"/>
+      <input [hidden]="true" formControlName="miny" type="number"/>
+      <input [hidden]="true" formControlName="maxy" type="number"/>
 
-  @if (toolActive()) {
-    <div class="clicked-coordinates-field-wrapper">
+      <div class="clicked-coordinates-buttons">
+        <button mat-flat-button
+                (click)="copy()"
+                [disabled]="coordinatesForm.invalid"
+                i18n-tmTooltip="@@core.toolbar.coordinate-picker-copy"
+                tmTooltip="Copy"
+                class="map-control-button toggle-button--active">
+          <mat-icon svgIcon="copy"></mat-icon>
+        </button>
 
-      <form [formGroup]="coordinatesForm" class="clicked-coordinates-inputs">
-        <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
-          <mat-label i18n="@@core.toolbar.coordinate-picker-x">X-coordinate</mat-label>
-          <input matInput type="number" formControlName="x"/>
-        </mat-form-field>
-        <mat-form-field appearance="outline" color="primary" [style.width.em]="12.5">
-          <mat-label i18n="@@core.toolbar.coordinate-picker-y">Y-coordinate</mat-label>
-          <input matInput type="number" formControlName="y"/>
-        </mat-form-field>
-        <input [hidden]="true" formControlName="minx" type="number"/>
-        <input [hidden]="true" formControlName="maxx" type="number"/>
-        <input [hidden]="true" formControlName="miny" type="number"/>
-        <input [hidden]="true" formControlName="maxy" type="number"/>
+        <button mat-flat-button
+                (click)="goTo()"
+                [disabled]="coordinatesForm.invalid"
+                i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
+                tmTooltip="Zoom To"
+                class="map-control-button toggle-button--active">
+          <mat-icon svgIcon="show_position"></mat-icon>
+        </button>
+      </div>
+    </form>
 
-        <div class="clicked-coordinates-buttons">
-          <button mat-flat-button
-            (click)="copy()"
-            [disabled]="coordinatesForm.invalid"
-            i18n-tmTooltip="@@core.toolbar.coordinate-picker-copy"
-            tmTooltip="Copy"
-            class="map-control-button toggle-button--active">
-            <mat-icon svgIcon="copy"></mat-icon>
-          </button>
-
-          <button mat-flat-button
-            (click)="goTo()"
-            [disabled]="coordinatesForm.invalid"
-            i18n-tmTooltip="@@core.toolbar.coordinate-picker-zoomTo"
-            tmTooltip="Zoom To"
-            class="map-control-button toggle-button--active">
-            <mat-icon svgIcon="show_position"></mat-icon>
-          </button>
-        </div>
-      </form>
-
-      @if (coordinatesForm.dirty && coordinatesForm.invalid) {
-        <tm-error-message
-          i18n="@@core.toolbar.coordinate-picker-invalid-input"
-          [message]="'Your input is invalid for the current application bounds'"
+    @if (coordinatesForm.dirty && coordinatesForm.invalid) {
+      <tm-error-message
+        i18n="@@core.toolbar.coordinate-picker-invalid-input"
+        [message]="'Your input is invalid for the current application bounds'"
         [friendlyError]="true"></tm-error-message>
-      }
-    </div>
-  }
+    }
+  </div>
+</ng-template>
 
-</div>
+@if ((visible$ | async) && !noExpansionPanel()) {
+  <div [class.clicked-coordinates-container--is-active]="toolActive()"
+       class="clicked-coordinates-container map-control-button-container"
+       (keyup.escape)="toggle()">
+
+    <button (click)="toggle()"
+            [class.toggle-button--active]="toolActive()"
+            class="map-control-button toggle-button"
+            i18n-tmTooltip="@@core.toolbar.coordinate-picker"
+            mat-flat-button
+            tmTooltip="Coordinate picker">
+      <mat-icon svgIcon="tools_push_pin"></mat-icon>
+    </button>
+
+    @if (toolActive()) {
+      <ng-container *ngTemplateOutlet="clickedCoordinatesContent"></ng-container>
+    }
+
+  </div>
+} @else if (visible$ | async) {
+  <div class="clicked-coordinates-no-expansion-panel">
+    <ng-container *ngTemplateOutlet="clickedCoordinatesContent"></ng-container>
+  </div>
+}
+
