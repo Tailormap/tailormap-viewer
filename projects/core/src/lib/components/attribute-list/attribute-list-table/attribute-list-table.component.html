@@ -26,7 +26,7 @@
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
           <mat-icon
-            svgIcon="filter_outline"
+            [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
             class="filter"
             [class.filter-active]="hasFilter(col.id)"
             [class.filter-disabled]="hasDisabledFilter(col.id)"
