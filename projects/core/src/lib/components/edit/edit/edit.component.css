@@ -44,22 +44,22 @@
 }
 
 @media screen and (max-width: 730px) {
-  /*.edit-container--is-active {*/
-  /*  padding: 0;*/
-  /*  width: var(--map-control-size);*/
-  /*  height: var(--map-control-size);*/
-  /*}*/
+  .edit-container--is-active:not(.edit-container--mobile) {
+    padding: 0;
+    width: var(--map-control-size);
+    height: var(--map-control-size);
+  }
 
-  /*.edit-wrapper {*/
-  /*  position: absolute;*/
-  /*  top: calc(var(--map-control-size) + 9px);*/
-  /*  left: 0;*/
-  /*  background: #fff;*/
-  /*  width: 260px;*/
-  /*  max-width: var(--max-control-width);*/
-  /*  z-index: 20;*/
-  /*  padding: 9px;*/
-  /*}*/
+  .edit-container:not(.edit-container--mobile) .edit-wrapper {
+    position: absolute;
+    top: calc(var(--map-control-size) + 9px);
+    left: 0;
+    background: #fff;
+    width: 260px;
+    max-width: var(--max-control-width);
+    z-index: 20;
+    padding: 9px;
+  }
 }
 
 @media screen and (max-width: 425px) {
