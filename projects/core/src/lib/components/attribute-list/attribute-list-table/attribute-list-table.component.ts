@@ -36,6 +36,7 @@ export class AttributeListTableComponent {
   @Input()
   public set filters(filters: AttributeFilterModel[] | null) {
     if (filters === null) {
+      this.filtersDictionary = new Map();
       return;
     }
     this.filtersDictionary = new Map<string, AttributeFilterModel>(filters.map(f => [ f.attribute, f ]));

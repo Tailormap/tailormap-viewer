@@ -39,21 +39,22 @@ export class SimpleAttributeFilterService {
   public hasFilter$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
-        return !!group && group.filters.length > 0 && (!featureType || group.filters.some(f => f.featureType === featureType));
+        return !!group && group.filters.length > 0 && group.filters.some(f => f.featureType === featureType);
       }));
   }
 
-  public hasFiltersForMultipleFeatureTypes$(source: string, layerId: string) {
+  public hasFiltersForOtherFeatureTypes$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
-        return !!group && new Set(group.filters.map(f => f.featureType)).size > 1;
+        return !!group && group.filters.length > 0 && group.filters.filter(f => f.featureType !== featureType).length > 0;
       }));
   }
 
-  public getFilters$(source: string, layerId: string): Observable<AttributeFilterModel[]> {
+  public getFilters$(source: string, layerId: string, featureType?: string): Observable<AttributeFilterModel[]> {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
-        return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }));
+        return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }))
+          .filter(f => f.featureType === featureType);
       }));
   }
 

@@ -57,12 +57,15 @@ export class AttributeListContentComponent implements OnInit {
     this.hasNoRows$ = this.store$.select(selectHasNoRowsForSelectedTab);
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
-    this.filters$ = this.store$.select(selectSelectedTab)
-      .pipe(switchMap(tab => {
+    this.filters$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(switchMap(([ tab, data ]) => {
         if (!tab || !tab.layerId) {
           return of([]);
         }
-        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       }));
     this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
