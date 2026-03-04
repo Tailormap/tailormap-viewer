@@ -46,7 +46,7 @@ export class SimpleAttributeFilterService {
   public hasFiltersForOtherFeatureTypes$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
-        return !!group && group.filters.length > 0 && group.filters.filter(f => f.featureType !== featureType).length > 0;
+        return !!group && group.filters.length > 0 && group.filters.some(f => f.featureType !== featureType);
       }));
   }
 
