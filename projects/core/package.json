@@ -24,6 +24,7 @@
     "@tailormap-viewer/shared": "^12.5.0",
     "@tailormap-viewer/map": "^12.5.0",
     "@tailormap-viewer/api": "^12.5.0",
+    "fast-deep-equal": "^3.1.3",
     "jspdf": "^4.2.0",
     "luxon": "^3.5.0",
     "nanoid": "^5.1.6",

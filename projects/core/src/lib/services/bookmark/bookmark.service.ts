@@ -6,6 +6,7 @@ import {
 } from './bookmark.models';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { deflate, inflate } from '@stardazed/zlib';
+import equal from 'fast-deep-equal';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
 
@@ -138,19 +139,12 @@ export class BookmarkService {
       const descriptor = fragment[0];
       const currentValue$ = fragment[1];
 
-      // Proto fragment
+      // JSON fragment
       if (isBookmarkJsonFragmentDescriptor(descriptor)) {
-        // TODO object equality test
-
-        //const decodedValue = descriptor.deserialize(valueFromBookmark);
-        //if (!descriptor.equals(currentValue$.value, decodedValue)) {
+        if (!equal(currentValue$.value, valueFromBookmark)) {
           currentValue$.next(valueFromBookmark);
-        //}
-        return;
-      }
-
-      // String fragment
-      if (currentValue$.value !== valueFromBookmark) {
+        }
+      } else if (currentValue$.value !== valueFromBookmark) { // String fragment
         currentValue$.next(valueFromBookmark);
       }
     });
