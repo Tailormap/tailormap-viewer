@@ -193,18 +193,18 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (!LayerTypesHelper.isWmsLayer(layer) || !isOpenLayersWMSLayer(olLayer)) {
       return;
     }
-    const checkPropChanges: Array<{ paramName: keyof WmsServiceParamsModel; layerPropName: keyof LayerProperties; layerKey: keyof WMSLayerModel }> = [
-      { paramName: 'LAYERS', layerPropName: 'name', layerKey: 'name' },
-      { paramName: 'STYLES', layerPropName: 'style', layerKey: 'selectedStyleName' },
+    const checkPropChanges: Array<{ paramName: keyof WmsServiceParamsModel; layerKey: keyof WMSLayerModel }> = [
+      { paramName: 'LAYERS', layerKey: 'name' },
+      { paramName: 'STYLES', layerKey: 'selectedStyleName' },
     ];
     if (layer.serverType === ServerType.GEOSERVER) {
       // CQL filter is only supported by GeoServer, so only check for changes if the server type is GeoServer
-      checkPropChanges.push({ paramName: 'CQL_FILTER', layerPropName: 'filter', layerKey: 'filter' });
+      checkPropChanges.push({ paramName: 'CQL_FILTER', layerKey: 'filter' });
     }
-    const existingProps = OlLayerHelper.getLayerProps(olLayer);
+    const currentParams: Partial<Record<keyof WmsServiceParamsModel, any>> = olLayer.getSource()?.getParams();
     const changedParams: Partial<Record<keyof WmsServiceParamsModel, any>> = {};
     checkPropChanges
-      .filter(({ layerPropName, layerKey }) => existingProps[layerPropName] !== layer[layerKey])
+      .filter(({ paramName, layerKey }) => currentParams[paramName] !== layer[layerKey])
       .forEach(({ paramName, layerKey }) => {
         changedParams[paramName] = layer[layerKey] ?? '';
       });
@@ -212,7 +212,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       return;
     }
     olLayer.getSource()?.updateParams(changedParams);
-    OlLayerHelper.setLayerProps(layer, olLayer);
   }
 
   public removeLayer(id: string) {
