@@ -52,14 +52,14 @@ export interface BookmarkNodeChildrenOrder {
 }
 
 export type CompactFilterBookmarkFragment = {
-  a?: Array<BookmarkFilterGroup<BookmarkAttributeFilterModel>>; // attribute layer filters
-  s?: Array<BookmarkFilterGroup<BookmarkSpatialFilterModel>>; // spatial filters
-  p?: Array<BookmarkFilterGroup<BookmarkPresetFilterModel>>; // preset filters
+  a?: BookmarkFilterGroup<BookmarkAttributeFilterModel>[]; // attribute layer filters
+  s?: BookmarkFilterGroup<BookmarkSpatialFilterModel>[]; // spatial filters
+  p?: BookmarkFilterGroup<BookmarkPresetFilterModel>[]; // preset filters
 };
 
 export type BookmarkFilterGroup<T> = {
   id: string;
-  l: string[]; // layerIds
+  l?: string[]; // layerIds
   d?: boolean; // disabled
   pG?: string; // parentGroup
   f: Array<T>;
@@ -71,10 +71,11 @@ export type BookmarkAttributeFilterModel = {
   a: string; // attribute
   aT: AttributeType; // attributeType (could be numeric enum)
   c: FilterConditionEnum; // condition (could be 1 char or numeric enum)
-  iC: boolean; // invertCondition
-  cS: boolean; // caseSensitive
+  iC?: boolean; // invertCondition
+  cS?: boolean; // caseSensitive
   v: string[]; // value
   aA?: string; // attributeAlias
+  fT?: string;
 };
 
 export type BookmarkSpatialFilterModel = {

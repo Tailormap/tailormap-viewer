@@ -11,9 +11,9 @@ export class FilterBookmarkHelper {
     console.log('Create bookmark from filter state:', filterState);
 
     const bookmarkData: CompactFilterBookmarkFragment = {};
-    FilterBookmarkHelper.addPresetFilterGroupsToBookmark(bookmarkData, filterState);
     FilterBookmarkHelper.addAttributeFilterGroupsToBookmark(bookmarkData, filterState);
     FilterBookmarkHelper.addSpatialFilterGroupsToBookmark(bookmarkData, filterState);
+    FilterBookmarkHelper.addPresetFilterGroupsToBookmark(bookmarkData, filterState);
     return bookmarkData;
   }
 
@@ -27,14 +27,15 @@ export class FilterBookmarkHelper {
       .filter(filterGroup => filterGroup.source === 'ATTRIBUTE_LIST' && filterGroup.type === FilterTypeEnum.ATTRIBUTE);
 
     for (const fg of attributeFilters) {
-      const bfg: any = {
+      const bfg: BookmarkFilterGroup<BookmarkAttributeFilterModel> = {
         id: fg.id,
         l: fg.layerIds,
+        f: [],
       };
       if (fg.disabled) { bfg.d = fg.disabled; }
-      if (fg.parentGroup) { bfg.pg = fg.parentGroup; }
-      bfg.f = (fg.filters as AttributeFilterModel[]).map(f => {
-        const bf: any = {
+      if (fg.parentGroup) { bfg.pG = fg.parentGroup; }
+      for (const f of fg.filters as AttributeFilterModel[]) {
+        const bf: BookmarkAttributeFilterModel = {
           id: f.id, // changed to size 6 instead of default 21, could be regenerated?
           a: f.attribute,
           aT: f.attributeType,
@@ -45,12 +46,11 @@ export class FilterBookmarkHelper {
         if (f.disabled) { bf.d = f.disabled; }
         if (f.invertCondition) { bf.iC = f.invertCondition; }
         if (f.caseSensitive) { bf.cS = f.caseSensitive; }
-        return bf;
-      });
-
-      if (!bookmarkData.a) {
-        bookmarkData.a = [];
+        if (f.featureType) { bf.fT = f.featureType; }
+        bfg.f.push(bf);
       }
+
+      if (!bookmarkData.a) { bookmarkData.a = []; }
       bookmarkData.a.push(bfg);
     }
   }
@@ -59,7 +59,7 @@ export class FilterBookmarkHelper {
     return {
       id: bfg.id,
       source: 'ATTRIBUTE_LIST',
-      layerIds: bfg.l,
+      layerIds: bfg.l!,
       type: FilterTypeEnum.ATTRIBUTE,
       disabled: bfg.d,
       parentGroup: bfg.pG,
@@ -71,59 +71,45 @@ export class FilterBookmarkHelper {
         attribute: f.a,
         attributeType: f.aT,
         condition: f.c,
-        invertCondition: f.iC,
-        caseSensitive: f.cS,
+        invertCondition: !!f.iC,
+        caseSensitive: !!f.cS,
         value: f.v,
         attributeAlias: f.aA,
+        featureType: f.fT,
       })),
     };
   }
 
   private static addPresetFilterGroupsToBookmark(bookmarkData: CompactFilterBookmarkFragment, filterState: FilterState) {
+    // Only save changes from the configured (preset) filter in the bookmark
     const currentPresetFilters = filterState.currentFilterGroups
       .filter(filterGroup => filterGroup.source === 'PRESET');
     if (currentPresetFilters.length > 0) {
-
       for(const currentPresetFilter of currentPresetFilters) {
         const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === currentPresetFilter.id && fg.source === 'PRESET');
-        if (!configuredPresetFilter) {
+        if (!configuredPresetFilter || equal(currentPresetFilter, configuredPresetFilter)) {
           continue;
         }
-        if (equal(currentPresetFilter, configuredPresetFilter)) {
-          continue;
-        }
-        const bookmarkFilter: any = { id: currentPresetFilter.id };
+        const bookmarkFilter: BookmarkFilterGroup<BookmarkPresetFilterModel> = { id: currentPresetFilter.id, f: [] };
         if (currentPresetFilter.disabled !== configuredPresetFilter.disabled) {
           bookmarkFilter.d = currentPresetFilter.disabled;
         }
-        let bookmarkFilters = undefined;
         for (const filter of currentPresetFilter.filters) {
           const configuredFilter = configuredPresetFilter.filters.find(f => f.id === filter.id);
-          if (!configuredFilter) {
+          if (!configuredFilter || equal(filter, configuredFilter)) {
             continue;
           }
-          if (equal(filter, configuredFilter)) {
-            continue;
-          }
-          const bf: any = { id: filter.id };
+          const bf: BookmarkPresetFilterModel = { id: filter.id };
           if (filter.disabled !== configuredFilter.disabled) {
             bf.d = filter.disabled;
           }
           if (FilterTypeHelper.isAttributeFilter(filter) && !equal(filter.value, configuredFilter.value)) {
             bf.v = filter.value;
           }
-          if (!bookmarkFilters) {
-            bookmarkFilters = [];
-          }
-          bookmarkFilters.push(bf);
-        }
-        if (bookmarkFilters) {
-          bookmarkFilter.f = bookmarkFilters;
+          bookmarkFilter.f.push(bf);
         }
 
-        if (!bookmarkData.p) {
-          bookmarkData.p = [];
-        }
+        if (!bookmarkData.p) { bookmarkData.p = []; }
         bookmarkData.p.push(bookmarkFilter);
       }
     }
@@ -158,27 +144,26 @@ export class FilterBookmarkHelper {
     const spatialFilters = filterState.currentFilterGroups
       .filter(filterGroup => filterGroup.type === FilterTypeEnum.SPATIAL);
     for (const fg of spatialFilters) {
-      const bfg: any = {
+      const bfg: BookmarkFilterGroup<BookmarkSpatialFilterModel> = {
         id: fg.id,
         l: fg.layerIds,
+        f: [],
       };
       if (fg.disabled) { bfg.d = fg.disabled; }
-      if (fg.parentGroup) { bfg.pg = fg.parentGroup; }
-      bfg.f = (fg.filters as SpatialFilterModel[]).map(f => {
-        const bf: any = {
+      if (fg.parentGroup) { bfg.pG = fg.parentGroup; }
+      for (const f of fg.filters as SpatialFilterModel[]) {
+        const bf: BookmarkSpatialFilterModel = {
           id: f.id, // changed to size 6 instead of default 21, could be regenerated?
           gC: f.geometryColumns.map(gc => ({ l: gc.layerId, c: gc.column })),
+          g: f.geometries.map(g => ({ id: g.id, g: g.geometry, l: g.referenceLayerId })),
         };
         if (f.disabled) { bf.d = f.disabled; }
         if (f.baseLayerId) { bf.l = f.baseLayerId; }
         if (f.buffer) { bf.b = f.buffer; }
-        if (f.geometries) { bf.g = f.geometries.map(g => ({ id: g.id, g: g.geometry, l: g.referenceLayerId })); }
-        return bf;
-      });
-
-      if (!bookmarkData.s) {
-        bookmarkData.s = [];
+        bfg.f.push(bf);
       }
+
+      if (!bookmarkData.s) { bookmarkData.s = []; }
       bookmarkData.s.push(bfg);
     }
   }
@@ -187,7 +172,7 @@ export class FilterBookmarkHelper {
     return {
       id: bfg.id,
       source: 'SPATIAL_FILTER_FORM',
-      layerIds: bfg.l,
+      layerIds: bfg.l!,
       type: FilterTypeEnum.SPATIAL,
       disabled: bfg.d,
       parentGroup: bfg.pG,
