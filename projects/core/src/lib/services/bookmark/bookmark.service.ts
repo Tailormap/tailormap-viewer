@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter, Observable } from 'rxjs';
 import {
-  BookmarkFragmentDescriptor, BookmarkID, BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor,
+  BookmarkFragmentDescriptor, BookmarkID, BookmarkJsonFragmentDescriptor,
   isBookmarkJsonFragmentDescriptor,
 } from './bookmark.models';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { deflate, inflate } from '@stardazed/zlib';
+import { deepEqual } from 'fast-equals';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
 
@@ -29,16 +30,17 @@ export class BookmarkService {
     return this.joinedBookmark.asObservable().pipe(filter((v): v is string => typeof v === 'string'));
   }
 
-  public registerJsonFragment$<T>(descriptor: BookmarkJsonFragmentDescriptor<T>): Observable<T> {
-    return this.registerFragment$(descriptor) as Observable<T>;
-  }
+  // public registerJsonFragment$<T>(descriptor: BookmarkJsonFragmentDescriptor<T>): Observable<T> {
+  //   return this.registerFragment$(descriptor) as Observable<T>;
+  // }
 
   /*
   This method is used to register and also get the value for a certain fragment
   If the bookmark url is read before calling this method, the value for the fragment is kept in the pendingFragments map
    */
-  public registerFragment$(descriptor: BookmarkStringFragmentDescriptor): Observable<string>;
-  public registerFragment$(descriptor: BookmarkFragmentDescriptor): Observable<any> {
+  public registerFragment$<T>(descriptor: BookmarkFragmentDescriptor): Observable<T | null> {
+//  public registerFragment$<T = string>(descriptor: BookmarkStringFragmentDescriptor): Observable<T>;
+//  public registerFragment$(descriptor: BookmarkFragmentDescriptor): Observable<any> {
     const existingFragment$ = this.fragments.get(descriptor);
     if (existingFragment$ !== undefined) {
       return existingFragment$;
@@ -48,12 +50,12 @@ export class BookmarkService {
       throw new Error('Invalid identifier');
     }
 
-    const fragment$ = new BehaviorSubject(descriptor.getInitialValue());
+    const fragment$ = new BehaviorSubject<T | null>(null);
 
     const pendingFragment = this.pendingFragments.get(descriptor.identifier);
 
     if (pendingFragment !== undefined) {
-      fragment$.next(pendingFragment);
+      fragment$.next(pendingFragment as T);
       this.pendingFragments.delete(descriptor.identifier);
     }
 
@@ -64,8 +66,6 @@ export class BookmarkService {
   /*
   This method is used to update a single fragment. After that fragment has been updated, the bookmark URL is updated as a whole
    */
-  public updateFragment<T>(descriptor: BookmarkJsonFragmentDescriptor<T>, value: T): void;
-  public updateFragment(descriptor: BookmarkStringFragmentDescriptor, value: string): void;
   public updateFragment(descriptor: BookmarkFragmentDescriptor, value: any) {
     if (!this.fragments.has(descriptor)) {
       this.registerFragment$(descriptor as any);
@@ -98,8 +98,7 @@ export class BookmarkService {
   This method is used to get the bookmark as a whole with a changed fragment
   This does not update the current bookmark URL and the change in the fragment is not persisted
    */
-  public getBookmark<T>(descriptor: BookmarkJsonFragmentDescriptor<T>, value: T): string;
-  public getBookmark(descriptor: BookmarkStringFragmentDescriptor, value: string): string;
+  public getBookmark<T>(descriptor: BookmarkJsonFragmentDescriptor, value: T): string;
   public getBookmark(descriptor: BookmarkFragmentDescriptor, value: any): string {
     const fragment$ = new BehaviorSubject(value);
     const fragments = new Map(this.fragments);
@@ -138,19 +137,12 @@ export class BookmarkService {
       const descriptor = fragment[0];
       const currentValue$ = fragment[1];
 
-      // Proto fragment
+      // JSON fragment
       if (isBookmarkJsonFragmentDescriptor(descriptor)) {
-        // TODO object equality test
-
-        //const decodedValue = descriptor.deserialize(valueFromBookmark);
-        //if (!descriptor.equals(currentValue$.value, decodedValue)) {
+        if (!deepEqual(currentValue$.value, valueFromBookmark)) {
           currentValue$.next(valueFromBookmark);
-        //}
-        return;
-      }
-
-      // String fragment
-      if (currentValue$.value !== valueFromBookmark) {
+        }
+      } else if (currentValue$.value !== valueFromBookmark) { // String fragment
         currentValue$.next(valueFromBookmark);
       }
     });
@@ -158,7 +150,7 @@ export class BookmarkService {
     // Unset any existing values.
     this.fragments.forEach((value$, descriptor) => {
       if (missingIdentifiers.has(descriptor.identifier)) {
-        value$.next(descriptor.getInitialValue());
+        value$.next(null);
       }
     });
   }
@@ -245,7 +237,6 @@ export class BookmarkService {
       outputs.push(BookmarkService.FRAGMENT_SEPARATOR, compressedJsonBase64Fragments);
     } else if (Object.keys(jsonFragments).length > 0) {
       const json = JSON.stringify(jsonFragments);
-      console.log('Compressing JSON bookmark fragments', json);
       const encoded = new TextEncoder().encode(json);
       const compressed = deflate(encoded, { format: 'deflate', level: 9 });
       const base64 = UrlHelper.bytesToUrlBase64(compressed);

@@ -1,5 +1,5 @@
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { MapSizeHelper, MapUnitEnum, MapViewDetailsModel } from '@tailormap-viewer/map';
+import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map/models';
 import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
 import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
@@ -20,7 +20,10 @@ export type LayerOrderBookmarkContents = Array<{ nodeId: string; children: strin
 
 export class MapBookmarkHelper {
 
-  public static locationAndZoomFromFragment(fragment: string, viewDetails?: MapViewDetailsModel, unitsOfMeasure?: MapUnitEnum): MapLocationBookmarkContents | undefined {
+  public static locationAndZoomFromFragment(fragment: string | null, viewDetails?: MapViewDetailsModel, unitsOfMeasure?: MapUnitEnum): MapLocationBookmarkContents | undefined {
+    if (!fragment) {
+      return undefined;
+    }
     const parts = fragment.split(',');
     if (parts.length !== 3) {
       return undefined;
@@ -65,7 +68,7 @@ export class MapBookmarkHelper {
   }
 
   public static visibilityDataFromFragment(
-    fragment: LayerVisibilityBookmarkFragment,
+    fragment: LayerVisibilityBookmarkFragment | null,
     layers: AppLayerStateModel[],
     checkInitialValues = true,
   ): MapBookmarkContents {
@@ -103,7 +106,7 @@ export class MapBookmarkHelper {
     if (!checkInitialValues) {
       layers.forEach(currentLayer => {
         const id = currentLayer.id;
-        const layer = fragment.find(l => l.id === id);
+        const layer = fragment?.find(l => l.id === id);
         if (!layer && currentLayer.visible) {
           visibilityData.push({ id, checked: false });
         }
@@ -164,7 +167,7 @@ export class MapBookmarkHelper {
   }
 
   public static layerTreeOrderFromFragment(
-    fragment: LayerTreeOrderBookmarkFragment,
+    fragment: LayerTreeOrderBookmarkFragment | null,
     layers: ExtendedLayerTreeNodeModel[],
   ): LayerOrderBookmarkContents {
     const output = [];
@@ -204,8 +207,8 @@ export class MapBookmarkHelper {
 
   public static mergeMapResponseWithBookmarkData(
     mapResponse: MapResponseModel,
-    opacityVisibility: LayerVisibilityBookmarkFragment,
-    layerOrder: LayerTreeOrderBookmarkFragment,
+    opacityVisibility: LayerVisibilityBookmarkFragment | null,
+    layerOrder: LayerTreeOrderBookmarkFragment | null,
   ): ExtendedMapResponseModel {
     const extendedAppLayers = mapResponse.appLayers.map(LayerModelHelper.getLayerWithInitialValues);
     const extendedTreeNodes = LayerTreeNodeHelper.getExtendedLayerTreeNodes(mapResponse.layerTreeNodes, mapResponse.appLayers);

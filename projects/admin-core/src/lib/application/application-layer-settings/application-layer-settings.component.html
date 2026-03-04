@@ -40,7 +40,7 @@
                               cdkDropList
                               class="styles-list"
                               formControlName="selectedStyles">
-            @for (style of availableStyles; track style.name) {
+            @for (style of availableStyles; track style) {
               <mat-list-option
                 [cdkDragData]="style"
                 [lines]="3"

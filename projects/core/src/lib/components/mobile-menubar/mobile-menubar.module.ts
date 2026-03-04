@@ -12,6 +12,7 @@ import { MobileMenubarHomeComponent } from './mobile-menubar-home/mobile-menubar
 import { MobileMenubarHomeButtonComponent } from './mobile-menubar-home-button/mobile-menubar-home-button.component';
 import { Switch3dModule } from "../toolbar/switch3d/switch3d.module";
 import { StreetviewModule } from "../toolbar/streetview/streetview.module";
+import { MeasureModule } from "../toolbar/measure/measure.module";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { StreetviewModule } from "../toolbar/streetview/streetview.module";
     CoreSharedModule,
     Switch3dModule,
     StreetviewModule,
+    MeasureModule,
   ],
   exports: [
     MobileMenubarComponent,

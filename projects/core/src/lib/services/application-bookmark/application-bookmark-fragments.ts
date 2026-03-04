@@ -11,15 +11,15 @@ export class ApplicationBookmarkFragments {
     BookmarkService.LOCATION_IDENTIFIER,
   );
 
-  public static VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<LayerVisibilityBookmarkFragment>(
+  public static VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'l',
   );
 
-  public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<LayerTreeOrderBookmarkFragment>(
+  public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'toc',
   );
 
-  public static FILTER_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<FilterBookmarkFragment>(
+  public static FILTER_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'f',
   );
 
@@ -34,7 +34,6 @@ export class ApplicationBookmarkFragments {
   public static MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
     'mobile',
   );
-
 }
 
 export type LayerVisibilityBookmarkFragment = Array<BookmarkLayerInfo>;

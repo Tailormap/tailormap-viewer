@@ -6,8 +6,10 @@ import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
-import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookmark.helper';
-import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
+import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
+import {
+  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+} from '../../services/application-bookmark/application-bookmark-fragments';
 
 @Injectable()
 export class MapEffects {
@@ -37,8 +39,8 @@ export class MapEffects {
                 return of(MapActions.loadMapFailed({ error: response }));
               }
               return combineLatest([
-                this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
-                this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$<LayerVisibilityBookmarkFragment>(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
               ])
                 .pipe(
                   take(1),
