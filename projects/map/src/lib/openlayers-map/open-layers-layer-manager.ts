@@ -204,8 +204,12 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const currentParams: Partial<Record<keyof WmsServiceParamsModel, any>> = olLayer.getSource()?.getParams() || {};
     const changedParams: Partial<Record<keyof WmsServiceParamsModel, any>> = {};
     checkPropChanges
-      .filter(({ paramName, layerKey }) => currentParams[paramName] !== layer[layerKey])
-      .forEach(({ paramName, layerKey }) => { changedParams[paramName] = layer[layerKey]; });
+      .filter(({ paramName, layerKey }) => {
+        return (currentParams[paramName] ?? '') !== (layer[layerKey] ?? '');
+      })
+      .forEach(({ paramName, layerKey }) => {
+        changedParams[paramName] = layer[layerKey] ?? '';
+      });
     if (Object.keys(changedParams).length === 0) {
       return;
     }
