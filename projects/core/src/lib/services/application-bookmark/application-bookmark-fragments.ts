@@ -1,8 +1,7 @@
 import { BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor } from '../bookmark/bookmark.models';
 import { BookmarkService } from '../bookmark/bookmark.service';
 import {
-  AttributeFilterModel,
-  AttributeType, FilterConditionEnum, FilterGroupModel, SpatialFilterModel,
+  AttributeType, FilterConditionEnum,
 } from '@tailormap-viewer/api';
 
 export class ApplicationBookmarkFragments {
@@ -52,21 +51,17 @@ export interface BookmarkNodeChildrenOrder {
   c: string[]; // children ids in (changed) order
 }
 
-// export type CompactFilterBookmarkFragment = {
-//   al?: Array<BookmarkFilterGroup<BookmarkAttributeFilterModel>>; // attribute layer filters
-//   s?: Array<BookmarkFilterGroup<BookmarkSpatialFilterModel>>; // spatial filters
-// };
-
-export type FilterBookmarkFragment = {
-  a?: Array<FilterGroupModel<AttributeFilterModel>>; // attribute layer filters
-  s?: Array<FilterGroupModel<SpatialFilterModel>>; // spatial filters
-  p: Array<FilterGroupModel<AttributeFilterModel>>; // preset filters
+export type CompactFilterBookmarkFragment = {
+  a?: Array<BookmarkFilterGroup<BookmarkAttributeFilterModel>>; // attribute layer filters
+  s?: Array<BookmarkFilterGroup<BookmarkSpatialFilterModel>>; // spatial filters
+  p?: Array<BookmarkFilterGroup<BookmarkPresetFilterModel>>; // preset filters
 };
 
 export type BookmarkFilterGroup<T> = {
   id: string;
   l: string[]; // layerIds
   d?: boolean; // disabled
+  pG?: string; // parentGroup
   f: Array<T>;
 };
 
@@ -89,4 +84,10 @@ export type BookmarkSpatialFilterModel = {
   g /* geometries */: Array<{ id: string; g /* geometry */: string; l? /* referenceLayerId*/: string }>;
   l?: string; // baseLayerId
   b?: number; // buffer
+};
+
+export type BookmarkPresetFilterModel = {
+  id: string;
+  d?: boolean; // disabled
+  v?: string[]; // value
 };
