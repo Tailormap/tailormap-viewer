@@ -14,7 +14,7 @@ import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../..
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 import { deepEqual } from 'fast-equals';
 import { selectFilterState } from '../../state';
-import { addFilterGroup } from '../../state/filter-state/filter.actions';
+import { addFilterGroup, updateFilterGroup } from '../../state/filter-state/filter.actions';
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastLocationBookmark: string | undefined;
   private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
-  //private lastFilterBookmark: FilterBookmarkFragment | undefined;
+  private lastFilterBookmark: FilterBookmarkFragment | undefined;
 
   constructor() {
     let initialRun = true;
@@ -96,7 +96,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.getFilterBookmarkData$()
       .pipe(skip(1), takeUntil(this.destroyed))
       .subscribe(bookmark => {
-        //this.lastFilterBookmark = bookmark;
+        this.lastFilterBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
@@ -160,16 +160,17 @@ export class ApplicationBookmarkService implements OnDestroy {
       });
 
     this.store$.select(selectLoadStatus).pipe(
+      skip(1),
       takeUntil(this.destroyed),
       filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
       switchMap(() => this.bookmarkService.registerFragment$<FilterBookmarkFragment>(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR)),
-      //filter(filterBookmark => !this.deepEqualsFilterBookmark(this.lastFilterBookmark, filterBookmark)),
+      filter(filterBookmark => !deepEqual(this.lastFilterBookmark, filterBookmark)),
       withLatestFrom(this.store$.select(selectFilterState)),
     ).subscribe(([ filterBookmark, filterState ]) => {
         console.log('Apply filter bookmark to filterState', filterBookmark, filterState);
 
         const currentFilterGroupIds = filterState.currentFilterGroups.map(fg => fg.id);
-        filterBookmark?.al?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
+        filterBookmark?.a?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
           const filterGroup = FilterBookmarkHelper.attributeFilterGroupFromBookmark(bfg);
           this.store$.dispatch(addFilterGroup({ filterGroup }));
         });
@@ -179,6 +180,12 @@ export class ApplicationBookmarkService implements OnDestroy {
           this.store$.dispatch(addFilterGroup({ filterGroup }));
         });
 
+        filterBookmark?.p?.forEach(bfg => {
+          const filterGroup = FilterBookmarkHelper.presetFilterGroupFromBookmark(filterState, bfg);
+          if (filterGroup) {
+            this.store$.dispatch(updateFilterGroup({ filterGroup }));
+          }
+        });
       });
   }
 

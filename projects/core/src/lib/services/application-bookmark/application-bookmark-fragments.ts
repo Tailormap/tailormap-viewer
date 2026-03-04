@@ -58,8 +58,9 @@ export interface BookmarkNodeChildrenOrder {
 // };
 
 export type FilterBookmarkFragment = {
-  al?: Array<FilterGroupModel<AttributeFilterModel>>; // attribute layer filters
+  a?: Array<FilterGroupModel<AttributeFilterModel>>; // attribute layer filters
   s?: Array<FilterGroupModel<SpatialFilterModel>>; // spatial filters
+  p: Array<FilterGroupModel<AttributeFilterModel>>; // preset filters
 };
 
 export type BookmarkFilterGroup<T> = {
