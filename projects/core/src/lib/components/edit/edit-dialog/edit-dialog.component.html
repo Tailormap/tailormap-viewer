@@ -60,7 +60,7 @@
   @let selectableFeatures = selectableFeature$ | async;
   @if (selectableFeatures && selectableFeatures.length > 0) {
     <div class="content">
-      <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
+      <tm-edit-select-feature [features]="selectableFeatures" [inMobilePanel]="inMobilePanel()"></tm-edit-select-feature>
     </div>
     <div class="buttons">
       <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
