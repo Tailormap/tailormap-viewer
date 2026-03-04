@@ -52,7 +52,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
 
-  private defaultTooltip = $localize `:@@core.edit.edit:Edit feature`;
+  private defaultTooltip = $localize `:@@core.edit.edit-feature:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
   private noLayersTooltip = $localize `:@@core.edit.no-editable-layers-tooltip:There are no editable layers. Enable a layer to start editing.`;
 

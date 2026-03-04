@@ -82,15 +82,9 @@ export class EditDialogComponent implements OnInit {
     this.editCoordinates$ = this.store$.select(selectEditMapCoordinates);
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
     this.dialogTitle$ = this.currentFeature$.pipe(
-      map(feature => {
-        if (!feature) {
-          return $localize `:@@core.edit.edit:Edit`;
-        }
-        return feature.feature.__fid !== 'new'
-        ? $localize `:@@core.edit.edit:Edit feature`
-        : $localize `:@@core.edit.add-new-feature:Add new feature`;
-      }),
-    );
+      map(feature => feature?.feature.__fid !== 'new'
+        ? $localize `:@@core.edit.edit-feature:Edit feature`
+        : $localize `:@@core.edit.add-new-feature:Add new feature`));
     this.isCreateFeature$ = this.store$.select(selectEditCreateNewOrCopyFeatureActive);
     this.selectableFeature$ = combineLatest([
       this.store$.select(selectEditFeatures),

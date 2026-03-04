@@ -68,7 +68,6 @@
 
 .buttons-fixed-position {
   flex: 0 0 auto;
-  position: sticky;
 }
 
 .buttons button {

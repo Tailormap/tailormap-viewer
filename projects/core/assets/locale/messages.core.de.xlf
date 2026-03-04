@@ -463,6 +463,10 @@
         <target>Löschen des Features fehlgeschlagen</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
+        <source>Edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="core.edit.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
       </trans-unit>
