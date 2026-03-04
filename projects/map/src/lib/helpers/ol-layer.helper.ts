@@ -30,9 +30,7 @@ export interface LayerProperties {
   id: string;
   visible: boolean;
   name: string;
-  filter?: string;
   language?: string;
-  style?: string | null;
 }
 
 export interface WmsServiceParamsModel {
@@ -55,8 +53,6 @@ export class OlLayerHelper {
       id: layer.id,
       visible: layer.visible,
       name: layer.name,
-      filter: LayerTypesHelper.isServiceLayer(layer) ? layer.filter : undefined,
-      style: LayerTypesHelper.isWmsLayer(layer) ? layer.selectedStyleName : undefined,
     };
     olLayer.setProperties(layerProps);
   }
@@ -70,8 +66,6 @@ export class OlLayerHelper {
       id: props['id'],
       visible: props['visible'],
       name: props['name'],
-      filter: props['filter'],
-      style: props['style'],
     };
   }
 
