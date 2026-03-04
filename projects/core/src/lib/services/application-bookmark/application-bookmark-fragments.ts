@@ -7,11 +7,11 @@ export class ApplicationBookmarkFragments {
     BookmarkService.LOCATION_IDENTIFIER,
   );
 
-  public static VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<LayerVisibilityBookmarkFragment>(
+  public static VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'l',
   );
 
-  public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor<LayerTreeOrderBookmarkFragment>(
+  public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'toc',
   );
 

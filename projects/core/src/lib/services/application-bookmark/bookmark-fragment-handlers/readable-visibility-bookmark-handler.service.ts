@@ -47,7 +47,7 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
   }
 
   private handleExclusiveLayersInBookmark() {
-    const bookmarkFragment$ = this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR)
+    const bookmarkFragment$ = this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR)
       .pipe(take(1));
     this.store$.select(selectLoadStatus)
       .pipe(
@@ -81,7 +81,7 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
   }
 
   public static getExclusiveVisibilityChangesForBookmark(
-    bookmark: string,
+    bookmark: string | null,
     layers: ExtendedAppLayerModel[],
     backgroundLayerIds: string[],
   ): Array<{ id: string; checked: boolean }> | null {

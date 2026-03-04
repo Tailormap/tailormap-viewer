@@ -99,20 +99,20 @@ export class ApplicationBookmarkService implements OnDestroy {
   }
 
   private updateMapOnUrlChanges() {
-    this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
         filter(locationBookmark => locationBookmark !== this.lastLocationBookmark),
       )
       .subscribe(locationBookmark => {
-        const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
+        const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark || '');
         if (bookmark) {
           this.mapService.setCenterAndZoom(bookmark[0], bookmark[1]);
         }
       });
 
-    this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerVisibilityBookmarkFragment>(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
@@ -120,7 +120,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
-        if ((visBookmark || []).length === 0) {
+        if (visBookmark === null) {
           return;
         }
         const visibilityChanges = MapBookmarkHelper.visibilityDataFromFragment(visBookmark, extendedAppLayers, false);
@@ -128,7 +128,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.store$.dispatch(setLayerOpacity({ opacity: visibilityChanges.opacityChanges }));
       });
 
-    this.bookmarkService.registerJsonFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),

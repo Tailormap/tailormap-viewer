@@ -51,7 +51,7 @@ export class ApplicationMapService implements OnDestroy {
             ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
             ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
         }),
-        withLatestFrom(this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)),
+        withLatestFrom(this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)),
       )
       .subscribe(([ mapOptions, locationBookmark ]) => {
         if (mapOptions === null) {
