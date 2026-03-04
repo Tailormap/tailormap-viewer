@@ -8,7 +8,7 @@ import { BookmarkService } from '../bookmark/bookmark.service';
 import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+  ApplicationBookmarkFragments, FilterBookmarkFragment, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -162,7 +162,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.store$.select(selectLoadStatus).pipe(
       takeUntil(this.destroyed),
       filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-      switchMap(() => this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR)),
+      switchMap(() => this.bookmarkService.registerFragment$<FilterBookmarkFragment>(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR)),
       //filter(filterBookmark => !this.deepEqualsFilterBookmark(this.lastFilterBookmark, filterBookmark)),
       withLatestFrom(this.store$.select(selectFilterState)),
     ).subscribe(([ filterBookmark, filterState ]) => {
