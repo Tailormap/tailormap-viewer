@@ -8,8 +8,6 @@ import { FilterTypeHelper } from '../../filter';
 
 export class FilterBookmarkHelper {
   public static fragmentFromFilterState(filterState: FilterState): CompactFilterBookmarkFragment {
-    console.log('Create bookmark from filter state:', filterState);
-
     const bookmarkData: CompactFilterBookmarkFragment = {};
     FilterBookmarkHelper.addAttributeFilterGroupsToBookmark(bookmarkData, filterState);
     FilterBookmarkHelper.addSpatialFilterGroupsToBookmark(bookmarkData, filterState);
@@ -80,66 +78,6 @@ export class FilterBookmarkHelper {
     };
   }
 
-  private static addPresetFilterGroupsToBookmark(bookmarkData: CompactFilterBookmarkFragment, filterState: FilterState) {
-    // Only save changes from the configured (preset) filter in the bookmark
-    const currentPresetFilters = filterState.currentFilterGroups
-      .filter(filterGroup => filterGroup.source === 'PRESET');
-    if (currentPresetFilters.length > 0) {
-      for(const currentPresetFilter of currentPresetFilters) {
-        const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === currentPresetFilter.id && fg.source === 'PRESET');
-        if (!configuredPresetFilter || equal(currentPresetFilter, configuredPresetFilter)) {
-          continue;
-        }
-        const bookmarkFilter: BookmarkFilterGroup<BookmarkPresetFilterModel> = { id: currentPresetFilter.id, f: [] };
-        if (currentPresetFilter.disabled !== configuredPresetFilter.disabled) {
-          bookmarkFilter.d = currentPresetFilter.disabled;
-        }
-        for (const filter of currentPresetFilter.filters) {
-          const configuredFilter = configuredPresetFilter.filters.find(f => f.id === filter.id);
-          if (!configuredFilter || equal(filter, configuredFilter)) {
-            continue;
-          }
-          const bf: BookmarkPresetFilterModel = { id: filter.id };
-          if (filter.disabled !== configuredFilter.disabled) {
-            bf.d = filter.disabled;
-          }
-          if (FilterTypeHelper.isAttributeFilter(filter) && !equal(filter.value, configuredFilter.value)) {
-            bf.v = filter.value;
-          }
-          bookmarkFilter.f.push(bf);
-        }
-
-        if (!bookmarkData.p) { bookmarkData.p = []; }
-        bookmarkData.p.push(bookmarkFilter);
-      }
-    }
-  }
-
-  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg:BookmarkFilterGroup<BookmarkPresetFilterModel>) {
-    const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === bfg.id && fg.source === 'PRESET');
-    if (!configuredPresetFilter) {
-      console.log(`Bookmark: Preset filter group with id ${bfg.id} not found in configured filter groups`);
-      return undefined;
-    }
-    const filters = configuredPresetFilter.filters.map(f => {
-      const bf = bfg.f.find((tbf: any) => tbf.id === f.id);
-      if (bf) {
-        return {
-          ...f,
-          value: bf.v,
-          disabled: bf.d,
-        };
-      } else {
-        return f;
-      }
-    });
-    return {
-      ...configuredPresetFilter,
-      disabled: bfg.d,
-      filters,
-    } as FilterGroupModel<AttributeFilterModel>;
-  }
-
   private static addSpatialFilterGroupsToBookmark(bookmarkData: CompactFilterBookmarkFragment, filterState: FilterState) {
     const spatialFilters = filterState.currentFilterGroups
       .filter(filterGroup => filterGroup.type === FilterTypeEnum.SPATIAL);
@@ -187,5 +125,65 @@ export class FilterBookmarkHelper {
         buffer: f.b,
       })),
     };
+  }
+
+  private static addPresetFilterGroupsToBookmark(bookmarkData: CompactFilterBookmarkFragment, filterState: FilterState) {
+    // Only save changes from the configured (preset) filter in the bookmark
+    const currentPresetFilters = filterState.currentFilterGroups
+      .filter(filterGroup => filterGroup.source === 'PRESET');
+    if (currentPresetFilters.length > 0) {
+      for(const currentPresetFilter of currentPresetFilters) {
+        const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === currentPresetFilter.id && fg.source === 'PRESET');
+        if (!configuredPresetFilter || equal(currentPresetFilter, configuredPresetFilter)) {
+          continue;
+        }
+        const bookmarkFilter: BookmarkFilterGroup<BookmarkPresetFilterModel> = { id: currentPresetFilter.id, f: [] };
+        if (currentPresetFilter.disabled !== configuredPresetFilter.disabled) {
+          bookmarkFilter.d = currentPresetFilter.disabled;
+        }
+        for (const filter of currentPresetFilter.filters) {
+          const configuredFilter = configuredPresetFilter.filters.find(f => f.id === filter.id);
+          if (!configuredFilter || equal(filter, configuredFilter)) {
+            continue;
+          }
+          const bf: BookmarkPresetFilterModel = { id: filter.id };
+          if (filter.disabled !== configuredFilter.disabled) {
+            bf.d = filter.disabled;
+          }
+          if (FilterTypeHelper.isAttributeFilter(filter) && !equal(filter.value, configuredFilter.value)) {
+            bf.v = filter.value;
+          }
+          bookmarkFilter.f.push(bf);
+        }
+
+        if (!bookmarkData.p) { bookmarkData.p = []; }
+        bookmarkData.p.push(bookmarkFilter);
+      }
+    }
+  }
+
+  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg:BookmarkFilterGroup<BookmarkPresetFilterModel>) {
+    const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === bfg.id && fg.source === 'PRESET');
+    if (!configuredPresetFilter) {
+      console.error(`Bookmark: Preset filter group with id ${bfg.id} not found in configured filter groups`);
+      return undefined;
+    }
+    const filters = configuredPresetFilter.filters.map(f => {
+      const bf = bfg.f.find((tbf: any) => tbf.id === f.id);
+      if (bf) {
+        return {
+          ...f,
+          value: bf.v,
+          disabled: bf.d,
+        };
+      } else {
+        return f;
+      }
+    });
+    return {
+      ...configuredPresetFilter,
+      disabled: bfg.d,
+      filters,
+    } as FilterGroupModel<AttributeFilterModel>;
   }
 }

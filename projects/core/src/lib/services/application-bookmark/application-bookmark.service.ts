@@ -167,8 +167,6 @@ export class ApplicationBookmarkService implements OnDestroy {
       filter(filterBookmark => !deepEqual(this.lastFilterBookmark, filterBookmark)),
       withLatestFrom(this.store$.select(selectFilterState)),
     ).subscribe(([ filterBookmark, filterState ]) => {
-        console.log('Apply filter bookmark to filterState', filterBookmark, filterState);
-
         const currentFilterGroupIds = filterState.currentFilterGroups.map(fg => fg.id);
         filterBookmark?.a?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
           const filterGroup = FilterBookmarkHelper.attributeFilterGroupFromBookmark(bfg);
