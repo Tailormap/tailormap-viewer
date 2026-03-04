@@ -1,10 +1,10 @@
 import { MapBookmarkHelper } from './bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { AppLayerWithInitialValuesModel } from '../../map/models';
+import { AppLayerStateModel } from '../../map';
 
 const getAppLayerWithInitialValuesModel =
-  (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number): AppLayerWithInitialValuesModel => {
+  (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number): AppLayerStateModel => {
     const model = getAppLayerModel(partial);
     return {
       ...model,
