@@ -13,6 +13,7 @@ import {
 import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
+import equal from 'fast-deep-equal';
 
 @Injectable({
   providedIn: 'root',
@@ -115,7 +116,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(visBookmark => !this.deepEqualsVisibilityBookmark(this.lastVisibilityBookmark, visBookmark)),
+        filter(visBookmark => !equal(this.lastVisibilityBookmark, visBookmark)),
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
@@ -131,7 +132,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(orderBookmark => !this.deepEqualsOrderBookmark(this.lastOrderingBookmark, orderBookmark)),
+        filter(orderBookmark => !equal(this.lastOrderingBookmark, orderBookmark)),
         withLatestFrom(this.store$.select(selectLayerTreeNodes)),
       )
       .subscribe(([ orderBookmark, layerTreeNodes ]) => {
@@ -182,40 +183,4 @@ export class ApplicationBookmarkService implements OnDestroy {
         filter((fragment): fragment is string => fragment !== undefined),
       );
   }
-
-  private deepEqualsVisibilityBookmark(
-    bookmark1: LayerVisibilityBookmarkFragment | undefined,
-    bookmark2: LayerVisibilityBookmarkFragment | undefined,
-  ): boolean {
-    if (bookmark1 === bookmark2) {
-      return true;
-    }
-    if (!bookmark1 || !bookmark2 || bookmark1.length !== bookmark2.length) {
-      return false;
-    }
-    return bookmark1.every((item1, index) => {
-      const item2 = bookmark2[index];
-      return item1.id === item2.id && item1.v === item2.v && item1.o === item2.o;
-    });
-  }
-
-  private deepEqualsOrderBookmark(
-    bookmark1: LayerTreeOrderBookmarkFragment | undefined,
-    bookmark2: LayerTreeOrderBookmarkFragment | undefined,
-  ): boolean {
-    if (bookmark1 === bookmark2) {
-      return true;
-    }
-    if (!bookmark1 || !bookmark2 || bookmark1.length !== bookmark2.length) {
-      return false;
-    }
-    return bookmark1.every((item1, index) => {
-      const item2 = bookmark2[index];
-      if (item1.id !== item2.id || item1.c.length !== item2.c.length) {
-        return false;
-      }
-      return item1.c.every((child, childIndex) => child === item2.c[childIndex]);
-    });
-  }
-
 }
