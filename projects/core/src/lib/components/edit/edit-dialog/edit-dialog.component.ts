@@ -351,4 +351,5 @@ export class EditDialogComponent {
   public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
     this.deletedAttachmentIds = deletedAttachmentIds;
   }
+
 }

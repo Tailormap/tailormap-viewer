@@ -2,7 +2,7 @@
   @let currentFeature = currentFeature$ | async;
   @let layerDetails = layerDetails$ | async;
   @if (currentFeature && layerDetails) {
-    <div class="edit-form">
+    <div class="edit-form" [class.edit-form--mobile-panel]="inMobilePanel()">
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
         @let editInput = { feature: currentFeature, details: layerDetails.details };
@@ -16,7 +16,7 @@
                                   (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-attachments-form>
       </div>
-      <div class="buttons">
+      <div class="buttons" [class.buttons-fixed-position]="inMobilePanel()">
         @if (isCreateFeature$ | async) {
           <button (click)="add(layerDetails.layer.id, editInput)"
                   [disabled]="addOrSaveDisabled()"

@@ -121,7 +121,6 @@ export class EditComponent implements OnInit, OnDestroy {
     this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(enabled => {
-        console.debug("edittool enabled:", enabled)
         if (!enabled) {
           // Maybe we should check for changes and then ask what the user wants to do?
           this.store$.dispatch(setEditActive({ active: false }));
