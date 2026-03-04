@@ -7,11 +7,13 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
 import { MapBookmarkHelper } from './bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApplicationBookmarkFragments } from './application-bookmark-fragments';
-import { LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment } from './bookmark_pb';
+import {
+  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+} from './application-bookmark-fragments';
 import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
+import { deepEqual } from 'fast-equals';
 
 @Injectable({
   providedIn: 'root',
@@ -97,28 +99,28 @@ export class ApplicationBookmarkService implements OnDestroy {
   }
 
   private updateMapOnUrlChanges() {
-    this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
         filter(locationBookmark => locationBookmark !== this.lastLocationBookmark),
       )
       .subscribe(locationBookmark => {
-        const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
+        const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark || '');
         if (bookmark) {
           this.mapService.setCenterAndZoom(bookmark[0], bookmark[1]);
         }
       });
 
-    this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerVisibilityBookmarkFragment>(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(visBookmark => !this.lastVisibilityBookmark?.equals(visBookmark)),
+        filter(visBookmark => !deepEqual(this.lastVisibilityBookmark, visBookmark)),
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
-        if (visBookmark.layers.length === 0) {
+        if (visBookmark === null) {
           return;
         }
         const visibilityChanges = MapBookmarkHelper.visibilityDataFromFragment(visBookmark, extendedAppLayers, false);
@@ -126,11 +128,11 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.store$.dispatch(setLayerOpacity({ opacity: visibilityChanges.opacityChanges }));
       });
 
-    this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(orderBookmark => !this.lastOrderingBookmark?.equals(orderBookmark)),
+        filter(orderBookmark => !deepEqual(this.lastOrderingBookmark, orderBookmark)),
         withLatestFrom(this.store$.select(selectLayerTreeNodes)),
       )
       .subscribe(([ orderBookmark, layerTreeNodes ]) => {
@@ -181,5 +183,4 @@ export class ApplicationBookmarkService implements OnDestroy {
         filter((fragment): fragment is string => fragment !== undefined),
       );
   }
-
 }
