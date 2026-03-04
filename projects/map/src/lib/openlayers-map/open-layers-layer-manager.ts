@@ -137,9 +137,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
-          this.updateFilterIfChanged(layer, existingLayer);
-          this.updateLayerStyleIfChanged(layer, existingLayer);
-          this.updateLayerNameIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -192,46 +189,30 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (currentOpacity !== layerOpacity) {
       olLayer.setOpacity(layerOpacity);
     }
-  }
-
-  private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    // For now, GeoServer & WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
+    // For now, updating layer properties works for WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer) || !isOpenLayersWMSLayer(olLayer)) {
       return;
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'CQL_FILTER', 'filter', 'filter');
-  }
-
-  private updateLayerNameIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    // For now WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
-      return;
+    const checkPropChanges: Array<{ paramName: keyof WmsServiceParamsModel; layerPropName: keyof LayerProperties; layerKey: keyof WMSLayerModel }> = [
+      { paramName: 'LAYERS', layerPropName: 'name', layerKey: 'name' },
+      { paramName: 'STYLES', layerPropName: 'style', layerKey: 'selectedStyleName' },
+    ];
+    if (layer.serverType === ServerType.GEOSERVER) {
+      // CQL filter is only supported by GeoServer, so only check for changes if the server type is GeoServer
+      checkPropChanges.push({ paramName: 'CQL_FILTER', layerPropName: 'filter', layerKey: 'filter' });
     }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'LAYERS', 'name', 'name');
-  }
-
-  private updateLayerStyleIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    if (!LayerTypesHelper.isWmsLayer(layer)) {
-      return;
-    }
-    this.updateWmsLayerPropIfChanged(layer, olLayer, 'STYLES', 'style', 'selectedStyleName');
-  }
-
-  private updateWmsLayerPropIfChanged(
-    layer: WMSLayerModel,
-    olLayer: BaseLayer,
-    paramName: keyof WmsServiceParamsModel,
-    layerPropName: keyof LayerProperties,
-    layerKey: keyof WMSLayerModel,
-  ) {
     const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps[layerPropName] === layer[layerKey]) {
+    const changedParams: Partial<Record<keyof WmsServiceParamsModel, any>> = {};
+    checkPropChanges
+      .filter(({ layerPropName, layerKey }) => existingProps[layerPropName] !== layer[layerKey])
+      .forEach(({ paramName, layerKey }) => {
+        changedParams[paramName] = layer[layerKey] ?? '';
+      });
+    if (Object.keys(changedParams).length === 0) {
       return;
     }
+    olLayer.getSource()?.updateParams(changedParams);
     OlLayerHelper.setLayerProps(layer, olLayer);
-    if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ [paramName]: layer[layerKey] ?? '' });
-    }
   }
 
   public removeLayer(id: string) {
