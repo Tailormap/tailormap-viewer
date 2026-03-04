@@ -75,7 +75,6 @@
     "@angular/cli": "^20.3.16",
     "@angular/compiler-cli": "^20.3.16",
     "@angular/localize": "^20.3.16",
-    "@bufbuild/buf": "^1.49.0",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.17",
     "@tailormap-viewer/tools": "^0.0.25",
