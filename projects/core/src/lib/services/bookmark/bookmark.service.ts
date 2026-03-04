@@ -6,7 +6,7 @@ import {
 } from './bookmark.models';
 import { UrlHelper } from '@tailormap-viewer/shared';
 import { deflate, inflate } from '@stardazed/zlib';
-import equal from 'fast-deep-equal';
+import { deepEqual } from 'fast-equals';
 
 type BookmarkFragmentValueObservable = BehaviorSubject<any>;
 
@@ -139,7 +139,7 @@ export class BookmarkService {
 
       // JSON fragment
       if (isBookmarkJsonFragmentDescriptor(descriptor)) {
-        if (!equal(currentValue$.value, valueFromBookmark)) {
+        if (!deepEqual(currentValue$.value, valueFromBookmark)) {
           currentValue$.next(valueFromBookmark);
         }
       } else if (currentValue$.value !== valueFromBookmark) { // String fragment

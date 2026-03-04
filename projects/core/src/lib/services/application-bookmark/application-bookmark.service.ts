@@ -13,7 +13,7 @@ import {
 import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
-import equal from 'fast-deep-equal';
+import { deepEqual } from 'fast-equals';
 
 @Injectable({
   providedIn: 'root',
@@ -116,7 +116,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(visBookmark => !equal(this.lastVisibilityBookmark, visBookmark)),
+        filter(visBookmark => !deepEqual(this.lastVisibilityBookmark, visBookmark)),
         withLatestFrom(this.store$.select(selectLayers)),
       )
       .subscribe(([ visBookmark, extendedAppLayers ]) => {
@@ -132,7 +132,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(orderBookmark => !equal(this.lastOrderingBookmark, orderBookmark)),
+        filter(orderBookmark => !deepEqual(this.lastOrderingBookmark, orderBookmark)),
         withLatestFrom(this.store$.select(selectLayerTreeNodes)),
       )
       .subscribe(([ orderBookmark, layerTreeNodes ]) => {
