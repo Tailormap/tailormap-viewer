@@ -237,7 +237,6 @@ export class BookmarkService {
       outputs.push(BookmarkService.FRAGMENT_SEPARATOR, compressedJsonBase64Fragments);
     } else if (Object.keys(jsonFragments).length > 0) {
       const json = JSON.stringify(jsonFragments);
-      console.log('Compressing JSON bookmark fragments', json);
       const encoded = new TextEncoder().encode(json);
       const compressed = deflate(encoded, { format: 'deflate', level: 9 });
       const base64 = UrlHelper.bytesToUrlBase64(compressed);
