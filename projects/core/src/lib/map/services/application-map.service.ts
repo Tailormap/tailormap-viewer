@@ -6,7 +6,7 @@ import {
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
-  combineLatest, concatMap, debounceTime, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take,
+  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take,
   takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -119,7 +119,6 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectOrderedVisibleLayersWithServices),
       this.store$.select(selectCQLFilters),
     ]).pipe(
-      debounceTime(0),
       map(([ layers, filters ]) => {
         return layers.map(l => ({
           ...l,

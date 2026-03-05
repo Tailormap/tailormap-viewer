@@ -38,7 +38,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
-  public hasFiltersForMultipleFeatureTypes$: Observable<boolean> = of(false);
+  public hasFiltersForOtherFeatureTypes$: Observable<boolean> = of(false);
 
   constructor() {
     effect(() => {
@@ -69,13 +69,16 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
           return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
         }),
       );
-    this.hasFiltersForMultipleFeatureTypes$ = this.store$.select(selectSelectedTab)
+    this.hasFiltersForOtherFeatureTypes$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
       .pipe(
-        switchMap(tab => {
+        switchMap(([ tab, data ]) => {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFiltersForMultipleFeatureTypes$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+          return this.simpleAttributeFilterService.hasFiltersForOtherFeatureTypes$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
         }),
       );
   }
