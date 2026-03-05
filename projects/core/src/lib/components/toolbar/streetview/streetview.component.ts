@@ -85,7 +85,9 @@ export class StreetviewComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.mapService.disableTool(this.tool);
+    if (this.toolActive()) {
+      this.mapService.disableTool(this.tool);
+    }
   }
 
   public toggle() {

@@ -5,7 +5,7 @@ import {
   selectSelectedEditLayer,
 } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, of, take } from 'rxjs';
+import { combineLatest, first, map, of, take } from 'rxjs';
 import {
   setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
   setSelectedEditLayer,
@@ -75,10 +75,7 @@ export class EditComponent implements OnInit, OnDestroy {
         this.store$.dispatch(setSelectedEditLayer({ layer: layerDetails ? layerDetails.layer.id : null }));
         this.editGeometryType = layerDetails ? layerDetails.details.geometryType : null;
       });
-    if (this.inMobilePanel()) {
-      this.store$.dispatch(hideFeatureInfoDialog());
-      this.store$.dispatch(setEditActive({ active: true }));
-    }
+
     combineLatest([
       this.active$,
       this.editableLayers$,
@@ -126,6 +123,17 @@ export class EditComponent implements OnInit, OnDestroy {
           this.store$.dispatch(setEditActive({ active: false }));
         }
       });
+
+    if (this.inMobilePanel()) {
+      this.store$.dispatch(hideFeatureInfoDialog());
+      this.store$.dispatch(setEditActive({ active: true }));
+      this.mapService.setSwitchedTool(true);
+      this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
+        .pipe(first((enabled) => enabled))
+        .subscribe(() => {
+          this.mapService.setSwitchedTool(false);
+        });
+    }
   }
 
   public ngOnDestroy(): void {
@@ -161,6 +169,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public toggle(close?: boolean) {
     if (close) {
+      console.debug("toggle edit active with close");
       this.store$.dispatch(setEditActive({ active: false }));
       return;
     }
@@ -168,6 +177,7 @@ export class EditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(active => {
         const editActive = !active; // toggle
+        console.debug("toggle edit active: ", editActive);
         this.store$.dispatch(setEditActive({ active: editActive }));
         if (editActive) {
           this.store$.dispatch(hideFeatureInfoDialog());
