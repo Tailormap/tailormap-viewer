@@ -150,8 +150,13 @@ export class FilterBookmarkHelper {
           if (filter.disabled !== configuredFilter.disabled) {
             bf.d = filter.disabled;
           }
-          if (FilterTypeHelper.isAttributeFilter(filter) && !equal(filter.value, configuredFilter.value)) {
-            bf.v = filter.value;
+          if (FilterTypeHelper.isAttributeFilter(filter)) {
+            if (filter.condition !== configuredFilter.condition) {
+              bf.c = filter.condition;
+            }
+            if (!equal(filter.value, configuredFilter.value)) {
+              bf.v = filter.value;
+            }
           }
           bookmarkFilter.f.push(bf);
         }
@@ -173,7 +178,8 @@ export class FilterBookmarkHelper {
       if (bf) {
         return {
           ...f,
-          value: bf.v,
+          value: bf.v !== undefined ? bf.v : f.value,
+          condition: bf.c !== undefined ? bf.c : f.condition,
           disabled: bf.d,
         };
       } else {

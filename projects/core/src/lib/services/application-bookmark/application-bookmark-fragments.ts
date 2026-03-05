@@ -89,6 +89,7 @@ export type BookmarkSpatialFilterModel = {
 
 export type BookmarkPresetFilterModel = {
   id: string;
+  c?: FilterConditionEnum; // condition (changed by SwitchFilterComponent)
   d?: boolean; // disabled
   v?: string[]; // value
 };
