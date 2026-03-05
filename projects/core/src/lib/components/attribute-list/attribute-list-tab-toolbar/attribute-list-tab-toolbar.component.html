@@ -4,7 +4,7 @@
     @if (hasFilters$ | async) {
       <button mat-flat-button color="primary" (click)="clearFilter()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
     }
-    @if (hasFiltersForMultipleFeatureTypes$ | async) {
+    @if (hasFiltersForOtherFeatureTypes$ | async) {
       <button mat-flat-button color="primary" (click)="clearAllFilters()" i18n="@@core.attribute-list.clear-all-filters">Clear all filters</button>
     }
     <ng-template #attributeListFeaturesContainer></ng-template>
