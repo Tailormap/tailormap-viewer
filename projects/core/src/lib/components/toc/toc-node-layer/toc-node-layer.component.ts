@@ -91,7 +91,8 @@ export class TocNodeLayerComponent {
     this.zoomToScale.emit(zoomToScale);
   }
 
-  public editLayerClicked(node: TreeModel<AppLayerModel>) {
+  public editLayerClicked($event: MouseEvent, node: TreeModel<AppLayerModel>) {
+    $event.stopPropagation();
     this.editLayer.emit(node.id);
   }
 
@@ -103,7 +104,8 @@ export class TocNodeLayerComponent {
     this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
   }
 
-  public emitShowInfo() {
+  public emitShowInfo($event: MouseEvent) {
+    $event.stopPropagation();
     if (this.node) {
       this.showInfo.emit(this.node);
     }
