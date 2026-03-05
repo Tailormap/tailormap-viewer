@@ -17,6 +17,7 @@
     }
     @if (isLayerHiddenIn2d()) {
       <mat-icon class="icon"
+                (click)="$event.stopPropagation()"
                 svgIcon="tools_3d"
                 tmTooltip="Switch to 3D to see this layer"
                 i18n-tmTooltip="@@core.toc.3d-layer"
@@ -25,6 +26,7 @@
     }
     @if (isLayerFiltered()) {
       <mat-icon class="icon"
+                (click)="$event.stopPropagation()"
                 svgIcon="components_filter"
                 tmTooltip="A filter is applied to this layer"
                 i18n-tmTooltip=":@@core.toc.filtered-layer"
@@ -33,7 +35,7 @@
     }
     @if (isInScale() && isLayerEditable() && node.checked && !in3D) {
       <mat-icon class="icon"
-                (click)="editLayerClicked(node)"
+                (click)="editLayerClicked($event, node)"
                 svgIcon="edit"
                 tmTooltip="Edit layer"
                 i18n-tmTooltip=":@@core.toc.edit-layer"
@@ -42,7 +44,7 @@
     }
     @if (showInfoIcon && !isLevel()) {
       <mat-icon class="icon"
-                (click)="emitShowInfo()"
+                (click)="emitShowInfo($event)"
                 svgIcon="components_info_menu_button">
       </mat-icon>
     }
@@ -50,7 +52,7 @@
   </div>
 
   @if (hasStylesToShow()) {
-    <div class="styles-list-container">
+    <div class="styles-list-container" (click)="$event.stopPropagation()">
       <mat-radio-group
         (change)="styleChanged($event.value)"
         class="styles-list"
