@@ -93,7 +93,7 @@ describe('MapReducer', () => {
         getLayerTreeNode({ id: 'layer-4', appLayerId: '4', name: 'TEST4', root: false }),
       ],
     };
-    const action = MapActions.toggleAllLayersVisibility();
+    const action = MapActions.toggleAllLayersVisibility({});
     const updatedState = mapReducer(initialState, action);
     expect(updatedState.layers.find(l => l.id === '1')?.visible).toEqual(false);
     expect(updatedState.layers.find(l => l.id === '2')?.visible).toEqual(false);
@@ -105,6 +105,42 @@ describe('MapReducer', () => {
     expect(updatedState2.layers.find(l => l.id === '2')?.visible).toEqual(true);
     expect(updatedState2.layers.find(l => l.id === '3')?.visible).toEqual(true);
     expect(updatedState2.layers.find(l => l.id === '4')?.visible).toEqual(true);
+  });
+
+  test('handles MapActions.toggleAllLayersVisibility with filterTerm', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layers: [
+        getAppLayerModel({ id: '1', title: 'TEST1', visible: false }),
+        getAppLayerModel({ id: '2', title: 'TEST2', visible: true }),
+        getAppLayerModel({ id: '3', title: 'TEST3', visible: true }),
+        getAppLayerModel({ id: '4', title: 'TEST4', visible: true }),
+      ],
+      layerTreeNodes: [
+        getLayerTreeNode({ root: true, childrenIds: [ 'level-1', 'level-2' ] }),
+        getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['layer-1'] }),
+        getLayerTreeNode({ id: 'layer-1', appLayerId: '1', name: 'TEST', root: false }),
+        getLayerTreeNode({ id: 'level-2', root: false, childrenIds: [ 'layer-2', 'layer-3' ] }),
+        getLayerTreeNode({ id: 'layer-2', appLayerId: '2', name: 'TEST2', root: false }),
+        getLayerTreeNode({ id: 'layer-3', appLayerId: '3', name: 'TEST3', root: false }),
+      ],
+      baseLayerTreeNodes: [
+        getLayerTreeNode({ root: true, childrenIds: ['layer-4'] }),
+        getLayerTreeNode({ id: 'layer-4', appLayerId: '4', name: 'TEST4', root: false }),
+      ],
+    };
+    const action = MapActions.toggleAllLayersVisibility({ filterTerm: 'TEST3' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers.find(l => l.id === '1')?.visible).toEqual(false); // not changed
+    expect(updatedState.layers.find(l => l.id === '2')?.visible).toEqual(true); // not changed
+    expect(updatedState.layers.find(l => l.id === '3')?.visible).toEqual(false); // matches filter, should be toggled
+    expect(updatedState.layers.find(l => l.id === '4')?.visible).toEqual(true); // not changed
+
+    const updatedState2 = mapReducer(updatedState, action);
+    expect(updatedState2.layers.find(l => l.id === '1')?.visible).toEqual(false); // not changed
+    expect(updatedState2.layers.find(l => l.id === '2')?.visible).toEqual(true); // not changed
+    expect(updatedState2.layers.find(l => l.id === '3')?.visible).toEqual(true); // matches filter, should be toggled
+    expect(updatedState2.layers.find(l => l.id === '4')?.visible).toEqual(true); // not changed
   });
 
   test('handles MapActions.toggleLevelExpansion', () => {
