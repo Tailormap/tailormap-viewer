@@ -21,7 +21,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
  * Support for multiple layers per service with comma in layer list: layers:only=service_title/layername,layer2
  *
  * Future idea:
- * Replace the current protobuf layer visibility changes url into something readable by combining these functions
+ * Replace the current json layer visibility changes url into something readable by combining these functions
  * For example
  * layers:only=service_title/layername;c=service_title/layername:0|1@50...
  */
@@ -47,7 +47,7 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
   }
 
   private handleExclusiveLayersInBookmark() {
-    const bookmarkFragment$ = this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR)
+    const bookmarkFragment$ = this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.READABLE_VISIBILITY_BOOKMARK_DESCRIPTOR)
       .pipe(take(1));
     this.store$.select(selectLoadStatus)
       .pipe(
@@ -81,7 +81,7 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
   }
 
   public static getExclusiveVisibilityChangesForBookmark(
-    bookmark: string,
+    bookmark: string | null,
     layers: ExtendedAppLayerModel[],
     backgroundLayerIds: string[],
   ): Array<{ id: string; checked: boolean }> | null {
