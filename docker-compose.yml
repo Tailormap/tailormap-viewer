@@ -79,7 +79,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:9.10.1
+    image: ghcr.io/tailormap/solr:10.0.0
     profiles:
       - solr
     environment:
@@ -90,7 +90,7 @@ services:
       # default is 512m
       # SOLR_HEAP: 512m
       SOLR_OPTS: '${SOLR_OPTS:-} -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
-      SOLR_DELETE_UNKNOWN_CORES: true
+      SOLR_CLOUD_STARTUP_DELETE_UNKNOWN_CORES_ENABLED: true
       SOLR_MODE: user-managed
     mem_swappiness: 0
     volumes:
@@ -115,7 +115,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}-solr-status
     depends_on:
       - solr
-    image: ghcr.io/tailormap/solr:9.10.1
+    image: ghcr.io/tailormap/solr:10.0.0
     profiles:
       - solr
     environment:
