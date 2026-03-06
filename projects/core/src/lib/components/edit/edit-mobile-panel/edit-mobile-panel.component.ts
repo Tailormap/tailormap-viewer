@@ -4,6 +4,9 @@ import { AuthenticatedUserService, BaseComponentTypeEnum } from '@tailormap-view
 import { ComponentRegistrationService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { selectEditDialogVisible } from '../state/edit.selectors';
 
 @Component({
   selector: 'tm-edit-mobile-panel',
@@ -13,6 +16,7 @@ import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.co
   standalone: false,
 })
 export class EditMobilePanelComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private componentRegistrationService = inject(ComponentRegistrationService);
@@ -34,11 +38,19 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
       });
 
     // Toggle the Edit map tool when the Edit menu button is clicked in the mobile layout.
-    this.visible$.subscribe(visibleInMobileLayout => {
-      if (visibleInMobileLayout) {
-        this.menubarService.setMobilePanelHeight(450);
-      }
-    });
+    combineLatest([
+      this.visible$,
+      this.store$.select(selectEditDialogVisible),
+    ]).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([ visibleInMobileLayout, editDialogVisible ]) => {
+        if (visibleInMobileLayout) {
+          if (editDialogVisible) {
+            this.menubarService.setMobilePanelHeight(450);
+          } else {
+            this.menubarService.setMobilePanelHeight(130);
+          }
+        }
+      });
 
   }
 
