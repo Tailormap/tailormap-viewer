@@ -169,7 +169,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public toggle(close?: boolean) {
     if (close) {
-      console.debug("toggle edit active with close");
       this.store$.dispatch(setEditActive({ active: false }));
       return;
     }
@@ -177,7 +176,6 @@ export class EditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(active => {
         const editActive = !active; // toggle
-        console.debug("toggle edit active: ", editActive);
         this.store$.dispatch(setEditActive({ active: editActive }));
         if (editActive) {
           this.store$.dispatch(hideFeatureInfoDialog());
