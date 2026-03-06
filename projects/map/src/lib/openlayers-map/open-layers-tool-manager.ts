@@ -172,11 +172,14 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (!toolId) {
       return this;
     }
+    const toolWasActive = this.tools.get(toolId)?.tool.isActive;
     this.tools.get(toolId)?.tool.destroy();
     this.tools.delete(toolId);
     this.autoEnabledTools.delete(toolId);
     this.alwaysEnabledTools.delete(toolId);
-    this.enableAutoEnabledTools();
+    if (toolWasActive) {
+      this.enableAutoEnabledTools();
+    }
     return this;
   }
 
@@ -197,5 +200,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
       return;
     }
     this.autoEnabledTools.forEach(tool => this.enableTool(tool));
+  }
+
+  public setSwitchedTool(switched: boolean) {
+    this.switchedTool = switched;
   }
 }

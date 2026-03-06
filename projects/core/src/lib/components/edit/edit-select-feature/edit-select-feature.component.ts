@@ -23,6 +23,9 @@ export class EditSelectFeatureComponent implements OnInit {
   @Input()
   public features: FeatureInfoFeatureModel[] = [];
 
+  @Input()
+  public inMobilePanel: boolean = false;
+
   private highlightedFeatureGeometrySubject = new BehaviorSubject<string | null>(null);
   private highlightedFeatureGeometry$ = this.highlightedFeatureGeometrySubject.asObservable();
 
