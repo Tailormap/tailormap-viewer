@@ -1,5 +1,8 @@
 import { BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor } from '../bookmark/bookmark.models';
 import { BookmarkService } from '../bookmark/bookmark.service';
+import {
+  AttributeType, FilterConditionEnum,
+} from '@tailormap-viewer/api';
 
 export class ApplicationBookmarkFragments {
 
@@ -13,6 +16,10 @@ export class ApplicationBookmarkFragments {
 
   public static ORDERING_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'toc',
+  );
+
+  public static FILTER_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
+    'f',
   );
 
   public static EMBED_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
@@ -43,3 +50,46 @@ export interface BookmarkNodeChildrenOrder {
   id: string; // app layer id
   c: string[]; // children ids in (changed) order
 }
+
+export type CompactFilterBookmarkFragment = {
+  a?: BookmarkFilterGroup<BookmarkAttributeFilterModel>[]; // attribute layer filters
+  s?: BookmarkFilterGroup<BookmarkSpatialFilterModel>[]; // spatial filters
+  p?: BookmarkFilterGroup<BookmarkPresetFilterModel>[]; // preset filters
+};
+
+export type BookmarkFilterGroup<T> = {
+  id: string;
+  l?: string[]; // layerIds
+  d?: boolean; // disabled
+  pG?: string; // parentGroup
+  f: Array<T>;
+};
+
+export type BookmarkAttributeFilterModel = {
+  id: string;
+  d?: boolean; // disabled
+  a: string; // attribute
+  aT: AttributeType; // attributeType (could be numeric enum)
+  c: FilterConditionEnum; // condition (could be 1 char or numeric enum)
+  iC?: boolean; // invertCondition
+  cS?: boolean; // caseSensitive
+  v: string[]; // value
+  aA?: string; // attributeAlias
+  fT?: string;
+};
+
+export type BookmarkSpatialFilterModel = {
+  id: string;
+  d?: boolean; // disabled
+  gC /* geometryColums */ : Array<{ l /* layerId */: string; c /* column*/: string[] }>;
+  g /* geometries */: Array<{ id: string; g /* geometry */: string; l? /* referenceLayerId*/: string }>;
+  l?: string; // baseLayerId
+  b?: number; // buffer
+};
+
+export type BookmarkPresetFilterModel = {
+  id: string;
+  c?: FilterConditionEnum; // condition (changed by SwitchFilterComponent)
+  d?: boolean; // disabled
+  v?: string[]; // value
+};

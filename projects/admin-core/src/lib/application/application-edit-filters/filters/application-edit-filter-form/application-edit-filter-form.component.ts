@@ -131,7 +131,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         const editFilterConfiguration = value.editFilterConfiguration
           ? { ...value.editFilterConfiguration, condition: undefined } : undefined;
         const attributeFilter: AttributeFilterModel = {
-          id: value.id ?? nanoid(),
+          id: value.id ?? nanoid(6),
           attribute: value.attribute ?? '',
           attributeType: value.attributeType ?? AttributeType.STRING,
           condition: value.condition ?? FilterConditionEnum.NULL_KEY,
