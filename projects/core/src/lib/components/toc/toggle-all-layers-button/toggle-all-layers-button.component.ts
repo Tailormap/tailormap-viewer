@@ -3,6 +3,8 @@ import { selectSomeLayersVisible } from '../../../map/state/map.selectors';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
+import { selectFilterTerm } from '../state/toc.selectors';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-toggle-all-layers-button',
@@ -13,8 +15,6 @@ import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
 })
 export class ToggleAllLayersButtonComponent implements OnInit {
   private store$ = inject(Store);
-
-
   public someLayersVisible$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {
@@ -22,7 +22,11 @@ export class ToggleAllLayersButtonComponent implements OnInit {
   }
 
   public toggleAll() {
-    this.store$.dispatch(toggleAllLayersVisibility());
+    this.store$.select(selectFilterTerm)
+      .pipe(take(1))
+      .subscribe(filterTerm => {
+        this.store$.dispatch(toggleAllLayersVisibility({ filterTerm }));
+      });
   }
 
 }

@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
 
@@ -51,15 +51,27 @@ const onSetLayerVisibility = (state: MapState, payload: ReturnType<typeof MapAct
   }),
 });
 
-const onToggleAllLayersVisibility = (state: MapState): MapState => {
+const onToggleAllLayersVisibility = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.toggleAllLayersVisibility>,
+): MapState => {
   // Maybe we should specify which layers are foreground/background layers in the state when fetched from the API
-  const foregroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
-  const foregroundLayers = state.layers.filter(l => foregroundLayerIds.has(l.id));
+  const allForegroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
+  const filterTerms = payload.filterTerm
+    ? FilterHelper.createFilterTerms(payload.filterTerm)
+    : null;
+  const foregroundLayers = state.layers.filter(l => {
+    if (!allForegroundLayerIds.has(l.id)) {
+      return false;
+    }
+    return filterTerms === null || FilterHelper.matchesFilterTerm(filterTerms, l.title);
+  });
   const someVisible = foregroundLayers.some(l => l.visible);
+  const filteredLayerIds = new Set(foregroundLayers.map(l => l.id));
   return {
     ...state,
     layers: state.layers.map(layer => {
-      if (foregroundLayerIds.has(layer.id)) {
+      if (filteredLayerIds.has(layer.id)) {
         return {
           ...layer,
           visible: !someVisible,

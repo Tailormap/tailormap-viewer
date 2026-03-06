@@ -23,6 +23,7 @@ export const setLayerVisibility = createAction(
 );
 export const toggleAllLayersVisibility = createAction(
   `${mapActionsPrefix} Toggle All Layers Visibility`,
+  props<{ filterTerm?: string }>(),
 );
 export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
