@@ -37,7 +37,7 @@
                 color="primary"
                 [tmTooltip]="toggleExpandAllTooltip$ | async"
                 (click)="toggleExpandAll()">
-          <mat-icon [svgIcon]="(allNodesExpanded$ | async) ? 'collapse_all' : 'expand_all'"></mat-icon>
+          <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
         </button>
 
       </div>

@@ -40,8 +40,8 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }>({ tree: [], nodes:  [] });
 
   private readonly dataSource$ = this.dataSource.asObservable().pipe(map(source => source.tree));
-  public readonly allLevelNodesExpanded$ = this.dataSource.asObservable().pipe(
-    map(datasource => datasource.nodes.every(node => !node.expandable || node.expanded)),
+  public readonly allLevelNodesCollapsed$ = this.dataSource.asObservable().pipe(
+    map(datasource => datasource.nodes.every(node => !node.expandable || !node.expanded)),
   );
 
   public constructor() {

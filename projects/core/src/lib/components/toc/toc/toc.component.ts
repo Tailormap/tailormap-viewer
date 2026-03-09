@@ -57,9 +57,9 @@ export class TocComponent implements OnInit, OnDestroy {
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
   public dragDropEnabled = !this.isMobileDevice;
-  public allNodesExpanded$ = this.treeService.allLevelNodesExpanded$;
-  public toggleExpandAllTooltip$ = this.allNodesExpanded$.pipe(
-    map(expanded => expanded ? $localize `:@@core.toc.collapse-all:Collapse all` : $localize `:@@core.toc.expand-all:Expand all`),
+  public allLevelNodesCollapsed$ = this.treeService.allLevelNodesCollapsed$;
+  public toggleExpandAllTooltip$ = this.allLevelNodesCollapsed$.pipe(
+    map(collapsed => collapsed ? $localize `:@@core.toc.expand-all:Expand all` : $localize `:@@core.toc.collapse-all:Collapse all`),
   );
 
   public in3D: Signal<boolean> = signal(false);
@@ -198,11 +198,11 @@ export class TocComponent implements OnInit, OnDestroy {
   }
 
   public toggleExpandAll() {
-    this.allNodesExpanded$.pipe(take(1)).subscribe(expanded => {
-      if (expanded) {
-        this.treeService.collapseAllLevelNodes();
-      } else {
+    this.allLevelNodesCollapsed$.pipe(take(1)).subscribe(collapsed => {
+      if (collapsed) {
         this.treeService.expandAllLevelNodes();
+      } else {
+        this.treeService.collapseAllLevelNodes();
       }
     });
   }
