@@ -1199,6 +1199,10 @@
         <source>Filter by layer name...</source>
         <target>Nach Ebenennamen filtern...</target>
       </trans-unit>
+      <trans-unit id="core.toc.filter-layers" datatype="html">
+        <source>Filter layers</source>
+        <target>Ebenen filtern</target>
+      </trans-unit>
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
         <target>Auf diese Ebene wird ein Filter angewendet</target>
