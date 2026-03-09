@@ -479,6 +479,9 @@
       <trans-unit id="admin-core.application.terrain" datatype="html">
         <source>Terrain</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.terrain-lagen" datatype="html">
+        <source>The catalog above shows only terrain layers</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
       </trans-unit>
