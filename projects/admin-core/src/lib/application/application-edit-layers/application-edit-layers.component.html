@@ -10,12 +10,11 @@
           [applicationStateTree]="applicationStateTree"
         (addLayer)="addLayer($event)"></tm-admin-application-catalog-tree>
       </div>
-      @if (applicationStateTree !== 'terrainLayer') {
-        <div class="tree-hint"
-             i18n="@@admin-core.application.filtered-layers">The catalog above shows only layers matching the application projection ({{draftApplicationCrs$ | async}})</div>
-      }
       @if (applicationStateTree === 'terrainLayer') {
         <div class="tree-hint" i18n="@@admin-core.application.terrain-lagen">The catalog above shows only terrain layers</div>
+      } @else {
+        <div class="tree-hint"
+             i18n="@@admin-core.application.filtered-layers">The catalog above shows only layers matching the application projection ({{draftApplicationCrs$ | async}})</div>
       }
     </div>
     <button mat-icon-button (click)="toggleCatalogTree()" class="toggle-tree-icon">
