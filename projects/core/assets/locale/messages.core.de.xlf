@@ -1174,6 +1174,10 @@
         <source>Close details</source>
         <target>Details schließen</target>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all</source>
+        <target>Alles einklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -1187,13 +1191,13 @@
         <target>Ebene bearbeiten</target>
         <note priority="1" from="description">:</note>
       </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all</source>
+        <target>Alles ausklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
         <target>Nach Ebenennamen filtern...</target>
-      </trans-unit>
-      <trans-unit id="core.toc.filter-layers" datatype="html">
-        <source>Filter layers</source>
-        <target>Ebenen filtern</target>
       </trans-unit>
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>

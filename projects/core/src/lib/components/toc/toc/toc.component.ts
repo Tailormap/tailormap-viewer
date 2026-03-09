@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
-import { filter, Observable, of, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeService,
 } from '@tailormap-viewer/shared';
@@ -57,6 +57,10 @@ export class TocComponent implements OnInit, OnDestroy {
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
   public dragDropEnabled = !this.isMobileDevice;
+  public allNodesExpanded$ = this.treeService.allLevelNodesExpanded$;
+  public toggleExpandAllTooltip$ = this.allNodesExpanded$.pipe(
+    map(expanded => expanded ? $localize `:@@core.toc.collapse-all:Collapse all` : $localize `:@@core.toc.expand-all:Expand all`),
+  );
 
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
@@ -191,5 +195,15 @@ export class TocComponent implements OnInit, OnDestroy {
 
   protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
     this.store$.dispatch(setLayerStyle({ layerId, selectedStyleName: selectedStyle.name }));
+  }
+
+  public toggleExpandAll() {
+    this.allNodesExpanded$.pipe(take(1)).subscribe(expanded => {
+      if (expanded) {
+        this.treeService.collapseAllLevelNodes();
+      } else {
+        this.treeService.expandAllLevelNodes();
+      }
+    });
   }
 }

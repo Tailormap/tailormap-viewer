@@ -40,6 +40,9 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }>({ tree: [], nodes:  [] });
 
   private readonly dataSource$ = this.dataSource.asObservable().pipe(map(source => source.tree));
+  public readonly allLevelNodesExpanded$ = this.dataSource.asObservable().pipe(
+    map(datasource => datasource.nodes.every(node => !node.expandable || node.expanded)),
+  );
 
   public constructor() {
   }
@@ -257,6 +260,18 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   public getRootNodeId(): string | null {
     return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
+  }
+
+  public expandAllLevelNodes() {
+    this.dataSource.value.nodes
+      .filter(node => node.expandable && !node.expanded)
+      .forEach(node => this.nodeExpansionChangedSource.next({ expanded: true, node }));
+  }
+
+  public collapseAllLevelNodes() {
+    this.dataSource.value.nodes
+      .filter(node => node.expandable && node.expanded)
+      .forEach(node => this.nodeExpansionChangedSource.next({ expanded: false, node }));
   }
 
 }

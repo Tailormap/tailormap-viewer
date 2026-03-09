@@ -881,6 +881,9 @@
       <trans-unit id="core.toc.close-details" datatype="html">
         <source>Close details</source>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all</source>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
       </trans-unit>
@@ -891,11 +894,11 @@
         <source>Edit layer</source>
         <note priority="1" from="description">:</note>
       </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all</source>
+      </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
-      </trans-unit>
-      <trans-unit id="core.toc.filter-layers" datatype="html">
-        <source>Filter layers</source>
       </trans-unit>
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
