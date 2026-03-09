@@ -638,6 +638,10 @@
         <source>Terrain</source>
         <target>Gelände</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.terrain-lagen" datatype="html">
+        <source>The catalog above shows only terrain layers</source>
+        <target>Der obige Katalog enthält nur Geländeebene</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
         <target>Geländeebene</target>
