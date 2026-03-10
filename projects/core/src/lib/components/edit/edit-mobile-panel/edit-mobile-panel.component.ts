@@ -37,7 +37,6 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
         }
       });
 
-    // Toggle the Edit map tool when the Edit menu button is clicked in the mobile layout.
     combineLatest([
       this.visible$,
       this.store$.select(selectEditDialogVisible),
