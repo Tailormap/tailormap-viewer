@@ -885,7 +885,7 @@
         <source>Close details</source>
       </trans-unit>
       <trans-unit id="core.toc.collapse-all" datatype="html">
-        <source>Collapse all</source>
+        <source>Collapse all groups</source>
       </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
@@ -898,7 +898,7 @@
         <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.expand-all" datatype="html">
-        <source>Expand all</source>
+        <source>Expand all groups</source>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

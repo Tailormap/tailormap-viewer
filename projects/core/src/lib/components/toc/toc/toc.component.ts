@@ -60,7 +60,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public allLevelNodesCollapsed$ = this.treeService.allLevelNodesCollapsed$;
   public hasExpandableNodes$ = this.treeService.hasExpandableNodes$;
   public toggleExpandAllTooltip$ = this.allLevelNodesCollapsed$.pipe(
-    map(collapsed => collapsed ? $localize `:@@core.toc.expand-all:Expand all` : $localize `:@@core.toc.collapse-all:Collapse all`),
+    map(collapsed => collapsed ? $localize `:@@core.toc.expand-all:Expand all groups` : $localize `:@@core.toc.collapse-all:Collapse all groups`),
   );
 
   public in3D: Signal<boolean> = signal(false);
