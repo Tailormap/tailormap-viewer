@@ -1,4 +1,6 @@
 .edit-container {
+  display: flex;
+  flex-direction: row;
   justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
@@ -42,13 +44,13 @@
 }
 
 @media screen and (max-width: 730px) {
-  .edit-container--is-active {
+  .edit-container--is-active:not(.edit-container--mobile) {
     padding: 0;
     width: var(--map-control-size);
     height: var(--map-control-size);
   }
 
-  .edit-wrapper {
+  .edit-container:not(.edit-container--mobile) .edit-wrapper {
     position: absolute;
     top: calc(var(--map-control-size) + 9px);
     left: 0;

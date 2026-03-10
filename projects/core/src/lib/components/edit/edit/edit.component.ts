@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, input, OnDestroy } from '@angular/core';
 import {
   selectCopiedFeatures,
   selectEditActive, selectEditCopyOtherLayerFeaturesActive, selectEditCreateNewFeatureActive, selectSelectedCopyLayer,
   selectSelectedEditLayer,
 } from '../state/edit.selectors';
 import { Store } from '@ngrx/store';
-import { combineLatest, map, of, take } from 'rxjs';
+import { combineLatest, first, map, of, take } from 'rxjs';
 import {
   setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
   setSelectedEditLayer,
@@ -23,9 +23,6 @@ import {
 } from '@tailormap-viewer/api';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
-import { ComponentRegistrationService } from '../../../services';
-import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
-import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-edit',
@@ -40,8 +37,9 @@ export class EditComponent implements OnInit, OnDestroy {
   private applicationLayerService = inject(ApplicationLayerService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private mapService = inject(MapService);
-  private componentRegistrationService = inject(ComponentRegistrationService);
-  private mobileLayoutService = inject(MobileLayoutService);
+
+
+  public inMobilePanel = input<boolean>(false);
 
   public active$ = this.store$.select(selectEditActive);
   public createNewFeatureActive$ = this.store$.select(selectEditCreateNewFeatureActive);
@@ -51,11 +49,10 @@ export class EditComponent implements OnInit, OnDestroy {
   public editableLayers$ = this.store$.select(selectEditableLayers);
   public layer = new FormControl();
   public editGeometryType: GeometryType | null = null;
-  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
   public layersToCreateNewFeaturesFrom = signal<AppLayerModel[]>([]);
 
-  private defaultTooltip = $localize `:@@core.edit.edit:Edit feature`;
+  private defaultTooltip = $localize `:@@core.edit.edit-feature:Edit feature`;
   private notLoggedInTooltip = $localize `:@@core.edit.require-login-tooltip:You must be logged in to edit.`;
   private noLayersTooltip = $localize `:@@core.edit.no-editable-layers-tooltip:There are no editable layers. Enable a layer to start editing.`;
 
@@ -78,6 +75,7 @@ export class EditComponent implements OnInit, OnDestroy {
         this.store$.dispatch(setSelectedEditLayer({ layer: layerDetails ? layerDetails.layer.id : null }));
         this.editGeometryType = layerDetails ? layerDetails.details.geometryType : null;
       });
+
     combineLatest([
       this.active$,
       this.editableLayers$,
@@ -126,21 +124,20 @@ export class EditComponent implements OnInit, OnDestroy {
         }
       });
 
-
-    this.authenticatedUserService.getUserDetails$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((userDetails) => {
-        if (userDetails.isAuthenticated) {
-          this.componentRegistrationService.registerComponent(
-            'mobile-menu-bottom',
-            { type: BaseComponentTypeEnum.EDIT, component: EditMenuButtonComponent },
-          );
-        }
-      });
+    if (this.inMobilePanel()) {
+      this.store$.dispatch(hideFeatureInfoDialog());
+      this.store$.dispatch(setEditActive({ active: true }));
+      this.mapService.setSwitchedTool(true);
+      this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
+        .pipe(first((enabled) => enabled))
+        .subscribe(() => {
+          this.mapService.setSwitchedTool(false);
+        });
+    }
   }
 
   public ngOnDestroy(): void {
-    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
+    this.store$.dispatch(setEditActive({ active: false }));
   }
 
   public isLine() {
