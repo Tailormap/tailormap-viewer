@@ -116,14 +116,16 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="attachments-attributes">
-    <mat-card>
-      <mat-card-title i18n="@@admin-core.catalog.attachment-attributes">Attachment attributes</mat-card-title>
-      <mat-card-content>
-        <tm-admin-feature-type-attachment-attributes [attachmentAttributes]="attachmentAttributes"
-                                                     (attachmentAttributesChange)="onAttachmentAttributesChanged($event)"></tm-admin-feature-type-attachment-attributes>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  @if (writable) {
+    <div class="attachments-attributes">
+      <mat-card>
+        <mat-card-title i18n="@@admin-core.catalog.attachment-attributes">Attachment attributes</mat-card-title>
+        <mat-card-content>
+          <tm-admin-feature-type-attachment-attributes (attachmentAttributesChange)="onAttachmentAttributesChanged($event)"
+                                                       [attachmentAttributes]="attachmentAttributes"></tm-admin-feature-type-attachment-attributes>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
 
 </div>
