@@ -637,6 +637,10 @@
         <source>Terrain</source>
         <target>Terrein</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.terrain-lagen" datatype="html">
+        <source>The catalog above shows only terrain layers</source>
+        <target>De catalogus hierboven bevat alleen terreinlagen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
         <target>Terreinlagen</target>

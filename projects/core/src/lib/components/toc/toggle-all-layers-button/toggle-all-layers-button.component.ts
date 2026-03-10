@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { selectSomeLayersVisible } from '../../../map/state/map.selectors';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
+import { selectFilterEnabled, selectFilterTerm, selectSomeLayersVisibleInToc } from '../state/toc.selectors';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-toggle-all-layers-button',
@@ -13,16 +14,21 @@ import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
 })
 export class ToggleAllLayersButtonComponent implements OnInit {
   private store$ = inject(Store);
-
-
   public someLayersVisible$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {
-    this.someLayersVisible$ = this.store$.select(selectSomeLayersVisible);
+    this.someLayersVisible$ = this.store$.select(selectSomeLayersVisibleInToc);
   }
 
   public toggleAll() {
-    this.store$.dispatch(toggleAllLayersVisibility());
+    combineLatest([
+      this.store$.select(selectFilterEnabled),
+      this.store$.select(selectFilterTerm),
+    ])
+      .pipe(take(1))
+      .subscribe(([ filterEnabled, filterTerm ]) => {
+        this.store$.dispatch(toggleAllLayersVisibility({ filterTerm: filterEnabled ? filterTerm : undefined }));
+      });
   }
 
 }
