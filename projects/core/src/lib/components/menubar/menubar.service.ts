@@ -72,4 +72,12 @@ export class MenubarService {
     return this.mobilePanelHeight$.asObservable();
   }
 
+  public setDialogTitle(dialogTitle: string) {
+    const current = this.activeComponent$.value;
+    if (!current) {
+      return;
+    }
+    this.activeComponent$.next({ ...current, dialogTitle });
+  }
+
 }
