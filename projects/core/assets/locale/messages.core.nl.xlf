@@ -464,7 +464,7 @@
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
         <source>Edit</source>
-        <target>Objecten-editor</target>
+        <target>Bewerken</target>
       </trans-unit>
       <trans-unit id="core.edit.edit-feature" datatype="html">
         <source>Edit feature</source>
