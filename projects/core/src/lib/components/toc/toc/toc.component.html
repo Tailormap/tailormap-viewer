@@ -32,14 +32,15 @@
           (click)="toggleLayerFilter()">
           <mat-icon svgIcon="search"></mat-icon>
         </button>
-        <button mat-icon-button
-                class="map-control-button"
-                color="primary"
-                [tmTooltip]="toggleExpandAllTooltip$ | async"
-                (click)="toggleExpandAll()">
-          <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
-        </button>
-
+        @if (hasExpandableNodes$ | async) {
+          <button mat-icon-button
+                  class="map-control-button"
+                  color="primary"
+                  [tmTooltip]="toggleExpandAllTooltip$ | async"
+                  (click)="toggleExpandAll()">
+            <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
+          </button>
+        }
       </div>
       <div class="toc-header-right">
         @if (isMobileDevice) {
