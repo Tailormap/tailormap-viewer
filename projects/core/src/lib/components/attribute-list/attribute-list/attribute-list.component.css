@@ -13,3 +13,9 @@ mat-tab-group {
 tm-attribute-list-tab {
   flex: 1;
 }
+
+.tab-group .table-options-button {
+  position: absolute;
+  right: -24px;
+  margin-top: 3px;
+}

@@ -213,7 +213,10 @@ const onChangeColumnPosition = (
         return data;
       }
       const updatedColumns = [...data.columns];
-      const newPosition = payload.previousColumn === null ? 0 : siblingIndex + 1;
+      const movingDown = columnIdx < siblingIndex;
+      const newPosition = payload.previousColumn === null
+        ? 0
+        : siblingIndex + (movingDown ? 0 : 1);
       updatedColumns.splice(newPosition, 0, updatedColumns.splice(columnIdx, 1)[0]);
       return {
         ...data,
@@ -238,6 +241,24 @@ const onToggleColumnVisible = (
         c => ({ ...c, visible: !c.visible }),
       ),
     }),
+  ),
+});
+
+const onToggleAllColumnsVisible = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.toggleAllColumnsVisible>,
+): AttributeListState => ({
+  ...state,
+  data: AttributeListStateHelper.updateData(
+    state.data,
+    payload.dataId,
+    data => {
+      const someInvisible = data.columns.some(c => !c.visible);
+      return {
+        ...data,
+        columns: data.columns.map(c => ({ ...c, visible: someInvisible })),
+      };
+    },
   ),
 });
 
@@ -266,6 +287,7 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.updateRowSelected, onUpdateRowSelected),
   on(AttributeListActions.changeColumnPosition, onChangeColumnPosition),
   on(AttributeListActions.toggleColumnVisible, onToggleColumnVisible),
+  on(AttributeListActions.toggleAllColumnsVisible, onToggleAllColumnsVisible),
   on(AttributeListActions.setHighlightedFeature, onSetHighlightedFeature),
   on(AttributeListActions.setSelectedDataId, onSetSelectedDataId),
 );

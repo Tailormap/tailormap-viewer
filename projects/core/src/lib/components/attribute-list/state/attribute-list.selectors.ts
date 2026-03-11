@@ -124,6 +124,14 @@ export const selectRowsForSelectedTab = createSelector(
 export const selectColumnsForSelectedTab = createSelector(
   selectDataForSelectedTab,
   (data): AttributeListColumnModel[] => {
+    return data ? data.columns.filter(c => c.visible) : [];
+  },
+);
+
+export const selectSelectedColumnsForData = (dataId: string) => createSelector(
+  selectAttributeListData,
+  (allData): AttributeListColumnModel[] => {
+    const data = allData.find(d => d.id === dataId);
     return data ? data.columns : [];
   },
 );

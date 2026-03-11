@@ -97,7 +97,7 @@ export class AttributeListTableComponent {
       return [];
     }
     const names = columns.map(c => c.label || c.id);
-    if (canExpandRows) {
+    if (canExpandRows && names.length > 0) {
       names.unshift(this.EXPAND_DETAILS_COLUMN_NAME);
     }
     return names;

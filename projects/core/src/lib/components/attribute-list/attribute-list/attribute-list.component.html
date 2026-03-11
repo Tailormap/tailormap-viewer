@@ -22,6 +22,11 @@
           [label]="tab.label">
           <ng-template mat-tab-label>
             {{tab.label}}
+            @if (selectedTab === tab.id) {
+              <mat-icon svgIcon="drop_down"
+                        class="table-options-button"
+                        (click)="openColumnSelection($event, tab)"></mat-icon>
+            }
           </ng-template>
         </mat-tab>
       }

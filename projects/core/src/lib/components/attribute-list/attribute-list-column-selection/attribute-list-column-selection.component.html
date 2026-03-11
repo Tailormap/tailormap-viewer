@@ -1,0 +1,23 @@
+<div class="column-selection mat-elevation-z2">
+  @let columns = (columns$ | async) ?? [];
+  <div class="row select-all">
+    @let allVisible = (allColumnsVisible$ | async) ?? false;
+    @let someVisible = (someColumnsVisible$ | async) ?? false;
+    <mat-checkbox (change)="toggleSelectAll()"
+                  [checked]="allVisible"
+                  [indeterminate]="someVisible && !allVisible"></mat-checkbox>
+    <div class="label"></div>
+    <mat-icon class="close" svgIcon="close" (click)="closeOverlay()"></mat-icon>
+  </div>
+  <div class="list" cdkDropList (cdkDropListDropped)="drop($event, columns)">
+    @for (column of columns; track trackByColumnId($index, column)) {
+      <div class="row" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
+        <div class="placeholder" *cdkDragPlaceholder>{{column.label}}</div>
+        <div class="preview" *cdkDragPreview></div>
+        <mat-checkbox (change)="toggleVisible(column)" [checked]="column.visible"></mat-checkbox>
+        <div class="label">{{column.label}}</div>
+        <mat-icon class="drag-handle" svgIcon="reorder" cdkDragHandle></mat-icon>
+      </div>
+    }
+  </div>
+</div>

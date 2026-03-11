@@ -1,0 +1,77 @@
+.column-selection {
+  width: 300px;
+  max-width: 100vw;
+  height: 100%;
+}
+
+.column-selection {
+  background-color: #fff;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row .label {
+  flex: 1;
+  padding: 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list,
+.select-all {
+  padding: 0 14px;
+}
+
+.list {
+  flex: 1;
+  overflow: auto;
+}
+
+.select-all {
+  border-bottom: 1px solid #e1e1e1;
+  padding-right: 6px;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.close ::ng-deep svg {
+  transition: transform 250ms ease-in-out;
+}
+
+.close:hover ::ng-deep svg {
+  transform: rotate(90deg);
+}
+
+.preview {
+  display: none;
+}
+
+.example-list.cdk-drop-list-dragging .row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.placeholder {
+  background: #fff;
+  border: dotted 3px #999;
+  opacity: 1;
+  line-height: 30px;
+  padding: 0 14px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.mat-checkbox {
+  margin-top: -2px;
+}
+
+.drag-handle {
+  cursor: move;
+}
