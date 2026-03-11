@@ -128,7 +128,7 @@ export const selectColumnsForSelectedTab = createSelector(
   },
 );
 
-export const selectSelectedColumnsForData = (dataId: string) => createSelector(
+export const selectColumnsForData = (dataId: string) => createSelector(
   selectAttributeListData,
   (allData): AttributeListColumnModel[] => {
     const data = allData.find(d => d.id === dataId);

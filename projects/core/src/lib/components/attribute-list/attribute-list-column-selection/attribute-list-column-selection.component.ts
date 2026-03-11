@@ -4,8 +4,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { changeColumnPosition, toggleAllColumnsVisible, toggleColumnVisible } from '../state/attribute-list.actions';
 import { OVERLAY_DATA, OverlayRef } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
-import { selectSelectedColumnsForData } from '../state/attribute-list.selectors';
-import { map } from 'rxjs';
+import { selectColumnsForData } from '../state/attribute-list.selectors';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-attribute-list-column-selection',
@@ -18,8 +18,8 @@ export class AttributeListColumnSelectionComponent {
   private store$ = inject(Store);
   private overlayRef = inject(OverlayRef);
   private data = inject(OVERLAY_DATA) as { dataId: string };
-  public columns$ = this.store$.select(selectSelectedColumnsForData(this.data.dataId));
-  public allColumnsVisible$ = this.columns$.pipe(map(columns => columns.every(column => column.visible)));
+  public columns$ = this.store$.select(selectColumnsForData(this.data.dataId));
+  public allColumnsVisible$ = this.columns$.pipe(map(columns => columns.length > 0 && columns.every(column => column.visible)));
   public someColumnsVisible$ = this.columns$.pipe(map(columns => columns.some(column => column.visible)));
 
   public closeOverlay() {

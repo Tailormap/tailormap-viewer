@@ -7,7 +7,9 @@
                   [checked]="allVisible"
                   [indeterminate]="someVisible && !allVisible"></mat-checkbox>
     <div class="label"></div>
-    <mat-icon class="close" svgIcon="close" (click)="closeOverlay()"></mat-icon>
+    <button mat-icon-button (click)="closeOverlay()">
+      <mat-icon class="close" svgIcon="close"></mat-icon>
+    </button>
   </div>
   <div class="list" cdkDropList (cdkDropListDropped)="drop($event, columns)">
     @for (column of columns; track trackByColumnId($index, column)) {
