@@ -237,4 +237,12 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setApplicationTreeFilterTerm({ filterTerm, tree: this.applicationStateTree }));
   }
 
+  public expandOnStartup($event: { nodeId: string; expandOnStartup: boolean }) {
+    const updatedNode: Partial<AppTreeLevelNodeModel> = { expandOnStartup: $event.expandOnStartup };
+    this.store$.dispatch(updateApplicationTreeNode({
+      tree: this.applicationStateTree,
+      nodeId: $event.nodeId,
+      updatedNode,
+    }));
+  }
 }

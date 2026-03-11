@@ -60,6 +60,9 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   @Output()
   public filterChanged = new EventEmitter<string | null>();
 
+  @Output()
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: boolean }>();
+
   public treeFilter = new FormControl('');
 
   constructor() {
@@ -129,4 +132,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
     this.nodeExpandedToggled.emit({ expandCollapseAll: someExpanded ? 'collapse' : 'expand' });
   }
 
+  public onExpandOnStartup($event: { nodeId: string; expandOnStartup: boolean }) {
+    this.expandOnStartup.emit($event);
+  }
 }
