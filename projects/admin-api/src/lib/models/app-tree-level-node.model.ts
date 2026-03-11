@@ -4,4 +4,5 @@ export interface AppTreeLevelNodeModel extends AppTreeNodeModel {
   childrenIds: string[];
   root: boolean;
   title: string;
+  expandOnStartup?: boolean;
 }

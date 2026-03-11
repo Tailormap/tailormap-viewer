@@ -48,6 +48,7 @@
           <mat-icon svgIcon="close"></mat-icon>
           <span i18n="@@admin-core.application.remove">Remove</span>
         </button>
+        <mat-checkbox [checked]="getExpandOnStartup()" (change)="toggleExpandOnStartup($event.checked)">Expand on startup</mat-checkbox>
       </mat-menu>
     </div>
   </div>
