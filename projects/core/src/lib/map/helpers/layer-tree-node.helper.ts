@@ -18,7 +18,7 @@ export class LayerTreeNodeHelper {
       if (LayerTreeNodeHelper.isAppLayerNode(node)) {
         return false;
       }
-      return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers);
+      return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers) || (LayerTreeNodeHelper.isLevelNode(node) && node.expandOnStartup);
     });
     const checkedNodeIds = new Set(checkedNodes.map(c => c.id));
     return nodes.map(node => {
