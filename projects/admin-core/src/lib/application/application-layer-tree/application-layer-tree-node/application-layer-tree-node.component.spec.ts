@@ -5,10 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
   await render(ApplicationLayerTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
+    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule ],
     inputs: { node },
   });
 };

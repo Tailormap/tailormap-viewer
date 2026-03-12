@@ -26,6 +26,9 @@ export class ApplicationLayerTreeNodeComponent {
   @Output()
   public deleteNode = new EventEmitter<string>();
 
+  @Output()
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: boolean }>();
+
   public isLevel() {
     return this.node?.type === 'level';
   }
@@ -61,5 +64,18 @@ export class ApplicationLayerTreeNodeComponent {
       return 'admin_terrain';
     }
     return 'admin_catalog';
+  }
+
+  public getExpandOnStartup() {
+    if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+      return this.node.metadata?.expandOnStartup;
+    }
+    return false;
+  }
+
+  public toggleExpandOnStartup(expandOnStartup: boolean) {
+    if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+      this.expandOnStartup.emit({ nodeId: this.node.id, expandOnStartup });
+    }
   }
 }
