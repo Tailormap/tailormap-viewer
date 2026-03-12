@@ -94,13 +94,13 @@ export class DrawingLegendPrintService {
     }, new Map());
 
     const nonImageFeatures = filteredFeatures.filter(f => f.attributes.type !== 'IMAGE');
-    const distinctNonImageFeatures = nonImageFeatures.reduce((acc, feature) => {
+    const distinctNonImageFeatures = nonImageFeatures.reduce<DrawingFeatureModel[]>((acc, feature) => {
       const isDuplicate = acc.some(f => f.attributes.type == feature.attributes.type && deepEqual(f.attributes.style, feature.attributes.style));
       if (!isDuplicate) {
         acc.push(feature);
       }
       return acc;
-    }, [] as DrawingFeatureModel[]);
+    }, []);
 
     return [ ...distinctNonImageFeatures, ...Array.from(distinctImageFeatures.values()) ];
   }
