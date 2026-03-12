@@ -11,6 +11,7 @@ import { unByKey } from 'ol/Observable';
 import { Geometry } from 'ol/geom';
 import { Type as GeometryType } from 'ol/geom/Geometry';
 import { default as BaseEvent } from 'ol/events/Event';
+import { never } from 'ol/events/condition';
 import { getCenter } from 'ol/extent';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
@@ -101,6 +102,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
       type: OpenLayersDrawingTool.getDrawingType(drawingType),
       style: this.getDrawingStyle(drawingType, args.style),
       geometryFunction: OpenLayersDrawingTool.getGeometryFunction(drawingType),
+      freehandCondition: this.toolConfig.disableFreeHandDrawing ? never : undefined,
     });
     this.olMap.addInteraction(this.drawInteraction);
     this.listeners.push(this.drawInteraction.on('drawstart', (e: DrawEvent) => this.drawStarted(e)));

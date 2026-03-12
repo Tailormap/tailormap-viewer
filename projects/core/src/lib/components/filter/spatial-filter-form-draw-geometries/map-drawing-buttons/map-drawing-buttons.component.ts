@@ -100,6 +100,7 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       type: ToolTypeEnum.Draw,
       style: MapDrawingButtonsComponent.getDefaultStyle(),
       owner: BaseComponentTypeEnum.FILTER,
+      disableFreeHandDrawing: true,
     })
       .pipe(
         takeUntil(this.destroyed),
