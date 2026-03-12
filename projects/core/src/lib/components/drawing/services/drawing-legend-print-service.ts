@@ -8,6 +8,7 @@ import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 import { IconService } from '@tailormap-viewer/shared';
+import { deepEqual } from 'fast-equals';
 
 const layout = {
   fontSizeTitle: 20,
@@ -84,8 +85,6 @@ export class DrawingLegendPrintService {
 
     // For IMAGE type features, keep only distinct ones based on markerImage and description
     const imageFeatures = filteredFeatures.filter(f => f.attributes.type === 'IMAGE');
-    const nonImageFeatures = filteredFeatures.filter(f => f.attributes.type !== 'IMAGE');
-
     const distinctImageFeatures = imageFeatures.reduce((acc, feature) => {
       const key = `${feature.attributes.style.markerImage || ''}_${feature.attributes.style.description || ''}`;
       if (!acc.has(key)) {
@@ -94,7 +93,16 @@ export class DrawingLegendPrintService {
       return acc;
     }, new Map());
 
-    return [ ...nonImageFeatures, ...Array.from(distinctImageFeatures.values()) ];
+    const nonImageFeatures = filteredFeatures.filter(f => f.attributes.type !== 'IMAGE');
+    const distinctNonImageFeatures = nonImageFeatures.reduce<DrawingFeatureModel[]>((acc, feature) => {
+      const isDuplicate = acc.some(f => f.attributes.type == feature.attributes.type && deepEqual(f.attributes.style, feature.attributes.style));
+      if (!isDuplicate) {
+        acc.push(feature);
+      }
+      return acc;
+    }, []);
+
+    return [ ...distinctNonImageFeatures, ...Array.from(distinctImageFeatures.values()) ];
   }
 
   private addImage(doc: jsPDF, feature: DrawingFeatureModel, x: number, y: number): Observable<jsPDF> {

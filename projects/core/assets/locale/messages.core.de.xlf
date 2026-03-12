@@ -10,6 +10,14 @@
         <source>Clear filters</source>
         <target>Filter löschen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
+        <source>Close column settings</source>
+        <target>Spalteneinstellungen schließen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.column-settings" datatype="html">
+        <source>Column settings</source>
+        <target>Spalteneinstellungen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
         <target>Exportieren</target>
@@ -45,6 +53,10 @@
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributliste</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
+        <source>Toggle visibility of all columns</source>
+        <target>Sichtbarkeit aller Spalten wechseln</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
@@ -1178,6 +1190,10 @@
         <source>Close details</source>
         <target>Details schließen</target>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all groups</source>
+        <target>Alle Gruppen einklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -1190,6 +1206,10 @@
         <source>Edit layer</source>
         <target>Ebene bearbeiten</target>
         <note priority="1" from="description">:</note>
+      </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all groups</source>
+        <target>Alle Gruppen ausklappen</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

@@ -20,6 +20,7 @@ import { AttributeListExportButtonComponent } from './attribute-list-export-butt
 import { CoreSharedModule } from '../../shared';
 import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details/attribute-list-feature-details.component';
 import { AttributeListApiService } from './services/attribute-list-api.service';
+import { AttributeListColumnSelectionComponent } from './attribute-list-column-selection/attribute-list-column-selection.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AttributeListApiService } from './services/attribute-list-api.service';
     AttributeListFilterComponent,
     AttributeListExportButtonComponent,
     AttributeListFeatureDetailsComponent,
+    AttributeListColumnSelectionComponent,
   ],
   imports: [
     CommonModule,

@@ -117,6 +117,7 @@ export class PrintService implements OnDestroy {
             logo,
             bookmarkUrl: options.showBookmark ? `${window.location}` : null,
             addDrawingLegendFunction: options.addDrawingLegendFunction,
+            includeDrawing: options.includeDrawing,
           };
           return this.mapPdfService.create$({
             printOptions,

@@ -70,6 +70,11 @@ export const toggleColumnVisible = createAction(
   props<{ dataId: string; columnId: string }>(),
 );
 
+export const toggleAllColumnsVisible = createAction(
+  `${attributeListActionsPrefix} Toggle All Columns Visibility`,
+  props<{ dataId: string }>(),
+);
+
 export const setSelectedDataId = createAction(
   `${attributeListActionsPrefix} Set Selected Data Id`,
   props<{ tabId: string; dataId: string }>(),
