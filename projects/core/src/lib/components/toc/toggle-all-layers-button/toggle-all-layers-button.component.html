@@ -1,7 +1,10 @@
-<button mat-icon-button color="primary" (click)="toggleAll()">
+<button
+  mat-icon-button color="primary"
+  (click)="toggleAll()"
+  [tmTooltip]="toggleAllLayersTooltip$ | async">
   @if (someLayersVisible$ | async) {
-    <mat-icon i18n-tmTooltip="@@core.toc.toggle-layers-off" tmTooltip="Toggle all layers off" svgIcon="uncheck_all"></mat-icon>
+    <mat-icon svgIcon="uncheck_all"></mat-icon>
   } @else {
-    <mat-icon i18n-tmTooltip="@@core.toc.toggle-layers-on" tmTooltip="Toggle all layers on" svgIcon="check_all"></mat-icon>
+    <mat-icon svgIcon="check_all"></mat-icon>
   }
 </button>

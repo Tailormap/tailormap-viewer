@@ -24,14 +24,6 @@
     <div class="toc-header">
       <div class="toc-header-left">
         <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
-        <button mat-icon-button
-          color="primary"
-          i18n-tmTooltip="@@core.toc.filter-layers"
-          class="map-control-button"
-          tmTooltip="Filter layers"
-          (click)="toggleLayerFilter()">
-          <mat-icon svgIcon="search"></mat-icon>
-        </button>
         @if (hasExpandableNodes$ | async) {
           <button mat-icon-button
                   class="map-control-button"
@@ -41,6 +33,14 @@
             <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
           </button>
         }
+        <button mat-icon-button
+          color="primary"
+          i18n-tmTooltip="@@core.toc.filter-layers"
+          class="map-control-button"
+          tmTooltip="Filter layers"
+          (click)="toggleLayerFilter()">
+          <mat-icon svgIcon="search"></mat-icon>
+        </button>
       </div>
       <div class="toc-header-right">
         @if (isMobileDevice) {
