@@ -4,10 +4,11 @@
     @let allVisible = (allColumnsVisible$ | async) ?? false;
     @let someVisible = (someColumnsVisible$ | async) ?? false;
     <mat-checkbox (change)="toggleSelectAll()"
+                  aria-label="Toggle visibility of all columns"
                   [checked]="allVisible"
                   [indeterminate]="someVisible && !allVisible"></mat-checkbox>
     <div class="label"></div>
-    <button mat-icon-button (click)="closeOverlay()">
+    <button mat-icon-button (click)="closeOverlay()" aria-label="Close column settings">
       <mat-icon class="close" svgIcon="close"></mat-icon>
     </button>
   </div>

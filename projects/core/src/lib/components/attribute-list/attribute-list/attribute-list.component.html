@@ -23,7 +23,10 @@
           <ng-template mat-tab-label>
             <div class="label">{{tab.label}}</div>
             @if (selectedTab === tab.id) {
-              <button mat-icon-button class="table-options-button" (click)="openColumnSelection($event, tab)">
+              <button mat-icon-button
+                      aria-label="Column settings"
+                      class="table-options-button"
+                      (click)="openColumnSelection($event, tab)">
                 <mat-icon svgIcon="drop_down"></mat-icon>
               </button>
             }
