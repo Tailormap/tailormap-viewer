@@ -6,10 +6,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AttachmentAttributeModel, AttributeTypeHelper } from "@tailormap-viewer/api";
 
-type CheckableAttribute =  'hidden' | 'editable';
+type CheckableAttribute = 'hidden' | 'editable';
 
-const attributeColumnLabels = [ 'label-enabled', 'label-editable', 'label-name', 'label-type', 'label-alias' ];
-const attributeColumns = [ 'enabled', 'editable', 'name', 'type', 'alias' ];
+const baseAttributeColumnLabels = [ 'label-enabled', 'label-name', 'label-type', 'label-alias' ];
+const baseAttributeColumns = [ 'enabled', 'name', 'type', 'alias' ];
+const editableAttributeColumnLabels = ['label-editable'];
+const editableAttributeColumns = ['editable'];
 
 const attributeExtraColumnLabels = ['label-sort'];
 const attributeExtraColumns = ['sort'];
@@ -24,11 +26,18 @@ const attributeExtraColumns = ['sort'];
 export class FeatureTypeAttributesComponent implements OnChanges {
   private destroyRef = inject(DestroyRef);
 
+  public columnLabels: string[] = [];
+  public columns: string[] = [];
 
-  public columnLabels = attributeColumnLabels;
-  public columns = attributeColumns;
-
-  @Input() public writable: undefined | boolean;
+  private _writable: undefined | boolean;
+  @Input()
+  public set writable(value: undefined | boolean) {
+    this._writable = value;
+    this.rebuildDisplayedColumns();
+  }
+  public get writable(): undefined | boolean {
+    return this._writable;
+  }
 
   @Input()
   public attributes: AttributeDescriptorModel[] = [];
@@ -45,12 +54,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   @Input()
   public set showFullSettings(showFullSettings: boolean) {
     this._showFullSettings = showFullSettings;
-    this.columnLabels = showFullSettings
-      ? [ ...attributeColumnLabels, ...attributeExtraColumnLabels ]
-      : attributeColumnLabels;
-    this.columns = showFullSettings
-      ? [ ...attributeColumns, ...attributeExtraColumns ]
-      : attributeColumns;
+    this.rebuildDisplayedColumns();
   }
   public get showFullSettings() {
     return this._showFullSettings;
@@ -94,6 +98,7 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public attachmentAttributes: AttachmentAttributeModel[] = [];
 
   constructor() {
+    this.rebuildDisplayedColumns();
     this.aliasForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {
@@ -193,6 +198,24 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     return this.featureTypeSettings && this.featureTypeSettings[item] !== changes['featureTypeSettings'].previousValue[item];
   }
 
+  private rebuildDisplayedColumns(): void {
+    const labels = [...baseAttributeColumnLabels];
+    const cols = [...baseAttributeColumns];
+
+    if (this.writable) {
+      labels.splice(1, 0, ...editableAttributeColumnLabels);
+      cols.splice(1, 0, ...editableAttributeColumns);
+    }
+
+    if (this.showFullSettings) {
+      labels.push(...attributeExtraColumnLabels);
+      cols.push(...attributeExtraColumns);
+    }
+
+    this.columnLabels = labels;
+    this.columns = cols;
+  }
+
   public getTooltip(attributeName: string) {
     return this.catalogFeatureTypeSettings && !this.catalogFeatureTypeEditable.has(attributeName)
       ? $localize `:@@admin-core.catalog.readonly-in-catalog:This attribute is set to not editable in the catalog and cannot be changed here`
@@ -224,7 +247,6 @@ export class FeatureTypeAttributesComponent implements OnChanges {
     } else {
       this.selectedIndexes.set(currentIndexes.has(id) ? new Set() : new Set([id]));
     }
-
   }
 
   public dragStarted($event: CdkDragStart) {
@@ -241,5 +263,4 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public onAttachmentAttributesChanged(attributes: AttachmentAttributeModel[]) {
     this.attachmentAttributesChanged.emit(attributes);
   }
-
 }
