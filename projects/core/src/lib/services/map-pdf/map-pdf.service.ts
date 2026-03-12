@@ -34,6 +34,7 @@ export interface MapPdfPrintOptions {
   logo?: string | null;
   bookmarkUrl?: string | null;
   addDrawingLegendFunction?: (doc: jsPDF, width: number, height: number) => Observable<void>;
+  includeDrawing?: boolean;
 }
 
 @Injectable({
@@ -148,10 +149,10 @@ export class MapPdfService {
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
       concatMap(() => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, x, y, options.size)),
       concatMap(() => {
-        if(options.printOptions.addDrawingLegendFunction) {
+        if(options.printOptions.includeDrawing && options.printOptions.addDrawingLegendFunction) {
           return options.printOptions.addDrawingLegendFunction(doc, options.size.width, options.size.height);
         } else {
-          return of();
+          return of(doc);
         }
       }),
       map(() => doc.output('dataurlstring', { filename: options.printOptions.filename || $localize `:@@core.print.default-pdf-filename:map.pdf` })),
