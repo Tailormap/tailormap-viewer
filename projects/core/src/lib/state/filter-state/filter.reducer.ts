@@ -73,6 +73,26 @@ export const onUpdateFilterGroup = (
   return updateFilterGroup(state, payload.filterGroup.id, () => payload.filterGroup);
 };
 
+export const onAddAndUpdateFilterGroups = (
+  state: FilterState,
+  payload: ReturnType<typeof FilterActions.addAndUpdateFilterGroups>,
+): FilterState => {
+  let updatedState = { ...state };
+  payload.filterGroups.forEach(filterGroup => {
+    const idx = updatedState.currentFilterGroups.findIndex(cfg => cfg.id === filterGroup.id);
+    if (idx === -1) {
+      updatedState = {
+        ...updatedState,
+        currentFilterGroups: [ ...updatedState.currentFilterGroups, filterGroup ],
+      };
+    } else {
+      updatedState = updateFilterGroup(updatedState, filterGroup.id, () => filterGroup);
+    }
+  });
+  return updatedState;
+};
+
+
 export const onAddFilter = (
   state: FilterState,
   payload: ReturnType<typeof FilterActions.addFilter>,

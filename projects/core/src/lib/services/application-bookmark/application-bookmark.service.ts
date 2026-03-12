@@ -14,8 +14,9 @@ import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../..
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 import { deepEqual } from 'fast-equals';
 import { selectFilterState } from '../../state';
-import { addFilterGroup, updateFilterGroup } from '../../state/filter-state/filter.actions';
+import { addAndUpdateFilterGroups } from '../../state/filter-state/filter.actions';
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
@@ -168,22 +169,28 @@ export class ApplicationBookmarkService implements OnDestroy {
       withLatestFrom(this.store$.select(selectFilterState)),
     ).subscribe(([ filterBookmark, filterState ]) => {
         const currentFilterGroupIds = filterState.currentFilterGroups.map(fg => fg.id);
+        const newAndUpdatedFilterGroups: FilterGroupModel[] = [];
+
         filterBookmark?.a?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
           const filterGroup = FilterBookmarkHelper.attributeFilterGroupFromBookmark(bfg);
-          this.store$.dispatch(addFilterGroup({ filterGroup }));
+          newAndUpdatedFilterGroups.push(filterGroup);
         });
 
         filterBookmark?.s?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
           const filterGroup = FilterBookmarkHelper.spatialFilterGroupFromBookmark(bfg);
-          this.store$.dispatch(addFilterGroup({ filterGroup }));
+          newAndUpdatedFilterGroups.push(filterGroup);
         });
 
         filterBookmark?.p?.forEach(bfg => {
           const filterGroup = FilterBookmarkHelper.presetFilterGroupFromBookmark(filterState, bfg);
           if (filterGroup) {
-            this.store$.dispatch(updateFilterGroup({ filterGroup }));
+            newAndUpdatedFilterGroups.push(filterGroup);
           }
         });
+
+        if (newAndUpdatedFilterGroups.length > 0) {
+          this.store$.dispatch(addAndUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
+        }
       });
   }
 
