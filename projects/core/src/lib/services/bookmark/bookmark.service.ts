@@ -30,17 +30,11 @@ export class BookmarkService {
     return this.joinedBookmark.asObservable().pipe(filter((v): v is string => typeof v === 'string'));
   }
 
-  // public registerJsonFragment$<T>(descriptor: BookmarkJsonFragmentDescriptor<T>): Observable<T> {
-  //   return this.registerFragment$(descriptor) as Observable<T>;
-  // }
-
   /*
   This method is used to register and also get the value for a certain fragment
   If the bookmark url is read before calling this method, the value for the fragment is kept in the pendingFragments map
    */
   public registerFragment$<T>(descriptor: BookmarkFragmentDescriptor): Observable<T | null> {
-//  public registerFragment$<T = string>(descriptor: BookmarkStringFragmentDescriptor): Observable<T>;
-//  public registerFragment$(descriptor: BookmarkFragmentDescriptor): Observable<any> {
     const existingFragment$ = this.fragments.get(descriptor);
     if (existingFragment$ !== undefined) {
       return existingFragment$;

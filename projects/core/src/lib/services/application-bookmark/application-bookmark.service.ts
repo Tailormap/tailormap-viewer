@@ -1,19 +1,22 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, debounceTime, filter, map, Observable, skip, Subject, takeUntil } from 'rxjs';
+import { combineLatest, debounceTime, filter, map, Observable, skip, Subject, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
-import { MapBookmarkHelper } from './bookmark.helper';
+import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+  ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
 } from './application-bookmark-fragments';
-import { withLatestFrom } from 'rxjs/operators';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 import { deepEqual } from 'fast-equals';
+import { selectFilterState } from '../../state';
+import { addAndUpdateFilterGroups } from '../../state/filter-state/filter.actions';
+import { FilterBookmarkHelper } from './filter-bookmark.helper';
+import { FilterGroupModel } from '@tailormap-viewer/api';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +34,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastLocationBookmark: string | undefined;
   private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
+  private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
 
   constructor() {
     let initialRun = true;
@@ -89,6 +93,12 @@ export class ApplicationBookmarkService implements OnDestroy {
       .subscribe(bookmark => {
         this.lastLocationBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR, bookmark);
+      });
+    this.getFilterBookmarkData$()
+      .pipe(skip(1), takeUntil(this.destroyed))
+      .subscribe(bookmark => {
+        this.lastFilterBookmark = bookmark;
+        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     this.bookmarkService.getBookmarkValue$()
@@ -149,6 +159,39 @@ export class ApplicationBookmarkService implements OnDestroy {
         });
         this.store$.dispatch(updateLayerTreeNodes({ layerTreeNodes: updatedLayerTreeNodes }));
       });
+
+    this.store$.select(selectLoadStatus).pipe(
+      skip(1),
+      takeUntil(this.destroyed),
+      filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+      switchMap(() => this.bookmarkService.registerFragment$<CompactFilterBookmarkFragment>(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR)),
+      filter(filterBookmark => !deepEqual(this.lastFilterBookmark, filterBookmark)),
+      withLatestFrom(this.store$.select(selectFilterState)),
+    ).subscribe(([ filterBookmark, filterState ]) => {
+        const currentFilterGroupIds = filterState.currentFilterGroups.map(fg => fg.id);
+        const newAndUpdatedFilterGroups: FilterGroupModel[] = [];
+
+        filterBookmark?.a?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
+          const filterGroup = FilterBookmarkHelper.attributeFilterGroupFromBookmark(bfg);
+          newAndUpdatedFilterGroups.push(filterGroup);
+        });
+
+        filterBookmark?.s?.filter(bfg => !currentFilterGroupIds.includes(bfg.id)).forEach(bfg => {
+          const filterGroup = FilterBookmarkHelper.spatialFilterGroupFromBookmark(bfg);
+          newAndUpdatedFilterGroups.push(filterGroup);
+        });
+
+        filterBookmark?.p?.forEach(bfg => {
+          const filterGroup = FilterBookmarkHelper.presetFilterGroupFromBookmark(filterState, bfg);
+          if (filterGroup) {
+            newAndUpdatedFilterGroups.push(filterGroup);
+          }
+        });
+
+        if (newAndUpdatedFilterGroups.length > 0) {
+          this.store$.dispatch(addAndUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
+        }
+      });
   }
 
   private getVisibilityBookmarkData$() {
@@ -182,5 +225,17 @@ export class ApplicationBookmarkService implements OnDestroy {
         map(([ info, measure ]) => MapBookmarkHelper.fragmentFromLocationAndZoom(info, measure)),
         filter((fragment): fragment is string => fragment !== undefined),
       );
+  }
+
+  private getFilterBookmarkData$() {
+    return combineLatest([
+      this.store$.select(selectFilterState),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      takeUntil(this.destroyed),
+      debounceTime(250),
+      map(([filterState]) => FilterBookmarkHelper.fragmentFromFilterState(filterState)),
+    );
   }
 }
