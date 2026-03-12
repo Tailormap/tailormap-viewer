@@ -176,6 +176,9 @@
       <trans-unit id="admin-core.application.error-updating-application" datatype="html">
         <source>Error while updating application.</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup" datatype="html">
+        <source>Expand on startup</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
       </trans-unit>
