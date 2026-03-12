@@ -78,3 +78,13 @@
   margin-top: -26px;
   z-index: 1;
 }
+
+.expand-on-startup {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.expand-on-startup span {
+  padding-left: 2px;
+  font-size: 16px;
+}
