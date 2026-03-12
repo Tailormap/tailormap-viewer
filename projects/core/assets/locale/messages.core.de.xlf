@@ -463,6 +463,10 @@
         <target>Löschen des Features fehlgeschlagen</target>
       </trans-unit>
       <trans-unit id="core.edit.edit" datatype="html">
+        <source>Edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="core.edit.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
       </trans-unit>
@@ -1174,6 +1178,10 @@
         <source>Close details</source>
         <target>Details schließen</target>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all groups</source>
+        <target>Alle Gruppen einklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -1186,6 +1194,10 @@
         <source>Edit layer</source>
         <target>Ebene bearbeiten</target>
         <note priority="1" from="description">:</note>
+      </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all groups</source>
+        <target>Alle Gruppen ausklappen</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>

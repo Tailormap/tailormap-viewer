@@ -1,6 +1,8 @@
 <div class="select-feature">
   <h2 i18n="@@core.edit.select-feature-to-edit">Select which feature to edit</h2>
-  <div i18n="@@core.edit.hover-to-highlight">Hover over the buttons to highlight the feature on the map</div>
+  @if (!inMobilePanel) {
+    <div i18n="@@core.edit.hover-to-highlight">Hover over the buttons to highlight the feature on the map</div>
+  }
   @for (feature of features; track trackByFid(idx, feature); let idx = $index) {
     <div class="feature">
       <a href="#"

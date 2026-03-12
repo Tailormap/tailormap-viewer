@@ -17,6 +17,7 @@ import { MatBadge } from '@angular/material/badge';
 import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attachments-form.component';
 import { EditMenuButtonComponent } from './edit-menu-button/edit-menu-button.component';
 import { MenubarModule } from "../menubar";
+import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MenubarModule } from "../menubar";
     EditSelectFeatureComponent,
     SelectFieldComponent,
     EditMenuButtonComponent,
+    EditMobilePanelComponent,
   ],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { MenubarModule } from "../menubar";
   exports: [
     EditComponent,
     EditDialogComponent,
+    EditMobilePanelComponent,
   ],
 })
 export class EditComponentModule {

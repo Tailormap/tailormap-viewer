@@ -24,6 +24,15 @@
     <div class="toc-header">
       <div class="toc-header-left">
         <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+        @if (hasExpandableNodes$ | async) {
+          <button mat-icon-button
+                  class="map-control-button"
+                  color="primary"
+                  [tmTooltip]="toggleExpandAllTooltip$ | async"
+                  (click)="toggleExpandAll()">
+            <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
+          </button>
+        }
         <button mat-icon-button
           color="primary"
           i18n-tmTooltip="@@core.toc.filter-layers"
