@@ -12,6 +12,7 @@
           (dragstart)="isDragging.set(true)"
           (dragend)="isDragging.set(false)"
           (cdkDropListDropped)="dropTable($event)">
+
           <ng-container matColumnDef="enabled">
             <mat-header-cell *matHeaderCellDef>
               <mat-checkbox (change)="toggleAllAttributes('hidden')" [checked]="allChecked['hidden']" [indeterminate]="someChecked['hidden']"></mat-checkbox>
@@ -20,18 +21,21 @@
               <mat-checkbox (change)="toggleAttribute('hidden', att.name)" [checked]="isAttributeEnabled('hidden', att.name)"></mat-checkbox>
             </mat-cell>
           </ng-container>
-          <ng-container matColumnDef="editable">
-            <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="toggleAllAttributes('editable')" [checked]="allChecked['editable']" [indeterminate]="someChecked['editable']"></mat-checkbox>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let att" [class.disabled-cell]="isEditableFieldDisabled(att.name)">
+          @if (writable) {
+            <ng-container matColumnDef="editable">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="toggleAllAttributes('editable')" [checked]="allChecked['editable']"
+                              [indeterminate]="someChecked['editable']"></mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let att" [class.disabled-cell]="isEditableFieldDisabled(att.name)">
               <span [tmTooltip]="getTooltip(att.name)">
                 <mat-checkbox (change)="toggleAttribute('editable', att.name)"
-                  [disabled]="isEditableFieldDisabled(att.name)"
-                [checked]="isEditableFieldChecked(att.name)"></mat-checkbox>
+                              [checked]="isEditableFieldChecked(att.name)"
+                              [disabled]="isEditableFieldDisabled(att.name)"></mat-checkbox>
               </span>
-            </mat-cell>
-          </ng-container>
+              </mat-cell>
+            </ng-container>
+          }
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let att" [class.disabled-cell]="isEditableFieldDisabled(att.name)">
@@ -69,9 +73,14 @@
           <ng-container matColumnDef="label-enabled">
             <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Enabled" i18n-tmTooltip="@@admin-core.common.enabled" i18n="@@admin-core.common.enabled">Enabled</div></mat-header-cell>
           </ng-container>
-          <ng-container matColumnDef="label-editable">
-            <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Editable" i18n-tmTooltip="@@admin-core.application.editable" i18n="@@admin-core.application.editable">Editable</div></mat-header-cell>
-          </ng-container>
+          @if (writable) {
+            <ng-container matColumnDef="label-editable">
+              <mat-header-cell *matHeaderCellDef>
+                <div class="wrap-text" i18n="@@admin-core.application.editable" i18n-tmTooltip="@@admin-core.application.editable"
+                     tmTooltip="Editable">Editable</div>
+              </mat-header-cell>
+            </ng-container>
+          }
           <ng-container matColumnDef="label-name">
             <mat-header-cell *matHeaderCellDef><div class="wrap-text" tmTooltip="Name" i18n-tmTooltip="@@admin-core.common.name" i18n="@@admin-core.common.name">Name</div></mat-header-cell>
           </ng-container>
