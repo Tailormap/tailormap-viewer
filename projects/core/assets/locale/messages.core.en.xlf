@@ -8,6 +8,12 @@
       <trans-unit id="core.attribute-list.clear-filters" datatype="html">
         <source>Clear filters</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
+        <source>Close column settings</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.column-settings" datatype="html">
+        <source>Column settings</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
       </trans-unit>
@@ -34,6 +40,9 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
+        <source>Toggle visibility of all columns</source>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>

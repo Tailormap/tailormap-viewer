@@ -4,11 +4,15 @@
     @let allVisible = (allColumnsVisible$ | async) ?? false;
     @let someVisible = (someColumnsVisible$ | async) ?? false;
     <mat-checkbox (change)="toggleSelectAll()"
-                  aria-label="Toggle visibility of all columns"
+                  i18n-tmTooltip="@@core.attribute-list.toggle-all-columns-visibility"
+                  tmTooltip="Toggle visibility of all columns"
                   [checked]="allVisible"
                   [indeterminate]="someVisible && !allVisible"></mat-checkbox>
     <div class="label"></div>
-    <button mat-icon-button (click)="closeOverlay()" aria-label="Close column settings">
+    <button mat-icon-button
+            (click)="closeOverlay()"
+            i18n-tmTooltip="@@core.attribute-list.close-column-settings"
+            tmTooltip="Close column settings">
       <mat-icon class="close" svgIcon="close"></mat-icon>
     </button>
   </div>

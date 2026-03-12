@@ -24,7 +24,8 @@
             <div class="label">{{tab.label}}</div>
             @if (selectedTab === tab.id) {
               <button mat-icon-button
-                      aria-label="Column settings"
+                      i18n-tmTooltip="@@core.attribute-list.column-settings"
+                      tmTooltip="Column settings"
                       class="table-options-button"
                       (click)="openColumnSelection($event, tab)">
                 <mat-icon svgIcon="drop_down"></mat-icon>
