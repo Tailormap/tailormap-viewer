@@ -8,4 +8,5 @@ export interface DrawingToolConfigModel extends ToolConfigModel {
   type: ToolTypeEnum.Draw;
   drawingType?: DrawingType;
   style?: Partial<MapStyleModel>;
+  disableFreeHandDrawing?: boolean;
 }
