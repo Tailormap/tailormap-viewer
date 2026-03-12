@@ -22,7 +22,10 @@ export class FilterBookmarkHelper {
     // know the layer ids, the disabled state, and the filters with their conditions and values.
 
     const attributeFilters = filterState.currentFilterGroups
-      .filter(filterGroup => filterGroup.source === 'ATTRIBUTE_LIST' && filterGroup.type === FilterTypeEnum.ATTRIBUTE);
+      .filter(filterGroup =>
+        filterGroup.source === 'ATTRIBUTE_LIST' && filterGroup.type === FilterTypeEnum.ATTRIBUTE
+        && filterGroup.operator === 'AND'
+        && filterGroup.filters?.length > 0);
 
     for (const fg of attributeFilters) {
       const bfg: BookmarkFilterGroup<BookmarkAttributeFilterModel> = {
@@ -80,7 +83,10 @@ export class FilterBookmarkHelper {
 
   private static addSpatialFilterGroupsToBookmark(bookmarkData: CompactFilterBookmarkFragment, filterState: FilterState) {
     const spatialFilters = filterState.currentFilterGroups
-      .filter(filterGroup => filterGroup.type === FilterTypeEnum.SPATIAL);
+      .filter(filterGroup =>
+        filterGroup.source === 'SPATIAL_FILTER_FORM' && filterGroup.type === FilterTypeEnum.SPATIAL
+        && filterGroup.operator === 'AND'
+        && filterGroup.filters?.length > 0);
     for (const fg of spatialFilters) {
       const bfg: BookmarkFilterGroup<BookmarkSpatialFilterModel> = {
         id: fg.id,
