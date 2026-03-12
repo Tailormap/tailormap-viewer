@@ -10,6 +10,14 @@
         <source>Clear filters</source>
         <target>Filters wissen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
+        <source>Close column settings</source>
+        <target>Sluit kolom instellingen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.column-settings" datatype="html">
+        <source>Column settings</source>
+        <target>Kolom instellingen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
         <target>Exporteren</target>
@@ -45,6 +53,10 @@
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributenlijst</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
+        <source>Toggle visibility of all columns</source>
+        <target>Zichtbaarheid van alle kolommen aanpassen</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>

@@ -21,7 +21,16 @@
         <mat-tab
           [label]="tab.label">
           <ng-template mat-tab-label>
-            {{tab.label}}
+            <div class="label">{{tab.label}}</div>
+            @if (selectedTab === tab.id) {
+              <button mat-icon-button
+                      i18n-tmTooltip="@@core.attribute-list.column-settings"
+                      tmTooltip="Column settings"
+                      class="table-options-button"
+                      (click)="openColumnSelection($event, tab)">
+                <mat-icon svgIcon="drop_down"></mat-icon>
+              </button>
+            }
           </ng-template>
         </mat-tab>
       }
