@@ -167,8 +167,10 @@ export class FilterBookmarkHelper {
           bookmarkFilter.f.push(bf);
         }
 
-        if (!bookmarkData.p) { bookmarkData.p = []; }
-        bookmarkData.p.push(bookmarkFilter);
+        if (bookmarkFilter.f.length > 0) {
+          if (!bookmarkData.p) { bookmarkData.p = []; }
+          bookmarkData.p.push(bookmarkFilter);
+        }
       }
     }
   }
