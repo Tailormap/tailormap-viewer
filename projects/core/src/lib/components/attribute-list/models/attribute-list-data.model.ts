@@ -13,5 +13,6 @@ export interface AttributeListDataModel {
   totalCount: number | null;
   sortedColumn?: string;
   sortDirection: 'asc' | 'desc' | '';
+  errorMessage?: string;
 }
 

@@ -17,6 +17,8 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { MapService } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { OverlayRef, PopoverPositionEnum, PopoverService } from '@tailormap-viewer/shared';
+import { AttributeListColumnSelectionComponent } from '../attribute-list-column-selection/attribute-list-column-selection.component';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -28,6 +30,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   private store$ = inject<Store<AttributeListState>>(Store);
   private menubarService = inject(MenubarService);
   private mapService = inject(MapService);
+  private popoverService = inject(PopoverService);
   public isLoadingTabs$ = inject(AttributeListManagerService).isLoadingTabs$();
 
   public isVisible$: Observable<boolean>;
@@ -37,6 +40,8 @@ export class AttributeListComponent implements OnInit, OnDestroy {
 
   public selectedTab?: string;
   public title$: Observable<string> = of('');
+
+  private columnSelectionOverlayRef: OverlayRef | undefined;
 
   constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
@@ -62,6 +67,9 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.ATTRIBUTE_LIST);
     this.store$.dispatch(setAttributeListVisibility({ visible: false }));
+    if (this.columnSelectionOverlayRef) {
+      this.columnSelectionOverlayRef.close();
+    }
     this.destroyed.next(null);
     this.destroyed.complete();
   }
@@ -76,6 +84,26 @@ export class AttributeListComponent implements OnInit, OnDestroy {
 
   public trackByTabId(idx: number, layer: AttributeListTabModel) {
     return layer.id;
+  }
+
+  public openColumnSelection($event: MouseEvent, tab: AttributeListTabModel) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    if (this.columnSelectionOverlayRef && this.columnSelectionOverlayRef.isOpen) {
+      this.columnSelectionOverlayRef.close();
+      return;
+    }
+    const WINDOW_WIDTH = 300;
+    this.columnSelectionOverlayRef = this.popoverService.open({
+      origin: $event.currentTarget as HTMLElement,
+      content: AttributeListColumnSelectionComponent,
+      data: { dataId: tab.selectedDataId },
+      height: 250,
+      width: Math.min(WINDOW_WIDTH, window.innerWidth),
+      closeOnClickOutside: true,
+      position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
+      positionOffset: 10,
+    });
   }
 
 }

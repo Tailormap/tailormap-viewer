@@ -10,6 +10,14 @@
         <source>Clear filters</source>
         <target>Filter löschen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
+        <source>Close column settings</source>
+        <target>Spalteneinstellungen schließen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.column-settings" datatype="html">
+        <source>Column settings</source>
+        <target>Spalteneinstellungen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
         <target>Exportieren</target>
@@ -45,6 +53,10 @@
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributliste</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
+        <source>Toggle visibility of all columns</source>
+        <target>Sichtbarkeit aller Spalten wechseln</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
