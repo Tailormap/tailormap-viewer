@@ -1178,6 +1178,10 @@
         <source>Close details</source>
         <target>Details sluiten</target>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all groups</source>
+        <target>Alle groepen inklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
         <target>Beschrijving</target>
@@ -1190,6 +1194,10 @@
         <source>Edit layer</source>
         <target>Laag bewerken</target>
         <note priority="1" from="description">:</note>
+      </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all groups</source>
+        <target>Alle groepen uitklappen</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
