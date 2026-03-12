@@ -115,6 +115,12 @@ export class MapService {
     });
   }
 
+  public setSwitchedTool(switched: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.setSwitchedTool(switched);
+    });
+  }
+
   public executeToolManagerAction(callback: (manager: ToolManagerModel) => void) {
     this.getToolManager$()
       .pipe(take(1))

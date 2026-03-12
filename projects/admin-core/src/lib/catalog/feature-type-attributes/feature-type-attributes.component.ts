@@ -28,6 +28,8 @@ export class FeatureTypeAttributesComponent implements OnChanges {
   public columnLabels = attributeColumnLabels;
   public columns = attributeColumns;
 
+  @Input() public writable: undefined | boolean;
+
   @Input()
   public attributes: AttributeDescriptorModel[] = [];
 

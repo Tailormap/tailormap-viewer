@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import { from, Observable, toArray } from 'rxjs';
@@ -21,6 +21,7 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
 import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { withLatestFrom } from 'rxjs/operators';
+import { MenubarService } from '../../menubar';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -29,7 +30,7 @@ import { withLatestFrom } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EditDialogComponent {
+export class EditDialogComponent implements OnInit {
   private store$ = inject(Store);
   private editMapToolService = inject(EditMapToolService);
   private applicationLayerService = inject(ApplicationLayerService);
@@ -39,6 +40,10 @@ export class EditDialogComponent {
   private confirmService = inject(ConfirmDialogService);
   private uniqueValuesService = inject(UniqueValuesService);
   private cdr = inject(ChangeDetectorRef);
+  private menubarService = inject(MenubarService);
+
+
+  public inMobilePanel = input<boolean>(false);
 
   private viewerId = toSignal(this.store$.select(selectViewerId).pipe(map(id => id || '')), { initialValue: '' });
   public dialogOpen$;
@@ -78,7 +83,7 @@ export class EditDialogComponent {
     this.currentFeature$ = this.store$.select(selectSelectedEditFeature);
     this.dialogTitle$ = this.currentFeature$.pipe(
       map(feature => feature?.feature.__fid !== 'new'
-        ? $localize `:@@core.edit.edit:Edit feature`
+        ? $localize `:@@core.edit.edit-feature:Edit feature`
         : $localize `:@@core.edit.add-new-feature:Add new feature`));
     this.isCreateFeature$ = this.store$.select(selectEditCreateNewOrCopyFeatureActive);
     this.selectableFeature$ = combineLatest([
@@ -136,6 +141,16 @@ export class EditDialogComponent {
         this.closeDialogAfterAddingFeature = config.closeAfterAddFeature;
       },
     );
+  }
+
+  public ngOnInit() {
+    if (this.inMobilePanel()) {
+      this.dialogTitle$
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(dialogTitle => {
+          this.menubarService.setDialogTitle(dialogTitle);
+        });
+    }
   }
 
   private resetChanges() {
@@ -348,4 +363,5 @@ export class EditDialogComponent {
   public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
     this.deletedAttachmentIds = deletedAttachmentIds;
   }
+
 }

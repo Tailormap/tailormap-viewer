@@ -1,17 +1,8 @@
-<tm-dialog [open]="dialogOpen$ | async"
-           [openFromRight]="true"
-           [width]="panelWidth"
-           [widthMargin]="panelWidthMargin"
-           class="edit-dialog"
-           (closeDialog)="closeDialog()"
-           [allowCollapse]="true"
-           [collapsed]="dialogCollapsed$ | async"
-           (expandCollapseDialog)="expandCollapseDialog()"
-           [dialogTitle]="dialogTitle$ | async">
+<ng-template #editDialogContent>
   @let currentFeature = currentFeature$ | async;
   @let layerDetails = layerDetails$ | async;
   @if (currentFeature && layerDetails) {
-    <div class="edit-form">
+    <div class="edit-form" [class.edit-form--mobile-panel]="inMobilePanel()">
       <div class="content">
         <h2>{{layerDetails.layer.title}}</h2>
         @let editInput = { feature: currentFeature, details: layerDetails.details };
@@ -25,7 +16,7 @@
                                   (deletedAttachmentsChanged)="onDeletedAttachmentsChanged($event)"
         ></tm-edit-attachments-form>
       </div>
-      <div class="buttons">
+      <div class="buttons" [class.buttons-fixed-position]="inMobilePanel()">
         @if (isCreateFeature$ | async) {
           <button (click)="add(layerDetails.layer.id, editInput)"
                   [disabled]="addOrSaveDisabled()"
@@ -69,13 +60,30 @@
   @let selectableFeatures = selectableFeature$ | async;
   @if (selectableFeatures && selectableFeatures.length > 0) {
     <div class="content">
-      <tm-edit-select-feature [features]="selectableFeatures"></tm-edit-select-feature>
+      <tm-edit-select-feature [features]="selectableFeatures" [inMobilePanel]="inMobilePanel()"></tm-edit-select-feature>
     </div>
     <div class="buttons">
       <button mat-flat-button i18n="@@core.common.close" (click)="closeDialog()">Close</button>
     </div>
   }
-</tm-dialog>
+</ng-template>
+
+@if (!inMobilePanel()) {
+  <tm-dialog [open]="dialogOpen$ | async"
+             [openFromRight]="true"
+             [width]="panelWidth"
+             [widthMargin]="panelWidthMargin"
+             class="edit-dialog"
+             (closeDialog)="closeDialog()"
+             [allowCollapse]="true"
+             [collapsed]="dialogCollapsed$ | async"
+             (expandCollapseDialog)="expandCollapseDialog()"
+             [dialogTitle]="dialogTitle$ | async">
+    <ng-container *ngTemplateOutlet="editDialogContent"></ng-container>
+  </tm-dialog>
+} @else {
+  <ng-container *ngTemplateOutlet="editDialogContent"></ng-container>
+}
 
 <tm-map-spinner [coordinates$]="editCoordinates$"
                 [loading$]="loadingEditFeatureInfo$"></tm-map-spinner>
