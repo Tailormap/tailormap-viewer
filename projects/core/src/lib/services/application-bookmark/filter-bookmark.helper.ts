@@ -175,7 +175,7 @@ export class FilterBookmarkHelper {
     }
   }
 
-  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg:BookmarkFilterGroup<BookmarkPresetFilterModel>) {
+  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg:BookmarkFilterGroup<BookmarkPresetFilterModel>): FilterGroupModel<AttributeFilterModel> | undefined {
     const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === bfg.id && fg.source === 'PRESET');
     if (!configuredPresetFilter) {
       console.error(`Bookmark: Preset filter group with id ${bfg.id} not found in configured filter groups`);
@@ -198,6 +198,6 @@ export class FilterBookmarkHelper {
       ...configuredPresetFilter,
       disabled: bfg.d,
       filters,
-    } as FilterGroupModel<AttributeFilterModel>;
+    };
   }
 }
