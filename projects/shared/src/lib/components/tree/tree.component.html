@@ -13,6 +13,7 @@
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.padding-left]="depth(node) * 20 + 'px'"
+         [style.--tree-node-indent]="depth(node) * 20 + 'px'"
          (click)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"

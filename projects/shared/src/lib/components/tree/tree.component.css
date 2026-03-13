@@ -46,9 +46,23 @@ mat-checkbox {
 }
 
 .tree-node--selected-with-info .tree-node-wrapper--leaf {
-  background-color: var(--primary-color-0_1);
+  position: relative;
+  align-self: flex-start;
+  background-color: transparent;
   color: var(--primary-color);
   border-radius: 8px 8px 0 0;
+}
+
+.tree-node--selected-with-info .tree-node-wrapper--leaf::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--tree-node-indent, 0px));
+  width: calc(100% + var(--tree-node-indent, 0px));
+  background-color: var(--primary-color-0_1);
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
 }
 
 .tree-node-wrapper {
