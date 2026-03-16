@@ -7,7 +7,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take, timer } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -40,6 +40,7 @@ export class OpenLayersMap implements MapViewerModel {
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
   private mapPadding: number[] | undefined;
+  private attributionControl?: Attribution;
 
   constructor(
     private ngZone: NgZone,
@@ -95,9 +96,10 @@ export class OpenLayersMap implements MapViewerModel {
       view,
     });
     // always add the attribution control
-    olMap.addControl(new Attribution({
+    this.attributionControl = new Attribution({
       collapsed: false,
-    }));
+    });
+    olMap.addControl(this.attributionControl);
 
     this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent
@@ -121,6 +123,20 @@ export class OpenLayersMap implements MapViewerModel {
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
+
+    merge(
+      timer(5000),
+      OpenLayersEventManager.onMapClick$(),
+      OpenLayersEventManager.onMapZoomEnd$(),
+      OpenLayersEventManager.onMapDragEnd$(),
+    )
+      .pipe(
+        take(1),
+      )
+      .subscribe((event) => {
+        console.debug('event', event);
+        this.attributionControl?.setCollapsed(true);
+      });
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
