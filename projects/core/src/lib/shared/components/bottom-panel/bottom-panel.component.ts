@@ -22,6 +22,8 @@ export class BottomPanelComponent implements OnInit {
     restore: $localize `:@@core.shared.restore-panel-height:Restore panel height`,
   };
 
+  public static readonly MINIMUM_PANEL_HEIGHT_PX = 110;
+
   @Input({ required: true })
   public isVisible$: Observable<boolean> = of(false);
 
@@ -85,8 +87,11 @@ export class BottomPanelComponent implements OnInit {
     }
     this.isMinimized = false;
     this.isMaximized = false;
-    const height = initialHeight - changedHeight;
+    const computedHeight = initialHeight - changedHeight;
     this.isUserResizing = true;
+    const height = computedHeight < BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX
+      ? BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX
+      : computedHeight;
     this.heightSubject.next(height);
     this.heightChanged.emit(height);
     setTimeout(() => { this.isUserResizing = false; }, 0);
