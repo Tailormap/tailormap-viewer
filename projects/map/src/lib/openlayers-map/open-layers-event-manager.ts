@@ -24,9 +24,8 @@ export class OpenLayersEventManager {
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
-  private static pointerDragEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
-  private static postRenderEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static renderCompleteEvent: EventManagerEvent<RenderEvent> = { stream: new Subject<RenderEvent>() };
+  private static mapMoveStartEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static in3d = false;
   private static destroyed = new Subject();
 
@@ -40,9 +39,8 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointerdrag', OpenLayersEventManager.pointerDragEvent);
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'postrender', OpenLayersEventManager.postRenderEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'rendercomplete', OpenLayersEventManager.renderCompleteEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'movestart', OpenLayersEventManager.mapMoveStartEvent);
 
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
@@ -56,9 +54,8 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
-    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.pointerDragEvent);
-    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.postRenderEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.renderCompleteEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapMoveStartEvent);
 
   }
 
@@ -100,16 +97,11 @@ export class OpenLayersEventManager {
     return OpenLayersEventManager.changeViewEvent.stream.asObservable();
   }
 
-  public static onPointerDrag$(): Observable<MapBrowserEvent<PointerEvent>> {
-    return OpenLayersEventManager.pointerDragEvent.stream.asObservable();
-  }
-
-  public static onPostRender$(): Observable<MapEvent> {
-    return OpenLayersEventManager.postRenderEvent.stream.asObservable();
-  }
-
   public static onRenderComplete$(): Observable<RenderEvent> {
     return OpenLayersEventManager.renderCompleteEvent.stream.asObservable();
   }
 
+  public static onMapMoveStart$(): Observable<MapEvent> {
+    return OpenLayersEventManager.mapMoveStartEvent.stream.asObservable();
+  }
 }

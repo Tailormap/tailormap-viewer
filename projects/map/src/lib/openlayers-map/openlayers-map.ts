@@ -124,19 +124,19 @@ export class OpenLayersMap implements MapViewerModel {
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
 
+    // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
     merge(
       timer(5000),
       OpenLayersEventManager.onMapClick$(),
       OpenLayersEventManager.onRenderComplete$().pipe(
         take(1),
-        switchMap(() => OpenLayersEventManager.onMapMove$()),
+        switchMap(() => OpenLayersEventManager.onMapMoveStart$()),
       ),
     )
       .pipe(
         take(1),
       )
-      .subscribe((event) => {
-        console.debug('event', event);
+      .subscribe(() => {
         this.attributionControl?.setCollapsed(true);
       });
 
