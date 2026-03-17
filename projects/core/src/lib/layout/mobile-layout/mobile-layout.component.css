@@ -66,3 +66,7 @@
   right: auto;
   left: calc(var(--body-margin) - 8px);
 }
+
+.map ::ng-deep .ol-attribution button {
+  font-size: inherit;
+}
