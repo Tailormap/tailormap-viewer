@@ -41,7 +41,6 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'rendercomplete', OpenLayersEventManager.renderCompleteEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'movestart', OpenLayersEventManager.mapMoveStartEvent);
-
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
       .subscribe(in3d => OpenLayersEventManager.in3d = in3d);
@@ -56,7 +55,6 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.renderCompleteEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapMoveStartEvent);
-
   }
 
   private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
