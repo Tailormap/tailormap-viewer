@@ -10,7 +10,7 @@ import { ObjectEvent } from 'ol/Object';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'
-  | 'postrender' | 'precompose' | 'postcompose' | 'rendercomplete' | 'zoomend' | 'dragend';
+  | 'postrender' | 'precompose' | 'postcompose' | 'rendercomplete';
 
 interface EventManagerEvent<EventType extends BaseEvent = BaseEvent> {
   eventKey?: EventsKey;
@@ -19,13 +19,11 @@ interface EventManagerEvent<EventType extends BaseEvent = BaseEvent> {
 
 export class OpenLayersEventManager {
 
-  private static mapMoveStartEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static mapMoveEndEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
-  private static mapZoomEndEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
-  private static mapDragEndEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
+  private static pointerDragEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static in3d = false;
   private static destroyed = new Subject();
 
@@ -35,13 +33,11 @@ export class OpenLayersEventManager {
     in3d$: Observable<boolean>,
   ) {
     OpenLayersEventManager.destroyed = new Subject();
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'movestart', OpenLayersEventManager.mapMoveStartEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'moveend', OpenLayersEventManager.mapMoveEndEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'zoomend', OpenLayersEventManager.mapZoomEndEvent);
-    OpenLayersEventManager.registerEvent(olMap, ngZone, 'dragend', OpenLayersEventManager.mapDragEndEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointerdrag', OpenLayersEventManager.pointerDragEvent);
 
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
@@ -55,6 +51,7 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.pointerDragEvent);
   }
 
   private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
@@ -78,10 +75,6 @@ export class OpenLayersEventManager {
     );
   }
 
-  public static onMapMoveStart$(): Observable<MapEvent> {
-    return OpenLayersEventManager.mapMoveStartEvent.stream.asObservable();
-  }
-
   public static onMapMove$(): Observable<MapEvent> {
     return OpenLayersEventManager.mapMoveEndEvent.stream.asObservable();
   }
@@ -99,12 +92,8 @@ export class OpenLayersEventManager {
     return OpenLayersEventManager.changeViewEvent.stream.asObservable();
   }
 
-  public static onMapZoomEnd$(): Observable<MapEvent> {
-    return OpenLayersEventManager.mapZoomEndEvent.stream.asObservable();
-  }
-
-  public static onMapDragEnd$(): Observable<MapEvent> {
-    return OpenLayersEventManager.mapDragEndEvent.stream.asObservable();
+  public static onPointerDrag$(): Observable<MapBrowserEvent<PointerEvent>> {
+    return OpenLayersEventManager.pointerDragEvent.stream.asObservable();
   }
 
 }
