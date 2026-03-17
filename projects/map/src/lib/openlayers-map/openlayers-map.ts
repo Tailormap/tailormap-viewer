@@ -40,6 +40,7 @@ export class OpenLayersMap implements MapViewerModel {
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
   private mapPadding: number[] | undefined;
+  private attributionControl?: Attribution;
 
   constructor(
     private ngZone: NgZone,
@@ -95,9 +96,11 @@ export class OpenLayersMap implements MapViewerModel {
       view,
     });
     // always add the attribution control
-    olMap.addControl(new Attribution({
+    this.attributionControl = new Attribution({
       collapsed: false,
-    }));
+      collapseLabel: options.attributionsBottomLeft ? '‹' : '›',
+    });
+    olMap.addControl(this.attributionControl);
 
     this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent

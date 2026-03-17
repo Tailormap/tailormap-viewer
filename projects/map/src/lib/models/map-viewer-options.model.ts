@@ -6,4 +6,5 @@ export interface MapViewerOptionsModel {
   projectionDefinition: string;
   maxExtent: OpenlayersExtent;
   initialExtent?: OpenlayersExtent;
+  attributionsBottomLeft?: boolean;
 }
