@@ -7,6 +7,7 @@ import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { MapBrowserEvent } from 'ol';
 import { ObjectEvent } from 'ol/Object';
+import RenderEvent from 'ol/render/Event';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'
@@ -24,6 +25,8 @@ export class OpenLayersEventManager {
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
   private static pointerDragEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
+  private static postRenderEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
+  private static renderCompleteEvent: EventManagerEvent<RenderEvent> = { stream: new Subject<RenderEvent>() };
   private static in3d = false;
   private static destroyed = new Subject();
 
@@ -38,6 +41,8 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointerdrag', OpenLayersEventManager.pointerDragEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'postrender', OpenLayersEventManager.postRenderEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'rendercomplete', OpenLayersEventManager.renderCompleteEvent);
 
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
@@ -52,6 +57,9 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.pointerDragEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.postRenderEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.renderCompleteEvent);
+
   }
 
   private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
@@ -94,6 +102,14 @@ export class OpenLayersEventManager {
 
   public static onPointerDrag$(): Observable<MapBrowserEvent<PointerEvent>> {
     return OpenLayersEventManager.pointerDragEvent.stream.asObservable();
+  }
+
+  public static onPostRender$(): Observable<MapEvent> {
+    return OpenLayersEventManager.postRenderEvent.stream.asObservable();
+  }
+
+  public static onRenderComplete$(): Observable<RenderEvent> {
+    return OpenLayersEventManager.renderCompleteEvent.stream.asObservable();
   }
 
 }

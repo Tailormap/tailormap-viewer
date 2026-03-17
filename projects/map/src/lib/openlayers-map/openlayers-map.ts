@@ -127,7 +127,10 @@ export class OpenLayersMap implements MapViewerModel {
     merge(
       timer(5000),
       OpenLayersEventManager.onMapClick$(),
-      OpenLayersEventManager.onPointerDrag$(),
+      OpenLayersEventManager.onRenderComplete$().pipe(
+        take(1),
+        switchMap(() => OpenLayersEventManager.onMapMove$()),
+      ),
     )
       .pipe(
         take(1),
