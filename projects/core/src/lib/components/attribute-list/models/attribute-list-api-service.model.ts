@@ -226,9 +226,9 @@ export interface GetStatisticParams {
 
 export interface GetStatisticResponse {
   /**
-   * The statistic value
+   * The statistic value. May be null if the statistic could not be calculated successfully.
    */
-  result: number;
+  result: number | null;
   /**
    * Indicates whether the statistic was successfully calculated. If false, the result may be null or invalid.
    */
