@@ -75,6 +75,14 @@ export class AttributeListStatisticsService {
           const loadParams = { type: params.type, columnName: params.columnName, dataType: params.dataType, applicationId, layerId: selectedTab.layerId };
           const key = this.getStatisticsKey(loadParams.applicationId, loadParams.layerId);
           const layerStatistics = this.statistics.value.get(key);
+
+          if (params.type === StatisticType.NONE) {
+            // NONE clears any existing statistic for this column
+            const filteredStatistics = (layerStatistics || []).filter(s => s.columnName !== loadParams.columnName);
+            this.statistics.next(new Map(this.statistics.value).set(key, filteredStatistics));
+            return of(null);
+          }
+
           const currentStatistic = layerStatistics?.find(s => {
             return s.dataType === loadParams.dataType && s.columnName === loadParams.columnName && s.type === loadParams.type;
           });
@@ -82,8 +90,11 @@ export class AttributeListStatisticsService {
             // already loaded
             return of(null);
           }
-          this.statistics.next(this.statistics.value.set(key, [
-            ...(layerStatistics || []),
+
+          // Replace any existing statistic for this column (different type) with the new loading entry
+          const statisticsWithoutCurrentColumn = (layerStatistics || []).filter(s => s.columnName !== loadParams.columnName);
+          this.statistics.next(new Map(this.statistics.value).set(key, [
+            ...statisticsWithoutCurrentColumn,
             { columnName: params.columnName, dataType: params.dataType, type: params.type, isLoading: true, value: 0 },
           ]));
           const filter = this.filterService.getFilterForLayer(loadParams.layerId);
@@ -103,17 +114,15 @@ export class AttributeListStatisticsService {
         }
         const key = this.getStatisticsKey(statistic.params.applicationId, statistic.params.layerId);
         const currentStatistics = this.statistics.value.get(key) || [];
-        currentStatistics.map(c => {
+        const updatedStatistics = currentStatistics.map(c => {
           if (c.columnName === statistic.params.columnName && c.dataType === statistic.params.dataType && c.type === statistic.params.type) {
             const hasError = !statistic.response || !statistic.response.success;
             const value = statistic.response?.result ?? 0;
-            c.value = hasError ? 0 : value;
-            c.hasError = hasError;
-            c.isLoading = false;
+            return { ...c, value: hasError ? 0 : value, hasError, isLoading: false };
           }
           return c;
         });
-        this.statistics.next(this.statistics.value.set(key, currentStatistics));
+        this.statistics.next(new Map(this.statistics.value).set(key, updatedStatistics));
       });
   }
 
