@@ -54,3 +54,23 @@ tm-feature-info-layer-dropdown {
   display: block;
   flex: 1;
 }
+
+.mobile-feature-info-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.mobile-feature-info-dialog .layer-list-dropdown-wrapper {
+  flex: 0 0 auto;
+}
+
+.mobile-feature-info-dialog tm-feature-info-content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+tm-feature-info-content {
+  overflow: hidden;
+}

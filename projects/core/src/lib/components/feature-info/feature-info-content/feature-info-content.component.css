@@ -1,8 +1,13 @@
+:host {
+  display: flex;
+}
+
 .feature-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  max-height: 100%;
 }
 
 tm-error-message {
@@ -106,4 +111,8 @@ tm-error-message {
 .edit-feature-button {
   flex: 0 0 36px;
   margin-left: 14px;
+}
+
+.feature-info-attributes-and-attachments {
+  overflow-y: scroll;
 }
