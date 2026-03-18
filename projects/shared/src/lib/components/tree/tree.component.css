@@ -25,6 +25,7 @@ mat-checkbox {
   height: var(--tree-node-size);
   min-height: initial;
   position: relative;
+  padding-left: var(--tree-node-indent, 0px);
   color: var(--mat-tree-node-text-color);
   font-family: var(--mat-tree-node-text-font);
   font-size: var(--mat-tree-node-text-size);
