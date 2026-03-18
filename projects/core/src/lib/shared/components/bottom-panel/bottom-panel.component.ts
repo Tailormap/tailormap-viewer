@@ -89,9 +89,7 @@ export class BottomPanelComponent implements OnInit {
     this.isMaximized = false;
     const computedHeight = initialHeight - changedHeight;
     this.isUserResizing = true;
-    const height = computedHeight < BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX
-      ? BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX
-      : computedHeight;
+    const height = Math.max(computedHeight, BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX);
     this.heightSubject.next(height);
     this.heightChanged.emit(height);
     setTimeout(() => { this.isUserResizing = false; }, 0);
