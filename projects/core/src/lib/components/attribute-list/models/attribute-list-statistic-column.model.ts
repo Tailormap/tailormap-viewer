@@ -1,16 +1,13 @@
 import { StatisticType } from './attribute-list-api-service.model';
 
-export interface StatisticValueModel {
-  type: StatisticType;
-  value: string | null;
+export interface StatisticValueModel extends AttributeListStatisticColumnModel {
   label: string;
-  isLoading: boolean;
 }
 
 export interface AttributeListStatisticColumnModel {
   columnName: string;
   type: StatisticType;
-  value: number;
+  value: number | null;
   isLoading: boolean;
   dataType: string;
   hasError?: boolean;

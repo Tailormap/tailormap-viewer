@@ -74,7 +74,18 @@ export class AttributeListStatisticsService {
           }
           const loadParams = { type: params.type, columnName: params.columnName, dataType: params.dataType, applicationId, layerId: selectedTab.layerId };
           const key = this.getStatisticsKey(loadParams.applicationId, loadParams.layerId);
-          const layerStatistics = this.statistics.value.get(key);
+          const layerStatistics = this.statistics.value.get(key) || [];
+
+          if (params.type === StatisticType.NONE) {
+            const updatedStatistics = layerStatistics.filter(statistic => {
+              return !(statistic.columnName === params.columnName && statistic.dataType === params.dataType);
+            });
+            if (updatedStatistics.length !== layerStatistics.length) {
+              this.statistics.next(this.statistics.value.set(key, updatedStatistics));
+            }
+            return of(null);
+          }
+
           const currentStatistic = layerStatistics?.find(s => {
             return s.dataType === loadParams.dataType && s.columnName === loadParams.columnName && s.type === loadParams.type;
           });
@@ -82,10 +93,16 @@ export class AttributeListStatisticsService {
             // already loaded
             return of(null);
           }
-          this.statistics.next(this.statistics.value.set(key, [
-            ...(layerStatistics || []),
-            { columnName: params.columnName, dataType: params.dataType, type: params.type, isLoading: true, value: 0 },
-          ]));
+          // Remove any previous statistic for the same column and data type
+          const filteredLayerStatistics = (layerStatistics || []).filter(statistic => {
+            return !(statistic.columnName === params.columnName && statistic.dataType === params.dataType);
+          });
+          const updatedStatistics = new Map(this.statistics.value);
+          updatedStatistics.set(key, [
+            ...filteredLayerStatistics,
+            { columnName: params.columnName, dataType: params.dataType, type: params.type, isLoading: true, value: null },
+          ]);
+          this.statistics.next(updatedStatistics);
           const filter = this.filterService.getFilterForLayer(loadParams.layerId);
           return this.attributeListManagerService.getStatistic$(selectedTab.tabSourceId, {
             applicationId: loadParams.applicationId,
@@ -103,17 +120,19 @@ export class AttributeListStatisticsService {
         }
         const key = this.getStatisticsKey(statistic.params.applicationId, statistic.params.layerId);
         const currentStatistics = this.statistics.value.get(key) || [];
-        currentStatistics.map(c => {
+        const updatedStatisticsForLayer: AttributeListStatisticColumnModel[] = currentStatistics.map(c => {
           if (c.columnName === statistic.params.columnName && c.dataType === statistic.params.dataType && c.type === statistic.params.type) {
             const hasError = !statistic.response || !statistic.response.success;
-            const value = statistic.response?.result ?? 0;
-            c.value = hasError ? 0 : value;
+            const value = statistic.response?.result ?? null;
+            c.value = hasError ? null : value;
             c.hasError = hasError;
             c.isLoading = false;
           }
           return c;
         });
-        this.statistics.next(this.statistics.value.set(key, currentStatistics));
+        const updatedStatistics = new Map(this.statistics.value);
+        updatedStatistics.set(key, updatedStatisticsForLayer);
+        this.statistics.next(updatedStatistics);
       });
   }
 

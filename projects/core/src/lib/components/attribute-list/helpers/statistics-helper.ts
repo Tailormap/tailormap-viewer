@@ -22,12 +22,21 @@ const statisticNumberTypes = new Set([
 
 export class StatisticsHelper {
 
+  public static getStatisticsHelpMessage() {
+    return $localize `:@@core.attribute-list.statistics-help:Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.`;
+  }
+
   public static getStatisticOptions() {
     return statisticOptions;
   }
 
-  public static getLabelForStatisticType(type: StatisticType) {
-    return statisticOptionsMap.get(type);
+  public static getLabelForStatisticType(stat: AttributeListStatisticColumnModel) {
+    const statType = statisticOptionsMap.get(stat.type);
+    const statValueLabel = StatisticsHelper.getStatisticValue(stat);
+    if (statValueLabel) {
+      return `${statType} = ${statValueLabel}`;
+    }
+    return "";
   }
 
   public static isStatisticTypeAvailable(type: StatisticType, dataType: AttributeType) {
@@ -39,17 +48,15 @@ export class StatisticsHelper {
     return statisticNumberTypes.has(type) && isNumberDataType;
   }
 
-  public static getStatisticValue(columnDataType?: string, column?: AttributeListStatisticColumnModel): string | null {
-    if (!column || !column.value || column.type === StatisticType.NONE) {
+  private static getStatisticValue(stat: AttributeListStatisticColumnModel): string | null {
+    const columnDataType = stat.dataType;
+    if (typeof stat.value !== 'number' || stat.type === StatisticType.NONE) {
       return null;
     }
-    if (column.type === StatisticType.COUNT || (columnDataType && columnDataType.toLowerCase() === 'integer')) {
-      return column.value.toFixed();
+    if (stat.type === StatisticType.COUNT || (columnDataType && columnDataType.toLowerCase() === 'integer')) {
+      return stat.value.toFixed();
     }
-    return column.value.toFixed(2);
+    return stat.value.toFixed(2);
   }
 
-  public static getStatisticsHelpMessage() {
-    return $localize `:@@core.attribute-list.statistics-help:Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.`;
-  }
 }

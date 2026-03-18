@@ -167,13 +167,13 @@ export class AttributeListManagerService implements OnDestroy {
 
   public canLoadStatistics(tabSourceId: string): boolean {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
-    return typeof source?.dataLoader.getStatisticValue$ !== 'undefined';
+    return typeof source?.dataLoader.getStatisticValue$ === 'function';
   }
 
   public getStatistic$(tabSourceId: string, params: GetStatisticParams): Observable<GetStatisticResponse> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
-    if (!source || !source.dataLoader.getStatisticValue$) {
-      return of({ result: 0, success: false });
+    if (!source || typeof source?.dataLoader.getStatisticValue$ !== 'function') {
+      return of({ result: null, success: false });
     }
     return source.dataLoader.getStatisticValue$(params);
   }

@@ -159,7 +159,11 @@ mat-table {
 }
 
 .mat-mdc-footer-cell .mat-icon {
-  padding-left: 0;
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
+  padding: 0;
+  cursor: help;
 }
 
 .details-row .mat-mdc-cell {
@@ -237,4 +241,8 @@ mat-table {
 
 .row-expand-icon:hover {
   color: var(--primary-color);
+}
+
+.error {
+  color: var(--error-color);
 }

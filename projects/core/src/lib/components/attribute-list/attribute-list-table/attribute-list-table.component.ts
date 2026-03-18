@@ -91,13 +91,12 @@ export class AttributeListTableComponent {
     const statistics = this.statistics() || [];
     return new Map<string, StatisticValueModel>(statistics.map(
       s => {
-        const statisticValue = StatisticsHelper.getStatisticValue(s.dataType, s);
-        const label = StatisticsHelper.getLabelForStatisticType(s.type);
+        const label = s.hasError
+          ? $localize `:@@core.attribute-list.statistics-error:Error loading statistic`
+          : StatisticsHelper.getLabelForStatisticType(s);
         const value: StatisticValueModel = {
-          type: s.type,
-          label: `${label} = ${statisticValue}`,
-          isLoading: s.isLoading,
-          value: statisticValue,
+          ...s,
+          label,
         };
         return [ s.columnName, value ];
       },
@@ -199,17 +198,8 @@ export class AttributeListTableComponent {
     this.expandedRows.set(expandedRows);
   }
 
-  public hasStatisticResult(col: AttributeListColumnModel): boolean {
-    const column = this.statisticsDictionary().get(col.id);
-    return column?.value !== null && typeof column?.value !== 'undefined';
-  }
-
-  public getStatisticResult(col: AttributeListColumnModel): string {
-    const column = this.statisticsDictionary().get(col.id);
-    if (column && column.value) {
-      return column.label;
-    }
-    return '';
+  public getStatisticResult(col: AttributeListColumnModel): StatisticValueModel | undefined {
+    return this.statisticsDictionary().get(col.id);
   }
 
   public isStatisticsProcessing(colName: string): boolean {

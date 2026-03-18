@@ -68,14 +68,17 @@
                          [matMenuTriggerFor]="statsMenu"
                          [matMenuTriggerData]="{column: col}"
                          [style.flexBasis]="getColumnWidth(col)">
-          @if (isStatisticsProcessing(col.id)) {
+          @let statisticProcessing = isStatisticsProcessing(col.id);
+          @let statisticResult = getStatisticResult(col);
+          @if (statisticProcessing) {
             <div><mat-spinner diameter="20"></mat-spinner></div>
           }
-          @if (!isStatisticsProcessing(col.id) && !hasStatisticResult(col)) {
+          @if (!statisticProcessing && !statisticResult) {
             <div class="statistics-placeholder"><mat-icon svgIcon="functions"></mat-icon></div>
           }
-          @if (hasStatisticResult(col)) {
-            <div>{{getStatisticResult(col)}}</div>
+          @if (statisticResult) {
+            <div [class.error]="statisticResult.hasError"
+                 [tmTooltip]="statisticResult.label">{{statisticResult.label}}</div>
           }
         </mat-footer-cell>
       }
