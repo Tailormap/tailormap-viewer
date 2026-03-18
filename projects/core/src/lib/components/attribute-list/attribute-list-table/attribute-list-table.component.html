@@ -72,7 +72,7 @@
             <div><mat-spinner diameter="20"></mat-spinner></div>
           }
           @if (!isStatisticsProcessing(col.id) && !hasStatisticResult(col)) {
-            <div><mat-icon svgIcon="functions"></mat-icon></div>
+            <div class="statistics-placeholder"><mat-icon svgIcon="functions"></mat-icon></div>
           }
           @if (hasStatisticResult(col)) {
             <div>{{getStatisticResult(col)}}</div>
