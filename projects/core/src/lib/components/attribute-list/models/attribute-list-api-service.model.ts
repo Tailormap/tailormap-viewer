@@ -3,6 +3,17 @@ import {
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 
+
+
+export enum StatisticType {
+  SUM = 'SUM',
+  MIN = 'MIN',
+  MAX = 'MAX',
+  AVERAGE = 'AVERAGE',
+  COUNT = 'COUNT',
+  NONE = 'NONE',
+}
+
 /**
  * Parameters for fetching features from a specific layer.
  */
@@ -187,6 +198,43 @@ export interface FeatureDetailsModel {
   details: FeatureDetailModel[];
 }
 
+export interface GetStatisticParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer
+   */
+  layerId: string;
+  /**
+   * Key of the column
+   */
+  column: string;
+  /**
+   * Type of statistic needed
+   */
+  type: StatisticType;
+  /**
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
+   */
+  filter?: Map<string | symbol, string> | null;
+}
+
+export interface GetStatisticResponse {
+  /**
+   * The statistic value
+   */
+  result: number;
+  /**
+   * Indicates whether the statistic was successfully calculated. If false, the result may be null or invalid.
+   */
+  success: boolean;
+}
+
 /**
  * Interface for implementing custom attribute list data loaders.
  * Implementations of this interface can be registered as data sources for the attribute list.
@@ -233,4 +281,11 @@ export interface AttributeListApiServiceModel {
    * @returns Observable emitting the feature details model or null if not found.
    */
   getFeatureDetails$?(params: GetFeatureDetailsParams): Observable<FeatureDetailsModel | null>;
+
+  /**
+   * Retrieves statistical information (like sum, avg, etc) for a column
+   * @param params Parameters specifying the application, layer ID, type of statistic etc.
+   * @returns Observable emitting the statistic value and success status.
+   */
+  getStatisticValue$?(params: GetStatisticParams): Observable<GetStatisticResponse>;
 }

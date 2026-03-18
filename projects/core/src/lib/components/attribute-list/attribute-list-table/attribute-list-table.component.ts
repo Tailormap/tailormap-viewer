@@ -3,7 +3,9 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeType } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
-import { FeatureDetailsModel } from '../models/attribute-list-api-service.model';
+import { FeatureDetailsModel, StatisticType } from '../models/attribute-list-api-service.model';
+import { StatisticsHelper } from '../helpers/statistics-helper';
+import { AttributeListStatisticColumnModel, StatisticValueModel } from '../models/attribute-list-statistic-column.model';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
@@ -46,9 +48,11 @@ export class AttributeListTableComponent {
   public selectedRowId: string | undefined | null;
 
   public canExpandRows = input<boolean | null>(false);
-
   public featureDetails = input<Map<string, FeatureDetailsModel> | null>(new Map());
   public loadingFeatureDetailsIds = input<Set<string> | null>(new Set());
+
+  public showStatistics = input<boolean | null>(false);
+  public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
@@ -61,6 +65,12 @@ export class AttributeListTableComponent {
 
   @Output()
   public loadFeatureDetailsForFeature = new EventEmitter<string>();
+
+  @Output()
+  public showStatisticsHelp = new EventEmitter();
+
+  @Output()
+  public loadStatisticsForColumn = new EventEmitter<{ type: StatisticType; columnName: string; dataType: string }>();
 
   private _rows: AttributeListRowModel[] = [];
   public columnNames = computed(() => {
@@ -75,6 +85,24 @@ export class AttributeListTableComponent {
 
   public readonly EXPAND_DETAILS_COLUMN_NAME = '__tm_attribute_list_expand_details__';
   public readonly EXPAND_DETAILS_ROW_NAME = '__tm_attribute_list_expand_details_row__';
+
+  public statisticTypes = StatisticsHelper.getStatisticOptions();
+  private statisticsDictionary = computed<Map<string, StatisticValueModel>>(() => {
+    const statistics = this.statistics() || [];
+    return new Map<string, StatisticValueModel>(statistics.map(
+      s => {
+        const statisticValue = StatisticsHelper.getStatisticValue(s.dataType, s);
+        const label = StatisticsHelper.getLabelForStatisticType(s.type);
+        const value: StatisticValueModel = {
+          type: s.type,
+          label: `${label} = ${statisticValue}`,
+          isLoading: s.isLoading,
+          value: statisticValue,
+        };
+        return [ s.columnName, value ];
+      },
+    ));
+  });
 
   constructor() {
     effect(() => {
@@ -169,6 +197,36 @@ export class AttributeListTableComponent {
       this.loadFeatureDetailsForFeature.emit(featureId);
     }
     this.expandedRows.set(expandedRows);
+  }
+
+  public hasStatisticResult(col: AttributeListColumnModel): boolean {
+    const column = this.statisticsDictionary().get(col.id);
+    return column?.value !== null && typeof column?.value !== 'undefined';
+  }
+
+  public getStatisticResult(col: AttributeListColumnModel): string {
+    const column = this.statisticsDictionary().get(col.id);
+    if (column && column.value) {
+      return column.label;
+    }
+    return '';
+  }
+
+  public isStatisticsProcessing(colName: string): boolean {
+    return this.statisticsDictionary().get(colName)?.isLoading ?? false;
+  }
+
+  public isStatisticsTypeAvailable(type: StatisticType, col: AttributeListColumnModel) {
+    return StatisticsHelper.isStatisticTypeAvailable(type, col.type);
+  }
+
+  public isStatisticsTypeSelected(type: StatisticType, col: AttributeListColumnModel) {
+    const statisticColumn = this.statisticsDictionary().get(col.id);
+    return !!statisticColumn && statisticColumn.type === type;
+  }
+
+  public loadStatistic(type: StatisticType, col: AttributeListColumnModel) {
+    this.loadStatisticsForColumn.emit({ type, columnName: col.id, dataType: col.type });
   }
 
 }

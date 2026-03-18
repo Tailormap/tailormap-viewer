@@ -22,10 +22,14 @@
       [canExpandRows]="canExpandRows$ | async"
       [featureDetails]="featureDetails$ | async"
       [loadingFeatureDetailsIds]="loadingFeatureDetailsIds$ | async"
+      [showStatistics]="showStatistics$ | async"
+      [statistics]="statistics$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"
-      (loadFeatureDetailsForFeature)="loadFeatureDetailsForFeature($event)"></tm-attribute-list-table>
+      (loadFeatureDetailsForFeature)="loadFeatureDetailsForFeature($event)"
+      (loadStatisticsForColumn)="loadStatisticsForColumn($event)"
+      (showStatisticsHelp)="showStatisticsHelp()"></tm-attribute-list-table>
   }
 
 </div>
