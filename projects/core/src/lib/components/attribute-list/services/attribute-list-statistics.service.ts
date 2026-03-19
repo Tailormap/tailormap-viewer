@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
-import { map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { selectViewerId } from '../../../state';
 import { GetStatisticResponse, StatisticType } from '../models/attribute-list-api-service.model';
@@ -113,7 +113,11 @@ export class AttributeListStatisticsService {
             type: loadParams.type,
             filter,
           })
-            .pipe(take(1), map(response => ({ response, params: loadParams } )));
+            .pipe(
+              take(1),
+              map(response => ({ response, params: loadParams })),
+              catchError(() => of({ response: null, params: loadParams })),
+            );
         }),
       )
       .subscribe((statistic: { params: LoadStatisticParams; response: GetStatisticResponse | null } | null) => {
