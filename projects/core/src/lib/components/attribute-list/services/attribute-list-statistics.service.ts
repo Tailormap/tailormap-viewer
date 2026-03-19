@@ -52,8 +52,8 @@ export class AttributeListStatisticsService {
   public statistics$ = combineLatest([
     this.statistics.asObservable(),
     this.statisticsKey$,
-  ]).pipe(map(([ featureDetailsMap, key ]): AttributeListStatisticColumnModel[] => {
-    return featureDetailsMap.get(key ?? '') || [];
+  ]).pipe(map(([ statisticsMap, key ]): AttributeListStatisticColumnModel[] => {
+    return statisticsMap.get(key ?? '') || [];
   }));
 
   private getStatisticsKey(applicationId: string, layerId: string) {

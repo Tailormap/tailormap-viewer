@@ -67,7 +67,7 @@ export class AttributeListTableComponent {
   public loadFeatureDetailsForFeature = new EventEmitter<string>();
 
   @Output()
-  public showStatisticsHelp = new EventEmitter();
+  public showStatisticsHelp = new EventEmitter<void>();
 
   @Output()
   public loadStatisticsForColumn = new EventEmitter<{ type: StatisticType; columnName: string; dataType: string }>();
