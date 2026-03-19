@@ -81,7 +81,7 @@
           @if (!statisticProcessing && !statisticResult) {
             <div class="statistics-placeholder"><mat-icon svgIcon="functions"></mat-icon></div>
           }
-          @if (statisticResult) {
+          @if (!statisticProcessing && statisticResult) {
             <div [class.error]="statisticResult.hasError"
                  [tmTooltip]="statisticResult.label">{{statisticResult.label}}</div>
           }
