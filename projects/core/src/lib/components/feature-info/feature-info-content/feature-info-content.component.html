@@ -4,7 +4,7 @@
   }
   @if(currentFeature(); as feature) {
     <div class="feature-info" [class.attributes-collapsed]="attributesCollapsed() && !!layer.template">
-      <div class="feature-info-attributes-and-attachments">
+      <div class="feature-info-wrapper">
         @if (layer.template) {
           <div class="row template-row">
             <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
