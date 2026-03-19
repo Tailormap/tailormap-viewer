@@ -81,7 +81,9 @@ export class AttributeListStatisticsService {
               return !(statistic.columnName === params.columnName && statistic.dataType === params.dataType);
             });
             if (updatedStatistics.length !== layerStatistics.length) {
-              this.statistics.next(this.statistics.value.set(key, updatedStatistics));
+              const updatedMap = new Map(this.statistics.value);
+              updatedMap.set(key, updatedStatistics);
+              this.statistics.next(updatedMap);
             }
             return of(null);
           }
