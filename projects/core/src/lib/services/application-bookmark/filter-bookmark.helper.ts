@@ -99,7 +99,10 @@ export class FilterBookmarkHelper {
         const bf: BookmarkSpatialFilterModel = {
           id: f.id, // changed to size 6 instead of default 21, could be regenerated?
           gC: f.geometryColumns.map(gc => ({ l: gc.layerId, c: gc.column })),
-          g: f.geometries.map(g => ({ id: g.id, g: g.geometry, l: g.referenceLayerId })),
+          g: f.geometries
+            // only save user drawn geometries in the bookmark, reference layer geometries are loaded dynamically and can change
+            .filter(g => typeof g.referenceLayerId === 'undefined')
+            .map(g => ({ id: g.id, g: g.geometry, l: g.referenceLayerId })),
         };
         if (f.disabled) { bf.d = f.disabled; }
         if (f.baseLayerId) { bf.l = f.baseLayerId; }
