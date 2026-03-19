@@ -58,6 +58,10 @@
         <source>Count</source>
         <target>Anzahl</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-error" datatype="html">
+        <source>Error loading statistic</source>
+        <target>Fehler beim Laden der Statistik</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.statistics-help" datatype="html">
         <source>Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.</source>
         <target>Statistiken werden aus den aktiven Filtern berechnet. Verwenden Sie die Filterschaltfläche in den Spaltenüberschriften, um Filter hinzuzufügen oder zu entfernen.</target>
