@@ -28,7 +28,12 @@
     </mat-cell>
     @if (showStatistics()) {
       <mat-footer-cell class="column_small" *matFooterCellDef>
-        <mat-icon (click)="showStatisticsHelp.emit()" svgIcon="functions"></mat-icon>
+        <button mat-icon-button
+                type="button"
+                aria-label="Show statistics help"
+                (click)="showStatisticsHelp.emit()">
+          <mat-icon svgIcon="functions"></mat-icon>
+        </button>
       </mat-footer-cell>
     }
   </ng-container>
