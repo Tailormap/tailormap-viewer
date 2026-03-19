@@ -126,9 +126,12 @@ export class AttributeListStatisticsService {
           if (c.columnName === statistic.params.columnName && c.dataType === statistic.params.dataType && c.type === statistic.params.type) {
             const hasError = !statistic.response || !statistic.response.success;
             const value = statistic.response?.result ?? null;
-            c.value = hasError ? null : value;
-            c.hasError = hasError;
-            c.isLoading = false;
+            return {
+              ...c,
+              value: hasError ? null : value,
+              hasError,
+              isLoading: false,
+            };
           }
           return c;
         });
