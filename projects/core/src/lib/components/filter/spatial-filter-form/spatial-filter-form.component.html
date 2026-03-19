@@ -46,6 +46,12 @@
         <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
       </div>
     }
+    @let currentGroupExceededMaxFeatures = currentGroupExceededMaxFeatures$ | async;
+    @if (currentGroupExceededMaxFeatures) {
+      @let referenceLayerTitle = selectReferenceLayerLabel$ | async;
+      <tm-error-message message="Ensure that no more than {{ MAX_REFERENCE_FEATURES }} objects from the {{ referenceLayerTitle }} layer are visible on the map."
+        i18n-message="@@core.filter.max-features-exceeded-warning"></tm-error-message>
+    }
     <div class="form-section buttons">
       @if (currentGroup$ | async; as currentGroup) {
         <button mat-stroked-button
@@ -56,6 +62,7 @@
         i18n="@@core.common.delete">Delete</button>
         <button mat-flat-button
           color="primary"
+          [disabled]="currentGroupExceededMaxFeatures"
           (click)="save()"
           tmTooltip="Save filter"
           i18n-tmTooltip="@@core.filter.save-filter"

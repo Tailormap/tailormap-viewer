@@ -6,8 +6,9 @@ import { combineLatest, map, Observable, of, Subject, switchMap, takeUntil } fro
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
-  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectReferenceLayerLabel, selectSelectedFilterGroupError,
+  selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
@@ -49,6 +50,9 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
+  public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
+  public selectReferenceLayerLabel$ = this.store$.select(selectReferenceLayerLabel);
+  public MAX_REFERENCE_FEATURES = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
   public in3dView$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {

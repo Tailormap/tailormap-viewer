@@ -48,6 +48,9 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
   }): Observable<FeaturesResponseModel> {
     return of(getFeaturesResponseModel()).pipe(delay(3000));
   }
