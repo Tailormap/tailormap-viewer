@@ -3,8 +3,6 @@ import {
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 
-
-
 export enum StatisticType {
   SUM = 'SUM',
   MIN = 'MIN',

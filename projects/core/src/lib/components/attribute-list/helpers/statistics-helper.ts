@@ -53,7 +53,7 @@ export class StatisticsHelper {
     if (typeof stat.value !== 'number' || stat.type === StatisticType.NONE) {
       return null;
     }
-    if (stat.type === StatisticType.COUNT || (columnDataType && columnDataType.toLowerCase() === 'integer')) {
+    if (stat.type === StatisticType.COUNT || (columnDataType && columnDataType.toLowerCase() === 'integer' && stat.type !== StatisticType.AVERAGE)) {
       return stat.value.toFixed();
     }
     return stat.value.toFixed(2);

@@ -153,7 +153,7 @@ describe('AttributeListStatisticsService', () => {
       expect(resolvedEmission[0].type).toBe(StatisticType.SUM);
     });
 
-    it('loading -> error: should set hasError=true and value=0 when loading fails', () => {
+    it('loading -> error: should set hasError=true and value=null when loading fails', () => {
       const { service } = setup({ getStatisticResponse: { result: null, success: false } });
       const emissions: AttributeListStatisticColumnModel[][] = [];
       service.statistics$.subscribe(stats => emissions.push(stats));
