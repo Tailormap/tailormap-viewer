@@ -64,7 +64,10 @@ export class ApplicationMapService implements OnDestroy {
         }
         const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
         const initialOptions = bookmark ? { initialCenter: bookmark[0], initialZoom: bookmark[1] } : undefined;
-        const mapViewerOptions: MapViewerOptionsModel = { ...mapOptions, attributionsBottomLeft: isMobileLayoutEnabled };
+        const mapViewerOptions: MapViewerOptionsModel = {
+          ...mapOptions,
+          controlOptions: { attributionPosition: isMobileLayoutEnabled ? 'left' : 'right' },
+        };
         this.mapService.initMap(mapViewerOptions, initialOptions);
       });
 

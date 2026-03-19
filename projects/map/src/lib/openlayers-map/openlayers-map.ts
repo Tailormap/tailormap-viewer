@@ -97,8 +97,9 @@ export class OpenLayersMap implements MapViewerModel {
     });
     // always add the attribution control
     this.attributionControl = new Attribution({
+      className: `ol-attribution ol-attribution--${options.controlOptions?.attributionPosition}`,
       collapsed: false,
-      collapseLabel: options.attributionsBottomLeft ? '‹' : '›',
+      collapseLabel: options.controlOptions?.attributionPosition === 'left' ? '‹' : '›',
     });
     olMap.addControl(this.attributionControl);
 
