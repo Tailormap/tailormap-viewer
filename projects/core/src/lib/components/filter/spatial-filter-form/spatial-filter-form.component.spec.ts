@@ -130,7 +130,8 @@ describe('SpatialFilterFormComponent', () => {
       selectedFilterGroup: group,
       exceededMax: true,
     });
-    expect(await screen.findByText('Ensure that no more than 250 objects from the the_reference_layer layer are visible on the map.')).toBeInTheDocument();
+    // eslint-disable-next-line max-len
+    expect(await screen.findByText('There are more than 250 objects available in the the_reference_layer layer. The maximum is 250. Apply filters to narrow down the selection.')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save filter')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save filter')).toBeDisabled();
   });
