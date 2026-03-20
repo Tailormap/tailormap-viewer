@@ -1,12 +1,13 @@
 import { Map as OlMap } from 'ol';
 import { NgZone } from '@angular/core';
-import { Observable, Subject, takeUntil, filter } from 'rxjs';
+import { Observable, Subject, takeUntil, filter, skipUntil } from 'rxjs';
 import { default as MapEvent } from 'ol/MapEvent';
 import { default as BaseEvent } from 'ol/events/Event';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { MapBrowserEvent } from 'ol';
 import { ObjectEvent } from 'ol/Object';
+import { default as RenderEvent } from 'ol/render/Event';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'
@@ -23,6 +24,8 @@ export class OpenLayersEventManager {
   private static mapClickEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static mouseMoveEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
+  private static renderCompleteEvent: EventManagerEvent<RenderEvent> = { stream: new Subject<RenderEvent>() };
+  private static mapMoveStartEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
   private static in3d = false;
   private static destroyed = new Subject();
 
@@ -36,6 +39,8 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'singleclick', OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointermove', OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'rendercomplete', OpenLayersEventManager.renderCompleteEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'movestart', OpenLayersEventManager.mapMoveStartEvent);
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
       .subscribe(in3d => OpenLayersEventManager.in3d = in3d);
@@ -48,6 +53,8 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapClickEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mouseMoveEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.renderCompleteEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapMoveStartEvent);
   }
 
   private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
@@ -88,4 +95,10 @@ export class OpenLayersEventManager {
     return OpenLayersEventManager.changeViewEvent.stream.asObservable();
   }
 
+  public static onMapMoveStart$(): Observable<MapEvent> {
+    return OpenLayersEventManager.mapMoveStartEvent.stream.asObservable()
+      .pipe(
+        skipUntil(OpenLayersEventManager.renderCompleteEvent.stream.asObservable()),
+      );
+  }
 }
