@@ -51,7 +51,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
   public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
-  public selectReferenceLayerLabel$ = this.store$.select(selectReferenceLayerLabel);
+  public referenceLayerLabel$ = this.store$.select(selectReferenceLayerLabel);
   public MAX_REFERENCE_FEATURES = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
   public in3dView$: Observable<boolean> = of(false);
 
