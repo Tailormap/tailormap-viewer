@@ -77,7 +77,7 @@ export class AttributeListStatisticsService {
           const key = this.getStatisticsKey(loadParams.applicationId, loadParams.layerId);
           const layerStatistics = this.statistics.value.get(key) || [];
           if (params.type === StatisticType.NONE) {
-            this.clearStatistic(layerStatistics, key, params);
+            return this.clearStatistic$(layerStatistics, key, params);
           }
           const currentStatistic = layerStatistics?.find(s => {
             return s.dataType === loadParams.dataType && s.columnName === loadParams.columnName && s.type === loadParams.type;
@@ -107,7 +107,7 @@ export class AttributeListStatisticsService {
       });
   }
 
-  private clearStatistic(layerStatistics: AttributeListStatisticColumnModel[], key: string, params: {
+  private clearStatistic$(layerStatistics: AttributeListStatisticColumnModel[], key: string, params: {
     type: StatisticType;
     columnName: string;
     dataType: string;
