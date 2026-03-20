@@ -24,6 +24,7 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarService } from '../../menubar';
+import { selectComponentTitle } from '../../../state';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -174,16 +175,37 @@ export class FeatureInfoDialogComponent {
     this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
   }
 
+  // public editFeature() {
+  //   this.store$.select(selectCurrentFeatureForEdit)
+  //     .pipe(take(1))
+  //     .subscribe(featureWithMetadata => {
+  //       if (featureWithMetadata) {
+  //         this.store$.dispatch(setLoadedEditFeature({
+  //           feature: featureWithMetadata.feature,
+  //           columnMetadata: featureWithMetadata.columnMetadata,
+  //           openedFromFeatureInfo: true,
+  //         }));
+  //       }
+  //     });
+  //
+  // }
+
   public editFeature() {
-    this.store$.select(selectCurrentFeatureForEdit)
-      .pipe(take(1))
-      .subscribe(featureWithMetadata => {
+    combineLatest([
+      this.store$.select(selectCurrentFeatureForEdit),
+      this.mobileLayoutService.isMobileLayoutEnabled$,
+      this.store$.select(selectComponentTitle(BaseComponentTypeEnum.EDIT, $localize `:@@core.edit.edit:Edit`)),
+    ]).pipe(take(1))
+      .subscribe(([ featureWithMetadata, isMobileLayoutEnabled, panelTitle ]) => {
         if (featureWithMetadata) {
           this.store$.dispatch(setLoadedEditFeature({
             feature: featureWithMetadata.feature,
             columnMetadata: featureWithMetadata.columnMetadata,
             openedFromFeatureInfo: true,
           }));
+          if (isMobileLayoutEnabled) {
+            this.menuBarService.toggleActiveComponent(BaseComponentTypeEnum.EDIT, panelTitle);
+          }
         }
       });
 
