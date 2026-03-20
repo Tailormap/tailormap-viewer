@@ -2,7 +2,7 @@ import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
-  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D,
+  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D, MapViewerOptionsModel,
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
@@ -22,6 +22,7 @@ import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookm
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
 import { FeaturesFilterHelper } from '../../filter';
+import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 
 @Injectable({
    providedIn: 'root',
@@ -33,6 +34,7 @@ export class ApplicationMapService implements OnDestroy {
   private bookmarkService = inject(BookmarkService);
   private localeId = inject(LOCALE_ID);
   private _applicationLayerRefreshService = inject(ApplicationLayerRefreshService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
   private destroyed = new Subject();
   private capabilities: Map<string, string> = new Map();
@@ -51,15 +53,22 @@ export class ApplicationMapService implements OnDestroy {
             ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
             ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
         }),
-        withLatestFrom(this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)),
+        withLatestFrom(
+          this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR),
+          this.mobileLayoutService.isMobileLayoutEnabled$,
+        ),
       )
-      .subscribe(([ mapOptions, locationBookmark ]) => {
+      .subscribe(([ mapOptions, locationBookmark, isMobileLayoutEnabled ]) => {
         if (mapOptions === null) {
           return;
         }
         const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
         const initialOptions = bookmark ? { initialCenter: bookmark[0], initialZoom: bookmark[1] } : undefined;
-        this.mapService.initMap(mapOptions, initialOptions);
+        const mapViewerOptions: MapViewerOptionsModel = {
+          ...mapOptions,
+          controlOptions: { attributionPosition: isMobileLayoutEnabled ? 'left' : 'right' },
+        };
+        this.mapService.initMap(mapViewerOptions, initialOptions);
       });
 
     combineLatest([

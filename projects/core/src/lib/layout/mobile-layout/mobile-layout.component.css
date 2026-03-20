@@ -61,8 +61,3 @@
 .map-controls-right ::ng-deep .geolocation-buttons {
   margin-top: 0;
 }
-
-.map ::ng-deep .ol-attribution {
-  right: auto;
-  left: calc(var(--body-margin) - 8px);
-}
