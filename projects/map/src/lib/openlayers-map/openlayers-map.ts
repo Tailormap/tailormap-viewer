@@ -7,7 +7,7 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take, timer } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -95,9 +95,10 @@ export class OpenLayersMap implements MapViewerModel {
       view,
     });
     // always add the attribution control
-    olMap.addControl(new Attribution({
+    const attributionControl = new Attribution({
       collapsed: false,
-    }));
+    });
+    olMap.addControl(attributionControl);
 
     this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent
@@ -121,6 +122,19 @@ export class OpenLayersMap implements MapViewerModel {
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
+
+    // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
+    merge(
+      timer(5000),
+      OpenLayersEventManager.onMapClick$(),
+      OpenLayersEventManager.onMapMoveStart$(),
+    )
+      .pipe(
+        take(1),
+      )
+      .subscribe(() => {
+        attributionControl?.setCollapsed(true);
+      });
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
