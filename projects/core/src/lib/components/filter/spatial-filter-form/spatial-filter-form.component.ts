@@ -51,8 +51,18 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
   public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
-  public referenceLayerLabel$ = this.store$.select(selectReferenceLayerLabel);
-  public MAX_REFERENCE_FEATURES = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
+  public exceededMaxErrorMessage$ = this.currentGroupExceededMaxFeatures$.pipe(
+    filter(hasExceeded => !!hasExceeded),
+    switchMap(() => this.store$.select(selectReferenceLayerLabel)),
+    map((referenceLayerTitle) =>  {
+      if (!referenceLayerTitle) {
+        return '';
+      }
+      const maxFeatures = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
+      // eslint-disable-next-line max-len
+      return $localize `:@@core.filter.max-features-exceeded-warning:There are more than ${maxFeatures} objects available in the ${referenceLayerTitle} layer. The maximum is ${maxFeatures}. Apply filters to narrow down the selection.`;
+    }),
+  );
   public in3dView$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {

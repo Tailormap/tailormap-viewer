@@ -799,8 +799,8 @@
         <target>Referentiegeometrie laden</target>
       </trans-unit>
       <trans-unit id="core.filter.max-features-exceeded-warning" datatype="html">
-        <source>Ensure that no more than <x id="INTERPOLATION" equiv-text="{{ MAX_REFERENCE_FEATURES }}"/> objects from the <x id="INTERPOLATION_1" equiv-text="{{ referenceLayerTitle }}"/> layer are visible on the map.</source>
-        <target>Zorg dat er van de laag <x id="INTERPOLATION_1" equiv-text="{{ referenceLayerTitle }}"/> maximaal <x id="INTERPOLATION" equiv-text="{{ MAX_REFERENCE_FEATURES }}"/> objecten zichtbaar zijn in de kaart.</target>
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="referenceLayerTitle"/> layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters to narrow down the selection.</source>
+        <target>Er zijn meer dan <x id="PH" equiv-text="maxFeatures"/> objecten beschikbaar in de laag <x id="PH_1" equiv-text="referenceLayerTitle"/>. Het maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Pas filters toe om de selectie te verfijnen.</target>
       </trans-unit>
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>

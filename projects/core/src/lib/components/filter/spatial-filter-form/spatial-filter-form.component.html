@@ -48,9 +48,7 @@
     }
     @let currentGroupExceededMaxFeatures = currentGroupExceededMaxFeatures$ | async;
     @if (currentGroupExceededMaxFeatures) {
-      @let referenceLayerTitle = referenceLayerLabel$ | async;
-      <tm-error-message message="Ensure that no more than {{ MAX_REFERENCE_FEATURES }} objects from the {{ referenceLayerTitle }} layer are visible on the map."
-        i18n-message="@@core.filter.max-features-exceeded-warning"></tm-error-message>
+      <tm-error-message [message]="exceededMaxErrorMessage$ | async"></tm-error-message>
     }
     <div class="form-section buttons">
       @if (currentGroup$ | async; as currentGroup) {
