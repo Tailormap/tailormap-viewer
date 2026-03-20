@@ -6,8 +6,9 @@ import { combineLatest, map, Observable, of, Subject, switchMap, takeUntil } fro
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
-  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectReferenceLayerLabel, selectSelectedFilterGroupError,
+  selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
@@ -49,6 +50,19 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
+  public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
+  public exceededMaxErrorMessage$ = this.currentGroupExceededMaxFeatures$.pipe(
+    filter(hasExceeded => !!hasExceeded),
+    switchMap(() => this.store$.select(selectReferenceLayerLabel)),
+    map((referenceLayerTitle) =>  {
+      if (!referenceLayerTitle) {
+        return '';
+      }
+      const maxFeatures = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
+      // eslint-disable-next-line max-len
+      return $localize `:@@core.filter.max-features-exceeded-warning:There are more than ${maxFeatures} objects available in the ${referenceLayerTitle} layer. The maximum is ${maxFeatures}. Apply filters to narrow down the selection.`;
+    }),
+  );
   public in3dView$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {

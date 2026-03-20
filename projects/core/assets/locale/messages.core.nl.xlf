@@ -798,6 +798,10 @@
         <source>Loading reference geometry</source>
         <target>Referentiegeometrie laden</target>
       </trans-unit>
+      <trans-unit id="core.filter.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="referenceLayerTitle"/> layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters to narrow down the selection.</source>
+        <target>Er zijn meer dan <x id="PH" equiv-text="maxFeatures"/> objecten beschikbaar in de laag <x id="PH_1" equiv-text="referenceLayerTitle"/>. Het maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Pas filters toe om de selectie te verfijnen.</target>
+      </trans-unit>
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>
         <target>Geen lagen beschikbaar om op te filteren</target>

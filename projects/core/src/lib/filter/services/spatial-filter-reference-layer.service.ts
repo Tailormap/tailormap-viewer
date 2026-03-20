@@ -15,6 +15,8 @@ import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
 })
 export class SpatialFilterReferenceLayerService implements OnDestroy {
 
+  public static MAX_REFERENCE_FEATURES = 250;
+
   private store$ = inject(Store);
   private api = inject(TAILORMAP_API_V1_SERVICE);
 
@@ -63,6 +65,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             layerId: referenceLayer,
             applicationId,
             page: 1,
+            pageSize: SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES,
             filter: cqlFilter === '' ? undefined : cqlFilter,
             simplify: false,
             onlyGeometries: true,
@@ -70,9 +73,10 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
             map(response => ({
               features: response.features,
               error: false,
+              exceededMaxFeatures: response.features.length < (response.total || 0),
             })),
             catchError(() => {
-              return of(({ features: [], error: true }));
+              return of(({ features: [], error: true, exceededMaxFeatures: false }));
             }),
           );
         }),
@@ -97,6 +101,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
               ...f,
               baseLayerId: response.error ? undefined : f.baseLayerId,
               geometries: userDrawnGeometries.concat(geometries),
+              exceededMaxFeatures: response.exceededMaxFeatures,
             };
           }),
         };

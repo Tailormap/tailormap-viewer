@@ -3,8 +3,8 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
-  selectSelectedLayersCount,
+  hasSelectedLayersAndGeometry, selectReferenceLayerLabel, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -24,6 +24,7 @@ const setup = async (conf: {
   selectedLayers?: boolean;
   selectedLayersAndGeometry?: boolean;
   selectedFilterGroup?: FilterGroupModel;
+  exceededMax?: boolean;
 }) => {
   const store = provideMockStore({
     initialState: {},
@@ -33,6 +34,8 @@ const setup = async (conf: {
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
+      { selector: selectSpatialFilterHasExceededMaxFeatures, value: conf.exceededMax ?? false },
+      { selector: selectReferenceLayerLabel, value: conf.selectedFilterGroup ? 'the_reference_layer' : null },
       { selector: selectIn3dView, value: false },
     ],
   });
@@ -118,6 +121,19 @@ describe('SpatialFilterFormComponent', () => {
       selectedFilterGroup: { ...group, error: 'This group has some error' },
     });
     expect(await screen.findByText('This group has some error')).toBeInTheDocument();
+  });
+
+  test('shows an error message when the group exceeded max features', async () => {
+    const group = getFilterGroup();
+    await setup({
+      layers,
+      selectedFilterGroup: group,
+      exceededMax: true,
+    });
+    // eslint-disable-next-line max-len
+    expect(await screen.findByText('There are more than 250 objects available in the the_reference_layer layer. The maximum is 250. Apply filters to narrow down the selection.')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Save filter')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Save filter')).toBeDisabled();
   });
 
 });

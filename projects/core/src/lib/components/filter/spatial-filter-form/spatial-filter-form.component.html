@@ -46,6 +46,10 @@
         <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
       </div>
     }
+    @let currentGroupExceededMaxFeatures = currentGroupExceededMaxFeatures$ | async;
+    @if (currentGroupExceededMaxFeatures) {
+      <tm-error-message [message]="exceededMaxErrorMessage$ | async"></tm-error-message>
+    }
     <div class="form-section buttons">
       @if (currentGroup$ | async; as currentGroup) {
         <button mat-stroked-button
@@ -56,6 +60,7 @@
         i18n="@@core.common.delete">Delete</button>
         <button mat-flat-button
           color="primary"
+          [disabled]="currentGroupExceededMaxFeatures"
           (click)="save()"
           tmTooltip="Save filter"
           i18n-tmTooltip="@@core.filter.save-filter"

@@ -31,6 +31,7 @@ export interface TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;

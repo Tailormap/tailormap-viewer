@@ -54,6 +54,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
@@ -68,6 +69,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       __fid: params.__fid,
       simplify: params.simplify,
       page: params.page,
+      pageSize: params.pageSize,
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
       onlyGeometries: params.onlyGeometries,
