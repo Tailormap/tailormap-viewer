@@ -10,3 +10,9 @@ export interface LoginConfigurationModel {
   ssoLinks: SSOLinkModel[];
   enablePasswordReset: boolean;
 }
+
+export interface RouterNavigationState {
+  hasInsufficientRights?: boolean;
+  userName?: string;
+  routeBeforeLogin?: string;
+}
