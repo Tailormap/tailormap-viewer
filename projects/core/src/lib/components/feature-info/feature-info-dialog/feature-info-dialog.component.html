@@ -1,18 +1,20 @@
 @if ((isMobileLayoutEnabled$ | async) === true) {
   @if (dialogOpen$ | async) {
-    <div class="layer-list-dropdown-wrapper">
-      <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
+    <div class="mobile-feature-info-dialog">
+      <div class="layer-list-dropdown-wrapper">
+        <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
+      </div>
+      <tm-feature-info-content class="feature-info-content--mobile"
+                               [selectedLayer]="selectedLayer$ | async"
+                               [currentFeature]="currentFeature()"
+                               [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
+                               [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
+                               [isEditPossible]="isEditPossible() ?? false"
+                               (showNextFeatureInfoFeature)="next()"
+                               (showPreviousFeatureInfoFeature)="back()"
+                               (editFeature)="editFeature()">
+      </tm-feature-info-content>
     </div>
-    <tm-feature-info-content
-      [selectedLayer]="selectedLayer$ | async"
-      [currentFeature]="currentFeature()"
-      [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
-      [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
-      [isEditPossible]="isEditPossible() ?? false"
-      (showNextFeatureInfoFeature)="next()"
-      (showPreviousFeatureInfoFeature)="back()"
-      (editFeature)="editFeature()">
-    </tm-feature-info-content>
   }
 } @else {
   <tm-dialog [open]="dialogOpen$ | async"
