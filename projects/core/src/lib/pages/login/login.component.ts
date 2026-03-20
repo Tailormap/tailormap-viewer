@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  AuthenticatedUserService, LoginConfigurationModel, RouterNavigationState, TAILORMAP_SECURITY_API_V1_SERVICE,
+  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
+
+export interface RouterNavigationState {
+  hasInsufficientRights?: boolean;
+  userName?: string;
+  routeBeforeLogin?: string;
+}
 
 @Component({
   selector: 'tm-login',
@@ -56,7 +62,7 @@ export class LoginComponent implements OnInit {
   private isRouterNavigationState(obj: unknown): obj is RouterNavigationState {
     // check if obj is an object
     if (typeof obj === 'object' && !Array.isArray(obj) && obj !== null) {
-      return obj && typeof obj === 'object' && ('routeBeforeLogin' in obj || 'hasInsufficientRights' in obj);
+      return ('routeBeforeLogin' in obj || 'hasInsufficientRights' in obj);
     }
     return false;
   }
