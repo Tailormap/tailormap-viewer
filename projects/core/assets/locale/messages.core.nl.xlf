@@ -50,6 +50,38 @@
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
+        <source>Average</source>
+        <target>Gemiddelde</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-count" datatype="html">
+        <source>Count</source>
+        <target>Aantal</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-error" datatype="html">
+        <source>Error loading statistic</source>
+        <target>Fout bij het laden van de statistiek</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-help" datatype="html">
+        <source>Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.</source>
+        <target>Statistieken worden berekend op basis van de actieve filters. Gebruik de filterknop in de kolomkoppen om filters toe te voegen of te verwijderen.</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-max" datatype="html">
+        <source>Max</source>
+        <target>Max</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-min" datatype="html">
+        <source>Min</source>
+        <target>Min</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-none" datatype="html">
+        <source>None</source>
+        <target>Geen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-sum" datatype="html">
+        <source>Sum</source>
+        <target>Som</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributenlijst</target>

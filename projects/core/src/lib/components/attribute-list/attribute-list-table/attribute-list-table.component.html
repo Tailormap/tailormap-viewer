@@ -1,5 +1,20 @@
 @let expandedRowsIds = expandedRows();
 
+<mat-menu #statsMenu="matMenu">
+  <ng-template matMenuContent let-column="column">
+    @for (option of statisticTypes; track $index) {
+      @if (isStatisticsTypeAvailable(option.type, column)) {
+        <button mat-menu-item (click)="loadStatistic(option.type, column)">
+          @if (isStatisticsTypeSelected(option.type, column)) {
+            <mat-icon svgIcon="check"></mat-icon>
+          }
+          {{option.label}}
+        </button>
+      }
+    }
+  </ng-template>
+</mat-menu>
+
 <mat-table [dataSource]="rows"
   [trackBy]="trackByRowId"
   multiTemplateDataRows>
@@ -11,7 +26,16 @@
                 [svgIcon]="expandedRowsIds.has(row.id) ? 'expand_close' : 'expand_open'"
                 (click)="onRowExpandClick($event, row);"></mat-icon>
     </mat-cell>
-    <mat-footer-cell class="column_small" *matFooterCellDef></mat-footer-cell>
+    @if (showStatistics()) {
+      <mat-footer-cell class="column_small" *matFooterCellDef>
+        <button mat-icon-button
+                type="button"
+                aria-label="Show statistics help"
+                (click)="showStatisticsHelp.emit()">
+          <mat-icon svgIcon="functions"></mat-icon>
+        </button>
+      </mat-footer-cell>
+    }
   </ng-container>
 
   <!-- Columns with data -->
@@ -44,6 +68,25 @@
         <div class="cell-content"
         [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
       </mat-cell>
+      @if (showStatistics()) {
+        <mat-footer-cell *matFooterCellDef class="statistics-footer-cell"
+                         [matMenuTriggerFor]="statsMenu"
+                         [matMenuTriggerData]="{column: col}"
+                         [style.flexBasis]="getColumnWidth(col)">
+          @let statisticProcessing = isStatisticsProcessing(col.id);
+          @let statisticResult = getStatisticResult(col);
+          @if (statisticProcessing) {
+            <div><mat-spinner diameter="20"></mat-spinner></div>
+          }
+          @if (!statisticProcessing && !statisticResult) {
+            <div class="statistics-placeholder"><mat-icon svgIcon="functions"></mat-icon></div>
+          }
+          @if (!statisticProcessing && statisticResult) {
+            <div [class.error]="statisticResult.hasError"
+                 [tmTooltip]="statisticResult.label">{{statisticResult.label}}</div>
+          }
+        </mat-footer-cell>
+      }
     </ng-container>
   }
 
@@ -72,5 +115,9 @@
 
   <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"
            [ngClass]="expandedRowsIds.has(row.id) ? 'expanded' : 'collapsed'"></mat-row>
+
+  @if (showStatistics()) {
+    <mat-footer-row *matFooterRowDef="colNames; sticky: true;"></mat-footer-row>
+  }
 
 </mat-table>
