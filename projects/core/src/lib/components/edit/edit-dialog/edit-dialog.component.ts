@@ -188,8 +188,18 @@ export class EditDialogComponent implements OnInit {
       || this.deletedAttachmentIds.size !== 0;
   }
 
-  public addOrSaveDisabled() {
-    return !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
+  public addOrSaveDisabled(currentFeature: FeatureWithMetadataModel | null, geometryAttribute: string) {
+    const geometryValue = this.getGeometryValue(currentFeature, geometryAttribute);
+    const hasGeometry = !(geometryValue === null || geometryValue === undefined ||
+                          (typeof geometryValue === 'string' && geometryValue.trim() === ''));
+    return !hasGeometry || !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
+  }
+
+  private getGeometryValue(currentFeature: FeatureWithMetadataModel | null, geometryAttribute: string) {
+    if (this.updatedAttributes && Object.hasOwn(this.updatedAttributes, geometryAttribute)) {
+      return this.updatedAttributes[geometryAttribute];
+    }
+    return currentFeature?.feature.attributes[geometryAttribute];
   }
 
   public save(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel })  {
@@ -324,12 +334,14 @@ export class EditDialogComponent implements OnInit {
   }
 
   public featureChanged($event: { attribute: string; value: any; invalid?: boolean }) {
+    console.debug(`Feature attribute ${$event.attribute} changed to value ${$event.value}, invalid: ${$event.invalid}`);
     this.formValid = !$event.invalid;
     this.setAttributeUpdated($event.attribute, $event.value);
   }
 
   public geometryChanged(geometry: string | null, newFeature: boolean) {
-    if (!this.currentFeature$ || geometry === null) {
+    console.debug(`Feature geometry changed to value ${geometry}, new feature: ${newFeature}`);
+    if (!this.currentFeature$) {
       return;
     }
     this.currentFeature$.pipe(
