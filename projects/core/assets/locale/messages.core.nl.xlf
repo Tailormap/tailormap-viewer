@@ -50,6 +50,38 @@
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
+        <source>Average</source>
+        <target>Gemiddelde</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-count" datatype="html">
+        <source>Count</source>
+        <target>Aantal</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-error" datatype="html">
+        <source>Error loading statistic</source>
+        <target>Fout bij het laden van de statistiek</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-help" datatype="html">
+        <source>Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.</source>
+        <target>Statistieken worden berekend op basis van de actieve filters. Gebruik de filterknop in de kolomkoppen om filters toe te voegen of te verwijderen.</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-max" datatype="html">
+        <source>Max</source>
+        <target>Max</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-min" datatype="html">
+        <source>Min</source>
+        <target>Min</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-none" datatype="html">
+        <source>None</source>
+        <target>Geen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-sum" datatype="html">
+        <source>Sum</source>
+        <target>Som</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributenlijst</target>
@@ -797,6 +829,10 @@
       <trans-unit id="core.filter.loading-reference-layer" datatype="html">
         <source>Loading reference geometry</source>
         <target>Referentiegeometrie laden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="referenceLayerTitle"/> layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters to narrow down the selection.</source>
+        <target>Er zijn meer dan <x id="PH" equiv-text="maxFeatures"/> objecten beschikbaar in de laag <x id="PH_1" equiv-text="referenceLayerTitle"/>. Het maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Pas filters toe om de selectie te verfijnen.</target>
       </trans-unit>
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, take } from 'rxjs';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
-import { BrowserHelper, RegisteredComponent } from '@tailormap-viewer/shared';
+import { RegisteredComponent } from '@tailormap-viewer/shared';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
@@ -10,6 +10,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 })
 export class MenubarService {
   private componentRegistrationService = inject(ComponentRegistrationService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
@@ -19,14 +20,16 @@ export class MenubarService {
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
     if (this.activeComponent$.value?.componentId === componentId) {
-      if (BrowserHelper.isMobile && MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
-        this.activeComponent$.next({
-          componentId: BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
-          dialogTitle: $localize `:@@core.home.menu:Menu`,
-        });
-      } else {
-        this.closePanel();
-      }
+      this.mobileLayoutService.isMobileLayoutEnabled$.pipe(take(1)).subscribe(isMobileLayoutEnabled => {
+        if (isMobileLayoutEnabled && MobileLayoutService.MOBILE_MENUBAR_HOME_COMPONENTS.includes(componentId)) {
+          this.activeComponent$.next({
+            componentId: BaseComponentTypeEnum.MOBILE_MENUBAR_HOME,
+            dialogTitle: $localize `:@@core.home.menu:Menu`,
+          });
+        } else {
+          this.closePanel();
+        }
+      });
       return;
     }
     this.activeComponent$.next({ componentId, dialogTitle });

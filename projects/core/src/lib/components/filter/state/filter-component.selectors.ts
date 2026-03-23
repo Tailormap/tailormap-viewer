@@ -103,3 +103,24 @@ export const hasSelectedLayersAndGeometry = createSelector(
     return selectedLayers.length > 0 && geometries.length > 0;
   },
 );
+
+export const selectSpatialFilterHasExceededMaxFeatures = createSelector(
+  selectSelectedFilterGroup,
+  group => {
+    if (!group || group.filters.length === 0 || !FilterTypeHelper.isSpatialFilterGroup(group)) {
+      return undefined;
+    }
+    return group.filters[0].exceededMaxFeatures;
+  },
+);
+
+export const selectReferenceLayerLabel = createSelector(
+  selectReferencableLayers,
+  selectReferenceLayer,
+  (layers, layerId) => {
+    if (!layerId || layers.length === 0) {
+      return null;
+    }
+    return layers.find(layer => layer.id === layerId)?.title ?? null;
+  },
+);

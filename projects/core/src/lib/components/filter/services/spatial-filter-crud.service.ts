@@ -76,6 +76,7 @@ export class SpatialFilterCrudService {
             ...f,
             geometries,
             baseLayerId: layer,
+            exceededMaxFeatures: undefined,
           };
         }),
       }),

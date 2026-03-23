@@ -124,13 +124,13 @@ mat-table {
 
 .mat-mdc-row:not(.details-row),
 .mat-mdc-header-row,
-mat-mdc-footer-row {
+.mat-mdc-footer-row {
   min-height: 45px;
 }
 
 .mat-mdc-cell,
 .mat-mdc-header-cell,
-mat-mdc-footer-cell {
+.mat-mdc-footer-cell {
   overflow-x: hidden;
   white-space: nowrap;
   width: 170px;
@@ -156,6 +156,23 @@ mat-mdc-footer-cell {
 .mat-mdc-footer-cell:first-of-type {
   padding-left: 5px;
   margin-left: 5px;
+}
+
+.mat-mdc-footer-cell .mat-icon {
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
+  padding: 0;
+  cursor: help;
+}
+
+.mat-mdc-footer-cell:first-of-type {
+  padding-left: 0;
+}
+
+.mat-mdc-footer-cell .mat-mdc-icon-button.mat-mdc-button-base {
+  width: 34px;
+  height: 34px;
 }
 
 .details-row .mat-mdc-cell {
@@ -185,7 +202,7 @@ mat-mdc-footer-cell {
 
 .statistics-placeholder {
   border: 1px dashed var(--primary-color);
-  margin: 3px;
+  margin: 3px 3px 3px 0;
   flex: 1;
   align-self: stretch;
   display: none;
@@ -233,4 +250,8 @@ mat-mdc-footer-cell {
 
 .row-expand-icon:hover {
   color: var(--primary-color);
+}
+
+.error {
+  color: var(--error-color);
 }

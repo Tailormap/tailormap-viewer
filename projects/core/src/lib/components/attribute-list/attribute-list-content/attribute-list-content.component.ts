@@ -18,8 +18,12 @@ import { AttributeListFilterComponent, FilterDialogData } from '../attribute-lis
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { CssHelper, SnackBarMessageComponent } from '@tailormap-viewer/shared';
 import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StatisticsHelper } from '../helpers/statistics-helper';
+import { StatisticType } from '../models/attribute-list-api-service.model';
+import { AttributeListStatisticsService } from '../services/attribute-list-statistics.service';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -32,8 +36,10 @@ export class AttributeListContentComponent implements OnInit {
   private store$ = inject(Store);
   private attributeListStateService = inject(AttributeListStateService);
   private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
+  private attributeListStatisticsService = inject(AttributeListStatisticsService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
@@ -48,6 +54,9 @@ export class AttributeListContentComponent implements OnInit {
   public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
   public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
   public loadingFeatureDetailsIds$ = this.attributeListFeatureDetailsService.loadingFeatureDetailsIds$;
+
+  public showStatistics$ = this.attributeListStatisticsService.canLoadStatistics$;
+  public statistics$ = this.attributeListStatisticsService.statistics$;
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -162,6 +171,18 @@ export class AttributeListContentComponent implements OnInit {
 
   public loadFeatureDetailsForFeature($event: string) {
     this.attributeListFeatureDetailsService.loadFeatureDetailsForFeature($event);
+  }
+
+  public showStatisticsHelp() {
+    SnackBarMessageComponent.open$(this.snackBar, {
+      message: StatisticsHelper.getStatisticsHelpMessage(),
+      duration: 5000,
+    });
+    return;
+  }
+
+  public loadStatisticsForColumn($event: { type: StatisticType; columnName: string; dataType: string }) {
+    this.attributeListStatisticsService.loadStatistics($event);
   }
 
 }

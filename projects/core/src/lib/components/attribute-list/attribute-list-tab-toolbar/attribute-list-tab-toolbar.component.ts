@@ -99,7 +99,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     if (!$event.target || !($event.target instanceof HTMLElement)) {
       return;
     }
-    if ($event.target.classList.contains('mat-paginator-range-label')) {
+    if ($event.target.className.indexOf('paginator-range-label') !== -1) {
       if (this.pagingPopover && this.pagingPopover.isOpen) {
         this.pagingPopover.close();
         return;
@@ -108,7 +108,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       this.pagingPopover = this.popoverService.open({
         origin: $event.target,
         content: AttributeListPagingDialogComponent,
-        height: 100,
+        height: 80,
         width: Math.min(WINDOW_WIDTH, BrowserHelper.getScreenWith()),
         closeOnClickOutside: true,
         position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
