@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import { from, Observable, toArray } from 'rxjs';
@@ -30,7 +30,7 @@ import { MenubarService } from '../../menubar';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EditDialogComponent implements OnInit {
+export class EditDialogComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private editMapToolService = inject(EditMapToolService);
   private applicationLayerService = inject(ApplicationLayerService);
@@ -141,6 +141,12 @@ export class EditDialogComponent implements OnInit {
         this.closeDialogAfterAddingFeature = config.closeAfterAddFeature;
       },
     );
+  }
+
+  public ngOnDestroy(): void {
+    if (this.inMobilePanel()) {
+      this.closeDialog();
+    }
   }
 
   public ngOnInit() {

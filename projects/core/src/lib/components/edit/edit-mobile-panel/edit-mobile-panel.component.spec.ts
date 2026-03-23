@@ -8,6 +8,7 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { ComponentRegistrationService } from '../../../services';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MapService } from '@tailormap-viewer/map';
+import { selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
 
 const setup = async (visible: boolean) => {
   const menubarServiceMock = {
@@ -36,7 +37,10 @@ const setup = async (visible: boolean) => {
   const { container } = await render(EditMobilePanelComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
-      provideMockStore({ initialState: {} }),
+      provideMockStore({
+        initialState: {},
+        selectors: [{ selector: selectEditOpenedFromFeatureInfo, value: false }],
+      }),
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: AuthenticatedUserService, useValue: authenticatedUserServiceMock },
       { provide: ComponentRegistrationService, useValue: componentRegistrationServiceMock },
