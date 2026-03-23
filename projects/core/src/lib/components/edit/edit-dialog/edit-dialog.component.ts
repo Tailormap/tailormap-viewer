@@ -194,8 +194,18 @@ export class EditDialogComponent implements OnInit, OnDestroy {
       || this.deletedAttachmentIds.size !== 0;
   }
 
-  public addOrSaveDisabled() {
-    return !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
+  public addOrSaveDisabled(currentFeature: FeatureWithMetadataModel | null, geometryAttribute: string) {
+    const geometryValue = this.getGeometryValue(currentFeature, geometryAttribute);
+    const hasGeometry = !(geometryValue === null || geometryValue === undefined ||
+                          (typeof geometryValue === 'string' && geometryValue.trim() === ''));
+    return !hasGeometry || !(this.formValid || this.attachmentsUpdated()) || this.creatingSavingFeature();
+  }
+
+  private getGeometryValue(currentFeature: FeatureWithMetadataModel | null, geometryAttribute: string) {
+    if (this.updatedAttributes && Object.hasOwn(this.updatedAttributes, geometryAttribute)) {
+      return this.updatedAttributes[geometryAttribute];
+    }
+    return currentFeature?.feature.attributes[geometryAttribute];
   }
 
   public save(layerId: string, info: { feature: FeatureWithMetadataModel; details: LayerDetailsModel })  {
