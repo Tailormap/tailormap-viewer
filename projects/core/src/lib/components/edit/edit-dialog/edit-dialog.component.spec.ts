@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeType, getAppLayerModel, getFeatureModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
@@ -16,7 +15,7 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { CoreSharedModule } from '../../../shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { EditMapToolService } from '../services/edit-map-tool.service';
-import { coreStateKey, initialCoreState, selectViewerLoadingState, ViewerState } from '../../../state';
+import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
@@ -30,10 +29,9 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
 };
 
 const setup = async (getLayerDetails = false, selectors: any[] = []) => {
-  const { container } = await render(EditDialogComponent, {
+  const { container, fixture } = await render(EditDialogComponent, {
     imports: [
       SharedModule,
-      NoopAnimationsModule,
       MatIconTestingModule,
       CoreSharedModule,
     ],
@@ -54,7 +52,7 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });
-  return { container };
+  return { container, fixture };
 };
 
 describe('EditDialogComponent', () => {
@@ -73,6 +71,60 @@ describe('EditDialogComponent', () => {
     expect(await screen.findByText('Close')).toBeInTheDocument();
     expect(await screen.findByText('Save')).toBeInTheDocument();
     expect(await screen.findByText('Delete')).toBeInTheDocument();
+  });
+
+  describe('addOrSaveDisabled', () => {
+    const featureWithGeom = (geomValue: any): FeatureWithMetadataModel => ({
+      feature: { ...getFeatureModel(), layerId: '1', attributes: { geom: geomValue } },
+      columnMetadata: [],
+    });
+    const featureWithoutGeomAttribute = (): FeatureWithMetadataModel => ({
+      feature: { ...getFeatureModel(), layerId: '1', attributes: {} },
+      columnMetadata: [],
+    });
+
+    let component: EditDialogComponent;
+
+    beforeEach(async () => {
+      const { fixture } = await setup(true);
+      component = fixture.componentInstance;
+      component.formValid = true;
+    });
+
+    test('is disabled when geometry attribute is null', () => {
+      expect(component.addOrSaveDisabled(featureWithGeom(null), 'geom')).toBe(true);
+    });
+
+    test('is disabled when geometry attribute is undefined', () => {
+      expect(component.addOrSaveDisabled(featureWithoutGeomAttribute(), 'geom')).toBe(true);
+    });
+
+    test('is disabled when geometry attribute is a blank string', () => {
+      expect(component.addOrSaveDisabled(featureWithGeom('   '), 'geom')).toBe(true);
+    });
+
+    test('is disabled when currentFeature is null', () => {
+      expect(component.addOrSaveDisabled(null, 'geom')).toBe(true);
+    });
+
+    test('is enabled when geometry attribute has a valid value', () => {
+      expect(component.addOrSaveDisabled(featureWithGeom('POINT(1 2)'), 'geom')).toBe(false);
+    });
+
+    test('is disabled when updatedAttributes overrides geometry to null', () => {
+      component.updatedAttributes = { geom: null };
+      expect(component.addOrSaveDisabled(featureWithGeom('POINT(1 2)'), 'geom')).toBe(true);
+    });
+
+    test('is disabled when updatedAttributes overrides geometry to empty string', () => {
+      component.updatedAttributes = { geom: '' };
+      expect(component.addOrSaveDisabled(featureWithGeom('POINT(1 2)'), 'geom')).toBe(true);
+    });
+
+    test('is enabled when geometry is provided via updatedAttributes', () => {
+      component.updatedAttributes = { geom: 'POINT(1 2)' };
+      expect(component.addOrSaveDisabled(featureWithoutGeomAttribute(), 'geom')).toBe(false);
+    });
   });
 
 });
