@@ -6,7 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { selectEditDialogVisible } from '../state/edit.selectors';
+import { selectEditDialogVisible, selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
 
 @Component({
   selector: 'tm-edit-mobile-panel',
@@ -24,6 +24,7 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
 
 
   public visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.EDIT);
+  public openedFromFeatureInfo = this.store$.selectSignal(selectEditOpenedFromFeatureInfo);
 
   public ngOnInit(): void {
     this.authenticatedUserService.getUserDetails$()

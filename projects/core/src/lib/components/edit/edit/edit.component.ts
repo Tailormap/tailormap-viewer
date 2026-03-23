@@ -126,6 +126,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
     if (this.inMobilePanel()) {
       this.store$.dispatch(hideFeatureInfoDialog());
+
       this.store$.dispatch(setEditActive({ active: true }));
       this.mapService.setSwitchedTool(true);
       this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])

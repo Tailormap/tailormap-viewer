@@ -175,21 +175,6 @@ export class FeatureInfoDialogComponent {
     this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
   }
 
-  // public editFeature() {
-  //   this.store$.select(selectCurrentFeatureForEdit)
-  //     .pipe(take(1))
-  //     .subscribe(featureWithMetadata => {
-  //       if (featureWithMetadata) {
-  //         this.store$.dispatch(setLoadedEditFeature({
-  //           feature: featureWithMetadata.feature,
-  //           columnMetadata: featureWithMetadata.columnMetadata,
-  //           openedFromFeatureInfo: true,
-  //         }));
-  //       }
-  //     });
-  //
-  // }
-
   public editFeature() {
     combineLatest([
       this.store$.select(selectCurrentFeatureForEdit),
