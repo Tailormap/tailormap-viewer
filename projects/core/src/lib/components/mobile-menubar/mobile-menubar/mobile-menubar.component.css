@@ -5,13 +5,14 @@
 
 .mobile-menubar ::ng-deep button {
   height: 100%;
-  width: 20vw;
+  width: 17vw;
   margin-top: 0;
   margin-bottom: 0;
   border-radius: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 4px;
 }
 
 .mobile-menubar ::ng-deep button .mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
