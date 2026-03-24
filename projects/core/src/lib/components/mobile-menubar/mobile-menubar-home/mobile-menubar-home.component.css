@@ -39,7 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: auto;
+  touch-action: auto !important;
 }
 
 .mobile-menubar-home-buttons ::ng-deep button mat-icon {
