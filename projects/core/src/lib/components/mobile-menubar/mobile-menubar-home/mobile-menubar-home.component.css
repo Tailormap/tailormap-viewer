@@ -14,7 +14,7 @@
 }
 
 .mobile-menubar-home-buttons {
-  flex: 1 0 7vh;
+  flex: 0 0 58px;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
@@ -35,7 +35,7 @@
 }
 
 .mobile-menubar-home-buttons ::ng-deep button {
-  height: 6vh;
+  height: 45px;
   width: 45px;
   display: flex;
   align-items: center;
