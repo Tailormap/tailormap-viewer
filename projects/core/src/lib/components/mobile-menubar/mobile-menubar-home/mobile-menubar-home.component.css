@@ -14,12 +14,13 @@
 }
 
 .mobile-menubar-home-buttons {
-  flex: 0 0 7vh;
+  flex: 1 0 7vh;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
   margin-left: 4px;
   margin-right: 4px;
+  overflow-x: scroll;
 }
 
 .mobile-menubar-home-buttons * {
