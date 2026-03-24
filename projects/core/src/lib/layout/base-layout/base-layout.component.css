@@ -87,7 +87,15 @@
   display: flex;
 }
 
-.map-controls-left > * + * {
+.map-controls-left > *[hidden] {
+  display: none;
+}
+
+.map-controls-left > :where(*):not([hidden]):has(~ :where(*):not([hidden])) {
+  margin-right: 9px;
+}
+
+.map-controls-right > * + * {
   margin-left: 9px;
 }
 
