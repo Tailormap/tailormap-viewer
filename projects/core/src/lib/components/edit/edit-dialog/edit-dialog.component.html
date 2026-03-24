@@ -19,7 +19,7 @@
       <div class="buttons" [class.buttons-fixed-position]="inMobilePanel()">
         @if (isCreateFeature$ | async) {
           <button (click)="add(layerDetails.layer.id, editInput)"
-                  [disabled]="addOrSaveDisabled()"
+                  [disabled]="addOrSaveDisabled(currentFeature, layerDetails.details.geometryAttribute)"
                   color="primary"
                   mat-flat-button>
             @if (creatingSavingFeature()) {
@@ -30,7 +30,7 @@
           </button>
         } @else {
           <button (click)="save(layerDetails.layer.id, editInput)"
-                  [disabled]="addOrSaveDisabled()"
+                  [disabled]="addOrSaveDisabled(currentFeature, layerDetails.details.geometryAttribute)"
                   color="primary"
                   mat-flat-button>
             @if (creatingSavingFeature()) {
