@@ -5,17 +5,18 @@
 
 .mobile-menubar ::ng-deep button {
   height: 100%;
-  width: 20vw;
+  width: 18vw;
   margin-top: 0;
   margin-bottom: 0;
   border-radius: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2px;
 }
 
-.mobile-menubar ::ng-deep button .mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
-  border-radius: 0;
+.mobile-menubar ::ng-deep button span {
+  border-radius: inherit;
 }
 
 .mobile-menubar ::ng-deep mat-icon {

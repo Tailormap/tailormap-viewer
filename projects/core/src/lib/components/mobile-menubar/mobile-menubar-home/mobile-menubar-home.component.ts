@@ -7,6 +7,7 @@ import { ComponentRegistrationService } from '../../../services/component-regist
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LayoutService } from '../../../layout/layout.service';
 import { MapService } from '@tailormap-viewer/map';
+import { BottomPanelComponent } from '../../../shared';
 
 @Component({
   selector: 'tm-mobile-menubar-home',
@@ -44,7 +45,7 @@ export class MobileMenubarHomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(activeComponent => {
         if (activeComponent?.componentId === BaseComponentTypeEnum.MOBILE_MENUBAR_HOME) {
-          this.menubarService.setMobilePanelHeight(110);
+          this.menubarService.setMobilePanelHeight(BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX);
         }
       });
   }

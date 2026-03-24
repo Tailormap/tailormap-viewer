@@ -14,12 +14,13 @@
 }
 
 .mobile-menubar-home-buttons {
-  flex: 0 0 6vh;
+  flex: 0 0 58px;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
   margin-left: 4px;
   margin-right: 4px;
+  overflow-x: scroll;
 }
 
 .mobile-menubar-home-buttons * {
@@ -34,10 +35,22 @@
 }
 
 .mobile-menubar-home-buttons ::ng-deep button {
-  height: 5vh;
+  height: 45px;
+  width: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: auto !important;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button mat-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button svg {
+  width: 100%;
+  height: 100%;
 }
 
 tm-switch3-d ::ng-deep mat-icon,
