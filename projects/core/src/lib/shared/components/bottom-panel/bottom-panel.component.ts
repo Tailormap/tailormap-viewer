@@ -22,7 +22,7 @@ export class BottomPanelComponent implements OnInit {
     restore: $localize `:@@core.shared.restore-panel-height:Restore panel height`,
   };
 
-  private static readonly MINIMUM_PANEL_HEIGHT_PX = 115;
+  public static readonly MINIMUM_PANEL_HEIGHT_PX = 115;
 
   @Input({ required: true })
   public isVisible$: Observable<boolean> = of(false);
