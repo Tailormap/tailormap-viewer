@@ -14,7 +14,7 @@
 }
 
 .mobile-menubar-home-buttons {
-  flex: 0 0 6vh;
+  flex: 0 0 7vh;
   border-top: 1px solid var(--border-color);
   display: flex;
   flex-direction: row;
@@ -34,10 +34,21 @@
 }
 
 .mobile-menubar-home-buttons ::ng-deep button {
-  height: 5vh;
+  height: 6vh;
+  width: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button mat-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button svg {
+  width: 100%;
+  height: 100%;
 }
 
 tm-switch3-d ::ng-deep mat-icon,
