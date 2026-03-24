@@ -44,7 +44,7 @@
 }
 
 .simple-search-container--mobile-is-active {
-  width: calc(80 * var(--vw));
+  width: calc(75 * var(--vw));
   border-radius: 30px;
 }
 
