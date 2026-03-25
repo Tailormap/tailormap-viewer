@@ -87,4 +87,10 @@ export class ApplicationLayerTreeNodeComponent {
     }
     return this.treeService.descendantsPartiallySelected(node) || this.treeService.descendantsAllSelected(node);
   }
+
+  public getExpandOnStartupTooltip() {
+    return this.someChildrenChecked()
+      ? $localize `:@@admin-core.application.expand-on-startup-disabled-tooltip:This group is expanded on startup, because a layer in the group is checked`
+      : $localize `:@@admin-core.application.expand-on-startup-tooltip:Expand this group when the application is started`;
+  }
 }

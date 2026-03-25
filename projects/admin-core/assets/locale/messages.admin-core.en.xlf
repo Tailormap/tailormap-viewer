@@ -179,6 +179,12 @@
       <trans-unit id="admin-core.application.expand-on-startup" datatype="html">
         <source>Expand on startup</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
+        <source>This group is expanded on startup, because one the layers in the group is checked</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
+        <source>Expand this group when the application is started</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
       </trans-unit>
