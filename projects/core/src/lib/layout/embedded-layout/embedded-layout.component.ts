@@ -22,8 +22,6 @@ export class EmbeddedLayoutComponent {
 
   private mapContainer = viewChild('mapContainer', { read: ElementRef });
 
-  private hasLocationBookmarkFragment = false;
-
   private intersectionObserver = new IntersectionObserver(entries => {
     if (entries.length > 0 && entries[0].boundingClientRect.width > 0 && entries[0].boundingClientRect.height > 0) {
       this.zoomToInitialExtent();
@@ -44,10 +42,6 @@ export class EmbeddedLayoutComponent {
      * The assumption here is that as long the user did not touch the map there is no harm in setting initial extent
      * We only zoom to initial extent in case there is no location inside the bookmark initially
      */
-    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
-      .pipe(take(1))
-      .subscribe(fragment => this.hasLocationBookmarkFragment = !!fragment);
-
     const mapMoved = new Subject<void>();
     effect(() => {
       const el = this.mapContainer()?.nativeElement;
@@ -73,9 +67,13 @@ export class EmbeddedLayoutComponent {
   }
 
   private zoomToInitialExtent(): void {
-    if (!this.hasLocationBookmarkFragment) {
-      window.setTimeout(() => { this.mapService.zoomToInitialExtent(); }, 0);
-    }
+    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
+      .pipe(take(1))
+      .subscribe(fragment => {
+        if (!fragment) {
+          window.setTimeout(() => { this.mapService.zoomToInitialExtent(); }, 0);
+        }
+      });
   }
 
 }
