@@ -13,7 +13,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { selectEditableLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap, withLatestFrom } from 'rxjs/operators';
+import { switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import {
@@ -127,9 +127,13 @@ export class EditComponent implements OnInit, OnDestroy {
     if (this.inMobilePanel()) {
       this.store$.dispatch(hideFeatureInfoDialog());
       this.store$.dispatch(setEditActive({ active: true }));
-      this.mapService.setSwitchedTool(true);
-      this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
-        .pipe(first((enabled) => enabled))
+      this.store$.select(selectSelectedEditLayer)
+        .pipe(
+          first((layerId) => layerId !== null),
+          tap(() => this.mapService.setSwitchedTool(true)),
+          switchMap(() => this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])),
+          first((enabled) => enabled)
+        )
         .subscribe(() => {
           this.mapService.setSwitchedTool(false);
         });

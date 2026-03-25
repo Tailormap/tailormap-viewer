@@ -183,7 +183,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     return this;
   }
 
-  private disableAllTools() {
+  public disableAllTools() {
     this.tools.forEach((tool) => {
       if (tool.tool.isActive && !this.alwaysEnabledTools.has(tool.tool.id)) {
         tool.tool.disable();
@@ -192,7 +192,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     this.toolsStatusChanged.next(null);
   }
 
-  private enableAutoEnabledTools() {
+  public enableAutoEnabledTools() {
     if (this.debugLogging) {
       console.log(`[OpenLayersToolManager] ${this.switchedTool ? '[Ignore because switching tools]' : ''} Enabling auto-enabled tools`, Array.from(this.autoEnabledTools));
     }

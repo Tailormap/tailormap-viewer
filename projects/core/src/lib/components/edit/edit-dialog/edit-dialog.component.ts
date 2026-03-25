@@ -22,6 +22,7 @@ import { hideFeatureInfoDialog, reopenFeatureInfoDialog } from '../../feature-in
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { withLatestFrom } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
+import { MapService } from '@tailormap-viewer/map';
 
 @Component({
   selector: 'tm-edit-dialog',
@@ -41,6 +42,7 @@ export class EditDialogComponent implements OnInit, OnDestroy {
   private uniqueValuesService = inject(UniqueValuesService);
   private cdr = inject(ChangeDetectorRef);
   private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
 
 
   public inMobilePanel = input<boolean>(false);
@@ -145,12 +147,14 @@ export class EditDialogComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     if (this.inMobilePanel()) {
+      this.mapService.enableAutoEnabledTools();
       this.closeDialog();
     }
   }
 
   public ngOnInit() {
     if (this.inMobilePanel()) {
+      this.mapService.disableAllTools();
       this.dialogTitle$
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(dialogTitle => {
