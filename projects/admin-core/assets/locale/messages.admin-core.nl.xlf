@@ -238,6 +238,14 @@
         <source>Expand on startup</source>
         <target>Uitklappen bij opstarten</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
+        <source>This group is expanded on startup, because a layer in the group is checked</source>
+        <target>Deze groep wordt uitgeklapt bij het opstarten, omdat er een laag in de groep is aangevinkt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
+        <source>Expand this group when the application is started</source>
+        <target>Klap deze groep uit bij het openen van de applicatie</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
         <target>Applicaties filteren</target>
