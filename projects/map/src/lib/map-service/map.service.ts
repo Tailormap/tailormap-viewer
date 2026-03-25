@@ -325,4 +325,8 @@ export class MapService {
     return this.map.get3dTerrainOpacity$();
   }
 
+  public hasUserInteractedWithMap$() {
+    return this.map.hasUserInteractedWithMap$();
+  }
+
 }

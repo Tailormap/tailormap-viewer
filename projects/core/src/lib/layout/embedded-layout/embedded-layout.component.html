@@ -1,7 +1,7 @@
 @if ((layoutService.componentsConfig$ | async); as layoutConfig) {
   <div class="content">
     <div class="center">
-      <div class="map">
+      <div class="map" #mapContainer>
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) {
           <tm-feature-info></tm-feature-info>
         }
