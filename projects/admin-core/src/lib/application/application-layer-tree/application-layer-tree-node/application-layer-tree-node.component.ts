@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
 
@@ -10,6 +10,7 @@ import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
   standalone: false,
 })
 export class ApplicationLayerTreeNodeComponent {
+  private treeService = inject(TreeService);
 
   @Input()
   public node: TreeModel<AppTreeNodeModel> | null = null;
@@ -68,7 +69,7 @@ export class ApplicationLayerTreeNodeComponent {
 
   public getExpandOnStartup() {
     if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
-      return this.node.metadata?.expandOnStartup;
+      return this.someChildrenChecked() || this.node.metadata?.expandOnStartup;
     }
     return false;
   }
@@ -77,5 +78,13 @@ export class ApplicationLayerTreeNodeComponent {
     if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
       this.expandOnStartup.emit({ nodeId: this.node.id, expandOnStartup });
     }
+  }
+
+  public someChildrenChecked() {
+    const node = this.treeService.getNode(this.node?.id || '');
+    if (!node) {
+      return false;
+    }
+    return this.treeService.descendantsPartiallySelected(node) || this.treeService.descendantsAllSelected(node);
   }
 }
