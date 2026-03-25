@@ -48,15 +48,16 @@
           <mat-icon svgIcon="close"></mat-icon>
           <span i18n="@@admin-core.application.remove">Remove</span>
         </button>
-        <mat-checkbox
-          class="expand-on-startup"
-          [checked]="getExpandOnStartup()"
-          [disabled]="someChildrenChecked()"
-          [tmTooltip]="getExpandOnStartupTooltip()"
-          (click)="$event.stopPropagation()"
-          (change)="toggleExpandOnStartup($event.checked)">
-          <span i18n="@@admin-core.application.expand-on-startup">Expand on startup</span>
-        </mat-checkbox>
+        <div class="expand-on-startup-wrapper" [tmTooltip]="getExpandOnStartupTooltip()">
+          <mat-checkbox
+            class="expand-on-startup"
+            [checked]="getExpandOnStartup()"
+            [disabled]="someChildrenChecked()"
+            (click)="$event.stopPropagation()"
+            (change)="toggleExpandOnStartup($event.checked)">
+            <span i18n="@@admin-core.application.expand-on-startup">Expand on startup</span>
+          </mat-checkbox>
+        </div>
       </mat-menu>
     </div>
   </div>
