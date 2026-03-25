@@ -26,6 +26,14 @@ window.ResizeObserver =
     unobserve: jest.fn(),
   }));
 
+window.IntersectionObserver =
+  window.IntersectionObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+  }));
+
 window.EventSource = window.EventSource || jest.fn().mockImplementation(() => ({
   close: jest.fn(),
 }));

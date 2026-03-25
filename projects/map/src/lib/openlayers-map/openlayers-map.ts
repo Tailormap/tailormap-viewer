@@ -7,7 +7,9 @@ import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOption
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, switchMap, take, timer } from 'rxjs';
+import {
+  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
+} from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
@@ -40,6 +42,8 @@ export class OpenLayersMap implements MapViewerModel {
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
   private mapPadding: number[] | undefined;
+
+  private hasUserInteractedSubject = new BehaviorSubject(false);
 
   constructor(
     private ngZone: NgZone,
@@ -137,6 +141,10 @@ export class OpenLayersMap implements MapViewerModel {
       .subscribe(() => {
         attributionControl?.setCollapsed(true);
       });
+
+    race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
+      .pipe(take(1))
+      .subscribe(() => this.hasUserInteractedSubject.next(true));
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -449,6 +457,10 @@ export class OpenLayersMap implements MapViewerModel {
     return this.getCesiumManager$().pipe(
       switchMap(cesiumManager => cesiumManager.getTerrainOpacity$()),
     );
+  }
+
+  public hasUserInteractedWithMap$(): Observable<boolean> {
+    return this.hasUserInteractedSubject.asObservable();
   }
 
 }

@@ -325,4 +325,8 @@ export class MapService {
     return this.map.get3dTerrainOpacity$();
   }
 
+  public hasUserInteractedWithMap$(): Observable<boolean> {
+    return this.map.hasUserInteractedWithMap$();
+  }
+
 }
