@@ -1,11 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, effect, OnDestroy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { LayoutService } from '../layout.service';
 import { MapService } from '@tailormap-viewer/map';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, take } from 'rxjs';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'tm-embedded-layout',
@@ -14,13 +13,14 @@ import { take } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EmbeddedLayoutComponent {
+export class EmbeddedLayoutComponent implements OnDestroy {
   public layoutService = inject(LayoutService);
   private mapService = inject(MapService);
   private bookmarkService = inject(BookmarkService);
   public componentTypes = BaseComponentTypeEnum;
 
   private mapContainer = viewChild('mapContainer', { read: ElementRef });
+  private mapMoved = new Subject<void>();
 
   private intersectionObserver = new IntersectionObserver(entries => {
     if (entries.length > 0 && entries[0].boundingClientRect.width > 0 && entries[0].boundingClientRect.height > 0) {
@@ -42,10 +42,9 @@ export class EmbeddedLayoutComponent {
      * The assumption here is that as long the user did not touch the map there is no harm in setting initial extent
      * We only zoom to initial extent in case there is no location inside the bookmark initially
      */
-    const mapMoved = new Subject<void>();
     effect(() => {
       const el = this.mapContainer()?.nativeElement;
-      if (!el || mapMoved.closed) {
+      if (!el || this.mapMoved.closed) {
         return;
       }
       this.intersectionObserver.disconnect();
@@ -54,16 +53,23 @@ export class EmbeddedLayoutComponent {
       this.resizeObserver.observe(el);
     });
     this.mapService.hasUserInteractedWithMap$()
-      .pipe(takeUntil(mapMoved))
+      .pipe(takeUntil(this.mapMoved))
       .subscribe(hasInteracted => {
         if (!hasInteracted) {
           return;
         }
         this.intersectionObserver.disconnect();
         this.resizeObserver.disconnect();
-        mapMoved.next();
-        mapMoved.complete();
+        this.mapMoved.next();
+        this.mapMoved.complete();
       });
+  }
+
+  public ngOnDestroy() {
+    this.intersectionObserver.disconnect();
+    this.resizeObserver.disconnect();
+    this.mapMoved.next();
+    this.mapMoved.complete();
   }
 
   private zoomToInitialExtent(): void {

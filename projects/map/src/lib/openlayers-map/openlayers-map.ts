@@ -459,7 +459,7 @@ export class OpenLayersMap implements MapViewerModel {
     );
   }
 
-  public hasUserInteractedWithMap$() {
+  public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.hasUserInteractedSubject.asObservable();
   }
 
