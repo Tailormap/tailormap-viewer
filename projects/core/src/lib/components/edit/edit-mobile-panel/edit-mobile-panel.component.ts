@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef, ElementRef, AfterViewInit, viewChild, effect,
+} from '@angular/core';
 import { MenubarService } from '../../menubar';
 import { AuthenticatedUserService, BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { ComponentRegistrationService } from '../../../services';
@@ -14,13 +16,14 @@ import { selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class EditMobilePanelComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EditMobilePanelComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private menubarService = inject(MenubarService);
   private authenticatedUserService = inject(AuthenticatedUserService);
   private componentRegistrationService = inject(ComponentRegistrationService);
   private destroyRef = inject(DestroyRef);
-  private elementRef = inject(ElementRef);
+
+  private editWrapper = viewChild<ElementRef<HTMLElement>>('editWrapper');
 
   private resizeObserver: ResizeObserver | null = null;
   private static readonly MAX_HEIGHT = 450;
@@ -28,6 +31,20 @@ export class EditMobilePanelComponent implements OnInit, AfterViewInit, OnDestro
 
   public visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.EDIT);
   public openedFromFeatureInfo = this.store$.selectSignal(selectEditOpenedFromFeatureInfo);
+
+  constructor() {
+    effect(() => {
+      const el = this.editWrapper()?.nativeElement;
+      this.resizeObserver?.disconnect();
+      this.resizeObserver = null;
+      if (el) {
+        this.resizeObserver = new ResizeObserver(() => {
+          this.updatePanelHeight(el);
+        });
+        this.resizeObserver.observe(el);
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.authenticatedUserService.getUserDetails$()
@@ -55,14 +72,6 @@ export class EditMobilePanelComponent implements OnInit, AfterViewInit, OnDestro
     //     }
     //   });
 
-  }
-
-  public ngAfterViewInit(): void {
-    const el = this.elementRef.nativeElement as HTMLElement;
-    this.resizeObserver = new ResizeObserver(() => {
-      this.updatePanelHeight(el);
-    });
-    this.resizeObserver.observe(el);
   }
 
   private updatePanelHeight(el: HTMLElement): void {

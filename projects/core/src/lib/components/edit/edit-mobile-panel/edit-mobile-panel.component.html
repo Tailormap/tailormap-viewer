@@ -1,8 +1,10 @@
 @if (visible$ | async) {
-  @if (!openedFromFeatureInfo()) {
-    <div class="tm-edit-wrapper">
-      <tm-edit [inMobilePanel]="true"></tm-edit>
-    </div>
-  }
-  <tm-edit-dialog [inMobilePanel]="true"></tm-edit-dialog>
+  <div #editWrapper class="edit-wrapper">
+    @if (!openedFromFeatureInfo()) {
+      <div class="tm-edit-component-wrapper">
+        <tm-edit [inMobilePanel]="true"></tm-edit>
+      </div>
+    }
+    <tm-edit-dialog [inMobilePanel]="true"></tm-edit-dialog>
+  </div>
 }
