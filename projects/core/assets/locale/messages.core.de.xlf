@@ -978,6 +978,14 @@
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Sie sind als <x id="PH" equiv-text="userLabel"/> angemeldet, haben jedoch nicht die erforderlichen Rollen, um auf die Anwendung zuzugreifen. Bitte kontaktieren Sie Ihren Administrator.</target>
       </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
+        <source>Stop editing?</source>
+        <target>Bearbeitung beenden?</target>
+      </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing-message" datatype="html">
+        <source>Are you sure you want to stop editing?</source>
+        <target>Bist du sicher, dass du die Bearbeitung beenden möchtest?</target>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
         <source>Confirm Password</source>
         <target>Passwort bestätigen</target>
