@@ -7,7 +7,9 @@ import {
   selectEditOpenedFromFeatureInfo, selectLoadingEditFeatures, selectSelectedEditFeature,
 } from '../state/edit.selectors';
 import { combineLatest, concatMap, filter, map, of, switchMap, take } from 'rxjs';
-import { editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, updateEditFeature } from '../state/edit.actions';
+import {
+  editNewlyCreatedFeature, expandCollapseEditDialog, hideEditDialog, setEditActive, setSelectedEditFeature, updateEditFeature,
+} from '../state/edit.actions';
 import {
   AttachmentMetadataModel, BaseComponentTypeEnum, EditConfigModel, FeatureModelAttributes, LayerDetailsModel, UniqueValuesService,
 } from '@tailormap-viewer/api';
@@ -55,6 +57,7 @@ export class EditDialogComponent implements OnInit, OnDestroy {
   public dialogTitle$;
   public layerDetails$;
   public selectableFeature$;
+  public editFeatures = this.store$.selectSignal(selectEditFeatures);
 
   public creatingSavingFeature = signal(false);
   public removingFeature = signal(false);
@@ -382,6 +385,10 @@ export class EditDialogComponent implements OnInit, OnDestroy {
 
   public onDeletedAttachmentsChanged(deletedAttachmentIds: Set<string>) {
     this.deletedAttachmentIds = deletedAttachmentIds;
+  }
+
+  public backToFeatureList() {
+    this.store$.dispatch(setSelectedEditFeature({ fid: null }));
   }
 
 }

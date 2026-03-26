@@ -50,9 +50,15 @@
             }
           </button>
         }
-        <button (click)="closeDialog()"
-                i18n="@@core.common.close"
-                mat-flat-button>Close</button>
+        @if (editFeatures().length > 1) {
+          <button (click)="backToFeatureList()"
+                  i18n="@@core.common.back"
+                  mat-flat-button>Back</button>
+        } @else {
+          <button (click)="closeDialog()"
+                  i18n="@@core.common.close"
+                  mat-flat-button>Close</button>
+        }
       </div>
     </div>
   }
