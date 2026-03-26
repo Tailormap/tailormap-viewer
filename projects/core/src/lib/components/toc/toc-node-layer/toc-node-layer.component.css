@@ -49,6 +49,7 @@
 
 .style-radio-button {
   font-style: italic;
+  margin-left: -8px;
 }
 
 .tree-node__info {
