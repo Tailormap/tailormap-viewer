@@ -128,12 +128,8 @@ export class EditComponent implements OnInit, OnDestroy {
       this.store$.dispatch(hideFeatureInfoDialog());
       this.store$.dispatch(setEditActive({ active: true }));
       this.mapService.setSwitchedTool(true);
-      this.store$.select(selectSelectedEditLayer)
-        .pipe(
-          first((layerId) => layerId !== null),
-          switchMap(() => this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])),
-          first((enabled) => enabled),
-        )
+      this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])
+        .pipe(first((enabled) => enabled))
         .subscribe(() => {
           this.mapService.setSwitchedTool(false);
         });
