@@ -20,8 +20,9 @@
 }
 
 .edit-form--mobile-panel {
-  height: calc(100% - 70px);
+  flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .content {

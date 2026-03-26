@@ -1,3 +1,17 @@
+.edit-wrapper {
+  max-height: calc(450px - var(--mat-toolbar-mobile-height));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+tm-edit-dialog {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .tm-edit-component-wrapper {
   padding: 0 14px;
   width: 100%;
