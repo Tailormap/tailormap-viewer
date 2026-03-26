@@ -27,7 +27,7 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
 
   private resizeObserver: ResizeObserver | null = null;
   private static readonly MAX_HEIGHT = 450;
-  private static readonly HEIGHT_OFFSET = 70;
+  private static readonly HEIGHT_OFFSET = 52;
 
   public visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.EDIT);
   public openedFromFeatureInfo = this.store$.selectSignal(selectEditOpenedFromFeatureInfo);
@@ -57,21 +57,6 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
           );
         }
       });
-
-    // combineLatest([
-    //   this.visible$,
-    //   this.store$.select(selectEditDialogVisible),
-    // ]).pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe(([ visibleInMobileLayout, editDialogVisible ]) => {
-    //     if (visibleInMobileLayout) {
-    //       if (editDialogVisible) {
-    //         this.menubarService.setMobilePanelHeight(450);
-    //       } else {
-    //         this.menubarService.setMobilePanelHeight(130);
-    //       }
-    //     }
-    //   });
-
   }
 
   private updatePanelHeight(el: HTMLElement): void {
