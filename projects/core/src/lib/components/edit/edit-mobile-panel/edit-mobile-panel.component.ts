@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef, ElementRef, AfterViewInit, viewChild, effect,
+  Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef, ElementRef, viewChild, effect,
 } from '@angular/core';
 import { MenubarService } from '../../menubar';
 import { AuthenticatedUserService, BaseComponentTypeEnum } from '@tailormap-viewer/api';
@@ -59,15 +59,15 @@ export class EditMobilePanelComponent implements OnInit, OnDestroy {
       });
   }
 
+  public ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
+  }
+
   private updatePanelHeight(el: HTMLElement): void {
     const contentHeight = el.scrollHeight;
     const newHeight = Math.min(contentHeight + EditMobilePanelComponent.HEIGHT_OFFSET, EditMobilePanelComponent.MAX_HEIGHT);
     this.menubarService.setMobilePanelHeight(newHeight);
-  }
-
-  public ngOnDestroy(): void {
-    this.resizeObserver?.disconnect();
-    this.componentRegistrationService.deregisterComponent('mobile-menu-bottom', BaseComponentTypeEnum.EDIT);
   }
 
 }
