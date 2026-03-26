@@ -132,7 +132,7 @@ export class EditComponent implements OnInit, OnDestroy {
         .pipe(
           first((layerId) => layerId !== null),
           switchMap(() => this.mapService.someToolsEnabled$([BaseComponentTypeEnum.EDIT])),
-          first((enabled) => enabled)
+          first((enabled) => enabled),
         )
         .subscribe(() => {
           this.mapService.setSwitchedTool(false);

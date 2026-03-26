@@ -58,11 +58,11 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
             return this.confirmService.confirm$(
               $localize `:@@core.mobile-panel.stop-editing:Stop editing?`,
               $localize `:@@core.mobile-panel.stop-editing-message:Are you sure you want to stop editing?`,
-            )
+            );
           } else {
             return of(true);
           }
-        })
+        }),
       ).subscribe((confirmed: boolean) => {
         if (confirmed) {
           this.menubarService.closePanel();
