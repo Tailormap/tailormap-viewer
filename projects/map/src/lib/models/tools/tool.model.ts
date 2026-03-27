@@ -4,4 +4,5 @@ export interface ToolModel {
   enable(args: any): void;
   disable(): void;
   destroy(): void;
+  supportsSnapping?: boolean;
 }

@@ -1,14 +1,12 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, Subject, take } from 'rxjs';
 import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../../state/filter-state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { SpatialFilterGeometry, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
-import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
-import { selectViewerId } from '../../state/core.selectors';
-import { TypesHelper } from '@tailormap-viewer/shared';
 import { updateFilterGroup } from '../../state/filter-state/filter.actions';
 import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
+import { LoadGeometriesService } from '../../services/load-geometries.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +16,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   public static MAX_REFERENCE_FEATURES = 250;
 
   private store$ = inject(Store);
-  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private loadFeaturesService = inject(LoadGeometriesService);
 
   private destroyed = new Subject();
   private geometriesLoaded: Map<string, string> = new Map();
@@ -55,43 +53,17 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   }
 
   private loadGeometries(group: FilterGroupModel<SpatialFilterModel>, referenceLayer: string, cqlFilter: string | undefined): void {
-    this.store$.select(selectViewerId)
-      .pipe(
-        take(1),
-        filter(TypesHelper.isDefined),
-        tap(() => this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ])),
-        switchMap(applicationId => {
-          return this.api.getFeatures$({
-            layerId: referenceLayer,
-            applicationId,
-            page: 1,
-            pageSize: SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES,
-            filter: cqlFilter === '' ? undefined : cqlFilter,
-            simplify: false,
-            onlyGeometries: true,
-          }).pipe(
-            map(response => ({
-              features: response.features,
-              error: false,
-              exceededMaxFeatures: response.features.length < (response.total || 0),
-            })),
-            catchError(() => {
-              return of(({ features: [], error: true, exceededMaxFeatures: false }));
-            }),
-          );
-        }),
-      )
+    this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ]);
+    this.loadFeaturesService.loadGeometries$(SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES, referenceLayer, cqlFilter)
+      .pipe(take(1))
       .subscribe(response => {
-        const geometries: SpatialFilterGeometry[] = response.features.map<SpatialFilterGeometry | undefined>(feat => {
-          if (!feat.geometry) {
-            return undefined;
-          }
+        const geometries: SpatialFilterGeometry[] = response.features.map(feat => {
           return {
             id: feat.__fid,
             geometry: feat.geometry,
             referenceLayerId: referenceLayer,
           };
-        }).filter(TypesHelper.isDefined);
+        });
         const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
           ...group,
           error: response.error ? $localize `:@@core.filter.error-loading-reference-layer-geometries:Error loading reference layer geometries` : undefined,

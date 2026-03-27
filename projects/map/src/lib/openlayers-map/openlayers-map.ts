@@ -3,7 +3,7 @@ import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
-import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
+import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
@@ -27,6 +27,7 @@ import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumManager } from './cesium-map/cesium-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
+import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -123,11 +124,13 @@ export class OpenLayersMap implements MapViewerModel {
     }
 
     OpenLayersEventManager.destroy();
+    OpenLayersSnappingManager.destroy();
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
+    OpenLayersSnappingManager.init(olMap, layerManager);
 
     // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
     merge(
@@ -461,6 +464,22 @@ export class OpenLayersMap implements MapViewerModel {
 
   public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.hasUserInteractedSubject.asObservable();
+  }
+
+  public allowSnapping(allow: boolean) {
+    OpenLayersSnappingManager.allowSnapping(allow);
+  }
+
+  public setSnappingLayerStyle(style: OlMapStyleType) {
+    OpenLayersSnappingManager.setSnappingLayerStyle(style);
+  }
+
+  public setSnappingTolerance(tolerance: number) {
+    OpenLayersSnappingManager.setSnappingTolerance(tolerance);
+  }
+
+  public getSnappingLayer() {
+    return OpenLayersSnappingManager.getSnappingLayer();
   }
 
 }

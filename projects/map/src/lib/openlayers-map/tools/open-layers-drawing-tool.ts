@@ -45,6 +45,8 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
 
   public drawing$ = merge(this.drawStart$, this.drawChange$, this.drawEnd$);
 
+  public supportsSnapping = true;
+
   private static getDrawingType(type?: DrawingType) {
     if (type === 'line') {
       return 'LineString';

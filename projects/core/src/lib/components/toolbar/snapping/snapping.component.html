@@ -1,0 +1,25 @@
+<div class="map-control-button-container">
+  <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
+    <mat-button-toggle [class.selected]="toolActive()" (click)="toggleTool()">
+      <mat-icon svgIcon="tools_snap"></mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenu">
+      <mat-icon svgIcon="drop_down"></mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<mat-menu #dropdownMenu="matMenu" class="options-menu">
+  @let selectedLayers = selectedLayers$ | async;
+  @for (layer of availableLayers(); track layer.id) {
+    <button mat-menu-item
+            [tmTooltip]="layer.title"
+            [matTooltipPosition]="'before'"
+            (click)="toggleLayer(layer)">
+      @if (selectedLayers?.has(layer.id)) {
+        <mat-icon svgIcon="check"></mat-icon>
+      }
+      {{ layer.title }}
+    </button>
+  }
+</mat-menu>

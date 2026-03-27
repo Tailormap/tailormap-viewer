@@ -12,6 +12,7 @@ import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-tool';
 import { debounceTime } from 'rxjs/operators';
 import { ToolsStatusModel } from '../models/tools-status.model';
+import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 
 const TOOL_STATUS_DEBOUNCE_TIME = 10;
 
@@ -161,6 +162,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
     const tool = this.tools.get(toolId);
     if (tool && (!tool.tool.isActive || forceEnableIfActivated)) {
       tool.tool.enable(enableArgs);
+      if (tool.tool.supportsSnapping) {
+        OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      }
       this.switchedTool = true;
       window.setTimeout(() => this.switchedTool = false, TOOL_STATUS_DEBOUNCE_TIME + 5);
     }

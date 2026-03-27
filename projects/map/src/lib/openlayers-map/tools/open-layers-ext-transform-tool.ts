@@ -38,6 +38,8 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   private editLayer: VectorLayer | null = null;
   private source: VectorSource | null = null;
 
+  public supportsSnapping = true;
+
   constructor(
     public id: string,
     private toolConfig: ExtTransformToolConfigModel,

@@ -4,11 +4,10 @@ import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
   LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
-  ToolConfigModel, ToolModel,
-  VectorLayerModel,
+  ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import { Vector as VectorLayer } from 'ol/layer';
+import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
@@ -17,7 +16,6 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
@@ -187,13 +185,7 @@ export class MapService {
           if (!vectorLayer) {
             return;
           }
-          vectorLayer.getSource()?.getFeatures().forEach(feature => {
-            vectorLayer.getSource()?.removeFeature(feature);
-          });
-          const featureModels = FeatureHelper.getFeatures(featureGeometry, vectorLayer.getSource()?.getProjection()?.getCode());
-          featureModels.forEach(feature => {
-            vectorLayer.getSource()?.addFeature(feature);
-          });
+          const featureModels = this.renderFeaturesToLayer(vectorLayer, featureGeometry);
           const shouldZoom = this.getBoolean(config?.zoomToFeature);
           const shouldCenter = this.getBoolean(config?.centerFeature);
           if (shouldZoom) {
@@ -339,6 +331,40 @@ export class MapService {
 
   public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.map.hasUserInteractedWithMap$();
+  }
+
+  public allowSnapping(allow: boolean) {
+    this.map.allowSnapping(allow);
+  }
+
+  public setSnappingLayerStyle<T extends FeatureModelAttributes = FeatureModelAttributes>(vectorLayerStyle: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel)) {
+    this.map.setSnappingLayerStyle(MapStyleHelper.getStyle(vectorLayerStyle));
+  }
+
+  public setSnappingTolerance(tolerance: number) {
+    this.map.setSnappingTolerance(tolerance);
+  }
+
+  public setSnappingFeatures<T extends FeatureModelAttributes = FeatureModelAttributes>(features: FeatureModelType<T> | Array<FeatureModelType<T>>) {
+    const snappingLayer = this.map.getSnappingLayer();
+    if (snappingLayer) {
+      this.renderFeaturesToLayer(snappingLayer, features);
+    }
+  }
+
+  private renderFeaturesToLayer<T extends FeatureModelAttributes = FeatureModelAttributes>(
+    vectorLayer: VectorLayer,
+    features: FeatureModelType<T> | Array<FeatureModelType<T>>,
+  ) {
+    vectorLayer.getSource()?.getFeatures().forEach(feature => {
+      vectorLayer.getSource()?.removeFeature(feature);
+    });
+    const featureModels = FeatureHelper.getFeatures(features, vectorLayer.getSource()?.getProjection()?.getCode());
+    console.log(featureModels);
+    featureModels.forEach(feature => {
+      vectorLayer.getSource()?.addFeature(feature);
+    });
+    return featureModels;
   }
 
 }
