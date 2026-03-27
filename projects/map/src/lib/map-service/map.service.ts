@@ -121,6 +121,18 @@ export class MapService {
     });
   }
 
+  public disableAllTools() {
+    this.executeToolManagerAction(manager => {
+      manager.disableAllTools();
+    });
+  }
+
+  public enableAutoEnabledTools() {
+    this.executeToolManagerAction(manager => {
+      manager.enableAutoEnabledTools();
+    });
+  }
+
   public executeToolManagerAction(callback: (manager: ToolManagerModel) => void) {
     this.getToolManager$()
       .pipe(take(1))

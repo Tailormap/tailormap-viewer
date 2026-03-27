@@ -978,6 +978,14 @@
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Je bent ingelogd <x id="PH" equiv-text="userLabel"/> maar je hebt niet de juiste rollen om toegang te krijgen tot de applicatie. Neem contact op met uw beheerder.</target>
       </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
+        <source>Stop editing?</source>
+        <target>Stoppen met bewerken?</target>
+      </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing-message" datatype="html">
+        <source>Are you sure you want to stop editing?</source>
+        <target>Weet u zeker dat u wilt stoppen met bewerken?</target>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
         <source>Confirm Password</source>
         <target>Bevestig wachtwoord</target>

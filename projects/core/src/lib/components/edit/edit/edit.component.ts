@@ -137,6 +137,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.mapService.setSwitchedTool(false);
     this.store$.dispatch(setEditActive({ active: false }));
   }
 

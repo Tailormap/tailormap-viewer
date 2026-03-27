@@ -13,4 +13,6 @@ export interface ToolManagerModel {
   destroy(): void;
   getToolStatusChanged$(): Observable<ToolsStatusModel>;
   setSwitchedTool(switched: boolean): void;
+  disableAllTools(): void;
+  enableAutoEnabledTools(): void;
 }

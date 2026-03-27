@@ -734,6 +734,12 @@
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
       </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
+        <source>Stop editing?</source>
+      </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing-message" datatype="html">
+        <source>Are you sure you want to stop editing?</source>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
         <source>Confirm Password</source>
       </trans-unit>

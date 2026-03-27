@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy, DestroyRef } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, take } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MenubarService } from '../../menubar/menubar.service';
-import { BrowserHelper, CssHelper } from '@tailormap-viewer/shared';
+import { BrowserHelper, ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-mobile-menubar-panel',
@@ -15,6 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private menubarService = inject(MenubarService);
   private destroyRef = inject(DestroyRef);
+  private confirmService = inject(ConfirmDialogService);
 
 
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
@@ -48,7 +50,24 @@ export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   }
 
   public closeDialog() {
-    this.menubarService.closePanel();
+    this.menubarService.getActiveComponent$()
+      .pipe(
+        take(1),
+        switchMap(activeComponent => {
+          if (activeComponent?.componentId === BaseComponentTypeEnum.EDIT) {
+            return this.confirmService.confirm$(
+              $localize `:@@core.mobile-panel.stop-editing:Stop editing?`,
+              $localize `:@@core.mobile-panel.stop-editing-message:Are you sure you want to stop editing?`,
+            );
+          } else {
+            return of(true);
+          }
+        }),
+      ).subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.menubarService.closePanel();
+        }
+      });
   }
 
   private getInitialHeightPx(): number {
