@@ -30,7 +30,6 @@ import { ProfileMenuButtonComponent } from './profile/profile-menu-button/profil
     MenubarComponent,
     MenubarButtonComponent,
     MenubarPanelComponent,
-    MenubarLogoComponent,
     ProfileComponent,
   ],
 })
