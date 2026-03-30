@@ -1,10 +1,15 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Geometry } from 'ol/geom';
 import { GeometryTypeHelper } from './geometry-type.helper';
+import { getLength as getSphereLength, getArea as getSphereArea } from 'ol/sphere';
+import { ProjectionsHelper } from './projections.helper';
 
 export class MapSizeHelper {
 
-  public static getSize(geometry?: Geometry) {
+  public static getSize(geometry?: Geometry, projection?: string) {
+    if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
+      return MapSizeHelper.getSphericalSize(geometry, projection);
+    }
     if (GeometryTypeHelper.isLineGeometry(geometry)) {
       return geometry.getLength();
     }
@@ -17,8 +22,21 @@ export class MapSizeHelper {
     return 0;
   }
 
-  public static getFormattedSize(geometry?: Geometry) {
-    const size = MapSizeHelper.getSize(geometry);
+  public static getSphericalSize(geometry?: Geometry, projection?: string) {
+    if (!geometry) {
+      return 0;
+    }
+    if (GeometryTypeHelper.isLineGeometry(geometry)) {
+      return getSphereLength(geometry, { projection: projection ?? 'EPSG:3857' });
+    }
+    if (GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isCircleGeometry(geometry)) {
+      return getSphereArea(geometry, { projection: projection ?? 'EPSG:3857' });
+    }
+    return 0;
+  }
+
+  public static getFormattedSize(geometry?: Geometry, projection?: string) {
+    const size = MapSizeHelper.getSize(geometry, projection);
     if (size && GeometryTypeHelper.isLineGeometry(geometry)) {
       return MapSizeHelper.getFormattedLength(size);
     }

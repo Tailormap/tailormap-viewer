@@ -25,4 +25,12 @@ export class ProjectionsHelper {
     }
   }
 
+  public static needsSphericalMeasurements(projection: string) {
+    const def = Proj4Helper.proj4.defs(projection);
+    if (!def) {
+      return false;
+    }
+    return (def.projName === 'longlat' || def.sphere || def.projName === 'merc');
+  }
+
 }

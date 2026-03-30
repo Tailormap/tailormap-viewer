@@ -14,6 +14,7 @@ export class MeasureStyleHelper {
     feature: Feature,
     showTotalSize?: boolean,
     showSegmentSize?: boolean,
+    projection?: string,
   ) {
     const styles = [];
     const geometry = feature.getGeometry();
@@ -29,7 +30,7 @@ export class MeasureStyleHelper {
       }
       line?.forEachSegment(function (a, b) {
         const segment = new LineString([ a, b ]);
-        const label = MapSizeHelper.getFormattedSize(segment);
+        const label = MapSizeHelper.getFormattedSize(segment, projection);
         const segmentStyle = MeasureStyleHelper.segmentStyle.clone();
         segmentStyle.setGeometry(segment);
         segmentStyle.getText()?.setText(label);
@@ -45,7 +46,7 @@ export class MeasureStyleHelper {
       } else if (geometry instanceof Circle) {
         point = new Point(geometry.getCenter());
       }
-      const sizeLabel = MapSizeHelper.getFormattedSize(geometry);
+      const sizeLabel = MapSizeHelper.getFormattedSize(geometry, projection);
       if (point && sizeLabel) {
         const labelStyle = MeasureStyleHelper.labelStyle.clone();
         labelStyle.setGeometry(point);

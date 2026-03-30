@@ -21,6 +21,7 @@ import { default as LayerRenderer } from 'ol/renderer/Layer';
 import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { ToolsStatusModel } from '../models/tools-status.model';
+import { withLatestFrom } from 'rxjs/operators';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
 
@@ -150,10 +151,11 @@ export class MapService {
             layerManager.removeLayer(layer.id);
           }
         }),
-        map(manager => {
+        withLatestFrom(this.getProjectionCode$()),
+        map(([ manager, projectionCode ]) => {
           const vectorLayer = manager.addLayer<VectorLayer>(layer);
           if (vectorLayer) {
-            vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle));
+            vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle, projectionCode));
           }
           return vectorLayer;
         }),
@@ -360,7 +362,6 @@ export class MapService {
       vectorLayer.getSource()?.removeFeature(feature);
     });
     const featureModels = FeatureHelper.getFeatures(features, vectorLayer.getSource()?.getProjection()?.getCode());
-    console.log(featureModels);
     featureModels.forEach(feature => {
       vectorLayer.getSource()?.addFeature(feature);
     });

@@ -35,7 +35,10 @@ export class MapStyleHelper {
     pointFillColor: MapStyleHelper.DEFAULT_COLOR,
   });
 
-  public static getStyle<T extends FeatureModelAttributes = FeatureModelAttributes>(styleConfig?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel)): OlMapStyleType {
+  public static getStyle<T extends FeatureModelAttributes = FeatureModelAttributes>(
+    styleConfig?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
+    projection?: string,
+  ): OlMapStyleType {
     if (typeof styleConfig === 'undefined') {
       return MapStyleHelper.DEFAULT_STYLE;
     }
@@ -53,11 +56,11 @@ export class MapStyleHelper {
       } else {
         style = styleConfig;
       }
-      return MapStyleHelper.mapStyleModelToOlStyle(style, feature, resolution);
+      return MapStyleHelper.mapStyleModelToOlStyle(style, feature, resolution, projection);
     };
   }
 
-  public static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number) {
+  public static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number, projection?: string) {
     const baseZIndex = styleConfig.zIndex || 0;
     const baseStyle = new Style({ zIndex: baseZIndex });
     const stroke = StrokeStyleHelper.createStroke(styleConfig);
@@ -85,7 +88,7 @@ export class MapStyleHelper {
     }
     styles.push(...ArrowStyleHelper.createArrowStyles(styleConfig, feature, stroke, baseZIndex));
     if (styleConfig.label) {
-      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature, baseZIndex));
+      styles.push(...LabelStyleHelper.createLabelStyle(styleConfig, symbolSizeForLabel, MapStyleHelper.DEFAULT_SYMBOL_SIZE, feature, baseZIndex, projection));
     }
     if (styleConfig.isSelected && (!styleConfig.pointType || (!!styleConfig.pointType && !styleConfig.label)) && typeof feature !== 'undefined') {
       styles.push(...SelectionStyleHelper.createOutlinedSelectionRectangle(feature, resolution, undefined, styleConfig));
@@ -94,7 +97,7 @@ export class MapStyleHelper {
       styles.push(...MapStyleHelper.createBuffer(feature, styleConfig.buffer, styleConfig));
     }
     if (feature && (styleConfig.showSegmentSize || styleConfig.showTotalSize)) {
-      styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize));
+      styles.push(...MeasureStyleHelper.addMeasures(feature, styleConfig.showTotalSize, styleConfig.showSegmentSize, projection));
     }
     if (styleConfig.showVertices) {
       styles.push(MapStyleHelper.getVertices(styleConfig.strokeColor || MapStyleHelper.DEFAULT_COLOR, styleConfig.strokeWidth ?? 1));
