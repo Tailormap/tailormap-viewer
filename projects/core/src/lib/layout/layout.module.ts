@@ -7,7 +7,7 @@ import { EmbeddedLayoutComponent } from './embedded-layout/embedded-layout.compo
 import { ShareViewerModule } from '../components/toolbar/share-viewer/share-viewer.module';
 import { Switch3dModule } from "../components/toolbar/switch3d/switch3d.module";
 import { MobileLayoutComponent } from './mobile-layout/mobile-layout.component';
-import {SnappingModule} from "../components/toolbar/snapping/snapping.module";
+import { SnappingModule } from "../components/toolbar/snapping/snapping.module";
 
 
 

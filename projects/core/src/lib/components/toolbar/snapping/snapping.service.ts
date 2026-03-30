@@ -1,9 +1,9 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { ExtendedAppLayerModel } from '../../../map';
-import { DescribeAppLayerService, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { DescribeAppLayerService } from '@tailormap-viewer/api';
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
-import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers, selectViewerId } from '../../../state';
-import { debounceTime, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { selectCQLFilters, selectViewerId } from '../../../state';
+import { debounceTime } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take } from 'rxjs';
 import { FeaturesFilterHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
