@@ -24,9 +24,6 @@ const mockLayer = {
 };
 
 const setup = async () => {
-  const snappingLayers$ = new BehaviorSubject([]);
-  const snappingGeometries$ = new BehaviorSubject([]);
-
   const mapServiceMock = {
     setSnappingTolerance: jest.fn(),
     setSnappingLayerStyle: jest.fn(),
@@ -35,8 +32,8 @@ const setup = async () => {
   };
 
   const snappingServiceMock = {
-    snappingLayers$: snappingLayers$.asObservable(),
-    snappingGeometries$: snappingGeometries$.asObservable(),
+    snappingLayers$: new BehaviorSubject([]),
+    snappingGeometries$: new BehaviorSubject([]),
     toggleLayer: jest.fn(),
     showGeometries: jest.fn(),
     hideGeometries: jest.fn(),
