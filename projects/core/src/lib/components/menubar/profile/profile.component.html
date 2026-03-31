@@ -34,7 +34,7 @@
 
 @if (userDetails && !inMobilePanel() && (visible$ | async)) {
   <tm-menubar-button [menuTrigger]="userMenu"
-  [icon]="(icon$ | async) ?? ''"></tm-menubar-button>
+  [icon]="(icon$ | async) ?? ''" tmTooltip="Profile" i18n-tmTooltip="@@core.profile"></tm-menubar-button>
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
     <ng-container *ngTemplateOutlet="profileMenuContent; context: { $implicit: userDetails }"></ng-container>
   </mat-menu>
