@@ -133,7 +133,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
     };
     return feature => {
       if (feature instanceof RenderFeature) {
-        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig, undefined, undefined, this.olMap.getView().getProjection().getCode());
+        return MapStyleHelper.mapStyleModelToOlStyle(styleConfig, this.olMap.getView().getProjection().getCode());
       }
       // OL drawing interaction draws different features while drawing. So if the user draws a polygon,
       // OL also draws a point (cursor) and a line (current segment). We don't want (optional) measurements
@@ -144,7 +144,7 @@ export class OpenLayersDrawingTool implements DrawingToolModel {
         ...styleConfig,
         showTotalSize: isSameAsDrawingType ? styleConfig.showTotalSize : false,
         showSegmentSize: isSameAsDrawingType ? styleConfig.showSegmentSize : false,
-      }, feature, undefined, this.olMap.getView().getProjection().getCode());
+      }, this.olMap.getView().getProjection().getCode(), feature);
     };
   }
 

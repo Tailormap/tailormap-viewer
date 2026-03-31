@@ -56,11 +56,11 @@ export class MapStyleHelper {
       } else {
         style = styleConfig;
       }
-      return MapStyleHelper.mapStyleModelToOlStyle(style, feature, resolution, projection);
+      return MapStyleHelper.mapStyleModelToOlStyle(style, projection, feature, resolution);
     };
   }
 
-  public static mapStyleModelToOlStyle(styleConfig: MapStyleModel, feature?: Feature<Geometry>, resolution?: number, projection?: string) {
+  public static mapStyleModelToOlStyle(styleConfig: MapStyleModel, projection?: string, feature?: Feature<Geometry>, resolution?: number) {
     const baseZIndex = styleConfig.zIndex || 0;
     const baseStyle = new Style({ zIndex: baseZIndex });
     const stroke = StrokeStyleHelper.createStroke(styleConfig);

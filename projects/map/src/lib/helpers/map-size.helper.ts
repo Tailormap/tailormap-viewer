@@ -23,9 +23,6 @@ export class MapSizeHelper {
   }
 
   public static getSphericalSize(geometry?: Geometry, projection?: string) {
-    if (!geometry) {
-      return 0;
-    }
     if (GeometryTypeHelper.isLineGeometry(geometry)) {
       return getSphereLength(geometry, { projection: projection ?? 'EPSG:3857' });
     }

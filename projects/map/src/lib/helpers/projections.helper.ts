@@ -30,7 +30,7 @@ export class ProjectionsHelper {
     if (!def) {
       return false;
     }
-    return (def.projName === 'longlat' || def.sphere || def.projName === 'merc');
+    return (def.sphere || def.projName === 'longlat' || def.projName === 'merc');
   }
 
 }
