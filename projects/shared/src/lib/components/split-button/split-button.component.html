@@ -1,5 +1,6 @@
 <mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
-  <mat-button-toggle (click)="cycleNextOption()" [tmTooltip]="nextOption?.label || ''" class="cycle-button">
+  <mat-button-toggle (click)="cycleNextOption()" [aria-label]="getNextLabel()" [tmTooltip]="getNextLabel()"
+                     class="cycle-button">
     {{ getLabel() }}
   </mat-button-toggle>
   <mat-button-toggle [matMenuTriggerFor]="dropdownMenu" class="drop-down-button"
