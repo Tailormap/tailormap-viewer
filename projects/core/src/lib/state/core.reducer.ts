@@ -91,7 +91,7 @@ const coreReducerImpl = createReducer<CoreState>(
   on(FilterActions.addFilterGroup, reduceFilters(FilterReducer.onAddFilterGroup)),
   on(FilterActions.removeFilterGroup, reduceFilters(FilterReducer.onRemoveFilterGroup)),
   on(FilterActions.updateFilterGroup, reduceFilters(FilterReducer.onUpdateFilterGroup)),
-  on(FilterActions.addAndUpdateFilterGroups, reduceFilters(FilterReducer.onAddAndUpdateFilterGroups)),
+  on(FilterActions.addOrUpdateFilterGroups, reduceFilters(FilterReducer.onAddAndUpdateFilterGroups)),
   on(FilterActions.addFilter, reduceFilters(FilterReducer.onAddFilter)),
   on(FilterActions.removeFilter, reduceFilters(FilterReducer.onRemoveFilter)),
   on(FilterActions.updateFilter, reduceFilters(FilterReducer.onUpdateFilter)),

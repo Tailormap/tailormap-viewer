@@ -24,7 +24,7 @@ export const updateFilterGroup = createAction(
   props<{ filterGroup: FilterGroupModel }>(),
 );
 
-export const addAndUpdateFilterGroups = createAction(
+export const addOrUpdateFilterGroups = createAction(
   `${filterActionsPrefix} Add or Update Filter Groups`,
   props<{ filterGroups: FilterGroupModel[] }>(),
 );
