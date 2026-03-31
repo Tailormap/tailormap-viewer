@@ -14,7 +14,7 @@ import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../..
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 import { deepEqual } from 'fast-equals';
 import { selectFilterState } from '../../state';
-import { addAndUpdateFilterGroups } from '../../state/filter-state/filter.actions';
+import { addOrUpdateFilterGroups } from '../../state/filter-state/filter.actions';
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 
@@ -189,7 +189,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         });
 
         if (newAndUpdatedFilterGroups.length > 0) {
-          this.store$.dispatch(addAndUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
+          this.store$.dispatch(addOrUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
         }
       });
   }
