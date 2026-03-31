@@ -48,6 +48,7 @@ export class SplitButtonComponent {
   public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
+  public nextOption: SplitButtonOptionModel | null = null;
 
   public cycleNextOption() {
     const idx = this.optionsList.findIndex(o => o.id === this.selectedOptionId);
@@ -57,6 +58,11 @@ export class SplitButtonComponent {
     }
     this.selectedOptionId = this.optionsList[nextIdx].id;
     this.selectedOptionObject = this.optionsList[nextIdx];
+    nextIdx = nextIdx + 1;
+    if (idx === -1 || nextIdx === this.optionsList.length) {
+      nextIdx = 1;
+    }
+    this.nextOption = this.optionsList[nextIdx];
     this.optionSelected.emit(this.selectedOptionId);
   }
 
