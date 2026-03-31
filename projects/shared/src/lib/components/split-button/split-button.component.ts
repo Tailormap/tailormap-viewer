@@ -48,21 +48,16 @@ export class SplitButtonComponent {
   public selectedOptionId: string | null = null;
   public selectedOptionObject: SplitButtonOptionModel | null = null;
   public optionsList: SplitButtonOptionModel[] = [];
-  public nextOption: SplitButtonOptionModel | null = null;
+  private nextOption: SplitButtonOptionModel | null = null;
 
   public cycleNextOption() {
+    if (this.optionsList.length === 0) {
+      return;
+    }
     const idx = this.optionsList.findIndex(o => o.id === this.selectedOptionId);
-    let nextIdx = idx + 1;
-    if (idx === -1 || nextIdx === this.optionsList.length) {
-      nextIdx = 0;
-    }
+    const nextIdx = idx === -1 ? 0 : (idx + 1) % this.optionsList.length;
     this.selectedOptionId = this.optionsList[nextIdx].id;
-    this.selectedOptionObject = this.optionsList[nextIdx];
-    nextIdx = nextIdx + 1;
-    if (idx === -1 || nextIdx === this.optionsList.length) {
-      nextIdx = 1;
-    }
-    this.nextOption = this.optionsList[nextIdx];
+    this.setSelectedOption();
     this.optionSelected.emit(this.selectedOptionId);
   }
 
@@ -75,6 +70,10 @@ export class SplitButtonComponent {
   public setSelectedOption() {
     if (this.optionsList.length > 0) {
       this.selectedOptionObject = this.optionsList.find(o => o.id === this.selectedOptionId) || null;
+      const idx = this.optionsList.findIndex(o => o.id === this.selectedOptionId);
+      this.nextOption = idx !== -1 && this.optionsList.length > 1
+        ? this.optionsList[(idx + 1) % this.optionsList.length]
+        : null;
     }
   }
 
@@ -83,6 +82,14 @@ export class SplitButtonComponent {
       return this.selectedOptionObject.label;
     }
     return this.emptyLabel || '';
+  }
+
+  public getNextLabel(): string {
+    const nextLabel = this.nextOption?.label;
+    if (!nextLabel) {
+      return '';
+    }
+    return $localize`:@@core.background-layer-toggle.show-next-option:Show ${nextLabel}:NEXT_LABEL:`;
   }
 
   public isLayerHiddenOnMap(option: SplitButtonOptionModel) {

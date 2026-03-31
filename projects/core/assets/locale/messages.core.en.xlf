@@ -68,6 +68,9 @@
       <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
         <source>Toggle visibility of all columns</source>
       </trans-unit>
+      <trans-unit id="core.background-layer-toggle.show-next-option" datatype="html">
+        <source>Show <x id="NEXT_LABEL" equiv-text="{{ nextLabel }}"/></source>
+      </trans-unit>
       <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
         <source>Select basemap</source>
       </trans-unit>
