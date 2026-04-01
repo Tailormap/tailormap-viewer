@@ -11,7 +11,7 @@
 
 <mat-menu #dropdownMenu="matMenu" class="options-menu">
   @let selectedLayers = selectedLayers$ | async;
-  @for (layer of availableLayers(); track layer.id) {
+  @for (layer of selectableLayers(); track layer.id) {
     <button mat-menu-item
             [tmTooltip]="layer.title"
             [matTooltipPosition]="'before'"

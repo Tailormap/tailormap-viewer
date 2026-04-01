@@ -4,7 +4,6 @@ import { SnappingComponent } from './snapping.component';
 import { BehaviorSubject } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
@@ -46,7 +45,7 @@ const setup = async () => {
   });
 
   await render(SnappingComponent, {
-    imports: [ SharedModule, NoopAnimationsModule, MatIconTestingModule ],
+    imports: [ SharedModule, MatIconTestingModule ],
     providers: [
       { provide: MapService, useValue: mapServiceMock },
       { provide: SnappingService, useValue: snappingServiceMock },
@@ -81,6 +80,13 @@ describe('SnappingComponent', () => {
     await userEvent.click(toggleBtn);
     expect(mapServiceMock.allowSnapping).toHaveBeenLastCalledWith(false);
     expect(snappingServiceMock.hideGeometries).toHaveBeenCalled();
+  });
+
+  test('should show list of layers when dropdown button is clicked', async () => {
+    await setup();
+    const dropdownBtn = screen.getAllByRole('presentation')[1];
+    await userEvent.click(dropdownBtn);
+    expect(screen.getByText('Layer One')).toBeInTheDocument();
   });
 
 });

@@ -37,7 +37,7 @@
             || layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
               <tm-terrain-controls></tm-terrain-controls>
             }
-<!--            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SNAPPING)) { <tm-snapping></tm-snapping> }-->
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SNAPPING)) { <tm-snapping></tm-snapping> }
             <tm-registered-components-renderer [config]="layoutConfig.config" area="map-controls-left"></tm-registered-components-renderer>
           </div>
           <div class="map-controls-right">
