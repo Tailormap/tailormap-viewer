@@ -1,50 +1,86 @@
 import { render, screen } from '@testing-library/angular';
+import { userEvent } from '@testing-library/user-event';
 import { SnappingComponent } from './snapping.component';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
-import { selectComponentsConfig } from '../../../state/core.selectors';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { MapService } from '@tailormap-viewer/map';
+import { SnappingService } from './snapping.service';
+import { selectVisibleLayersWithAttributes } from '../../../map';
+
+const mockLayer = {
+  id: 'layer1',
+  layerName: 'layer1',
+  title: 'Layer One',
+  serviceId: 'service-1',
+  visible: true,
+  hasAttributes: true,
+  editable: true,
+  opacity: 1,
+  searchIndex: null,
+};
 
 const setup = async () => {
-  const drawingSubject = new Subject<any>();
-  const mockTool = {
-    id: 'drawingTool',
-    drawing$: drawingSubject.asObservable(),
+  const mapServiceMock = {
+    setSnappingTolerance: jest.fn(),
+    setSnappingLayerStyle: jest.fn(),
+    setSnappingFeatures: jest.fn(),
+    allowSnapping: jest.fn(),
   };
-  const mapServiceMock = getMapServiceMock(() => mockTool);
+
+  const snappingServiceMock = {
+    snappingLayers$: new BehaviorSubject([]),
+    snappingGeometries$: new BehaviorSubject([]),
+    toggleLayer: jest.fn(),
+    showGeometries: jest.fn(),
+    hideGeometries: jest.fn(),
+  };
+
   const mockStore = createMockStore({
     selectors: [
-      { selector: selectComponentsConfig, value: [] },
+      { selector: selectVisibleLayersWithAttributes, value: [mockLayer] },
     ],
   });
-  const mockDispatch = jest.fn();
-  mockStore.dispatch = mockDispatch;
+
   await render(SnappingComponent, {
-    imports: [
-      SharedModule,
-      NoopAnimationsModule,
-      MatIconTestingModule,
-    ],
+    imports: [ SharedModule, NoopAnimationsModule, MatIconTestingModule ],
     providers: [
-      mapServiceMock.provider,
+      { provide: MapService, useValue: mapServiceMock },
+      { provide: SnappingService, useValue: snappingServiceMock },
       { provide: Store, useValue: mockStore },
     ],
   });
-  return { mapServiceMock, mockStore, mockDispatch, drawingSubject, mockTool };
+
+  return { mapServiceMock, snappingServiceMock };
 };
 
-describe('MeasureComponent', () => {
+describe('SnappingComponent', () => {
 
-  test('should render', async () => {
+  test('should initialise snapping settings on init', async () => {
     const { mapServiceMock } = await setup();
-    expect(screen.getByLabelText('Measure distance'));
-    expect(screen.getByLabelText('Measure area'));
-    expect(mapServiceMock.mapService.renderFeatures$).toHaveBeenCalled();
-    expect(mapServiceMock.mapService.createTool$).toHaveBeenCalled();
+    expect(mapServiceMock.setSnappingTolerance).toHaveBeenCalledWith(10);
+    expect(mapServiceMock.setSnappingLayerStyle).toHaveBeenCalledWith(
+      expect.objectContaining({ styleKey: 'snapping-style', zIndex: 999, strokeWidth: 3 }),
+    );
+  });
+
+  test('should enable snapping when toggle button is clicked', async () => {
+    const { mapServiceMock, snappingServiceMock } = await setup();
+    await userEvent.click(screen.getAllByRole('presentation')[0]);
+    expect(mapServiceMock.allowSnapping).toHaveBeenCalledWith(true);
+    expect(snappingServiceMock.showGeometries).toHaveBeenCalled();
+  });
+
+  test('should disable snapping when toggle button is clicked a second time', async () => {
+    const { mapServiceMock, snappingServiceMock } = await setup();
+    const toggleBtn = screen.getAllByRole('presentation')[0];
+    await userEvent.click(toggleBtn);
+    await userEvent.click(toggleBtn);
+    expect(mapServiceMock.allowSnapping).toHaveBeenLastCalledWith(false);
+    expect(snappingServiceMock.hideGeometries).toHaveBeenCalled();
   });
 
 });

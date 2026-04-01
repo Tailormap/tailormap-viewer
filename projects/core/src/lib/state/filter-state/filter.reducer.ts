@@ -75,7 +75,7 @@ export const onUpdateFilterGroup = (
 
 export const onAddAndUpdateFilterGroups = (
   state: FilterState,
-  payload: ReturnType<typeof FilterActions.addAndUpdateFilterGroups>,
+  payload: ReturnType<typeof FilterActions.addOrUpdateFilterGroups>,
 ): FilterState => {
   let updatedState = { ...state };
   payload.filterGroups.forEach(filterGroup => {
