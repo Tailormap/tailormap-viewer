@@ -1,8 +1,9 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Geometry } from 'ol/geom';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { getLength as getSphereLength, getArea as getSphereArea } from 'ol/sphere';
+import { getLength as getSphereLength, getArea as getSphereArea, offset as sphereOffset } from 'ol/sphere';
 import { ProjectionsHelper } from './projections.helper';
+import { fromLonLat, toLonLat } from 'ol/proj';
 
 export class MapSizeHelper {
 
@@ -73,6 +74,23 @@ export class MapSizeHelper {
       case MapUnitEnum.degrees: return 6;
       default: return 4;
     }
+  }
+
+  /**
+  Translate a distance in meters to a distance in the projected units at a given point using Openlayers Sphere.
+  For example, translating the distance in web mercator meters to the estimated number of meters at a given point.
+  @param pointCoordinates The point coordinates in map projection units
+  @param meters The desired distance in meters
+  @param projection The map projection code, e.g. 'EPSG:3857'
+   */
+  public static metersToProjectedUnitsAtPoint(pointCoordinates: number[], meters: number, projection: string): number {
+    const centerLonLat = toLonLat(pointCoordinates, projection);
+    const offsetPointLonLat = sphereOffset(centerLonLat, meters, 0);
+    const offsetPointProjected = fromLonLat(offsetPointLonLat, projection);
+    return Math.sqrt(
+      Math.pow(offsetPointProjected[0] - pointCoordinates[0], 2) +
+      Math.pow(offsetPointProjected[1] - pointCoordinates[1], 2),
+    );
   }
 
 }
