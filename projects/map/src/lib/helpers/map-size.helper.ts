@@ -85,7 +85,7 @@ export class MapSizeHelper {
    */
   public static metersToProjectedUnitsAtPoint(pointCoordinates: number[], meters: number, projection: string): number {
     const centerLonLat = toLonLat(pointCoordinates, projection);
-    const offsetPointLonLat = sphereOffset(centerLonLat, meters, 0);
+    const offsetPointLonLat = sphereOffset(centerLonLat, meters, Math.PI / 2);
     const offsetPointProjected = fromLonLat(offsetPointLonLat, projection);
     return Math.sqrt(
       Math.pow(offsetPointProjected[0] - pointCoordinates[0], 2) +
