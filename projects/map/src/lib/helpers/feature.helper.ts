@@ -3,11 +3,11 @@ import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Circle, Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
-import { fromCircle, fromExtent } from 'ol/geom/Polygon';
+import { circular, fromCircle, fromExtent } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { Projection } from 'ol/proj';
+import { Projection, toLonLat } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
 import { nanoid } from 'nanoid';
 import { WriteOptions } from 'ol/format/Feature';
@@ -215,7 +215,10 @@ export class FeatureHelper {
     }
     let projectedRadius = radius;
     if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
-      projectedRadius = MapSizeHelper.metersToProjectedUnitsAtPoint(point.getCoordinates(), radius, projection);
+      const lonLat = toLonLat(point.getCoordinates(), projection);
+      const circlePolygon = circular(lonLat, radius, 200);
+      circlePolygon.transform('EPSG:4326', projection);
+      return FeatureHelper.getWKT(circlePolygon);
     }
     const circle = new Circle(point.getCoordinates(), projectedRadius);
     return FeatureHelper.getWKT(circle);
