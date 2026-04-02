@@ -10,6 +10,7 @@ import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
 import { DrawingHelper } from '../helpers/drawing.helper';
+import { withLatestFrom } from 'rxjs/operators';
 
 @Injectable()
 export class DrawingService {
@@ -101,12 +102,13 @@ export class DrawingService {
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool }) => this.drawingTool = tool),
         switchMap(({ tool }) => tool.drawing$),
+        withLatestFrom(this.mapService.getProjectionCode$()),
       )
-      .subscribe(drawEvent => {
+      .subscribe(([ drawEvent, projection ]) => {
         if (drawEvent && drawEvent.type === 'end' && this.activeDrawingTool) {
           this.drawingAdded.next({
             ...drawEvent,
-            geometry: this.applyFixedSize(drawEvent.geometry),
+            geometry: this.applyFixedSize(drawEvent.geometry, projection),
           });
           if (opts.drawSingleShape) {
             const activeTool = this.activeDrawingTool;
@@ -269,25 +271,25 @@ export class DrawingService {
     }
   }
 
-  private applyFixedSize(geometry: string): string {
+  private applyFixedSize(geometry: string, projection?: string): string {
     const customRectangleWidth = this.customRectangleWidth();
     const customRectangleLength = this.customRectangleLength();
     if (this.activeDrawingTool == DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE && customRectangleWidth != null && customRectangleLength != null && geometry) {
-      const rectangle = FeatureHelper.createRectangleAtPoint(geometry, customRectangleWidth, customRectangleLength);
+      const rectangle = FeatureHelper.createRectangleAtPoint(geometry, customRectangleWidth, customRectangleLength, projection);
       if (rectangle) {
         return rectangle;
       }
     }
     const customCircleRadius = this.customCircleRadius();
     if (this.activeDrawingTool === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS && customCircleRadius != null && geometry) {
-      const circle = FeatureHelper.createCircleAtPoint(geometry, customCircleRadius);
+      const circle = FeatureHelper.createCircleAtPoint(geometry, customCircleRadius, projection);
       if (circle) {
         return circle;
       }
     }
     const customSquareLength = this.customSquareLength();
     if (this.activeDrawingTool === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH && customSquareLength != null && geometry) {
-      const square = FeatureHelper.createRectangleAtPoint(geometry, customSquareLength, customSquareLength);
+      const square = FeatureHelper.createRectangleAtPoint(geometry, customSquareLength, customSquareLength, projection);
       if (square) {
         return square;
       }

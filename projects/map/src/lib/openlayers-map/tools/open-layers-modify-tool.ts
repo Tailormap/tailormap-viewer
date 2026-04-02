@@ -89,7 +89,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
 
   private getStyle(style?: MapStyleModel) {
     if (style) {
-      return MapStyleHelper.getStyle(style);
+      return MapStyleHelper.getStyle(style, this.olMap.getView().getProjection().getCode());
     }
     return MapStyleHelper.getStyle({
       styleKey: 'edit-tool-style',
@@ -100,7 +100,7 @@ export class OpenLayersModifyTool implements ModifyToolModel {
       pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
       pointFillColor: 'rgba(255, 255, 255, 0.5)',
       ...(this.toolConfig.style || {}),
-    });
+    }, this.olMap.getView().getProjection().getCode());
   }
 
   private stopModify() {

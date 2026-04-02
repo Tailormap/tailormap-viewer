@@ -19,9 +19,10 @@ export class LabelStyleHelper {
     defaultSymbolSize: number,
     feature?: Feature<Geometry>,
     zIndex?: number,
+    projection?: string,
   ) {
     const geom = feature?.getGeometry();
-    const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom);
+    const label = LabelStyleHelper.replaceSpecialValues(styleConfig.label, geom, projection);
     const labelSize = UnitsHelper.getNumberValue(styleConfig.labelSize, defaultSymbolSize);
     const scale = 1 + (labelSize / LabelStyleHelper.DEFAULT_FONT_SIZE);
     const isPolygonLabel = [ "Polygon", "MultiPolygon", "Circle" ].includes(geom?.getType() || '');
@@ -68,14 +69,14 @@ export class LabelStyleHelper {
     return [baseLabelStyle];
   }
 
-  private static replaceSpecialValues(label?: string, geometry?: Geometry) {
+  private static replaceSpecialValues(label?: string, geometry?: Geometry, projection?: string) {
     label = label || '';
     if (label.indexOf('[COORDINATES]') !== -1) {
       const coordinatesLabel = GeometryTypeHelper.isPointGeometry(geometry) ? geometry.getCoordinates().join(' ') : '';
       label = label.replace(/\[COORDINATES]/g, coordinatesLabel);
     }
     if (label.indexOf('[LENGTH]') !== -1 || label.indexOf('[AREA]') !== -1) {
-      label = label.replace(/\[(LENGTH|AREA)\]/g, MapSizeHelper.getFormattedSize(geometry));
+      label = label.replace(/\[(LENGTH|AREA)\]/g, MapSizeHelper.getFormattedSize(geometry, projection));
     }
     return label;
   }

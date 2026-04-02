@@ -119,7 +119,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private getStyle(style?: Partial<MapStyleModel> | ((feature: FeatureModel) => MapStyleModel)) {
     if (typeof style === 'function') {
-      return MapStyleHelper.getStyle(style);
+      return MapStyleHelper.getStyle(style, this.olMap.getView().getProjection().getCode());
     }
     return MapStyleHelper.getStyle({
       styleKey: 'edit-tool-style',
@@ -130,7 +130,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       pointStrokeColor: 'rgba(0, 0, 0, 0.7)',
       pointFillColor: 'rgba(255, 255, 255, 0.5)',
       ...(style || this.toolConfig.style),
-    });
+    }, this.olMap.getView().getProjection().getCode());
   }
 
   private stopModify() {

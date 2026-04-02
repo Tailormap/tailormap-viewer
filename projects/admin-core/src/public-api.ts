@@ -13,6 +13,8 @@ export * from './lib/application/services/configuration-component-registry.servi
 export * from './lib/application/services/component-configuration.service';
 export * from './lib/application/components/configuration-component.model';
 export * from './lib/application/components/base-component-config/base-component-config.component';
+export * from './lib/application/state';
+export * from './lib/application/models';
 export * from './lib/user';
 export * from './lib/shared/services/admin-field-registration.service';
 export * from './lib/shared/services/admin-snackbar.service';
@@ -20,3 +22,5 @@ export * from './lib/shared/services/admin-sse.service';
 export * from './lib/shared/components';
 export * from './lib/helpers/form.helper';
 export * from './lib/templates/admin-navigation.service';
+export * from './lib/catalog/state';
+export * from './lib/catalog/services/feature-source.service';
