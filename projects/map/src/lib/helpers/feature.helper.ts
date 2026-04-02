@@ -11,6 +11,7 @@ import { Projection } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
 import { nanoid } from 'nanoid';
 import { WriteOptions } from 'ol/format/Feature';
+import { ProjectionsHelper } from './projections.helper';
 
 export class FeatureHelper {
 
@@ -187,26 +188,36 @@ export class FeatureHelper {
     return FeatureHelper.getWKT(geom);
   }
 
-  public static createRectangleAtPoint(pointWkt: string, width: number, height: number): string | null {
+  public static createRectangleAtPoint(pointWkt: string, width: number, height: number, projection?: string): string | null {
     const point = FeatureHelper.fromWKT(pointWkt);
     if (!(point instanceof Point)) {
       return null;
     }
     const coords = point.getFlatCoordinates();
+    let projectedWidth = width;
+    let projectedHeight = height;
+    if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
+      projectedWidth = MapSizeHelper.metersToProjectedUnitsAtPoint(coords, width, projection);
+      projectedHeight = MapSizeHelper.metersToProjectedUnitsAtPoint(coords, height, projection);
+    }
     return FeatureHelper.getWKT(fromExtent([
-      coords[0] - width / 2,
-      coords[1] - height / 2,
-      coords[0] + width / 2,
-      coords[1] + height / 2,
+      coords[0] - projectedWidth / 2,
+      coords[1] - projectedHeight / 2,
+      coords[0] + projectedWidth / 2,
+      coords[1] + projectedHeight / 2,
     ]));
   }
 
-  public static createCircleAtPoint(pointWkt: string, radius: number) {
+  public static createCircleAtPoint(pointWkt: string, radius: number, projection?: string) {
     const point = FeatureHelper.fromWKT(pointWkt);
     if (!(point instanceof Point)) {
       return null;
     }
-    const circle = new Circle(point.getCoordinates(), radius);
+    let projectedRadius = radius;
+    if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
+      projectedRadius = MapSizeHelper.metersToProjectedUnitsAtPoint(point.getCoordinates(), radius, projection);
+    }
+    const circle = new Circle(point.getCoordinates(), projectedRadius);
     return FeatureHelper.getWKT(circle);
   }
 
