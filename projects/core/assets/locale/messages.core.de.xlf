@@ -90,6 +90,14 @@
         <source>Toggle visibility of all columns</source>
         <target>Sichtbarkeit aller Spalten wechseln</target>
       </trans-unit>
+      <trans-unit id="core.background-layer-toggle.show-next-option" datatype="html">
+        <source>Show <x id="NEXT_LABEL" equiv-text="{{ nextLabel }}"/></source>
+        <target><x id="NEXT_LABEL" equiv-text="{{ nextLabel }}"/> Anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
+        <source>Select basemap</source>
+        <target>Grundkarte auswählen</target>
+      </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
         <target>Keine Grundkarte</target>
