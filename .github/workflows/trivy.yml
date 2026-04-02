@@ -12,6 +12,7 @@ concurrency:
 jobs:
   build:
     name: 'Trivy Scan'
+    if: false # disable for now, external service is not working
     runs-on: ubuntu-latest
     permissions:
       actions: read
