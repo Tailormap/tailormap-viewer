@@ -4,7 +4,7 @@
     @if (cnf.logoFileId) {
         <img [src]="getUrl(cnf.logoFileId)" (load)="checkUseDropdown()" alt="Logo" class="header-logo-image" />
     }
-    <h1 class="header-title">{{cnf.title}}</h1>
+    <h1 class="header-title" [class.mobile-header]="mobileHeader()">{{cnf.title}}</h1>
     @if (cnf.menuItems) {
       <div class="header-menu" #headerMenu>
         @if (!useDropdownMenu()) {

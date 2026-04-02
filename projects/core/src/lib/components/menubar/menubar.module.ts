@@ -31,6 +31,7 @@ import { ProfileMenuButtonComponent } from './profile/profile-menu-button/profil
     MenubarButtonComponent,
     MenubarPanelComponent,
     ProfileComponent,
+    MenubarLogoComponent,
   ],
 })
 export class MenubarModule { }
