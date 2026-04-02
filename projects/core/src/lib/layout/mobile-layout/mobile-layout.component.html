@@ -1,6 +1,6 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
-  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header [mobileHeader]="true"></tm-header> }
   <div class="viewer">
     <div class="map">
       @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
