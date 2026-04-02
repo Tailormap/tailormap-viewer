@@ -180,7 +180,7 @@
         <source>Expand on startup</source>
       </trans-unit>
       <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
-        <source>This group is expanded on startup, because one the layers in the group is checked</source>
+        <source>This group is expanded on startup, because a layer in the group is checked</source>
       </trans-unit>
       <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
         <source>Expand this group when the application is started</source>
@@ -1216,6 +1216,9 @@
       </trans-unit>
       <trans-unit id="admin-core.components.header-height" datatype="html">
         <source>Header Height</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height-hint" datatype="html">
+        <source> In the layout for mobile phones a height of more than 50 pixels will be reduced to 50 pixels. </source>
       </trans-unit>
       <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
         <source>Layout settings</source>

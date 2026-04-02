@@ -1649,6 +1649,10 @@
         <source>Header Height</source>
         <target>Headerhoogte</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.header-height-hint" datatype="html">
+        <source> In the layout for mobile phones a height of more than 50 pixels will be reduced to 50 pixels. </source>
+        <target> In de layout voor mobiele telefoons wordt een hoogte van meer dan 50 pixels verlaagd naar 50 pixels. </target>
+      </trans-unit>
       <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
         <source>Layout settings</source>
         <target>Lay-out instellingen</target>
