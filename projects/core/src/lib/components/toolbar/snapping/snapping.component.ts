@@ -33,6 +33,10 @@ export class SnappingComponent implements OnInit {
   });
   public selectedLayers$ = this.snappingService.snappingLayers$
     .pipe(map(layers => new Set(layers.map(l => l.id))));
+  public tooltip = signal($localize `:@@core.snapping.tooltip:Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.`);
+  public configured = computed(() => this.selectableLayers().length > 0);
+
+  public maxSelectedLayers = 5;
 
   public ngOnInit(): void {
     this.store$.select(selectComponentsConfigForType<SnappingComponentConfigModel>(BaseComponentTypeEnum.SNAPPING))
@@ -40,6 +44,9 @@ export class SnappingComponent implements OnInit {
       .subscribe(config => {
         this.mapService.setSnappingTolerance(config?.config.tolerance ?? DEFAULT_SNAPPING_TOLERANCE);
         this.configuredLayers.set(config?.config.selectedLayers || []);
+        if (config?.config.title) {
+          this.tooltip.set(config.config.title);
+        }
       });
     this.mapService.setSnappingLayerStyle({
       styleKey: 'snapping-style',

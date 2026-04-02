@@ -1,25 +1,37 @@
-<div class="map-control-button-container">
-  <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
-    <mat-button-toggle [class.selected]="toolActive()" (click)="toggleTool()">
-      <mat-icon svgIcon="tools_snap"></mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenu">
-      <mat-icon svgIcon="drop_down"></mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-</div>
+@if (configured()) {
+  <div class="map-control-button-container">
+    <mat-button-toggle-group [hideSingleSelectionIndicator]="true" [tmTooltip]="tooltip()">
+      <mat-button-toggle [class.selected]="toolActive()" (click)="toggleTool()">
+        <mat-icon svgIcon="tools_snap"></mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle class="drop-down-button"
+                         [matMenuTriggerFor]="dropdownMenu">
+        <mat-icon svgIcon="drop_down"></mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
-<mat-menu #dropdownMenu="matMenu" class="options-menu">
-  @let selectedLayers = selectedLayers$ | async;
-  @for (layer of selectableLayers(); track layer.id) {
-    <button mat-menu-item
-            [tmTooltip]="layer.title"
-            [matTooltipPosition]="'before'"
-            (click)="toggleLayer(layer)">
-      @if (selectedLayers?.has(layer.id)) {
-        <mat-icon svgIcon="check"></mat-icon>
-      }
-      {{ layer.title }}
-    </button>
-  }
-</mat-menu>
+  <mat-menu #dropdownMenu="matMenu" class="options-menu">
+    @let selectedLayers = selectedLayers$ | async;
+    @let cannotSelectMoreLayers = (selectedLayers?.size ?? 0) >= maxSelectedLayers;
+    @if (cannotSelectMoreLayers) {
+      <div>
+      <tm-error-message [friendlyError]="true"
+                        [show]="true"
+                        i18n="@@core.snapping.unselect-layers-to-select-more">You can select a maximum of {{maxSelectedLayers}} layers for snapping. Unselect layers before selecting others.</tm-error-message>
+      </div>
+    }
+    @for (layer of selectableLayers(); track layer.id) {
+      <button mat-menu-item
+              [tmTooltip]="layer.title"
+              [disabled]="cannotSelectMoreLayers"
+              [matTooltipPosition]="'before'"
+              (click)="toggleLayer(layer)">
+        @if (selectedLayers?.has(layer.id)) {
+          <mat-icon svgIcon="check"></mat-icon>
+        }
+        {{ layer.title }}
+      </button>
+    }
+  </mat-menu>
+}

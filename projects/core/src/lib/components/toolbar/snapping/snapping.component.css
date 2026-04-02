@@ -27,3 +27,8 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 .selected mat-icon {
   color: var(--primary-color);
 }
+
+tm-error-message ::ng-deep .error-message {
+  padding: 8px;
+  margin: 0 8px 8px 8px;
+}

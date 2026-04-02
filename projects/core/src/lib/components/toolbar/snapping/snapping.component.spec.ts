@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import { SnappingService } from './snapping.service';
 import { selectVisibleLayersWithAttributes } from '../../../map';
+import { selectComponentsConfig } from '../../../state';
 
 const mockLayer = {
   id: 'layer1',
@@ -41,6 +42,7 @@ const setup = async () => {
   const mockStore = createMockStore({
     selectors: [
       { selector: selectVisibleLayersWithAttributes, value: [mockLayer] },
+      { selector: selectComponentsConfig, value: [{ type: 'SNAPPING', config: { tolerance: 10, selectedLayers: ['layer1'] } }] },
     ],
   });
 
