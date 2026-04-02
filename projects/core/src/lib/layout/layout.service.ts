@@ -1,5 +1,5 @@
 import { map, Observable, combineLatest } from 'rxjs';
-import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentModel } from '@tailormap-viewer/api';
+import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 import { selectComponentsConfig } from '../state/core.selectors';
 import { Store } from '@ngrx/store';
 import { Injectable, inject } from '@angular/core';
@@ -73,6 +73,11 @@ export class LayoutService {
       return false;
     }
     return BaseComponentConfigHelper.isComponentEnabled(layoutConfig.config, componentType);
+  }
+
+  public shouldDisplayLogo(layoutConfig: LayoutConfig): boolean {
+    const headerConfig = layoutConfig.config.find(c => c.type === BaseComponentTypeEnum.HEADER);
+    return !headerConfig?.config?.enabled || !((headerConfig.config as HeaderComponentConfigModel).logoFileId);
   }
 
 }

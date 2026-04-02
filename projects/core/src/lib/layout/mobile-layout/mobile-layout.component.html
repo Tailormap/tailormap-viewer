@@ -17,7 +17,7 @@
 
       </div>
       <div class="map-controls-right--on-bottom">
-        @if (!layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) {
+        @if (layoutService.shouldDisplayLogo(layoutConfig)) {
           <div class="menubar-logo-container">
             <tm-menubar-logo></tm-menubar-logo>
           </div>
