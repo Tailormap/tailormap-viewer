@@ -1214,6 +1214,18 @@
         <source>Restore panel height</source>
         <target>Paneelhoogte herstellen</target>
       </trans-unit>
+      <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
+        <target>Er zijn meer dan <x id="PH" equiv-text="maxFeatures"/> objecten beschikbaar in de <x id="PH_1" equiv-text="layerTitle"/> snapping-laag. Het maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Pas filters toe of zoom in om de selectie te verkleinen.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.tooltip" datatype="html">
+        <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>
+        <target>Snapping-tool. Selecteer (zichtbare) lagen om aan te snappen bij het meten, tekenen en bewerken.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.unselect-layers-to-select-more" datatype="html">
+        <source>You can select a maximum of <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> layers for snapping. Unselect layers before selecting others.</source>
+        <target>U kunt maximaal <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> lagen selecteren voor snapping. Deselecteer eerst lagen voordat u andere lagen selecteert.</target>
+      </trans-unit>
       <trans-unit id="core.terrain-controls" datatype="html">
         <source>Terrain controls</source>
         <target>Terreinbediening</target>

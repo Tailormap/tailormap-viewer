@@ -1,0 +1,11 @@
+<tm-admin-list-filter [formControl]="filterControl"
+                      [filterTerm]="filterTerm()"
+                      i18n-label="@@admin-core.application.filter-tree"
+                      label="Filter application layers"></tm-admin-list-filter>
+<mat-selection-list (selectionChange)="onSelectedLayerChanged($event)">
+  @for (layer of filteredLayerList(); track layer.id) {
+    <mat-list-option [value]="layer.id" [selected]="layer.selected">
+      <div class="layer-label">{{ layer.label }}</div>
+    </mat-list-option>
+  }
+</mat-selection-list>
