@@ -258,7 +258,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
             layer: layer,
             sibling: '',
             toParent: rootNodeId,
-            position: "after",
+            position: "inside",
           };
           this.addLayer(addLayerEvent);
         } else {
