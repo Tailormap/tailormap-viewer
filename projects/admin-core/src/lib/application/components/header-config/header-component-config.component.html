@@ -5,6 +5,11 @@
       <mat-label i18n="@@admin-core.components.header-height">Header Height</mat-label>
       <input matInput type="number" [formControl]="heightControl" />
     </mat-form-field>
+    @if (heightControl.value > 50) {
+      <div class="header-height-hint" i18n="@@admin-core.components.header-height-hint">
+        In the layout for mobile phones a height of more than 50 pixels will be reduced to 50 pixels.
+      </div>
+    }
   </div>
   <div class="controls">
     <div class="control">

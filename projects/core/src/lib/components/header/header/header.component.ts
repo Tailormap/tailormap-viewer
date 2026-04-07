@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, ComponentModel, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel } from '@tailormap-viewer/api';
@@ -15,6 +15,7 @@ import { HeaderHelper } from './header.helper';
 export class HeaderComponent implements OnDestroy {
   private store$ = inject(Store);
 
+  public mobileHeader = input<boolean>(false);
 
   public config: Signal<ComponentModel<HeaderComponentConfigModel> | null>;
   public headerContainer = viewChild<ElementRef<HTMLDivElement>>('headerContainer');
@@ -29,8 +30,10 @@ export class HeaderComponent implements OnDestroy {
     effect(() => {
       const config = this.config();
       const headerContainer = this.headerContainer();
+      const mobileHeader = this.mobileHeader();
       if (config && config.config && headerContainer) {
-        CssHelper.setCssVariableValue('--header-component-height', (config.config.height ?? 100) + 'px');
+        const componentHeight = mobileHeader ? Math.min(50, config.config.height) : config.config.height;
+        CssHelper.setCssVariableValue('--header-component-height', componentHeight + 'px');
         CssHelper.setCssVariableValue('--header-text-color', config.config.textColor || '#000000', headerContainer.nativeElement);
         CssHelper.setCssVariableValue('--header-background-color', config.config.backgroundColor || '#ffffff', headerContainer.nativeElement);
       }

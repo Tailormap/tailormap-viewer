@@ -38,3 +38,12 @@ h2 {
   margin-top: 8px;
   margin-left: 8px;
 }
+
+.header-height-hint {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
+}

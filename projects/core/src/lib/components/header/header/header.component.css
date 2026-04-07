@@ -37,6 +37,10 @@ h1 {
   -webkit-line-clamp: 2;
 }
 
+h1.mobile-header {
+  -webkit-line-clamp: 2;
+}
+
 @media screen and (max-width: 800px) {
   h1 {
     font-size: 20px;
