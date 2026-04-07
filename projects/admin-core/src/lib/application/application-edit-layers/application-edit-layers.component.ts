@@ -247,7 +247,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public onLayerDoubleClicked(layer: ExtendedGeoServiceLayerModel) {
+  public onLayerDoubleClick(layer: ExtendedGeoServiceLayerModel) {
     this.applicationTreeService.selectedNode$
       .pipe(take(1))
       .subscribe(selectedNode => {
@@ -262,6 +262,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
           };
           this.addLayer(addLayerEvent);
         } else {
+          // Add layer to selected group or after selected node
           const parentId = this.applicationTreeService.getParent(selectedNode);
           const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
           const addLayerEvent: AddLayerEvent = {

@@ -9,5 +9,5 @@
   <tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode"
                               [scrollToItem]="selectedLayerId$ | async"
                               [getDropZones]="getDropZones()"
-                              [nodeDoubleClickCallback]="onLayerDoubleClicked.bind(this)"></tm-admin-catalog-base-tree>
+                              [onNodeDoubleClick]="onLayerDoubleClick.bind(this)"></tm-admin-catalog-base-tree>
 </div>

@@ -52,7 +52,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
 
   @Output()
-  public layerDoubleClicked = new EventEmitter<ExtendedGeoServiceLayerModel>();
+  public layerDoubleClick = new EventEmitter<ExtendedGeoServiceLayerModel>();
 
   public catalogFilter = new FormControl('');
   public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
@@ -112,10 +112,10 @@ export class ApplicationCatalogTreeComponent implements OnInit {
     });
   }
 
-  public onLayerDoubleClicked(evt: FlatTreeModel) {
+  public onLayerDoubleClick(evt: FlatTreeModel) {
     const node = this.treeService.getNode(evt.id);
     if (node && !!node.metadata && this.selectableNode(node)) {
-      this.layerDoubleClicked.emit(node.metadata);
+      this.layerDoubleClick.emit(node.metadata);
     }
   }
 }

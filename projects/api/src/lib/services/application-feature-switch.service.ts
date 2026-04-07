@@ -16,7 +16,7 @@ export class ApplicationFeatureSwitchService {
   private featuresEnabled = new BehaviorSubject<{ feature: ApplicationFeature; enabled: boolean }[]>([
     { feature: ApplicationFeature.SEARCH_INDEX, enabled: true },
     { feature: ApplicationFeature.TASKS, enabled: true },
-    { feature: ApplicationFeature.MOBILE_LAYOUT, enabled: true },
+    { feature: ApplicationFeature.MOBILE_LAYOUT, enabled: false },
   ]);
 
   public isFeatureEnabled$(feature: ApplicationFeature): Observable<boolean> {

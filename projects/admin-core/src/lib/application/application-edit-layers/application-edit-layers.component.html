@@ -9,7 +9,7 @@
           [selectedLayerId$]="selectedCatalogItem$"
           [applicationStateTree]="applicationStateTree"
           (addLayer)="addLayer($event)"
-          (layerDoubleClicked)="onLayerDoubleClicked($event)"></tm-admin-application-catalog-tree>
+          (layerDoubleClick)="onLayerDoubleClick($event)"></tm-admin-application-catalog-tree>
       </div>
       @if (applicationStateTree === 'terrainLayer') {
         <div class="tree-hint" i18n="@@admin-core.application.terrain-lagen">The catalog above shows only terrain layers</div>

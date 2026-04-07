@@ -35,7 +35,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   public scrollToItem?: string | null;
 
   @Input()
-  public nodeDoubleClickCallback?: (layer: FlatTreeModel) => void;
+  public onNodeDoubleClick?: (layer: FlatTreeModel) => void;
 
   constructor() {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)
