@@ -69,7 +69,7 @@ export class MenubarService {
 
   public setMobilePanelHeight(height: number | null) {
     if (height) {
-      const newHeight = Math.min(this.getMaxMobilePanelHeightPx(), height)
+      const newHeight = Math.min(this.getMaxMobilePanelHeightPx(), height);
       this.mobilePanelHeight$.next(newHeight);
     }
   }
