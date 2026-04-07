@@ -5,6 +5,8 @@
   <tm-error-message [message]="message"></tm-error-message>
   <button mat-raised-button color="primary" (click)="onRetryClick()" i18n="@@admin-core.common.retry">Retry</button>
 }
-<tm-tree [treeNodeTemplate]="treeNodeTemplate"
+<tm-tree
+  [treeNodeTemplate]="treeNodeTemplate"
   [scrollToItem]="scrollToItem"
-[getDropZones]="getDropZones"></tm-tree>
+  [getDropZones]="getDropZones"
+  [nodeDoubleClickCallback]="nodeDoubleClickCallback"></tm-tree>
