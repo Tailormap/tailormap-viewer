@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output, inject } from '@angular/core';
 import {
-  DropZoneOptions, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
+  DropZoneOptions, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { CatalogTreeModelMetadataTypes } from '../../catalog/models/catalog-tree.model';
@@ -50,6 +50,9 @@ export class ApplicationCatalogTreeComponent implements OnInit {
 
   @Input()
   public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
+
+  @Output()
+  public layerDoubleClick = new EventEmitter<ExtendedGeoServiceLayerModel>();
 
   public catalogFilter = new FormControl('');
   public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
@@ -107,5 +110,12 @@ export class ApplicationCatalogTreeComponent implements OnInit {
         });
       }
     });
+  }
+
+  public onLayerDoubleClick(evt: FlatTreeModel) {
+    const node = this.treeService.getNode(evt.id);
+    if (node && !!node.metadata && this.selectableNode(node)) {
+      this.layerDoubleClick.emit(node.metadata);
+    }
   }
 }
