@@ -11,3 +11,4 @@ export * from './select-upload/select-upload-button/select-upload.component';
 export * from './select-upload/models/upload-remove-service.injection-token';
 export * from './select-upload/models/upload-remove-service.model';
 export * from './list-filter/list-filter.component';
+export * from './layer-selection/layer-selection-config.component';

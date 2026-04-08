@@ -9,6 +9,8 @@ import { FeaturesFilterHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 
 interface SnappingFeature {
   __fid: string;
@@ -27,6 +29,7 @@ export class SnappingService {
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
   private describeLayerService = inject(DescribeAppLayerService);
+  private snackbar = inject(MatSnackBar);
 
   private snappingLayers = new BehaviorSubject<ExtendedAppLayerModel[]>([]);
   private snappingFeatures = new BehaviorSubject<SnappingFeature[]>([]);
@@ -131,6 +134,14 @@ export class SnappingService {
     this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, cqlFilter)
       .pipe(take(1))
       .subscribe(response => {
+        if (response.exceededMaxFeatures) {
+          const maxFeatures = SnappingService.MAX_SNAPPING_FEATURES;
+          const layerTitle = layer.title;
+          const message = $localize `:@@core.snapping.max-features-exceeded-warning:There are more than ${maxFeatures} objects \
+            available in the ${layerTitle} snapping layer. The maximum is ${maxFeatures}. Apply filters or zoom in to narrow down the \
+            selection.`;
+          SnackBarMessageComponent.open$(this.snackbar, { message, duration: 5000 });
+        }
         const features: SnappingFeature[] = response.features.map(feat => ({
           ...feat,
           layerId: layer.id,
