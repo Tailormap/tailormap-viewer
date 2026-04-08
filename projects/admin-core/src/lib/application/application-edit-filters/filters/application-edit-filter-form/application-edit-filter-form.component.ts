@@ -78,7 +78,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     this.initForm(updateFilter);
     if (this.currentFilterId !== updateFilter?.id) {
       this.currentFilterId = updateFilter?.id || null;
-      if (!updateFilter?.editConfiguration) {
+      if (!updateFilter?.editConfiguration || updateFilter?.editConfiguration?.filterTool === FilterToolEnum.DATE_INTERVAL) {
         this.initialEditConfiguration = null;
         return;
       }
@@ -128,7 +128,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         filter(() => this.isValidForm()),
       )
       .subscribe(value => {
-        const editFilterConfiguration = value.editFilterConfiguration
+        const editFilterConfiguration = value.editFilterConfiguration && value.editFilterConfiguration.filterTool !== FilterToolEnum.DATE_INTERVAL
           ? { ...value.editFilterConfiguration, condition: undefined } : undefined;
         const attributeFilter: AttributeFilterModel = {
           id: value.id ?? nanoid(6),
@@ -164,7 +164,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         editFilterConfiguration: null,
       }, { emitEvent: false });
     } else {
-      const editFilterConfiguration = attributeFilter.editConfiguration
+      const editFilterConfiguration = attributeFilter.editConfiguration && attributeFilter.editConfiguration.filterTool !== FilterToolEnum.DATE_INTERVAL
         ? { ...attributeFilter.editConfiguration, condition: attributeFilter.condition } : undefined;
       if (attributeFilter.attributeType !== AttributeType.BOOLEAN) {
         this.setUniqueValues(attributeFilter.attribute);
