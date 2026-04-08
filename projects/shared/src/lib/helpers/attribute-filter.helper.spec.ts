@@ -23,7 +23,7 @@ export const getFilterGroup = <T extends BaseFilterModel = AttributeFilterModel>
     type: type || FilterTypeEnum.ATTRIBUTE,
     filters: filters || [attributeFilter as unknown as T],
     operator: 'AND',
-    source: 'SOME_COMPONENT',
+    source: 'ATTRIBUTE_LIST',
   };
 };
 
