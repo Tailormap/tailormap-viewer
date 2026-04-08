@@ -1,9 +1,12 @@
-import { AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterGroupModel } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel,
+} from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 import { FeaturesFilters, FeatureTypeName, LayerFeaturesFilters } from '../models/feature-filter.model';
 import { FeaturesFilterHelper } from './features-filter.helper';
+import { DateTime } from 'luxon';
 
 export class CqlFilterHelper {
 
@@ -150,7 +153,8 @@ export class CqlFilterHelper {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForString(filter));
     }
     if (CqlFilterHelper.isDate(filter.attributeType)) {
-      return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForDate(filter));
+      const cql = CqlFilterHelper.getQueryForDate(filter);
+      return cql ? CqlFilterHelper.wrapFilter(cql) : null;
     }
     if (filter.attributeType === AttributeType.BOOLEAN) {
       const isTrue = filter.condition === FilterConditionEnum.BOOLEAN_TRUE_KEY ||
@@ -208,6 +212,9 @@ export class CqlFilterHelper {
       query.push(`${CqlFilterHelper.addTimePartToDate(dateFrom, true)} AND ${CqlFilterHelper.addTimePartToDate(dateUntil, false)}`);
       return `${query.join(' ')}`;
     }
+    if (filter.condition === FilterConditionEnum.DATE_INTERVAL_KEY && filter.value.length > 1) {
+      return CqlFilterHelper.getQueryForDateInterval(filter, filter.value[0], filter.value[1]);
+    }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
       : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
@@ -215,6 +222,32 @@ export class CqlFilterHelper {
     const value = CqlFilterHelper.addTimePartToDate(filter.value[0], cond !== 'AFTER');
     query.push(value);
     return query.join(' ');
+  }
+
+  private static getQueryForDateInterval(filter: AttributeFilterModel, dateFrom: string, interval: string) {
+    const allowedIntervals: string[] = [
+      FilterDateIntervalEnum.YEARS,
+      FilterDateIntervalEnum.MONTHS,
+      FilterDateIntervalEnum.DAYS,
+      FilterDateIntervalEnum.QUARTERS,
+      FilterDateIntervalEnum.WEEKS,
+    ];
+    if (!allowedIntervals.includes(interval)) {
+      return null;
+    }
+    const query: string[] = [filter.attribute];
+    if (filter.invertCondition) {
+      query.push('NOT');
+    }
+    query.push('BETWEEN');
+    const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
+    const endDate = DateTime.fromISO(startDate).plus({ [interval.toLowerCase()]: 1 }).set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+    }).toISO();
+    query.push(`${startDate} AND ${endDate}`);
+    return `${query.join(' ')}`;
   }
 
   private static addTimePartToDate(filterValue: string, isStart: boolean): string {

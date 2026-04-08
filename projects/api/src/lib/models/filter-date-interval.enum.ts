@@ -1,10 +1,10 @@
 export enum FilterDateIntervalEnum {
-  YEARS = 'YEARS',
-  MONTHS = 'MONTHS',
-  DAYS = 'DAYS',
-  QUARTERS = 'QUARTERS',
-  WEEKS = 'WEEKS',
-  HOURS = 'HOURS',
-  MINUTES = 'MINUTES',
-  SECONDS = 'SECONDS',
+  YEARS = 'YEAR',
+  MONTHS = 'MONTH',
+  DAYS = 'DAY',
+  QUARTERS = 'QUARTER',
+  WEEKS = 'WEEK',
+  // HOURS = 'HOURS',
+  // MINUTES = 'MINUTES',
+  // SECONDS = 'SECONDS',
 }
