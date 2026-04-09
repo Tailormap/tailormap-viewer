@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
+import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
 
 @Component({
   selector: 'tm-reset-filters-button',
@@ -22,7 +23,8 @@ export class ResetFiltersButtonComponent implements OnInit {
   public ngOnInit(): void {
     this.filters$ = this.store$.select(selectFilterGroupsWithLayers).pipe(
       map(groups =>
-        groups.filter(group => group.layers.some(layer => layer.visible)),
+        groups.filter(group =>
+          group.layers.some(layer => layer.visible)&& FilterSourceHelper.isStandardFilterSource(group)),
       ),
     );
   }

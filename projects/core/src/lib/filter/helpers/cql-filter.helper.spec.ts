@@ -279,7 +279,7 @@ describe('CQLFilterHelper', () => {
         value: ['value'],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
     }, {
       id: '2',
       type: FilterTypeEnum.ATTRIBUTE,
@@ -304,7 +304,7 @@ describe('CQLFilterHelper', () => {
         value: ['10'],
       }],
       operator: 'OR',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '1',
     }, {
       id: '3',
@@ -321,7 +321,7 @@ describe('CQLFilterHelper', () => {
         value: [ '5', '10' ],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '1',
     }, {
       id: '4',
@@ -338,7 +338,7 @@ describe('CQLFilterHelper', () => {
         value: [],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '2',
     }];
     const filters = CqlFilterHelper.getFilters(filterGroups);

@@ -2,6 +2,7 @@ import * as FilterActions from './filter.actions';
 import { FilterState } from './filter.state';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../../filter/helpers/filter-type.helper';
+import { FilterSourceHelper } from '../../filter/helpers/filter-source.helper';
 
 export const onAddAllFilterGroupsInConfig = (
   state: FilterState,
@@ -199,9 +200,9 @@ export const onResetAttributeFilters = (
   return {
     ...state,
     currentFilterGroups: state.currentFilterGroups
-      .filter(fg => fg.source === "PRESET")
+      .filter(fg => !FilterSourceHelper.isStandardFilterSource(fg) || fg.source === "PRESET")
       .map(fg => {
-        if (!FilterTypeHelper.isAttributeFilterGroup(fg)) {
+        if (!FilterSourceHelper.isStandardFilterSource(fg) || !FilterTypeHelper.isAttributeFilterGroup(fg)) {
           return fg;
         }
         return {
