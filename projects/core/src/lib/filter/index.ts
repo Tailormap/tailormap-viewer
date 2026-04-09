@@ -7,3 +7,4 @@ export * from './helpers/features-filter.helper';
 export * from './helpers/filter-type.helper';
 export * from './filter.module';
 export * from './models/feature-filter.model';
+export * from './helpers/filter-source.helper';
