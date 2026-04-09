@@ -236,17 +236,13 @@ export class CqlFilterHelper {
       return null;
     }
     const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
-    const endDate = DateTime.fromISO(startDate).plus({ [interval.toLowerCase()]: 1 }).set({
-      hour: 0,
-      minute: 0,
-      second: 0,
-    }).toISO();
-
-    if (filter.invertCondition) {
-      return `${filter.attribute} < ${startDate} OR ${filter.attribute} >= ${endDate}`;
-    }
-
-    return `${filter.attribute} >= ${startDate} AND ${filter.attribute} < ${endDate}`;
+    const endDate = DateTime.fromISO(startDate)
+      .plus({ [interval.toLowerCase()]: 1 })
+      .set({ hour: 0, minute: 0, second: 0 })
+      .minus({ seconds: 1 })
+      .toISO();
+    query.push(`${startDate} AND ${endDate}`);
+    return `${query.join(' ')}`;
   }
 
   private static addTimePartToDate(filterValue: string, isStart: boolean): string {

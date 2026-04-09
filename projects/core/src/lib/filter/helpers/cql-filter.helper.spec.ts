@@ -1,4 +1,4 @@
-import { FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterDateIntervalEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
@@ -41,7 +41,7 @@ const dateIntervalFilter = (interval: FilterDateIntervalEnum | string, dateFrom:
     attribute: 'attribute',
     attributeType: AttributeType.DATE,
     condition: FilterConditionEnum.DATE_INTERVAL_KEY,
-    value: [dateFrom, interval],
+    value: [ dateFrom, interval ],
   }]);
   const filters = CqlFilterHelper.getFilters([filterGroup]);
   return filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME);
@@ -396,22 +396,22 @@ describe('CQLFilterHelper', () => {
 
   test('date interval filter generates half-open range for each interval type', () => {
     expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01'))
-      .toBe('(attribute >= 2020-01-01T00:00:00Z AND attribute < 2021-01-01T00:00:00.000+00:00)');
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
     expect(dateIntervalFilter(FilterDateIntervalEnum.MONTHS, '2020-01-01'))
-      .toBe('(attribute >= 2020-01-01T00:00:00Z AND attribute < 2020-02-01T00:00:00.000+00:00)');
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-31T23:59:59.000+00:00)');
     expect(dateIntervalFilter(FilterDateIntervalEnum.WEEKS, '2020-01-01'))
-      .toBe('(attribute >= 2020-01-01T00:00:00Z AND attribute < 2020-01-08T00:00:00.000+00:00)');
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-07T23:59:59.000+00:00)');
     expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-01-01'))
-      .toBe('(attribute >= 2020-01-01T00:00:00Z AND attribute < 2020-01-02T00:00:00.000+00:00)');
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59.000+00:00)');
     expect(dateIntervalFilter(FilterDateIntervalEnum.QUARTERS, '2020-01-01'))
-      .toBe('(attribute >= 2020-01-01T00:00:00Z AND attribute < 2020-04-01T00:00:00.000+00:00)');
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-03-31T23:59:59.000+00:00)');
   });
 
   test('date interval filter with invertCondition generates correct inverted range', () => {
     expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01', true))
-      .toBe('(attribute < 2020-01-01T00:00:00Z OR attribute >= 2021-01-01T00:00:00.000+00:00)');
+      .toBe('(attribute NOT BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
     expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-06-15', true))
-      .toBe('(attribute < 2020-06-15T00:00:00Z OR attribute >= 2020-06-16T00:00:00.000+00:00)');
+      .toBe('(attribute NOT BETWEEN 2020-06-15T00:00:00Z AND 2020-06-15T23:59:59.000+00:00)');
   });
 
   test('date interval filter with invalid interval returns no filter', () => {
