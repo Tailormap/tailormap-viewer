@@ -235,6 +235,11 @@ export class CqlFilterHelper {
     if (!allowedIntervals.includes(interval)) {
       return null;
     }
+    const query: string[] = [filter.attribute];
+    if (filter.invertCondition) {
+      query.push('NOT');
+    }
+    query.push('BETWEEN');
     const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
     const endDate = DateTime.fromISO(startDate)
       .plus({ [interval.toLowerCase()]: 1 })
