@@ -1,4 +1,4 @@
-.simple-search-container {
+:host-context(.base-layout) .simple-search-container {
   justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
@@ -7,14 +7,14 @@
   transition: all 0.2s ease-in-out;
 }
 
-.simple-search-container--is-active {
+:host-context(.base-layout) .simple-search-container--is-active {
   padding: 5px 6px 5px 0;
   width: 500px;
   height: 70px;
   max-width: var(--max-control-width);
 }
 
-.simple-search-container button {
+:host-context(.base-layout) .simple-search-container button {
   border-radius: 3px;
 }
 
@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-.simple-search-container--mobile {
+:host-context(.mobile-layout) .simple-search-container {
   overflow: hidden;
   background-color: #fff;
   width: 40px;
@@ -33,22 +33,22 @@
   transition: width 0.2s ease-in-out;
 }
 
-.simple-search-container--mobile mat-form-field {
+:host-context(.mobile-layout) .simple-search-container mat-form-field {
   width: 100%;
   padding-top: 6px;
 }
 
-.simple-search-container--mobile .simple-search-field-wrapper {
+:host-context(.mobile-layout) .simple-search-container .simple-search-field-wrapper {
   padding: 9px;
   height: 40px;
 }
 
-.simple-search-container--mobile-is-active {
+:host-context(.mobile-layout) .simple-search-container--is-active {
   width: calc(75 * var(--vw));
   border-radius: 30px;
 }
 
-.simple-search-container--mobile-is-active .map-control-button {
+:host-context(.mobile-layout) .simple-search-container--is-active .map-control-button {
   align-self: center;
 }
 
@@ -110,7 +110,7 @@
   flex: 1;
 }
 
-.simple-search-container mat-form-field {
+:host-context(.base-layout) .simple-search-container mat-form-field {
   width: 100%;
   padding-top: 6px;
 }
@@ -167,13 +167,13 @@
 }
 
 @media screen and (max-width: 730px) {
-  .simple-search-container--is-active {
+  :host-context(.base-layout) .simple-search-container--is-active {
     padding: 0;
     width: var(--map-control-size);
     height: var(--map-control-size);
   }
 
-  .simple-search-container.simple-search-field-wrapper {
+  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper {
     position: absolute;
     top: calc(var(--map-control-size) + 9px);
     left: 0;
@@ -186,7 +186,7 @@
 }
 
 @media screen and (max-width: 425px) {
-  .simple-search-container.simple-search-field-wrapper {
+  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper {
     width: var(--max-control-width);
   }
 }
