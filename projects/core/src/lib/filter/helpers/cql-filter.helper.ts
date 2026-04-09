@@ -235,19 +235,18 @@ export class CqlFilterHelper {
     if (!allowedIntervals.includes(interval)) {
       return null;
     }
-    const query: string[] = [filter.attribute];
-    if (filter.invertCondition) {
-      query.push('NOT');
-    }
-    query.push('BETWEEN');
     const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
     const endDate = DateTime.fromISO(startDate).plus({ [interval.toLowerCase()]: 1 }).set({
       hour: 0,
       minute: 0,
       second: 0,
     }).toISO();
-    query.push(`${startDate} AND ${endDate}`);
-    return `${query.join(' ')}`;
+
+    if (filter.invertCondition) {
+      return `${filter.attribute} < ${startDate} OR ${filter.attribute} >= ${endDate}`;
+    }
+
+    return `${filter.attribute} >= ${startDate} AND ${filter.attribute} < ${endDate}`;
   }
 
   private static addTimePartToDate(filterValue: string, isStart: boolean): string {
