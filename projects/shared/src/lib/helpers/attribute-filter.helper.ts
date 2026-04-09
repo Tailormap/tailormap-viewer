@@ -1,5 +1,6 @@
 import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../models/filter-condition.model';
+import { DateIntervalModel } from '../models/date-interval.model';
 
 export class AttributeFilterHelper {
 
@@ -22,9 +23,10 @@ export class AttributeFilterHelper {
   private static filtersRequiringTwoValues = new Set([
     FilterConditionEnum.NUMBER_BETWEEN_KEY,
     FilterConditionEnum.DATE_BETWEEN_KEY,
+    FilterConditionEnum.DATE_INTERVAL_KEY,
   ]);
 
-  public static dateIntervalTypes = [
+  public static dateIntervalTypes: DateIntervalModel[] = [
     {
       interval: FilterDateIntervalEnum.YEARS,
       label: $localize`:@@core.filter.interval-years:Years`,
