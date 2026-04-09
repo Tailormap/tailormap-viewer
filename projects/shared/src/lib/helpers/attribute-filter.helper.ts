@@ -1,5 +1,6 @@
 import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../models/filter-condition.model';
+import { DateIntervalModel } from '../models/date-interval.model';
 
 export class AttributeFilterHelper {
 
@@ -22,9 +23,10 @@ export class AttributeFilterHelper {
   private static filtersRequiringTwoValues = new Set([
     FilterConditionEnum.NUMBER_BETWEEN_KEY,
     FilterConditionEnum.DATE_BETWEEN_KEY,
+    FilterConditionEnum.DATE_INTERVAL_KEY,
   ]);
 
-  public static dateIntervalTypes = [
+  public static dateIntervalTypes: DateIntervalModel[] = [
     {
       interval: FilterDateIntervalEnum.YEARS,
       label: $localize`:@@core.filter.interval-years:Years`,
@@ -50,21 +52,21 @@ export class AttributeFilterHelper {
       label: $localize`:@@core.filter.interval-days:Days`,
       attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
     },
-    {
-      interval: FilterDateIntervalEnum.HOURS,
-      label: $localize`:@@core.filter.interval-hours:Hours`,
-      attributeType: [AttributeType.TIMESTAMP],
-    },
-    {
-      interval: FilterDateIntervalEnum.MINUTES,
-      label: $localize`:@@core.filter.interval-minutes:Minutes`,
-      attributeType: [AttributeType.TIMESTAMP],
-    },
-    {
-      interval: FilterDateIntervalEnum.SECONDS,
-      label: $localize`:@@core.filter.interval-seconds:Seconds`,
-      attributeType: [AttributeType.TIMESTAMP],
-    },
+    // {
+    //   interval: FilterDateIntervalEnum.HOURS,
+    //   label: $localize`:@@core.filter.interval-hours:Hours`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
+    // {
+    //   interval: FilterDateIntervalEnum.MINUTES,
+    //   label: $localize`:@@core.filter.interval-minutes:Minutes`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
+    // {
+    //   interval: FilterDateIntervalEnum.SECONDS,
+    //   label: $localize`:@@core.filter.interval-seconds:Seconds`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
   ];
 
   public static getConditionTypes(includeUniqueValues = false): FilterConditionModel[] {
