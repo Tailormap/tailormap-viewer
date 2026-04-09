@@ -90,10 +90,6 @@
         <source>Toggle visibility of all columns</source>
         <target>Sichtbarkeit aller Spalten wechseln</target>
       </trans-unit>
-      <trans-unit id="core.background-layer-toggle.show-next-option" datatype="html">
-        <source>Show <x id="NEXT_LABEL" equiv-text="{{ nextLabel }}"/></source>
-        <target><x id="NEXT_LABEL" equiv-text="{{ nextLabel }}"/> Anzeigen</target>
-      </trans-unit>
       <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
         <source>Select basemap</source>
         <target>Grundkarte auswählen</target>
@@ -101,6 +97,10 @@
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
         <target>Keine Grundkarte</target>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.show-next-option" datatype="html">
+        <source>Show <x id="NEXT_LABEL" equiv-text="nextLabel"/></source>
+        <target><x id="NEXT_LABEL" equiv-text="nextLabel"/> Anzeigen</target>
       </trans-unit>
       <trans-unit id="core.bookmark.layer-not-found" datatype="html">
         <source>Layer is not available</source>
@@ -757,6 +757,26 @@
       <trans-unit id="core.filter.greater-than-or-equal-to" datatype="html">
         <source>Greater than or equal to</source>
         <target>Größer als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-days" datatype="html">
+        <source>Days</source>
+        <target>Tage</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-months" datatype="html">
+        <source>Months</source>
+        <target>Monate</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-quarters" datatype="html">
+        <source>Quarters</source>
+        <target>Quartale</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-weeks" datatype="html">
+        <source>Weeks</source>
+        <target>Wochen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-years" datatype="html">
+        <source>Years</source>
+        <target>Jahre</target>
       </trans-unit>
       <trans-unit id="core.filter.invert-condition" datatype="html">
         <source>Invert condition</source>

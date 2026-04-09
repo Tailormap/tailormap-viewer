@@ -55,6 +55,8 @@ export * from './switch-filter.model';
 export * from './date-picker-filter.model';
 export * from './dropdown-list-filter.model';
 export * from './edit-filter-configuration.model';
+export * from './filter-date-interval.enum';
+export * from './date-interval-filter.model';
 export * from './unique-values-response.model';
 export * from './tileset-3d-style.model';
 export * from './layer-export-capabilities.model';
