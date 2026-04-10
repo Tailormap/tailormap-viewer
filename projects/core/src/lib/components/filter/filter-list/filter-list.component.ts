@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
+import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
 
 @Component({
   selector: 'tm-filter-list',
@@ -17,7 +18,9 @@ export class FilterListComponent implements OnInit {
   public filters$: Observable<ExtendedFilterGroupModel[]> = of([]);
 
   public ngOnInit(): void {
-    this.filters$ = this.store$.select(selectFilterGroupsWithLayers);
+    this.filters$ = this.store$.select(selectFilterGroupsWithLayers).pipe(
+      map(groups =>
+        groups.filter(group => FilterSourceHelper.isStandardFilterSource(group))),
+    );
   }
-
 }

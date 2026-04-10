@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveFilterGroups } from '../../../state/filter-state/filter.selectors';
 import { map, Observable } from 'rxjs';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
+import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
 
 @Component({
   selector: 'tm-filter-menu-button',
@@ -22,7 +23,7 @@ export class FilterMenuButtonComponent {
     .pipe(
       map(groups => {
         const filtersPerActiveGroup: number[] = groups
-          .filter(group => !group.disabled)
+          .filter(group => !group.disabled && FilterSourceHelper.isStandardFilterSource(group))
           .map(group => group.filters
             .filter(filter => !(FilterTypeHelper.isAttributeFilter(filter) && filter.generatedByFilterId)).length);
         const numberOfFilters = filtersPerActiveGroup.reduce((a, b) => a + b, 0);
