@@ -5,7 +5,7 @@
     animate.enter="enter-animation"
     animate.leave="leave-animation">
     <tm-panel-resize (positionChanged)="sizeChanged($event)" orientation="horizontal"></tm-panel-resize>
-    <div [ngClass]="mobile ? 'mobile-panel' : 'panel'"
+    <div class="panel"
          [ngStyle]="{ 'height': getHeight() }"
          [class.panel--minimized]="isMinimized"
          [class.panel--maximized]="isMaximized"
