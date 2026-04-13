@@ -6,5 +6,5 @@ export interface LayerTreeNodeModel {
   childrenIds: string[] | null;
   description?: string;
   webMercatorAvailable?: boolean;
-  expandOnStartup?: boolean;
+  expandOnStartup?: "automatic" | "alwaysExpand" | "neverExpand";
 }

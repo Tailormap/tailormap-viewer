@@ -28,7 +28,7 @@ export class ApplicationLayerTreeNodeComponent {
   public deleteNode = new EventEmitter<string>();
 
   @Output()
-  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: boolean }>();
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: "automatic" | "alwaysExpand" | "neverExpand" }>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -69,12 +69,12 @@ export class ApplicationLayerTreeNodeComponent {
 
   public getExpandOnStartup() {
     if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
-      return this.someChildrenChecked() || this.node.metadata?.expandOnStartup;
+      return this.node.metadata?.expandOnStartup;
     }
-    return false;
+    return "automatic";
   }
 
-  public toggleExpandOnStartup(expandOnStartup: boolean) {
+  public setExpandOnStartup(expandOnStartup: "automatic" | "alwaysExpand" | "neverExpand") {
     if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
       this.expandOnStartup.emit({ nodeId: this.node.id, expandOnStartup });
     }

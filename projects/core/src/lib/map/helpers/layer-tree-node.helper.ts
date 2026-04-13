@@ -18,7 +18,13 @@ export class LayerTreeNodeHelper {
       if (LayerTreeNodeHelper.isAppLayerNode(node)) {
         return false;
       }
-      return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers) || (LayerTreeNodeHelper.isLevelNode(node) && node.expandOnStartup);
+      if (node.expandOnStartup === 'automatic') {
+        return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers);
+      } else if (node.expandOnStartup === 'alwaysExpand') {
+        return true;
+      }
+      return false;
+      // return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers) || (LayerTreeNodeHelper.isLevelNode(node) && node.expandOnStartup);
     });
     const checkedNodeIds = new Set(checkedNodes.map(c => c.id));
     return nodes.map(node => {
