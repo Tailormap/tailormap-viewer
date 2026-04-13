@@ -64,11 +64,13 @@ export interface TailormapApiV1ServiceModel {
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
 
+  /** @deprecated To be replaced with the /extract API */
   getLayerExportCapabilities$(params: {
     applicationId: string;
     layerId: string;
   }): Observable<LayerExportCapabilitiesModel>;
 
+  /** @deprecated To be replaced with the /extract API */
   getLayerExport$(params: {
     applicationId: string;
     layerId: string;
