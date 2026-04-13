@@ -83,7 +83,7 @@ export interface TailormapApiV1ServiceModel {
     crs?: string;
   }): Observable<HttpResponse<Blob>>;
 
-  getAllowedExtractFormats$(params: {
+  getLayerExtractFormats$(params: {
     applicationId: string;
     layerId: string;
   }): Observable<LayerExtractCapabilitiesModel>;
