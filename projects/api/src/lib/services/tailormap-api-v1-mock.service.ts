@@ -10,10 +10,12 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
+  getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel, getLayerExtractFormatsModel,
 } from '../mock-data';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { LayerExtractCapabilitiesModel } from "../models/layer-extract-capabilities.model";
+import { LayerExtractModel } from "../models/layer-extract.model";
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -64,6 +66,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUniqueValuesResponseModel());
   }
 
+  /** @deprecated To be replaced with the /extract API */
   public getLayerExportCapabilities$(_params: {
     applicationId: string;
     layerId: string;
@@ -71,6 +74,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getLayerExportCapabilitiesModel());
   }
 
+  /** @deprecated To be replaced with the /extract API */
   public getLayerExport$(_params: {
     applicationId: string;
     layerId: string;
@@ -80,6 +84,28 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     attributes?: string[];
     crs?: string;
   }): Observable<HttpResponse<Blob>> {
+    return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
+  }
+
+  public getLayerExtractFormats$(_params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
+    return of(getLayerExtractFormatsModel());
+  }
+
+  public requestLayerExtract$(_params: {
+    applicationId: string;
+    layerId: string;
+    clientId: string;
+    outputFormat: string;
+    attributes?: string[];
+    filter?: string;
+    sort: { column: string; direction: string } | null;
+  }): Observable<LayerExtractModel> {
+    return of({
+      downloadId: crypto.randomUUID(), message: 'Layer extract request received',
+    });
+  }
+
+  public downloadLayerExtract$(_params: { applicationId: string; layerId: string; downloadId: string }): Observable<HttpResponse<Blob>> {
     return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
   }
 
