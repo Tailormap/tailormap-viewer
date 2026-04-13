@@ -7,6 +7,8 @@ import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { LayerExtractModel } from '../models/layer-extract.model';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -79,6 +81,27 @@ export interface TailormapApiV1ServiceModel {
     sort: { column: string; direction: string} | null;
     attributes?: string[];
     crs?: string;
+  }): Observable<HttpResponse<Blob>>;
+
+  getAllowedExtractFormats$(params: {
+    applicationId: string;
+    layerId: string;
+  }): Observable<LayerExtractCapabilitiesModel>;
+
+  requestLayerExtract$(params: {
+    applicationId: string;
+    layerId: string;
+    clientId: string;
+    outputFormat: string;
+    attributes?: string[];
+    filter?: string;
+    sort: { column: string; direction: string} | null;
+  }): Observable<LayerExtractModel>;
+
+  downloadLayerExtract$(params: {
+    applicationId: string;
+    layerId: string;
+    downloadId: string;
   }): Observable<HttpResponse<Blob>>;
 
   getConfig$<T>(key: string): Observable<ConfigResponseModel<T>>;
