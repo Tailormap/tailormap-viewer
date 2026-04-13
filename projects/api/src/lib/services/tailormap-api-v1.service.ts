@@ -124,6 +124,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
+  /** @deprecated To be replaced with the /extract API */
   public getLayerExportCapabilities$(params: {
     applicationId: string;
     layerId: string;
@@ -133,6 +134,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
+  /** @deprecated To be replaced with the /extract API */
   public getLayerExport$(params: {
     applicationId: string;
     layerId: string;
