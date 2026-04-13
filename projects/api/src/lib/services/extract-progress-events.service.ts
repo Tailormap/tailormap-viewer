@@ -4,7 +4,6 @@ import { nanoid } from 'nanoid';
 import { TailormapApiConstants } from './tailormap-api.constants';
 import { filter, Observable, Subject } from 'rxjs';
 
-
 export enum EventType {
   KEEP_ALIVE = 'keep-alive',
   EXTRACT_PROGRESS = 'extract-progress',
@@ -28,7 +27,7 @@ export interface ExtractProgressEventModel extends ServerSentEventModel {
 @Injectable({
   providedIn: 'root',
 })
-export class ServerSentEventsService implements OnDestroy {
+export class ExtractProgressEventsService implements OnDestroy {
 
   private eventSource: EventSource | null = null;
   private retryTimeout = 5000;
@@ -37,7 +36,7 @@ export class ServerSentEventsService implements OnDestroy {
   private maxRetryCount = 5;
   private logging = false;
   private ngZone = inject(NgZone);
-
+  private readonly clientId = nanoid();
   private extractProgressEvents = new Subject<ExtractProgressEventModel>();
   private extractProgressEvents$ = this.extractProgressEvents.asObservable();
 
@@ -55,6 +54,13 @@ export class ServerSentEventsService implements OnDestroy {
     if (this.eventSource) {
       this.eventSource.close();
     }
+  }
+
+  /**
+   * Returns the stable SSE client id to use with /extract/{clientId} requests.
+   */
+  public getClientId(): string {
+    return this.clientId;
   }
 
   /**
@@ -77,15 +83,14 @@ export class ServerSentEventsService implements OnDestroy {
     if (this.eventSource) {
       return;
     }
-    const clientId = nanoid();
-    const eventSource = new EventSource(`${TailormapApiConstants.BASE_URL}/events/${clientId}`);
+    const eventSource = new EventSource(`${TailormapApiConstants.BASE_URL}/events/${this.clientId}`);
     this.eventSource = eventSource;
     this.ngZone.runOutsideAngular(() => {
       eventSource.onmessage = (e) => {
         const evt: ServerSentEventModel = JSON.parse(e.data);
         this.log('SSE event', evt);
         this.retryCount = 0;
-        if (evt.eventType === EventType.EXTRACT_PROGRESS && this.monitoredExtractEvents.has(evt.eventType)) {
+        if (this.monitoredExtractEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.extractProgressEvents.next(evt as ExtractProgressEventModel));
         }
       };
