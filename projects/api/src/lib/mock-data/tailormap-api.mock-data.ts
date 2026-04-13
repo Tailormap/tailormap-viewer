@@ -9,6 +9,7 @@ import { FeaturesResponseModel } from '../models/features-response.model';
 import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
 
 export const getVersionResponseModel = (overrides?: VersionResponseModel): VersionResponseModel => ({
   version: '0.1-SNAPSHOT',
@@ -165,9 +166,15 @@ export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>):
   ...overrides,
 });
 
+/** @deprecated To be replaced with the /extract API */
 export const getLayerExportCapabilitiesModel = (overrides?: Partial<LayerExportCapabilitiesModel>): LayerExportCapabilitiesModel => ({
   exportable: true,
   outputFormats: [ 'SHAPE-ZIP',  'excel2007',  'gpkg',  'json',  'text/csv' ],
+  ...overrides,
+});
+
+export const getLayerExtractFormatsModel = (overrides?: Partial<LayerExtractCapabilitiesModel>): LayerExtractCapabilitiesModel => ({
+  outputFormats: ['csv'],
   ...overrides,
 });
 

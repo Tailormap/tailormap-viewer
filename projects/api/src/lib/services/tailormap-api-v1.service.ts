@@ -10,8 +10,8 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { ApiHelper } from '../helpers/api.helper';
 import { TailormapApiConstants } from './tailormap-api.constants';
-import { LayerExtractCapabilitiesModel } from "../models/layer-extract-capabilities.model";
-import { LayerExtractModel } from "../models/layer-extract.model";
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
+import { LayerExtractModel } from '../models/layer-extract.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
@@ -166,7 +166,7 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
-  public getAllowedExtractFormats$(params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
+  public getLayerExtractFormats$(params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
     return this.httpClient.get<LayerExtractCapabilitiesModel>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/formats`);
   }
 
@@ -196,7 +196,13 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
   }
 
   public downloadLayerExtract$(params: { applicationId: string; layerId: string; downloadId: string }): Observable<HttpResponse<Blob>> {
-    return this.httpClient.get<HttpResponse<Blob>>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/download/${params.downloadId}`);
+    return this.httpClient.get(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/download/${params.downloadId}`,
+      {
+        observe: 'response',
+        responseType: 'blob',
+      },
+    );
   }
 
   public getConfig$<T>(key: string): Observable<ConfigResponseModel<T>> {
