@@ -182,6 +182,10 @@
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
         <target>Möchten Sie die Anwendung <x id="PH" equiv-text="title"/> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.does-not-expand-on-startup" datatype="html">
+        <source>This group is not expanded on startup</source>
+        <target>Diese Gruppe wird beim Start nicht erweitert</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.dropdown-list-filter.hint" datatype="html">
         <source> All unique values will be displayed in the dropdown list, unless altered below. </source>
         <target> Alle eindeutigen Werte werden in der Dropdown-Liste angezeigt, sofern sie unten nicht geändert werden. </target>
@@ -238,13 +242,21 @@
         <source>Expand on startup</source>
         <target>Beim Start ausklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
-        <source>This group is expanded on startup, because a layer in the group is checked</source>
-        <target>Diese Gruppe ist beim Start ausgeklappt, weil eine Ebene in der Gruppe aktiviert ist</target>
+      <trans-unit id="admin-core.application.expand-on-startup-always" datatype="html">
+        <source>Always expand</source>
+        <target>Immer ausklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
-        <source>Expand this group when the application is started</source>
-        <target>Diese Gruppe beim Start der Anwendung ausklappen</target>
+      <trans-unit id="admin-core.application.expand-on-startup-automatic" datatype="html">
+        <source>Automatic</source>
+        <target>Automatisch</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
+        <source>Never expand</source>
+        <target>Nie ausklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expands-on-startup" datatype="html">
+        <source>This group is expanded on startup</source>
+        <target>Diese Gruppe wird beim Start ausgeklappt</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
