@@ -6,6 +6,9 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
   const mockTreeService = {
@@ -14,7 +17,7 @@ const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
     descendantsAllSelected: jest.fn().mockReturnValue(false),
   };
   await render(ApplicationLayerTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule ],
+    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule, MatFormFieldModule, MatSelectModule, MatTooltipModule ],
     inputs: { node },
     providers: [
       { provide: TreeService, useValue: mockTreeService },

@@ -88,9 +88,31 @@ export class ApplicationLayerTreeNodeComponent {
     return this.treeService.descendantsPartiallySelected(node) || this.treeService.descendantsAllSelected(node);
   }
 
+  public isExpandedOnStartup() {
+    if (!ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+      return false;
+    }
+    const expandOnStartup = this.node.metadata?.expandOnStartup;
+    if (expandOnStartup === 'alwaysExpand') {
+      return true;
+    }
+    if (expandOnStartup === 'neverExpand') {
+      return false;
+    }
+    return this.someChildrenChecked();
+  }
+
+  public getExpandedOnStartupIcon() {
+    if (this.isExpandedOnStartup()) {
+      return 'admin_expanded';
+    } else {
+      return 'admin_not_expanded';
+    }
+  }
+
   public getExpandOnStartupTooltip() {
-    return this.someChildrenChecked()
-      ? $localize `:@@admin-core.application.expand-on-startup-disabled-tooltip:This group is expanded on startup, because a layer in the group is checked`
-      : $localize `:@@admin-core.application.expand-on-startup-tooltip:Expand this group when the application is started`;
+    return this.isExpandedOnStartup()
+      ? $localize `:@@admin-core.application.expands-on-startup:This group is expanded on startup`
+      : $localize `:@@admin-core.application.does-not-expand-on-startup:This group is not expanded on startup`;
   }
 }

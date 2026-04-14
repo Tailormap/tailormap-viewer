@@ -6,7 +6,17 @@
       <span class="tree-node__icon">
         <mat-icon [attr.aria-label]="node.label" [svgIcon]="getIcon()"></mat-icon>
       </span>
-      <span class="tree-node__label-content">{{node.label}}</span>
+      <span class="tree-node__label-content">
+        <span class="tree-node__label-text">{{node.label}}</span>
+        @if (isLevel()) {
+          <span
+            class="tree-node__startup-state-icon"
+            [matTooltip]="getExpandOnStartupTooltip()"
+            [attr.aria-label]="getExpandOnStartupTooltip()">
+            <mat-icon [svgIcon]="getExpandedOnStartupIcon()"></mat-icon>
+          </span>
+        }
+      </span>
     </div>
     <div class="tree-node__actions">
       @if (isLayer()) {
@@ -48,7 +58,7 @@
           <mat-icon svgIcon="close"></mat-icon>
           <span i18n="@@admin-core.application.remove">Remove</span>
         </button>
-        <div class="expand-on-startup-wrapper" [tmTooltip]="getExpandOnStartupTooltip()">
+        <div class="expand-on-startup-wrapper">
           <mat-form-field appearance="outline" class="expand-on-startup">
             <mat-label i18n="@@admin-core.application.expand-on-startup">Expand on startup</mat-label>
             <mat-select
