@@ -69,7 +69,7 @@ export class ApplicationLayerTreeNodeComponent {
   }
 
   public getExpandOnStartup() {
-    if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+    if (ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.expandOnStartup) {
       return this.node.metadata?.expandOnStartup;
     }
     return "automatic";
