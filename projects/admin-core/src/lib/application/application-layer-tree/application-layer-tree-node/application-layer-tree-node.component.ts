@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
+import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-layer-tree-node',
@@ -28,7 +29,7 @@ export class ApplicationLayerTreeNodeComponent {
   public deleteNode = new EventEmitter<string>();
 
   @Output()
-  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: "automatic" | "alwaysExpand" | "neverExpand" }>();
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: ExpandOnStartupEnum }>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -74,7 +75,7 @@ export class ApplicationLayerTreeNodeComponent {
     return "automatic";
   }
 
-  public setExpandOnStartup(expandOnStartup: "automatic" | "alwaysExpand" | "neverExpand") {
+  public setExpandOnStartup(expandOnStartup: ExpandOnStartupEnum) {
     if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
       this.expandOnStartup.emit({ nodeId: this.node.id, expandOnStartup });
     }

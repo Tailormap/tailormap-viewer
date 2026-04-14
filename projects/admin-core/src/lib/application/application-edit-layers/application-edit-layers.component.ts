@@ -28,6 +28,7 @@ import { expandTree } from '../../catalog/state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -238,7 +239,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.store$.dispatch(setApplicationTreeFilterTerm({ filterTerm, tree: this.applicationStateTree }));
   }
 
-  public expandOnStartup($event: { nodeId: string; expandOnStartup: "automatic" | "alwaysExpand" | "neverExpand" }) {
+  public expandOnStartup($event: { nodeId: string; expandOnStartup: ExpandOnStartupEnum }) {
     const updatedNode: Partial<AppTreeLevelNodeModel> = { expandOnStartup: $event.expandOnStartup };
     this.store$.dispatch(updateApplicationTreeNode({
       tree: this.applicationStateTree,
