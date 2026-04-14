@@ -762,6 +762,14 @@
         <source>Days</source>
         <target>Tage</target>
       </trans-unit>
+      <trans-unit id="core.filter.interval-hours" datatype="html">
+        <source>Hours</source>
+        <target>Stunden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-minutes" datatype="html">
+        <source>Minutes</source>
+        <target>Minuten</target>
+      </trans-unit>
       <trans-unit id="core.filter.interval-months" datatype="html">
         <source>Months</source>
         <target>Monate</target>
@@ -769,6 +777,10 @@
       <trans-unit id="core.filter.interval-quarters" datatype="html">
         <source>Quarters</source>
         <target>Quartale</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-seconds" datatype="html">
+        <source>Seconds</source>
+        <target>Sekunden</target>
       </trans-unit>
       <trans-unit id="core.filter.interval-weeks" datatype="html">
         <source>Weeks</source>

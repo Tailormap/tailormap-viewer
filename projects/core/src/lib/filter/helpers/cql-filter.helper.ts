@@ -231,6 +231,9 @@ export class CqlFilterHelper {
       FilterDateIntervalEnum.DAYS,
       FilterDateIntervalEnum.QUARTERS,
       FilterDateIntervalEnum.WEEKS,
+      FilterDateIntervalEnum.HOURS,
+      FilterDateIntervalEnum.MINUTES,
+      FilterDateIntervalEnum.SECONDS,
     ];
     if (!allowedIntervals.includes(interval)) {
       return null;
@@ -240,6 +243,7 @@ export class CqlFilterHelper {
       query.push('NOT');
     }
     query.push('BETWEEN');
+    // XXX werkt niet voor date met tijd erbij...
     const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
     const endDate = DateTime.fromISO(startDate)
       .plus({ [interval.toLowerCase()]: 1 })
