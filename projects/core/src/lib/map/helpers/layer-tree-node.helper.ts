@@ -24,7 +24,6 @@ export class LayerTreeNodeHelper {
         return true;
       }
       return false;
-      // return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers) || (LayerTreeNodeHelper.isLevelNode(node) && node.expandOnStartup);
     });
     const checkedNodeIds = new Set(checkedNodes.map(c => c.id));
     return nodes.map(node => {
