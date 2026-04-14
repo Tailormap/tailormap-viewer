@@ -94,10 +94,10 @@ export class ApplicationLayerTreeNodeComponent {
       return false;
     }
     const expandOnStartup = this.node.metadata?.expandOnStartup;
-    if (expandOnStartup === 'alwaysExpand') {
+    if (expandOnStartup === ExpandOnStartupEnum.ALWAYS_EXPAND) {
       return true;
     }
-    if (expandOnStartup === 'neverExpand') {
+    if (expandOnStartup === ExpandOnStartupEnum.NEVER_EXPAND) {
       return false;
     }
     return this.someChildrenChecked();

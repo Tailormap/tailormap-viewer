@@ -1,4 +1,4 @@
-import { AppLayerModel, LayerTreeNodeModel } from '@tailormap-viewer/api';
+import { AppLayerModel, ExpandOnStartupEnum, LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { ExtendedLayerTreeNodeModel } from '../models';
 import { TreeHelper, TreeModel, TypesHelper } from '@tailormap-viewer/shared';
 
@@ -18,9 +18,9 @@ export class LayerTreeNodeHelper {
       if (LayerTreeNodeHelper.isAppLayerNode(node)) {
         return false;
       }
-      if (node.expandOnStartup === 'automatic') {
+      if (node.expandOnStartup === ExpandOnStartupEnum.AUTOMATIC) {
         return LayerTreeNodeHelper.hasCheckedChildren(node, nodes, checkedLayers);
-      } else if (node.expandOnStartup === 'alwaysExpand') {
+      } else if (node.expandOnStartup === ExpandOnStartupEnum.ALWAYS_EXPAND) {
         return true;
       }
       return false;
