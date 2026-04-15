@@ -1,7 +1,7 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { ExtendedAppLayerModel, selectVisibleLayersWithAttributes } from '../../../map';
 import {
-  BaseComponentTypeEnum, DEFAULT_SNAPPING_TOLERANCE, DescribeAppLayerService, SnappingComponentConfigModel,
+  BaseComponentTypeEnum, DescribeAppLayerService, SnappingComponentConfigModel,
 } from '@tailormap-viewer/api';
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
 import { selectComponentsConfigForType, selectCQLFilters, selectViewerId } from '../../../state';
@@ -93,7 +93,7 @@ export class SnappingService {
     ])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        filter(([ snappingLayers, mapExtent, allFilters, viewerId, snappingActive ]) => snappingActive),
+        filter(([ _snappingLayers, _mapExtent, _allFilters, _viewerId, snappingActive ]) => snappingActive),
         debounceTime(500),
         concatMap(([ snappingLayers, mapExtent, allFilters, viewerId ]) => {
           const layerDetails = snappingLayers.map(l => this.describeLayerService.getDescribeAppLayer$(viewerId, l.id).pipe(take(1)));

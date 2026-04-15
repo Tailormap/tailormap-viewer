@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal } from '@angular/core';
 import { MapService } from '@tailormap-viewer/map';
 import { map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ApplicationStyleService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ExtendedAppLayerModel, selectVisibleLayersWithAttributes } from '../../../map';
+import { ExtendedAppLayerModel } from '../../../map';
 import { SnappingService } from './snapping.service';
 import { selectComponentsConfigForType } from '../../../state';
 import {
