@@ -23,7 +23,6 @@ export class AttributeFilterHelper {
   private static filtersRequiringTwoValues = new Set([
     FilterConditionEnum.NUMBER_BETWEEN_KEY,
     FilterConditionEnum.DATE_BETWEEN_KEY,
-    FilterConditionEnum.DATE_INTERVAL_KEY,
   ]);
 
   public static dateIntervalTypes: DateIntervalModel[] = [
