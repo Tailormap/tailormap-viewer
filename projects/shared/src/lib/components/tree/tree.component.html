@@ -10,10 +10,11 @@
   <ng-container *cdkVirtualFor="let node of dataSource$; trackBy: treeTrackBy">
     <div [class.tree-node--selected]="selectedNodeId === node.id && !openInfoInTree"
          [class.tree-node--selected-with-info]="activeInTreeInfoNodes.includes(node.id) && openInfoInTree"
+         [class.tree-node--multi-selected]="multiSelectedNodeIds.includes(node.id)"
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.--tree-node-indent]="depth(node) * 20 + 'px'"
-         (click)="setNodeSelected(node)"
+         (click)="setNodeSelected(node, $event)"
          (dblclick)="onNodeDoubleClick ? onNodeDoubleClick(node) : null">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"

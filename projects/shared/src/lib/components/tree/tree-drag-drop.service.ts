@@ -18,6 +18,7 @@ export interface DropZoneOptions {
   isExpanded(nodeid: string): boolean;
   expandNode(nodeid: string): void;
   getParent(nodeid: string): string | null;
+  getNodeOrder?(nodeIds: string[]): string[];
   nodePositionChanged(evt: NodePositionChangedEventModel): void;
   getExtendedDropzoneElement?(): HTMLElement | null;
   getRootNodeId?(): string | null;
@@ -36,6 +37,7 @@ export class TreeDragDropService implements OnDestroy {
   private readonly handleMouseMoveListener: MouseEventHandler = e => this.handleMouseMove(e);
 
   private dragNode: FlatTreeModel | null = null;
+  private dragNodeIds: string[] = [];
   private dragNodeExpandOverWaitTimeMs = 300;
   private dragOverNodeId: string | null = null;
   private dragNodeExpandOverTime: number | null = null;
@@ -78,15 +80,16 @@ export class TreeDragDropService implements OnDestroy {
     this.treeDragDropEnabled.next(enable);
   }
 
-  public handleDragStart(event: DragEvent, dragNode: FlatTreeModel, dropZones: DropZoneOptions[]) {
+  public handleDragStart(event: DragEvent, dragNode: FlatTreeModel, dropZones: DropZoneOptions[], dragNodeIds: string[] = [dragNode.id]) {
     this.dropZones = dropZones;
     this.dragNode = dragNode;
+    this.dragNodeIds = dragNodeIds;
 
     if (event.dataTransfer) {
       if (dropZones.length > 0 && event.dataTransfer.setDragImage) {
         const dragImage = document.createElement('div');
         dragImage.classList.add('tree-node__drag-image');
-        dragImage.innerText = dragNode.label;
+        dragImage.innerText = dragNodeIds.length > 1 ? `${dragNodeIds.length} items` : dragNode.label;
         dropZones[0].getTargetElement()?.appendChild(dragImage);
         event.dataTransfer.setDragImage(dragImage, 0, BrowserHelper.isTouchDevice ? 75 : 25);
       }
@@ -163,7 +166,7 @@ export class TreeDragDropService implements OnDestroy {
       if (this.dragNodeExpandOverTime) {
         window.clearTimeout(this.dragNodeExpandOverTime);
       }
-      const shouldExpand = this.dragNode.id !== nodeId && dropZone.isExpandable(nodeId) && !dropZone.isExpanded(nodeId);
+      const shouldExpand = !this.dragNodeIds.includes(nodeId) && dropZone.isExpandable(nodeId) && !dropZone.isExpanded(nodeId);
       if (shouldExpand) {
         this.dragNodeExpandOverTime = window.setTimeout(() => {
           dropZone.expandNode(nodeId);
@@ -233,25 +236,39 @@ export class TreeDragDropService implements OnDestroy {
       return;
     }
 
+    if (!this.dragNodeIds.includes(nodeId)) {
+      const orderedDragNodeIds = dropZone.getNodeOrder
+        ? dropZone.getNodeOrder(this.dragNodeIds)
+        : [...this.dragNodeIds];
 
-
-    if (nodeId !== this.dragNode.id) {
       const insideExpandableNode = this.dragNodePosition === 'inside' && dropZone.isExpandable(nodeId);
       let parent = insideExpandableNode ? nodeId : dropZone.getParent(nodeId);
       let sibling = nodeId;
+      let position = this.dragNodePosition;
+
       if (element.className.includes(TreeDragDropService.EXTENDED_DROPZONE_CLASS)) {
         parent = dropZone.getRootNodeId ? dropZone.getRootNodeId() : null;
         sibling = dropZone.getRootNodeId ? dropZone.getRootNodeId() ?? '' : '';
       }
-      const prevParent = dropZone.getParent(this.dragNode.id);
-      const eventData = {
-        nodeId: this.dragNode.id,
-        toParent: parent ? parent : null,
-        fromParent: prevParent ? prevParent : null,
-        position: this.dragNodePosition,
-        sibling: sibling,
-      };
-      dropZone.nodePositionChanged(eventData);
+
+      orderedDragNodeIds.forEach((dragNodeId, index) => {
+        const prevParent = dropZone.getParent(dragNodeId);
+        const eventData = {
+          nodeId: dragNodeId,
+          toParent: parent ? parent : null,
+          fromParent: prevParent ? prevParent : null,
+          position,
+          sibling,
+        };
+        dropZone.nodePositionChanged(eventData);
+
+        if (index === 0) {
+          sibling = dragNodeId;
+          position = 'after';
+        } else {
+          sibling = dragNodeId;
+        }
+      });
     }
     this.handleDragEnd();
   };
@@ -288,6 +305,8 @@ export class TreeDragDropService implements OnDestroy {
         }
       }
     });
+    this.dragNode = null;
+    this.dragNodeIds = [];
   };
 
   private attachEventListenersToNodes(treeElement: HTMLElement) {
