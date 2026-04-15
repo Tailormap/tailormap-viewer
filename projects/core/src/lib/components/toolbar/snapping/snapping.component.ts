@@ -24,17 +24,13 @@ export class SnappingComponent implements OnInit {
   private snappingService = inject(SnappingService);
   private destroyRef = inject(DestroyRef);
 
-  public toolActive = signal(false);
-  public configuredLayers = signal<string[]>([]);
-  public availableLayers = this.store$.selectSignal(selectVisibleLayersWithAttributes);
-  public selectableLayers = computed(() => {
-    const configured = new Set(this.configuredLayers());
-    return this.availableLayers().filter(layer => configured.has(layer.id));
-  });
+  public toolActive$ = this.snappingService.snappingActive$;
+
   public selectedLayers$ = this.snappingService.snappingLayers$
     .pipe(map(layers => new Set(layers.map(l => l.id))));
+  public selectableLayers$ = this.snappingService.selectableLayers$;
+  public hasSelectableLayers$ = this.snappingService.hasSelectableLayers$;
   public tooltip = signal($localize `:@@core.snapping.tooltip:Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.`);
-  public configured = computed(() => this.selectableLayers().length > 0);
 
   public maxSelectedLayers = 5;
 
@@ -43,7 +39,6 @@ export class SnappingComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(config => {
         this.mapService.setSnappingTolerance(config?.config.tolerance ?? DEFAULT_SNAPPING_TOLERANCE);
-        this.configuredLayers.set(config?.config.selectedLayers || []);
         if (config?.config.title) {
           this.tooltip.set(config.config.title);
         }
@@ -69,14 +64,12 @@ export class SnappingComponent implements OnInit {
   }
 
   public toggleTool() {
-    if (!this.toolActive()) {
+    if (!this.snappingService.isSnappingActive()) {
       this.mapService.allowSnapping(true);
-      this.snappingService.showGeometries();
-      this.toolActive.set(true);
+      this.snappingService.enableSnapping();
     } else {
       this.mapService.allowSnapping(false);
-      this.snappingService.hideGeometries();
-      this.toolActive.set(false);
+      this.snappingService.disableSnapping();
     }
   }
 

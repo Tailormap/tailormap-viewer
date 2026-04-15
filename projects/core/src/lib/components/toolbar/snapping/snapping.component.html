@@ -1,7 +1,7 @@
-@if (configured()) {
+@if (hasSelectableLayers$ | async) {
   <div class="map-control-button-container">
     <mat-button-toggle-group [hideSingleSelectionIndicator]="true" [tmTooltip]="tooltip()">
-      <mat-button-toggle [class.selected]="toolActive()" (click)="toggleTool()">
+      <mat-button-toggle [class.selected]="toolActive$ | async" (click)="toggleTool()">
         <mat-icon svgIcon="tools_snap"></mat-icon>
       </mat-button-toggle>
       <mat-button-toggle class="drop-down-button"
@@ -21,7 +21,7 @@
                         i18n="@@core.snapping.unselect-layers-to-select-more">You can select a maximum of {{maxSelectedLayers}} layers for snapping. Unselect layers before selecting others.</tm-error-message>
       </div>
     }
-    @for (layer of selectableLayers(); track layer.id) {
+    @for (layer of (selectableLayers$ | async); track layer.id) {
       <button mat-menu-item
               [tmTooltip]="layer.title"
               [disabled]="cannotSelectMoreLayers"
