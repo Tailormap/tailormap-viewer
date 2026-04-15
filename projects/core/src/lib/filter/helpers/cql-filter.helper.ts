@@ -1,12 +1,11 @@
 import {
-  AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel,
+  AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterGroupModel,
 } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 import { FeaturesFilters, FeatureTypeName, LayerFeaturesFilters } from '../models/feature-filter.model';
 import { FeaturesFilterHelper } from './features-filter.helper';
-import { DateTime } from 'luxon';
 
 export class CqlFilterHelper {
 
