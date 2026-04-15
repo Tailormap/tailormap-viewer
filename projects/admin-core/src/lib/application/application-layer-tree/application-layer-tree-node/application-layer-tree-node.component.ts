@@ -53,6 +53,10 @@ export class ApplicationLayerTreeNodeComponent {
     this.deleteNode.emit(nodeId);
   }
 
+  public removeNodeFromMenu(nodeId: string) {
+    this.deleteNode.emit(nodeId);
+  }
+
   public isNonRoot() {
     const isRoot = ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.root;
     return !isRoot;
