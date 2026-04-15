@@ -74,6 +74,9 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input()
   public activeInTreeInfoNodes: string[] = [];
 
+  @Input()
+  public onNodeDoubleClick?: (node: FlatTreeModel) => void;
+
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
   private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });

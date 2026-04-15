@@ -68,7 +68,10 @@ export class MenubarService {
   }
 
   public setMobilePanelHeight(height: number | null) {
-    this.mobilePanelHeight$.next(height);
+    if (height) {
+      const newHeight = Math.min(this.getMaxMobilePanelHeightPx(), height);
+      this.mobilePanelHeight$.next(newHeight);
+    }
   }
 
   public getMobilePanelHeight$() {
@@ -81,6 +84,13 @@ export class MenubarService {
       return;
     }
     this.activeComponent$.next({ ...current, dialogTitle });
+  }
+
+  private getMaxMobilePanelHeightPx(): number {
+    const viewportHeight = window.innerHeight;
+    const mobileMenubarHeightValue: string = window.getComputedStyle(document.documentElement).getPropertyValue('--mobile-menubar-height');
+    const mobileMenubarHeight: number = parseInt(mobileMenubarHeightValue, 10) || 0;
+    return viewportHeight - mobileMenubarHeight - 60;
   }
 
 }

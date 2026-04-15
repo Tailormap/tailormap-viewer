@@ -1,7 +1,6 @@
-import { FilterConditionEnum } from '@tailormap-viewer/api';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../models/filter-condition.model';
-import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { DateIntervalModel } from '../models/date-interval.model';
 
 export class AttributeFilterHelper {
 
@@ -24,7 +23,51 @@ export class AttributeFilterHelper {
   private static filtersRequiringTwoValues = new Set([
     FilterConditionEnum.NUMBER_BETWEEN_KEY,
     FilterConditionEnum.DATE_BETWEEN_KEY,
+    FilterConditionEnum.DATE_INTERVAL_KEY,
   ]);
+
+  public static dateIntervalTypes: DateIntervalModel[] = [
+    {
+      interval: FilterDateIntervalEnum.YEARS,
+      label: $localize`:@@core.filter.interval-years:Years`,
+      attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
+    },
+    {
+      interval: FilterDateIntervalEnum.QUARTERS,
+      label: $localize`:@@core.filter.interval-quarters:Quarters`,
+      attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
+    },
+    {
+      interval: FilterDateIntervalEnum.MONTHS,
+      label: $localize`:@@core.filter.interval-months:Months`,
+      attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
+    },
+    {
+      interval: FilterDateIntervalEnum.WEEKS,
+      label: $localize`:@@core.filter.interval-weeks:Weeks`,
+      attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
+    },
+    {
+      interval: FilterDateIntervalEnum.DAYS,
+      label: $localize`:@@core.filter.interval-days:Days`,
+      attributeType: [ AttributeType.DATE, AttributeType.TIMESTAMP ],
+    },
+    // {
+    //   interval: FilterDateIntervalEnum.HOURS,
+    //   label: $localize`:@@core.filter.interval-hours:Hours`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
+    // {
+    //   interval: FilterDateIntervalEnum.MINUTES,
+    //   label: $localize`:@@core.filter.interval-minutes:Minutes`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
+    // {
+    //   interval: FilterDateIntervalEnum.SECONDS,
+    //   label: $localize`:@@core.filter.interval-seconds:Seconds`,
+    //   attributeType: [AttributeType.TIMESTAMP],
+    // },
+  ];
 
   public static getConditionTypes(includeUniqueValues = false): FilterConditionModel[] {
     const types: FilterConditionModel[] = [

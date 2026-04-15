@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject } from '@angular/core';
-import { DropZoneOptions, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
+import { DropZoneOptions, FlatTreeModel, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { Store } from '@ngrx/store';
@@ -33,6 +33,9 @@ export class CatalogBaseTreeComponent implements OnDestroy {
 
   @Input()
   public scrollToItem?: string | null;
+
+  @Input()
+  public onNodeDoubleClick?: (layer: FlatTreeModel) => void;
 
   constructor() {
     this.isLoading$ = this.store$.select(selectCatalogLoadStatus)

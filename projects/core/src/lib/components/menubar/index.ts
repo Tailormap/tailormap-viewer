@@ -4,3 +4,4 @@ export * from './menubar-button/menubar-button.component';
 export * from './menubar.component';
 export * from './menubar-panel/menubar-panel.component';
 export * from './profile/profile.component';
+export * from './menubar-logo/menubar-logo.component';

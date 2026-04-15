@@ -27,6 +27,7 @@ import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.sele
 import { expandTree } from '../../catalog/state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -245,4 +246,34 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       updatedNode,
     }));
   }
+
+  public onLayerDoubleClick(layer: ExtendedGeoServiceLayerModel) {
+    this.applicationTreeService.selectedNode$
+      .pipe(take(1))
+      .subscribe(selectedNode => {
+        if (!selectedNode) {
+          // Add layer to root of the tree
+          const rootNodeId = this.applicationTreeService.getRootNodeId();
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
+            sibling: '',
+            toParent: rootNodeId,
+            position: "inside",
+          };
+          this.addLayer(addLayerEvent);
+        } else {
+          // Add layer to selected group or after selected node
+          const parentId = this.applicationTreeService.getParent(selectedNode);
+          const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
+            sibling: isLevelNode ? '' : selectedNode,
+            toParent: isLevelNode ? selectedNode : parentId,
+            position: isLevelNode ? "inside" : "after",
+          };
+          this.addLayer(addLayerEvent);
+        }
+      });
+  }
+
 }

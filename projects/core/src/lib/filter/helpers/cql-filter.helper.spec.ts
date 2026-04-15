@@ -1,6 +1,6 @@
-import { FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterDateIntervalEnum, FilterGroupModel } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum } from '@tailormap-viewer/api';
+import { FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
@@ -28,6 +28,21 @@ const simpleNumberFilter = (condition?: FilterConditionEnum, value?: string[], i
   filterGroup.filters[0].condition = condition || FilterConditionEnum.NUMBER_SMALLER_THAN_KEY;
   filterGroup.filters[0].value = value || ['1'];
   filterGroup.filters[0].invertCondition = invertCondition;
+  const filters = CqlFilterHelper.getFilters([filterGroup]);
+  return filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME);
+};
+
+const dateIntervalFilter = (interval: FilterDateIntervalEnum | string, dateFrom: string, invertCondition = false) => {
+  const filterGroup = getFilterGroup([{
+    id: '1',
+    caseSensitive: false,
+    type: FilterTypeEnum.ATTRIBUTE,
+    invertCondition,
+    attribute: 'attribute',
+    attributeType: AttributeType.DATE,
+    condition: FilterConditionEnum.DATE_INTERVAL_KEY,
+    value: [ dateFrom, interval ],
+  }]);
   const filters = CqlFilterHelper.getFilters([filterGroup]);
   return filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME);
 };
@@ -264,7 +279,7 @@ describe('CQLFilterHelper', () => {
         value: ['value'],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
     }, {
       id: '2',
       type: FilterTypeEnum.ATTRIBUTE,
@@ -289,7 +304,7 @@ describe('CQLFilterHelper', () => {
         value: ['10'],
       }],
       operator: 'OR',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '1',
     }, {
       id: '3',
@@ -306,7 +321,7 @@ describe('CQLFilterHelper', () => {
         value: [ '5', '10' ],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '1',
     }, {
       id: '4',
@@ -323,7 +338,7 @@ describe('CQLFilterHelper', () => {
         value: [],
       }],
       operator: 'AND',
-      source: 'SOME_COMPONENT',
+      source: 'ATTRIBUTE_LIST',
       parentGroup: '2',
     }];
     const filters = CqlFilterHelper.getFilters(filterGroups);
@@ -377,6 +392,30 @@ describe('CQLFilterHelper', () => {
       'AND (attribute2 = true))');
     expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
       'AND (attribute4 IS NOT NULL))');
+  });
+
+  test('date interval filter generates half-open range for each interval type', () => {
+    expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01'))
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
+    expect(dateIntervalFilter(FilterDateIntervalEnum.MONTHS, '2020-01-01'))
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-31T23:59:59.000+00:00)');
+    expect(dateIntervalFilter(FilterDateIntervalEnum.WEEKS, '2020-01-01'))
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-07T23:59:59.000+00:00)');
+    expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-01-01'))
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59.000+00:00)');
+    expect(dateIntervalFilter(FilterDateIntervalEnum.QUARTERS, '2020-01-01'))
+      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-03-31T23:59:59.000+00:00)');
+  });
+
+  test('date interval filter with invertCondition generates correct inverted range', () => {
+    expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01', true))
+      .toBe('(attribute NOT BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
+    expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-06-15', true))
+      .toBe('(attribute NOT BETWEEN 2020-06-15T00:00:00Z AND 2020-06-15T23:59:59.000+00:00)');
+  });
+
+  test('date interval filter with invalid interval returns no filter', () => {
+    expect(dateIntervalFilter('INVALID_INTERVAL', '2020-01-01')).toBeUndefined();
   });
 
 });

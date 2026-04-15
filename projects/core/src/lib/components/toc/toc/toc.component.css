@@ -11,7 +11,7 @@
   padding-right: var(--toc-side-padding);
 }
 
-.toc-tree--mobile ::ng-deep .tree-wrapper {
+:host-context(.mobile-layout) .toc-tree ::ng-deep .tree-wrapper {
   padding-right: 0;
 }
 
@@ -62,7 +62,7 @@
   padding: 6px 0 0 var(--toc-side-padding);
 }
 
-.toc-tree--mobile {
+:host-context(.mobile-layout) .toc-tree {
   padding: 0 6px;
 }
 
