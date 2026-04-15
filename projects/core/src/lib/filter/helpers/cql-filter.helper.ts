@@ -212,8 +212,8 @@ export class CqlFilterHelper {
       query.push(`${CqlFilterHelper.addTimePartToDate(dateFrom, true)} AND ${CqlFilterHelper.addTimePartToDate(dateUntil, false)}`);
       return `${query.join(' ')}`;
     }
-    if (filter.condition === FilterConditionEnum.DATE_INTERVAL_KEY && filter.value.length > 1) {
-      return CqlFilterHelper.getQueryForDateInterval(filter, filter.value[0], filter.value[1]);
+    if (filter.condition === FilterConditionEnum.DATE_INTERVAL_KEY && filter.value.length === 3) {
+      return CqlFilterHelper.getQueryForDateInterval(filter, filter.value[0], filter.value[1], Number(filter.value[2]));
     }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
@@ -224,7 +224,7 @@ export class CqlFilterHelper {
     return query.join(' ');
   }
 
-  private static getQueryForDateInterval(filter: AttributeFilterModel, dateFrom: string, interval: string) {
+  private static getQueryForDateInterval(filter: AttributeFilterModel, dateFrom: string, interval: string, stepSize: number) {
     const allowedIntervals: string[] = [
       FilterDateIntervalEnum.YEARS,
       FilterDateIntervalEnum.MONTHS,
@@ -243,14 +243,22 @@ export class CqlFilterHelper {
       query.push('NOT');
     }
     query.push('BETWEEN');
-    // XXX werkt niet voor date met tijd erbij...
-    const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
-    const endDate = DateTime.fromISO(startDate)
-      .plus({ [interval.toLowerCase()]: 1 })
-      .set({ hour: 0, minute: 0, second: 0 })
-      .minus({ seconds: 1 })
-      .toISO();
-    query.push(`${startDate} AND ${endDate}`);
+    if (filter.attributeType === AttributeType.TIMESTAMP) {
+      const endDate = DateTime.fromISO(dateFrom)
+        .plus({ [interval.toLowerCase()]: stepSize })
+        .minus({ milliseconds: 1 })
+        .toISO();
+      query.push(`${dateFrom} AND ${endDate}`);
+    } else {
+      const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
+      const endDate = DateTime.fromISO(startDate)
+        .plus({ [interval.toLowerCase()]: stepSize })
+        .set({ hour: 0, minute: 0, second: 0 })
+        .minus({ milliseconds: 1 })
+        .toISO();
+      query.push(`${startDate} AND ${endDate}`);
+    }
+    console.log('Date interval query, ', `${query.join(' ')}`);
     return `${query.join(' ')}`;
   }
 
