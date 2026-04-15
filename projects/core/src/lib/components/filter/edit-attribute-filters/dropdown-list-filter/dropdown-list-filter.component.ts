@@ -18,13 +18,15 @@ export class DropdownListFilterComponent implements OnInit {
 
   @Input()
   public set dropdownListFilter(filter: AttributeFilterModel) {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
+    const editConfiguration = filter.editConfiguration;
+    if (editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
       return;
     }
-    this.alteredValuesSubject$.next(filter.editConfiguration.attributeValuesSettings || []);
-    const selectedValues = filter.editConfiguration.attributeValuesSettings
-      .filter(value => value.initiallySelected)
-      .map(value => ({ value: value.value, alias: value.alias })) || [];
+    this.alteredValuesSubject$.next(editConfiguration.attributeValuesSettings || []);
+    const selectedValues: { value: string; alias?: string }[] = filter.value.map(value => {
+      const alias = editConfiguration.attributeValuesSettings.find(s => s.value === value)?.alias;
+      return { value, alias };
+    });
     this.selectedValuesSubject$.next(selectedValues);
   }
 
