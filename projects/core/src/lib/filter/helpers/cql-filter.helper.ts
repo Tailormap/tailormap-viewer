@@ -221,7 +221,7 @@ export class CqlFilterHelper {
     return query.join(' ');
   }
 
-  public static addTimePartToDate(filterValue: string, isStart: boolean): string {
+  private static addTimePartToDate(filterValue: string, isStart: boolean): string {
     if (filterValue.includes('T')) {
       const hasTimezoneOffset = /[+-]\d{2}(:?\d{2})?$/.test(filterValue);
       return (filterValue.endsWith('Z') || hasTimezoneOffset) ? filterValue : `${filterValue}Z`;
