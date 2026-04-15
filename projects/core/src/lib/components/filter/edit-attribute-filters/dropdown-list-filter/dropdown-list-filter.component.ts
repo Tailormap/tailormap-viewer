@@ -18,19 +18,21 @@ export class DropdownListFilterComponent implements OnInit {
 
   @Input()
   public set dropdownListFilter(filter: AttributeFilterModel) {
-    if (filter.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
+    const editConfiguration = filter.editConfiguration;
+    if (editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST) {
       return;
     }
-    this.alteredValuesSubject$.next(filter.editConfiguration.attributeValuesSettings || []);
-    const selectedValues = filter.editConfiguration.attributeValuesSettings
-      .filter(value => value.initiallySelected)
-      .map(value => ({ value: value.value, alias: value.alias })) || [];
+    this.attributeValueSettingsSubject$.next(editConfiguration.attributeValuesSettings || []);
+    const selectedValues: { value: string; alias?: string }[] = filter.value.map(value => {
+      const alias = editConfiguration.attributeValuesSettings.find(s => s.value === value)?.alias;
+      return { value, alias };
+    });
     this.selectedValuesSubject$.next(selectedValues);
   }
 
   @Input()
   public set uniqueValues(uniqueValues: string[] | null) {
-    this.uniqueValuesSubject$.next(uniqueValues);
+    this.allUniqueValuesSubject$.next(uniqueValues);
   }
 
   @Output()
@@ -38,12 +40,12 @@ export class DropdownListFilterComponent implements OnInit {
 
   public filter = new FormControl<string | { value: string; alias?: string }[]>('');
   private filterSubject$ = new BehaviorSubject<string | null>(null);
-  private uniqueValuesSubject$ = new BehaviorSubject<string[] | null>(null);
-  private alteredValuesSubject$ = new BehaviorSubject<AttributeValueSettings[]>([]);
+  private allUniqueValuesSubject$ = new BehaviorSubject<string[] | null>(null);
+  private attributeValueSettingsSubject$ = new BehaviorSubject<AttributeValueSettings[]>([]);
   public selectedValuesSubject$ = new BehaviorSubject<{ value: string; alias?: string }[]>([]);
 
-  private alteredUniqueValues$: Observable<{ value: string; alias?: string }[]> = of([]);
-  public filteredUniqueValues$: Observable<{ value: string; alias?: string }[]> = of([]);
+  private uniqueValuesForFilter$: Observable<{ value: string; alias?: string }[]> = of([]);
+  public selectableUniqueValues$: Observable<{ value: string; alias?: string }[]> = of([]);
 
   public ngOnInit(): void {
     this.filter.valueChanges
@@ -56,19 +58,19 @@ export class DropdownListFilterComponent implements OnInit {
         }
       });
 
-    this.alteredUniqueValues$ = combineLatest([
-      this.uniqueValuesSubject$.asObservable(),
-      this.alteredValuesSubject$.asObservable(),
+    this.uniqueValuesForFilter$ = combineLatest([
+      this.allUniqueValuesSubject$.asObservable(),
+      this.attributeValueSettingsSubject$.asObservable(),
     ]).pipe(
-      map(([ uniqueValues, alteredValues ]) => {
-        if (!uniqueValues) {
+      map(([ allUniqueValues, attributeValueSettings ]) => {
+        if (!allUniqueValues) {
           return [];
         }
-        return uniqueValues.filter(value => {
-          const alteredValue = alteredValues.find(av => av.value === value);
+        return allUniqueValues.filter(value => {
+          const alteredValue = attributeValueSettings.find(av => av.value === value);
           return !(alteredValue && !alteredValue.selectable);
         }).map(value => {
-            const alteredValue = alteredValues.find(av => av.value === value);
+            const alteredValue = attributeValueSettings.find(av => av.value === value);
             if (alteredValue) {
               return {
                 value: value,
@@ -80,9 +82,9 @@ export class DropdownListFilterComponent implements OnInit {
       }),
     );
 
-    this.filteredUniqueValues$ = combineLatest([
+    this.selectableUniqueValues$ = combineLatest([
       this.filterSubject$.asObservable(),
-      this.alteredUniqueValues$,
+      this.uniqueValuesForFilter$,
       this.selectedValuesSubject$.asObservable(),
     ]).pipe(map(([ filter, uniqueValues, selectedValues ]) => {
       if (!uniqueValues) {
