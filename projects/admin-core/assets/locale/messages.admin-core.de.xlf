@@ -66,6 +66,10 @@
         <source>Change folder name</source>
         <target>Ordnername ändern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
+        <source>This group is collapsed on startup</source>
+        <target>Diese Gruppe ist beim Start eingeklappt</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
         <target>Attributliste</target>
@@ -238,13 +242,21 @@
         <source>Expand on startup</source>
         <target>Beim Start ausklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
-        <source>This group is expanded on startup, because a layer in the group is checked</source>
-        <target>Diese Gruppe ist beim Start ausgeklappt, weil eine Ebene in der Gruppe aktiviert ist</target>
+      <trans-unit id="admin-core.application.expand-on-startup-always" datatype="html">
+        <source>Always expand</source>
+        <target>Immer ausklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
-        <source>Expand this group when the application is started</source>
-        <target>Diese Gruppe beim Start der Anwendung ausklappen</target>
+      <trans-unit id="admin-core.application.expand-on-startup-automatic" datatype="html">
+        <source>Automatic</source>
+        <target>Automatisch</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
+        <source>Never expand</source>
+        <target>Nie ausklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expanded-on-startup" datatype="html">
+        <source>This group is expanded on startup</source>
+        <target>Diese Gruppe wird beim Start ausgeklappt</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>

@@ -1,3 +1,9 @@
+export enum ExpandOnStartupEnum {
+  AUTOMATIC = "automatic",
+  ALWAYS_EXPAND = "alwaysExpand",
+  NEVER_EXPAND = "neverExpand",
+}
+
 export interface LayerTreeNodeModel {
   id: string;
   appLayerId?: string | null;
@@ -6,5 +12,5 @@ export interface LayerTreeNodeModel {
   childrenIds: string[] | null;
   description?: string;
   webMercatorAvailable?: boolean;
-  expandOnStartup?: boolean;
+  expandOnStartup?: ExpandOnStartupEnum;
 }
