@@ -7,6 +7,7 @@ import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name/application-folder-node-name.component';
 import { FormControl } from '@angular/forms';
+import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-layer-tree',
@@ -61,7 +62,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   public filterChanged = new EventEmitter<string | null>();
 
   @Output()
-  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: boolean }>();
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: ExpandOnStartupEnum }>();
 
   public treeFilter = new FormControl('');
 
@@ -132,7 +133,7 @@ export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
     this.nodeExpandedToggled.emit({ expandCollapseAll: someExpanded ? 'collapse' : 'expand' });
   }
 
-  public onExpandOnStartup($event: { nodeId: string; expandOnStartup: boolean }) {
+  public onExpandOnStartup($event: { nodeId: string; expandOnStartup: ExpandOnStartupEnum }) {
     this.expandOnStartup.emit($event);
   }
 }

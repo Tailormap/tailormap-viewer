@@ -50,6 +50,9 @@
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
         <source>Change folder name</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
+        <source>This group is collapsed on startup</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
@@ -182,11 +185,17 @@
       <trans-unit id="admin-core.application.expand-on-startup" datatype="html">
         <source>Expand on startup</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
-        <source>This group is expanded on startup, because a layer in the group is checked</source>
+      <trans-unit id="admin-core.application.expand-on-startup-always" datatype="html">
+        <source>Always expand</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
-        <source>Expand this group when the application is started</source>
+      <trans-unit id="admin-core.application.expand-on-startup-automatic" datatype="html">
+        <source>Automatic</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
+        <source>Never expand</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expanded-on-startup" datatype="html">
+        <source>This group is expanded on startup</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>

@@ -80,6 +80,7 @@
 }
 
 .expand-on-startup {
+  padding-top: 8px;
   padding-left: 8px;
   padding-right: 8px;
 }
@@ -87,4 +88,21 @@
 .expand-on-startup span {
   padding-left: 2px;
   font-size: 16px;
+}
+
+.tree-node__label-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tree-node__startup-state-icon {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.tree-node__startup-state-icon .mat-icon {
+  width: 20px;
+  height: 20px;
 }

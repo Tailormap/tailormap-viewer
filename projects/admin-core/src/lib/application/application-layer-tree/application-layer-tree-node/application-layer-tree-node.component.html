@@ -6,7 +6,17 @@
       <span class="tree-node__icon">
         <mat-icon [attr.aria-label]="node.label" [svgIcon]="getIcon()"></mat-icon>
       </span>
-      <span class="tree-node__label-content">{{node.label}}</span>
+      <span class="tree-node__label-content">
+        <span class="tree-node__label-text">{{node.label}}</span>
+        @if (isLevel()) {
+          <span
+            class="tree-node__startup-state-icon"
+            [matTooltip]="getExpandOnStartupTooltip()"
+            [attr.aria-label]="getExpandOnStartupTooltip()">
+            <mat-icon [svgIcon]="getExpandedOnStartupIcon()"></mat-icon>
+          </span>
+        }
+      </span>
     </div>
     <div class="tree-node__actions">
       @if (isLayer()) {
@@ -44,19 +54,22 @@
           <span i18n="@@admin-core.application.rename">Rename</span>
         </button>
         <button mat-menu-item
-          (click)="removeNode($event, node.id)">
+          (click)="removeNodeFromMenu(node.id)">
           <mat-icon svgIcon="close"></mat-icon>
           <span i18n="@@admin-core.application.remove">Remove</span>
         </button>
-        <div class="expand-on-startup-wrapper" [tmTooltip]="getExpandOnStartupTooltip()">
-          <mat-checkbox
-            class="expand-on-startup"
-            [checked]="getExpandOnStartup()"
-            [disabled]="someChildrenChecked()"
-            (click)="$event.stopPropagation()"
-            (change)="toggleExpandOnStartup($event.checked)">
-            <span i18n="@@admin-core.application.expand-on-startup">Expand on startup</span>
-          </mat-checkbox>
+        <div class="expand-on-startup-wrapper">
+          <mat-form-field appearance="outline" class="expand-on-startup">
+            <mat-label i18n="@@admin-core.application.expand-on-startup">Expand on startup</mat-label>
+            <mat-select
+              [value]="getExpandOnStartup()"
+              (click)="$event.stopPropagation()"
+              (selectionChange)="setExpandOnStartup($event.value)">
+              <mat-option value="automatic" i18n="@@admin-core.application.expand-on-startup-automatic">Automatic</mat-option>
+              <mat-option value="alwaysExpand" i18n="@@admin-core.application.expand-on-startup-always">Always expand</mat-option>
+              <mat-option value="neverExpand" i18n="@@admin-core.application.expand-on-startup-never">Never expand</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </mat-menu>
     </div>
