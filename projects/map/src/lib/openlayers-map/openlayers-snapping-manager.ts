@@ -43,7 +43,7 @@ export class OpenLayersSnappingManager {
       OpenLayersSnappingManager.snapInitialized = false;
       OpenLayersSnappingManager.snapInitializing = false;
     }
-    if (OpenLayersSnappingManager.snappingLayer) {
+    if (OpenLayersSnappingManager.snappingLayer.value) {
       OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_LAYER_ID);
       OpenLayersSnappingManager.snappingLayer.next(null);
       OpenLayersSnappingManager.layerInitialized = false;

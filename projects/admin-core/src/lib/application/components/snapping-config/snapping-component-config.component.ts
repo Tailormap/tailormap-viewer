@@ -25,7 +25,7 @@ export class SnappingComponentConfigComponent implements ConfigurationComponentM
   @Input()
   public set config(config: SnappingComponentConfigModel | undefined) {
     this._config = config;
-    this.tolerance.patchValue(config?.tolerance || DEFAULT_SNAPPING_TOLERANCE, { emitEvent: false, onlySelf: true });
+    this.tolerance.patchValue(config?.tolerance ?? DEFAULT_SNAPPING_TOLERANCE, { emitEvent: false, onlySelf: true });
     this.selectedLayers.patchValue(config?.selectedLayers || [], { emitEvent: false, onlySelf: true });
   }
   public get config() {

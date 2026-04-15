@@ -22,12 +22,13 @@
       </div>
     }
     @for (layer of (selectableLayers$ | async); track layer.id) {
+      @let selectedLayer = selectedLayers?.has(layer.id);
       <button mat-menu-item
               [tmTooltip]="layer.title"
-              [disabled]="cannotSelectMoreLayers"
+              [disabled]="cannotSelectMoreLayers && !selectedLayer"
               [matTooltipPosition]="'before'"
               (click)="toggleLayer(layer)">
-        @if (selectedLayers?.has(layer.id)) {
+        @if (selectedLayer) {
           <mat-icon svgIcon="check"></mat-icon>
         }
         {{ layer.title }}

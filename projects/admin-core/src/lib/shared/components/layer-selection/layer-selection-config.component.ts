@@ -99,8 +99,12 @@ export class LayerSelectionConfigComponent implements ControlValueAccessor {
         selectedLayers.splice(selectedLayers.indexOf(option.value), 1);
       }
     });
+    this.selectedLayers.set(selectedLayers);
     if (this.onChange) {
       this.onChange(selectedLayers);
+    }
+    if (this.onTouched) {
+      this.onTouched();
     }
     this.changed.emit(selectedLayers);
   }

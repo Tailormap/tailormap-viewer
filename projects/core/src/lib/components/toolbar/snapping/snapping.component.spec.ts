@@ -33,7 +33,7 @@ const setup = async (snappingActive = false) => {
   const snappingServiceMock = {
     snappingLayers$: new BehaviorSubject([]),
     snappingGeometries$: new BehaviorSubject([]),
-    snappingEnabled$: of(true),
+    snappingActive$: of(snappingActive),
     isSnappingActive: jest.fn(() => snappingActive),
     hasSelectableLayers$: of(true),
     selectableLayers$: of([mockLayer]),
@@ -63,7 +63,7 @@ const setup = async (snappingActive = false) => {
 describe('SnappingComponent', () => {
 
   test('should initialise snapping settings on init', async () => {
-    const { mapServiceMock } = await setup();
+    const { mapServiceMock } = await setup(true);
     expect(mapServiceMock.setSnappingTolerance).toHaveBeenCalledWith(10);
     expect(mapServiceMock.setSnappingLayerStyle).toHaveBeenCalledWith(
       expect.objectContaining({ styleKey: 'snapping-style', zIndex: 999, strokeWidth: 3 }),
@@ -87,7 +87,7 @@ describe('SnappingComponent', () => {
   });
 
   test('should show list of layers when dropdown button is clicked', async () => {
-    await setup();
+    await setup(true);
     const dropdownBtn = screen.getAllByRole('presentation')[1];
     await userEvent.click(dropdownBtn);
     expect(screen.getByText('Layer One')).toBeInTheDocument();
