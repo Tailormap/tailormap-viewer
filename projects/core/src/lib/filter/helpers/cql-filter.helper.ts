@@ -1,12 +1,11 @@
 import {
-  AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel,
+  AttributeFilterModel, AttributeType, BaseFilterModel, FilterConditionEnum, FilterGroupModel,
 } from '@tailormap-viewer/api';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FilterTypeHelper } from './filter-type.helper';
 import { CqlSpatialFilterHelper } from './cql-spatial-filter.helper';
 import { FeaturesFilters, FeatureTypeName, LayerFeaturesFilters } from '../models/feature-filter.model';
 import { FeaturesFilterHelper } from './features-filter.helper';
-import { DateTime } from 'luxon';
 
 export class CqlFilterHelper {
 
@@ -212,9 +211,6 @@ export class CqlFilterHelper {
       query.push(`${CqlFilterHelper.addTimePartToDate(dateFrom, true)} AND ${CqlFilterHelper.addTimePartToDate(dateUntil, false)}`);
       return `${query.join(' ')}`;
     }
-    if (filter.condition === FilterConditionEnum.DATE_INTERVAL_KEY && filter.value.length > 1) {
-      return CqlFilterHelper.getQueryForDateInterval(filter, filter.value[0], filter.value[1]);
-    }
     const cond = filter.condition === FilterConditionEnum.DATE_ON_KEY
       ? (filter.invertCondition ? '!=' : '=')
       : (filter.condition === 'AFTER' || filter.invertCondition) ? 'AFTER' : 'BEFORE';
@@ -224,38 +220,12 @@ export class CqlFilterHelper {
     return query.join(' ');
   }
 
-  private static getQueryForDateInterval(filter: AttributeFilterModel, dateFrom: string, interval: string) {
-    const allowedIntervals: string[] = [
-      FilterDateIntervalEnum.YEARS,
-      FilterDateIntervalEnum.MONTHS,
-      FilterDateIntervalEnum.DAYS,
-      FilterDateIntervalEnum.QUARTERS,
-      FilterDateIntervalEnum.WEEKS,
-    ];
-    if (!allowedIntervals.includes(interval)) {
-      return null;
-    }
-    const query: string[] = [filter.attribute];
-    if (filter.invertCondition) {
-      query.push('NOT');
-    }
-    query.push('BETWEEN');
-    const startDate = CqlFilterHelper.addTimePartToDate(dateFrom, true);
-    const endDate = DateTime.fromISO(startDate)
-      .plus({ [interval.toLowerCase()]: 1 })
-      .set({ hour: 0, minute: 0, second: 0 })
-      .minus({ seconds: 1 })
-      .toISO();
-    query.push(`${startDate} AND ${endDate}`);
-    return `${query.join(' ')}`;
-  }
-
   private static addTimePartToDate(filterValue: string, isStart: boolean): string {
     if (filterValue.includes('T')) {
       const hasTimezoneOffset = /[+-]\d{2}(:?\d{2})?$/.test(filterValue);
       return (filterValue.endsWith('Z') || hasTimezoneOffset) ? filterValue : `${filterValue}Z`;
     }
-    return isStart ? `${filterValue}T00:00:00Z` : `${filterValue}T23:59:59Z`;
+    return isStart ? `${filterValue}T00:00:00.000Z` : `${filterValue}T23:59:59.999Z`;
   }
 
   private static getQueryForNumber(filter: AttributeFilterModel) {
