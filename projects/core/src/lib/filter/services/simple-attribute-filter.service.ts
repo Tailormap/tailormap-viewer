@@ -137,22 +137,29 @@ export class SimpleAttributeFilterService {
       if (!group) {
         return;
       }
-      if (featureType) {
-        const filtersToKeep = group.filters.filter(f => {
-          if (!FilterTypeHelper.isAttributeFilter(f)) {
-            return true;
-          }
-          return f.featureType !== featureType;
-        });
-        if (filtersToKeep.length > 0) {
-          this.store$.dispatch(FilterActions.updateFilterGroup({
-            filterGroup: {
-              ...group,
-              filters: filtersToKeep,
-            },
-          }));
-          return;
+      const filtersToKeep = group.filters.filter(f => {
+        if (!FilterTypeHelper.isAttributeFilter(f)) {
+          return true;
         }
+        return f.featureType !== featureType;
+      });
+      if (filtersToKeep.length > 0) {
+        this.store$.dispatch(FilterActions.updateFilterGroup({
+          filterGroup: {
+            ...group,
+            filters: filtersToKeep,
+          },
+        }));
+        return;
+      }
+      this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
+    });
+  }
+
+  public removeAllFiltersForLayer(source: string, layerId: string) {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+      if (!group) {
+        return;
       }
       this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
     });
