@@ -7,6 +7,7 @@ export interface DateIntervalFilterModel {
   condition: FilterConditionEnum.DATE_INTERVAL_KEY;
   interval: FilterDateIntervalEnum;
   stepSize: number;
+  isTimestamp: boolean;
   initialValue: string;
   minimumDate: string;
   maximumDate: string;
