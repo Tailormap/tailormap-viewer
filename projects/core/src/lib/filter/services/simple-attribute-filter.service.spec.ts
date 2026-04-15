@@ -163,7 +163,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter());
     service.setFilter('source', '2', createFilter());
     service.setFilter('source', '2', createFilter('attribute2', 'other_value'));
-    service.setFilter('source', '2', createFilter('attribute2', 'other_value', 'other_feature_type'));
+    service.setFilter('source', '2', createFilter('attribute3', 'other_value2', 'other_feature_type'));
     service.setFilter('source', '3', createFilter());
     service.removeFiltersForLayer('source', '2');
     store.select(selectActiveFilterGroups).subscribe(filterGroups => {
@@ -172,6 +172,26 @@ describe('SimpleAttributeFilterService', () => {
       expect(filterGroups[1].layerIds).toEqual(['2']);
       expect(filterGroups[1].filters.length).toEqual(1);
       expect(filterGroups[1].filters[0].featureType).toEqual('other_feature_type');
+      expect(filterGroups[2].layerIds).toEqual(['3']);
+      done();
+    });
+  });
+
+  test('should remove filters for a layer - remove specific feature type', (done) => {
+    const { service, store } = createService();
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '2', createFilter());
+    service.setFilter('source', '2', createFilter('attribute2', 'other_value'));
+    service.setFilter('source', '2', createFilter('attribute3', 'other_value', 'other_feature_type'));
+    service.setFilter('source', '3', createFilter());
+    service.removeFiltersForLayer('source', '2', 'other_feature_type');
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
+      expect(filterGroups.length).toEqual(3);
+      expect(filterGroups[0].layerIds).toEqual(['1']);
+      expect(filterGroups[1].layerIds).toEqual(['2']);
+      expect(filterGroups[1].filters.length).toEqual(2);
+      expect(filterGroups[1].filters[0].featureType).toEqual(undefined);
+      expect(filterGroups[1].filters[1].featureType).toEqual(undefined);
       expect(filterGroups[2].layerIds).toEqual(['3']);
       done();
     });
