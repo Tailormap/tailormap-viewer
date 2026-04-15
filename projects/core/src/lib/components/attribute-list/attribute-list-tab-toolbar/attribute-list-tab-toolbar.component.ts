@@ -124,7 +124,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeAllFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        this.simpleAttributeFilterService.removeAllFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
       });
   }
 
@@ -138,7 +138,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
+        this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       });
   }
 
