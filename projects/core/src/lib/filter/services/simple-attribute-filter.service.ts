@@ -143,16 +143,19 @@ export class SimpleAttributeFilterService {
         }
         return f.featureType !== featureType;
       });
-      if (filtersToKeep.length > 0) {
-        this.store$.dispatch(FilterActions.updateFilterGroup({
-          filterGroup: {
-            ...group,
-            filters: filtersToKeep,
-          },
-        }));
+      if (filtersToKeep.length === group.filters.length) {
         return;
       }
-      this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
+      if (filtersToKeep.length === 0) {
+        this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
+        return;
+      }
+      this.store$.dispatch(FilterActions.updateFilterGroup({
+        filterGroup: {
+          ...group,
+          filters: filtersToKeep,
+        },
+      }));
     });
   }
 
