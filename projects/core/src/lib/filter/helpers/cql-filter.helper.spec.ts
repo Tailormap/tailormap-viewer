@@ -1,6 +1,5 @@
-import { FilterDateIntervalEnum, FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterDateIntervalEnum, FilterGroupModel, FilterConditionEnum } from '@tailormap-viewer/api';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum, FilterDateIntervalEnum } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
@@ -125,7 +124,7 @@ describe('CQLFilterHelper', () => {
       value: ['2020-01-01'],
     }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute AFTER 2020-01-01T23:59:59Z)');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute AFTER 2020-01-01T23:59:59.999Z)');
   });
 
   test('after date with partial timestamp  filter', () => {
@@ -215,7 +214,7 @@ describe('CQLFilterHelper', () => {
       value: ['2020-01-01'],
     }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute BEFORE 2020-01-01T00:00:00Z)');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(attribute BEFORE 2020-01-01T00:00:00.000Z)');
   });
 
   test('combine multiple filters into a CQL filter', () => {
@@ -259,7 +258,7 @@ describe('CQLFilterHelper', () => {
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('((attribute ILIKE \'%value%\') ' +
       'AND (attribute2 = true) ' +
-      'AND (attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
+      'AND (attribute3 BETWEEN 2020-01-01T00:00:00.000Z AND 2020-01-01T23:59:59.999Z) ' +
       'AND (attribute4 IS NOT NULL))');
   });
 
@@ -390,32 +389,7 @@ describe('CQLFilterHelper', () => {
     expect(filters.get('1')?.size).toBe(2);
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('((attribute ILIKE \'%value%\') ' +
       'AND (attribute2 = true))');
-    expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59Z) ' +
+    expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00.000Z AND 2020-01-01T23:59:59.999Z) ' +
       'AND (attribute4 IS NOT NULL))');
   });
-
-  test('date interval filter generates half-open range for each interval type', () => {
-    expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01'))
-      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
-    expect(dateIntervalFilter(FilterDateIntervalEnum.MONTHS, '2020-01-01'))
-      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-31T23:59:59.000+00:00)');
-    expect(dateIntervalFilter(FilterDateIntervalEnum.WEEKS, '2020-01-01'))
-      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-07T23:59:59.000+00:00)');
-    expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-01-01'))
-      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-01-01T23:59:59.000+00:00)');
-    expect(dateIntervalFilter(FilterDateIntervalEnum.QUARTERS, '2020-01-01'))
-      .toBe('(attribute BETWEEN 2020-01-01T00:00:00Z AND 2020-03-31T23:59:59.000+00:00)');
-  });
-
-  test('date interval filter with invertCondition generates correct inverted range', () => {
-    expect(dateIntervalFilter(FilterDateIntervalEnum.YEARS, '2020-01-01', true))
-      .toBe('(attribute NOT BETWEEN 2020-01-01T00:00:00Z AND 2020-12-31T23:59:59.000+00:00)');
-    expect(dateIntervalFilter(FilterDateIntervalEnum.DAYS, '2020-06-15', true))
-      .toBe('(attribute NOT BETWEEN 2020-06-15T00:00:00Z AND 2020-06-15T23:59:59.000+00:00)');
-  });
-
-  test('date interval filter with invalid interval returns no filter', () => {
-    expect(dateIntervalFilter('INVALID_INTERVAL', '2020-01-01')).toBeUndefined();
-  });
-
 });

@@ -572,11 +572,20 @@
       <trans-unit id="core.filter.interval-days" datatype="html">
         <source>Days</source>
       </trans-unit>
+      <trans-unit id="core.filter.interval-hours" datatype="html">
+        <source>Hours</source>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-minutes" datatype="html">
+        <source>Minutes</source>
+      </trans-unit>
       <trans-unit id="core.filter.interval-months" datatype="html">
         <source>Months</source>
       </trans-unit>
       <trans-unit id="core.filter.interval-quarters" datatype="html">
         <source>Quarters</source>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-seconds" datatype="html">
+        <source>Seconds</source>
       </trans-unit>
       <trans-unit id="core.filter.interval-weeks" datatype="html">
         <source>Weeks</source>

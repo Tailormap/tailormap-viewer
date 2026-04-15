@@ -4,7 +4,7 @@ export enum FilterDateIntervalEnum {
   DAYS = 'DAY',
   QUARTERS = 'QUARTER',
   WEEKS = 'WEEK',
-  // HOURS = 'HOURS',
-  // MINUTES = 'MINUTES',
-  // SECONDS = 'SECONDS',
+  HOURS = 'HOUR',
+  MINUTES = 'MINUTE',
+  SECONDS = 'SECOND',
 }
