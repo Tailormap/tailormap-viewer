@@ -104,16 +104,14 @@ export class ApplicationLayerTreeNodeComponent {
   }
 
   public getExpandedOnStartupIcon() {
-    if (this.isExpandedOnStartup()) {
-      return 'admin_expanded';
-    } else {
-      return 'admin_not_expanded';
-    }
+    return this.isExpandedOnStartup()
+      ? 'admin_expanded'
+      : 'admin_collapsed';
   }
 
   public getExpandOnStartupTooltip() {
     return this.isExpandedOnStartup()
-      ? $localize `:@@admin-core.application.expands-on-startup:This group is expanded on startup`
-      : $localize `:@@admin-core.application.does-not-expand-on-startup:This group is not expanded on startup`;
+      ? $localize `:@@admin-core.application.expanded-on-startup:This group is expanded on startup`
+      : $localize `:@@admin-core.application.collapsed-on-startup:This group is collapsed on startup`;
   }
 }

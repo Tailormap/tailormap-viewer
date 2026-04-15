@@ -50,6 +50,9 @@
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
         <source>Change folder name</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
+        <source>This group is collapsed on startup</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
@@ -137,9 +140,6 @@
       <trans-unit id="admin-core.application.delete-application-message" datatype="html">
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.does-not-expand-on-startup" datatype="html">
-        <source>This group is not expanded on startup</source>
-      </trans-unit>
       <trans-unit id="admin-core.application.dropdown-list-filter.hint" datatype="html">
         <source> All unique values will be displayed in the dropdown list, unless altered below. </source>
       </trans-unit>
@@ -191,7 +191,7 @@
       <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
         <source>Never expand</source>
       </trans-unit>
-      <trans-unit id="admin-core.application.expands-on-startup" datatype="html">
+      <trans-unit id="admin-core.application.expanded-on-startup" datatype="html">
         <source>This group is expanded on startup</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
