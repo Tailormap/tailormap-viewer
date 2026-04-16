@@ -2,7 +2,7 @@
 
   <div class="buttons">
     @if (hasFilters$ | async) {
-      <button mat-flat-button color="primary" (click)="clearFilter()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
+      <button mat-flat-button color="primary" (click)="clearFilters()" i18n="@@core.attribute-list.clear-filters">Clear filters</button>
     }
     @if (hasFiltersForOtherFeatureTypes$ | async) {
       <button mat-flat-button color="primary" (click)="clearAllFilters()" i18n="@@core.attribute-list.clear-all-filters">Clear all filters</button>

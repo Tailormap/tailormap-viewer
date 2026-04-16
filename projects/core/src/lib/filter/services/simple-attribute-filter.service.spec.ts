@@ -30,7 +30,7 @@ const createService = () => {
   return { service, store };
 };
 
-const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilterModel => ({
+const createFilter = (attribute = 'attribute', value = 'value', featureType?: string): AttributeFilterModel => ({
   attribute,
   id: '',
   type: FilterTypeEnum.ATTRIBUTE,
@@ -39,6 +39,7 @@ const createFilter = (attribute = 'attribute', value = 'value'): AttributeFilter
   caseSensitive: false,
   condition: FilterConditionEnum.STRING_LIKE_KEY,
   invertCondition: false,
+  featureType,
 });
 
 const mockLayers: AppLayerModel[] = [
@@ -141,12 +142,67 @@ describe('SimpleAttributeFilterService', () => {
     });
   });
 
+  test('should remove filters for a layer', (done) => {
+    const { service, store } = createService();
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '2', createFilter());
+    service.setFilter('source', '2', createFilter('attribute2'));
+    service.setFilter('source', '2', createFilter('attribute3'));
+    service.setFilter('source', '3', createFilter());
+    service.removeFiltersForLayer('source', '2');
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
+      expect(filterGroups.length).toEqual(2);
+      expect(filterGroups[0].layerIds).toEqual(['1']);
+      expect(filterGroups[1].layerIds).toEqual(['3']);
+      done();
+    });
+  });
+
+  test('should remove filters for a layer - keep other feature types', (done) => {
+    const { service, store } = createService();
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '2', createFilter());
+    service.setFilter('source', '2', createFilter('attribute2', 'other_value'));
+    service.setFilter('source', '2', createFilter('attribute3', 'other_value2', 'other_feature_type'));
+    service.setFilter('source', '3', createFilter());
+    service.removeFiltersForLayer('source', '2');
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
+      expect(filterGroups.length).toEqual(3);
+      expect(filterGroups[0].layerIds).toEqual(['1']);
+      expect(filterGroups[1].layerIds).toEqual(['2']);
+      expect(filterGroups[1].filters.length).toEqual(1);
+      expect(filterGroups[1].filters[0].featureType).toEqual('other_feature_type');
+      expect(filterGroups[2].layerIds).toEqual(['3']);
+      done();
+    });
+  });
+
+  test('should remove filters for a layer - remove specific feature type', (done) => {
+    const { service, store } = createService();
+    service.setFilter('source', '1', createFilter());
+    service.setFilter('source', '2', createFilter());
+    service.setFilter('source', '2', createFilter('attribute2', 'other_value'));
+    service.setFilter('source', '2', createFilter('attribute3', 'other_value', 'other_feature_type'));
+    service.setFilter('source', '3', createFilter());
+    service.removeFiltersForLayer('source', '2', 'other_feature_type');
+    store.select(selectActiveFilterGroups).subscribe(filterGroups => {
+      expect(filterGroups.length).toEqual(3);
+      expect(filterGroups[0].layerIds).toEqual(['1']);
+      expect(filterGroups[1].layerIds).toEqual(['2']);
+      expect(filterGroups[1].filters.length).toEqual(2);
+      expect(filterGroups[1].filters[0].featureType).toEqual(undefined);
+      expect(filterGroups[1].filters[1].featureType).toEqual(undefined);
+      expect(filterGroups[2].layerIds).toEqual(['3']);
+      done();
+    });
+  });
+
   test('should remove all filters for a layer', (done) => {
     const { service, store } = createService();
     service.setFilter('source', '1', createFilter());
     service.setFilter('source', '2', createFilter());
     service.setFilter('source', '3', createFilter());
-    service.removeFiltersForLayer('source', '2');
+    service.removeAllFiltersForLayer('source', '2');
     store.select(selectActiveFilterGroups).subscribe(filterGroups => {
       expect(filterGroups.length).toEqual(2);
       expect(filterGroups[0].layerIds).toEqual(['1']);
