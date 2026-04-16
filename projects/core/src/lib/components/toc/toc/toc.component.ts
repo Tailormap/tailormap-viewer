@@ -17,7 +17,7 @@ import {
 import {
   moveLayerTreeNode, setLayerStyle, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId,
 } from '../../../map/state/map.actions';
-import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
+import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -66,7 +66,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
-  public filteredLayerIds: Signal<string[]> = signal([]);
+  public filteredLayerIds: Signal<{ id: string; source: string }[]> = signal([]);
 
   private config = ComponentConfigHelper.componentConfigSignal<TocConfigModel>(this.store$, BaseComponentTypeEnum.TOC);
 
@@ -129,7 +129,7 @@ export class TocComponent implements OnInit, OnDestroy {
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
-    this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIds);
+    this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIdsWithSource);
 
     if (this.mobileToc()) {
       this.visible$

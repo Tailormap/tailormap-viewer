@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
+import { FilterSourceHelper } from '../../../filter';
 
 @Component({
   selector: 'tm-toc-node-layer',
@@ -27,7 +28,7 @@ export class TocNodeLayerComponent {
   public tiles3DLayerIds: string[] = [];
 
   @Input()
-  public filteredLayerIds: string[] = [];
+  public filteredLayerIdsWithSource: { id: string; source: string}[] = [];
 
   @Input()
   public editableLayerIds: string[] = [];
@@ -68,7 +69,15 @@ export class TocNodeLayerComponent {
   }
 
   public isLayerFiltered() {
-    return this.filteredLayerIds.includes(this.node?.id || '');
+    return this.filteredLayerIdsWithSource.some(l => l.id === this.node?.id);
+  }
+
+  public getLayerFilterSourceInfo() {
+    const filterSource = this.filteredLayerIdsWithSource.find(l => l.id === this.node?.id)?.source;
+    return FilterSourceHelper.getFilterInfoBySource().get(filterSource || '') ?? {
+      icon: 'components_filter',
+      tooltip: $localize`:@@core.toc.filtered-layer:A filter is applied to this layer`,
+    };
   }
 
   public isLayerEditable() {

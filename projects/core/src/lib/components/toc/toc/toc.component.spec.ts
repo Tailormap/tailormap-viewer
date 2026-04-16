@@ -20,7 +20,7 @@ import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../
 import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { selectFilteredLayerIds } from '../../../state/filter-state/filter.selectors';
+import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
 const buildMockStore = (selectedLayer = '') => {
@@ -44,7 +44,7 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectIn3dView, value: false },
       { selector: selectLayersWithoutWebMercatorIds, value: [] },
       { selector: select3dTilesLayers, value: [] },
-      { selector: selectFilteredLayerIds, value: [] },
+      { selector: selectFilteredLayerIdsWithSource, value: [] },
       { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
       { selector: selectComponentsConfig, value: [] },
     ],
