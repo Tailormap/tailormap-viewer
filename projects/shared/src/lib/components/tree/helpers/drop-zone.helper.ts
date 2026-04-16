@@ -25,6 +25,7 @@ export class DropZoneHelper {
       isExpanded: (nodeId) => treeService.isExpanded(nodeId),
       expandNode: (nodeId) => treeService.expandNode(nodeId),
       getParent: (nodeId) => treeService.getParent(nodeId),
+      getNodeOrder: (nodeIds: string[]) => treeService.getNodeOrder(nodeIds),
       nodePositionChanged: evt => treeService.nodePositionChanged(evt),
     };
   }
