@@ -128,7 +128,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       });
   }
 
-  public clearFilter() {
+  public clearFilters() {
     combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),
