@@ -18,6 +18,7 @@ import { InfoConfigComponent } from './info-config/info-config.component';
 import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
 import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
 import { SharedAdminComponentsModule } from '../../shared/components';
+import { SnappingComponentConfigComponent } from './snapping-config/snapping-component-config.component';
 
 @NgModule({
   declarations: [
@@ -33,15 +34,16 @@ import { SharedAdminComponentsModule } from '../../shared/components';
     InfoConfigComponent,
     DrawingConfigComponent,
     TocComponentConfigComponent,
+    SnappingComponentConfigComponent,
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        BaseComponentConfigComponent,
-        SelectUploadModule,
-        MarkdownEditorComponent,
-        SharedAdminComponentsModule,
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    BaseComponentConfigComponent,
+    SelectUploadModule,
+    MarkdownEditorComponent,
+    SharedAdminComponentsModule,
+  ],
   exports: [
     ComponentsListComponent,
     ComponentConfigRendererComponent,
@@ -71,5 +73,6 @@ export class ComponentsModule {
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.GEOLOCATION, $localize `:@@admin-core.application.component-geolocation:Geolocation`, GeolocationConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.INFO, $localize `:@@admin-core.application.component-info:Info`, InfoConfigComponent);
     configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.TERRAIN_OPACITY, $localize `:@@admin-core.application.component-terrain-opacity:Terrain opacity`, BaseComponentConfigComponent);
+    configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SNAPPING, $localize `:@@admin-core.application.component-snapping:Snapping`, SnappingComponentConfigComponent);
   }
 }

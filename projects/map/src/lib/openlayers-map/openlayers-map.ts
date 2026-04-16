@@ -28,6 +28,7 @@ import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumManager } from './cesium-map/cesium-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
+import { FeatureModelType } from '../models/feature-model.type';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -478,8 +479,8 @@ export class OpenLayersMap implements MapViewerModel {
     OpenLayersSnappingManager.setSnappingTolerance(tolerance);
   }
 
-  public getSnappingLayer() {
-    return OpenLayersSnappingManager.getSnappingLayer();
+  public renderSnappingFeatures(features: FeatureModelType[]) {
+    return OpenLayersSnappingManager.renderFeatures(features);
   }
 
 }

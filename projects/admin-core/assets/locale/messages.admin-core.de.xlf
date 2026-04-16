@@ -130,6 +130,10 @@
         <source>Search</source>
         <target>Suchen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-snapping" datatype="html">
+        <source>Snapping</source>
+        <target>Fangen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
         <target>Streetview-Werkzeug</target>
@@ -1713,6 +1717,18 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
         <target>Suchtitel</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
+        <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
+        <target>Wählen Sie einen oder mehrere Layer aus, die zum Fangen verfügbar sind. Wählen Sie mindestens einen Layer aus, um das Fangen zu ermöglichen.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tolerance" datatype="html">
+        <source>Snapping tolerance (px)</source>
+        <target>Fangtoleranz (px)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
+        <source>Snapping tooltip</source>
+        <target>Fang-Tooltip</target>
       </trans-unit>
       <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
         <source>Show edit layer icon</source>

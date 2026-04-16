@@ -51,6 +51,7 @@ export class MeasureStyleHelper {
         const labelStyle = MeasureStyleHelper.labelStyle.clone();
         labelStyle.setGeometry(point);
         labelStyle.getText()?.setText(sizeLabel);
+        labelStyle.setZIndex(99999999);
         styles.push(labelStyle);
       }
     }
