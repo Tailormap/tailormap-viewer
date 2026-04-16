@@ -137,14 +137,12 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       selectedNodeIds.add(nodeId);
     }
     this.multiSelectedNodeIds.next(Array.from(selectedNodeIds));
-    console.log('Updated (toggle) multi-selected node IDs:', this.multiSelectedNodeIds.value);
   }
 
   public clearMultiSelectedNodeIds() {
     if (this.multiSelectedNodeIds.value.length > 0) {
       this.multiSelectedNodeIds.next([]);
     }
-    console.log('Updated (clear) multi-selected node IDs:', this.multiSelectedNodeIds.value);
   }
 
   // Service message commands

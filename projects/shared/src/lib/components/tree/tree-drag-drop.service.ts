@@ -253,6 +253,12 @@ export class TreeDragDropService implements OnDestroy {
 
       orderedDragNodeIds.forEach((dragNodeId, index) => {
         const prevParent = dropZone.getParent(dragNodeId);
+        if (index === 0) {
+          sibling = dragNodeId;
+          position = 'after';
+        } else {
+          sibling = dragNodeId;
+        }
         const eventData = {
           nodeId: dragNodeId,
           toParent: parent ? parent : null,
@@ -261,13 +267,6 @@ export class TreeDragDropService implements OnDestroy {
           sibling,
         };
         dropZone.nodePositionChanged(eventData);
-
-        if (index === 0) {
-          sibling = dragNodeId;
-          position = 'after';
-        } else {
-          sibling = dragNodeId;
-        }
       });
     }
     this.handleDragEnd();

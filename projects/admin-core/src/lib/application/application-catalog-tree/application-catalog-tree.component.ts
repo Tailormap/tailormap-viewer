@@ -18,7 +18,7 @@ import { FormControl } from '@angular/forms';
 import { setApplicationCatalogFilterTerm } from '../state/application.actions';
 
 export interface AddLayerEvent {
-  layer: ExtendedGeoServiceLayerModel;
+  layers: ExtendedGeoServiceLayerModel[];
   position: TreeNodePosition;
   sibling: string;
   toParent: string | null;
@@ -37,7 +37,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
   private ngZone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
-
 
   @Input()
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
@@ -99,15 +98,30 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   }
 
   private onNodePositionChanged(evt: NodePositionChangedEventModel) {
-    const node = this.treeService.getNode(evt.nodeId);
+    const multiSelectedNodeIds = this.treeService.getMultiSelectedNodeIds();
+    const draggedNodeIds = multiSelectedNodeIds.includes(evt.nodeId)
+      ? this.treeService.getNodeOrder(multiSelectedNodeIds)
+      : [evt.nodeId];
+
+    if (draggedNodeIds[0] !== evt.nodeId) {
+      return;
+    }
+
+    const layers: ExtendedGeoServiceLayerModel[] = draggedNodeIds.flatMap(nodeId => {
+      const node = this.treeService.getNode(nodeId);
+      return node && this.selectableNode(node) && node.metadata ? [node.metadata] : [];
+    });
+
+    console.debug("layers", layers, "evt:", evt);
     this.ngZone.run(() => {
-      if (node && !!node.metadata && this.selectableNode(node)) {
+      if (layers.length > 0) {
         this.addLayer.emit({
-          layer: node.metadata,
+          layers,
           position: evt.position,
           sibling: evt.sibling,
           toParent: evt.toParent,
         });
+        this.treeService.clearMultiSelectedNodeIds();
       }
     });
   }

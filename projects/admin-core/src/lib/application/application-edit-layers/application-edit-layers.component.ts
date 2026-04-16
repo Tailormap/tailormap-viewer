@@ -147,19 +147,39 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   }
 
   public addLayer($event: AddLayerEvent) {
-    const layer = $event.layer;
+    this.addLayers($event.layers, $event.toParent || undefined, $event.position, $event.sibling);
+  }
+
+  private addLayers(
+    layers: ExtendedGeoServiceLayerModel[],
+    parentId?: string,
+    position?: TreeNodePosition,
+    sibling?: string,
+  ) {
     combineLatest([
-        this.store$.select(selectBaseLayerNodesForSelectedApplication),
-        this.store$.select(selectAppLayerNodesForSelectedApplication),
-        this.store$.select(selectTerrainLayerNodesForSelectedApplication),
+      this.store$.select(selectBaseLayerNodesForSelectedApplication),
+      this.store$.select(selectAppLayerNodesForSelectedApplication),
+      this.store$.select(selectTerrainLayerNodesForSelectedApplication),
     ])
       .pipe(take(1))
       .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
-        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ]);
-        if (this.useRadioInputs) {
-          node.visible = false;
-        }
-        this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
+        const existingNodes = [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ];
+        const treeNodes = layers.map(layer => {
+          const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, existingNodes);
+          if (this.useRadioInputs) {
+            node.visible = false;
+          }
+          existingNodes.push(node);
+          return node;
+        });
+
+        this.store$.dispatch(addApplicationTreeNodes({
+          tree: this.applicationStateTree,
+          treeNodes,
+          parentId,
+          position,
+          sibling,
+        }));
       });
   }
 
@@ -252,21 +272,19 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(selectedNode => {
         if (!selectedNode) {
-          // Add layer to root of the tree
           const rootNodeId = this.applicationTreeService.getRootNodeId();
           const addLayerEvent: AddLayerEvent = {
-            layer: layer,
+            layers: [layer],
             sibling: '',
             toParent: rootNodeId,
             position: "inside",
           };
           this.addLayer(addLayerEvent);
         } else {
-          // Add layer to selected group or after selected node
           const parentId = this.applicationTreeService.getParent(selectedNode);
           const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
           const addLayerEvent: AddLayerEvent = {
-            layer: layer,
+            layers: [layer],
             sibling: isLevelNode ? '' : selectedNode,
             toParent: isLevelNode ? selectedNode : parentId,
             position: isLevelNode ? "inside" : "after",
