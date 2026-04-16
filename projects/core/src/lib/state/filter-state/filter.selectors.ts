@@ -74,7 +74,8 @@ export const selectSpatialFilterGroupsWithReferenceLayers = createSelector(
     },
 );
 
-export const selectFilteredLayerIds = createSelector(
+export const selectFilteredLayerIdsWithSource = createSelector(
   selectEnabledFilterGroups,
-  (groups): string[] => groups.flatMap(group => group.layerIds),
+  (groups): Array<{ id: string; source: string }> =>
+    groups.flatMap(group => group.layerIds.map(id => ({ id, source: group.source }))),
 );

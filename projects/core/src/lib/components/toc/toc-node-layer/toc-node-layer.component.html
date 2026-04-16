@@ -25,11 +25,11 @@
       </mat-icon>
     }
     @if (isLayerFiltered()) {
+      @let filterSourceInfo = getLayerFilterSourceInfo();
       <mat-icon class="icon"
                 (click)="$event.stopPropagation()"
-                svgIcon="components_filter"
-                tmTooltip="A filter is applied to this layer"
-                i18n-tmTooltip=":@@core.toc.filtered-layer"
+                [svgIcon]="filterSourceInfo.icon"
+                [tmTooltip]="filterSourceInfo.tooltip"
                 matListItemMeta>
       </mat-icon>
     }
