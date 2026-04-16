@@ -146,16 +146,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.addNode(node, params.nodeId);
   }
 
-  public addLayer($event: AddLayerEvent) {
-    this.addLayers($event.layers, $event.toParent || undefined, $event.position, $event.sibling);
-  }
-
-  private addLayers(
-    layers: ExtendedGeoServiceLayerModel[],
-    parentId?: string,
-    position?: TreeNodePosition,
-    sibling?: string,
-  ) {
+  public addLayers(evt: AddLayerEvent) {
     combineLatest([
       this.store$.select(selectBaseLayerNodesForSelectedApplication),
       this.store$.select(selectAppLayerNodesForSelectedApplication),
@@ -164,7 +155,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
         const existingNodes = [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ];
-        const treeNodes = layers.map(layer => {
+        const treeNodes = evt.layers.map(layer => {
           const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, existingNodes);
           if (this.useRadioInputs) {
             node.visible = false;
@@ -172,13 +163,14 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
           existingNodes.push(node);
           return node;
         });
+        console.debug("[application-edit-layers] Adding nodes to tree", treeNodes, "evt:", evt);
 
         this.store$.dispatch(addApplicationTreeNodes({
           tree: this.applicationStateTree,
           treeNodes,
-          parentId,
-          position,
-          sibling,
+          parentId: evt.toParent ?? undefined,
+          position: evt.position,
+          sibling: evt.sibling,
         }));
       });
   }
@@ -279,7 +271,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
             toParent: rootNodeId,
             position: "inside",
           };
-          this.addLayer(addLayerEvent);
+          this.addLayers(addLayerEvent);
         } else {
           const parentId = this.applicationTreeService.getParent(selectedNode);
           const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
@@ -289,7 +281,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
             toParent: isLevelNode ? selectedNode : parentId,
             position: isLevelNode ? "inside" : "after",
           };
-          this.addLayer(addLayerEvent);
+          this.addLayers(addLayerEvent);
         }
       });
   }

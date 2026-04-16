@@ -92,6 +92,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
       expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
       getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
       nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
+      dragEnded: () => this.treeService.clearMultiSelectedNodeIds(),
       getExtendedDropzoneElement: () => document.querySelector('.application-tree .extended-dropzone'),
       getRootNodeId: () => this.applicationTreeService?.getRootNodeId() || null,
     }];
@@ -112,7 +113,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
       return node && this.selectableNode(node) && node.metadata ? [node.metadata] : [];
     });
 
-    console.debug("layers", layers, "evt:", evt);
     this.ngZone.run(() => {
       if (layers.length > 0) {
         this.addLayer.emit({
@@ -121,7 +121,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
           sibling: evt.sibling,
           toParent: evt.toParent,
         });
-        this.treeService.clearMultiSelectedNodeIds();
       }
     });
   }

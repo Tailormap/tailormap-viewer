@@ -20,6 +20,7 @@ export interface DropZoneOptions {
   getParent(nodeid: string): string | null;
   getNodeOrder?(nodeIds: string[]): string[];
   nodePositionChanged(evt: NodePositionChangedEventModel): void;
+  dragEnded?(): void;
   getExtendedDropzoneElement?(): HTMLElement | null;
   getRootNodeId?(): string | null;
 }
@@ -244,14 +245,14 @@ export class TreeDragDropService implements OnDestroy {
       const insideExpandableNode = this.dragNodePosition === 'inside' && dropZone.isExpandable(nodeId);
       let parent = insideExpandableNode ? nodeId : dropZone.getParent(nodeId);
       let sibling = nodeId;
-      let position = this.dragNodePosition;
+      const position = this.dragNodePosition;
 
       if (element.className.includes(TreeDragDropService.EXTENDED_DROPZONE_CLASS)) {
         parent = dropZone.getRootNodeId ? dropZone.getRootNodeId() : null;
         sibling = dropZone.getRootNodeId ? dropZone.getRootNodeId() ?? '' : '';
       }
 
-      orderedDragNodeIds.forEach((dragNodeId, index) => {
+      orderedDragNodeIds.forEach((dragNodeId) => {
         const prevParent = dropZone.getParent(dragNodeId);
         const eventData = {
           nodeId: dragNodeId,
@@ -297,6 +298,7 @@ export class TreeDragDropService implements OnDestroy {
           this.removeEventListenersFromElement(extendedElement);
         }
       }
+      dropZone.dragEnded?.();
     });
     this.dragNode = null;
     this.dragNodeIds = [];
