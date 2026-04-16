@@ -20,7 +20,7 @@ import {
   updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
-import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
+import { AddLayersEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.selectors';
@@ -147,7 +147,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.addNode(node, params.nodeId);
   }
 
-  public addLayers(evt: AddLayerEvent) {
+  public addLayers(evt: AddLayersEvent) {
     combineLatest([
       this.store$.select(selectBaseLayerNodesForSelectedApplication),
       this.store$.select(selectAppLayerNodesForSelectedApplication),
@@ -164,7 +164,6 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
           existingNodes.push(node);
           return node;
         });
-        console.debug("[application-edit-layers] Adding nodes to tree", treeNodes, "evt:", evt);
 
         this.store$.dispatch(addApplicationTreeNodes({
           tree: this.applicationStateTree,
@@ -266,7 +265,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       .subscribe(selectedNode => {
         if (!selectedNode) {
           const rootNodeId = this.applicationTreeService.getRootNodeId();
-          const addLayerEvent: AddLayerEvent = {
+          const addLayerEvent: AddLayersEvent = {
             layers: [layer],
             sibling: '',
             toParent: rootNodeId,
@@ -276,7 +275,7 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
         } else {
           const parentId = this.applicationTreeService.getParent(selectedNode);
           const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
-          const addLayerEvent: AddLayerEvent = {
+          const addLayerEvent: AddLayersEvent = {
             layers: [layer],
             sibling: isLevelNode ? '' : selectedNode,
             toParent: isLevelNode ? selectedNode : parentId,

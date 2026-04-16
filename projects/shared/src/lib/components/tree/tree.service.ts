@@ -125,10 +125,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     return this.multiSelectedNodeIds.value;
   }
 
-  public setMultiSelectedNodeIds(nodeIds: string[]) {
-    this.multiSelectedNodeIds.next(nodeIds);
-  }
-
   public toggleMultiSelectedNodeId(nodeId: string) {
     const selectedNodeIds = new Set(this.multiSelectedNodeIds.value);
     if (selectedNodeIds.has(nodeId)) {

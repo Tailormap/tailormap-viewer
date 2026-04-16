@@ -17,7 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { setApplicationCatalogFilterTerm } from '../state/application.actions';
 
-export interface AddLayerEvent {
+export interface AddLayersEvent {
   layers: ExtendedGeoServiceLayerModel[];
   position: TreeNodePosition;
   sibling: string;
@@ -42,7 +42,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
 
   @Output()
-  public addLayer = new EventEmitter<AddLayerEvent>();
+  public addLayer = new EventEmitter<AddLayersEvent>();
 
   @Input()
   public selectedLayerId$: Observable<string | null> = of(null);
@@ -103,10 +103,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
     const draggedNodeIds = multiSelectedNodeIds.includes(evt.nodeId)
       ? this.treeService.getNodeOrder(multiSelectedNodeIds)
       : [evt.nodeId];
-
-    if (draggedNodeIds[0] !== evt.nodeId) {
-      return;
-    }
 
     const layers: ExtendedGeoServiceLayerModel[] = draggedNodeIds.flatMap(nodeId => {
       const node = this.treeService.getNode(nodeId);
