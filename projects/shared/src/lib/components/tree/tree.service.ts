@@ -114,7 +114,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     });
   }
 
-  public getNodeOrder(nodeIds: string[]) {
+  public getNodeOrder(nodeIds: string[]): string[] {
     const nodeIdSet = new Set(nodeIds);
     return this.dataSource.value.nodes
       .filter(node => nodeIdSet.has(node.id))
