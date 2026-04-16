@@ -150,9 +150,9 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public addLayer($event: AddLayerEvent) {
     const layer = $event.layer;
     combineLatest([
-      this.store$.select(selectBaseLayerNodesForSelectedApplication),
-      this.store$.select(selectAppLayerNodesForSelectedApplication),
-      this.store$.select(selectTerrainLayerNodesForSelectedApplication),
+        this.store$.select(selectBaseLayerNodesForSelectedApplication),
+        this.store$.select(selectAppLayerNodesForSelectedApplication),
+        this.store$.select(selectTerrainLayerNodesForSelectedApplication),
     ])
       .pipe(take(1))
       .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
