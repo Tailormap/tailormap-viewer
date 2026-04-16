@@ -20,7 +20,7 @@ import {
   updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
-import { AddLayersEvent } from '../application-catalog-tree/application-catalog-tree.component';
+import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.selectors';
@@ -147,7 +147,8 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     this.addNode(node, params.nodeId);
   }
 
-  public addLayers(evt: AddLayersEvent) {
+  public addLayer($event: AddLayerEvent) {
+    const layer = $event.layer;
     combineLatest([
       this.store$.select(selectBaseLayerNodesForSelectedApplication),
       this.store$.select(selectAppLayerNodesForSelectedApplication),
@@ -155,23 +156,11 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
     ])
       .pipe(take(1))
       .subscribe(([ backgroundNodes, layerNodes, terrainLayerNodes ]) => {
-        const existingNodes = [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ];
-        const treeNodes = evt.layers.map(layer => {
-          const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, existingNodes);
-          if (this.useRadioInputs) {
-            node.visible = false;
-          }
-          existingNodes.push(node);
-          return node;
-        });
-
-        this.store$.dispatch(addApplicationTreeNodes({
-          tree: this.applicationStateTree,
-          treeNodes,
-          parentId: evt.toParent ?? undefined,
-          position: evt.position,
-          sibling: evt.sibling,
-        }));
+        const node = ApplicationModelHelper.newApplicationTreeLayerNode(layer, [ ...backgroundNodes, ...layerNodes, ...terrainLayerNodes ]);
+        if (this.useRadioInputs) {
+          node.visible = false;
+        }
+        this.addNode(node, $event.toParent || undefined, $event.position, $event.sibling);
       });
   }
 
@@ -264,24 +253,26 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(selectedNode => {
         if (!selectedNode) {
+          // Add layer to root of the tree
           const rootNodeId = this.applicationTreeService.getRootNodeId();
-          const addLayerEvent: AddLayersEvent = {
-            layers: [layer],
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
             sibling: '',
             toParent: rootNodeId,
             position: "inside",
           };
-          this.addLayers(addLayerEvent);
+          this.addLayer(addLayerEvent);
         } else {
+          // Add layer to selected group or after selected node
           const parentId = this.applicationTreeService.getParent(selectedNode);
           const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
-          const addLayerEvent: AddLayersEvent = {
-            layers: [layer],
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
             sibling: isLevelNode ? '' : selectedNode,
             toParent: isLevelNode ? selectedNode : parentId,
             position: isLevelNode ? "inside" : "after",
           };
-          this.addLayers(addLayerEvent);
+          this.addLayer(addLayerEvent);
         }
       });
   }

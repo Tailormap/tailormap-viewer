@@ -17,8 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
 import { setApplicationCatalogFilterTerm } from '../state/application.actions';
 
-export interface AddLayersEvent {
-  layers: ExtendedGeoServiceLayerModel[];
+export interface AddLayerEvent {
+  layer: ExtendedGeoServiceLayerModel;
   position: TreeNodePosition;
   sibling: string;
   toParent: string | null;
@@ -42,7 +42,7 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
 
   @Output()
-  public addLayer = new EventEmitter<AddLayersEvent>();
+  public addLayer = new EventEmitter<AddLayerEvent>();
 
   @Input()
   public selectedLayerId$: Observable<string | null> = of(null);
@@ -99,20 +99,11 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   }
 
   private onNodePositionChanged(evt: NodePositionChangedEventModel) {
-    const multiSelectedNodeIds = this.treeService.getMultiSelectedNodeIds();
-    const draggedNodeIds = multiSelectedNodeIds.includes(evt.nodeId)
-      ? this.treeService.getNodeOrder(multiSelectedNodeIds)
-      : [evt.nodeId];
-
-    const layers: ExtendedGeoServiceLayerModel[] = draggedNodeIds.flatMap(nodeId => {
-      const node = this.treeService.getNode(nodeId);
-      return node && this.selectableNode(node) && node.metadata ? [node.metadata] : [];
-    });
-
+    const node = this.treeService.getNode(evt.nodeId);
     this.ngZone.run(() => {
-      if (layers.length > 0) {
+      if (node && !!node.metadata && this.selectableNode(node)) {
         this.addLayer.emit({
-          layers,
+          layer: node.metadata,
           position: evt.position,
           sibling: evt.sibling,
           toParent: evt.toParent,

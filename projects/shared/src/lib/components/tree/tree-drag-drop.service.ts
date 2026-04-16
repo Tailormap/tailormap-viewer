@@ -238,6 +238,10 @@ export class TreeDragDropService implements OnDestroy {
     }
 
     if (!this.dragNodeIds.includes(nodeId)) {
+      const orderedDragNodeIds = dropZone.getNodeOrder
+        ? dropZone.getNodeOrder(this.dragNodeIds)
+        : [...this.dragNodeIds];
+
       const insideExpandableNode = this.dragNodePosition === 'inside' && dropZone.isExpandable(nodeId);
       let parent = insideExpandableNode ? nodeId : dropZone.getParent(nodeId);
       let sibling = nodeId;
@@ -248,15 +252,17 @@ export class TreeDragDropService implements OnDestroy {
         sibling = dropZone.getRootNodeId ? dropZone.getRootNodeId() ?? '' : '';
       }
 
-      const prevParent = dropZone.getParent(this.dragNode.id);
-      const eventData = {
-        nodeId: this.dragNode.id,
-        toParent: parent ? parent : null,
-        fromParent: prevParent ? prevParent : null,
-        position,
-        sibling,
-      };
-      dropZone.nodePositionChanged(eventData);
+      orderedDragNodeIds.forEach((dragNodeId) => {
+        const prevParent = dropZone.getParent(dragNodeId);
+        const eventData = {
+          nodeId: dragNodeId,
+          toParent: parent ? parent : null,
+          fromParent: prevParent ? prevParent : null,
+          position,
+          sibling,
+        };
+        dropZone.nodePositionChanged(eventData);
+      });
     }
     this.handleDragEnd();
   };
