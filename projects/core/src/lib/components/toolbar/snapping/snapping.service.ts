@@ -1,14 +1,17 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { ExtendedAppLayerModel } from '../../../map';
-import { DescribeAppLayerService } from '@tailormap-viewer/api';
+import { ExtendedAppLayerModel, selectVisibleLayersWithAttributes } from '../../../map';
+import {
+  BaseComponentTypeEnum, DescribeAppLayerService, SnappingComponentConfigModel,
+} from '@tailormap-viewer/api';
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
-import { selectCQLFilters, selectViewerId } from '../../../state';
-import { debounceTime } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take } from 'rxjs';
+import { selectComponentsConfigForType, selectCQLFilters, selectViewerId } from '../../../state';
+import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take, debounceTime, filter } from 'rxjs';
 import { FeaturesFilterHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
 
 interface SnappingFeature {
   __fid: string;
@@ -27,17 +30,31 @@ export class SnappingService {
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
   private describeLayerService = inject(DescribeAppLayerService);
+  private snackbar = inject(MatSnackBar);
+
+  public configuredLayers = new BehaviorSubject<string[]>([]);
+  public availableLayers$ = this.store$.select(selectVisibleLayersWithAttributes);
+  public selectableLayers$ = combineLatest([
+    this.configuredLayers.asObservable(),
+    this.availableLayers$,
+  ]).pipe(map(([ configured, available ]) => {
+    const configuredLayers = new Set(configured);
+    return available.filter(layer => configuredLayers.has(layer.id));
+  }));
+  public hasSelectableLayers$ = this.selectableLayers$.pipe(map(l => l.length > 0));
 
   private snappingLayers = new BehaviorSubject<ExtendedAppLayerModel[]>([]);
   private snappingFeatures = new BehaviorSubject<SnappingFeature[]>([]);
-  private geometryVisible = new BehaviorSubject(false);
   private geometriesLoaded: Map<string, string> = new Map();
+
+  private snappingActive = new BehaviorSubject(false);
+  public snappingActive$ = this.snappingActive.asObservable();
 
   public snappingLayers$ = this.snappingLayers.asObservable();
   public snappingFeatures$ = this.snappingFeatures.asObservable();
   public snappingGeometries$: Observable<string[]> = combineLatest([
     this.snappingFeatures$,
-    this.geometryVisible.asObservable(),
+    this.snappingActive$,
   ]).pipe(
     map(([ features, visible ]) => {
       if (!visible) {
@@ -60,6 +77,11 @@ export class SnappingService {
     );
 
   constructor() {
+    this.store$.select(selectComponentsConfigForType<SnappingComponentConfigModel>(BaseComponentTypeEnum.SNAPPING))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(config => {
+        this.configuredLayers.next(config?.config.selectedLayers || []);
+      });
     combineLatest([
       this.snappingLayers.asObservable(),
       this.mapExtent$,
@@ -67,9 +89,12 @@ export class SnappingService {
         return prev.size === cur.size && Array.from(prev.entries()).every(([ key, value ]) => cur.get(key) === value);
       })),
       this.store$.select(selectViewerId),
+      this.snappingActive$,
     ])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        filter(([ _snappingLayers, _mapExtent, _allFilters, _viewerId, snappingActive ]) => snappingActive),
+        debounceTime(500),
         concatMap(([ snappingLayers, mapExtent, allFilters, viewerId ]) => {
           const layerDetails = snappingLayers.map(l => this.describeLayerService.getDescribeAppLayer$(viewerId, l.id).pipe(take(1)));
           return forkJoin([
@@ -104,33 +129,59 @@ export class SnappingService {
           }
         });
       });
+
+    this.selectableLayers$.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(selectableLayers => {
+        const currentSnappingLayers = this.snappingLayers.value;
+        const selectableLayerIds = new Set(selectableLayers.map(l => l.id));
+        const newSnappingLayers = currentSnappingLayers.filter(layer => selectableLayerIds.has(layer.id));
+        if (newSnappingLayers.length !== currentSnappingLayers.length) {
+          this.snappingLayers.next(newSnappingLayers);
+          this.cleanUpOldGeometries(newSnappingLayers);
+        }
+      });
   }
 
   public toggleLayer(layer: ExtendedAppLayerModel) {
     const currentLayers = this.snappingLayers.value;
     const idx = currentLayers.findIndex(l => l.id === layer.id);
+    let updatedLayers = [];
     if (idx !== -1) {
-      this.snappingLayers.next([
+      updatedLayers = [
         ...currentLayers.slice(0, idx),
         ...currentLayers.slice(idx + 1),
-      ]);
+      ];
     } else {
-      this.snappingLayers.next([ ...currentLayers, layer ]);
+      updatedLayers = [ ...currentLayers, layer ];
     }
+    this.snappingLayers.next(updatedLayers);
+    this.cleanUpOldGeometries(updatedLayers);
   }
 
-  public showGeometries() {
-    this.geometryVisible.next(true);
+  public isSnappingActive() {
+    return this.snappingActive.value;
   }
 
-  public hideGeometries() {
-    this.geometryVisible.next(false);
+  public enableSnapping() {
+    this.snappingActive.next(true);
+  }
+
+  public disableSnapping() {
+    this.snappingActive.next(false);
   }
 
   private loadGeometries(layer: ExtendedAppLayerModel, cqlFilter: string): void {
     this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, cqlFilter)
       .pipe(take(1))
       .subscribe(response => {
+        if (response.exceededMaxFeatures) {
+          const maxFeatures = SnappingService.MAX_SNAPPING_FEATURES;
+          const layerTitle = layer.title;
+          const message = $localize `:@@core.snapping.max-features-exceeded-warning:There are more than ${maxFeatures} objects \
+            available in the ${layerTitle} snapping layer. The maximum is ${maxFeatures}. Apply filters or zoom in to narrow down the \
+            selection.`;
+          SnackBarMessageComponent.open$(this.snackbar, { message, duration: 5000 });
+        }
         const features: SnappingFeature[] = response.features.map(feat => ({
           ...feat,
           layerId: layer.id,

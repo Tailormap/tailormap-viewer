@@ -3,25 +3,14 @@
                                 [config]="config"
                                 i18n-titleLabel="@@admin-core.components.edit-title"
                                 titleLabel="Edit">
-  <div [formGroup]="formGroup">
-    <mat-checkbox formControlName="closeAfterAddFeature"
+  <div>
+    <mat-checkbox [formControl]="closeAfterAddFeature"
                   i18n="@@admin-core.components.edit-close-after-add-feature">Close window after adding new feature</mat-checkbox>
-
     <div class="copy-layers">
       <div class="copy-layers-info">
         <span i18n="@@admin-core.application.copy-layers-info">Select one or more layers that are available for copying features from. If no layers are selected, all layers will be available. Note that incompatible layer geometry types may prevent successful copying.</span>
       </div>
-      <tm-admin-list-filter [formControl]="copyLayerFilter"
-                            [filterTerm]="copyLayerFilterSignal()"
-                            i18n-label="@@admin-core.application.filter-tree"
-                            label="Filter application layers"></tm-admin-list-filter>
-      <mat-selection-list (selectionChange)="onCopyLayerSelectionChange($event)">
-        @for (layer of filteredLayerList(); track layer.id) {
-          <mat-list-option [value]="layer.id" [selected]="layer.selected">
-            <div class="layer-label">{{ layer.label }}</div>
-          </mat-list-option>
-        }
-      </mat-selection-list>
+      <tm-admin-layer-selection-config-component [formControl]="selectedLayers"></tm-admin-layer-selection-config-component>
     </div>
   </div>
 </tm-admin-base-component-config>

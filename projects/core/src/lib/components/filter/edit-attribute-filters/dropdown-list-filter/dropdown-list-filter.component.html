@@ -25,7 +25,7 @@
         [formControl]="filter"
         [matAutocomplete]="auto"/>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        @for (value of filteredUniqueValues$ | async; track value.value) {
+        @for (value of selectableUniqueValues$ | async; track value.value) {
           <mat-option
                   [value]="value"
                   (click)="valueClicked(value)"

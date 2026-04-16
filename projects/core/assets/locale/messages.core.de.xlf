@@ -762,6 +762,14 @@
         <source>Days</source>
         <target>Tage</target>
       </trans-unit>
+      <trans-unit id="core.filter.interval-hours" datatype="html">
+        <source>Hours</source>
+        <target>Stunden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-minutes" datatype="html">
+        <source>Minutes</source>
+        <target>Minuten</target>
+      </trans-unit>
       <trans-unit id="core.filter.interval-months" datatype="html">
         <source>Months</source>
         <target>Monate</target>
@@ -769,6 +777,10 @@
       <trans-unit id="core.filter.interval-quarters" datatype="html">
         <source>Quarters</source>
         <target>Quartale</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-seconds" datatype="html">
+        <source>Seconds</source>
+        <target>Sekunden</target>
       </trans-unit>
       <trans-unit id="core.filter.interval-weeks" datatype="html">
         <source>Weeks</source>
@@ -1233,6 +1245,18 @@
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
         <target>Panelhöhe wiederherstellen</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
+        <target>Im Fang-Layer <x id="PH_1" equiv-text="layerTitle"/> sind mehr als <x id="PH" equiv-text="maxFeatures"/> Objekte verfügbar. Das Maximum beträgt <x id="PH_2" equiv-text="maxFeatures"/>. Wenden Sie Filter an oder zoomen Sie heran, um die Auswahl einzuschränken.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.tooltip" datatype="html">
+        <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>
+        <target>Fang-Werkzeug. Wählen Sie (sichtbare) Layer aus, an die beim Messen, Zeichnen und Bearbeiten gefangen werden soll.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.unselect-layers-to-select-more" datatype="html">
+        <source>You can select a maximum of <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> layers for snapping. Unselect layers before selecting others.</source>
+        <target>Sie können maximal <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> Layer zum Fangen auswählen. Heben Sie die Auswahl von Layern auf, bevor Sie andere auswählen.</target>
       </trans-unit>
       <trans-unit id="core.terrain-controls" datatype="html">
         <source>Terrain controls</source>

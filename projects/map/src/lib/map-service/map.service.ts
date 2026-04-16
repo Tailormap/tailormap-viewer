@@ -187,7 +187,13 @@ export class MapService {
           if (!vectorLayer) {
             return;
           }
-          const featureModels = this.renderFeaturesToLayer(vectorLayer, featureGeometry);
+          vectorLayer.getSource()?.getFeatures().forEach(feature => {
+            vectorLayer.getSource()?.removeFeature(feature);
+          });
+          const featureModels = FeatureHelper.getFeatures(featureGeometry, vectorLayer.getSource()?.getProjection()?.getCode());
+          featureModels.forEach(feature => {
+            vectorLayer.getSource()?.addFeature(feature);
+          });
           const shouldZoom = this.getBoolean(config?.zoomToFeature);
           const shouldCenter = this.getBoolean(config?.centerFeature);
           if (shouldZoom) {
@@ -347,25 +353,8 @@ export class MapService {
     this.map.setSnappingTolerance(tolerance);
   }
 
-  public setSnappingFeatures<T extends FeatureModelAttributes = FeatureModelAttributes>(features: FeatureModelType<T> | Array<FeatureModelType<T>>) {
-    const snappingLayer = this.map.getSnappingLayer();
-    if (snappingLayer) {
-      this.renderFeaturesToLayer(snappingLayer, features);
-    }
-  }
-
-  private renderFeaturesToLayer<T extends FeatureModelAttributes = FeatureModelAttributes>(
-    vectorLayer: VectorLayer,
-    features: FeatureModelType<T> | Array<FeatureModelType<T>>,
-  ) {
-    vectorLayer.getSource()?.getFeatures().forEach(feature => {
-      vectorLayer.getSource()?.removeFeature(feature);
-    });
-    const featureModels = FeatureHelper.getFeatures(features, vectorLayer.getSource()?.getProjection()?.getCode());
-    featureModels.forEach(feature => {
-      vectorLayer.getSource()?.addFeature(feature);
-    });
-    return featureModels;
+  public setSnappingFeatures<T extends FeatureModelAttributes = FeatureModelAttributes>(features: Array<FeatureModelType<T>>) {
+    this.map.renderSnappingFeatures(features);
   }
 
 }

@@ -66,6 +66,10 @@
         <source>Change folder name</source>
         <target>Mapnaam wijzigen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
+        <source>This group is collapsed on startup</source>
+        <target>Deze groep blijft ingeklapt bij het opstarten</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
         <target>Attributenlijst</target>
@@ -125,6 +129,10 @@
       <trans-unit id="admin-core.application.component-simple-search" datatype="html">
         <source>Search</source>
         <target>Zoeken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-snapping" datatype="html">
+        <source>Snapping</source>
+        <target>Snapping</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
@@ -238,13 +246,21 @@
         <source>Expand on startup</source>
         <target>Uitklappen bij opstarten</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-disabled-tooltip" datatype="html">
-        <source>This group is expanded on startup, because a layer in the group is checked</source>
-        <target>Deze groep wordt uitgeklapt bij het opstarten, omdat er een laag in de groep is aangevinkt</target>
+      <trans-unit id="admin-core.application.expand-on-startup-always" datatype="html">
+        <source>Always expand</source>
+        <target>Altijd uitklappen</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.expand-on-startup-tooltip" datatype="html">
-        <source>Expand this group when the application is started</source>
-        <target>Klap deze groep uit bij het openen van de applicatie</target>
+      <trans-unit id="admin-core.application.expand-on-startup-automatic" datatype="html">
+        <source>Automatic</source>
+        <target>Automatisch</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
+        <source>Never expand</source>
+        <target>Nooit uitklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expanded-on-startup" datatype="html">
+        <source>This group is expanded on startup</source>
+        <target>Deze groep wordt uitgeklapt bij het opstarten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
@@ -1700,6 +1716,18 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
         <target>Zoeken titel</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
+        <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
+        <target>Selecteer één of meerdere lagen die beschikbaar zijn voor snapping. Selecteer er tenminste 1 om snapping toe te staan.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tolerance" datatype="html">
+        <source>Snapping tolerance (px)</source>
+        <target>Snapping tolerantie (px)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
+        <source>Snapping tooltip</source>
+        <target>Snapping tooltip</target>
       </trans-unit>
       <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
         <source>Show edit layer icon</source>

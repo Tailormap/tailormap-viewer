@@ -124,11 +124,11 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        this.simpleAttributeFilterService.removeAllFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
       });
   }
 
-  public clearFilter() {
+  public clearFilters() {
     combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),
@@ -138,7 +138,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
+        this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       });
   }
 

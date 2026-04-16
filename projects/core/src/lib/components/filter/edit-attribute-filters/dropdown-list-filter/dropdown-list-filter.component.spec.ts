@@ -12,7 +12,7 @@ describe('DropdownListFilterComponent', () => {
       attributeType: AttributeType.BOOLEAN,
       attribute: 'attribute1',
       condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
-      value: ['true'],
+      value: ['value1'],
       invertCondition: false,
       caseSensitive: false,
       type: FilterTypeEnum.ATTRIBUTE,
