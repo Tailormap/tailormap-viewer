@@ -90,7 +90,7 @@ export class TreeDragDropService implements OnDestroy {
       if (dropZones.length > 0 && event.dataTransfer.setDragImage) {
         const dragImage = document.createElement('div');
         dragImage.classList.add('tree-node__drag-image');
-        dragImage.innerText = dragNodeIds.length > 1 ? `${dragNodeIds.length} items` : dragNode.label;
+        dragImage.innerText = dragNodeIds.length > 1 ? $localize `:@@shared.tree.items:${dragNodeIds.length} items` : dragNode.label;
         dropZones[0].getTargetElement()?.appendChild(dragImage);
         event.dataTransfer.setDragImage(dragImage, 0, BrowserHelper.isTouchDevice ? 75 : 25);
       }
