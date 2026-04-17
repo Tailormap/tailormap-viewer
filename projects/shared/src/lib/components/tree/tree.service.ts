@@ -121,10 +121,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
       .map(node => node.id);
   }
 
-  public getMultiSelectedNodeIds() {
-    return this.multiSelectedNodeIds.value;
-  }
-
   public toggleMultiSelectedNodeId(nodeId: string) {
     const selectedNodeIds = new Set(this.multiSelectedNodeIds.value);
     if (selectedNodeIds.has(nodeId)) {
@@ -136,7 +132,9 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public clearMultiSelectedNodeIds() {
-    if (this.multiSelectedNodeIds.value.length > 0) {
+    if (this.selectedNode.value) {
+      this.multiSelectedNodeIds.next([this.selectedNode.value]);
+    } else {
       this.multiSelectedNodeIds.next([]);
     }
   }
