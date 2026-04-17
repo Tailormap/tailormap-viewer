@@ -216,7 +216,7 @@ export class AttributeFilterComponent implements OnInit, OnDestroy {
   }
 
   public showCaseSensitiveInput() {
-    return this._attributeType === AttributeType.STRING;
+    return this._attributeType === AttributeType.STRING && this.formValues.condition !== FilterConditionEnum.UNIQUE_VALUES_KEY;
   }
 
   public showInvertConditionInput() {
