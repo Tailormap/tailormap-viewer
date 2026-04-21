@@ -50,6 +50,7 @@ export class MapPdfService {
   private readonly defaultMargin = 8;
   private readonly titleSize = 12;
   private readonly defaultFontSize = 8;
+  private readonly minimumBookmarkQrWidthMm = 25;
 
   public create$(options: {
     printOptions: MapPdfPrintOptions;
@@ -147,7 +148,7 @@ export class MapPdfService {
         return this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 });
       }),
       concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
-      concatMap(() => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, x, y, options.size)),
+      concatMap(() => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, options.size)),
       concatMap(() => {
         if(options.printOptions.includeDrawing && options.printOptions.addDrawingLegendFunction) {
           return options.printOptions.addDrawingLegendFunction(doc, options.size.width, options.size.height);
@@ -214,18 +215,20 @@ export class MapPdfService {
       }));
   }
 
-  private addBookmark2PDF$(doc: jsPDF, bookmarkUrl: string | null | undefined, x: number, y: number, size: Size): Observable<jsPDF> {
+  private addBookmark2PDF$(doc: jsPDF, bookmarkUrl: string | null | undefined, size: Size): Observable<jsPDF> {
     if (!bookmarkUrl) {
       return of(doc);
     }
 
-    const foreground = '#0000FF';
+    const foreground = '#000000';
     const background = '#FFFFFF';
     const restoreTextCol = doc.getTextColor();
     const restoreFillCol = doc.getFillColor();
     const restoreDrawCol = doc.getDrawColor();
+    const pdfWidthPx = size.width * 72 / 25.4;
+    const minimumQrOutputWidthPx = Math.ceil((this.minimumBookmarkQrWidthMm / size.width) * pdfWidthPx);
 
-    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background).pipe(take(1), map(imgData => {
+    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background, minimumQrOutputWidthPx).pipe(take(1), map(imgData => {
       const bookmarkText = $localize`:@@core.print.bookmark-text:Bookmark`;
       const bookmarkTextFontSize = 8;
       const bookmarkTextWidthInMM = (doc.getStringUnitWidth(bookmarkText) * bookmarkTextFontSize) / (72 / 25.6);
@@ -236,7 +239,7 @@ export class MapPdfService {
 
       // setup for left bottom corner above the scalebar
       const top = size.height - imgHeightMM - this.defaultMargin - 15;
-      const left = this.defaultMargin + 2 * boxMargin;
+      const left = this.defaultMargin + 4;
 
       doc.setFontSize(bookmarkTextFontSize).setTextColor(foreground).setFillColor(background).setDrawColor(foreground);
 
