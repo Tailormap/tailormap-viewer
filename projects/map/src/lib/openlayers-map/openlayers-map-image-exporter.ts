@@ -1,4 +1,4 @@
-import { MapExportOptions } from '../map-service/map.service';
+import { MapExportOptions, MapExportResult } from '../map-service/map.service';
 import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer } from 'ol/layer';
@@ -26,7 +26,7 @@ export class OpenLayersMapImageExporter {
     extraLayers: BaseLayer[],
     ngZone: NgZone,
     httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-  ): Observable<string> {
+  ): Observable<MapExportResult> {
     const viewResolution = olView.getResolution();
     if (!olSize || !viewResolution) {
       throw new Error('Map has no size or resolution');
@@ -99,7 +99,7 @@ export class OpenLayersMapImageExporter {
     manager.setLayers(layers);
     extraLayers.forEach(l => imageExportOlMap.addLayer(l));
 
-    const renderedMapCanvasDataURL$ = new Subject<string>();
+    const renderedMapCanvasDataURL$ = new Subject<MapExportResult>();
     imageExportOlMap.once('rendercomplete', () => {
       try {
         const imageExportCanvas = document.createElement('canvas');
@@ -120,6 +120,8 @@ export class OpenLayersMapImageExporter {
         // Set element visible otherwise html2canvas won't render it
         target.style.visibility = 'visible';
 
+        const heightExportPixels = height / sizeRatio;
+
         from(import('html2canvas'))
           .pipe(
             map(i => i.default),
@@ -132,14 +134,19 @@ export class OpenLayersMapImageExporter {
                 width,
                 height,
                 x: -16,
-                y: -(height / sizeRatio) + 50,
+                y: -heightExportPixels + 50,
               }));
             }),
             take(1),
           )
           .subscribe(() => {
-            renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
-            renderedMapCanvasDataURL$.complete();
+            renderedMapCanvasDataURL$.next({
+              dataURL: imageExportCanvas.toDataURL(),
+              scaleBarPosition: {
+                x: 16 / (width / sizeRatio),
+                y: (heightExportPixels - 50) / heightExportPixels - (scaleBar.offsetHeight / height),
+              },
+            });            renderedMapCanvasDataURL$.complete();
             manager.destroy();
             imageExportOlMap.dispose();
             document.body.removeChild(target);

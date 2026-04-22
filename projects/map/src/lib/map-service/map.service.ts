@@ -36,6 +36,16 @@ export interface MapExportOptions {
   vectorLayerFilter?: OlLayerFilter;
 }
 
+export interface MapExportScaleBarPosition {
+  x: number;
+  y: number;
+}
+
+export interface MapExportResult {
+  dataURL: string;
+  scaleBarPosition: MapExportScaleBarPosition;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -301,7 +311,7 @@ export class MapService {
   /**
    * Export the current map to an image.
    */
-  public exportMapImage$(options: MapExportOptions): Observable<string> {
+  public exportMapImage$(options: MapExportOptions): Observable<MapExportResult> {
     return this.map.exportMapImage$(options);
   }
 
