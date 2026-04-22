@@ -146,7 +146,7 @@ export class OpenLayersMapImageExporter {
               scaleBarPosition: {
                 // Emit the position of top left of the scale bar in ratio to the image size
                 x: scaleBarMarginFromLeft / (width / sizeRatio),
-                y: (heightExportPixels - scaleBarMarginFromBottom) / heightExportPixels - (scaleBar.offsetHeight / height),
+                y: (heightExportPixels - scaleBarMarginFromBottom) / heightExportPixels,
               },
             });
             renderedMapCanvasDataURL$.complete();

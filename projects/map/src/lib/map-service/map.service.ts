@@ -3,10 +3,8 @@ import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
-  MapViewerOptionsModel,
-  OpenlayersExtent,
-  ToolConfigModel, ToolModel, VectorLayerModel,
+  LayerManagerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
+  MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { Layer, Vector as VectorLayer } from 'ol/layer';
@@ -20,7 +18,6 @@ import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
-import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { ToolsStatusModel } from '../models/tools-status.model';
 import { withLatestFrom } from 'rxjs/operators';
