@@ -50,6 +50,7 @@ export class MapPdfService {
   private readonly defaultMargin = 8;
   private readonly titleSize = 12;
   private readonly defaultFontSize = 8;
+  private readonly minimumBookmarkQrWidthMm = 25;
 
   public create$(options: {
     printOptions: MapPdfPrintOptions;
@@ -234,13 +235,15 @@ export class MapPdfService {
       return of(doc);
     }
 
-    const foreground = '#0000FF';
+    const foreground = '#000000';
     const background = '#FFFFFF';
     const restoreTextCol = doc.getTextColor();
     const restoreFillCol = doc.getFillColor();
     const restoreDrawCol = doc.getDrawColor();
+    const pdfWidthPx = size.width * 72 / 25.4;
+    const minimumQrOutputWidthPx = Math.ceil((this.minimumBookmarkQrWidthMm / size.width) * pdfWidthPx);
 
-    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background).pipe(take(1), map(imgData => {
+    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background, minimumQrOutputWidthPx).pipe(take(1), map(imgData => {
       const bookmarkText = $localize`:@@core.print.bookmark-text:Bookmark`;
       const bookmarkTextFontSize = 8;
       const bookmarkTextWidthInMM = (doc.getStringUnitWidth(bookmarkText) * bookmarkTextFontSize) / (72 / 25.6);
