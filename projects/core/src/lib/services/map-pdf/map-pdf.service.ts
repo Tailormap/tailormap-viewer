@@ -156,7 +156,7 @@ export class MapPdfService {
       concatMap(mapExportResult => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 }).pipe(
         map(() => mapExportResult),
       )),
-      concatMap(mapExportResult => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, x, y, options.size, mapExportResult.scaleBarPosition)),
+      concatMap(mapExportResult => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, options.size, mapExportResult.scaleBarPosition)),
       concatMap(() => {
         if(options.printOptions.includeDrawing && options.printOptions.addDrawingLegendFunction) {
           return options.printOptions.addDrawingLegendFunction(doc, options.size.width, options.size.height);
@@ -226,8 +226,6 @@ export class MapPdfService {
   private addBookmark2PDF$(
     doc: jsPDF,
     bookmarkUrl: string | null | undefined,
-    x: number,
-    y: number,
     size: Size,
     scaleBarPosition: MapExportScaleBarPosition,
   ): Observable<jsPDF> {
@@ -253,8 +251,6 @@ export class MapPdfService {
       const imgWidthMM = Math.max(imgData.widthPx * 25.4 / 72, bookmarkTextWidthInMM + boxMargin);
 
       // setup for left bottom corner above the scalebar
-      console.debug("scalebarPosition:", scaleBarPosition);
-      console.debug("size", size);
       const scaleBarPositionYMM = scaleBarPosition.y * size.height;
       const top = scaleBarPositionYMM - imgHeightMM - bookmarkTextBoxHeightInMM - 8;
       const left = this.defaultMargin + 2 * boxMargin;

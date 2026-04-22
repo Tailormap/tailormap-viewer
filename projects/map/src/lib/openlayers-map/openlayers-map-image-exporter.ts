@@ -121,6 +121,8 @@ export class OpenLayersMapImageExporter {
         target.style.visibility = 'visible';
 
         const heightExportPixels = height / sizeRatio;
+        const scaleBarMarginFromBottom = 50;
+        const scaleBarMarginFromLeft = 16;
 
         from(import('html2canvas'))
           .pipe(
@@ -133,8 +135,8 @@ export class OpenLayersMapImageExporter {
                 scale: sizeRatio,
                 width,
                 height,
-                x: -16,
-                y: -heightExportPixels + 50,
+                x: -scaleBarMarginFromLeft,
+                y: -heightExportPixels + scaleBarMarginFromBottom,
               }));
             }),
             take(1),
@@ -143,8 +145,9 @@ export class OpenLayersMapImageExporter {
             renderedMapCanvasDataURL$.next({
               dataURL: imageExportCanvas.toDataURL(),
               scaleBarPosition: {
-                x: 16 / (width / sizeRatio),
-                y: (heightExportPixels - 50) / heightExportPixels - (scaleBar.offsetHeight / height),
+                // Emit the position of top left of the scale bar in ratio to the image size
+                x: scaleBarMarginFromLeft / (width / sizeRatio),
+                y: (heightExportPixels - scaleBarMarginFromBottom) / heightExportPixels - (scaleBar.offsetHeight / height),
               },
             });            renderedMapCanvasDataURL$.complete();
             manager.destroy();
