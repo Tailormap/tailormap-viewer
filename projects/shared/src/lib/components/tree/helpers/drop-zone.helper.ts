@@ -4,7 +4,7 @@ import { DropZoneOptions } from '../tree-drag-drop.service';
 
 export class DropZoneHelper {
 
-  public static getDefaultDropZones(treeService: TreeService): (target: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[] {
+  public static getDefaultDropZones(treeService: TreeService): (target: HTMLElement, node?: FlatTreeModel, dragNodeIds?: string[]) => DropZoneOptions[] {
     return (target: HTMLElement, node?: FlatTreeModel, dragNodeIds?: string[]) => [this.getDefaultDropZoneOptions(treeService, target, node, dragNodeIds)];
   }
 
