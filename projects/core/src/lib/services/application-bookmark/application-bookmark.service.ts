@@ -18,7 +18,8 @@ import { selectFilterState } from '../../state';
 import { addOrUpdateFilterGroups } from '../../state/filter-state/filter.actions';
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
 import { FilterGroupModel } from '@tailormap-viewer/api';
-import { addInitialDataSort, selectAttributeListTabsSort } from '../../components';
+import { selectAttributeListTabsSort } from '../../components/attribute-list/state/attribute-list.selectors';
+import { addInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
 import { SortBookmarkHelper } from './sort-bookmark.helper';
 
 @Injectable({
