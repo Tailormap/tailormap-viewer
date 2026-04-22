@@ -252,7 +252,11 @@ export class TreeDragDropService implements OnDestroy {
         sibling = dropZone.getRootNodeId ? dropZone.getRootNodeId() ?? '' : '';
       }
 
-      orderedDragNodeIds.forEach((dragNodeId) => {
+      const dragNodeIdsToMove = position === 'after'
+        ? [...orderedDragNodeIds].reverse()
+        : orderedDragNodeIds;
+
+      dragNodeIdsToMove.forEach((dragNodeId) => {
         const prevParent = dropZone.getParent(dragNodeId);
         const eventData = {
           nodeId: dragNodeId,
