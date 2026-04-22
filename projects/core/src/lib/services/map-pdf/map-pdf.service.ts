@@ -253,7 +253,7 @@ export class MapPdfService {
       // setup for left bottom corner above the scalebar
       const scaleBarPositionYMM = scaleBarPosition.y * size.height;
       const top = scaleBarPositionYMM - imgHeightMM - bookmarkTextBoxHeightInMM - 8;
-      const left = this.defaultMargin + 2 * boxMargin;
+      const left = this.defaultMargin + 4;
 
       doc.setFontSize(bookmarkTextFontSize).setTextColor(foreground).setFillColor(background).setDrawColor(foreground);
 

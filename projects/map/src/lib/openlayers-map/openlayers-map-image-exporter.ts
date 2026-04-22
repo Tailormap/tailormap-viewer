@@ -1,4 +1,3 @@
-import { MapExportOptions, MapExportResult } from '../map-service/map.service';
 import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer } from 'ol/layer';
@@ -7,7 +6,7 @@ import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import type html2canvas from 'html2canvas';
 import { ExtentHelper } from '../helpers/extent.helper';
-import { OpenlayersExtent } from '../models';
+import { MapExportOptions, MapExportResult, OpenlayersExtent } from '../models';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { NgZone } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
@@ -149,7 +148,8 @@ export class OpenLayersMapImageExporter {
                 x: scaleBarMarginFromLeft / (width / sizeRatio),
                 y: (heightExportPixels - scaleBarMarginFromBottom) / heightExportPixels - (scaleBar.offsetHeight / height),
               },
-            });            renderedMapCanvasDataURL$.complete();
+            });
+            renderedMapCanvasDataURL$.complete();
             manager.destroy();
             imageExportOlMap.dispose();
             document.body.removeChild(target);

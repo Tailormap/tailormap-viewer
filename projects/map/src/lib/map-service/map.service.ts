@@ -3,7 +3,9 @@ import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
+  LayerManagerModel, LayerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
+  MapViewerOptionsModel,
+  OpenlayersExtent,
   ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -24,27 +26,6 @@ import { ToolsStatusModel } from '../models/tools-status.model';
 import { withLatestFrom } from 'rxjs/operators';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
-
-export interface MapExportOptions {
-  widthInMm: number;
-  heightInMm: number;
-  dpi: number;
-  extent?: OpenlayersExtent | null;
-  center?: Coordinate;
-  layers: LayerModel[];
-  backgroundLayers: LayerModel[];
-  vectorLayerFilter?: OlLayerFilter;
-}
-
-export interface MapExportScaleBarPosition {
-  x: number;
-  y: number;
-}
-
-export interface MapExportResult {
-  dataURL: string;
-  scaleBarPosition: MapExportScaleBarPosition;
-}
 
 @Injectable({
   providedIn: 'root',
