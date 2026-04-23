@@ -243,11 +243,6 @@ const onAddInitialDataSort = (
 
     updatedState = {
       ...updatedState,
-      tabs: AttributeListStateHelper.updateTab(
-        updatedState.tabs,
-        matchingTab.id,
-        (tab => ({ ...tab, loadingData: true })),
-      ),
       data: AttributeListStateHelper.updateData(
         updatedState.data,
         matchingData.id,
