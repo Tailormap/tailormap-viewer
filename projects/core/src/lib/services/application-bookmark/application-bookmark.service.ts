@@ -8,7 +8,7 @@ import { BookmarkService } from '../bookmark/bookmark.service';
 import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ApplicationBookmarkFragments, BookmarkSortModel, CompactFilterBookmarkFragment, LayerTreeOrderBookmarkFragment,
+  ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
   LayerVisibilityBookmarkFragment,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
@@ -38,7 +38,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastLocationBookmark: string | undefined;
   private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
-  private lastSortBookmark: BookmarkSortModel | undefined;
+  private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
 
   constructor() {
@@ -172,7 +172,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.store$.dispatch(updateLayerTreeNodes({ layerTreeNodes: updatedLayerTreeNodes }));
       });
 
-    this.bookmarkService.registerFragment$<BookmarkSortModel>(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerSortBookmarkFragment>(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),

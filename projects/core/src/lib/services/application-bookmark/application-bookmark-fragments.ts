@@ -22,6 +22,7 @@ export class ApplicationBookmarkFragments {
     'f',
   );
 
+  /* 'sort' is separated from the layer bookmark because it supports different data sources (tabSourceId) */
   public  static SORT_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'sort',
   );
@@ -98,10 +99,12 @@ export type BookmarkPresetFilterModel = {
   v?: string[]; // value
 };
 
+export type LayerSortBookmarkFragment = Array<BookmarkSortModel>;
+
 /* Only supports sorting on a single column per layer */
 export type BookmarkSortModel = {
   s?: string; /* tabSourceId or default */
   l: string; /* layer */
   c: string; /* column */
   d?: boolean; /* descending instead ascending? */
-}[];
+};
