@@ -38,7 +38,6 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   private ngZone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
 
-
   @Input()
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
 
@@ -92,7 +91,9 @@ export class ApplicationCatalogTreeComponent implements OnInit {
       isExpanded: (nodeId) => !!this.applicationTreeService?.isExpanded(nodeId),
       expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
       getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
+      getNodeOrder: (nodeIds: string[]) => this.treeService.getNodeOrder(nodeIds),
       nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
+      dragEnded: () => this.treeService.clearMultiSelectedNodeIds(),
       getExtendedDropzoneElement: () => document.querySelector('.application-tree .extended-dropzone'),
       getRootNodeId: () => this.applicationTreeService?.getRootNodeId() || null,
     }];

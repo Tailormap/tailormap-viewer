@@ -1,6 +1,6 @@
 import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { concatMap, forkJoin, from, map, Observable, of, tap, take } from 'rxjs';
-import { LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
+import { LayerModel, MapExportResult, MapExportScaleBarPosition, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
 import { IconService } from '@tailormap-viewer/shared';
 import type { jsPDF } from 'jspdf';
@@ -140,15 +140,23 @@ export class MapPdfService {
       backgroundLayers: options.backgroundLayers,
       vectorLayerFilter: options.vectorLayerFilter,
     }).pipe(
-      concatMap(() => this.addLegendImages$(doc, options.size.width, options.size.height, options.legendLayers$)),
-      concatMap(() => {
+      concatMap(mapExportResult => this.addLegendImages$(doc, options.size.width, options.size.height, options.legendLayers$).pipe(
+        map(() => mapExportResult),
+      )),
+      concatMap(mapExportResult => {
         if (options.printOptions.logo) {
-          return this.addImage2PDF$(doc, options.printOptions.logo, options.size.width - 30, y);
+          return this.addImage2PDF$(doc, options.printOptions.logo, options.size.width - 30, y).pipe(
+            map(() => mapExportResult),
+          );
         }
-        return this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 });
+        return this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('logo'), { x: options.size.width - 30, y, width: 20, height: 20 }).pipe(
+          map(() => mapExportResult),
+        );
       }),
-      concatMap(() => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 })),
-      concatMap(() => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, options.size)),
+      concatMap(mapExportResult => this.addSvg2PDF$(doc, this.iconService.getUrlForIcon('north_arrow'), { x, y: y + 2, width: 20, height: 20 }).pipe(
+        map(() => mapExportResult),
+      )),
+      concatMap(mapExportResult => this.addBookmark2PDF$(doc, options.printOptions.bookmarkUrl, options.size, mapExportResult.scaleBarPosition)),
       concatMap(() => {
         if(options.printOptions.includeDrawing && options.printOptions.addDrawingLegendFunction) {
           return options.printOptions.addDrawingLegendFunction(doc, options.size.width, options.size.height);
@@ -215,7 +223,12 @@ export class MapPdfService {
       }));
   }
 
-  private addBookmark2PDF$(doc: jsPDF, bookmarkUrl: string | null | undefined, size: Size): Observable<jsPDF> {
+  private addBookmark2PDF$(
+    doc: jsPDF,
+    bookmarkUrl: string | null | undefined,
+    size: Size,
+    scaleBarPosition: MapExportScaleBarPosition,
+  ): Observable<jsPDF> {
     if (!bookmarkUrl) {
       return of(doc);
     }
@@ -238,8 +251,10 @@ export class MapPdfService {
       const imgWidthMM = Math.max(imgData.widthPx * 25.4 / 72, bookmarkTextWidthInMM + boxMargin);
 
       // setup for left bottom corner above the scalebar
-      const top = size.height - imgHeightMM - this.defaultMargin - 15;
-      const left = this.defaultMargin + 4;
+      const scaleBarPositionYMM = scaleBarPosition.y * (size.height - 2 * this.defaultMargin) + this.defaultMargin;
+      const scaleBarPositionXMM = scaleBarPosition.x * (size.width - 2 * this.defaultMargin) + this.defaultMargin;
+      const top = scaleBarPositionYMM - imgHeightMM - 4;
+      const left = scaleBarPositionXMM + boxMargin;
 
       doc.setFontSize(bookmarkTextFontSize).setTextColor(foreground).setFillColor(background).setDrawColor(foreground);
 
@@ -265,7 +280,7 @@ export class MapPdfService {
     layers: LayerModel[];
     backgroundLayers: LayerModel[];
     vectorLayerFilter?: OlLayerFilter;
-  }): Observable<string> {
+  }): Observable<MapExportResult> {
     return this.mapService.exportMapImage$({
       widthInMm: options.mapSize.width,
       heightInMm: options.mapSize.height,
@@ -275,9 +290,9 @@ export class MapPdfService {
       backgroundLayers: options.backgroundLayers,
       vectorLayerFilter: options.vectorLayerFilter,
     }).pipe(
-      tap(dataURL => {
+      tap(exportResult => {
         // Note: calling addImage() with a HTMLCanvasElement is actually slower than adding by PNG
-        options.doc.addImage(dataURL, 'PNG', options.x, options.y, options.mapSize.width, options.mapSize.height, '', 'FAST');
+        options.doc.addImage(exportResult.dataURL, 'PNG', options.x, options.y, options.mapSize.width, options.mapSize.height, '', 'FAST');
       }),
     );
   }

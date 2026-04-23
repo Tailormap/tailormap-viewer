@@ -149,6 +149,9 @@
       <trans-unit id="shared.password-reset-request-form.title" datatype="html">
         <source>Reset Password</source>
       </trans-unit>
+      <trans-unit id="shared.tree.items" datatype="html">
+        <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

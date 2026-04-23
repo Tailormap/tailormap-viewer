@@ -197,6 +197,10 @@
         <source>Reset Password</source>
         <target>Passwort zurücksetzen</target>
       </trans-unit>
+      <trans-unit id="shared.tree.items" datatype="html">
+        <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>
+        <target><x id="PH" equiv-text="dragNodeIds.length"/> Elemente</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
