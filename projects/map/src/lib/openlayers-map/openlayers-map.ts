@@ -3,7 +3,9 @@ import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
-import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType } from '../models';
+import {
+  LayerManagerModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
+} from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
@@ -14,7 +16,6 @@ import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
-import { MapExportOptions } from '../map-service/map.service';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { buffer, Extent, extend, getCenter } from 'ol/extent';
@@ -346,7 +347,7 @@ export class OpenLayersMap implements MapViewerModel {
       );
   }
 
-  public exportMapImage$(options: MapExportOptions): Observable<string> {
+  public exportMapImage$(options: MapExportOptions): Observable<MapExportResult> {
     return this.getMap$().pipe(
       take(1),
       concatMap((olMap: OlMap) => {
@@ -356,10 +357,10 @@ export class OpenLayersMap implements MapViewerModel {
           OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers, this.ngZone, this.httpXsrfTokenExtractor),
         ]);
       }),
-      map(([ extraLayers, pdfExport ]) => {
+      map(([ extraLayers, exportResult ]) => {
         // Force redraw of extra layers with normal DPI
         extraLayers.forEach(l => l.changed());
-        return pdfExport;
+        return exportResult;
       }),
     );
   }
