@@ -15,12 +15,13 @@ export class SortBookmarkHelper {
     }));
   }
 
-  public static fragmentFromSortState(sortState: AttributeListInitialDataSortModelWithoutSource[]): LayerSortBookmarkFragment {
-    return sortState.map(s => ({
+  public static fragmentFromSortState(sortState: AttributeListInitialDataSortModelWithoutSource[]): LayerSortBookmarkFragment | undefined {
+    const a = sortState.map(s => ({
       ...(s.tabSourceId !== ATTRIBUTE_LIST_DEFAULT_SOURCE ? { s: s.tabSourceId } : {}),
       l: s.layerId,
       c: s.sortedColumn,
       ...(s.sortDirection === 'desc' ? { d: true } : {}),
     }));
+    return a.length === 0 ? undefined : a;
   }
 }

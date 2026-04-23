@@ -12,4 +12,4 @@ export interface AttributeListInitialDataSortModel {
   source: 'config' | 'bookmark';
 }
 
-export type AttributeListInitialDataSortModelWithoutSource = Exclude<AttributeListInitialDataSortModel, "source">;
+export type AttributeListInitialDataSortModelWithoutSource = Omit<AttributeListInitialDataSortModel, 'source'>;

@@ -224,9 +224,7 @@ const onAddInitialDataSort = (
     initialDataSort: [ ...updatedSort, ...toAdd ],
   };
 
-  // Apply sorts directly to matching data items that are already loaded (happens when entering a bookmark on an already loaded browser tab)
-
-  // Not sure if this is really necessary...
+  // Apply sorts directly to matching data tabs that are already loaded (happens when entering a bookmark on an already loaded browser tab)
 
   newSort.forEach(sort => {
     const matchingTab = state.tabs.find(t => t.tabSourceId === sort.tabSourceId && t.layerId === sort.layerId);
@@ -245,11 +243,6 @@ const onAddInitialDataSort = (
 
     updatedState = {
       ...updatedState,
-      tabs: AttributeListStateHelper.updateTab(
-        updatedState.tabs,
-        matchingTab.id,
-        (tab => ({ ...tab, loadingData: true })),
-      ),
       data: AttributeListStateHelper.updateData(
         updatedState.data,
         matchingData.id,

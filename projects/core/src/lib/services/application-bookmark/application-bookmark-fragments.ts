@@ -23,7 +23,7 @@ export class ApplicationBookmarkFragments {
   );
 
   /* 'sort' is separated from the layer bookmark because it supports different data sources (tabSourceId) */
-  public  static SORT_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
+  public static SORT_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'sort',
   );
 
