@@ -153,7 +153,7 @@ export class PrintService implements OnDestroy {
         }),
         takeUntil(this.destroyed),
         takeUntil(this.cancelled$),
-        map(dataURL => ({ dataURL, filename })),
+        map(exportResult => ({ dataURL: exportResult.dataURL, filename })),
         catchError(message => this.handleExportError(message)),
       );
   }
