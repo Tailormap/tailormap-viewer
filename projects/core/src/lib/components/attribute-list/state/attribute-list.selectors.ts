@@ -19,9 +19,10 @@ export const selectAttributeListSelectedTab = createSelector(selectAttributeList
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
 
 export const selectAttributeListTabsSort = createSelector(selectAttributeListState, (state): AttributeListInitialDataSortModelWithoutSource[] => {
+  const dataById = new Map(state.data.map(d => [ d.id, d ]));
   return state.tabs
     .map(tab => {
-      const data = state.data.find(d => d.id === tab.selectedDataId);
+      const data = dataById.get(tab.selectedDataId);
       if (!data || !data.sortedColumn || data.sortDirection === '') {
         return null;
       }
