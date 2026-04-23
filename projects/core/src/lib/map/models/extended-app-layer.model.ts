@@ -9,6 +9,7 @@ export interface AppLayerStateModel extends AppLayerModel {
   initialValues?: {
     visible: boolean;
     opacity: number;
+    style?: string | null;
   };
   temporaryLayerName?: string; // WMS only
 }

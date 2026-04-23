@@ -12,6 +12,7 @@ export class LayerModelHelper {
       initialValues: {
         visible: layer.visible,
         opacity: layer.opacity,
+        style: layer.selectedStyleName,
       },
     };
   }

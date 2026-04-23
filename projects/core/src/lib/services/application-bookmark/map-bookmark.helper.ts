@@ -6,12 +6,13 @@ import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
 import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
 import { ExtendedMapResponseModel } from '../../map/models/extended-map-response.model';
 import {
-  BookmarkLayerInfo, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+  BookmarkLayerSettings, LayerTreeOrderBookmarkFragment, LayerSettingsBookmarkFragment,
 } from './application-bookmark-fragments';
 
 export interface MapBookmarkContents {
   visibilityChanges: { id: string; checked: boolean }[];
   opacityChanges: { id: string; opacity: number }[];
+  styleChanges: { id: string; style: string | null | undefined }[];
 }
 
 export type MapLocationBookmarkContents = [[number, number], number];
@@ -67,16 +68,18 @@ export class MapBookmarkHelper {
     return `${viewDetails.center[0].toFixed(precision)},${viewDetails.center[1].toFixed(precision)},${viewDetails.zoomLevel.toFixed(1)}`;
   }
 
-  public static visibilityDataFromFragment(
-    fragment: LayerVisibilityBookmarkFragment | null,
+  public static layerSettingsFromFragment(
+    fragment: LayerSettingsBookmarkFragment | null,
     layers: AppLayerStateModel[],
     checkInitialValues = true,
   ): MapBookmarkContents {
     const checkedVisibilityValues = new Set();
     const checkedOpacityValues = new Set();
+    const checkedStyleValues = new Set();
 
     const visibilityData = [];
     const opacityData = [];
+    const styleData = [];
 
     for (const layer of (fragment || [])) {
       const id = layer.id;
@@ -101,6 +104,14 @@ export class MapBookmarkHelper {
           opacityData.push({ id, opacity });
         }
       }
+
+      const style = layer.s;
+      if (style !== undefined || (!checkInitialValues && style !== currentLayer.selectedStyleName)) {
+        checkedStyleValues.add(id);
+        if (style !== currentLayer.selectedStyleName) {
+          styleData.push({ id, style });
+        }
+      }
     }
 
     if (!checkInitialValues) {
@@ -113,7 +124,7 @@ export class MapBookmarkHelper {
       });
     }
 
-    // Add all layers which have visibility or[ opacity different from their initial values but which were not in the bookmark, so we have a
+    // Add all layers that have visibility or opacity different from their initial values but which were not in the bookmark, so we have a
     // complete set of values different from the initial values
     if (checkInitialValues) {
       for (const layer of layers) {
@@ -124,16 +135,20 @@ export class MapBookmarkHelper {
         if (!checkedOpacityValues.has(layer.id) && layer.initialValues?.opacity !== layer.opacity) {
           opacityData.push({ id: layer.id, opacity: layer.initialValues?.opacity ?? 100 });
         }
+
+        if(!checkedStyleValues.has(layer.id) && layer.initialValues?.style !== layer.selectedStyleName) {
+          styleData.push({ id: layer.id, style: layer.initialValues?.style ?? null });
+        }
       }
     }
 
-    return { visibilityChanges: visibilityData, opacityChanges: opacityData };
+    return { visibilityChanges: visibilityData, opacityChanges: opacityData, styleChanges: styleData };
   }
 
-  public static fragmentFromVisibilityData(layers: AppLayerStateModel[]): LayerVisibilityBookmarkFragment | undefined {
-    const bookmarkData = new Array<BookmarkLayerInfo>();
+  public static fragmentFromLayerSettings(layers: AppLayerStateModel[]): LayerSettingsBookmarkFragment | undefined {
+    const bookmarkData = new Array<BookmarkLayerSettings>();
     for (const layer of layers) {
-      const info: BookmarkLayerInfo = { id: layer.id };
+      const info: BookmarkLayerSettings = { id: layer.id };
       let changed = false;
 
       if (layer.visible !== layer.initialValues?.visible) {
@@ -144,6 +159,11 @@ export class MapBookmarkHelper {
       if (layer.opacity !== layer.initialValues?.opacity) {
           info.o = layer.opacity;
           changed = true;
+      }
+
+      if (layer.selectedStyleName !== layer.initialValues?.style) {
+        info.s = layer.selectedStyleName;
+        changed = true;
       }
 
       if (changed) {
@@ -207,22 +227,25 @@ export class MapBookmarkHelper {
 
   public static mergeMapResponseWithBookmarkData(
     mapResponse: MapResponseModel,
-    opacityVisibility: LayerVisibilityBookmarkFragment | null,
+    layerSettings: LayerSettingsBookmarkFragment | null,
     layerOrder: LayerTreeOrderBookmarkFragment | null,
   ): ExtendedMapResponseModel {
     const extendedAppLayers = mapResponse.appLayers.map(LayerModelHelper.getLayerWithInitialValues);
     const extendedTreeNodes = LayerTreeNodeHelper.getExtendedLayerTreeNodes(mapResponse.layerTreeNodes, mapResponse.appLayers);
-    const bookmarkOpacityVisibility = MapBookmarkHelper.visibilityDataFromFragment(opacityVisibility, extendedAppLayers);
+    const bookmarkLayerSettings = MapBookmarkHelper.layerSettingsFromFragment(layerSettings, extendedAppLayers);
     const bookmarkLayerOrder = MapBookmarkHelper.layerTreeOrderFromFragment(layerOrder, extendedTreeNodes);
     const appLayers = extendedAppLayers.map<AppLayerModel>(layer => {
-      const updated = bookmarkOpacityVisibility.visibilityChanges.find(v => v.id === layer.id);
+      const updated = bookmarkLayerSettings.visibilityChanges.find(v => v.id === layer.id);
       const visible = updated ? updated.checked : layer.visible;
-      const opacityUpdated = bookmarkOpacityVisibility.opacityChanges.find(o => o.id === layer.id);
+      const opacityUpdated = bookmarkLayerSettings.opacityChanges.find(o => o.id === layer.id);
       const opacity = opacityUpdated ? opacityUpdated.opacity : layer.opacity;
+      const styleUpdated = bookmarkLayerSettings.styleChanges.find(s => s.id === layer.id);
+      const selectedStyleName = styleUpdated ? styleUpdated.style : layer.selectedStyleName;
       return {
         ...layer,
         visible,
         opacity,
+        selectedStyleName,
       };
     });
     return {
