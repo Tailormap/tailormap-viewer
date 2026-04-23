@@ -34,7 +34,7 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   public hideRootCollapseArrow = false;
 
   @Input()
-  public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel) => DropZoneOptions[];
+  public getDropZones?: (defaultTarget: HTMLElement, node?: FlatTreeModel, dragNodeIds?: string[]) => DropZoneOptions[];
 
   @Input()
   public set scrollToItem(scrollToItem: string | undefined | null) {
@@ -82,6 +82,7 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private extendedDropzoneEl = viewChild('extendedDropzone', { read: ElementRef });
 
   public selectedNodeId: string | undefined;
+  public multiSelectedNodeIds: string[] = [];
 
   public treeDragDropServiceEnabled = false;
 
@@ -123,6 +124,12 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       )
       .subscribe(selectedNodeId => {
         this.selectedNodeId = selectedNodeId;
+        this.cdr.detectChanges();
+      });
+    this.treeService.multiSelectedNodeIds$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(multiSelectedNodeIds => {
+        this.multiSelectedNodeIds = multiSelectedNodeIds;
         this.cdr.detectChanges();
       });
     this.treeService.readonlyMode$
@@ -170,11 +177,16 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.toggleNodeChecked(node);
   }
 
-  public setNodeSelected(node: FlatTreeModel) {
+  public setNodeSelected(node: FlatTreeModel, $event: MouseEvent) {
     if (this.openInfoInTree) {
       return;
     }
-    this.treeService.selectionStateChanged(node);
+    if ($event.ctrlKey || $event.metaKey) {
+      this.treeService.toggleMultiSelectedNodeId(node.id);
+    } else {
+      this.treeService.selectionStateChanged(node);
+      this.treeService.clearMultiSelectedNodeIds();
+    }
     if (this.expandOnGroupClick && FlatTreeHelper.isExpandable(node)) {
       this.treeService.toggleNodeExpanded(node);
     }
@@ -227,14 +239,17 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       event.preventDefault();
       return;
     }
-    const dropZoneConfig = this.getDropZones(treeElement.elementRef.nativeElement, node);
-    const dragAllowed = dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(node.id) : true);
+    const dragNodeIds = this.multiSelectedNodeIds.includes(node.id)
+      ? this.multiSelectedNodeIds.filter(nodeId => this.treeService.hasNode(nodeId))
+      : [node.id];
+    const dropZoneConfig = this.getDropZones(treeElement.elementRef.nativeElement, node, dragNodeIds);
+    const dragAllowed = dragNodeIds.every(nodeId => dropZoneConfig.some(dz => dz.dragAllowed ? dz.dragAllowed(nodeId) : true));
     if (!dragAllowed) {
       event.preventDefault();
       return;
     }
     this.ngZone.runOutsideAngular(() => {
-      this.treeDragDropService?.handleDragStart(event, node, dropZoneConfig);
+      this.treeDragDropService?.handleDragStart(event, node, dropZoneConfig, dragNodeIds);
     });
   }
 

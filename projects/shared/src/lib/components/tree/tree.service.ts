@@ -14,6 +14,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   // Observable string sources
   private selectedNode = new BehaviorSubject<string>('');
+  private multiSelectedNodeIds = new BehaviorSubject<string[]>([]);
   private readonlyMode = new BehaviorSubject<boolean>(false);
   private checkStateChangedSource = new Subject<BaseTreeModel<T, TypeDef>[]>();
   private selectionStateChangedSource = new Subject<BaseTreeModel<T, TypeDef>>();
@@ -22,6 +23,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   // Streams used in the tree component
   public selectedNode$ = this.selectedNode.asObservable();
+  public multiSelectedNodeIds$ = this.multiSelectedNodeIds.asObservable();
   public readonlyMode$ = this.readonlyMode.asObservable();
 
   // Streams triggered by tree, to be used in 'consuming' components
@@ -103,6 +105,38 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     }
     const children = this.getDescendants(dragNode).map(node => node.id);
     return children.includes(nodeId);
+  }
+
+  public isAnyNodeOrInsideOwnTree(nodeId: string, dragNodeIds: string[]) {
+    return dragNodeIds.some(dragNodeId => {
+      const dragNode = this.nodesMap.get(dragNodeId);
+      return !!dragNode && this.isNodeOrInsideOwnTree(nodeId, dragNode);
+    });
+  }
+
+  public getNodeOrder(nodeIds: string[]): string[] {
+    const nodeIdSet = new Set(nodeIds);
+    return this.dataSource.value.nodes
+      .filter(node => nodeIdSet.has(node.id))
+      .map(node => node.id);
+  }
+
+  public toggleMultiSelectedNodeId(nodeId: string) {
+    const selectedNodeIds = new Set(this.multiSelectedNodeIds.value);
+    if (selectedNodeIds.has(nodeId)) {
+      selectedNodeIds.delete(nodeId);
+    } else {
+      selectedNodeIds.add(nodeId);
+    }
+    this.multiSelectedNodeIds.next(Array.from(selectedNodeIds));
+  }
+
+  public clearMultiSelectedNodeIds() {
+    if (this.selectedNode.value) {
+      this.multiSelectedNodeIds.next([this.selectedNode.value]);
+    } else {
+      this.multiSelectedNodeIds.next([]);
+    }
   }
 
   // Service message commands
