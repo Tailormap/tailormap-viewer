@@ -97,7 +97,7 @@ export class MapBookmarkHelper {
         }
       }
 
-      const opacity = layer.o || 100;
+      const opacity = layer.o ?? currentLayer.opacity;
       if (layer.o !== undefined || (!checkInitialValues && opacity !== currentLayer.opacity)) {
         checkedOpacityValues.add(id);
         if (opacity !== currentLayer.opacity) {
@@ -105,11 +105,13 @@ export class MapBookmarkHelper {
         }
       }
 
-      const style = layer.s;
-      if (style !== undefined || (!checkInitialValues && style !== currentLayer.selectedStyleName)) {
-        checkedStyleValues.add(id);
-        if (style !== currentLayer.selectedStyleName) {
-          styleData.push({ id, style });
+      if (Object.hasOwn(layer, 's')) {
+        const style = layer.s;
+        if (style !== undefined || (!checkInitialValues && style !== currentLayer.selectedStyleName)) {
+          checkedStyleValues.add(id);
+          if (style !== currentLayer.selectedStyleName) {
+            styleData.push({ id, style });
+          }
         }
       }
     }
@@ -136,7 +138,7 @@ export class MapBookmarkHelper {
           opacityData.push({ id: layer.id, opacity: layer.initialValues?.opacity ?? 100 });
         }
 
-        if(!checkedStyleValues.has(layer.id) && layer.initialValues?.style !== layer.selectedStyleName) {
+        if (!checkedStyleValues.has(layer.id) && layer.initialValues?.style !== layer.selectedStyleName) {
           styleData.push({ id: layer.id, style: layer.initialValues?.style ?? null });
         }
       }
@@ -162,7 +164,7 @@ export class MapBookmarkHelper {
       }
 
       if (layer.selectedStyleName !== layer.initialValues?.style) {
-        info.s = layer.selectedStyleName;
+        info.s = layer.selectedStyleName ?? null;
         changed = true;
       }
 
