@@ -1,4 +1,3 @@
-
 /* Model to describe initial data sorting configuration for attribute lists, when a tab is not added yet and the dataId is not yet known */
 export interface AttributeListInitialDataSortModel {
   tabSourceId: string;
