@@ -21,7 +21,7 @@
         </button>
       }
       @if (allowCollapse) {
-        <button mat-icon-button class="toggle-button" (click)="expandCollapse()">
+        <button mat-icon-button class="toggle-button" [tmTooltip]="getExpandCollapseTooltip()" (click)="expandCollapse()">
           @if (!collapsed) {
             <mat-icon svgIcon="chevron_top"></mat-icon>
           }
