@@ -23,7 +23,7 @@ export const selectAttributeListTabsSort = createSelector(selectAttributeListSta
   return state.tabs
     .map(tab => {
       const data = dataById.get(tab.selectedDataId);
-      if (!data || !data.sortedColumn || data.sortDirection === '') {
+      if (!data || !data.sortedColumn || data.sortDirection === '' || !tab.layerId) {
         return null;
       }
       return {
