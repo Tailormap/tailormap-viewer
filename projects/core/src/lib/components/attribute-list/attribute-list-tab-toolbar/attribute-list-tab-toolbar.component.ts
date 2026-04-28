@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
+import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl } from '@tailormap-viewer/shared';
 import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
 import {
   selectDataForSelectedTab, selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab,
 } from '../state/attribute-list.selectors';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
@@ -22,6 +22,9 @@ import { AttributeListFeatureRegistrationService } from '../services/attribute-l
   styleUrls: ['./attribute-list-tab-toolbar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
+  ],
 })
 export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
