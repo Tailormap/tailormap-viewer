@@ -238,6 +238,14 @@
         <source>Coordinate Picker</source>
         <target>Koordinatenauswahl</target>
       </trans-unit>
+      <trans-unit id="core.dialog.collapse-panel" datatype="html">
+        <source>Collapse panel</source>
+        <target>Panel einklappen</target>
+      </trans-unit>
+      <trans-unit id="core.dialog.expand-panel" datatype="html">
+        <source>Expand panel</source>
+        <target>Panel ausklappen</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Ausgewähltes Objekt löschen</target>
@@ -582,6 +590,10 @@
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
         <target>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </target>
       </trans-unit>
+      <trans-unit id="core.feature-info.collapse-layer-list" datatype="html">
+        <source>Collapse layer list</source>
+        <target>Ebenenliste einklappen</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
@@ -593,6 +605,10 @@
       <trans-unit id="core.feature-info.error-loading-features" datatype="html">
         <source>Could not load feature info</source>
         <target>Objektinformationen konnten nicht geladen werden</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.expand-layer-list" datatype="html">
+        <source>Expand layer list</source>
+        <target>Ebenenliste ausklappen</target>
       </trans-unit>
       <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
         <source>Feature info</source>

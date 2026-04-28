@@ -30,7 +30,11 @@
              i18n-dialogTitle="@@core.feature-info.object-information">
     @if (expandedList()) {
       <div class="layer-list-wrapper">
-        <div class="toggle"><button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_right"></mat-icon></button></div>
+        <div class="toggle">
+          <button mat-icon-button tmTooltip="Collapse layer list" i18n-tmTooltip="@@core.feature-info.collapse-layer-list" (click)="toggleListExpanded()">
+            <mat-icon svgIcon="chevron_right"></mat-icon>
+          </button>
+        </div>
         <div class="layer-list">
           <tm-feature-info-layer-list></tm-feature-info-layer-list>
         </div>
@@ -42,7 +46,9 @@
       } @else if(!expandedList()) {
         <div class="layer-list-dropdown-wrapper">
           @if (isWideScreen()) {
-            <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
+            <button mat-icon-button tmTooltip="Expand layer list" i18n-tmTooltip="@@core.feature-info.expand-layer-list" (click)="toggleListExpanded()">
+              <mat-icon svgIcon="chevron_left"></mat-icon>
+            </button>
           }
           <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
         </div>
