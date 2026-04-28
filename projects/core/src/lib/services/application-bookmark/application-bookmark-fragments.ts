@@ -10,7 +10,7 @@ export class ApplicationBookmarkFragments {
     BookmarkService.LOCATION_IDENTIFIER,
   );
 
-  public static VISIBILITY_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
+  public static LAYER_SETTINGS_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
     'l',
   );
 
@@ -40,13 +40,14 @@ export class ApplicationBookmarkFragments {
   );
 }
 
-export type LayerVisibilityBookmarkFragment = Array<BookmarkLayerInfo>;
+export type LayerSettingsBookmarkFragment = Array<BookmarkLayerSettings>;
 
 // Compact JSON format for encoding in bookmark fragment, so no long identifiers
-export interface BookmarkLayerInfo {
+export interface BookmarkLayerSettings {
   id: string; // app layer id
   v?: number; // visibility: undefined = as configured, 1 = visible, 0 = invisible
   o?: number; // opacity: undefined = as configured, otherwise opacity
+  s?: string | null; // style name
 }
 
 export type LayerTreeOrderBookmarkFragment = Array<BookmarkNodeChildrenOrder>;

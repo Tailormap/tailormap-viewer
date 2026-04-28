@@ -9,9 +9,9 @@ import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
-  LayerVisibilityBookmarkFragment,
+  LayerSettingsBookmarkFragment,
 } from './application-bookmark-fragments';
-import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
+import { setLayerOpacity, setLayerStyle, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
 import { deepEqual } from 'fast-equals';
 import { selectFilterState } from '../../state';
@@ -36,7 +36,7 @@ export class ApplicationBookmarkService implements OnDestroy {
 
   private destroyed = new Subject();
   private lastLocationBookmark: string | undefined;
-  private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
+  private lastLayerSettingsBookmark: LayerSettingsBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
   private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
@@ -81,11 +81,11 @@ export class ApplicationBookmarkService implements OnDestroy {
   }
 
   private updateBookmarkOnChanges() {
-    this.getVisibilityBookmarkData$()
+    this.getLayerSettingsBookmarkData$()
       .pipe(skip(1), takeUntil(this.destroyed))
       .subscribe(bookmark => {
-        this.lastVisibilityBookmark = bookmark;
-        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR, bookmark);
+        this.lastLayerSettingsBookmark = bookmark;
+        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR, bookmark);
       });
     this.getOrderBookmarkData$()
       .pipe(skip(1), takeUntil(this.destroyed))
@@ -134,20 +134,27 @@ export class ApplicationBookmarkService implements OnDestroy {
         }
       });
 
-    this.bookmarkService.registerFragment$<LayerVisibilityBookmarkFragment>(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<LayerSettingsBookmarkFragment>(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
-        filter(visBookmark => !deepEqual(this.lastVisibilityBookmark, visBookmark)),
+        filter(layerBookmark => !deepEqual(this.lastLayerSettingsBookmark, layerBookmark)),
         withLatestFrom(this.store$.select(selectLayers)),
       )
-      .subscribe(([ visBookmark, extendedAppLayers ]) => {
-        if (visBookmark === null) {
+      .subscribe(([ layerBookmark, extendedAppLayers ]) => {
+        if (layerBookmark === null) {
           return;
         }
-        const visibilityChanges = MapBookmarkHelper.visibilityDataFromFragment(visBookmark, extendedAppLayers, false);
-        this.store$.dispatch(setLayerVisibility({ visibility: visibilityChanges.visibilityChanges }));
-        this.store$.dispatch(setLayerOpacity({ opacity: visibilityChanges.opacityChanges }));
+        const layerSettingsChanges = MapBookmarkHelper.layerSettingsFromFragment(layerBookmark, extendedAppLayers, false);
+        if (layerSettingsChanges.visibilityChanges.length > 0) {
+          this.store$.dispatch(setLayerVisibility({ visibility: layerSettingsChanges.visibilityChanges }));
+        }
+        if (layerSettingsChanges.opacityChanges.length > 0) {
+          this.store$.dispatch(setLayerOpacity({ opacity: layerSettingsChanges.opacityChanges }));
+        }
+        if (layerSettingsChanges.styleChanges.length > 0) {
+          this.store$.dispatch(setLayerStyle({ style: layerSettingsChanges.styleChanges }));
+        }
       });
 
     this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
@@ -218,14 +225,14 @@ export class ApplicationBookmarkService implements OnDestroy {
       });
   }
 
-  private getVisibilityBookmarkData$() {
+  private getLayerSettingsBookmarkData$() {
     return combineLatest([
       this.store$.select(selectLayers),
       this.store$.select(selectLoadStatus),
     ]).pipe(
       filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
       map(([layers]) => {
-        return MapBookmarkHelper.fragmentFromVisibilityData(layers);
+        return MapBookmarkHelper.fragmentFromLayerSettings(layers);
       }),
     );
   }

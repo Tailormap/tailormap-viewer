@@ -68,7 +68,7 @@ export const setLayerOpacity = createAction(
 
 export const setLayerStyle = createAction(
   `${mapActionsPrefix} Set Layer Style`,
-  props<{ layerId: string; selectedStyleName: string }>(),
+  props<{ style: Array<{ id: string; style: string | null | undefined }> }>(),
 );
 
 export const addLayerDetails = createAction(

@@ -219,13 +219,14 @@ const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapAction
 const onSetLayerStyle = (state: MapState, payload: ReturnType<typeof MapActions.setLayerStyle>): MapState => ({
   ...state,
   layers: state.layers.map(layer => {
-    if (payload.layerId === layer.id) {
-      return {
-        ...layer,
-        selectedStyleName: payload.selectedStyleName,
-      };
+    const updated = payload.style.find(s => s.id === layer.id);
+    if (!updated) {
+      return layer;
     }
-    return layer;
+    return {
+      ...layer,
+      selectedStyleName: updated.style,
+    };
   }),
 });
 

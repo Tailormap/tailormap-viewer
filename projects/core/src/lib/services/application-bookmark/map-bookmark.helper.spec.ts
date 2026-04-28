@@ -4,11 +4,11 @@ import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
 import { AppLayerStateModel } from '../../map';
 
 const getAppLayerWithInitialValuesModel =
-  (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number): AppLayerStateModel => {
+  (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number, initialStyle?: string): AppLayerStateModel => {
     const model = getAppLayerModel(partial);
     return {
       ...model,
-      initialValues: { visible: initialVisibility ?? model.visible, opacity: initialOpacity ?? model.opacity },
+      initialValues: { visible: initialVisibility ?? model.visible, opacity: initialOpacity ?? model.opacity, style: initialStyle ?? model.selectedStyleName },
     };
   };
 
@@ -107,44 +107,44 @@ describe('MapBookmarkHelper', () => {
   });
 
 
-  test('visibilityDataFromFragment generates expected data', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment([
+  test('layerSettingsFromFragment generates expected data', () => {
+    expect(MapBookmarkHelper.layerSettingsFromFragment([
         { id: '1', v: 0 },
         { id: '256', v: 1 },
-    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '256', checked: true }], opacityChanges: [] });
+    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '256', checked: true }], opacityChanges: [], styleChanges: [] });
   });
 
-  test('visibilityDataFromFragment skips unknown IDs', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment([
+  test('layerSettingsFromFragment skips unknown IDs', () => {
+    expect(MapBookmarkHelper.layerSettingsFromFragment([
         { id: '3', v: 1 },
-    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
+    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [], styleChanges: [] });
   });
 
-  test('visibilityDataFromFragment skips unset bookmarks', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment([
+  test('layerSettingsFromFragment skips unset bookmarks', () => {
+    expect(MapBookmarkHelper.layerSettingsFromFragment([
         { id: '1' },
         { id: '256', v: 1 },
-    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '256', checked: true }], opacityChanges: [] });
+    ], initialLayers)).toEqual({ visibilityChanges: [{ id: '256', checked: true }], opacityChanges: [], styleChanges: [] });
   });
 
-  test('visibilityDataFromFragment does not change already-changed visibility flags', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment([
+  test('layerSettingsFromFragment does not change already-changed visibility flags', () => {
+    expect(MapBookmarkHelper.layerSettingsFromFragment([
         { id: '1', v: 1 },
-    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [] });
+    ], initialLayers)).toEqual({ visibilityChanges: [], opacityChanges: [], styleChanges: [] });
   });
 
-  test('visibilityDataFromFragment resets layers back to initial value when not referenced', () => {
-    expect(MapBookmarkHelper.visibilityDataFromFragment([],
-      twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '2', checked: true }], opacityChanges: [] });
+  test('layerSettingsFromFragment resets layers back to initial value when not referenced', () => {
+    expect(MapBookmarkHelper.layerSettingsFromFragment([],
+      twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '2', checked: true }], opacityChanges: [], styleChanges: [] });
   });
 
-  test('fragmentFromVisibilityData serializes changes', () => {
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(initialLayers)).toEqual(undefined);
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(twoFlippedLayers)).toEqual([
+  test('fragmentFromLayerSettings serializes changes', () => {
+    expect(MapBookmarkHelper.fragmentFromLayerSettings(initialLayers)).toEqual(undefined);
+    expect(MapBookmarkHelper.fragmentFromLayerSettings(twoFlippedLayers)).toEqual([
         { id: '1', v: 1 },
         { id: '2', v: 0 },
     ]);
-    expect(MapBookmarkHelper.fragmentFromVisibilityData(allFlippedLayers)).toEqual([
+    expect(MapBookmarkHelper.fragmentFromLayerSettings(allFlippedLayers)).toEqual([
       { id: '1', v: 1 },
       { id: '2', v: 0 },
       { id: '3', v: 1 },
