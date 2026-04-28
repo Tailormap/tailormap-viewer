@@ -227,12 +227,12 @@ const onAddInitialDataSort = (
   // Apply sorts directly to matching data tabs that are already loaded (happens when entering a bookmark on an already loaded browser tab)
 
   newSort.forEach(sort => {
-    const matchingTab = state.tabs.find(t => t.tabSourceId === sort.tabSourceId && t.layerId === sort.layerId);
-    if (!matchingTab) {
+    const matchingTab = updatedState.tabs.find(t => t.tabSourceId === sort.tabSourceId && t.layerId === sort.layerId);
+    if (!matchingTab?.selectedDataId) {
       return;
     }
 
-    const matchingData = state.data.find(d => d.tabId === matchingTab.id);
+    const matchingData = updatedState.data.find(d => d.id === matchingTab.selectedDataId);
     if (!matchingData) {
       return;
     }
