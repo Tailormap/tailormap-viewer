@@ -1334,6 +1334,7 @@
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
         <target>Auf diese Ebene wird ein Filter angewendet</target>
+        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
@@ -1383,7 +1384,7 @@
         <source>Zoom To</source>
         <target>Hierhin zoomen</target>
       </trans-unit>
-           <trans-unit id="core.toolbar.measure-area" datatype="html">
+      <trans-unit id="core.toolbar.measure-area" datatype="html">
         <source>Measure area</source>
         <target>Fläche messen</target>
       </trans-unit>
