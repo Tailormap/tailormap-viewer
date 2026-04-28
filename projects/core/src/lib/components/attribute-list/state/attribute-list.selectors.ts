@@ -8,6 +8,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 import { selectVisibleLayersWithAttributes } from '../../../map';
+import { AttributeListInitialDataSortModelWithoutSource } from '../models/attribute-list-initial-data-sort.model';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
@@ -16,6 +17,24 @@ export const selectAttributeListTabs = createSelector(selectAttributeListState, 
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
+
+export const selectAttributeListTabsSort = createSelector(selectAttributeListState, (state): AttributeListInitialDataSortModelWithoutSource[] => {
+  const dataById = new Map(state.data.map(d => [ d.id, d ]));
+  return state.tabs
+    .map(tab => {
+      const data = dataById.get(tab.selectedDataId);
+      if (!data || !data.sortedColumn || data.sortDirection === '' || !tab.layerId) {
+        return null;
+      }
+      return {
+        tabSourceId: tab.tabSourceId,
+        layerId: tab.layerId,
+        sortedColumn: data.sortedColumn,
+        sortDirection: data.sortDirection,
+      };
+    })
+    .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
+});
 
 export const selectTabsForVisibleLayers = createSelector(
   selectVisibleLayersWithAttributes,

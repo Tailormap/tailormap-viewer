@@ -8,7 +8,8 @@ import { BookmarkService } from '../bookmark/bookmark.service';
 import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+  ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
+  LayerVisibilityBookmarkFragment,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -17,6 +18,9 @@ import { selectFilterState } from '../../state';
 import { addOrUpdateFilterGroups } from '../../state/filter-state/filter.actions';
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
 import { FilterGroupModel } from '@tailormap-viewer/api';
+import { selectAttributeListTabsSort } from '../../components/attribute-list/state/attribute-list.selectors';
+import { addInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
+import { SortBookmarkHelper } from './sort-bookmark.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +38,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastLocationBookmark: string | undefined;
   private lastVisibilityBookmark: LayerVisibilityBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
+  private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
 
   constructor() {
@@ -101,6 +106,13 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
+    this.getSortBookmarkData$()
+      .pipe(skip(1), takeUntil(this.destroyed))
+      .subscribe(bookmark => {
+        this.lastSortBookmark = bookmark;
+        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR, bookmark);
+      });
+
     this.bookmarkService.getBookmarkValue$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(bookmark => {
@@ -159,6 +171,18 @@ export class ApplicationBookmarkService implements OnDestroy {
         });
         this.store$.dispatch(updateLayerTreeNodes({ layerTreeNodes: updatedLayerTreeNodes }));
       });
+
+    this.bookmarkService.registerFragment$<LayerSortBookmarkFragment>(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR)
+      .pipe(
+        skip(1),
+        takeUntil(this.destroyed),
+        filter(sortBookmark => !deepEqual(this.lastSortBookmark, sortBookmark)),
+    ).subscribe(sortBookmark => {
+      const initialDataSort = SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []);
+      if (initialDataSort.length > 0) {
+        this.store$.dispatch(addInitialDataSort({ initialDataSort }));
+      }
+    });
 
     this.store$.select(selectLoadStatus).pipe(
       skip(1),
@@ -236,6 +260,18 @@ export class ApplicationBookmarkService implements OnDestroy {
       takeUntil(this.destroyed),
       debounceTime(250),
       map(([filterState]) => FilterBookmarkHelper.fragmentFromFilterState(filterState)),
+    );
+  }
+
+  private getSortBookmarkData$() {
+    return combineLatest([
+      this.store$.select(selectAttributeListTabsSort),
+      this.store$.select(selectLoadStatus),
+    ]).pipe(
+      filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
+      takeUntil(this.destroyed),
+      debounceTime(250),
+      map(([sortState]) => SortBookmarkHelper.fragmentFromSortState(sortState)),
     );
   }
 }
