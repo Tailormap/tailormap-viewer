@@ -177,6 +177,34 @@
         <source>Use ctrl + scroll to zoom the map</source>
         <target>Verwende ctrl + Scrollen, um die Karte zu vergrößern.</target>
       </trans-unit>
+      <trans-unit id="shared.paginator.first-page" datatype="html">
+        <source>First page</source>
+        <target>Erste Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.items-per-page" datatype="html">
+        <source>Items per page</source>
+        <target>Elemente pro Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.last-page" datatype="html">
+        <source>Last page</source>
+        <target>Letzte Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.next-page" datatype="html">
+        <source>Next page</source>
+        <target>Nächste Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.previous-page" datatype="html">
+        <source>Previous page</source>
+        <target>Vorherige Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label" datatype="html">
+        <source><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="length"/></source>
+        <target><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> von <x id="PH_2" equiv-text="length"/></target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label-empty" datatype="html">
+        <source>0 of 0</source>
+        <target>0 von 0</target>
+      </trans-unit>
       <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
         <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
         <target>Ihre Anfrage wurde akzeptiert. Wenn die von Ihnen angegebene E-Mail-Adresse registriert ist, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts.</target>

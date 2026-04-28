@@ -177,6 +177,34 @@
         <source>Use ctrl + scroll to zoom the map</source>
         <target>Gebruik ctrl + scroll om in te zoomen op de kaart.</target>
       </trans-unit>
+      <trans-unit id="shared.paginator.first-page" datatype="html">
+        <source>First page</source>
+        <target>Eerste pagina</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.items-per-page" datatype="html">
+        <source>Items per page</source>
+        <target>Items per pagina</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.last-page" datatype="html">
+        <source>Last page</source>
+        <target>Laatste pagina</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.next-page" datatype="html">
+        <source>Next page</source>
+        <target>Volgende pagina</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.previous-page" datatype="html">
+        <source>Previous page</source>
+        <target>Vorige pagina</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label" datatype="html">
+        <source><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="length"/></source>
+        <target><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> van de <x id="PH_2" equiv-text="length"/></target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label-empty" datatype="html">
+        <source>0 of 0</source>
+        <target>0 van de 0</target>
+      </trans-unit>
       <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
         <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
         <target>Uw verzoek is geaccepteerd. Als het opgegeven e-mailadres geregistreerd is, ontvangt u een e-mail met instructies om uw wachtwoord opnieuw in te stellen.</target>
