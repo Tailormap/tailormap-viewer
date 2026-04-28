@@ -132,4 +132,10 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.toggleFullscreenDialog.emit(this.fullscreen);
   }
 
+  public getExpandCollapseTooltip() {
+    return this.collapsed
+      ? $localize`:@@core.dialog.expand-panel:Expand panel`
+      : $localize`:@@core.dialog.collapse-panel:Collapse panel`;
+  }
+
 }
