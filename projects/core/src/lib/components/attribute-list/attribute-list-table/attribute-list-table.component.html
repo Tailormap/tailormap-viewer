@@ -17,7 +17,10 @@
 
 <mat-table [dataSource]="rows"
   [trackBy]="trackByRowId"
-  multiTemplateDataRows>
+  multiTemplateDataRows
+  aria-label="Attribute List Table"
+  i18n-aria-label="@@core.attribute-list.attribute-list-table"
+  [attr.aria-colcount]="columns()?.length">
 
   <ng-container [matColumnDef]="EXPAND_DETAILS_COLUMN_NAME">
     <mat-header-cell class="column_small" *matHeaderCellDef></mat-header-cell>
@@ -46,7 +49,8 @@
         class="header-cell--with-resizer header-cell--with-sort"
         [class.header-cell--with-filter]="setFilter"
         (click)="onSortClick(col.id)"
-        [style.flexBasis]="getColumnWidth(col)">
+        [style.flexBasis]="getColumnWidth(col)"
+        [attr.aria-sort]="getAriaSortValue(col.id)">
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
           <mat-icon

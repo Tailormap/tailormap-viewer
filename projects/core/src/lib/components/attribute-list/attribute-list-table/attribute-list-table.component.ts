@@ -219,4 +219,11 @@ export class AttributeListTableComponent {
     this.loadStatisticsForColumn.emit({ type, columnName: col.id, dataType: col.type });
   }
 
+  public getAriaSortValue(columnId: string): 'ascending' | 'descending' | 'none' {
+    if (!this.sort || this.sort.column !== columnId || this.sort.direction === '') {
+      return 'none';
+    }
+    return this.sort.direction === 'asc' ? 'ascending' : 'descending';
+  }
+
 }
