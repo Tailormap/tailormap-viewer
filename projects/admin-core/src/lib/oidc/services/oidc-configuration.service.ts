@@ -92,6 +92,7 @@ export class OIDCConfigurationService implements OnDestroy {
               name: oidcConfiguration.name,
               clientId: oidcConfiguration.clientId,
               clientSecret: oidcConfiguration.clientSecret,
+              clientSecretExpiry: oidcConfiguration.clientSecretExpiry,
               issuerUrl: oidcConfiguration.issuerUrl,
               userNameAttribute: oidcConfiguration.userNameAttribute,
               image: oidcConfiguration.image,

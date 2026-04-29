@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OIDCConfigurationModel, UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { DateTime } from 'luxon';
 import { FormHelper } from '../../helpers/form.helper';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
@@ -35,6 +36,14 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       return `${window.location.protocol}//${window.location.host}/api/oauth2/callback`;
   }
 
+  public get daysUntilExpiry(): number {
+    const expiry = this.oidcConfigurationForm?.get('clientSecretExpiry')?.value;
+    if (!expiry) {
+      return 0;
+    }
+    return Math.max(0, Math.ceil(expiry.diffNow('days').days));
+  }
+
   @Output()
   public updateOIDCConfiguration = new EventEmitter<Omit<OIDCConfigurationModel, 'id'>>();
 
@@ -48,6 +57,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     issuerUrl: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     clientSecret: new FormControl(''),
+    clientSecretExpiry: new FormControl<DateTime | null>(null),
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     image: new FormControl<string | null>(null),
   });
@@ -68,6 +78,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           issuerUrl: value.issuerUrl || '',
           clientId: value.clientId || '',
           clientSecret: value.clientSecret || undefined,
+          clientSecretExpiry: value.clientSecretExpiry ? value.clientSecretExpiry.toISODate() : null,
           userNameAttribute: value.userNameAttribute || 'name',
           image: value.image,
         });
@@ -85,6 +96,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       issuerUrl: oidcConfiguration?.issuerUrl ?? '',
       clientId: oidcConfiguration?.clientId ?? '',
       clientSecret: oidcConfiguration?.clientSecret,
+      clientSecretExpiry: oidcConfiguration?.clientSecretExpiry ? DateTime.fromISO(oidcConfiguration.clientSecretExpiry) : null,
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
       image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
@@ -106,4 +118,13 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     this.oidcConfigurationForm.markAsDirty();
   }
 
+  protected getExpiryClass() {
+    const daysUntilExpiry = this.daysUntilExpiry;
+    if (daysUntilExpiry === 0) {
+      return 'expired';
+    } else if (daysUntilExpiry <= 30) {
+      return 'expiring-soon';
+    }
+    return '';
+  }
 }
