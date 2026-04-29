@@ -3,6 +3,7 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { AttributeListInitialDataSortModel } from '../models/attribute-list-initial-data-sort.model';
 
 const attributeListActionsPrefix = '[Attributelist]';
 
@@ -48,6 +49,11 @@ export const updatePage = createAction(
 export const updateSort = createAction(
   `${attributeListActionsPrefix} Update Sort`,
   props<{ dataId: string; column: string; direction: 'asc' | 'desc' | '' }>(),
+);
+
+export const addInitialDataSort = createAction(
+  `${attributeListActionsPrefix} Add/Update Initial Data Sort`,
+  props<{ initialDataSort: AttributeListInitialDataSortModel[] }>(),
 );
 
 export const updateRowSelected = createAction(

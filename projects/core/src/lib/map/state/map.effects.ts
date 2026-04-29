@@ -8,7 +8,7 @@ import * as CoreActions from '../../state/core.actions';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookmark.helper';
 import {
-  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerVisibilityBookmarkFragment,
+  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerSettingsBookmarkFragment,
 } from '../../services/application-bookmark/application-bookmark-fragments';
 
 @Injectable()
@@ -39,13 +39,13 @@ export class MapEffects {
                 return of(MapActions.loadMapFailed({ error: response }));
               }
               return combineLatest([
-                this.bookmarkService.registerFragment$<LayerVisibilityBookmarkFragment>(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$<LayerSettingsBookmarkFragment>(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR),
                 this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
               ])
                 .pipe(
                   take(1),
-                  map(([ opacityVisibilityFragment, layerOrderFragment ]) => {
-                    const extendedMapResponse = MapBookmarkHelper.mergeMapResponseWithBookmarkData(response, opacityVisibilityFragment, layerOrderFragment);
+                  map(([ layerSettingsFragment, layerOrderFragment ]) => {
+                    const extendedMapResponse = MapBookmarkHelper.mergeMapResponseWithBookmarkData(response, layerSettingsFragment, layerOrderFragment);
                     return MapActions.loadMapSuccess(extendedMapResponse);
                   }),
                 );
