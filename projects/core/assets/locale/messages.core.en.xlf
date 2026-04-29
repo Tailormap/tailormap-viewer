@@ -80,6 +80,9 @@
       <trans-unit id="core.bookmark.layer-not-found" datatype="html">
         <source>Layer is not available</source>
       </trans-unit>
+      <trans-unit id="core.color-picker.open-picker" datatype="html">
+        <source>open color picker</source>
+      </trans-unit>
       <trans-unit id="core.common" datatype="html">
         <source>Login</source>
       </trans-unit>
@@ -1001,7 +1004,6 @@
       </trans-unit>
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
-        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>

@@ -1,5 +1,11 @@
 <div [class]="getClass()">
-  <button mat-flat-button (click)="openPicker()" #colorPickerButton class="color-picker__button">
+  <button
+    mat-flat-button
+    (click)="openPicker()"
+    #colorPickerButton
+    class="color-picker__button"
+    aria-label="open color picker"
+    i18n-aria-label="@@core.color-picker.open-picker">
     <span class="color-picker__toggle"
       [class.color-picker__toggle--as-line]="toggleFormat === 'line'"
       [class.color-picker__toggle--as-text]="toggleFormat === 'text'"

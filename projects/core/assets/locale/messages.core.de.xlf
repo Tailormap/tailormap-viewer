@@ -106,6 +106,10 @@
         <source>Layer is not available</source>
         <target>Ebene ist nicht verfügbar</target>
       </trans-unit>
+      <trans-unit id="core.color-picker.open-picker" datatype="html">
+        <source>open color picker</source>
+        <target>Farbauswahl öffnen</target>
+      </trans-unit>
       <trans-unit id="core.common" datatype="html">
         <source>Login</source>
         <target>Login</target>
@@ -1334,7 +1338,6 @@
       <trans-unit id="core.toc.filtered-layer" datatype="html">
         <source>A filter is applied to this layer</source>
         <target>Auf diese Ebene wird ein Filter angewendet</target>
-        <note priority="1" from="description">:</note>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>

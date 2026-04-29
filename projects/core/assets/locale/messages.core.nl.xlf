@@ -106,6 +106,10 @@
         <source>Layer is not available</source>
         <target>Deze kaartlaag is niet beschikbaar</target>
       </trans-unit>
+      <trans-unit id="core.color-picker.open-picker" datatype="html">
+        <source>open color picker</source>
+        <target>open kleurkiezer</target>
+      </trans-unit>
       <trans-unit id="core.common" datatype="html">
         <source>Login</source>
         <target>Login</target>
