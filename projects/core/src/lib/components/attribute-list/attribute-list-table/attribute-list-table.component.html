@@ -51,7 +51,8 @@
         (click)="onSortClick(col.id)"
         [style.flexBasis]="getColumnWidth(col)"
         [attr.aria-sort]="getAriaSortValue(col.id)"
-        [attr.aria-colindex]="$index">
+        [attr.aria-colindex]="$index + 1"
+        [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount">
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
           <mat-icon
@@ -69,7 +70,10 @@
           (positionChanged)="columnWidthChanged($event, col)"
         orientation="vertical"></tm-panel-resize>
       </mat-header-cell>
-      <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)" [attr.aria-colindex]="$index">
+      <mat-cell *matCellDef="let currRow"
+                [style.flexBasis]="getColumnWidth(col)"
+                [attr.aria-colindex]="$index + 1"
+                [attr.aria-rowindex]="rowIndexMap().get(currRow.id)">
         <div class="cell-content"
         [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
       </mat-cell>
@@ -116,7 +120,8 @@
   <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: colNames;"
     (click)="onRowClick($event, row);"
     [class.even_row]="dataIndex % 2 === 1"
-    [class.selected_row]="isSelected(row)"></mat-row>
+    [class.selected_row]="isSelected(row)"
+    [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>
 
   <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"
            [ngClass]="expandedRowsIds.has(row.id) ? 'expanded' : 'collapsed'"></mat-row>
