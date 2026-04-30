@@ -6,6 +6,7 @@ import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { FeatureDetailsModel, StatisticType } from '../models/attribute-list-api-service.model';
 import { StatisticsHelper } from '../helpers/statistics-helper';
 import { AttributeListStatisticColumnModel, StatisticValueModel } from '../models/attribute-list-statistic-column.model';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
@@ -53,6 +54,7 @@ export class AttributeListTableComponent {
 
   public showStatistics = input<boolean | null>(false);
   public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
+  public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
@@ -101,6 +103,16 @@ export class AttributeListTableComponent {
         return [ s.columnName, value ];
       },
     ));
+  });
+
+  public rowIndexMap = computed(() => {
+    const paging = this.pagingDataSelectedTab();
+    const pageOffset = paging ? (paging.pageIndex - 1) * paging.pageSize : 0;
+    const rowIndexMap = new Map<string, number>();
+    this._rows.forEach((row, index) => {
+      rowIndexMap.set(row.id, pageOffset + index + 1);
+    });
+    return rowIndexMap;
   });
 
   constructor() {
@@ -217,6 +229,13 @@ export class AttributeListTableComponent {
 
   public loadStatistic(type: StatisticType, col: AttributeListColumnModel) {
     this.loadStatisticsForColumn.emit({ type, columnName: col.id, dataType: col.type });
+  }
+
+  public getAriaSortValue(columnId: string): 'ascending' | 'descending' | 'none' {
+    if (!this.sort || this.sort.column !== columnId || this.sort.direction === '') {
+      return 'none';
+    }
+    return this.sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
 }

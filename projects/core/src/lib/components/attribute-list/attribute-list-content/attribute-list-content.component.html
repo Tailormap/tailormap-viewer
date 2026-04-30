@@ -13,7 +13,6 @@
 
   @if (hasRows$ | async) {
     <tm-attribute-list-table
-      role="table"
       [rows]="rows$ | async"
       [columns]="columns$ | async"
       [sort]="sort$ | async"
@@ -24,6 +23,7 @@
       [loadingFeatureDetailsIds]="loadingFeatureDetailsIds$ | async"
       [showStatistics]="showStatistics$ | async"
       [statistics]="statistics$ | async"
+      [pagingDataSelectedTab]="pagingDataSelectedTab$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"

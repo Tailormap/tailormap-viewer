@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
   selectColumnsForSelectedTab, selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab,
-  selectLoadingDataSelectedTab,
+  selectLoadingDataSelectedTab, selectPagingDataSelectedTab,
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
@@ -24,6 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatisticsHelper } from '../helpers/statistics-helper';
 import { StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticsService } from '../services/attribute-list-statistics.service';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -50,6 +51,7 @@ export class AttributeListContentComponent implements OnInit {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
+  public pagingDataSelectedTab$: Observable<AttributeListPagingDataType> = this.store$.select(selectPagingDataSelectedTab);
 
   public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
   public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
