@@ -83,6 +83,12 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for getExtractFormats$', () => {
+    service.getLayerExtractFormats$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/extract/formats', method: 'GET' });
+    req.flush(null);
+  });
+
   test('queries API for deleteFeature$', () => {
     const feat : FeatureModel = { __fid: '1', attributes: {} };
     service.deleteFeature$({ applicationId: 'app/default', layerId: '1', fid: feat.__fid } ).subscribe();
