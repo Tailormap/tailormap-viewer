@@ -123,6 +123,10 @@ export class SimpleSearchComponent implements OnInit {
   }
 
   public toggle(close?: boolean) {
+    if (this.fullScreen()) {
+      this.disableTransition.set(true);
+      setTimeout(() => this.disableTransition.set(false), 0);
+    }
     this.active.set(close ? false : !this.active());
   }
 
