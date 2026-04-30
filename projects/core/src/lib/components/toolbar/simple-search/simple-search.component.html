@@ -11,7 +11,7 @@
             [class.toggle-button--active]="active()"
             [tmTooltip]="label"
             (click)="toggle()">
-      <mat-icon svgIcon="search"></mat-icon>
+      <mat-icon [svgIcon]="fullScreen() ? 'close' : 'search'"></mat-icon>
     </button>
 
     @if (active()) {
