@@ -123,12 +123,11 @@ export class SimpleSearchComponent implements OnInit {
   }
 
   public toggle(close?: boolean) {
-    const active = close ? false : !this.active();
     if (this.fullScreen()) {
       this.disableTransition.set(true);
       setTimeout(() => this.disableTransition.set(false), 0);
     }
-    this.active.set(active);
+    this.active.set(close ? false : !this.active());
   }
 
   public displayLabel(result: string | SearchResultItemModel | null): string {
