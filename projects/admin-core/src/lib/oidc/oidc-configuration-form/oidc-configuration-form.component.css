@@ -7,3 +7,19 @@
   display: block;
   padding-bottom: 10px;
 }
+
+.expired {
+  color: #ff0000;
+}
+
+.expiring-soon {
+  color: #ff9900;
+}
+
+.flex-form-fields {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}

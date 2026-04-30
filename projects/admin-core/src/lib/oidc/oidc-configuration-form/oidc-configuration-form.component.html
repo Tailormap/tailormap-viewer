@@ -18,6 +18,22 @@
     <input matInput formControlName="clientId" />
   </mat-form-field>
   <tm-admin-password-field formControlName="clientSecret" label="Client Secret" i18n-label="@@admin-core.oidc.client-secret"/>
+  <div class="flex-form-fields">
+    <div style="flex: none; min-width: 280px">
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.oidc.client-secret-expiry-date">Client secret expiry date</mat-label>
+        <input matInput [matDatepicker]="dpClientSecretExpiry" formControlName="clientSecretExpiry" />
+        <mat-datepicker-toggle matSuffix [for]="dpClientSecretExpiry"></mat-datepicker-toggle>
+        <mat-datepicker #dpClientSecretExpiry></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      @if (oidcConfigurationForm.get('clientSecretExpiry')?.value) {
+        <span [ngClass]="getExpiryClass()"
+              i18n="@@admin-core.oidc.days-until-expiry">{daysUntilExpiry, plural, =0 {Expired} =1 {One day until expiry} other {{{ daysUntilExpiry }} days until expiry}}</span>
+      }
+    </div>
+  </div>
   <mat-form-field>
     <mat-label i18n="@@admin-core.oidc.username-attribute">User name attribute</mat-label>
     <input matInput placeholder="(name, sub, email, etc)" i18n-placeholder="@@admin-core.oidc.username-attribute-placeholder" formControlName="userNameAttribute" />

@@ -1502,6 +1502,9 @@
       <trans-unit id="admin-core.oidc.client-secret" datatype="html">
         <source>Client Secret</source>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiry-date" datatype="html">
+        <source>Client secret expiry date</source>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-created" datatype="html">
         <source>OIDC configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
       </trans-unit>
@@ -1519,6 +1522,9 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.create-configuration" datatype="html">
         <source>Create OIDC configuration</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.days-until-expiry" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {Expired} =1 {One day until expiry} other {<x id="INTERPOLATION"/> days until expiry}}</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>

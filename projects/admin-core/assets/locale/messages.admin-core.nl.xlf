@@ -2029,6 +2029,10 @@
         <source>Client Secret</source>
         <target>Client secret</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiry-date" datatype="html">
+        <source>Client secret expiry date</source>
+        <target>Verloopdatum client secret</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-created" datatype="html">
         <source>OIDC configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
         <target>OIDC-configuratie <x id="PH" equiv-text="createdOIDCConfiguration.name"/> aangemaakt</target>
@@ -2052,6 +2056,10 @@
       <trans-unit id="admin-core.oidc.create-configuration" datatype="html">
         <source>Create OIDC configuration</source>
         <target>OIDC-configuratie maken</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.days-until-expiry" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {Expired} =1 {One day until expiry} other {<x id="INTERPOLATION"/> days until expiry}}</source>
+        <target>{VAR_PLURAL, plural, =0 {Verlopen} =1 {Verloopt over één dag} other {Verloopt over <x id="INTERPOLATION"/> dagen}}</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
