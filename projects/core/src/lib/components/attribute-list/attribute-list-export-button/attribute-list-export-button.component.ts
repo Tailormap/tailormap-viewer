@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
 } from 'rxjs';
-import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
+import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
@@ -25,10 +25,10 @@ export class AttributeListExportButtonComponent implements OnDestroy {
 
   private destroyed = new Subject();
 
-  public supportedFormats = SupportedExportFormats;
+  public supportedFormats = SupportedExtractFormats;
 
-  private supportedFormatsSubject = new BehaviorSubject<SupportedExportFormats[]>([]);
-  private supportedFormats$: Observable<SupportedExportFormats[]> = this.supportedFormatsSubject.asObservable();
+  private supportedFormatsSubject = new BehaviorSubject<SupportedExtractFormats[]>([]);
+  private supportedFormats$: Observable<SupportedExtractFormats[]> = this.supportedFormatsSubject.asObservable();
   public showExportButton$ = this.supportedFormats$.pipe(map(formats => formats.length > 0));
 
   private isExportingSubject = new BehaviorSubject(false);
@@ -61,7 +61,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public onExportClick(format: SupportedExportFormats) {
+  public onExportClick(format: SupportedExtractFormats) {
     this.isExportingSubject.next(true);
     this.store$.select(selectSelectedTab)
       .pipe(
@@ -84,7 +84,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
       });
   }
 
-  public isFormatSupported$(format: SupportedExportFormats) {
+  public isFormatSupported$(format: SupportedExtractFormats) {
     return this.supportedFormats$.pipe(map(formats => formats.includes(format)));
   }
 

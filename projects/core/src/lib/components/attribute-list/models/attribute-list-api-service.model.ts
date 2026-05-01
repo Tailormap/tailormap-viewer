@@ -1,5 +1,5 @@
 import {
-  FeaturesResponseModel, LayerExportCapabilitiesModel, Sortorder, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 
@@ -56,7 +56,7 @@ export interface GetFeaturesParams {
 /**
  * Parameters for retrieving export capabilities of a layer.
  */
-export interface GetLayerExportCapabilitiesParams {
+export interface GetLayerExtractCapabilitiesParams {
   /**
    * The ID of the application.
    */
@@ -70,7 +70,7 @@ export interface GetLayerExportCapabilitiesParams {
 /**
  * Parameters for exporting features from a layer.
  */
-export interface GetLayerExportParams {
+export interface GetLayerExtractParams {
   /**
    * The ID of the application.
    */
@@ -79,6 +79,10 @@ export interface GetLayerExportParams {
    * The ID of the layer to export.
    */
   layerId: string;
+  /**
+   * the SSE token that is used for reporting progress.
+   */
+  clientId: string;
   /**
    * The desired output format (e.g., 'csv', 'shp').
    */
@@ -108,18 +112,10 @@ export interface GetLayerExportParams {
   crs?: string;
 }
 
-/**
- * Response model for a layer export operation.
- */
-export interface GetLayerExportResponse {
-  /**
-   * The exported file as a Blob.
-   */
-  file: Blob;
-  /**
-   * The suggested file name for the exported file.
-   */
-  fileName: string;
+export interface DownloadLayerExtractParams{
+  applicationId: string;
+  layerId: string;
+  downloadId: string;
 }
 
 export interface GetUniqueValuesParams {
@@ -250,14 +246,19 @@ export interface AttributeListApiServiceModel {
    * @param params Parameters specifying the application and layer ID.
    * @returns Observable emitting the export capabilities of the layer.
    */
-  getLayerExportCapabilities$(params: GetLayerExportCapabilitiesParams): Observable<LayerExportCapabilitiesModel>;
+  getLayerExtractCapabilities$(params: GetLayerExtractCapabilitiesParams): Observable<LayerExtractCapabilitiesModel>;
 
   /**
-   * Exports features from a layer in the specified format.
+   * Initiate the extraction of features from a layer in the specified format.
    * @param params Parameters specifying the export options, including format, filter, and attributes.
    * @returns Observable emitting the exported file and file name, or null if export is not available.
    */
-  getLayerExport$(params: GetLayerExportParams): Observable<GetLayerExportResponse | null>;
+  startLayerExtract$(params: GetLayerExtractParams): Observable<LayerExtractResponseModel | null>;
+
+  /**
+   * Download the extract file.
+   */
+  downloadLayerExtract$(params: DownloadLayerExtractParams):Observable<Blob | null>;
 
   /**
    * Retrieves unique values for a specific attribute in a layer.

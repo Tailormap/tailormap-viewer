@@ -10,17 +10,15 @@ import {
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
   AttributeListApiServiceModel,
-  CanExpandRowParams,
-  FeatureDetailsModel,
+  CanExpandRowParams, FeatureDetailsModel,
   GetFeatureDetailsParams,
-  GetFeaturesParams,
-  GetLayerExportCapabilitiesParams,
-  GetLayerExportParams,
-  GetLayerExportResponse,
+  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { AttributeListSourceModel } from '../models/attribute-list-source.model';
-import { FeaturesResponseModel, LayerExportCapabilitiesModel, UniqueValuesResponseModel } from '@tailormap-viewer/api';
+import {
+  FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
+} from '@tailormap-viewer/api';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
 describe('AttributeListManagerService', () => {
@@ -38,8 +36,8 @@ describe('AttributeListManagerService', () => {
 
     mockApiService = {
       getFeatures$: jest.fn(),
-      getLayerExportCapabilities$: jest.fn(),
-      getLayerExport$: jest.fn(),
+      getLayerExtractCapabilities$: jest.fn(),
+      startLayerExtract$: jest.fn(),
       getUniqueValues$: jest.fn(),
       canExpandRow$: jest.fn(),
       getFeatureDetails$: jest.fn(),
@@ -312,31 +310,30 @@ describe('AttributeListManagerService', () => {
     });
   });
 
-  describe('getLayerExportCapabilities$', () => {
+  describe('getLayerExtractCapabilities$', () => {
     it('should return empty capabilities when source is not found', (done) => {
-      const params: GetLayerExportCapabilitiesParams = {
+      const params: GetLayerExtractCapabilitiesParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      managerService.getLayerExportCapabilities$('non-existent-source', params).subscribe(result => {
-        expect(result).toEqual({ exportable: false, outputFormats: [] });
+      managerService.getLayerExtractCapabilities$('non-existent-source', params).subscribe(result => {
+        expect(result).toEqual({ outputFormats: [] });
         done();
       });
     });
 
     it('should return export capabilities from dataLoader when source is found', (done) => {
-      const params: GetLayerExportCapabilitiesParams = {
+      const params: GetLayerExtractCapabilitiesParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      const capabilities: LayerExportCapabilitiesModel = {
-        exportable: true,
-        outputFormats: [ 'csv', 'shp', 'gpkg' ],
+      const capabilities: LayerExtractCapabilitiesModel = {
+        outputFormats: [ 'csv', 'shp', 'geojson' ],
       };
 
-      mockApiService.getLayerExportCapabilities$.mockReturnValue(of(capabilities));
+      mockApiService.getLayerExtractCapabilities$.mockReturnValue(of(capabilities));
 
       const source: AttributeListSourceModel = {
         id: 'test-source',
@@ -346,41 +343,43 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getLayerExportCapabilities$('test-source', params).subscribe(result => {
+      managerService.getLayerExtractCapabilities$('test-source', params).subscribe(result => {
         expect(result).toEqual(capabilities);
-        expect(mockApiService.getLayerExportCapabilities$).toHaveBeenCalledWith(params);
+        expect(mockApiService.getLayerExtractCapabilities$).toHaveBeenCalledWith(params);
         done();
       });
     });
   });
 
-  describe('getLayerExport$', () => {
+  describe('startLayerExtract$', () => {
     it('should return null when source is not found', (done) => {
-      const params: GetLayerExportParams = {
+      const params:  GetLayerExtractParams = {
+        clientId: 'test',
         applicationId: '1',
         layerId: '1',
         outputFormat: 'csv',
       };
 
-      managerService.getLayerExport$('non-existent-source', params).subscribe(result => {
+      managerService.startLayerExtract$('non-existent-source', params).subscribe(result => {
         expect(result).toBeNull();
         done();
       });
     });
 
     it('should return export response from dataLoader when source is found', (done) => {
-      const params: GetLayerExportParams = {
+      const params: GetLayerExtractParams = {
+        clientId: 'test',
         applicationId: '1',
         layerId: '1',
         outputFormat: 'csv',
       };
 
-      const exportResponse: GetLayerExportResponse = {
-        file: new Blob(['test'], { type: 'text/csv' }),
-        fileName: 'export.csv',
+      const exportResponse: LayerExtractResponseModel = {
+        downloadId: 'test_extract.csv',
+        message: 'Extract accepted',
       };
 
-      mockApiService.getLayerExport$.mockReturnValue(of(exportResponse));
+      mockApiService.startLayerExtract$.mockReturnValue(of(exportResponse));
 
       const source: AttributeListSourceModel = {
         id: 'test-source',
@@ -390,9 +389,9 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getLayerExport$('test-source', params).subscribe(result => {
+      managerService.startLayerExtract$('test-source', params).subscribe(result => {
         expect(result).toEqual(exportResponse);
-        expect(mockApiService.getLayerExport$).toHaveBeenCalledWith(params);
+        expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
         done();
       });
     });
