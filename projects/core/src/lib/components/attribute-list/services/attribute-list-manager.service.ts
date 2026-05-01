@@ -8,13 +8,14 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import {
-  FeaturesResponseModel, LayerExportCapabilitiesModel, UniqueValuesResponseModel,
+  FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, FeatureDetailsModel, GetFeatureDetailsParams,
-  GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams, GetLayerExportResponse, GetStatisticParams,
+  CanExpandRowParams, DownloadLayerExtractParams, FeatureDetailsModel, GetFeatureDetailsParams,
+  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  GetStatisticParams,
   GetStatisticResponse,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
@@ -125,20 +126,28 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getFeatures$(params);
   }
 
-  public getLayerExportCapabilities$(tabSourceId: string, params: GetLayerExportCapabilitiesParams): Observable<LayerExportCapabilitiesModel> {
+  public getLayerExtractCapabilities$(tabSourceId: string, params: GetLayerExtractCapabilitiesParams): Observable<LayerExtractCapabilitiesModel> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
-      return of({ exportable: false, outputFormats: [] });
+      return of({ outputFormats: [] });
     }
-    return source.dataLoader.getLayerExportCapabilities$(params);
+    return source.dataLoader.getLayerExtractCapabilities$(params);
   }
 
-  public getLayerExport$(tabSourceId: string, params: GetLayerExportParams): Observable<GetLayerExportResponse | null> {
+  public startLayerExtract$(tabSourceId: string, params: GetLayerExtractParams): Observable<LayerExtractResponseModel | null> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of(null);
     }
-    return source.dataLoader.getLayerExport$(params);
+    return source.dataLoader.startLayerExtract$(params);
+  }
+
+  public downloadLayerExtract$(tabSourceId: string, params: DownloadLayerExtractParams): Observable<Blob | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(null);
+    }
+    return source.dataLoader.downloadLayerExtract$(params);
   }
 
   public getUniqueValues$(tabSourceId: string, params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel> {
