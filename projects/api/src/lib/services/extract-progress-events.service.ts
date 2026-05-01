@@ -64,12 +64,11 @@ export class ExtractProgressEventsService implements OnDestroy {
   }
 
   /**
-   * this enables listening for progress events for a specific download/extract, and also allows filtering on the type of event (progress/completed/failed)
+   * this enables listening for progress events for a specific download/extract
    * @param downloadId the download identifier
-   * @param type the type of event, eg. EventType.EXTRACT_COMPLETED
    */
-  public listenForSpecificExtractProgressEvents$(downloadId: string, type: EventType): Observable<ExtractProgressEventModel> {
-    return this.extractProgressEvents$.pipe(filter(event => event.details.downloadId === downloadId && event.eventType === type));
+  public listenForSpecificExtractProgressEvents$(downloadId: string): Observable<ExtractProgressEventModel> {
+    return this.extractProgressEvents$.pipe(filter(event => event.details.downloadId === downloadId));
   }
 
   /**

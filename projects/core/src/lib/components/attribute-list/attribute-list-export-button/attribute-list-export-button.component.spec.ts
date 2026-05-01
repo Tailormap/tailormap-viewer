@@ -5,14 +5,14 @@ import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { of } from 'rxjs';
-import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
+import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 
-const setup = async (layerId: string | null = null, supportedFormats: SupportedExportFormats[] = []) => {
+const setup = async (layerId: string | null = null, supportedFormats: SupportedExtractFormats[] = []) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -53,7 +53,7 @@ describe('AttributeListExportButtonComponent', () => {
   });
 
   test('should render button for selected layer and supported formats', async () => {
-    const { exportService } = await setup('1', [ SupportedExportFormats.CSV, SupportedExportFormats.XLSX ]);
+    const { exportService } = await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX ]);
     expect(screen.getByRole('button')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button'));
     expect(screen.getByText('CSV')).toBeInTheDocument();
