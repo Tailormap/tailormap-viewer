@@ -3,15 +3,15 @@
     <tm-error-message [message]="imageError" [friendlyError]="true"></tm-error-message>
   }
   <div class="img-space">
-    @if (currentImage) {
-      <img [src]="currentImage" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
+    @if (imageContent) {
+      <img [src]="imageContent" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
     }
     <div class="upload-wrapper" [class.upload-complete]="isImageSaved">
       <input type="file"
         accept="image/*"
         (change)="fileChangeEvent($event)"
         class="fileInputProfile">
-      @if (isImageSaved || currentImage) {
+      @if (isImageSaved || imageContent) {
         <button mat-stroked-button
           color="warn"
           tmTooltip="Remove the image"

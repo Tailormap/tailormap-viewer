@@ -9,6 +9,7 @@ import { UploadRemoveServiceModel } from '../models/upload-remove-service.model'
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
+import { FormControl } from '@angular/forms';
 
 export interface SelectUploadData {
   uploadId: string | null;
@@ -68,6 +69,8 @@ export class SelectUploadDialogComponent implements OnInit {
   public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
   public loading = signal(false);
   public dialogProps: DialogProps;
+  public pendingImage = signal<{ image: string; fileName: string} | null>(null);
+  public descriptionControl = new FormControl<string | null>(null);
 
   constructor() {
     this.dialogProps = CATEGORY_PROPS[this.data.category]
@@ -88,12 +91,19 @@ export class SelectUploadDialogComponent implements OnInit {
     this.adminApiService.getUploads$(this.data.category)
       .pipe(take(1), catchError(() => of(null)))
       .subscribe(uploads => {
+        console.debug(`Received uploads for category ${this.data.category}:`, uploads);
         this.existingUploads$.next(uploads === null ? uploads : uploads.map<UploadModel>(upload => ({
           ...upload,
           contentSize: this.humanFileSize(upload.contentLength),
         })));
         this.loading.set(false);
       });
+
+    this.descriptionControl.valueChanges.subscribe(description => {
+      if (description) {
+        this.setDescription(description);
+      }
+    });
   }
 
   private humanFileSize(sizeBytes: number | bigint | null | undefined): string {
@@ -122,13 +132,27 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public imageSelected($event: { image: string; fileName: string }) {
+    if ($event.image === '' && $event.fileName === '') {
+      this.pendingImage.set(null);
+      return;
+    }
+    this.pendingImage.set($event);
+  }
+
+  public saveImage() {
     this.loading.set(true);
-    const { image, mimeType } = UploadHelper.prepareBase64($event.image);
+    const pendingImage = this.pendingImage();
+    if (!pendingImage) {
+      this.loading.set(false);
+      return;
+    }
+    const { image, mimeType } = UploadHelper.prepareBase64(pendingImage.image);
     this.adminApiService.createUpload$({
       content: image,
-      filename: $event.fileName,
+      filename: pendingImage.fileName,
       category: this.data.category,
       mimeType,
+      description: this.descriptionControl.value || undefined,
     })
       .pipe(take(1), catchError(() => of(null)))
       .subscribe(upload => {
@@ -184,6 +208,15 @@ export class SelectUploadDialogComponent implements OnInit {
         this.existingUploads$.next((this.existingUploads$.value || []).filter(u => u.id !== uploadId));
         this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:File ${uploadName} removed`);
       });
+  }
+
+  public setDescription(description: string) {
+    this.pendingImage.update(pendingImage => {
+      if (!pendingImage) {
+        return null;
+      }
+      return { ...pendingImage, description };
+    });
   }
 
 }

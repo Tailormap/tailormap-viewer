@@ -299,7 +299,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel> {
+  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {
     return this.httpClient.post<UploadModel>(`${TailormapAdminApiV1Service.BASE_URL}/uploads`, upload).pipe(
       map(response => response),
     );

@@ -48,3 +48,7 @@ h2 {
   padding: 2px 0;
   --mat-icon-button-icon-size: 18px;
 }
+
+.description-field {
+  margin-top: 16px;
+}

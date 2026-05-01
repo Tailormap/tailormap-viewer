@@ -15,7 +15,10 @@
               <div class="file-info">
                 <div class="file-name">
                   <span [title]="upload.filename">{{upload.filename}}</span><br />
-                  <span i18n="@@admin-core.common.size">Size</span>: {{upload.contentSize}}
+                  <span i18n="@@admin-core.common.size">Size</span>: {{upload.contentSize}}<br />
+                  @if (upload.description) {
+                    <span i18n="@@admin-core.common.description">Description</span>: {{upload.description}}
+                  }
                 </div>
                 <button mat-icon-button
                         color="warn"
@@ -33,10 +36,20 @@
     <h2>{{ dialogProps.uploadNewTitle }}</h2>
     <tm-image-upload-field (imageChanged)="imageSelected($event)"
                            [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
+    <mat-form-field appearance="outline" class="description-field">
+      <mat-label i18n="@@admin-core.select-upload.description">Description</mat-label>
+      <input matInput [formControl]="descriptionControl" i18n-placeholder="@@admin-core.select-upload.description-placeholder" placeholder="Optional description"/>
+    </mat-form-field>
   </div>
 
 </div>
 
 <div mat-dialog-actions align="end">
+  @if (pendingImage()) {
+    <button mat-flat-button
+            color="primary"
+            (click)="saveImage()"
+            i18n="@@admin-core.select-upload.add">Add</button>
+  }
   <button mat-flat-button (click)="dismiss()" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>
