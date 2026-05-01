@@ -1673,6 +1673,12 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description" datatype="html">
+        <source>Description</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-hint" datatype="html">
+        <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
       </trans-unit>

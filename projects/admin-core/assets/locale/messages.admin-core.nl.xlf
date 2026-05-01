@@ -2261,6 +2261,14 @@
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Foutcode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, melding: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description" datatype="html">
+        <source>Description</source>
+        <target>Beschrijving</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-hint" datatype="html">
+        <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
+        <target> De beschrijving wordt gebruikt als ARIA-label voor de afbeelding om de digitale toegankelijkheid van de applicatie te verbeteren. </target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Bestand wordt gebruikt</target>

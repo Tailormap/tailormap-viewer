@@ -52,3 +52,12 @@ h2 {
 .description-field {
   margin-top: 16px;
 }
+
+.description-hint {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
+}

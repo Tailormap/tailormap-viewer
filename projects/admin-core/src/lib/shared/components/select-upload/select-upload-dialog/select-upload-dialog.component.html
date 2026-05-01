@@ -38,18 +38,20 @@
                            [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
     <mat-form-field appearance="outline" class="description-field">
       <mat-label i18n="@@admin-core.select-upload.description">Description</mat-label>
-      <input matInput [formControl]="descriptionControl" i18n-placeholder="@@admin-core.select-upload.description-placeholder" placeholder="Optional description"/>
+      <input matInput [formControl]="descriptionControl" i18n-placeholder="@@admin-core.select-upload.description" placeholder="Description"/>
     </mat-form-field>
+    <div class="description-hint" i18n="@@admin-core.select-upload.description-hint">
+      The description is used as the ARIA label for the image to improve the accessibility of the application.
+    </div>
   </div>
 
 </div>
 
 <div mat-dialog-actions align="end">
-  @if (pendingImage()) {
-    <button mat-flat-button
-            color="primary"
-            (click)="saveImage()"
-            i18n="@@admin-core.select-upload.add">Add</button>
-  }
+  <button mat-flat-button
+          color="primary"
+          [disabled]="!pendingImage()"
+          (click)="saveImage()"
+          i18n="@@admin-core.common.save">Save</button>
   <button mat-flat-button (click)="dismiss()" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>

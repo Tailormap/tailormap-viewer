@@ -91,7 +91,6 @@ export class SelectUploadDialogComponent implements OnInit {
     this.adminApiService.getUploads$(this.data.category)
       .pipe(take(1), catchError(() => of(null)))
       .subscribe(uploads => {
-        console.debug(`Received uploads for category ${this.data.category}:`, uploads);
         this.existingUploads$.next(uploads === null ? uploads : uploads.map<UploadModel>(upload => ({
           ...upload,
           contentSize: this.humanFileSize(upload.contentLength),
