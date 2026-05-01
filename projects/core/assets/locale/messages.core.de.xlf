@@ -27,8 +27,12 @@
         <target>Exportieren</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.export-failed" datatype="html">
-        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
-        <target>Daten für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> konnten nicht exportiert werden</target>
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+        <target>Datenextrakt für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.extract-download-failed" datatype="html">
+        <source>Downloading extract failed</source>
+        <target>Fehler beim Herunterladen des Datenextrakts</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>

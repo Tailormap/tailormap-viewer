@@ -10,12 +10,11 @@ import { UniqueValuesResponseModel } from '../models/unique-values-response.mode
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel, getLayerExtractFormatsModel,
+  getVersionResponseModel, getFeatureModel, getConfigModel, getLayerExtractFormatsModel,
 } from '../mock-data';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { LayerExtractCapabilitiesModel } from "../models/layer-extract-capabilities.model";
-import { LayerExtractModel } from "../models/layer-extract.model";
+import { LayerExtractResponseModel } from "../models/layer-extract-response.model";
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -66,27 +65,6 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUniqueValuesResponseModel());
   }
 
-  /** @deprecated To be replaced with the /extract API */
-  public getLayerExportCapabilities$(_params: {
-    applicationId: string;
-    layerId: string;
-  }): Observable<LayerExportCapabilitiesModel> {
-    return of(getLayerExportCapabilitiesModel());
-  }
-
-  /** @deprecated To be replaced with the /extract API */
-  public getLayerExport$(_params: {
-    applicationId: string;
-    layerId: string;
-    outputFormat: string;
-    filter?: string;
-    sort: { column: string; direction: string} | null;
-    attributes?: string[];
-    crs?: string;
-  }): Observable<HttpResponse<Blob>> {
-    return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
-  }
-
   public getLayerExtractFormats$(_params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
     return of(getLayerExtractFormatsModel());
   }
@@ -99,7 +77,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     attributes?: string[];
     filter?: string;
     sort: { column: string; direction: string } | null;
-  }): Observable<LayerExtractModel> {
+  }): Observable<LayerExtractResponseModel> {
     return of({
       downloadId: crypto.randomUUID(), message: 'Layer extract request received',
     });
