@@ -13,12 +13,6 @@
 }
 
 <mat-menu #exportMenu="matMenu">
-  @if (isFormatSupported$(supportedFormats.GEOPACKAGE) | async) {
-    <button
-      mat-menu-item
-      (click)="onExportClick(supportedFormats.GEOPACKAGE)"
-    i18n="@@core.common.geopackage">GeoPackage</button>
-  }
   @if (isFormatSupported$(supportedFormats.GEOJSON) | async) {
     <button
       mat-menu-item
@@ -42,11 +36,5 @@
       mat-menu-item
       (click)="onExportClick(supportedFormats.SHAPE)"
     i18n="@@core.common.shapefile">Shapefile</button>
-  }
-  @if (isFormatSupported$(supportedFormats.DXF) | async) {
-    <button
-      mat-menu-item
-      (click)="onExportClick(supportedFormats.DXF)"
-    i18n="@@core.common.dxf">DXF</button>
   }
 </mat-menu>
