@@ -30,6 +30,10 @@
         <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
         <target>Gegevens extract voor laag <x id="PH" equiv-text="params.serviceLayerName"/> en formaat <x id="PH_1" equiv-text="params.format"/> mislukt</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed-during-extraction" datatype="html">
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed during extraction</source>
+        <target>Gegevens extract voor laag <x id="PH" equiv-text="params.serviceLayerName"/> en formaat <x id="PH_1" equiv-text="params.format"/> tijdens de extractie mislukt</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.extract-download-failed" datatype="html">
         <source>Downloading extract failed</source>
         <target>Fout bij het downloaden van het gegevensextract</target>

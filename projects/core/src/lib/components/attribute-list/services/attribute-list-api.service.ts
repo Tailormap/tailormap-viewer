@@ -65,7 +65,8 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   public downloadLayerExtract$(params: DownloadLayerExtractParams): Observable<Blob | null> {
     return this.api.downloadLayerExtract$(params).pipe(map(response => {
       if (response && response.body) {
-        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || 'extract');
+        const contentDispositionHeader = response.headers.get('Content-Disposition') || '';
+        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(contentDispositionHeader, 'extract');
         FileHelper.saveAsFile(response.body, fileName);
         return response.body;
       }

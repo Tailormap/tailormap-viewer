@@ -84,7 +84,7 @@ export interface GetLayerExtractParams {
    */
   clientId: string;
   /**
-   * The desired output format (e.g., 'csv', 'shp').
+   * The desired output format (e.g., 'csv', 'shape').
    */
   outputFormat: string;
   /**
