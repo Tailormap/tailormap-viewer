@@ -32,15 +32,6 @@
 
 .menubar-section tm-menubar-logo ::ng-deep .logo {
   margin: 15% 0;
-  flex-shrink: 0;
-  max-width: 75%;
-  max-height: 40px;
-  height: auto;
-  width: auto;
-}
-
-.menubar-section tm-menubar-logo ::ng-deep mat-icon.logo {
-  height: 40px;
 }
 
 .logo-section {

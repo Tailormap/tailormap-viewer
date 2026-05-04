@@ -4,8 +4,6 @@ import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, ComponentModel, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { HeaderHelper } from './header.helper';
-import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'tm-header',
@@ -16,7 +14,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class HeaderComponent implements OnDestroy {
   private store$ = inject(Store);
-  private httpClient = inject(HttpClient);
 
   public mobileHeader = input<boolean>(false);
 

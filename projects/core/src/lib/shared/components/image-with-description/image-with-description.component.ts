@@ -15,7 +15,7 @@ export class ImageWithDescriptionComponent implements OnDestroy {
   public src = input<string>('');
 
   public logoAriaLabel = signal<string>('Logo');
-  public logoObjectUrl = signal<string | null>(null);  private resizeObserver: ResizeObserver | null = null;
+  public logoObjectUrl = signal<string | null>(null);
 
   constructor() {
     effect(() => {
@@ -26,7 +26,6 @@ export class ImageWithDescriptionComponent implements OnDestroy {
   }
 
   private fetchLogo(): void {
-    console.debug("fetch logo");
     this.httpClient.get(this.src(), { observe: 'response', responseType: 'blob' }).subscribe(response => {
       const description = response.headers.get('tm-description');
       if (description) {
