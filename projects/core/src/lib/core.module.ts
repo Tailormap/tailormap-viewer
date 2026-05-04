@@ -34,6 +34,7 @@ import { PasswordResetRequestFormComponent } from './pages/login/password-reset-
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
+import {CoreSharedModule} from "./shared";
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -58,29 +59,31 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     PasswordResetRequestFormComponent,
     PasswordResetComponent,
   ],
-  imports: [
-    CoreRoutingModule,
-    StoreModule.forRoot({
-      [coreStateKey]: coreReducer,
-    }, {
-      runtimeChecks: {
-        strictActionImmutability: true,
-        strictActionSerializability: true,
-        strictActionWithinNgZone: true,
-        strictStateImmutability: true,
-        strictStateSerializability: true,
-        strictActionTypeUniqueness: true,
-      },
-    }),
-    EffectsModule.forRoot([CoreEffects]),
-    ApplicationMapModule,
-    MapModule,
-    FilterModule,
-    SharedModule,
-    ComponentsModule,
-    LayoutModule,
-    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
-  ],
+    imports: [
+        CoreRoutingModule,
+        StoreModule.forRoot({
+            [coreStateKey]: coreReducer,
+        }, {
+            runtimeChecks: {
+                strictActionImmutability: true,
+                strictActionSerializability: true,
+                strictActionWithinNgZone: true,
+                strictStateImmutability: true,
+                strictStateSerializability: true,
+                strictActionTypeUniqueness: true,
+            },
+        }),
+        EffectsModule.forRoot([CoreEffects]),
+        ApplicationMapModule,
+        MapModule,
+        FilterModule,
+        SharedModule,
+        ComponentsModule,
+        LayoutModule,
+        RouterModule.forRoot([{path: '', children: []}]),
+        CoreSharedModule,
+        // Allow all modules to add child routes
+    ],
   exports: [
     ViewerAppComponent,
     RouterModule,

@@ -13,6 +13,7 @@ export class ImageWithDescriptionComponent implements OnDestroy {
 
 
   public src = input<string>('');
+  public alt = input<string>('Failed to load logo');
 
   public logoAriaLabel = signal<string>('Logo');
   public logoObjectUrl = signal<string | null>(null);
