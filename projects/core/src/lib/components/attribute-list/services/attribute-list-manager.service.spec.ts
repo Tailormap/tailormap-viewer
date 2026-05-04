@@ -330,7 +330,7 @@ describe('AttributeListManagerService', () => {
       };
 
       const capabilities: LayerExtractCapabilitiesModel = {
-        outputFormats: [ 'csv', 'shp', 'geojson' ],
+        outputFormats: [ 'csv', 'shape', 'geojson' ],
       };
 
       mockApiService.getLayerExtractCapabilities$.mockReturnValue(of(capabilities));

@@ -1,14 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  BehaviorSubject, catchError, combineLatest, filter, first, map, merge, mergeMap, Observable, of, share, startWith, switchMap, take,
-  takeUntil, tap,
+  BehaviorSubject, catchError, combineLatest, filter, first, map, merge, mergeMap, Observable, of,  share, startWith, switchMap, take,
+  takeUntil, tap, timeout,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from './attribute-list-manager.service';
-import { ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder } from '@tailormap-viewer/api';
+import {
+  ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder, ExtractProgressEventModel,
+} from '@tailormap-viewer/api';
 import { LayerFeaturesFilters } from '../../../filter';
 
 export enum SupportedExtractFormats {
@@ -33,6 +35,7 @@ export class AttributeListExportService {
    * @private
    */
   private cachedFormats: Map<string, string[]> = new Map();
+  private static  SSE_TIMEOUT_MS = 30_000;
 
   public getExportFormats$(tabSourceId: string, layerId: string): Observable<SupportedExtractFormats[]> {
     return this.getExtractCapabilities$(tabSourceId, layerId).pipe(
@@ -64,8 +67,9 @@ export class AttributeListExportService {
           this.showSnackbarMessage(defaultErrorMessage);
           return of(null);
         }
-        const sortOrder: Sortorder = params.sort?.direction === 'asc' ? Sortorder.ASC : Sortorder.DESC;
 
+        this.extractProgressSubject.next(0);
+        const sortOrder: Sortorder = params.sort?.direction === 'asc' ? Sortorder.ASC : Sortorder.DESC;
         return this.managerService.startLayerExtract$(params.tabSourceId, {
           clientId: this.extractProgressEventsService.getClientId(),
           applicationId,
@@ -77,21 +81,30 @@ export class AttributeListExportService {
           attributes: params.attributes,
         }).pipe(
           catchError(() => {
+            this.extractProgressSubject.next(0);
             this.showSnackbarMessage(defaultErrorMessage);
             return of(null);
           }),
           switchMap((response: LayerExtractResponseModel | null) => {
             // If no response or no downloadId, just pass it through
             if (!response || !response.downloadId) {
+              this.extractProgressSubject.next(0);
               return of(response);
             }
+
             // shared SSE stream for this downloadId (single underlying subscription)
             const events$ = this.extractProgressEventsService
               .listenForSpecificExtractProgressEvents$(response.downloadId)
               .pipe(share());
 
-            // completedOrFailed$ will emit the first COMPLETED or FAILED event
+            // completedOrFailed$ will emit the first COMPLETED or FAILED event, unless timed out
             const completedOrFailed$ = events$.pipe(
+              // If no event arrives in time, timeout will throw and catchError converts that to a synthetic EXTRACT_FAILED event
+              timeout(AttributeListExportService.SSE_TIMEOUT_MS),
+              catchError(err => {
+                console.error('Timed out waiting for extract completion/failed event or SSE error', err);
+                return of({ eventType: EventType.EXTRACT_FAILED, details: { downloadId: response.downloadId } } as ExtractProgressEventModel);
+              }),
               filter(evt => evt.eventType === EventType.EXTRACT_COMPLETED || evt.eventType === EventType.EXTRACT_FAILED),
               first(),
             );
@@ -101,7 +114,7 @@ export class AttributeListExportService {
               filter(evt => evt.eventType === EventType.EXTRACT_PROGRESS),
               takeUntil(completedOrFailed$),
               tap(evt => {
-                // side effect: relay progress to service's extractProgress$ observable for UI to consume
+                // relay progress to service's extractProgress$ observable for UI to consume
                 this.extractProgressSubject.next(evt.details.progress);
               }),
               // map to response so downstream receives consistent type
@@ -122,6 +135,7 @@ export class AttributeListExportService {
                   }).pipe(
                     // on error show snackbar and still return the response
                     catchError(err => {
+                      this.extractProgressSubject.next(0);
                       console.error('Error downloading extract', err);
                       this.showSnackbarMessage($localize `:@@core.attribute-list.extract-download-failed:Downloading extract failed`);
                       return of(null);
@@ -129,9 +143,10 @@ export class AttributeListExportService {
                     // emit the original response regardless of HTTP result so outer map can use it
                     map(() => response));
                 } else {
-                  // extraction failed -> show message and emit response
-                  const msg =
-                    $localize`:@@core.attribute-list.export-failed:Extracting data for layer ${params.serviceLayerName} and format ${params.format} failed during extraction`;
+                  // extraction process failed server side -> show message and emit response
+                  this.extractProgressSubject.next(0);
+                  /* eslint-disable-next-line max-len */
+                  const msg = $localize`:@@core.attribute-list.export-failed-during-extraction:Extracting data for layer ${params.serviceLayerName} and format ${params.format} failed during extraction`;
                   this.showSnackbarMessage(msg);
                   return of(response);
                 }
@@ -180,11 +195,14 @@ export class AttributeListExportService {
         }
         return this.managerService.getLayerExtractCapabilities$(tabSourceId, { applicationId, layerId })
           .pipe(
-            catchError(() => of({ outputFormats: [] })),
-            tap(capabilities => {
-                this.cachedFormats.set(key, capabilities.outputFormats);
-            }),
             map(capabilities => capabilities.outputFormats || []),
+            tap(outputFormats => {
+              // only cache when we have a successful, non-empty result
+              if (outputFormats && outputFormats.length > 0) {
+                this.cachedFormats.set(key, outputFormats);
+              }
+            }),
+            catchError(() => of([])),
           );
       }),
     );

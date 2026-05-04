@@ -23,6 +23,9 @@
       <trans-unit id="core.attribute-list.export-failed" datatype="html">
         <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed-during-extraction" datatype="html">
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed during extraction</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.extract-download-failed" datatype="html">
         <source>Downloading extract failed</source>
       </trans-unit>
