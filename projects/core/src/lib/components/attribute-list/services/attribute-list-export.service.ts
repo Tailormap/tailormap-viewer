@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  catchError, combineLatest, filter, first, map, merge, mergeMap, Observable, of, share, startWith, switchMap, take, takeUntil, tap,
+  BehaviorSubject, catchError, combineLatest, filter, first, map, merge, mergeMap, Observable, of, share, startWith, switchMap, take,
+  takeUntil, tap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
@@ -25,30 +26,19 @@ export class AttributeListExportService {
   private snackBar = inject(MatSnackBar);
   private managerService = inject(AttributeListManagerService);
   private extractProgressEventsService = inject(ExtractProgressEventsService);
-  private static CSV_FORMAT = 'csv';
-  private static XLSX_FORMAT = 'xlsx';
-  private static SHAPE_FORMAT = 'shape';
-  private static GEOJSON_FORMAT = 'geojson';
-  // the key is created in getCacheKey(applicationId, layerId)
+  private extractProgressSubject= new BehaviorSubject( 0);
+  public extractProgress$ = this.extractProgressSubject.asObservable();
+  /** the key is created using applicationId and layerId, the data is the list of supported formats.
+   * @see #getCacheKey(applicationId, layerId)
+   * @private
+   */
   private cachedFormats: Map<string, string[]> = new Map();
 
   public getExportFormats$(tabSourceId: string, layerId: string): Observable<SupportedExtractFormats[]> {
     return this.getExtractCapabilities$(tabSourceId, layerId).pipe(
       map(formats => {
-        const supportedFormats: SupportedExtractFormats[] = [];
-        if (this.hasSupport(formats, AttributeListExportService.CSV_FORMAT)) {
-          supportedFormats.push(SupportedExtractFormats.CSV);
-        }
-        if (this.hasSupport(formats, AttributeListExportService.XLSX_FORMAT)) {
-          supportedFormats.push(SupportedExtractFormats.XLSX);
-        }
-        if (this.hasSupport(formats, AttributeListExportService.SHAPE_FORMAT)) {
-          supportedFormats.push(SupportedExtractFormats.SHAPE);
-        }
-        if (this.hasSupport(formats, AttributeListExportService.GEOJSON_FORMAT)) {
-          supportedFormats.push(SupportedExtractFormats.GEOJSON);
-        }
-        return supportedFormats;
+        const enumValues = Object.values(SupportedExtractFormats) as SupportedExtractFormats[];
+        return enumValues.filter(fmt => formats.includes(fmt));
       }),
     );
   }
@@ -90,18 +80,14 @@ export class AttributeListExportService {
             this.showSnackbarMessage(defaultErrorMessage);
             return of(null);
           }),
-          // switchMap lets us return an observable that wires progress/completion/download without manual subscribe()
           switchMap((response: LayerExtractResponseModel | null) => {
             // If no response or no downloadId, just pass it through
             if (!response || !response.downloadId) {
               return of(response);
             }
-
-            const downloadId = response.downloadId;
-
             // shared SSE stream for this downloadId (single underlying subscription)
             const events$ = this.extractProgressEventsService
-              .listenForSpecificExtractProgressEvents$(downloadId)
+              .listenForSpecificExtractProgressEvents$(response.downloadId)
               .pipe(share());
 
             // completedOrFailed$ will emit the first COMPLETED or FAILED event
@@ -115,11 +101,8 @@ export class AttributeListExportService {
               filter(evt => evt.eventType === EventType.EXTRACT_PROGRESS),
               takeUntil(completedOrFailed$),
               tap(evt => {
-                // side-effect: relay progress to UI/store as needed
-                const details = evt.details;
-                console.debug('extract progress for downloadId', details.downloadId, 'progress', details.progress, 'message', details.progress);
-                // TODO: to receive progress updates in the UI replace this tap with a dispatch to Subject/store action and expose
-                //  that observable to components instead of logging
+                // side effect: relay progress to service's extractProgress$ observable for UI to consume
+                this.extractProgressSubject.next(evt.details.progress);
               }),
               // map to response so downstream receives consistent type
               map(() => response),
@@ -130,14 +113,13 @@ export class AttributeListExportService {
               mergeMap(evt => {
                 const details = evt.details;
                 if (evt.eventType === EventType.EXTRACT_COMPLETED) {
+                  this.extractProgressSubject.next(100);
                   // trigger the actual download; return an observable that emits the original response when done
                   return this.managerService.downloadLayerExtract$(params.tabSourceId, {
                     layerId: params.layerId,
                     applicationId: applicationId,
                     downloadId: details.downloadId,
                   }).pipe(
-                    // success side-effect
-                    tap(() => console.debug('download initiated for', details.downloadId)),
                     // on error show snackbar and still return the response
                     catchError(err => {
                       console.error('Error downloading extract', err);
@@ -155,7 +137,6 @@ export class AttributeListExportService {
                 }
               }),
             );
-
             // merge progress notifications and completion-download observable; start with the immediate response
             // that way callers get the initial response quickly and subsequent emissions keep emitting the same response
             return merge(progress$, completionTriggeredDownload$).pipe(startWith(response));
@@ -181,19 +162,7 @@ export class AttributeListExportService {
     return this.getExportFormats$(tabSourceId, layerId)
       .pipe(
         take(1),
-        map(formats => {
-          switch (format) {
-            case SupportedExtractFormats.CSV:
-              return this.getOutputFormat(formats, AttributeListExportService.CSV_FORMAT);
-            case SupportedExtractFormats.XLSX:
-              return this.getOutputFormat(formats, AttributeListExportService.XLSX_FORMAT);
-            case SupportedExtractFormats.SHAPE:
-              return this.getOutputFormat(formats, AttributeListExportService.SHAPE_FORMAT);
-            case SupportedExtractFormats.GEOJSON:
-              return this.getOutputFormat(formats, AttributeListExportService.GEOJSON_FORMAT);
-          }
-          return null;
-        }),
+        map(formats => (formats.find(fmt => fmt === format) ?? null)),
       );
   }
 
@@ -219,14 +188,6 @@ export class AttributeListExportService {
           );
       }),
     );
-  }
-
-  private getOutputFormat(supportedFormats: string[], requiredFormat: string): string | null {
-    return supportedFormats.find(format => format === requiredFormat) ?? null;
-  }
-
-  private hasSupport(supportedFormats: string[], requiredFormat: string): boolean {
-    return supportedFormats.includes(requiredFormat);
   }
 
   private getCacheKey(applicationId: string, layerId: string): string {
