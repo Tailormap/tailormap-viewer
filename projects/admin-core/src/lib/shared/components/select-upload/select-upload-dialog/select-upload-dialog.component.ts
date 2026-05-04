@@ -98,12 +98,6 @@ export class SelectUploadDialogComponent implements OnInit {
         })));
         this.loading.set(false);
       });
-
-    this.descriptionControl.valueChanges.subscribe(description => {
-      if (description) {
-        this.setDescription(description);
-      }
-    });
   }
 
   private humanFileSize(sizeBytes: number | bigint | null | undefined): string {
@@ -208,15 +202,6 @@ export class SelectUploadDialogComponent implements OnInit {
         this.existingUploads$.next((this.existingUploads$.value || []).filter(u => u.id !== uploadId));
         this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:File ${uploadName} removed`);
       });
-  }
-
-  public setDescription(description: string) {
-    this.pendingImage.update(pendingImage => {
-      if (!pendingImage) {
-        return null;
-      }
-      return { ...pendingImage, description };
-    });
   }
 
 }
