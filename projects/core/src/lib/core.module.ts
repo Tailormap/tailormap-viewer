@@ -80,7 +80,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     SharedModule,
     ComponentsModule,
     LayoutModule,
-    RouterModule.forRoot([{ path: '', children: [] }]),
+    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
     CoreSharedModule,
   ],
   exports: [
