@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
-  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
+  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest, finalize,
 } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
@@ -21,16 +21,12 @@ import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 export class AttributeListExportButtonComponent implements OnDestroy {
   private store$ = inject(Store);
   private exportService = inject(AttributeListExportService);
-
-
+  public isExtractProgress$ = this.exportService.extractProgress$;
   private destroyed = new Subject();
-
   public supportedFormats = SupportedExtractFormats;
-
   private supportedFormatsSubject = new BehaviorSubject<SupportedExtractFormats[]>([]);
   private supportedFormats$: Observable<SupportedExtractFormats[]> = this.supportedFormatsSubject.asObservable();
   public showExportButton$ = this.supportedFormats$.pipe(map(formats => formats.length > 0));
-
   private isExportingSubject = new BehaviorSubject(false);
   public isExporting$ = this.isExportingSubject.asObservable();
 
@@ -78,14 +74,15 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
           return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
-        }))
+        }),
+        finalize(() => this.isExportingSubject.next(false)),
+      )
       .subscribe(() => {
-        this.isExportingSubject.next(false);
+        // finalization/reset handled by finalize() above
       });
   }
 
   public isFormatSupported$(format: SupportedExtractFormats) {
     return this.supportedFormats$.pipe(map(formats => formats.includes(format)));
   }
-
 }
