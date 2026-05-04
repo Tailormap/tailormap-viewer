@@ -36,13 +36,15 @@
     <h2>{{ dialogProps.uploadNewTitle }}</h2>
     <tm-image-upload-field (imageChanged)="imageSelected($event)"
                            [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
-    <mat-form-field appearance="outline" class="description-field">
-      <mat-label i18n="@@admin-core.select-upload.description">Description</mat-label>
-      <input matInput [formControl]="descriptionControl" i18n-placeholder="@@admin-core.select-upload.description" placeholder="Description"/>
-    </mat-form-field>
-    <div class="description-hint" i18n="@@admin-core.select-upload.description-hint">
-      The description is used as the ARIA label for the image to improve the accessibility of the application.
-    </div>
+    @if (data.showDescriptionField) {
+      <mat-form-field appearance="outline" class="description-field">
+        <mat-label i18n="@@admin-core.select-upload.description">Description</mat-label>
+        <input matInput [formControl]="descriptionControl" i18n-placeholder="@@admin-core.select-upload.description" placeholder="Description"/>
+      </mat-form-field>
+      <div class="description-hint" i18n="@@admin-core.select-upload.description-hint">
+        The description is used as the ARIA label for the image to improve the accessibility of the application.
+      </div>
+    }
   </div>
 
 </div>

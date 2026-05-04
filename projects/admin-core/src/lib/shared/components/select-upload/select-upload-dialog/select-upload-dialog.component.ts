@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
 export interface SelectUploadData {
   uploadId: string | null;
   category: UploadCategoryEnum | string;
+  showDescriptionField: boolean;
 }
 
 export interface SelectUploadResult {

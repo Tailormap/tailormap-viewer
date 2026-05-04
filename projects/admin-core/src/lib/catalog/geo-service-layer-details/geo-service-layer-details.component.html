@@ -14,9 +14,11 @@
     </div>
     <div class="legend-settings">
       <strong i18n="@@admin-core.catalog.override-legend">Override service default legend</strong>
-      <tm-admin-select-upload [category]="legendCategory"
+      <tm-admin-select-upload
+        [category]="legendCategory"
         (fileSelected)="onLegendImageChanged($event)"
-      [selectedFile]="legendImageId || null"></tm-admin-select-upload>
+        [selectedFile]="legendImageId || null"
+        [showDescriptionField]="false"></tm-admin-select-upload>
     </div>
   </div>
   <div class="page-details-actions">
