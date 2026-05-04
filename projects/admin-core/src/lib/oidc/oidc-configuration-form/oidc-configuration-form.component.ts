@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { FormHelper } from '../../helpers/form.helper';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
+import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-form',
@@ -41,7 +42,11 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     if (!expiry) {
       return 0;
     }
-    return Math.max(0, Math.ceil(expiry.diffNow('days').days));
+    return OIDCConfigurationService.getDaysUntilExpiration(expiry);
+  }
+
+  public getExpiryClass() {
+    return OIDCConfigurationService.clientSecretExpirationDaysToCategory(this.daysUntilExpiry);
   }
 
   @Output()
@@ -116,15 +121,5 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
   public onImageChanged($event: string | null) {
     this.oidcConfigurationForm.patchValue({ image: $event }, { emitEvent: true });
     this.oidcConfigurationForm.markAsDirty();
-  }
-
-  protected getExpiryClass() {
-    const daysUntilExpiry = this.daysUntilExpiry;
-    if (daysUntilExpiry === 0) {
-      return 'expired';
-    } else if (daysUntilExpiry <= 30) {
-      return 'expiring-soon';
-    }
-    return '';
   }
 }
