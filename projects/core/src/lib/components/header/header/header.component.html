@@ -2,7 +2,7 @@
 @if (cnf) {
   <div class="header-container" #headerContainer>
     @if (cnf.logoFileId) {
-        <img [src]="getUrl(cnf.logoFileId)" (load)="checkUseDropdown()" alt="Logo" class="header-logo-image" />
+      <tm-image-with-description [src]="getUrl(cnf.logoFileId)" (load)="checkUseDropdown()" class="header-logo-image"></tm-image-with-description>
     }
     <h1 class="header-title">{{cnf.title}}</h1>
     @if (cnf.menuItems) {
