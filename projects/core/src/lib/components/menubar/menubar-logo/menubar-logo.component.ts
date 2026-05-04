@@ -22,11 +22,4 @@ export class MenubarLogoComponent implements OnInit {
     this.logo$ = this.store$.select(selectViewerLogo).pipe(distinctUntilChanged());
   }
 
-  public getSafeUrl(url: string): SafeUrl | string {
-    if (url.startsWith('data:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
-  }
-
 }

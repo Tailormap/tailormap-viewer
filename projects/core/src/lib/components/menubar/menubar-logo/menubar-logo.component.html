@@ -1,8 +1,8 @@
 @if (logo$ | async; as logo) {
-  <img
-    [src]="getSafeUrl(logo)"
-    class="logo custom-logo"
-    alt="Logo">
+  <tm-image-with-description
+    [src]="logo"
+    class="logo custom-logo">
+  </tm-image-with-description>
 } @else {
   <mat-icon class="logo" svgIcon="logo"></mat-icon>
 }
