@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MenubarModule } from '../menubar';
 import { HeaderComponent } from './header/header.component';
+import { CoreSharedModule } from "../../shared";
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { HeaderComponent } from './header/header.component';
     CommonModule,
     SharedModule,
     MenubarModule,
+    CoreSharedModule,
   ],
   exports: [
     HeaderComponent,

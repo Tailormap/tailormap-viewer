@@ -34,6 +34,7 @@ import { PasswordResetRequestFormComponent } from './pages/login/password-reset-
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
+import { CoreSharedModule } from './shared/core-shared.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -80,6 +81,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     ComponentsModule,
     LayoutModule,
     RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
+    CoreSharedModule,
   ],
   exports: [
     ViewerAppComponent,

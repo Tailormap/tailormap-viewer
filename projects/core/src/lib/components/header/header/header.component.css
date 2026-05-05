@@ -13,13 +13,14 @@
   align-items: center;
 }
 
-img {
+tm-image-with-description {
+  align-self: stretch;
   max-height: 100%;
   max-width: 50%;
 }
 
 @media screen and (max-width: 450px) {
-  img {
+  tm-image-with-description {
     max-width: 30%;
   }
 }

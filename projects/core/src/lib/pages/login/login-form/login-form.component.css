@@ -101,7 +101,7 @@ button mat-spinner {
 .sso-image {
   position: absolute;
   left: 0;
-  max-height: 30px;
+  height: 30px;
   max-width: 100px;
 }
 

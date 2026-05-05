@@ -48,3 +48,16 @@ h2 {
   padding: 2px 0;
   --mat-icon-button-icon-size: 18px;
 }
+
+.description-field {
+  margin-top: 16px;
+}
+
+.description-hint {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+  text-align: left;
+  padding: 0 16px;
+}

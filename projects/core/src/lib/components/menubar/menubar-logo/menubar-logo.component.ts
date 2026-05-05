@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { selectViewerLogo } from '../../../state/core.selectors';
 import { distinctUntilChanged, Observable, of } from 'rxjs';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'tm-menubar-logo',
@@ -13,20 +12,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class MenubarLogoComponent implements OnInit {
   private store$ = inject(Store);
-  private sanitizer = inject(DomSanitizer);
 
 
   public logo$: Observable<string | null> = of(null);
 
   public ngOnInit(): void {
     this.logo$ = this.store$.select(selectViewerLogo).pipe(distinctUntilChanged());
-  }
-
-  public getSafeUrl(url: string): SafeUrl | string {
-    if (url.startsWith('data:')) {
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-    return url;
   }
 
 }

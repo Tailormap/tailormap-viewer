@@ -25,13 +25,16 @@ export class SelectUploadComponent {
   @Input()
   public selectedFile: string | null = null;
 
+  @Input()
+  public showDescriptionField: boolean = true;
+
   @Output()
   public fileSelected = new EventEmitter<string | null>();
 
   public selectFile() {
     SelectUploadDialogComponent.open(
       this.dialog,
-      { category: this.category, uploadId: this.selectedFile },
+      { category: this.category, uploadId: this.selectedFile, showDescriptionField: this.showDescriptionField },
       this.viewContainerRef,
     )
       .afterClosed()

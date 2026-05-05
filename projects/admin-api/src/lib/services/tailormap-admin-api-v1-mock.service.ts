@@ -202,7 +202,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public getUploads$(): Observable<UploadModel[]> {
     return of([]);
   }
-  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel> {
+  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {
     return of({ id: '1', ...upload } as UploadModel);
   }
   public deleteUpload$(): Observable<boolean> {

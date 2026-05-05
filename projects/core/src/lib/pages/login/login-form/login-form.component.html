@@ -19,10 +19,10 @@
                     [tmAutoFocus]="idx === 0"
                     (click)="loginSSO(item.url)">
               @if (item.image) {
-                <img
+                <tm-image-with-description
                   [src]="item.image"
-                  class="sso-image"
-                  alt="Logo">
+                  class="sso-image">
+                </tm-image-with-description>
               }
               <span class="sso-button-text">
                 {{item.name}}
