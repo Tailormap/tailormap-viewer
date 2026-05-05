@@ -1,5 +1,21 @@
 process.env.TZ = 'GMT';
 
+const transformIgnorePatterns = [
+  '.*\\.mjs$',
+  'ol',
+  'observable-fns',
+  'quick-lru',
+  'nanoid',
+  'earcut',
+  'pbf',
+  'rbush',
+  '@tinyhttp/',
+  '@stardazed',
+  'quickselect',
+  'color-(space|parse|rgba|name)',
+  'uuid',
+];
+
 module.exports = {
   setupFiles: [],
   preset: 'jest-preset-angular',
@@ -17,5 +33,5 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|ol|observable-fns|quick-lru|nanoid|earcut|pbf|rbush|@tinyhttp/|@stardazed|color-(space|parse|rgba|name)/)|quickselect|uuid)'],
+  transformIgnorePatterns: [`node_modules/(?!(${transformIgnorePatterns.join('|')}/))`],
 };
