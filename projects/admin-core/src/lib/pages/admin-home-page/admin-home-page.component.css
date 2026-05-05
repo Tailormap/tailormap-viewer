@@ -1,0 +1,52 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.expiring-configs-container {
+  max-width: 500px;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.config-item {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  border-left: 4px solid;
+  cursor: pointer;
+}
+
+.config-item div {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.config-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.expired {
+  border-left-color: #d32f2f !important;
+  background-color: #ffebee;
+}
+
+.warning {
+  border-left-color: #f57c00 !important;
+  background-color: #fff3e0;
+}
+
+.expired-text {
+  color: #d32f2f;
+}
+
+.warning-text {
+  color: #f57c00;
+}

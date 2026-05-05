@@ -1502,6 +1502,15 @@
       <trans-unit id="admin-core.oidc.client-secret" datatype="html">
         <source>Client Secret</source>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiration-warnings" datatype="html">
+        <source>OIDC client secret expiration warnings</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expired" datatype="html">
+        <source>🔴 Expired on <x id="INTERPOLATION" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expires-in" datatype="html">
+        <source>⚠️ Expires in <x id="INTERPOLATION" equiv-text="{{ config.clientSecretExpirationDays }}"/> days on <x id="INTERPOLATION_1" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.client-secret-expiry-date" datatype="html">
         <source>Client secret expiry date</source>
       </trans-unit>

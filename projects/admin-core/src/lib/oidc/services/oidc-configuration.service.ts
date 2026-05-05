@@ -1,6 +1,7 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Injectable, OnDestroy, inject, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  OIDCClientSecretExpirationInfo,
   OIDCConfigurationModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
@@ -9,9 +10,13 @@ import {
   addOIDCConfiguration, deleteOIDCConfiguration, loadOIDCConfigurations,
   updateOIDCConfiguration,
 } from '../state/oidc-configuration.actions';
-import { selectOIDCConfigurationList, selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration } from '../state/oidc-configuration.selectors';
+import {
+  selectOIDCConfigurationList, selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration,
+  selectExpiringClientSecretConfigurations,
+} from '../state/oidc-configuration.selectors';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { DateTime } from 'luxon';
 
 type OIDCConfigurationCreateModel = Omit<OIDCConfigurationModel, 'id'>;
 type OIDCConfigurationEditModel = Partial<OIDCConfigurationCreateModel>;
@@ -25,6 +30,7 @@ export class OIDCConfigurationService implements OnDestroy {
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
 
+  public static DAYS_UNTIL_EXPIRY_WARNING = 30;
 
   private destroyed = new Subject<null>();
 
@@ -60,6 +66,31 @@ export class OIDCConfigurationService implements OnDestroy {
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectOIDCConfigurationList)),
       );
+  }
+
+  public static getDaysUntilExpirationForConfig(oidcConfiguration: OIDCConfigurationModel): number | null {
+    if (!oidcConfiguration.clientSecretExpiry) {
+      return null;
+    }
+    return OIDCConfigurationService.getDaysUntilExpiration(DateTime.fromISO(oidcConfiguration.clientSecretExpiry));
+  }
+
+  public static getDaysUntilExpiration(expirationDate: DateTime): number {
+    return Math.max(0, Math.ceil(expirationDate.diffNow('days').days));
+  }
+
+  public static clientSecretExpirationDaysToCategory(expirationDays: number) {
+    if (expirationDays <= 0) {
+      return 'expired';
+    } else if (expirationDays <= OIDCConfigurationService.DAYS_UNTIL_EXPIRY_WARNING) {
+      return 'warning';
+    } else {
+      return 'valid';
+    }
+  }
+
+  public getExpiringClientSecretConfigurations(): Signal<OIDCClientSecretExpirationInfo[]> {
+    return this.store$.selectSignal(selectExpiringClientSecretConfigurations);
   }
 
   public createOIDCConfiguration$(oidcConfiguration: OIDCConfigurationCreateModel) {

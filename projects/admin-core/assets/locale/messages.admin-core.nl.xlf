@@ -2029,6 +2029,18 @@
         <source>Client Secret</source>
         <target>Client secret</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiration-warnings" datatype="html">
+        <source>OIDC client secret expiration warnings</source>
+        <target>OIDC client secret verloopdatum waarschuwingen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expired" datatype="html">
+        <source>🔴 Expired on <x id="INTERPOLATION" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+        <target>🔴 Verlopen op <x id="INTERPOLATION" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expires-in" datatype="html">
+        <source>⚠️ Expires in <x id="INTERPOLATION" equiv-text="{{ config.clientSecretExpirationDays }}"/> days on <x id="INTERPOLATION_1" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+        <target>⚠️ Verloopt over <x id="INTERPOLATION" equiv-text="{{ config.clientSecretExpirationDays }}"/> dagen op <x id="INTERPOLATION_1" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.client-secret-expiry-date" datatype="html">
         <source>Client secret expiry date</source>
         <target>Verloopdatum client secret</target>
