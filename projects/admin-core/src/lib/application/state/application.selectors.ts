@@ -303,3 +303,8 @@ export const selectNoFilterableLayersForSelectedApplication = createSelector(
   selectFilterableLayersForApplication,
   filterableLayers => filterableLayers.length === 0,
 );
+
+export const selectDraftApplication3dEnabled = createSelector(
+  selectDraftApplication,
+  draftApplication => draftApplication?.settings?.uiSettings?.enable3D ?? false,
+);
