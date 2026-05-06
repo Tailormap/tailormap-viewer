@@ -3,7 +3,6 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { AttributeListState, initialAttributeListState } from './attribute-list.state';
 import { AttributeListStateHelper } from './attribute-list-state.helper';
 import { StateHelper } from '@tailormap-viewer/shared';
-import { AttributeListInitialDataSortModel } from '../models/attribute-list-initial-data-sort.model';
 
 const onSetAttributeListVisibility = (
   state: AttributeListState,

@@ -48,18 +48,23 @@ export const selectDataWithSort = createSelector(
   selectAttributeListData,
   selectInitialDataSort,
   (tabs, data, initialDataSort): AttributeListDataModel[] => {
+    const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
     return data.map(d => {
-      const tab = tabs.find(t => t.id === d.tabId);
+      const tab = tabsById.get(d.tabId);
       const matchingSorts = initialDataSort.filter(s => {
         return s.tabSourceId === tab?.tabSourceId && s.layerId === tab?.layerId;
       });
       const bookmarkSort = matchingSorts.find(sort => sort.source === 'bookmark');
       const configSort = matchingSorts.find(sort => sort.source === 'config');
       const sortToApply = bookmarkSort || configSort;
+      const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
+      if (hasExplicitSort || !sortToApply || sortToApply.sortDirection === d.sortDirection || sortToApply.sortedColumn === d.sortedColumn) {
+        return d;
+      }
       return {
         ...d,
-        sortDirection: d.sortDirection || (sortToApply?.sortDirection ?? ''),
-        sortedColumn: d.sortedColumn || sortToApply?.sortedColumn,
+        sortDirection: hasExplicitSort ? d.sortDirection : (sortToApply?.sortDirection ?? ''),
+        sortedColumn: hasExplicitSort ? d.sortedColumn : sortToApply?.sortedColumn,
       };
     });
   },
@@ -69,22 +74,22 @@ export const selectAttributeListTabsSort = createSelector(
   selectAttributeListTabs,
   selectDataWithSort,
   (tabs, data): AttributeListInitialDataSortModelWithoutSource[] => {
-  const dataById = new Map(data.map(d => [ d.id, d ]));
-  return tabs
-    .map(tab => {
-      const dataForTab = dataById.get(tab.selectedDataId);
-      if (!dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
-        return null;
-      }
-      return {
-        tabSourceId: tab.tabSourceId,
-        layerId: tab.layerId,
-        sortedColumn: dataForTab.sortedColumn,
-        sortDirection: dataForTab.sortDirection,
-      };
-    })
-    .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
-});
+    const dataById = new Map(data.map(d => [ d.id, d ]));
+    return tabs
+      .map(tab => {
+        const dataForTab = dataById.get(tab.selectedDataId);
+        if (!dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
+          return null;
+        }
+        return {
+          tabSourceId: tab.tabSourceId,
+          layerId: tab.layerId,
+          sortedColumn: dataForTab.sortedColumn,
+          sortDirection: dataForTab.sortDirection,
+        };
+      })
+      .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
+  });
 
 export const selectAttributeListTabData = (tabId: string) => createSelector(
   selectDataWithSort,

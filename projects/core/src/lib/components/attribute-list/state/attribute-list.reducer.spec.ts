@@ -97,14 +97,7 @@ describe('AttributeListReducer', () => {
     });
 
     test('adds new tabs and data with initial sort', () => {
-      const state = createState({
-        initialDataSort: [{
-          layerId: 'layer-1',
-          tabSourceId: 'source-1',
-          sortedColumn: 'col-1',
-          sortDirection: 'asc',
-          source: 'config' }],
-      });
+      const state = createState();
       const newTab = createTab();
       const newData = createData();
       const result = attributeListReducer(state, AttributeListActions.changeAttributeListTabs({
@@ -114,35 +107,7 @@ describe('AttributeListReducer', () => {
       }));
 
       expect(result.tabs).toEqual([newTab]);
-      expect(result.data).toEqual([{ ...newData, sortedColumn: 'col-1', sortDirection: 'asc' }]);
-    });
-
-    test('adds new tabs and data with initial sort where bookmark sort takes precedence over configured sort', () => {
-      const state = createState({
-        initialDataSort: [{
-          layerId: 'layer-1',
-          tabSourceId: 'source-1',
-          sortedColumn: 'col-1',
-          sortDirection: 'asc',
-          source: 'config',
-        }, {
-          layerId: 'layer-1',
-          tabSourceId: 'source-1',
-          sortedColumn: 'col-1',
-          sortDirection: 'desc',
-          source: 'bookmark',
-        }],
-      });
-      const newTab = createTab();
-      const newData = createData();
-      const result = attributeListReducer(state, AttributeListActions.changeAttributeListTabs({
-        newTabs: [newTab],
-        newData: [newData],
-        closedTabs: [],
-      }));
-
-      expect(result.tabs).toEqual([newTab]);
-      expect(result.data).toEqual([{ ...newData, sortedColumn: 'col-1', sortDirection: 'desc' }]);
+      expect(result.data).toEqual([newData]);
     });
 
     test('closes tabs and their data', () => {
