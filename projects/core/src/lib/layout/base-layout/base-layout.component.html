@@ -1,11 +1,11 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
-  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header role="banner"></tm-header> }
   <div class="viewer">
-    <div class="menubar">
+    <nav class="menubar">
       <tm-menubar [config]="layoutConfig.config"></tm-menubar>
-    </div>
-    <div class="content">
+    </nav>
+    <main class="content">
       <div class="center">
         <div class="left">
           <tm-menubar-panel>
@@ -59,6 +59,6 @@
         </div>
       </div>
       <div class="bottom"></div>
-    </div>
+    </main>
   </div>
 }
