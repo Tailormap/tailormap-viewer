@@ -58,13 +58,13 @@ export const selectDataWithSort = createSelector(
       const configSort = matchingSorts.find(sort => sort.source === 'config');
       const sortToApply = bookmarkSort || configSort;
       const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
-      if (hasExplicitSort || !sortToApply || sortToApply.sortDirection === d.sortDirection || sortToApply.sortedColumn === d.sortedColumn) {
+      if (hasExplicitSort || !sortToApply || (sortToApply.sortDirection === d.sortDirection && sortToApply.sortedColumn === d.sortedColumn)) {
         return d;
       }
       return {
         ...d,
-        sortDirection: hasExplicitSort ? d.sortDirection : (sortToApply?.sortDirection ?? ''),
-        sortedColumn: hasExplicitSort ? d.sortedColumn : sortToApply?.sortedColumn,
+        sortDirection: sortToApply.sortDirection ?? '',
+        sortedColumn: sortToApply.sortedColumn,
       };
     });
   },

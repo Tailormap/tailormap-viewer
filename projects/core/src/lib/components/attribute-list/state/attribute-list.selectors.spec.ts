@@ -77,7 +77,7 @@ describe('AttributeListSelectors', () => {
       expect(projector([])).toEqual([]);
     });
 
-    test('returns all layers when none have attribution list hidden', () => {
+    test('returns all layers when none have attribute list hidden', () => {
       const layers = [
         createLayer({ id: 'l1', title: 'A' }),
         createLayer({ id: 'l2', title: 'B', hiddenFunctionality: [HiddenLayerFunctionality.featureInfo] }),
