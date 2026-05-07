@@ -1,12 +1,12 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
-  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header [mobileHeader]="true"></tm-header> }
-  <div class="viewer">
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header role="banner" [mobileHeader]="true"></tm-header> }
+  <main class="viewer">
     <div class="map">
       @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
       <tm-map></tm-map>
       <div class="map-controls-left">
-        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search role="search"></tm-simple-search> }
       </div>
       <div class="map-controls-right">
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.GEOLOCATION)) { <tm-geolocation></tm-geolocation> }
@@ -42,8 +42,8 @@
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }
       </tm-mobile-menubar-panel>
     </div>
-    <div class="mobile-menubar-buttons">
+    <nav class="mobile-menubar-buttons">
       <tm-mobile-menubar-bottom [config]="layoutConfig.config"></tm-mobile-menubar-bottom>
-    </div>
-  </div>
+    </nav>
+  </main>
 }

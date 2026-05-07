@@ -1,11 +1,11 @@
 @let layoutConfig = layoutService.componentsConfig$ | async;
 @if (layoutConfig) {
-  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header></tm-header> }
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header role="banner"></tm-header> }
   <div class="viewer">
-    <div class="menubar">
+    <nav class="menubar">
       <tm-menubar [config]="layoutConfig.config"></tm-menubar>
-    </div>
-    <div class="content">
+    </nav>
+    <main class="content">
       <div class="center">
         <div class="left">
           <tm-menubar-panel>
@@ -28,7 +28,7 @@
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MEASURE)) { <tm-measure></tm-measure> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)) { <tm-clicked-coordinates></tm-clicked-coordinates> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.STREETVIEW)) { <tm-streetview></tm-streetview> }
-            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search></tm-simple-search> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search role="search"></tm-simple-search> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit></tm-edit> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)) { <tm-coordinate-link-window></tm-coordinate-link-window> }
             @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SHARE_VIEWER)) { <tm-share-viewer></tm-share-viewer> }
@@ -59,6 +59,6 @@
         </div>
       </div>
       <div class="bottom"></div>
-    </div>
+    </main>
   </div>
 }

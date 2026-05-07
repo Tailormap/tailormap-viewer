@@ -1,5 +1,5 @@
 @if ((layoutService.componentsConfig$ | async); as layoutConfig) {
-  <div class="content">
+  <main class="content">
     <div class="center">
       <div class="map" #mapContainer>
         @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) {
@@ -17,7 +17,7 @@
             <tm-streetview></tm-streetview>
           }
           @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) {
-            <tm-simple-search></tm-simple-search>
+            <tm-simple-search role="search"></tm-simple-search>
           }
           @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_LAYER_TOGGLE)
           || layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_OPACITY)) {
@@ -49,5 +49,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 }
