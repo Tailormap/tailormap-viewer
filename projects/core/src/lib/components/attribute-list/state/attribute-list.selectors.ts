@@ -50,7 +50,7 @@ export const selectDataWithSort = createSelector(
   (tabs, data, initialDataSort): AttributeListDataModel[] => {
     const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
     const getKey = (tabSourceId: string, layerId: string, source: string, featureType: string | undefined) => {
-      return [ tabSourceId, layerId, featureType ?? '', source ].join('-');
+      return [ tabSourceId, layerId, featureType ?? '', source ].join('___');
     };
     const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => {
       return [ getKey(s.tabSourceId, s.layerId, s.source, s.featureType), s ];
@@ -76,14 +76,15 @@ export const selectDataWithSort = createSelector(
   },
 );
 
-export const selectAttributeListTabsSort = createSelector(
+export const selectAttributeListDataSort = createSelector(
   selectAttributeListTabs,
   selectDataWithSort,
   (tabs, data): AttributeListInitialDataSortModelWithoutSource[] => {
+    const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
     return data
       .map<AttributeListInitialDataSortModelWithoutSource | null>(dataForTab => {
-        const tab = tabs.find(t => t.id === dataForTab.tabId);
-        if (!tab || !dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
+        const tab = tabsById.get(dataForTab.tabId);
+        if (!tab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
           return null;
         }
         return {

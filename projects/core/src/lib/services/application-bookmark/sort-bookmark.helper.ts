@@ -20,7 +20,7 @@ export class SortBookmarkHelper {
     const a = sortState.map(s => ({
       ...(s.tabSourceId !== ATTRIBUTE_LIST_DEFAULT_SOURCE ? { s: s.tabSourceId } : {}),
       l: s.layerId,
-      f: s.featureType,
+      ...(typeof s.featureType !== 'undefined' ? { f: s.featureType } : {}),
       c: s.sortedColumn,
       ...(s.sortDirection === 'desc' ? { d: true } : {}),
     }));

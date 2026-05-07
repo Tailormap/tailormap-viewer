@@ -3,7 +3,7 @@ import {
   selectIsLoadingTabs,
   selectAttributeListTab,
   selectDataWithSort,
-  selectAttributeListTabsSort,
+  selectAttributeListDataSort,
   selectAttributeListTabData,
 } from './attribute-list.selectors';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
@@ -189,10 +189,10 @@ describe('AttributeListSelectors', () => {
     });
   });
 
-  describe('selectAttributeListTabsSort', () => {
-    const projector = selectAttributeListTabsSort.projector;
+  describe('selectAttributeListDataSort', () => {
+    const projector = selectAttributeListDataSort.projector;
 
-    test('returns sort entries for tabs with a sorted column', () => {
+    test('returns sort entries for data with a sorted column', () => {
       const tab = createTab({ id: 'tab-1', tabSourceId: 'source-1', layerId: 'layer-1', selectedDataId: 'data-1' });
       const data = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: 'asc' });
 
@@ -201,7 +201,7 @@ describe('AttributeListSelectors', () => {
       expect(result[0]).toEqual({ tabSourceId: 'source-1', layerId: 'layer-1', sortedColumn: 'name', sortDirection: 'asc' });
     });
 
-    test('excludes tabs where data has no sortedColumn', () => {
+    test('excludes data where data has no sortedColumn', () => {
       const tab = createTab({ id: 'tab-1', tabSourceId: 'source-1', layerId: 'layer-1', selectedDataId: 'data-1' });
       const data = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: undefined });
 
@@ -209,7 +209,7 @@ describe('AttributeListSelectors', () => {
       expect(result).toHaveLength(0);
     });
 
-    test('excludes tabs where sortDirection is empty', () => {
+    test('excludes data where sortDirection is empty', () => {
       const tab = createTab({ id: 'tab-1', tabSourceId: 'source-1', layerId: 'layer-1', selectedDataId: 'data-1' });
       const data = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: '' });
 
@@ -217,7 +217,7 @@ describe('AttributeListSelectors', () => {
       expect(result).toHaveLength(0);
     });
 
-    test('excludes tabs where layerId is undefined', () => {
+    test('excludes data where layerId is undefined', () => {
       const tab = createTab({ id: 'tab-1', tabSourceId: 'source-1', layerId: undefined, selectedDataId: 'data-1' });
       const data = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: 'desc' });
 
@@ -225,15 +225,15 @@ describe('AttributeListSelectors', () => {
       expect(result).toHaveLength(0);
     });
 
-    test('excludes tabs where selectedData cannot be found', () => {
+    test('excludes data where tab cannot be found', () => {
       const tab = createTab({ id: 'tab-1', tabSourceId: 'source-1', layerId: 'layer-1', selectedDataId: 'missing' });
-      const data = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: 'asc' });
+      const data = createData({ id: 'data-1', tabId: 'tab-2', sortedColumn: 'name', sortDirection: 'asc' });
 
       const result = projector([tab], [data]);
       expect(result).toHaveLength(0);
     });
 
-    test('handles multiple tabs and only returns those with sorts', () => {
+    test('handles multiple data and only returns those with sorts', () => {
       const tab1 = createTab({ id: 'tab-1', tabSourceId: 'src-1', layerId: 'l-1', selectedDataId: 'data-1' });
       const tab2 = createTab({ id: 'tab-2', tabSourceId: 'src-2', layerId: 'l-2', selectedDataId: 'data-2' });
       const data1 = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: 'asc' });
@@ -242,6 +242,24 @@ describe('AttributeListSelectors', () => {
       const result = projector([ tab1, tab2 ], [ data1, data2 ]);
       expect(result).toHaveLength(1);
       expect(result[0].tabSourceId).toBe('src-1');
+    });
+
+    test('handles multiple data and featuretypes', () => {
+      const tab1 = createTab({ id: 'tab-1', tabSourceId: 'src-1', layerId: 'l-1', selectedDataId: 'data-1' });
+      const tab2 = createTab({ id: 'tab-2', tabSourceId: 'src-2', layerId: 'l-2', selectedDataId: 'data-2' });
+      const data1 = createData({ id: 'data-1', tabId: 'tab-1', sortedColumn: 'name', sortDirection: 'asc' });
+      const data2 = createData({ id: 'data-2', tabId: 'tab-2', sortedColumn: 'name', sortDirection: 'asc' });
+      const data3 = createData({ id: 'data-3', tabId: 'tab-2', sortedColumn: 'name2', sortDirection: 'desc', featureType: 'ft1' });
+
+      const result = projector([ tab1, tab2 ], [ data1, data2, data3 ]);
+      expect(result).toHaveLength(3);
+      expect(result[0].tabSourceId).toBe('src-1');
+      expect(result[1].tabSourceId).toBe('src-2');
+      expect(result[1].featureType).toBeUndefined();
+      expect(result[1].layerId).toBe('l-2');
+      expect(result[2].tabSourceId).toBe('src-2');
+      expect(result[2].featureType).toBe('ft1');
+      expect(result[2].layerId).toBe('l-2');
     });
   });
 
