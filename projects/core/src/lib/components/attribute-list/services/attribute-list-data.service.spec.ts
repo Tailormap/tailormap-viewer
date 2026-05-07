@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible } from '../state/attribute-list.selectors';
+import {
+  selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible, selectInitialDataSort,
+} from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
@@ -41,6 +43,7 @@ const setup = (
       { selector: selectAttributeListData, value: fillStore ? data : [] },
       { selector: selectViewerId, value: '1' },
       { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
+      { selector: selectInitialDataSort, value: [] },
     ],
   }) as Store;
 
