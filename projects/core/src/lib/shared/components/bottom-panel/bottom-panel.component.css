@@ -38,11 +38,11 @@
   transition: none !important;
 }
 
-.panel--minimized {
+:host-context(.base-layout) .panel--minimized {
   height: auto;
 }
 
-.panel--maximized {
+:host-context(.base-layout) .panel--maximized {
   height: calc(var(--100vh) - var(--header-component-height));
 }
 
