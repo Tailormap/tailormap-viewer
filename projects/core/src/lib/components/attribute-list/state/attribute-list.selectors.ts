@@ -17,24 +17,7 @@ export const selectAttributeListTabs = createSelector(selectAttributeListState, 
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
-
-export const selectAttributeListTabsSort = createSelector(selectAttributeListState, (state): AttributeListInitialDataSortModelWithoutSource[] => {
-  const dataById = new Map(state.data.map(d => [ d.id, d ]));
-  return state.tabs
-    .map(tab => {
-      const data = dataById.get(tab.selectedDataId);
-      if (!data || !data.sortedColumn || data.sortDirection === '' || !tab.layerId) {
-        return null;
-      }
-      return {
-        tabSourceId: tab.tabSourceId,
-        layerId: tab.layerId,
-        sortedColumn: data.sortedColumn,
-        sortDirection: data.sortDirection,
-      };
-    })
-    .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
-});
+export const selectInitialDataSort = createSelector(selectAttributeListState, state => state.initialDataSort || []);
 
 export const selectTabsForVisibleLayers = createSelector(
   selectVisibleLayersWithAttributes,
@@ -60,13 +43,61 @@ export const selectAttributeListTab = (tabId: string) => createSelector(
   tabs => tabs.find(t => t.id === tabId),
 );
 
-export const selectAttributeListTabData = (tabId: string) => createSelector(
+export const selectDataWithSort = createSelector(
+  selectAttributeListTabs,
   selectAttributeListData,
+  selectInitialDataSort,
+  (tabs, data, initialDataSort): AttributeListDataModel[] => {
+    const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
+    const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => [ `${s.tabSourceId}-${s.layerId}-${s.source}`, s ]));
+    return data.map(d => {
+      const tab = tabsById.get(d.tabId);
+      if (!tab) {
+        return d;
+      }
+      const key = `${tab.tabSourceId}-${tab.layerId}`;
+      const sortToApply = sortDict.get(`${key}-bookmark`) || sortDict.get(`${key}-config`);
+      const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
+      if (hasExplicitSort || !sortToApply || (sortToApply.sortDirection === d.sortDirection && sortToApply.sortedColumn === d.sortedColumn)) {
+        return d;
+      }
+      return {
+        ...d,
+        sortDirection: sortToApply.sortDirection ?? '',
+        sortedColumn: sortToApply.sortedColumn,
+      };
+    });
+  },
+);
+
+export const selectAttributeListTabsSort = createSelector(
+  selectAttributeListTabs,
+  selectDataWithSort,
+  (tabs, data): AttributeListInitialDataSortModelWithoutSource[] => {
+    const dataById = new Map(data.map(d => [ d.id, d ]));
+    return tabs
+      .map(tab => {
+        const dataForTab = dataById.get(tab.selectedDataId);
+        if (!dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
+          return null;
+        }
+        return {
+          tabSourceId: tab.tabSourceId,
+          layerId: tab.layerId,
+          sortedColumn: dataForTab.sortedColumn,
+          sortDirection: dataForTab.sortDirection,
+        };
+      })
+      .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
+  });
+
+export const selectAttributeListTabData = (tabId: string) => createSelector(
+  selectDataWithSort,
   data => data.filter(t => t.tabId === tabId),
 );
 
 export const selectAttributeListDataForId = (dataId: string) => createSelector(
-  selectAttributeListData,
+  selectDataWithSort,
   data => data.find(t => t.id === dataId),
 );
 
@@ -112,7 +143,7 @@ export const selectDataIdForSelectedTab = createSelector(
 
 export const selectDataForSelectedTab = createSelector(
   selectSelectedTab,
-  selectAttributeListData,
+  selectDataWithSort,
   (selectedTab, data): AttributeListDataModel | null => {
     if (!selectedTab) {
       return null;
@@ -148,7 +179,7 @@ export const selectColumnsForSelectedTab = createSelector(
 );
 
 export const selectColumnsForData = (dataId: string) => createSelector(
-  selectAttributeListData,
+  selectDataWithSort,
   (allData): AttributeListColumnModel[] => {
     const data = allData.find(d => d.id === dataId);
     return data ? data.columns : [];

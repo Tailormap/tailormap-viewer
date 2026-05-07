@@ -3,7 +3,6 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { AttributeListState, initialAttributeListState } from './attribute-list.state';
 import { AttributeListStateHelper } from './attribute-list-state.helper';
 import { StateHelper } from '@tailormap-viewer/shared';
-import { AttributeListInitialDataSortModel } from '../models/attribute-list-initial-data-sort.model';
 
 const onSetAttributeListVisibility = (
   state: AttributeListState,
@@ -24,31 +23,7 @@ const onChangeAttributeListTabs = (
   const updatedTabs = tabs.concat(newTabs);
   const data = [...state.data].filter(d => payload.closedTabs.indexOf(d.tabId) === -1);
   const newData = payload.newData
-    .filter(featureData => !data.some(f => f.id === featureData.id && f.tabId === featureData.tabId))
-    .map(featureData => {
-      const tab = updatedTabs.find(t => t.id === featureData.tabId);
-      if (!tab) {
-        return featureData;
-      }
-
-      const matchingSorts = (state.initialDataSort || [])
-        .filter(sort => sort.tabSourceId === tab.tabSourceId && sort.layerId === tab.layerId);
-
-      const bookmarkSort = matchingSorts.find(sort => sort.source === 'bookmark');
-      const configSort = matchingSorts.find(sort => sort.source === 'config');
-      const sortToApply = bookmarkSort || configSort;
-
-      if (!sortToApply) {
-        return featureData;
-      }
-
-      return {
-        ...featureData,
-        sortedColumn: sortToApply.sortedColumn,
-        sortDirection: sortToApply.sortDirection,
-      };
-    });
-
+    .filter(featureData => !data.some(f => f.id === featureData.id && f.tabId === featureData.tabId));
 
   let selectedTabId = state.selectedTabId;
   if (updatedTabs.findIndex(t => t.id === selectedTabId) === -1) {
@@ -198,64 +173,14 @@ const onUpdateSort = (
   };
 };
 
-const onAddInitialDataSort = (
+const onSetInitialDataSort = (
   state: AttributeListState,
-  payload: ReturnType<typeof AttributeListActions.addInitialDataSort>,
+  payload: ReturnType<typeof AttributeListActions.setInitialDataSort>,
 ): AttributeListState => {
-  const existingSort = state.initialDataSort || [];
-  const newSort = payload.initialDataSort;
-
-  const isSameSort = (lhs: AttributeListInitialDataSortModel, rhs: AttributeListInitialDataSortModel) =>
-    lhs.tabSourceId === rhs.tabSourceId &&
-    lhs.layerId === rhs.layerId &&
-    lhs.source === rhs.source;
-
-  const updatedSort = existingSort.map(existing => {
-    const matchingNew = newSort.find(ns => isSameSort(ns, existing));
-    return matchingNew || existing;
-  });
-
-  const toAdd = newSort.filter(ns =>
-    !existingSort.some(existing => isSameSort(ns, existing)),
-  );
-
-  let updatedState = {
+  return {
     ...state,
-    initialDataSort: [ ...updatedSort, ...toAdd ],
+    initialDataSort: payload.initialDataSort,
   };
-
-  // Apply sorts directly to matching data tabs that are already loaded (happens when entering a bookmark on an already loaded browser tab)
-
-  newSort.forEach(sort => {
-    const matchingTab = updatedState.tabs.find(t => t.tabSourceId === sort.tabSourceId && t.layerId === sort.layerId);
-    if (!matchingTab?.selectedDataId) {
-      return;
-    }
-
-    const matchingData = updatedState.data.find(d => d.id === matchingTab.selectedDataId);
-    if (!matchingData) {
-      return;
-    }
-
-    if (matchingData.sortedColumn === sort.sortedColumn && matchingData.sortDirection === sort.sortDirection) {
-      return;
-    }
-
-    updatedState = {
-      ...updatedState,
-      data: AttributeListStateHelper.updateData(
-        updatedState.data,
-        matchingData.id,
-        d => ({
-          ...d,
-          sortedColumn: sort.sortedColumn,
-          sortDirection: sort.sortDirection,
-        }),
-      ),
-    };
-  });
-
-  return updatedState;
 };
 
 const onUpdateRowSelected = (
@@ -370,7 +295,7 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.loadDataFailed, onLoadDataFailed),
   on(AttributeListActions.updatePage, onUpdatePage),
   on(AttributeListActions.updateSort, onUpdateSort),
-  on(AttributeListActions.addInitialDataSort, onAddInitialDataSort),
+  on(AttributeListActions.setInitialDataSort, onSetInitialDataSort),
   on(AttributeListActions.updateRowSelected, onUpdateRowSelected),
   on(AttributeListActions.changeColumnPosition, onChangeColumnPosition),
   on(AttributeListActions.toggleColumnVisible, onToggleColumnVisible),

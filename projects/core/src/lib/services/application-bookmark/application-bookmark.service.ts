@@ -19,7 +19,7 @@ import { addOrUpdateFilterGroups } from '../../state/filter-state/filter.actions
 import { FilterBookmarkHelper } from './filter-bookmark.helper';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 import { selectAttributeListTabsSort } from '../../components/attribute-list/state/attribute-list.selectors';
-import { addInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
+import { setInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
 import { SortBookmarkHelper } from './sort-bookmark.helper';
 
 @Injectable({
@@ -185,10 +185,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         takeUntil(this.destroyed),
         filter(sortBookmark => !deepEqual(this.lastSortBookmark, sortBookmark)),
     ).subscribe(sortBookmark => {
-      const initialDataSort = SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []);
-      if (initialDataSort.length > 0) {
-        this.store$.dispatch(addInitialDataSort({ initialDataSort }));
-      }
+      this.store$.dispatch(setInitialDataSort({ initialDataSort: SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []) }));
     });
 
     this.store$.select(selectLoadStatus).pipe(

@@ -51,8 +51,8 @@ export const updateSort = createAction(
   props<{ dataId: string; column: string; direction: 'asc' | 'desc' | '' }>(),
 );
 
-export const addInitialDataSort = createAction(
-  `${attributeListActionsPrefix} Add/Update Initial Data Sort`,
+export const setInitialDataSort = createAction(
+  `${attributeListActionsPrefix} Set Initial Data Sort`,
   props<{ initialDataSort: AttributeListInitialDataSortModel[] }>(),
 );
 
