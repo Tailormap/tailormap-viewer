@@ -9,6 +9,7 @@ export class SortBookmarkHelper {
     return b.map(e => ({
       tabSourceId: e.s ?? ATTRIBUTE_LIST_DEFAULT_SOURCE,
       layerId: e.l,
+      featureType: e.f,
       sortedColumn: e.c,
       sortDirection: e.d ? 'desc' : 'asc',
       source: 'bookmark',
@@ -19,6 +20,7 @@ export class SortBookmarkHelper {
     const a = sortState.map(s => ({
       ...(s.tabSourceId !== ATTRIBUTE_LIST_DEFAULT_SOURCE ? { s: s.tabSourceId } : {}),
       l: s.layerId,
+      f: s.featureType,
       c: s.sortedColumn,
       ...(s.sortDirection === 'desc' ? { d: true } : {}),
     }));

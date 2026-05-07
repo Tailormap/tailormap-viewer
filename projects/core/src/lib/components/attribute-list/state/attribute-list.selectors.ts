@@ -49,14 +49,20 @@ export const selectDataWithSort = createSelector(
   selectInitialDataSort,
   (tabs, data, initialDataSort): AttributeListDataModel[] => {
     const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
-    const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => [ `${s.tabSourceId}-${s.layerId}-${s.source}`, s ]));
+    const getKey = (tabSourceId: string, layerId: string, source: string, featureType: string | undefined) => {
+      return [ tabSourceId, layerId, featureType ?? '', source ].join('-');
+    };
+    const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => {
+      return [ getKey(s.tabSourceId, s.layerId, s.source, s.featureType), s ];
+    }));
     return data.map(d => {
       const tab = tabsById.get(d.tabId);
-      if (!tab) {
+      if (!tab || !tab.layerId) {
         return d;
       }
-      const key = `${tab.tabSourceId}-${tab.layerId}`;
-      const sortToApply = sortDict.get(`${key}-bookmark`) || sortDict.get(`${key}-config`);
+      const bookmarkKey = getKey(tab.tabSourceId, tab.layerId, 'bookmark', d.featureType);
+      const configKey = getKey(tab.tabSourceId, tab.layerId, 'config', d.featureType);
+      const sortToApply = sortDict.get(bookmarkKey) || sortDict.get(configKey);
       const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
       if (hasExplicitSort || !sortToApply || (sortToApply.sortDirection === d.sortDirection && sortToApply.sortedColumn === d.sortedColumn)) {
         return d;
@@ -74,16 +80,16 @@ export const selectAttributeListTabsSort = createSelector(
   selectAttributeListTabs,
   selectDataWithSort,
   (tabs, data): AttributeListInitialDataSortModelWithoutSource[] => {
-    const dataById = new Map(data.map(d => [ d.id, d ]));
-    return tabs
-      .map(tab => {
-        const dataForTab = dataById.get(tab.selectedDataId);
-        if (!dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
+    return data
+      .map<AttributeListInitialDataSortModelWithoutSource | null>(dataForTab => {
+        const tab = tabs.find(t => t.id === dataForTab.tabId);
+        if (!tab || !dataForTab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
           return null;
         }
         return {
           tabSourceId: tab.tabSourceId,
           layerId: tab.layerId,
+          featureType: dataForTab.featureType,
           sortedColumn: dataForTab.sortedColumn,
           sortDirection: dataForTab.sortDirection,
         };
