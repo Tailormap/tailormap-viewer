@@ -185,10 +185,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         takeUntil(this.destroyed),
         filter(sortBookmark => !deepEqual(this.lastSortBookmark, sortBookmark)),
     ).subscribe(sortBookmark => {
-      const initialDataSort = SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []);
-      if (initialDataSort.length > 0) {
-        this.store$.dispatch(setInitialDataSort({ initialDataSort }));
-      }
+      this.store$.dispatch(setInitialDataSort({ initialDataSort: SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []) }));
     });
 
     this.store$.select(selectLoadStatus).pipe(

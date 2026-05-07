@@ -49,14 +49,14 @@ export const selectDataWithSort = createSelector(
   selectInitialDataSort,
   (tabs, data, initialDataSort): AttributeListDataModel[] => {
     const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
+    const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => [ `${s.tabSourceId}-${s.layerId}-${s.source}`, s ]));
     return data.map(d => {
       const tab = tabsById.get(d.tabId);
-      const matchingSorts = initialDataSort.filter(s => {
-        return s.tabSourceId === tab?.tabSourceId && s.layerId === tab?.layerId;
-      });
-      const bookmarkSort = matchingSorts.find(sort => sort.source === 'bookmark');
-      const configSort = matchingSorts.find(sort => sort.source === 'config');
-      const sortToApply = bookmarkSort || configSort;
+      if (!tab) {
+        return d;
+      }
+      const key = `${tab.tabSourceId}-${tab.layerId}`;
+      const sortToApply = sortDict.get(`${key}-bookmark`) || sortDict.get(`${key}-config`);
       const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
       if (hasExplicitSort || !sortToApply || (sortToApply.sortDirection === d.sortDirection && sortToApply.sortedColumn === d.sortedColumn)) {
         return d;

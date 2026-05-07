@@ -96,20 +96,6 @@ describe('AttributeListReducer', () => {
       expect(result.data).toEqual([newData]);
     });
 
-    test('adds new tabs and data with initial sort', () => {
-      const state = createState();
-      const newTab = createTab();
-      const newData = createData();
-      const result = attributeListReducer(state, AttributeListActions.changeAttributeListTabs({
-        newTabs: [newTab],
-        newData: [newData],
-        closedTabs: [],
-      }));
-
-      expect(result.tabs).toEqual([newTab]);
-      expect(result.data).toEqual([newData]);
-    });
-
     test('closes tabs and their data', () => {
       const state = createState({
         tabs: [ createTab({ id: 'tab-1' }), createTab({ id: 'tab-2' }) ],
