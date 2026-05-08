@@ -230,6 +230,10 @@
         <source>Shapefile</source>
         <target>Shapefile</target>
       </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+        <target>GeoPackage</target>
+      </trans-unit>
       <trans-unit id="core.common.square" datatype="html">
         <source>Square</source>
         <target>Vierkant</target>

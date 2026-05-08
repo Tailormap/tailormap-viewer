@@ -173,6 +173,9 @@
       <trans-unit id="core.common.shapefile" datatype="html">
         <source>Shapefile</source>
       </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+      </trans-unit>
       <trans-unit id="core.common.square" datatype="html">
         <source>Square</source>
       </trans-unit>
