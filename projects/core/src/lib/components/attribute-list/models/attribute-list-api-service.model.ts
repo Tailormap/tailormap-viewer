@@ -54,7 +54,7 @@ export interface GetFeaturesParams {
 }
 
 /**
- * Parameters for retrieving export capabilities of a layer.
+ * Parameters for retrieving extract capabilities of a layer.
  */
 export interface GetLayerExtractCapabilitiesParams {
   /**
@@ -68,7 +68,7 @@ export interface GetLayerExtractCapabilitiesParams {
 }
 
 /**
- * Parameters for exporting features from a layer.
+ * Parameters for initiating a layer extract.
  */
 export interface GetLayerExtractParams {
   /**
@@ -112,7 +112,7 @@ export interface GetLayerExtractParams {
   crs?: string;
 }
 
-export interface DownloadLayerExtractParams{
+export interface DownloadLayerExtractParams {
   applicationId: string;
   layerId: string;
   downloadId: string;

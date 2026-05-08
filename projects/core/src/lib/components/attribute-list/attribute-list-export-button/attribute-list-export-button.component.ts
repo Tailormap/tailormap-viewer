@@ -21,7 +21,7 @@ import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 export class AttributeListExportButtonComponent implements OnDestroy {
   private store$ = inject(Store);
   private exportService = inject(AttributeListExportService);
-  public isExtractProgress$ = this.exportService.extractProgress$;
+  public extractProgress$ = this.exportService.extractProgress$;
   private destroyed = new Subject();
   public supportedFormats = SupportedExtractFormats;
   private supportedFormatsSubject = new BehaviorSubject<SupportedExtractFormats[]>([]);

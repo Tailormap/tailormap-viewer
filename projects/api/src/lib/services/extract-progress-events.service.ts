@@ -34,7 +34,7 @@ export class ExtractProgressEventsService implements OnDestroy {
   private retryTimeoutId: number | null = null;
   private retryCount = 0;
   private maxRetryCount = 5;
-  private logging = false;
+  private readonly logging: boolean = false;
   private ngZone = inject(NgZone);
   private readonly clientId = nanoid();
   private extractProgressEvents = new Subject<ExtractProgressEventModel>();
@@ -53,6 +53,10 @@ export class ExtractProgressEventsService implements OnDestroy {
   public ngOnDestroy() {
     if (this.eventSource) {
       this.eventSource.close();
+    }
+    if (this.retryTimeoutId !== null) {
+      window.clearTimeout(this.retryTimeoutId);
+      this.retryTimeoutId = null;
     }
   }
 
@@ -91,6 +95,9 @@ export class ExtractProgressEventsService implements OnDestroy {
         this.retryCount = 0;
         if (this.monitoredExtractEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.extractProgressEvents.next(evt as ExtractProgressEventModel));
+        }
+        if (EventType.KEEP_ALIVE === evt.eventType) {
+          // thanks, do nothing
         }
       };
       eventSource.onerror = (_error) => {

@@ -110,7 +110,10 @@ export class AttributeListExportService {
               timeout(AttributeListExportService.SSE_TIMEOUT_MS),
               catchError(err => {
                 console.error('Timed out waiting for extract completion/failed event or SSE error', err);
-                return of({ eventType: EventType.EXTRACT_FAILED, details: { downloadId: response.downloadId } } as ExtractProgressEventModel);
+                return of({
+                  eventType: EventType.EXTRACT_FAILED, id: '',
+                  details: { downloadId: response.downloadId, progress: 0, message: 'timeout' },
+                } as ExtractProgressEventModel);
               }),
               filter(evt => evt.eventType === EventType.EXTRACT_COMPLETED || evt.eventType === EventType.EXTRACT_FAILED),
               first(),
@@ -178,7 +181,7 @@ export class AttributeListExportService {
   }
 
   private static isLayerExtractResponseModel(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is LayerExtractResponseModel {
-    return !!response && 'downloadId' in response && 'layerId' in response;
+    return !!response && 'downloadId' in response && 'message' in response;
   }
 
   private static isDownloadLayerExtractResponse(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is DownloadLayerExtractResponse {
