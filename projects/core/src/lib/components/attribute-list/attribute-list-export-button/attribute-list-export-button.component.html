@@ -37,4 +37,10 @@
       (click)="onExportClick(supportedFormats.SHAPE)"
     i18n="@@core.common.shapefile">Shapefile</button>
   }
+  @if (isFormatSupported$(supportedFormats.GEOPACKAGE) | async) {
+    <button
+      mat-menu-item
+      (click)="onExportClick(supportedFormats.GEOPACKAGE)"
+      i18n="@@core.common.geopackage">GeoPackage</button>
+  }
 </mat-menu>
