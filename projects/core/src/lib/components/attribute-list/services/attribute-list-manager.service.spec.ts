@@ -10,7 +10,7 @@ import {
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
   AttributeListApiServiceModel,
-  CanExpandRowParams, FeatureDetailsModel,
+  CanExpandRowParams, DownloadLayerExtractResponse, FeatureDetailsModel,
   GetFeatureDetailsParams,
   GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
@@ -377,6 +377,36 @@ describe('AttributeListManagerService', () => {
       const exportResponse: LayerExtractResponseModel = {
         downloadId: 'test_extract.csv',
         message: 'Extract accepted',
+      };
+
+      mockApiService.startLayerExtract$.mockReturnValue(of(exportResponse));
+
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([]),
+        dataLoader: mockApiService,
+      };
+
+      managerService.addAttributeListSource(source);
+
+      managerService.startLayerExtract$('test-source', params).subscribe(result => {
+        expect(result).toEqual(exportResponse);
+        expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
+        done();
+      });
+    });
+
+    it('should return export response from dataLoader when source is found - direct download', (done) => {
+      const params: GetLayerExtractParams = {
+        clientId: 'test',
+        applicationId: '1',
+        layerId: '1',
+        outputFormat: 'csv',
+      };
+
+      const exportResponse: DownloadLayerExtractResponse = {
+        file: new Blob(['id,name\n1,Test'], { type: 'text/csv' }),
+        fileName: 'test_extract.csv',
       };
 
       mockApiService.startLayerExtract$.mockReturnValue(of(exportResponse));

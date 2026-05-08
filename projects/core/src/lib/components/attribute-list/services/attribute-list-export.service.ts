@@ -6,12 +6,13 @@ import {
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import {
   ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder, ExtractProgressEventModel,
 } from '@tailormap-viewer/api';
 import { LayerFeaturesFilters } from '../../../filter';
+import { DownloadLayerExtractResponse } from '../models/attribute-list-api-service.model';
 
 export enum SupportedExtractFormats {
   CSV = 'csv',
@@ -85,10 +86,15 @@ export class AttributeListExportService {
             this.showSnackbarMessage(defaultErrorMessage);
             return of(null);
           }),
-          switchMap((response: LayerExtractResponseModel | null) => {
+          switchMap((response: LayerExtractResponseModel | DownloadLayerExtractResponse | null) => {
             // If no response or no downloadId, just pass it through
-            if (!response || !response.downloadId) {
+            if (!AttributeListExportService.isLayerExtractResponseModel(response) && !AttributeListExportService.isDownloadLayerExtractResponse(response)) {
               this.extractProgressSubject.next(0);
+              return of(response);
+            }
+
+            if (AttributeListExportService.isDownloadLayerExtractResponse(response)) {
+              FileHelper.saveAsFile(response.file, response.fileName);
               return of(response);
             }
 
@@ -140,6 +146,11 @@ export class AttributeListExportService {
                       this.showSnackbarMessage($localize `:@@core.attribute-list.extract-download-failed:Downloading extract failed`);
                       return of(null);
                     }),
+                    tap(extractResponse => {
+                      if (extractResponse) {
+                        FileHelper.saveAsFile(extractResponse.file, extractResponse.fileName);
+                      }
+                    }),
                     // emit the original response regardless of HTTP result so outer map can use it
                     map(() => response));
                 } else {
@@ -159,8 +170,18 @@ export class AttributeListExportService {
         );
       }),
       // Convert the final response (possibly emitted multiple times) to boolean
-      map((response: LayerExtractResponseModel | null) => !!(response && response.downloadId)),
+      map((response: LayerExtractResponseModel | DownloadLayerExtractResponse | null) => {
+        return AttributeListExportService.isLayerExtractResponseModel(response)  || AttributeListExportService.isDownloadLayerExtractResponse(response);
+      }),
     );
+  }
+
+  private static isLayerExtractResponseModel(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is LayerExtractResponseModel {
+    return !!response && 'downloadId' in response && 'layerId' in response;
+  }
+
+  private static isDownloadLayerExtractResponse(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is DownloadLayerExtractResponse {
+    return !!response && 'file' in response && 'fileName' in response;
   }
 
   private showSnackbarMessage(msg: string) {

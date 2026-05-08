@@ -13,7 +13,7 @@ import {
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, DownloadLayerExtractParams, FeatureDetailsModel, GetFeatureDetailsParams,
+  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse, FeatureDetailsModel, GetFeatureDetailsParams,
   GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetStatisticParams,
   GetStatisticResponse,
@@ -134,7 +134,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getLayerExtractCapabilities$(params);
   }
 
-  public startLayerExtract$(tabSourceId: string, params: GetLayerExtractParams): Observable<LayerExtractResponseModel | null> {
+  public startLayerExtract$(tabSourceId: string, params: GetLayerExtractParams): Observable<LayerExtractResponseModel | DownloadLayerExtractResponse | null> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of(null);
@@ -142,7 +142,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.startLayerExtract$(params);
   }
 
-  public downloadLayerExtract$(tabSourceId: string, params: DownloadLayerExtractParams): Observable<Blob | null> {
+  public downloadLayerExtract$(tabSourceId: string, params: DownloadLayerExtractParams): Observable<DownloadLayerExtractResponse | null> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source) {
       return of(null);
