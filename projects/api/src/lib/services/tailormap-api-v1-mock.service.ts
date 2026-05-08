@@ -13,8 +13,8 @@ import {
   getVersionResponseModel, getFeatureModel, getConfigModel, getLayerExtractFormatsModel,
 } from '../mock-data';
 import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
-import { LayerExtractCapabilitiesModel } from "../models/layer-extract-capabilities.model";
-import { LayerExtractResponseModel } from "../models/layer-extract-response.model";
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
+import { LayerExtractResponseModel } from '../models/layer-extract-response.model';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
