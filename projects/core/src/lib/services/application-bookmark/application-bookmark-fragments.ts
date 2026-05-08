@@ -106,6 +106,7 @@ export type LayerSortBookmarkFragment = Array<BookmarkSortModel>;
 export type BookmarkSortModel = {
   s?: string; /* tabSourceId or default */
   l: string; /* layer */
+  f?: string; /* featureType */
   c: string; /* column */
   d?: boolean; /* descending instead ascending? */
 };

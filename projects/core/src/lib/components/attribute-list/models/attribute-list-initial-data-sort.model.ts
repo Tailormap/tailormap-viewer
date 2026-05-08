@@ -2,6 +2,7 @@
 export interface AttributeListInitialDataSortModel {
   tabSourceId: string;
   layerId: string;
+  featureType?: string;
   sortedColumn: string;
   sortDirection: 'asc' | 'desc';
   /* If the sort order can be configured in the admin in the future, keep that setting separate from the sort order set by the bookmark.
