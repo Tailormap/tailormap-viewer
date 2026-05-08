@@ -19,7 +19,7 @@ import {
   updateSelectedDrawingFeatureGeometry,
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, DrawingComponentConfigModel, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -89,14 +89,9 @@ export class DrawingComponent implements OnInit, OnDestroy {
       if (!belowButtonsContainer || !aboveButtonsContainer) {
         return;
       }
-      belowButtonsContainer.clear();
-      aboveButtonsContainer.clear();
-      components.forEach(component => {
-        if (component.position === 'aboveDrawingButtons') {
-          aboveButtonsContainer.createComponent(component.component);
-          return;
-        }
-        belowButtonsContainer.createComponent(component.component);
+      DynamicComponentsHelper.createComponentsForPosition(components, {
+        'belowDrawingButtons': belowButtonsContainer,
+        'aboveDrawingButtons': aboveButtonsContainer,
       });
     });
   }

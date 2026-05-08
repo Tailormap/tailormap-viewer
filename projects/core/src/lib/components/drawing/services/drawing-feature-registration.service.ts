@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AdditionalFeatureModel, BaseFeatureRegistrationService } from '../../../services';
+import { BaseFeatureRegistrationService } from '../../../services';
+import { RegisteredComponent } from '@tailormap-viewer/shared';
 
-interface AdditionalDrawingFeatureModel extends AdditionalFeatureModel {
+interface AdditionalDrawingFeatureModel extends RegisteredComponent {
   position?: 'belowDrawingButtons' | 'aboveDrawingButtons';
 }
 

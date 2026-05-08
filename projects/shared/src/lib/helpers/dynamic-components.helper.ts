@@ -33,4 +33,28 @@ export class DynamicComponentsHelper {
     return injectedComponents;
   }
 
+  public static createComponentsForPosition(
+    components: RegisteredComponent[],
+    containers: Record<string, ViewContainerRef>,
+    clearContainerBeforeAddingComponents = true,
+  ): ComponentRef<any>[] {
+    const injectedComponents: ComponentRef<any>[] = [];
+    const componentsByPosition = new Map<string, RegisteredComponent[]>();
+    components.forEach(component => {
+      const position = component.position || 'default';
+      if (!componentsByPosition.has(position)) {
+        componentsByPosition.set(position, []);
+      }
+      componentsByPosition.get(position)?.push(component);
+    });
+    componentsByPosition.forEach((componentsForPosition, position) => {
+      const container = containers[position];
+      if (!container) {
+        return;
+      }
+      injectedComponents.push(...this.createComponents(componentsForPosition, container, clearContainerBeforeAddingComponents));
+    });
+    return injectedComponents;
+  }
+
 }

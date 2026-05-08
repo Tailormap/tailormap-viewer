@@ -1,11 +1,7 @@
-import { signal, Type } from '@angular/core';
+import { signal } from '@angular/core';
+import { RegisteredComponent } from '@tailormap-viewer/shared';
 
-export interface AdditionalFeatureModel {
-  component: Type<any>;
-  type: string;
-}
-
-export class BaseFeatureRegistrationService<T extends AdditionalFeatureModel = AdditionalFeatureModel> {
+export class BaseFeatureRegistrationService<T extends RegisteredComponent = RegisteredComponent> {
 
   private registeredComponents = signal<T[]>([]);
   public registeredAdditionalFeatures = this.registeredComponents.asReadonly();

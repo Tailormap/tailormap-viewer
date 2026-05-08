@@ -55,12 +55,16 @@
           </button>
         }
       </div>
+      <ng-template #menuBar></ng-template>
     </div>
     @if (filterEnabled$ | async) {
       <div class="toc-search">
         <tm-toc-filter-input></tm-toc-filter-input>
       </div>
     }
+
+    <ng-template #aboveTreeContainer></ng-template>
+
     <tm-tree
       class="toc-tree"
       [treeNodeTemplate]="treeNode"
@@ -69,6 +73,9 @@
       [openInfoInTree]="mobileToc()"
       [nodeInfoInTreeTemplate]="nodeInfoMobile"
       [activeInTreeInfoNodes]="activeMobileInfoNodes()"></tm-tree>
+
+    <ng-template #belowTreeContainer></ng-template>
+
     @if (infoTreeNode$ | async; as infoTreeNode) {
       @if (infoVisible() && !mobileToc()) {
         <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
