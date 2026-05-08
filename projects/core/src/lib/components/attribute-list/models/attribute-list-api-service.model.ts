@@ -118,6 +118,20 @@ export interface DownloadLayerExtractParams{
   downloadId: string;
 }
 
+/**
+ * Response model for download layer extract operation.
+ */
+export interface DownloadLayerExtractResponse {
+  /**
+   * The exported file as a Blob.
+   */
+  file: Blob;
+  /**
+   * The suggested file name for the exported file.
+   */
+  fileName: string;
+}
+
 export interface GetUniqueValuesParams {
   /**
    * The ID of the application.
@@ -253,12 +267,12 @@ export interface AttributeListApiServiceModel {
    * @param params Parameters specifying the export options, including format, filter, and attributes.
    * @returns Observable emitting the exported file and file name, or null if export is not available.
    */
-  startLayerExtract$(params: GetLayerExtractParams): Observable<LayerExtractResponseModel | null>;
+  startLayerExtract$(params: GetLayerExtractParams): Observable<LayerExtractResponseModel | DownloadLayerExtractResponse | null>;
 
   /**
    * Download the extract file.
    */
-  downloadLayerExtract$(params: DownloadLayerExtractParams):Observable<Blob | null>;
+  downloadLayerExtract$(params: DownloadLayerExtractParams): Observable<DownloadLayerExtractResponse | null>;
 
   /**
    * Retrieves unique values for a specific attribute in a layer.

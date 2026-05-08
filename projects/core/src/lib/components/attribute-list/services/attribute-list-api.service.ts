@@ -1,5 +1,6 @@
 import {
-  AttributeListApiServiceModel, DownloadLayerExtractParams, GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  AttributeListApiServiceModel, DownloadLayerExtractParams, DownloadLayerExtractResponse, GetFeaturesParams,
+  GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { inject, Injectable } from '@angular/core';
@@ -62,13 +63,12 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
       }));
   }
 
-  public downloadLayerExtract$(params: DownloadLayerExtractParams): Observable<Blob | null> {
+  public downloadLayerExtract$(params: DownloadLayerExtractParams): Observable<DownloadLayerExtractResponse | null> {
     return this.api.downloadLayerExtract$(params).pipe(map(response => {
       if (response && response.body) {
         const contentDispositionHeader = response.headers.get('Content-Disposition') || '';
         const fileName = FileHelper.extractFileNameFromContentDispositionHeader(contentDispositionHeader, 'extract');
-        FileHelper.saveAsFile(response.body, fileName);
-        return response.body;
+        return { file: response.body, fileName };
       }
       return null;
     }));
