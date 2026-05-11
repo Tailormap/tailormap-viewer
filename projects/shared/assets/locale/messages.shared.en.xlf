@@ -171,7 +171,7 @@
         <source>Reset Password</source>
       </trans-unit>
       <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
-        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="this.getNextLabel()"/></source>
+        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>
       </trans-unit>
       <trans-unit id="shared.tree.items" datatype="html">
         <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>

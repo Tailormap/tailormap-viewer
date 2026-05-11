@@ -93,7 +93,11 @@ export class SplitButtonComponent {
   }
 
   public getCycleAriaLabel(): string {
-    return $localize`:@@shared.split-button.cycle-aria-label:Showing ${this.getLabel()} – click to switch to ${this.getNextLabel()}`;
+    const nextLabel = this.nextOption?.label;
+    if (!nextLabel) {
+      return '';
+    }
+    return $localize`:@@shared.split-button.cycle-aria-label:Showing ${this.getLabel()} – click to switch to ${nextLabel}`;
   }
 
   public isLayerHiddenOnMap(option: SplitButtonOptionModel) {

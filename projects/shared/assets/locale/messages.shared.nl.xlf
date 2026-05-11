@@ -226,8 +226,8 @@
         <target>Wachtwoord opnieuw instellen</target>
       </trans-unit>
       <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
-        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="this.getNextLabel()"/></source>
-        <target><x id="PH" equiv-text="this.getLabel()"/> wordt getoond – klik om te schakelen naar <x id="PH_1" equiv-text="this.getNextLabel()"/></target>
+        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>
+        <target state="new"><x id="PH" equiv-text="this.getLabel()"/> wordt getoond – klik om te schakelen naar <x id="PH_1" equiv-text="nextLabel"/></target>
       </trans-unit>
       <trans-unit id="shared.tree.items" datatype="html">
         <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>
