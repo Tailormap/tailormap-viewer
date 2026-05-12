@@ -50,6 +50,12 @@ export class SliderComponent implements ControlValueAccessor {
   @Input()
   public displayLabels = true;
 
+  @Input()
+  public label: string = '';
+
+  @Input()
+  public labelsLowerAndUpperValue: {labelLowerValue: string; labelUpperValue: string} = {labelLowerValue: '', labelUpperValue: ''}
+
   @Output()
   public valueChange = new EventEmitter<number>();
 

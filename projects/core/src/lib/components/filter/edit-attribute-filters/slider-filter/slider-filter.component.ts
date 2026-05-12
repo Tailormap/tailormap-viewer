@@ -5,6 +5,8 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import Filter from 'ol/format/filter/Filter';
 
 @Component({
   selector: 'tm-slider-filter',
@@ -27,6 +29,9 @@ export class SliderFilterComponent implements OnInit {
   public inputMode: SliderFilterInputModeEnum = SliderFilterInputModeEnum.SLIDER;
   public betweenInput: boolean = false;
   public static readonly MAX_PRECISION = 5;
+  public label: string = '';
+  public labelLowerValue: string = '';
+  public labelUpperValue: string = '';
   public displayWith: ((value: number) => string) = (value: number) => {
     const num = Number(value);
     if (isNaN(num)) {
@@ -53,6 +58,7 @@ export class SliderFilterComponent implements OnInit {
       this.initialUpperValue = filter.value[1] ? Number(filter.value[1]) : filter.editConfiguration.maximumValue;
     }
     this.initForm(this.initialValue ?? null, this.initialLowerValue ?? null, this.initialUpperValue ?? null);
+    this.setLabels(filter);
   }
 
   @Output()
@@ -109,6 +115,17 @@ export class SliderFilterComponent implements OnInit {
       lowerValue: Number($event.lower.toPrecision(SliderFilterComponent.MAX_PRECISION)),
       upperValue: Number($event.upper.toPrecision(SliderFilterComponent.MAX_PRECISION)),
     }, { emitEvent: true });
+  }
+
+  private setLabels(filter: AttributeFilterModel) {
+    const conditionType = AttributeFilterHelper.getConditionTypes()
+      .find(type => type.condition === filter.condition);
+    const conditionLabel = filter.invertCondition ? conditionType?.inverseReadableLabel : conditionType?.readableLabel;
+    this.label = $localize `:@@core.filter.slider-filter.label:Filter: ${filter.attribute} ${conditionLabel}`;
+    if (this.betweenInput) {
+      this.labelLowerValue = $localize `:@@core.filter.slider-filter.label-lower-value:Filter: ${filter.attribute} ${conditionLabel} - lower value`;
+      this.labelUpperValue = $localize `:@@core.filter.slider-filter.label-upper-value:Filter: ${filter.attribute} ${conditionLabel} - upper value`;
+    }
   }
 
 }

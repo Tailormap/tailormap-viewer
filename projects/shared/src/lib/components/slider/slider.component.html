@@ -6,15 +6,26 @@
               [discrete]="displayLabels"
               [displayWith]="displayWith"
               [class.label-down]="labelsOverlap()">
-    <input matSliderStartThumb [value]="lowerValue" (input)="onLowerInput($event)" (valueChange)="onLowerValueChange($event)">
-    <input matSliderEndThumb [value]="upperValue"  (input)="onUpperInput($event)" (valueChange)="onUpperValueChange($event)">
+    <input
+      matSliderStartThumb
+      [value]="lowerValue"
+      [aria-label]="labelsLowerAndUpperValue.labelLowerValue"
+      (input)="onLowerInput($event)"
+      (valueChange)="onLowerValueChange($event)">
+    <input
+      matSliderEndThumb
+      [value]="upperValue"
+      [aria-label]="labelsLowerAndUpperValue.labelUpperValue"
+      (input)="onUpperInput($event)"
+      (valueChange)="onUpperValueChange($event)">
   </mat-slider>
 } @else {
   <mat-slider [max]="max"
               [min]="min"
               [step]="step"
               [discrete]="displayLabels"
-              [displayWith]="displayWith">
-    <input matSliderThumb [value]="value" (input)="onInput($event)" (valueChange)="onValueChange($event)">
+              [displayWith]="displayWith"
+              [aria-label]="label">
+    <input matSliderThumb [value]="value" [aria-label]="label" (input)="onInput($event)" (valueChange)="onValueChange($event)">
   </mat-slider>
 }
