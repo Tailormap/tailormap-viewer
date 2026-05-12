@@ -984,15 +984,15 @@
       </trans-unit>
       <trans-unit id="core.filter.slider-filter.label" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></source>
-        <target state="new">Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></target>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></target>
       </trans-unit>
       <trans-unit id="core.filter.slider-filter.label-lower-value" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - lower value</source>
-        <target state="new">Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - lower value</target>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - unterer Wert</target>
       </trans-unit>
       <trans-unit id="core.filter.slider-filter.label-upper-value" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - upper value</source>
-        <target state="new">Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - upper value</target>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - oberer Wert</target>
       </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
