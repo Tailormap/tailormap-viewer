@@ -47,27 +47,27 @@ describe('SplitButtonComponent', () => {
   test('cycle button has aria-label set to next option on initial render', async () => {
     await setup();
     const buttons = screen.getAllByRole('radio');
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 2');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 1 – click to switch to Test 2');
   });
 
   test('cycle button aria-label updates after cycling', async () => {
     await setup();
     const buttons = screen.getAllByRole('radio');
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 2');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 1 – click to switch to Test 2');
     await userEvent.click(buttons[0]);
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 1');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 2 – click to switch to Test 1');
     await userEvent.click(buttons[0]);
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 2');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 1 – click to switch to Test 2');
   });
 
   test('cycle button aria-label updates after selecting from dropdown', async () => {
     await setup();
     const buttons = screen.getAllByRole('radio');
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 2');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 1 – click to switch to Test 2');
     await userEvent.click(buttons[1]);
     const menuItem = await screen.findByText('Test 2');
     await userEvent.click(menuItem);
-    expect(buttons[0].getAttribute('aria-label')).toBe('Show Test 1');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Showing Test 2 – click to switch to Test 1');
   });
 
 });
