@@ -58,5 +58,4 @@ export class LayerTransparencyComponent {
     this.store$.dispatch(setLayerOpacity({ opacity: [{ id: this.layerId, opacity }] }));
   }
 
-  protected readonly $localize = $localize;
 }

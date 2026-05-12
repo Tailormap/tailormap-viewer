@@ -6,7 +6,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
-import Filter from 'ol/format/filter/Filter';
 
 @Component({
   selector: 'tm-slider-filter',

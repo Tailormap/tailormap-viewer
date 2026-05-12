@@ -54,7 +54,7 @@ export class SliderComponent implements ControlValueAccessor {
   public label: string = '';
 
   @Input()
-  public labelsLowerAndUpperValue: {labelLowerValue: string; labelUpperValue: string} = {labelLowerValue: '', labelUpperValue: ''}
+  public labelsLowerAndUpperValue: {labelLowerValue: string; labelUpperValue: string} = { labelLowerValue: '', labelUpperValue: '' };
 
   @Output()
   public valueChange = new EventEmitter<number>();
