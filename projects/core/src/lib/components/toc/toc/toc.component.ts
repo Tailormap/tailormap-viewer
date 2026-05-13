@@ -1,7 +1,10 @@
-import { Component, computed, inject, input, NgZone, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import {
+  Component, computed, effect, inject, input, NgZone, OnDestroy, OnInit, signal, Signal, viewChild, ViewContainerRef,
+} from '@angular/core';
 import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeService,
+  BaseTreeModel, BrowserHelper, DropZoneHelper, DynamicComponentsHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel,
+  TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -21,6 +24,7 @@ import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/fi
 import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
 import { ComponentConfigHelper } from '../../../shared';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -42,7 +46,11 @@ export class TocComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private ngZone = inject(NgZone);
   private authenticatedUserService = inject(AuthenticatedUserService);
+  private tocFeatureRegistrationService = inject(TocFeatureRegistrationService);
 
+  private menuBarContainer = viewChild('menuBar', { read: ViewContainerRef });
+  private belowTreeContainer = viewChild('belowTreeContainer', { read: ViewContainerRef });
+  private aboveTreeContainer = viewChild('aboveTreeContainer', { read: ViewContainerRef });
 
   public mobileToc = input(false);
 
@@ -85,6 +93,23 @@ export class TocComponent implements OnInit, OnDestroy {
       ? this.editableLayerIds()
       : [];
   });
+
+  constructor() {
+    effect(() => {
+      const components = this.tocFeatureRegistrationService.registeredAdditionalFeatures();
+      const menuBarContainer = this.menuBarContainer();
+      const belowTreeContainer = this.belowTreeContainer();
+      const aboveTreeContainer = this.aboveTreeContainer();
+      if (!menuBarContainer || !belowTreeContainer || !aboveTreeContainer) {
+        return;
+      }
+      DynamicComponentsHelper.createComponentsForPosition(components, {
+        'menuBar': menuBarContainer,
+        'aboveTree': aboveTreeContainer,
+        'belowTree': belowTreeContainer,
+      });
+    });
+  }
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
