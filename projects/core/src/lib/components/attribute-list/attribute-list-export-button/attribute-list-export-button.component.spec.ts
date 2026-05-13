@@ -4,15 +4,22 @@ import { provideMockStore } from '@ngrx/store/testing';
 import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
+import { FileHelper, SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
+import { DownloadLayerExtractResponse } from '../models/attribute-list-api-service.model';
+import { LayerExtractResponseModel } from '@tailormap-viewer/api';
 
-const setup = async (layerId: string | null = null, supportedFormats: SupportedExtractFormats[] = []) => {
+const setup = async (
+  layerId: string | null = null,
+  supportedFormats: SupportedExtractFormats[] = [],
+  progress = 0,
+  exportResult: BehaviorSubject<any> = new BehaviorSubject(null),
+) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -26,7 +33,8 @@ const setup = async (layerId: string | null = null, supportedFormats: SupportedE
   });
   const exportService = {
     getExportFormats$: jest.fn().mockReturnValue(of(supportedFormats)),
-    export$: jest.fn().mockReturnValue(of(true)),
+    export$: jest.fn().mockReturnValue(exportResult.asObservable()),
+    extractProgress$: of(progress),
   };
   await render(AttributeListExportButtonComponent, {
     imports: [ SharedImportsModule, MatIconTestingModule ],
@@ -36,6 +44,19 @@ const setup = async (layerId: string | null = null, supportedFormats: SupportedE
 };
 
 describe('AttributeListExportButtonComponent', () => {
+
+  let saveAsFile: (data: object | Blob, filename: string) => void;
+
+  beforeEach(() => {
+    // Keep original method in a var to restore after testing
+    saveAsFile = FileHelper.saveAsFile;
+    // Replace by mock fn to prevent URL.createObjectURL on empty blobs
+    FileHelper.saveAsFile = jest.fn();
+  });
+
+  afterEach(() => {
+    FileHelper.saveAsFile = saveAsFile;
+  });
 
   test('should render nothing without layer or supported formats', async () => {
     await setup();
@@ -73,6 +94,43 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('DXF'));
     expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'dxf', filter: undefined, sort: null, attributes: [] });
+  });
+
+  it('should show spinner when progress is 0 and export is started', async () => {
+    const exportResponse = new BehaviorSubject<LayerExtractResponseModel | DownloadLayerExtractResponse>({
+      message: '',
+      downloadId: '',
+    });
+    await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX ], 0, exportResponse);
+    await userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByText('CSV'));
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByRole('progressbar')).toHaveAttribute('mode', 'indeterminate');
+    exportResponse.next({ message: '', downloadId: '' });
+    expect(screen.queryByText('Export')).not.toBeInTheDocument();
+    const download: DownloadLayerExtractResponse = { file: new Blob(), fileName: 'export.csv' };
+    exportResponse.next(download);
+    expect(await screen.findByText('Export')).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
+  it('should show spinner when progress is 20 and export is started', async () => {
+    const exportResponse = new BehaviorSubject<LayerExtractResponseModel | DownloadLayerExtractResponse>({
+      message: '',
+      downloadId: '',
+    });
+    await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX ], 20, exportResponse);
+    await userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByText('CSV'));
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByRole('progressbar')).toHaveAttribute('mode', 'determinate');
+    expect(await screen.findByRole('progressbar')).toHaveAttribute('aria-valuenow', '20');
+    exportResponse.next({ message: '', downloadId: '' });
+    expect(screen.queryByText('Export')).not.toBeInTheDocument();
+    const download: DownloadLayerExtractResponse = { file: new Blob(), fileName: 'export.csv' };
+    exportResponse.next(download);
+    expect(await screen.findByText('Export')).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
 });
