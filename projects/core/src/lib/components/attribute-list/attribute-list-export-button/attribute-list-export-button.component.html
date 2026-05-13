@@ -2,7 +2,11 @@
 @if (isExporting$ | async) {
   <button mat-stroked-button
           [disabled]="true">
-    <mat-progress-spinner diameter="20" color="primary" [value]="extractProgress$ | async"></mat-progress-spinner>
+    @if (useProgressSpinner$ | async) {
+      <mat-progress-spinner diameter="20" color="primary" [value]="extractProgress$ | async"></mat-progress-spinner>
+    } @else {
+      <mat-spinner diameter="20" color="primary"></mat-spinner>
+    }
   </button>
 } @else if (showExportButton$ | async) {
   <button mat-stroked-button
