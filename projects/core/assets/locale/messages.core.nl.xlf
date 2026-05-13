@@ -154,6 +154,10 @@
         <source>Delete</source>
         <target>Verwijderen</target>
       </trans-unit>
+      <trans-unit id="core.common.dxf" datatype="html">
+        <source>DXF</source>
+        <target>DXF</target>
+      </trans-unit>
       <trans-unit id="core.common.enabled" datatype="html">
         <source>Enabled</source>
         <target>Ingeschakeld</target>

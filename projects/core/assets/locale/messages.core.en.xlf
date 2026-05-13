@@ -116,6 +116,9 @@
       <trans-unit id="core.common.delete" datatype="html">
         <source>Delete</source>
       </trans-unit>
+      <trans-unit id="core.common.dxf" datatype="html">
+        <source>DXF</source>
+      </trans-unit>
       <trans-unit id="core.common.enabled" datatype="html">
         <source>Enabled</source>
       </trans-unit>
