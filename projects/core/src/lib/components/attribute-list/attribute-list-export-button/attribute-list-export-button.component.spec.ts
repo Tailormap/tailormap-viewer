@@ -52,7 +52,7 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  test('should render button for selected layer and supported formats', async () => {
+  test('should render button for selected layer and supported formats, CSV, XLSX', async () => {
     const { exportService } = await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX ]);
     expect(screen.getByRole('button')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button'));
@@ -61,6 +61,18 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('CSV'));
     expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
+  });
+
+  test('should render button for selected layer and supported formats, CSV, XLSX, DFX', async () => {
+    const { exportService } = await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX, SupportedExtractFormats.DXF ]);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button'));
+    expect(screen.getByText('CSV')).toBeInTheDocument();
+    expect(screen.getByText('Excel')).toBeInTheDocument();
+    expect(screen.getByText('DXF')).toBeInTheDocument();
+    expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
+    await userEvent.click(screen.getByText('DXF'));
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'dxf', filter: undefined, sort: null, attributes: [] });
   });
 
 });
