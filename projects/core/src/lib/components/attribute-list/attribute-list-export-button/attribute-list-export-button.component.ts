@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
-  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
+  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest, finalize,
 } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
@@ -80,6 +80,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           const attributes = columns.filter(c => c.visible).map(c => c.id);
           return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
         }),
+        finalize(() => this.isExportingSubject.next(false)),
       )
       .subscribe(response => {
         if (response === null || AttributeListExportService.isDownloadLayerExtractResponse(response)) {
