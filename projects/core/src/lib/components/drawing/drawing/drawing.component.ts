@@ -92,7 +92,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
       DynamicComponentsHelper.createComponentsForPosition(components, {
         'belowDrawingButtons': belowButtonsContainer,
         'aboveDrawingButtons': aboveButtonsContainer,
-      });
+      }, true, 'belowDrawingButtons');
     });
   }
 

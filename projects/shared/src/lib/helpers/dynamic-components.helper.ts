@@ -37,14 +37,26 @@ export class DynamicComponentsHelper {
     components: RegisteredComponent[],
     containers: Record<string, ViewContainerRef>,
     clearContainerBeforeAddingComponents = true,
+    defaultPosition?: string,
   ): ComponentRef<any>[] {
     if (clearContainerBeforeAddingComponents) {
       Object.entries(containers).forEach(([ _, container ]) => container.clear());
     }
+    const containerKeys = Object.keys(containers);
+    const resolvedDefaultPosition = defaultPosition
+      ?? ('default' in containers ? 'default' : undefined)
+      ?? (containerKeys.length === 1 ? containerKeys[0] : undefined);
     const injectedComponents: ComponentRef<any>[] = [];
     const componentsByPosition = new Map<string, RegisteredComponent[]>();
     components.forEach(component => {
-      const position = component.position || 'default';
+      const position = component.position ?? resolvedDefaultPosition;
+      if (!position) {
+        console.warn(
+          'DynamicComponentsHelper.createComponentsForPosition: skipping component without position because no default container could be resolved.',
+          component,
+        );
+        return;
+      }
       if (!componentsByPosition.has(position)) {
         componentsByPosition.set(position, []);
       }
@@ -53,6 +65,10 @@ export class DynamicComponentsHelper {
     componentsByPosition.forEach((componentsForPosition, position) => {
       const container = containers[position];
       if (!container) {
+        console.warn(
+          `DynamicComponentsHelper.createComponentsForPosition: skipping components for unknown position "${position}".`,
+          componentsForPosition,
+        );
         return;
       }
       injectedComponents.push(...this.createComponents(componentsForPosition, container, false));

@@ -3,7 +3,7 @@ import { BaseFeatureRegistrationService } from '../../../services';
 import { RegisteredComponent } from '@tailormap-viewer/shared';
 
 interface AdditionalTocFeatureModel extends RegisteredComponent {
-  position?: 'menuBar' | 'aboveTree' | 'belowTree';
+  position: 'menuBar' | 'aboveTree' | 'belowTree';
 }
 
 @Injectable({
