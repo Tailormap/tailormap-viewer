@@ -1,4 +1,6 @@
-<div class="map-container" tabindex="0"></div>
+<div class="map-container" tabindex="0" (mousedown)="mouseDown = true" (focus)="onFocus()" (blur)="mapFocusedByKeyboard = false"></div>
+<div class="map-focus-indicator" [class.map-focus-indicator--visible]="mapFocusedByKeyboard"></div>
+
 
 @if (inIframe) {
   <div class="embedded-overlay"><div class="message"></div></div>

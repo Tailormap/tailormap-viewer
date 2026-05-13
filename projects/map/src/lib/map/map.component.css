@@ -49,3 +49,17 @@
 .map-container--with-crosshair {
   cursor: crosshair;
 }
+
+.map-focus-indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--primary-color-0_5);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.map-focus-indicator--visible {
+  opacity: 1;
+}

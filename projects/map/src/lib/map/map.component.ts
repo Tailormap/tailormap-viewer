@@ -11,6 +11,8 @@ import { OverlayHelper } from '@tailormap-viewer/shared';
 export class MapComponent implements AfterViewInit, OnDestroy {
 
   public inIframe = window.self !== window.top;
+  public mapFocusedByKeyboard = false;
+  public mouseDown = false;
   private overlayHelper: OverlayHelper | undefined;
   private el = inject( ElementRef);
   private mapService= inject(MapService);
@@ -33,5 +35,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  public onFocus() {
+    if (this.mouseDown) {
+      this.mouseDown = false;
+      return;
+    }
+    this.mapFocusedByKeyboard = true;
+  }
 
 }
