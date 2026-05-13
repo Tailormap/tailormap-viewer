@@ -1,9 +1,10 @@
 import {
-  AttributeListApiServiceModel, GetFeaturesParams, GetLayerExportCapabilitiesParams, GetLayerExportParams,
+  AttributeListApiServiceModel, DownloadLayerExtractParams, DownloadLayerExtractResponse, GetFeaturesParams,
+  GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { inject, Injectable } from '@angular/core';
-import { FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, UniqueValuesService } from '@tailormap-viewer/api';
+import { FeaturesResponseModel, LayerExtractResponseModel, TAILORMAP_API_V1_SERVICE, UniqueValuesService } from '@tailormap-viewer/api';
 import { map, Observable } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
 import { FeaturesFilterHelper } from '../../../filter';
@@ -47,29 +48,30 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
       }));
   }
 
-  public getLayerExportCapabilities$(params: GetLayerExportCapabilitiesParams) {
-    return this.api.getLayerExportCapabilities$(params);
+  public getLayerExtractCapabilities$(params: GetLayerExtractCapabilitiesParams) {
+    return this.api.getLayerExtractFormats$(params);
   }
 
-  public getLayerExport$(params: GetLayerExportParams) {
+  public startLayerExtract$(params: GetLayerExtractParams): Observable<LayerExtractResponseModel> {
     const { sortBy, sortOrder, filter, ...exportParams } = params;
     const sort = sortBy && sortOrder ? { column: sortBy, direction: sortOrder } : null;
     // Convert filter to CQL
-    // Currently TM only supports filters on the layer itself, not related feature types
-    const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(filter) || undefined
-      : undefined;
-    return this.api.getLayerExport$({ ...exportParams, sort, filter: cqlFilter })
+    const cqlFilter = filter ? FeaturesFilterHelper.getFilter(filter) || undefined : undefined;
+    return this.api.requestLayerExtract$({ ...exportParams, sort, filter: cqlFilter })
       .pipe(map(response => {
-        if (!response || !response.body) {
-          return null;
-        }
-        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(response.headers.get('Content-Disposition') || '', '');
-        return {
-          file: response.body,
-          fileName,
-        };
+        return response;
       }));
+  }
+
+  public downloadLayerExtract$(params: DownloadLayerExtractParams): Observable<DownloadLayerExtractResponse | null> {
+    return this.api.downloadLayerExtract$(params).pipe(map(response => {
+      if (response && response.body) {
+        const contentDispositionHeader = response.headers.get('Content-Disposition') || '';
+        const fileName = FileHelper.extractFileNameFromContentDispositionHeader(contentDispositionHeader, 'extract');
+        return { file: response.body, fileName };
+      }
+      return null;
+    }));
   }
 
   public getUniqueValues$(params: GetUniqueValuesParams) {

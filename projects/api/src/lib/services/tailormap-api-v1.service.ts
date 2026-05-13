@@ -7,12 +7,14 @@ import {
 import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { ApiHelper } from '../helpers/api.helper';
 import { TailormapApiConstants } from './tailormap-api.constants';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
+import { LayerExtractResponseModel } from '../models/layer-extract-response.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
+
 
   private httpClient = inject( HttpClient);
 
@@ -124,37 +126,43 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
-  public getLayerExportCapabilities$(params: {
-    applicationId: string;
-    layerId: string;
-  }): Observable<LayerExportCapabilitiesModel> {
-    return this.httpClient.get<LayerExportCapabilitiesModel>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
-    );
+  public getLayerExtractFormats$(params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
+    return this.httpClient
+      .get<string[]>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/formats`)
+      .pipe(
+        map(formatsArray => ({ outputFormats: formatsArray || [] })),
+      );
   }
 
-  public getLayerExport$(params: {
+  public requestLayerExtract$(params: {
     applicationId: string;
     layerId: string;
+    clientId: string;
     outputFormat: string;
-    filter?: string;
-    sort: { column: string; direction: string} | null;
     attributes?: string[];
-    crs?: string;
-  }): Observable<HttpResponse<Blob>> {
+    filter?: string;
+    sort: { column: string; direction: string } | null;
+  }): Observable<LayerExtractResponseModel> {
     const queryParams = ApiHelper.getQueryParams({
       outputFormat: params.outputFormat,
       attributes: params.attributes?.join(','),
       sortBy: params.sort?.column,
       sortOrder: params.sort?.direction,
-      crs: params.crs,
     });
-    return this.httpClient.post(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/download`,
+    return this.httpClient.post<LayerExtractResponseModel>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/${params.clientId}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: queryParams,
+      },
+    );
+  }
+
+  public downloadLayerExtract$(params: { applicationId: string; layerId: string; downloadId: string }): Observable<HttpResponse<Blob>> {
+    return this.httpClient.get(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/download/${params.downloadId}`,
+      {
         observe: 'response',
         responseType: 'blob',
       },

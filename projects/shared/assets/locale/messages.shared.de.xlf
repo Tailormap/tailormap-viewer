@@ -225,6 +225,10 @@
         <source>Reset Password</source>
         <target>Passwort zurücksetzen</target>
       </trans-unit>
+      <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
+        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>
+        <target state="new">Zeige <x id="PH" equiv-text="this.getLabel()"/> – zum Wechseln auf <x id="PH_1" equiv-text="nextLabel"/> klicken</target>
+      </trans-unit>
       <trans-unit id="shared.tree.items" datatype="html">
         <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>
         <target><x id="PH" equiv-text="dragNodeIds.length"/> Elemente</target>

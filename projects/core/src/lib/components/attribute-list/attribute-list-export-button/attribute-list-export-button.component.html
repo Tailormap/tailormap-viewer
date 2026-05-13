@@ -2,7 +2,7 @@
 @if (isExporting$ | async) {
   <button mat-stroked-button
           [disabled]="true">
-    <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
+    <mat-progress-spinner diameter="20" color="primary" [value]="extractProgress$ | async"></mat-progress-spinner>
   </button>
 } @else if (showExportButton$ | async) {
   <button mat-stroked-button
@@ -13,12 +13,6 @@
 }
 
 <mat-menu #exportMenu="matMenu">
-  @if (isFormatSupported$(supportedFormats.GEOPACKAGE) | async) {
-    <button
-      mat-menu-item
-      (click)="onExportClick(supportedFormats.GEOPACKAGE)"
-    i18n="@@core.common.geopackage">GeoPackage</button>
-  }
   @if (isFormatSupported$(supportedFormats.GEOJSON) | async) {
     <button
       mat-menu-item
@@ -43,10 +37,10 @@
       (click)="onExportClick(supportedFormats.SHAPE)"
     i18n="@@core.common.shapefile">Shapefile</button>
   }
-  @if (isFormatSupported$(supportedFormats.DXF) | async) {
+  @if (isFormatSupported$(supportedFormats.GEOPACKAGE) | async) {
     <button
       mat-menu-item
-      (click)="onExportClick(supportedFormats.DXF)"
-    i18n="@@core.common.dxf">DXF</button>
+      (click)="onExportClick(supportedFormats.GEOPACKAGE)"
+      i18n="@@core.common.geopackage">GeoPackage</button>
   }
 </mat-menu>

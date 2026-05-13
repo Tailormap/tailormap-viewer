@@ -21,7 +21,13 @@
         <source>Export</source>
       </trans-unit>
       <trans-unit id="core.attribute-list.export-failed" datatype="html">
-        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed-during-extraction" datatype="html">
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed during extraction</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.extract-download-failed" datatype="html">
+        <source>Downloading extract failed</source>
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>
@@ -166,6 +172,9 @@
       </trans-unit>
       <trans-unit id="core.common.shapefile" datatype="html">
         <source>Shapefile</source>
+      </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
       </trans-unit>
       <trans-unit id="core.common.square" datatype="html">
         <source>Square</source>

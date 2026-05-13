@@ -92,6 +92,14 @@ export class SplitButtonComponent {
     return $localize`:@@core.background-layer-toggle.show-next-option:Show ${nextLabel}:NEXT_LABEL:`;
   }
 
+  public getCycleAriaLabel(): string {
+    const nextLabel = this.nextOption?.label;
+    if (!nextLabel) {
+      return '';
+    }
+    return $localize`:@@shared.split-button.cycle-aria-label:Showing ${this.getLabel()} – click to switch to ${nextLabel}`;
+  }
+
   public isLayerHiddenOnMap(option: SplitButtonOptionModel) {
     return this.in3D && this.layersWithoutWebMercator.includes(option.id);
   }

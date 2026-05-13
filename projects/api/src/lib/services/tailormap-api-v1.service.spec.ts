@@ -77,9 +77,9 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
-  test('queries API for getLayerExportCapabilities$', () => {
-    service.getLayerExportCapabilities$({ applicationId: 'app/default', layerId: '1' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/default/layer/1/export/capabilities', method: 'GET' });
+  test('queries API for getExtractFormats$', () => {
+    service.getLayerExtractFormats$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/extract/formats', method: 'GET' });
     req.flush(null);
   });
 

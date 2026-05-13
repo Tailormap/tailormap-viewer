@@ -51,7 +51,7 @@ jobs:
 
       - name: 'Remove GitHub deployment and environment'
         if: ${{ always() }}
-        uses: strumwolf/delete-deployment-environment@v3
+        uses: strumwolf/delete-deployment-environment@v4
         with:
           token: "${{ secrets.GHCR_CLEANUP_PAT }}"
           environment: "${{ env.VERSION_TAG }}"
