@@ -20,6 +20,7 @@ export enum SupportedExtractFormats {
   GEOJSON = 'geojson',
   XLSX = 'xlsx',
   GEOPACKAGE = 'geopackage',
+  DXF = 'dxf',
 }
 
 @Injectable({
