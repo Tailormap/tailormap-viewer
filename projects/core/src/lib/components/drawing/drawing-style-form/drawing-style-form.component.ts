@@ -81,6 +81,12 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public iconColor = ApplicationStyleService.getPrimaryColor();
 
+  public labelSize = $localize `:@@core.drawing.size:Size`;
+  public labelRotation = $localize `:@@core.drawing.rotation:Rotation`;
+  public labelLineThickness = $localize `:@@core.drawing.line-thickness:Line thickness`;
+  public labelThickness = $localize `:@@core.drawing.thickness:Thickness`;
+  public labelOpacity = $localize `:@@core.drawing.opacity:Opacity`;
+
   public ngOnInit(): void {
     this.labelControl.valueChanges
       .pipe(takeUntil(this.destroyed), debounceTime(250))

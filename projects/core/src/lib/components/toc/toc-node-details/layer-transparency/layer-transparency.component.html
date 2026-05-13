@@ -5,6 +5,7 @@
              [step]="1"
              [value]="opacity$ | async"
              [displayWith]="formatThumb"
+             [label]="label"
              (valueChange)="updateOpacity($event)">
   </tm-slider>
   <button mat-icon-button
