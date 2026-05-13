@@ -28,7 +28,7 @@ export class DynamicComponentsHelper {
     }
     components.forEach(component => {
       const addedComponent = container.createComponent(component.component);
-      injectedComponents.push(addedComponent.instance);
+      injectedComponents.push(addedComponent);
     });
     return injectedComponents;
   }
@@ -38,6 +38,9 @@ export class DynamicComponentsHelper {
     containers: Record<string, ViewContainerRef>,
     clearContainerBeforeAddingComponents = true,
   ): ComponentRef<any>[] {
+    if (clearContainerBeforeAddingComponents) {
+      Object.entries(containers).forEach(([ _, container ]) => container.clear());
+    }
     const injectedComponents: ComponentRef<any>[] = [];
     const componentsByPosition = new Map<string, RegisteredComponent[]>();
     components.forEach(component => {
@@ -52,7 +55,7 @@ export class DynamicComponentsHelper {
       if (!container) {
         return;
       }
-      injectedComponents.push(...this.createComponents(componentsForPosition, container, clearContainerBeforeAddingComponents));
+      injectedComponents.push(...this.createComponents(componentsForPosition, container, false));
     });
     return injectedComponents;
   }
