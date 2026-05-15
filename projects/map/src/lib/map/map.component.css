@@ -58,8 +58,21 @@
   box-shadow: inset 0 0 0 2px var(--primary-color-0_5);
   opacity: 0;
   transition: opacity 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .map-focus-indicator--visible {
   opacity: 1;
+}
+
+.map-focus-crosshair {
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+  stroke: var(--primary-color);
+  stroke-width: 1.5;
+  fill: none;
+  filter: drop-shadow(0 0 2px white);
 }
