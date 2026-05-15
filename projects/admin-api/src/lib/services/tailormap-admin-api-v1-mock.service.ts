@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { TailormapAdminApiV1ServiceModel } from './tailormap-admin-api-v1-service.model';
 import * as mockData from '../mock-data/tailormap-admin-api.mock-data';
 import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
-  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel,
+  SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
+import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -135,10 +136,6 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true).pipe(delay(this.delay));
   }
 
-  public validatePasswordStrength$(_password: string): Observable<boolean> {
-    return of(true).pipe(delay(this.delay));
-  }
-
   public updateUser$(params: { username: string; user: Omit<UserModel, 'groupNames'> & { groups: string[] } }): Observable<UserModel> {
     return of({ ...params.user, groupNames: params.user.groups }).pipe(delay(this.delay));
   }
@@ -205,11 +202,14 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
   public getUploads$(): Observable<UploadModel[]> {
     return of([]);
   }
-  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType'>): Observable<UploadModel> {
+  public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {
     return of({ id: '1', ...upload } as UploadModel);
   }
   public deleteUpload$(): Observable<boolean> {
     return of(true);
+  }
+  public findUploadsByHash$(_category: string, hashes: string[]): Observable<{ id: string; hash: string }[]> {
+    return of(hashes.map(hash => ({ id: hash, hash })));
   }
 
   public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
@@ -244,5 +244,11 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(true);
   }
 
+  public getUniqueValues$(): Observable<UniqueValuesResponseModel> {
+    return of(mockData.getUniqueValues());
+  }
 
+  public getServerConfig$(): Observable<AdminServerConfigModel> {
+    return of({ multipart: { maxFileSize: 15728640, maxRequestSize: 15728640 } });
+  }
 }

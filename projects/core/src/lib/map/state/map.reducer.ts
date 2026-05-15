@@ -1,7 +1,7 @@
 import * as MapActions from './map.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 import { MapState, initialMapState } from './map.state';
-import { ChangePositionHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ChangePositionHelper, FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
 
@@ -51,15 +51,27 @@ const onSetLayerVisibility = (state: MapState, payload: ReturnType<typeof MapAct
   }),
 });
 
-const onToggleAllLayersVisibility = (state: MapState): MapState => {
+const onToggleAllLayersVisibility = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.toggleAllLayersVisibility>,
+): MapState => {
   // Maybe we should specify which layers are foreground/background layers in the state when fetched from the API
-  const foregroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
-  const foregroundLayers = state.layers.filter(l => foregroundLayerIds.has(l.id));
+  const allForegroundLayerIds = new Set(LayerTreeNodeHelper.getAppLayerIds(state.layerTreeNodes, state.layerTreeNodes.find(l => l.root)));
+  const filterTerms = payload.filterTerm
+    ? FilterHelper.createFilterTerms(payload.filterTerm)
+    : null;
+  const foregroundLayers = state.layers.filter(l => {
+    if (!allForegroundLayerIds.has(l.id)) {
+      return false;
+    }
+    return filterTerms === null || FilterHelper.matchesFilterTerm(filterTerms, l.title);
+  });
   const someVisible = foregroundLayers.some(l => l.visible);
+  const filteredLayerIds = new Set(foregroundLayers.map(l => l.id));
   return {
     ...state,
     layers: state.layers.map(layer => {
-      if (foregroundLayerIds.has(layer.id)) {
+      if (filteredLayerIds.has(layer.id)) {
         return {
           ...layer,
           visible: !someVisible,
@@ -70,9 +82,9 @@ const onToggleAllLayersVisibility = (state: MapState): MapState => {
   };
 };
 
-const onSetSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapActions.setSelectedLayerId>): MapState => ({
+const onToggleSelectedLayerId = (state: MapState, payload: ReturnType<typeof MapActions.toggleSelectedLayerId>): MapState => ({
   ...state,
-  selectedLayer: payload.layerId,
+  selectedLayer: state.selectedLayer === payload.layerId ? undefined : payload.layerId,
 });
 
 const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapActions.toggleLevelExpansion>): MapState => {
@@ -204,6 +216,20 @@ const onSetLayerOpacity = (state: MapState, payload: ReturnType<typeof MapAction
   }),
 });
 
+const onSetLayerStyle = (state: MapState, payload: ReturnType<typeof MapActions.setLayerStyle>): MapState => ({
+  ...state,
+  layers: state.layers.map(layer => {
+    const updated = payload.style.find(s => s.id === layer.id);
+    if (!updated) {
+      return layer;
+    }
+    return {
+      ...layer,
+      selectedStyleName: updated.style,
+    };
+  }),
+});
+
 const onAddLayerDetails = (
   state: MapState,
   payload: ReturnType<typeof MapActions.addLayerDetails>,
@@ -228,6 +254,27 @@ const onToggleIn3DView = (state: MapState): MapState => ({
   in3dView: !state.in3dView,
 });
 
+const onUpdateTemporaryLayerName = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.updateTemporaryLayerName>,
+): MapState => {
+  const layerIdx = state.layers.findIndex(layer => layer.id === payload.id);
+  if (layerIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    layers: [
+      ...state.layers.slice(0, layerIdx),
+      {
+        ...state.layers[layerIdx],
+        temporaryLayerName: payload.temporaryLayerName,
+      },
+      ...state.layers.slice(layerIdx + 1),
+    ],
+  };
+};
+
 const mapReducerImpl = createReducer<MapState>(
   initialMapState,
   on(MapActions.loadMap, onLoadMap),
@@ -236,7 +283,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setLayerVisibility, onSetLayerVisibility),
   on(MapActions.toggleAllLayersVisibility, onToggleAllLayersVisibility),
   on(MapActions.toggleLevelExpansion, onToggleLevelExpansion),
-  on(MapActions.setSelectedLayerId, onSetSelectedLayerId),
+  on(MapActions.toggleSelectedLayerId, onToggleSelectedLayerId),
   on(MapActions.addServices, onAddServices),
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),
@@ -245,8 +292,10 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
   on(MapActions.setSelectedTerrainNodeId, onSetSelectedTerrainNodeId),
   on(MapActions.setLayerOpacity, onSetLayerOpacity),
+  on(MapActions.setLayerStyle, onSetLayerStyle),
   on(MapActions.addLayerDetails, onAddLayerDetails),
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
   on(MapActions.toggleIn3dView, onToggleIn3DView),
+  on(MapActions.updateTemporaryLayerName, onUpdateTemporaryLayerName),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);

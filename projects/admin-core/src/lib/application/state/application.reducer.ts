@@ -6,7 +6,7 @@ import {
   AppContentModel, ApplicationModel, AppTreeLayerNodeModel, AppTreeNodeModel,
 } from '@tailormap-admin/admin-api';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
-import { ComponentModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, ComponentModel, FilterGroupModel } from '@tailormap-viewer/api';
 
 const getApplication = (application: ApplicationModel) => ({
   ...application,
@@ -360,6 +360,163 @@ const onUpdateApplicationFiltersConfig = (
   }));
 };
 
+const updateSelectedFilterGroup = (
+  state: ApplicationState,
+  updateGroupCallback: (filterGroup: FilterGroupModel<AttributeFilterModel>) => FilterGroupModel<AttributeFilterModel>,
+) => {
+  return updateApplication(state, application => {
+    if (!application.settings?.filterGroups) {
+      return {};
+    }
+    const filterGroupIdx = application.settings.filterGroups.findIndex(filterGroup => {
+      return filterGroup.id === state.applicationSelectedFilterGroupId;
+    });
+    if (typeof filterGroupIdx === 'undefined' || filterGroupIdx === -1) {
+      return {};
+    }
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: [
+          ...application.settings.filterGroups.slice(0, filterGroupIdx),
+          updateGroupCallback(application.settings.filterGroups[filterGroupIdx]),
+          ...application.settings.filterGroups.slice(filterGroupIdx + 1),
+        ],
+      },
+    };
+  });
+};
+
+const onUpdateApplicationFiltersConfigForSelectedGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationFiltersConfigForSelectedGroup>,
+): ApplicationState => {
+  return updateSelectedFilterGroup(state, filterGroup => ({
+    ...filterGroup,
+    filters: payload.filters,
+  }));
+};
+
+const onUpdateApplicationFilterConfigForSelectedGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.updateApplicationFilterConfigForSelectedGroup>,
+): ApplicationState => {
+  return updateSelectedFilterGroup(state, filterGroup => {
+    const filterIdx = filterGroup.filters.findIndex(filter => filter.id === payload.filter.id);
+    if (filterIdx === -1) {
+      return {
+        ...filterGroup,
+        filters: [ ...filterGroup.filters, payload.filter ],
+      };
+    }
+    return {
+      ...filterGroup,
+      filters: [
+        ...filterGroup.filters.slice(0, filterIdx),
+        payload.filter,
+        ...filterGroup.filters.slice(filterIdx + 1),
+      ],
+    };
+  });
+};
+
+const onCreateApplicationAttributeFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.createApplicationAttributeFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroupIdx = application.settings?.filterGroups?.findIndex(filterGroup =>
+      payload.filterGroup.layerIds.length === filterGroup.layerIds.length
+      && payload.filterGroup.layerIds.every(layerId => filterGroup.layerIds.includes(layerId)));
+    if (filterGroupIdx === undefined || filterGroupIdx === -1) {
+      return {
+        settings: {
+          ...application.settings,
+          layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+          filterGroups: [ ...application.settings?.filterGroups ?? [], payload.filterGroup ],
+        },
+      };
+    }
+    const filterGroups = application.settings?.filterGroups || [];
+    const updatedFilterGroup = {
+      ...filterGroups[filterGroupIdx],
+      filters: [ ...filterGroups[filterGroupIdx].filters, ...payload.filterGroup.filters ],
+    };
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: [
+          ...filterGroups.slice(0, filterGroupIdx),
+          updatedFilterGroup,
+          ...filterGroups.slice(filterGroupIdx + 1),
+        ],
+      },
+    };
+  });
+};
+
+const onDeleteApplicationAttributeFilter = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilter>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.map(filterGroup => {
+      const updatedFilters = filterGroup.filters.filter(filter => filter.id !== payload.filterId);
+      if (updatedFilters.length === 0) {
+        return null;
+      }
+      return { ...filterGroup, filters: updatedFilters };
+    }).filter(filterGroup => filterGroup !== null) as FilterGroupModel<AttributeFilterModel>[];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
+    });
+};
+
+const onDeleteApplicationAttributeFilterGroup = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.deleteApplicationAttributeFilterGroup>,
+): ApplicationState => {
+  return updateApplication(state, application => {
+    const filterGroups: FilterGroupModel<AttributeFilterModel>[] = application.settings?.filterGroups?.filter(fg => fg.id !== payload.filterGroupId) || [];
+    return {
+      settings: {
+        ...application.settings,
+        layerSettings: application.settings?.layerSettings || {}, // Ensure layerSettings is defined
+        filterGroups: filterGroups,
+      },
+    };
+  });
+};
+
+const onSetApplicationSelectedFilterGroupId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterGroupId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterGroupId: payload.filterGroupId,
+  };
+};
+
+
+
+const onSetApplicationSelectedFilterId = (
+  state: ApplicationState,
+  payload: ReturnType<typeof ApplicationActions.setApplicationSelectedFilterId>,
+): ApplicationState => {
+  return {
+    ...state,
+    applicationSelectedFilterId: payload.filterId,
+  };
+};
+
 const onToggleNodeExpanded = (
   state: ApplicationState,
   payload: ReturnType<typeof ApplicationActions.toggleApplicationNodeExpanded>,
@@ -449,6 +606,13 @@ const applicationReducerImpl = createReducer<ApplicationState>(
   on(ApplicationActions.updateApplicationComponentConfig, onUpdateApplicationComponentConfig),
   on(ApplicationActions.updateApplicationStylingConfig, onUpdateApplicationStylingConfig),
   on(ApplicationActions.updateApplicationFiltersConfig, onUpdateApplicationFiltersConfig),
+  on(ApplicationActions.updateApplicationFiltersConfigForSelectedGroup, onUpdateApplicationFiltersConfigForSelectedGroup),
+  on(ApplicationActions.updateApplicationFilterConfigForSelectedGroup, onUpdateApplicationFilterConfigForSelectedGroup),
+  on(ApplicationActions.createApplicationAttributeFilterGroup, onCreateApplicationAttributeFilterGroup),
+  on(ApplicationActions.deleteApplicationAttributeFilter, onDeleteApplicationAttributeFilter),
+  on(ApplicationActions.deleteApplicationAttributeFilterGroup, onDeleteApplicationAttributeFilterGroup),
+  on(ApplicationActions.setApplicationSelectedFilterGroupId, onSetApplicationSelectedFilterGroupId),
+  on(ApplicationActions.setApplicationSelectedFilterId, onSetApplicationSelectedFilterId),
   on(ApplicationActions.toggleApplicationNodeExpanded, onToggleNodeExpanded),
   on(ApplicationActions.toggleApplicationNodeExpandedAll, onToggleNodeExpandedAll),
   on(ApplicationActions.setApplicationCatalogFilterTerm, onSetApplicationCatalogFilterTerm),

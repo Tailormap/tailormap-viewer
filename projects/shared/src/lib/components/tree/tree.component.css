@@ -25,6 +25,7 @@ mat-checkbox {
   height: var(--tree-node-size);
   min-height: initial;
   position: relative;
+  padding-left: var(--tree-node-indent, 0px);
   color: var(--mat-tree-node-text-color);
   font-family: var(--mat-tree-node-text-font);
   font-size: var(--mat-tree-node-text-size);
@@ -34,6 +35,39 @@ mat-checkbox {
 .tree-node--selected {
   background-color: var(--primary-color-0_1);
   color: var(--primary-color);
+}
+
+.tree-node--multi-selected {
+  background-color: var(--primary-color-0_1);
+}
+
+.tree-node--selected-with-info {
+  background-color: var(--primary-color-0_1);
+  border-radius: 8px;
+}
+
+.tree-node--selected-with-info + .tree-node--selected-with-info {
+  margin-top: 4px;
+}
+
+.tree-node--selected-with-info .tree-node-wrapper--leaf {
+  position: relative;
+  align-self: flex-start;
+  background-color: transparent;
+  color: var(--primary-color);
+  border-radius: 8px 8px 0 0;
+}
+
+.tree-node--selected-with-info .tree-node-wrapper--leaf::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--tree-node-indent, 0px));
+  width: calc(100% + var(--tree-node-indent, 0px));
+  background-color: var(--primary-color-0_1);
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
 }
 
 .tree-node-wrapper {
@@ -137,4 +171,16 @@ mat-checkbox {
   border: 1px solid var(--primary-color);
   box-shadow: 0 0 6px var(--primary-color-0_5);
   border-radius: 3px;
+}
+
+.extended-dropzone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+}
+
+.tree-node__info {
+  margin: 0 8px 0 8px;
 }

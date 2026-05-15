@@ -8,23 +8,50 @@
   overflow: auto;
 }
 
+.label {
+  margin-bottom: 0;
+}
+
+.circle-input__radius {
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs {
+  display: flex;
+  margin: 8px 0;
+}
+
+.rectangle-size-inputs mat-form-field {
+  margin: 0 2px;
+}
+
+.rectangle-size-inputs button {
+  margin: auto;
+}
+
 .horizontal-line {
   border-top: 1px solid var(--border-color);
   margin: 8px 0;
 }
 
-.drawing-button-list .mat-mdc-outlined-button {
+.icon-button-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-button-list .mat-mdc-outlined-button {
   min-width: 40px;
   padding: 0 8px;
   border-radius: 3px;
   margin: 8px 8px 0 0;
 }
 
-.drawing-button-list .mat-mdc-outlined-button mat-icon {
+.icon-button-list .mat-mdc-outlined-button mat-icon {
   margin: 0;
+  min-height: auto;
 }
 
-.drawing-button-list .mat-mdc-outlined-button:last-of-type {
+.icon-button-list .mat-mdc-outlined-button:last-of-type {
   margin-right: 0;
 }
 
@@ -41,7 +68,21 @@
   flex: 1;
 }
 
+.split-buttons .selected_feature_buttons {
+  flex: 2;
+}
+
 .drawing_buttons {
   display: flex;
   justify-content: flex-end;
+}
+
+tm-drawing-style-library-list {
+  display: block;
+  margin-top: 16px;
+}
+
+.locked-style {
+  color: var(--disabled-text-color);
+  margin-top: 8px;
 }

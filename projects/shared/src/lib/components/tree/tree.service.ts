@@ -14,6 +14,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   // Observable string sources
   private selectedNode = new BehaviorSubject<string>('');
+  private multiSelectedNodeIds = new BehaviorSubject<string[]>([]);
   private readonlyMode = new BehaviorSubject<boolean>(false);
   private checkStateChangedSource = new Subject<BaseTreeModel<T, TypeDef>[]>();
   private selectionStateChangedSource = new Subject<BaseTreeModel<T, TypeDef>>();
@@ -22,6 +23,7 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   // Streams used in the tree component
   public selectedNode$ = this.selectedNode.asObservable();
+  public multiSelectedNodeIds$ = this.multiSelectedNodeIds.asObservable();
   public readonlyMode$ = this.readonlyMode.asObservable();
 
   // Streams triggered by tree, to be used in 'consuming' components
@@ -39,11 +41,19 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     nodes: FlatTreeModel<T, TypeDef>[];
   }>({ tree: [], nodes:  [] });
 
+  private readonly dataSource$ = this.dataSource.asObservable().pipe(map(source => source.tree));
+  public readonly allLevelNodesCollapsed$ = this.dataSource.asObservable().pipe(
+    map(datasource => datasource.nodes.every(node => !node.expandable || !node.expanded)),
+  );
+  public readonly hasExpandableNodes$ = this.dataSource.asObservable().pipe(
+    map(datasource => datasource.nodes.some(node => node.expandable)),
+  );
+
   public constructor() {
   }
 
   public getTreeDataSource$() {
-    return this.dataSource.asObservable().pipe(map(source => source.tree));
+    return this.dataSource$;
   }
 
   public hasNode(nodeId: string) {
@@ -95,6 +105,38 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     }
     const children = this.getDescendants(dragNode).map(node => node.id);
     return children.includes(nodeId);
+  }
+
+  public isAnyNodeOrInsideOwnTree(nodeId: string, dragNodeIds: string[]) {
+    return dragNodeIds.some(dragNodeId => {
+      const dragNode = this.nodesMap.get(dragNodeId);
+      return !!dragNode && this.isNodeOrInsideOwnTree(nodeId, dragNode);
+    });
+  }
+
+  public getNodeOrder(nodeIds: string[]): string[] {
+    const nodeIdSet = new Set(nodeIds);
+    return this.dataSource.value.nodes
+      .filter(node => nodeIdSet.has(node.id))
+      .map(node => node.id);
+  }
+
+  public toggleMultiSelectedNodeId(nodeId: string) {
+    const selectedNodeIds = new Set(this.multiSelectedNodeIds.value);
+    if (selectedNodeIds.has(nodeId)) {
+      selectedNodeIds.delete(nodeId);
+    } else {
+      selectedNodeIds.add(nodeId);
+    }
+    this.multiSelectedNodeIds.next(Array.from(selectedNodeIds));
+  }
+
+  public clearMultiSelectedNodeIds() {
+    if (this.selectedNode.value) {
+      this.multiSelectedNodeIds.next([this.selectedNode.value]);
+    } else {
+      this.multiSelectedNodeIds.next([]);
+    }
   }
 
   // Service message commands
@@ -186,7 +228,6 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   }
 
   public toggleNodeExpanded(node: FlatTreeModel<T, TypeDef>) {
-    // this.treeControl.toggle(node);
     this.nodeExpansionChangedSource.next({ expanded: node.expanded, node });
   }
 
@@ -252,6 +293,22 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
 
   public getNode(nodeId: string): FlatTreeModel<T, TypeDef> | undefined {
     return this.nodesMap.get(nodeId);
+  }
+
+  public getRootNodeId(): string | null {
+    return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
+  }
+
+  public expandAllLevelNodes() {
+    this.dataSource.value.nodes
+      .filter(node => node.expandable && !node.expanded)
+      .forEach(node => this.nodeExpansionChangedSource.next({ expanded: true, node }));
+  }
+
+  public collapseAllLevelNodes() {
+    this.dataSource.value.nodes
+      .filter(node => node.expandable && node.expanded)
+      .forEach(node => this.nodeExpansionChangedSource.next({ expanded: false, node }));
   }
 
 }

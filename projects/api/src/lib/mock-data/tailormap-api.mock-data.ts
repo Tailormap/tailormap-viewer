@@ -8,7 +8,7 @@ import { ColumnMetadataModel } from '../models/column-metadata.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { LayerTreeNodeModel } from '../models/layer-tree-node.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
 
 export const getVersionResponseModel = (overrides?: VersionResponseModel): VersionResponseModel => ({
   version: '0.1-SNAPSHOT',
@@ -29,6 +29,7 @@ export const getUserResponseModel = (overrides?: Partial<UserResponseModel>): Us
 export const getLoginConfigurationModel = (overrides?: Partial<LoginConfigurationModel>): LoginConfigurationModel => ({
   hideLoginForm: false,
   ssoLinks: [],
+  enablePasswordReset: true,
   ...overrides,
 });
 
@@ -67,6 +68,7 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   layerName: 'test',
   opacity: 100,
   searchIndex: null,
+  legendType: 'dynamic',
   ...overrides,
 });
 
@@ -88,6 +90,7 @@ export const getLayerDetailsModel = (overrides?: Partial<LayerDetailsModel>): La
   featureTypeName: 'test',
   editable: false,
   attributes: [],
+  attachmentAttributes: [],
   ...overrides,
 });
 
@@ -105,12 +108,13 @@ export const getFeatureModel = (overrides?: Partial<FeatureModel>): FeatureModel
     prop1: 'test',
     prop2: 'another test',
   },
+  attachments: [],
   ...overrides,
 });
 
 export const getColumnMetadataModel = (overrides?: Partial<ColumnMetadataModel>): ColumnMetadataModel => ({
   type: AttributeType.STRING,
-  key: 'prop1',
+  name: 'prop1',
   alias: 'Property 1',
   ...overrides,
 });
@@ -127,14 +131,15 @@ export const getFeaturesResponseModel = (overrides?: Partial<FeaturesResponseMod
     { __fid: '8', attributes: { object_id: '0622100000041690',  valid_from: '2015-05-20', year: 1700, status: 'Pand in gebruik' } },
   ];
   const columnMetadata: Partial<ColumnMetadataModel>[] = [
-    { key: 'object_id', alias: 'Pand', type: AttributeType.STRING },
-    { key: 'valid_from', alias: 'Geldig vanaf', type: AttributeType.DATE },
-    { key: 'year', alias: 'Bouwjaar', type: AttributeType.INTEGER },
-    { key: 'status', alias: 'Status', type: AttributeType.STRING },
+    { name: 'object_id', alias: 'Pand', type: AttributeType.STRING },
+    { name: 'valid_from', alias: 'Geldig vanaf', type: AttributeType.DATE },
+    { name: 'year', alias: 'Bouwjaar', type: AttributeType.INTEGER },
+    { name: 'status', alias: 'Status', type: AttributeType.STRING },
   ];
   return {
     features: features.map(featureOverride => getFeatureModel({ ...featureOverride })),
     columnMetadata: columnMetadata.map(columnMetadataOverride => getColumnMetadataModel({ ...columnMetadataOverride })),
+    attachmentMetadata: [],
     template: null,
     page: null,
     pageSize: null,
@@ -160,9 +165,8 @@ export const getViewerResponseData = (overrides?: Partial<ViewerResponseModel>):
   ...overrides,
 });
 
-export const getLayerExportCapabilitiesModel = (overrides?: Partial<LayerExportCapabilitiesModel>): LayerExportCapabilitiesModel => ({
-  exportable: true,
-  outputFormats: [ 'SHAPE-ZIP',  'excel2007',  'gpkg',  'json',  'text/csv' ],
+export const getLayerExtractFormatsModel = (overrides?: Partial<LayerExtractCapabilitiesModel>): LayerExtractCapabilitiesModel => ({
+  outputFormats: ['csv'],
   ...overrides,
 });
 

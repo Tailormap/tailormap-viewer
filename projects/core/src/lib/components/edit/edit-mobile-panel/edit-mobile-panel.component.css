@@ -1,0 +1,28 @@
+.edit-wrapper {
+  max-height: calc(450px - var(--mat-toolbar-mobile-height));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+tm-edit-dialog {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tm-edit-component-wrapper {
+  padding: 0 14px;
+  width: 100%;
+}
+
+tm-edit {
+  width: 100%;
+  display: inline-block;
+}
+
+tm-edit ::ng-deep .edit-container--is-active {
+  width: 100%;
+  max-width: 100%;
+}

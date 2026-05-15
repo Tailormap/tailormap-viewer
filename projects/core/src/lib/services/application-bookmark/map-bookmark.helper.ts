@@ -1,0 +1,269 @@
+import { ArrayHelper } from '@tailormap-viewer/shared';
+import { MapSizeHelper, MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
+import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map/models';
+import { AppLayerModel, MapResponseModel } from '@tailormap-viewer/api';
+import { LayerModelHelper } from '../../map/helpers/layer-model.helper';
+import { LayerTreeNodeHelper } from '../../map/helpers/layer-tree-node.helper';
+import { ExtendedMapResponseModel } from '../../map/models/extended-map-response.model';
+import {
+  BookmarkLayerSettings, LayerTreeOrderBookmarkFragment, LayerSettingsBookmarkFragment,
+} from './application-bookmark-fragments';
+
+export interface MapBookmarkContents {
+  visibilityChanges: { id: string; checked: boolean }[];
+  opacityChanges: { id: string; opacity: number }[];
+  styleChanges: { id: string; style: string | null | undefined }[];
+}
+
+export type MapLocationBookmarkContents = [[number, number], number];
+
+export type LayerOrderBookmarkContents = Array<{ nodeId: string; children: string[] }>;
+
+export class MapBookmarkHelper {
+
+  public static locationAndZoomFromFragment(fragment: string | null, viewDetails?: MapViewDetailsModel, unitsOfMeasure?: MapUnitEnum): MapLocationBookmarkContents | undefined {
+    if (!fragment) {
+      return undefined;
+    }
+    const parts = fragment.split(',');
+    if (parts.length !== 3) {
+      return undefined;
+    }
+
+    let center: [number, number] = [ parseFloat(parts[0]), parseFloat(parts[1]) ];
+    let zoom = parseFloat(parts[2]);
+
+    if (!isFinite(center[0]) || !isFinite(center[1]) || !isFinite(zoom)) {
+      return undefined;
+    }
+
+    if (viewDetails && unitsOfMeasure && viewDetails.center !== undefined) {
+      const precision = MapSizeHelper.getCoordinatePrecision(unitsOfMeasure);
+      const maxDiff = Math.pow(10, -precision);
+
+      const coordinatesChanged = Math.abs(viewDetails.center[0] - center[0]) > maxDiff || Math.abs(viewDetails.center[1] - center[1]) > maxDiff;
+      const zoomChanged = Math.abs(viewDetails.zoomLevel - zoom) > 0.1;
+
+      if (!coordinatesChanged && !zoomChanged) {
+        return undefined;
+      }
+
+      if (!coordinatesChanged) {
+        center = [ viewDetails.center[0], viewDetails.center[1] ];
+      } else if (!zoomChanged) {
+        zoom = viewDetails.zoomLevel;
+      }
+    }
+
+    return [ center, zoom ];
+  }
+
+  public static fragmentFromLocationAndZoom(viewDetails: MapViewDetailsModel, unitsOfMeasure: MapUnitEnum): string | undefined {
+    if (viewDetails.center === undefined) {
+      return undefined;
+    }
+
+    const precision = MapSizeHelper.getCoordinatePrecision(unitsOfMeasure);
+
+    return `${viewDetails.center[0].toFixed(precision)},${viewDetails.center[1].toFixed(precision)},${viewDetails.zoomLevel.toFixed(1)}`;
+  }
+
+  public static layerSettingsFromFragment(
+    fragment: LayerSettingsBookmarkFragment | null,
+    layers: AppLayerStateModel[],
+    checkInitialValues = true,
+  ): MapBookmarkContents {
+    const checkedVisibilityValues = new Set();
+    const checkedOpacityValues = new Set();
+    const checkedStyleValues = new Set();
+
+    const visibilityData = [];
+    const opacityData = [];
+    const styleData = [];
+
+    for (const layer of (fragment || [])) {
+      const id = layer.id;
+
+      const currentLayer = layers.find(a => a.id === id);
+      if (currentLayer === undefined) {
+        continue;
+      }
+
+      const isLayerVisible = layer.v === 1;
+      if (layer.v !== undefined || (!checkInitialValues && isLayerVisible !== currentLayer.visible)) {
+        checkedVisibilityValues.add(id);
+        if (isLayerVisible !== currentLayer.visible) {
+          visibilityData.push({ id, checked: isLayerVisible });
+        }
+      }
+
+      const opacity = layer.o ?? currentLayer.opacity;
+      if (layer.o !== undefined || (!checkInitialValues && opacity !== currentLayer.opacity)) {
+        checkedOpacityValues.add(id);
+        if (opacity !== currentLayer.opacity) {
+          opacityData.push({ id, opacity });
+        }
+      }
+
+      if (Object.hasOwn(layer, 's')) {
+        const style = layer.s;
+        if (style !== undefined || (!checkInitialValues && style !== currentLayer.selectedStyleName)) {
+          checkedStyleValues.add(id);
+          if (style !== currentLayer.selectedStyleName) {
+            styleData.push({ id, style });
+          }
+        }
+      }
+    }
+
+    if (!checkInitialValues) {
+      layers.forEach(currentLayer => {
+        const id = currentLayer.id;
+        const layer = fragment?.find(l => l.id === id);
+        if (!layer && currentLayer.visible) {
+          visibilityData.push({ id, checked: false });
+        }
+      });
+    }
+
+    // Add all layers that have visibility or opacity different from their initial values but which were not in the bookmark, so we have a
+    // complete set of values different from the initial values
+    if (checkInitialValues) {
+      for (const layer of layers) {
+        if (!checkedVisibilityValues.has(layer.id) && layer.initialValues?.visible !== layer.visible) {
+          visibilityData.push({ id: layer.id, checked: layer.initialValues?.visible ?? true });
+        }
+
+        if (!checkedOpacityValues.has(layer.id) && layer.initialValues?.opacity !== layer.opacity) {
+          opacityData.push({ id: layer.id, opacity: layer.initialValues?.opacity ?? 100 });
+        }
+
+        if (!checkedStyleValues.has(layer.id) && layer.initialValues?.style !== layer.selectedStyleName) {
+          styleData.push({ id: layer.id, style: layer.initialValues?.style ?? null });
+        }
+      }
+    }
+
+    return { visibilityChanges: visibilityData, opacityChanges: opacityData, styleChanges: styleData };
+  }
+
+  public static fragmentFromLayerSettings(layers: AppLayerStateModel[]): LayerSettingsBookmarkFragment | undefined {
+    const bookmarkData = new Array<BookmarkLayerSettings>();
+    for (const layer of layers) {
+      const info: BookmarkLayerSettings = { id: layer.id };
+      let changed = false;
+
+      if (layer.visible !== layer.initialValues?.visible) {
+          info.v = layer.visible ? 1 : 0;
+          changed = true;
+      }
+
+      if (layer.opacity !== layer.initialValues?.opacity) {
+          info.o = layer.opacity;
+          changed = true;
+      }
+
+      if (layer.selectedStyleName !== layer.initialValues?.style) {
+        info.s = layer.selectedStyleName ?? null;
+        changed = true;
+      }
+
+      if (changed) {
+        bookmarkData.push(info);
+      }
+    }
+
+    return bookmarkData.length === 0 ? undefined : bookmarkData;
+  }
+
+  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment | undefined {
+    const layerOrderBookmark: LayerTreeOrderBookmarkFragment = [];
+
+    for (const layer of tree) {
+      if (!ArrayHelper.arrayEquals(layer.initialChildren, layer.childrenIds ?? [])) {
+        layerOrderBookmark.push({ id: layer.id, c: layer.childrenIds ?? [] });
+      }
+    }
+
+    return layerOrderBookmark.length === 0 ? undefined : layerOrderBookmark;
+  }
+
+  public static layerTreeOrderFromFragment(
+    fragment: LayerTreeOrderBookmarkFragment | null,
+    layers: ExtendedLayerTreeNodeModel[],
+  ): LayerOrderBookmarkContents {
+    const output = [];
+    const outMap = new Map<string, { nodeId: string; children: string[] }>();
+    const missingChildren = new Set(layers.map(a => a.id));
+
+    for (const layer of layers) {
+       const newChildren = fragment?.find(l => l.id === layer.id)?.c?.filter(a => layers.some(b => b.id === a)) ?? layer.initialChildren;
+       for (const child of newChildren) {
+         missingChildren.delete(child);
+       }
+
+       if (!ArrayHelper.arrayEquals(layer.childrenIds ?? [], newChildren)) {
+         const arr = { nodeId: layer.id, children: newChildren };
+         output.push(arr);
+         outMap.set(layer.id, arr);
+       }
+    }
+
+    for (const layer of layers) {
+      for (const child of layer.initialChildren) {
+        if (missingChildren.has(child)) {
+          const item = outMap.get(layer.id);
+          if (item === undefined) {
+            // Layer tree is missing a child, while  it has not been modified from its initial state.
+            // This should not happen. Ignore it, for resilience.
+            continue;
+          }
+
+          item.children.push(child);
+        }
+      }
+    }
+
+    return output;
+  }
+
+  public static mergeMapResponseWithBookmarkData(
+    mapResponse: MapResponseModel,
+    layerSettings: LayerSettingsBookmarkFragment | null,
+    layerOrder: LayerTreeOrderBookmarkFragment | null,
+  ): ExtendedMapResponseModel {
+    const extendedAppLayers = mapResponse.appLayers.map(LayerModelHelper.getLayerWithInitialValues);
+    const extendedTreeNodes = LayerTreeNodeHelper.getExtendedLayerTreeNodes(mapResponse.layerTreeNodes, mapResponse.appLayers);
+    const bookmarkLayerSettings = MapBookmarkHelper.layerSettingsFromFragment(layerSettings, extendedAppLayers);
+    const bookmarkLayerOrder = MapBookmarkHelper.layerTreeOrderFromFragment(layerOrder, extendedTreeNodes);
+    const appLayers = extendedAppLayers.map<AppLayerModel>(layer => {
+      const updated = bookmarkLayerSettings.visibilityChanges.find(v => v.id === layer.id);
+      const visible = updated ? updated.checked : layer.visible;
+      const opacityUpdated = bookmarkLayerSettings.opacityChanges.find(o => o.id === layer.id);
+      const opacity = opacityUpdated ? opacityUpdated.opacity : layer.opacity;
+      const styleUpdated = bookmarkLayerSettings.styleChanges.find(s => s.id === layer.id);
+      const selectedStyleName = styleUpdated ? styleUpdated.style : layer.selectedStyleName;
+      return {
+        ...layer,
+        visible,
+        opacity,
+        selectedStyleName,
+      };
+    });
+    return {
+      ...mapResponse,
+      layerTreeNodes: LayerTreeNodeHelper.getExtendedLayerTreeNodes(extendedTreeNodes, appLayers).map(node => {
+        const matches = bookmarkLayerOrder.find(a => a.nodeId === node.id);
+        if (matches !== undefined) {
+          return {
+            ...node,
+            childrenIds: matches.children,
+          };
+        }
+        return node;
+      }),
+      appLayers,
+    };
+  }
+
+}

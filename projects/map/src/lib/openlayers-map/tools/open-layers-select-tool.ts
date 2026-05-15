@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { Map as OlMap } from 'ol';
+import { Collection, Feature, Map as OlMap } from 'ol';
 import { MapStyleHelper } from '../../helpers/map-style.helper';
 import { NgZone } from '@angular/core';
 import { EventsKey } from 'ol/events';
@@ -21,6 +21,8 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
 
   private selectedFeaturesSubject: Subject<Array<FeatureModel<A> | null> | null> = new Subject<Array<FeatureModel<A> | null> | null>();
   public selectedFeatures$ = this.selectedFeaturesSubject.asObservable();
+
+  private selectedFeaturesCollection = new Collection<Feature>();
 
   constructor(
     public id: string,
@@ -54,6 +56,7 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
       style: this.getSelectionStyle(),
       multi: false,
       hitTolerance: 4,
+      features: this.selectedFeaturesCollection,
     });
     this.olMap.addInteraction(this.selectInteraction);
     this.listeners.push(this.selectInteraction.on('select', (e: SelectEvent) => {
@@ -64,6 +67,13 @@ export class OpenLayersSelectTool<A extends FeatureModelAttributes = FeatureMode
         return FeatureHelper.getFeatureModelForFeature<A>(feature, this.olMap.getView().getProjection());
       })));
     }));
+  }
+
+  public setSelectedFeature(feature: FeatureModel | null) {
+    this.selectedFeaturesCollection.clear();
+    FeatureHelper.getFeatures(feature).forEach(f => {
+      this.selectedFeaturesCollection.push(f);
+    });
   }
 
   private filterLayers(layer: BaseLayer) {

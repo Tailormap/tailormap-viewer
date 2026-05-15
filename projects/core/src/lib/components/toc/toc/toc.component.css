@@ -1,11 +1,18 @@
 :host,
 .toc {
-  height: 100%;
   --toc-side-padding: 14px;
+}
+
+.toc {
+  height: 100%;
 }
 
 ::ng-deep .tree-wrapper {
   padding-right: var(--toc-side-padding);
+}
+
+:host-context(.mobile-layout) .toc-tree ::ng-deep .tree-wrapper {
+  padding-right: 0;
 }
 
 .toc-tree ::ng-deep .mat-tree-node {
@@ -55,6 +62,14 @@
   padding: 6px 0 0 var(--toc-side-padding);
 }
 
+:host-context(.mobile-layout) .toc-tree {
+  padding: 0 6px;
+}
+
 tm-toc-filter-input {
   display: block;
+}
+
+.toc-tree ::ng-deep .tree-node-checkbox {
+  align-self: flex-start;
 }

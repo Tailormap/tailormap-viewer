@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TreeModel, TreeNodePosition, TreeService } from '@tailormap-viewer/shared';
 import {
@@ -27,6 +27,8 @@ import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.sele
 import { expandTree } from '../../catalog/state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-model-type.enum';
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
+import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
+import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-edit-layers',
@@ -37,6 +39,8 @@ import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
   standalone: false,
 })
 export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  public applicationTreeService = inject<TreeService<AppTreeNodeModel>>(TreeService);
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -74,11 +78,6 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   public selectedCatalogItem$ = this.selectedCatalogItemSubject.asObservable();
 
   public filterTerm$: Observable<string | undefined> = of('');
-
-  constructor(
-    private store$: Store,
-    public applicationTreeService: TreeService<AppTreeNodeModel>,
-  ) {}
 
   public ngOnInit(): void {
     this.setDataSources();
@@ -238,6 +237,44 @@ export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
 
   public filterChanged(filterTerm: string | null) {
     this.store$.dispatch(setApplicationTreeFilterTerm({ filterTerm, tree: this.applicationStateTree }));
+  }
+
+  public expandOnStartup($event: { nodeId: string; expandOnStartup: ExpandOnStartupEnum }) {
+    const updatedNode: Partial<AppTreeLevelNodeModel> = { expandOnStartup: $event.expandOnStartup };
+    this.store$.dispatch(updateApplicationTreeNode({
+      tree: this.applicationStateTree,
+      nodeId: $event.nodeId,
+      updatedNode,
+    }));
+  }
+
+  public onLayerDoubleClick(layer: ExtendedGeoServiceLayerModel) {
+    this.applicationTreeService.selectedNode$
+      .pipe(take(1))
+      .subscribe(selectedNode => {
+        if (!selectedNode) {
+          // Add layer to root of the tree
+          const rootNodeId = this.applicationTreeService.getRootNodeId();
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
+            sibling: '',
+            toParent: rootNodeId,
+            position: "inside",
+          };
+          this.addLayer(addLayerEvent);
+        } else {
+          // Add layer to selected group or after selected node
+          const parentId = this.applicationTreeService.getParent(selectedNode);
+          const isLevelNode = this.applicationTreeService.isExpandable(selectedNode);
+          const addLayerEvent: AddLayerEvent = {
+            layer: layer,
+            sibling: isLevelNode ? '' : selectedNode,
+            toParent: isLevelNode ? selectedNode : parentId,
+            position: isLevelNode ? "inside" : "after",
+          };
+          this.addLayer(addLayerEvent);
+        }
+      });
   }
 
 }

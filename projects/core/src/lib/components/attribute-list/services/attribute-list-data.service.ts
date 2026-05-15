@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { catchError, concatMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
@@ -6,7 +6,7 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
 import {
-  ColumnMetadataModel, FeatureModel, Sortorder, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel, AttributeTypeHelper,
+  ColumnMetadataModel, FeatureModel, Sortorder, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -15,36 +15,33 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
+import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { AttributeListManagerService } from './attribute-list-manager.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttributeListDataService implements OnDestroy {
+  private api = inject(AttributeListManagerService);
+  private store$ = inject(Store);
+  private filterService = inject(FilterService);
+  private featureUpdatedService = inject(FeatureUpdatedService);
+
 
   private destroyed = new Subject();
 
   public static DEFAULT_ERROR_MESSAGE = $localize `:@@core.attribute-list.failed-loading-data:Failed to load attribute list data`;
   private static FILTER_GEOMETRY_COLUMNS = true;
 
-  constructor(
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-    private store$: Store,
-    private filterService: FilterService,
-  ) {
-    this.filterService.getChangedFilters$()
-      .pipe(
-        takeUntil(this.destroyed),
-        withLatestFrom(this.store$.select(selectAttributeListTabs)),
-        map(([ filters, tabs ]) => {
-          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : filters.has(tab.layerId));
-        }),
-      )
-      .subscribe(tabs => {
-        tabs.forEach(tab => {
-          this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
-          this.store$.dispatch(AttributeListActions.loadData({ tabId: tab.id }));
-        });
-      });
+  constructor() {
+    this.registerDataUpdateListener(
+      this.filterService.getChangedFilters$(),
+      (filters, layerId) => filters.has(layerId),
+    );
+    this.registerDataUpdateListener(
+      this.featureUpdatedService.featureUpdated$,
+      (updatedFeature, layerId) => layerId === updatedFeature.layerId,
+    );
   }
 
   public ngOnDestroy() {
@@ -85,7 +82,7 @@ export class AttributeListDataService implements OnDestroy {
     return this.store$.select(selectViewerId)
       .pipe(
         filter(TypesHelper.isDefined),
-        concatMap(applicationId => this.api.getFeatures$({
+        concatMap(applicationId => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
           applicationId,
           page: start,
@@ -96,7 +93,7 @@ export class AttributeListDataService implements OnDestroy {
             : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
       ).pipe(
-      catchError(() => of(null)),
+      catchError(_e => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
           // eslint-disable-next-line max-len
@@ -108,6 +105,8 @@ export class AttributeListDataService implements OnDestroy {
           success: true,
           columns: AttributeListDataService.getColumns(response.columnMetadata),
           rows: AttributeListDataService.decorateFeatures(response.features, selectedData),
+          pageSize: response.pageSize || selectedData.pageSize,
+          pageIndex: response.page === null || typeof response.page === 'undefined' ? undefined : response.page,
         };
       }),
     );
@@ -136,10 +135,10 @@ export class AttributeListDataService implements OnDestroy {
         return !AttributeTypeHelper.isGeometryType(column.type);
       })
       .map<AttributeListColumnModel>(column => ({
-        id: column.key,
+        id: column.name,
         visible: true,
         type: column.type,
-        label: column.alias || column.key,
+        label: column.alias || column.name,
       }));
   }
 
@@ -151,7 +150,26 @@ export class AttributeListDataService implements OnDestroy {
       columns: [],
       success: false,
       errorMessage: message || AttributeListDataService.DEFAULT_ERROR_MESSAGE,
+      pageSize: 0,
     };
+  }
+
+  private registerDataUpdateListener<T>(source$: Observable<T>, shouldUpdateTab: (sourceResult: T, layerId: string) => boolean) {
+    source$
+      .pipe(
+        takeUntil(this.destroyed),
+        withLatestFrom(this.store$.select(selectAttributeListTabs)),
+        map(([ sourceResult, tabs ]) => {
+          return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : shouldUpdateTab(sourceResult, tab.layerId));
+        }),
+      )
+      .subscribe(tabs => {
+        this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature: null }));
+        tabs.forEach(tab => {
+          // After changes, reset the page index because the number of results may have changed
+          this.store$.dispatch(AttributeListActions.updatePage({ dataId: tab.selectedDataId, page: 1 }));
+        });
+      });
   }
 
 }

@@ -18,7 +18,11 @@ export interface DropZoneOptions {
   isExpanded(nodeid: string): boolean;
   expandNode(nodeid: string): void;
   getParent(nodeid: string): string | null;
+  getNodeOrder?(nodeIds: string[]): string[];
   nodePositionChanged(evt: NodePositionChangedEventModel): void;
+  dragEnded?(): void;
+  getExtendedDropzoneElement?(): HTMLElement | null;
+  getRootNodeId?(): string | null;
 }
 
 @Injectable()
@@ -34,6 +38,7 @@ export class TreeDragDropService implements OnDestroy {
   private readonly handleMouseMoveListener: MouseEventHandler = e => this.handleMouseMove(e);
 
   private dragNode: FlatTreeModel | null = null;
+  private dragNodeIds: string[] = [];
   private dragNodeExpandOverWaitTimeMs = 300;
   private dragOverNodeId: string | null = null;
   private dragNodeExpandOverTime: number | null = null;
@@ -44,13 +49,16 @@ export class TreeDragDropService implements OnDestroy {
   private insideCls = `${treeNodeBaseClass}--drop-inside`;
   private lastOffsetY: number | null = null;
 
+  public static readonly EXTENDED_DROPZONE_CLASS = "extended-dropzone";
+
   private dropZones: DropZoneOptions[] = [];
 
   private static getDragTarget(e: DragEvent): HTMLElement | null {
     if (!e.target) {
       return null;
     }
-    return (e.target as HTMLElement).closest(`.${treeNodeBaseClass}`);
+    return (e.target as HTMLElement).closest(`.${treeNodeBaseClass}`)
+      || (e.target as HTMLElement).closest(`.${TreeDragDropService.EXTENDED_DROPZONE_CLASS}`);
   }
 
   private static getNodeId(treeNode: HTMLElement): string {
@@ -73,15 +81,16 @@ export class TreeDragDropService implements OnDestroy {
     this.treeDragDropEnabled.next(enable);
   }
 
-  public handleDragStart(event: DragEvent, dragNode: FlatTreeModel, dropZones: DropZoneOptions[]) {
+  public handleDragStart(event: DragEvent, dragNode: FlatTreeModel, dropZones: DropZoneOptions[], dragNodeIds: string[] = [dragNode.id]) {
     this.dropZones = dropZones;
     this.dragNode = dragNode;
+    this.dragNodeIds = dragNodeIds;
 
     if (event.dataTransfer) {
       if (dropZones.length > 0 && event.dataTransfer.setDragImage) {
         const dragImage = document.createElement('div');
         dragImage.classList.add('tree-node__drag-image');
-        dragImage.innerText = dragNode.label;
+        dragImage.innerText = dragNodeIds.length > 1 ? $localize `:@@shared.tree.items:${dragNodeIds.length} items` : dragNode.label;
         dropZones[0].getTargetElement()?.appendChild(dragImage);
         event.dataTransfer.setDragImage(dragImage, 0, BrowserHelper.isTouchDevice ? 75 : 25);
       }
@@ -93,6 +102,11 @@ export class TreeDragDropService implements OnDestroy {
     this.dragNodeExpandOverTime = 0;
     this.lastOffsetY = null;
 
+    const dragEnd = () => {
+      this.handleDragEnd();
+      event.target?.removeEventListener('dragend', dragEnd);
+    };
+    event.target?.addEventListener('dragend', dragEnd);
     dropZones.forEach(dz => this.initDropZone(dz));
   }
 
@@ -115,6 +129,12 @@ export class TreeDragDropService implements OnDestroy {
     treeElement.classList.add(`mat-tree--drag-active`);
     scrollContainer.addEventListener('dragover', this.handleMouseMove);
     this.attachEventListenersToNodes(treeElement);
+    if (dropZone.getExtendedDropzoneElement) {
+      const extendedElement = dropZone.getExtendedDropzoneElement();
+      if (extendedElement) {
+        this.addEventListenersToElement(extendedElement);
+      }
+    }
   }
 
   private handleMouseMove = (e: MouseEvent) => {
@@ -137,7 +157,8 @@ export class TreeDragDropService implements OnDestroy {
       return;
     }
     const nodeId = TreeDragDropService.getNodeId(element);
-    const dropZone = this.dropZones.find(dz => dz.dropAllowed(nodeId));
+    const dropZone = this.dropZones.find(dz => dz.dropAllowed(nodeId)
+      || (dz.getExtendedDropzoneElement && element === dz.getExtendedDropzoneElement()));
     if (!dropZone) {
       return;
     }
@@ -146,7 +167,7 @@ export class TreeDragDropService implements OnDestroy {
       if (this.dragNodeExpandOverTime) {
         window.clearTimeout(this.dragNodeExpandOverTime);
       }
-      const shouldExpand = this.dragNode.id !== nodeId && dropZone.isExpandable(nodeId) && !dropZone.isExpanded(nodeId);
+      const shouldExpand = !this.dragNodeIds.includes(nodeId) && dropZone.isExpandable(nodeId) && !dropZone.isExpanded(nodeId);
       if (shouldExpand) {
         this.dragNodeExpandOverTime = window.setTimeout(() => {
           dropZone.expandNode(nodeId);
@@ -163,7 +184,8 @@ export class TreeDragDropService implements OnDestroy {
     }
     this.lastOffsetY = offsetY;
     const percentageY = offsetY / element.offsetHeight;
-    if (dropZone.dropInsideOnly && dropZone.dropInsideAllowed(nodeId)) {
+    if ((dropZone.dropInsideOnly && dropZone.dropInsideAllowed(nodeId))
+      || element.classList.contains(TreeDragDropService.EXTENDED_DROPZONE_CLASS)) {
       this.dragNodePosition = 'inside';
     } else {
       const beforePercentage = dropZone.dropInsideAllowed(nodeId) ? 0.25 : 0.5;
@@ -209,22 +231,42 @@ export class TreeDragDropService implements OnDestroy {
       return;
     }
     const nodeId = TreeDragDropService.getNodeId(element);
-    const dropZone = this.dropZones.find(dz => dz.dropAllowed(nodeId));
+    const dropZone = this.dropZones.find(dz => dz.dropAllowed(nodeId)
+      || (dz.getExtendedDropzoneElement && element === dz.getExtendedDropzoneElement()));
     if (!dropZone) {
       return;
     }
-    if (nodeId !== this.dragNode.id) {
+
+    if (!this.dragNodeIds.includes(nodeId)) {
+      const orderedDragNodeIds = dropZone.getNodeOrder
+        ? dropZone.getNodeOrder(this.dragNodeIds)
+        : [...this.dragNodeIds];
+
       const insideExpandableNode = this.dragNodePosition === 'inside' && dropZone.isExpandable(nodeId);
-      const parent = insideExpandableNode ? nodeId : dropZone.getParent(nodeId);
-      const prevParent = dropZone.getParent(this.dragNode.id);
-      const eventData = {
-        nodeId: this.dragNode.id,
-        toParent: parent ? parent : null,
-        fromParent: prevParent ? prevParent : null,
-        position: this.dragNodePosition,
-        sibling: nodeId,
-      };
-      dropZone.nodePositionChanged(eventData);
+      let parent = insideExpandableNode ? nodeId : dropZone.getParent(nodeId);
+      let sibling = nodeId;
+      const position = this.dragNodePosition;
+
+      if (element.className.includes(TreeDragDropService.EXTENDED_DROPZONE_CLASS)) {
+        parent = dropZone.getRootNodeId ? dropZone.getRootNodeId() : null;
+        sibling = dropZone.getRootNodeId ? dropZone.getRootNodeId() ?? '' : '';
+      }
+
+      const dragNodeIdsToMove = position === 'after'
+        ? [...orderedDragNodeIds].reverse()
+        : orderedDragNodeIds;
+
+      dragNodeIdsToMove.forEach((dragNodeId) => {
+        const prevParent = dropZone.getParent(dragNodeId);
+        const eventData = {
+          nodeId: dragNodeId,
+          toParent: parent ? parent : null,
+          fromParent: prevParent ? prevParent : null,
+          position,
+          sibling,
+        };
+        dropZone.nodePositionChanged(eventData);
+      });
     }
     this.handleDragEnd();
   };
@@ -254,34 +296,50 @@ export class TreeDragDropService implements OnDestroy {
       const scrollContainer = treeElement.closest('.tree-wrapper') as HTMLElement;
       scrollContainer.removeEventListener('dragover', this.handleMouseMoveListener);
       this.removeEventListenersFromNodes(treeElement);
+      if (dropZone.getExtendedDropzoneElement) {
+        const extendedElement = dropZone.getExtendedDropzoneElement();
+        if (extendedElement) {
+          this.removeEventListenersFromElement(extendedElement);
+        }
+      }
+      dropZone.dragEnded?.();
     });
+    this.dragNode = null;
+    this.dragNodeIds = [];
   };
 
   private attachEventListenersToNodes(treeElement: HTMLElement) {
     TreeDragDropService.loopNodes(treeElement, treeNode => {
-      if (treeNode.hasAttribute('tree-listener-added')) {
-        return;
-      }
-      treeNode.setAttribute('tree-listener-added', 'true');
-      treeNode.addEventListener('dragover', this.handleDragOverListener);
-      treeNode.addEventListener('dragleave', this.handleDragLeaveListener);
-      treeNode.addEventListener('dragend', this.handleDragEndListener);
-      treeNode.addEventListener('drop', this.handleDropListener);
+      this.addEventListenersToElement(treeNode);
     });
   }
 
   private removeEventListenersFromNodes(treeElement: HTMLElement) {
     TreeDragDropService.loopNodes(treeElement, treeNode => {
-      treeNode.removeEventListener('dragover', this.handleDragOverListener);
-      treeNode.removeEventListener('dragleave', this.handleDragLeaveListener);
-      treeNode.removeEventListener('dragend', this.handleDragEndListener);
-      treeNode.removeEventListener('drop', this.handleDropListener);
-      treeNode.classList.remove(this.beforeCls);
-      treeNode.classList.remove(this.afterCls);
-      treeNode.classList.remove(this.insideCls);
-      treeNode.removeAttribute('tree-listener-added');
+      this.removeEventListenersFromElement(treeNode);
     });
+  }
 
+  private addEventListenersToElement(element: HTMLElement) {
+    if (element.hasAttribute('tree-listener-added')) {
+      return;
+    }
+    element.setAttribute('tree-listener-added', 'true');
+    element.addEventListener('dragover', this.handleDragOverListener);
+    element.addEventListener('dragleave', this.handleDragLeaveListener);
+    element.addEventListener('dragend', this.handleDragEndListener);
+    element.addEventListener('drop', this.handleDropListener);
+  }
+
+  private removeEventListenersFromElement(element: HTMLElement) {
+    element.removeEventListener('dragover', this.handleDragOverListener);
+    element.removeEventListener('dragleave', this.handleDragLeaveListener);
+    element.removeEventListener('dragend', this.handleDragEndListener);
+    element.removeEventListener('drop', this.handleDropListener);
+    element.classList.remove(this.beforeCls);
+    element.classList.remove(this.afterCls);
+    element.classList.remove(this.insideCls);
+    element.removeAttribute('tree-listener-added');
   }
 
 }

@@ -1,6 +1,7 @@
 <button mat-flat-button [color]="color" [attr.aria-label]="label" (click)="clicked()" [disabled]="disabled || (showSpinner$ | async)">
-  <ng-template #textLabel>{{label}}</ng-template>
-  <ng-container *ngIf="showSpinner$ | async; else: textLabel">
+  @if (showSpinner$ | async) {
     <mat-spinner diameter="20"></mat-spinner>
-  </ng-container>
+  } @else {
+    {{label}}
+  }
 </button>

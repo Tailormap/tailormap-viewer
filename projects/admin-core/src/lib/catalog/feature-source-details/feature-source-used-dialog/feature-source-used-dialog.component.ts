@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
@@ -16,16 +16,19 @@ import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.se
   standalone: false,
 })
 export class FeatureSourceUsedDialogComponent {
+  private dialogRef = inject<MatDialogRef<FeatureSourceUsedDialogComponent, boolean | 'layer-updated'>>(MatDialogRef);
+  public data = inject<{
+    layers: ExtendedGeoServiceLayerModel[];
+    featureSource: FeatureSourceModel;
+}>(MAT_DIALOG_DATA);
+  private dialog = inject(MatDialog);
+  private store$ = inject(Store);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private destroyed = new Subject();
 
-  constructor(
-    private dialogRef: MatDialogRef<FeatureSourceUsedDialogComponent, boolean | 'layer-updated'>,
-    @Inject(MAT_DIALOG_DATA) public data: { layers: ExtendedGeoServiceLayerModel[]; featureSource: FeatureSourceModel },
-    private dialog: MatDialog,
-    private store$: Store,
-    private adminSnackbarService: AdminSnackbarService,
-  ) {
+  constructor() {
     this.dialogRef.afterClosed()
       .pipe(take(1))
       .subscribe(() => {

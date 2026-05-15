@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { BookmarkService } from '../../../../services/bookmark/bookmark.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
@@ -14,16 +14,13 @@ import { startWith } from 'rxjs';
   standalone: false,
 })
 export class ShareViewerDialogComponent implements OnInit {
+  private bookmarkService = inject(BookmarkService);
+  private dialogRef = inject<MatDialogRef<ShareViewerDialogComponent>>(MatDialogRef);
+  private destroyRef = inject(DestroyRef);
+
 
   public urlControl = new FormControl<string>('');
   public embedControl = new FormControl<string>('');
-
-  constructor(
-    private bookmarkService: BookmarkService,
-    private dialogRef: MatDialogRef<ShareViewerDialogComponent>,
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit() {
 

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
-import { FilterTypeEnum, FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterTypeEnum, FilterGroupModel, AttributeFilterModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
-import { toggleFilterDisabled } from '../../../filter/state/filter.actions';
+import { toggleFilterDisabled } from '../../../state/filter-state/filter.actions';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { setSelectedFilterGroup } from '../state/filter-component.actions';
 import { RemoveFilterService } from '../services/remove-filter.service';
@@ -17,11 +17,26 @@ import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 })
 export class FilterListItemComponent {
 
-  @Input()
   public filter: ExtendedFilterGroupModel | null = null;
+  public editableFilters: AttributeFilterModel[] = [];
+
+  @Input()
+  public set filterGroup(filterGroup: ExtendedFilterGroupModel | null) {
+    if (!filterGroup) {
+      return;
+    }
+    this.filter = filterGroup;
+    this.editableFilters = this.filter?.filters.filter((f): f is AttributeFilterModel =>
+      FilterTypeHelper.isAttributeFilter(f) && (!!f.editConfiguration || !!f.generatedByFilterId)) ?? [];
+  }
+
+  @Input()
+  public editFiltersExpanded = false;
 
   private store$ = inject(Store);
   private removeFilterService = inject(RemoveFilterService);
+
+
 
   public isAttributeFilter(type: FilterTypeEnum) {
     return type === FilterTypeEnum.ATTRIBUTE;

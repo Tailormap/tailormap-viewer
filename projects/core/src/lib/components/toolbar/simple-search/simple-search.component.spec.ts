@@ -11,6 +11,7 @@ import { SearchResultModel } from './models';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const setup = async () => {
   const mockedSearchService = {
@@ -25,6 +26,7 @@ const setup = async () => {
     }])),
   };
   const mockedMapService = getMapServiceMock(null, 'EPSG:28992');
+  const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(SimpleSearchComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [
@@ -38,6 +40,7 @@ const setup = async () => {
           },
         },
       } }),
+      { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
   });
   return {

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { applicationStateKey } from './state/application.state';
 import { applicationReducer } from './state/application.reducer';
@@ -34,7 +34,21 @@ import {
 import { FormModule } from "../form/form.module";
 import { ApplicationCopyDialogComponent } from './application-copy-dialog/application-copy-dialog.component';
 import { ApplicationEditTerrainLayersComponent } from './application-edit-terrain-layers/application-edit-terrain-layers.component';
+import { ApplicationFilterGroupListComponent } from './application-edit-filters/filter-group-list/application-filter-group-list.component';
+import { ApplicationCreateFilterGroupComponent } from './application-edit-filters/filter-group-create/application-create-filter-group.component';
+import { ApplicationDatePickerFilterFormComponent } from './application-edit-filters/filters/application-date-picker-filter-form/application-date-picker-filter-form.component';
+import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ApplicationEditFiltersComponent } from './application-edit-filters/application-edit-filters.component';
+import { ApplicationEditFiltersHomeComponent } from './application-edit-filters/filter-group-home/application-edit-filters-home.component';
+import { ApplicationEditFilterComponent } from './application-edit-filters/filter-group-edit/application-edit-filter.component';
+import {
+  ApplicationCheckboxFilterFormComponent, ApplicationEditFilterFormComponent, ApplicationFilterAttributeListComponent,
+  ApplicationFiltersListComponent,
+  ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent,
+} from './application-edit-filters/filters';
+import {
+  ApplicationDropdownListFilterFormComponent,
+} from './application-edit-filters/filters/application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +71,18 @@ import { ApplicationEditFiltersComponent } from './application-edit-filters/appl
     ApplicationCopyDialogComponent,
     ApplicationEditTerrainLayersComponent,
     ApplicationEditFiltersComponent,
+    ApplicationFilterGroupListComponent,
+    ApplicationEditFiltersHomeComponent,
+    ApplicationEditFilterComponent,
+    ApplicationCreateFilterGroupComponent,
+    ApplicationFilterAttributeListComponent,
+    ApplicationFiltersListComponent,
+    ApplicationCheckboxFilterFormComponent,
+    ApplicationSliderFilterFormComponent,
+    ApplicationSwitchFilterFormComponent,
+    ApplicationEditFilterFormComponent,
+    ApplicationDatePickerFilterFormComponent,
+    ApplicationDropdownListFilterFormComponent,
   ],
   imports: [
     CommonModule,
@@ -68,13 +94,18 @@ import { ApplicationEditFiltersComponent } from './application-edit-filters/appl
     CatalogModule,
     ComponentsModule,
     FormModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
   ],
     exports: [
         ApplicationListComponent,
     ],
 })
 export class ApplicationModule {
-  constructor(applicationService: ApplicationService) {
+  constructor() {
+    const applicationService = inject(ApplicationService);
+
     applicationService.listenForApplicationChanges();
   }
 }

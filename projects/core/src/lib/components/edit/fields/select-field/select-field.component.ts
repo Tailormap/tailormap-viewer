@@ -1,6 +1,4 @@
-import {
-  Component, ChangeDetectionStrategy, Input, forwardRef, DestroyRef, OnInit, Output, EventEmitter, ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, forwardRef, DestroyRef, OnInit, Output, EventEmitter, ChangeDetectorRef, inject } from '@angular/core';
 import { ViewerEditFormFieldModel } from '../../models/viewer-edit-form-field.model';
 import { FormFieldValueListItemModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
@@ -26,6 +24,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class SelectFieldComponent implements OnInit, ControlValueAccessor {
+  private uniqueValueService = inject(UniqueValuesService);
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input({ required: true })
   public item: ViewerEditFormFieldModel | null = null;
@@ -48,13 +51,6 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   private onTouched: any | null = null;
 
   public formControl = new FormControl<string | number | boolean>('');
-
-  constructor(
-    private uniqueValueService: UniqueValuesService,
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public ngOnInit() {
     const value = this.item?.value || '';

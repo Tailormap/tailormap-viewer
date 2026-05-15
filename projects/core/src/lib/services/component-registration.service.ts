@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { RegisteredComponent } from '@tailormap-viewer/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export type AreaType = 'panel' | 'menu' | 'map' | 'map-controls-left' | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | string;
+export type AreaType = 'panel' | 'menu' | 'map' | 'map-controls-left'
+  | 'map-controls-right' | 'map-controls-left-bottom' | 'map-controls-right-bottom' | 'mobile-menu-bottom' | 'mobile-menu-home' | string;
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +42,9 @@ export class ComponentRegistrationService {
       this.registeredComponents[area] = [];
     }
     this.registeredComponents[area] = this.registeredComponents[area].filter(c => c.type !== componentType);
-    this.componentRegistry[area].next([...this.registeredComponents[area]]);
+    if (this.componentRegistry[area]) {
+      this.componentRegistry[area].next([...this.registeredComponents[area]]);
+    }
   }
 
   public getRegisteredComponents$(area: AreaType): Observable<RegisteredComponent[]> {

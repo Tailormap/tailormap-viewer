@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, signal, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { MarkdownHelper } from '@tailormap-viewer/shared';
@@ -12,6 +12,8 @@ import { take } from 'rxjs';
   standalone: true,
 })
 export class FeatureInfoTemplateRendererComponent implements OnChanges {
+  private sanitizer = inject(DomSanitizer);
+
 
   @Input()
   public feature: FeatureInfoModel | undefined;
@@ -20,11 +22,6 @@ export class FeatureInfoTemplateRendererComponent implements OnChanges {
   public template: string | undefined;
 
   public rendererTemplate = signal<SafeHtml | null>(null);
-
-  constructor(
-    private sanitizer: DomSanitizer,
-  ) {
-  }
 
   public ngOnChanges() {
     if (!this.template) {

@@ -1,8 +1,12 @@
-import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, EventEmitter, Output, input, computed, signal, effect } from '@angular/core';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { AttributeType } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
+import { FeatureDetailsModel, StatisticType } from '../models/attribute-list-api-service.model';
+import { StatisticsHelper } from '../helpers/statistics-helper';
+import { AttributeListStatisticColumnModel, StatisticValueModel } from '../models/attribute-list-statistic-column.model';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
@@ -27,18 +31,7 @@ export class AttributeListTableComponent {
     return this._rows;
   }
 
-  @Input()
-  public set columns(columns: AttributeListColumnModel[] | null) {
-    if (columns === null) {
-      return;
-    }
-    this._columns = columns;
-    this.columnNames = this.getColumnNames();
-  }
-
-  public get columns() {
-    return this._columns;
-  }
+  public columns = input<AttributeListColumnModel[] | null>([]);
 
   @Input()
   public sort: { column: string; direction: string } | null = null;
@@ -46,6 +39,7 @@ export class AttributeListTableComponent {
   @Input()
   public set filters(filters: AttributeFilterModel[] | null) {
     if (filters === null) {
+      this.filtersDictionary = new Map();
       return;
     }
     this.filtersDictionary = new Map<string, AttributeFilterModel>(filters.map(f => [ f.attribute, f ]));
@@ -53,6 +47,14 @@ export class AttributeListTableComponent {
 
   @Input()
   public selectedRowId: string | undefined | null;
+
+  public canExpandRows = input<boolean | null>(false);
+  public featureDetails = input<Map<string, FeatureDetailsModel> | null>(new Map());
+  public loadingFeatureDetailsIds = input<Set<string> | null>(new Set());
+
+  public showStatistics = input<boolean | null>(false);
+  public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
+  public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
@@ -63,13 +65,63 @@ export class AttributeListTableComponent {
   @Output()
   public setFilter = new EventEmitter<{ columnId: string; attributeType: AttributeType }>();
 
+  @Output()
+  public loadFeatureDetailsForFeature = new EventEmitter<string>();
+
+  @Output()
+  public showStatisticsHelp = new EventEmitter<void>();
+
+  @Output()
+  public loadStatisticsForColumn = new EventEmitter<{ type: StatisticType; columnName: string; dataType: string }>();
+
   private _rows: AttributeListRowModel[] = [];
-  private _columns: AttributeListColumnModel[] = [];
-  public columnNames: string[] = [];
+  public columnNames = computed(() => {
+    return this.getColumnNames(this.columns(), this.canExpandRows());
+  });
   private filtersDictionary: Map<string, AttributeFilterModel> = new Map();
 
   private columnWidths: Map<string, number> = new Map();
   private isResizing = false;
+
+  public expandedRows = signal<Set<string>>(new Set());
+
+  public readonly EXPAND_DETAILS_COLUMN_NAME = '__tm_attribute_list_expand_details__';
+  public readonly EXPAND_DETAILS_ROW_NAME = '__tm_attribute_list_expand_details_row__';
+
+  public statisticTypes = StatisticsHelper.getStatisticOptions();
+  private statisticsDictionary = computed<Map<string, StatisticValueModel>>(() => {
+    const statistics = this.statistics() || [];
+    return new Map<string, StatisticValueModel>(statistics.map(
+      s => {
+        const label = s.hasError
+          ? $localize `:@@core.attribute-list.statistics-error:Error loading statistic`
+          : StatisticsHelper.getLabelForStatisticType(s);
+        const value: StatisticValueModel = {
+          ...s,
+          label,
+        };
+        return [ s.columnName, value ];
+      },
+    ));
+  });
+
+  public rowIndexMap = computed(() => {
+    const paging = this.pagingDataSelectedTab();
+    const pageOffset = paging ? (paging.pageIndex - 1) * paging.pageSize : 0;
+    const rowIndexMap = new Map<string, number>();
+    this._rows.forEach((row, index) => {
+      rowIndexMap.set(row.id, pageOffset + index + 1);
+    });
+    return rowIndexMap;
+  });
+
+  constructor() {
+    effect(() => {
+      // reset column names and expanded rows when columns change
+      this.columns();
+      this.expandedRows.set(new Set());
+    });
+  }
 
   public trackByRowId(idx: number, row: AttributeListRowModel) {
     return row.id;
@@ -79,11 +131,15 @@ export class AttributeListTableComponent {
     return column.id;
   }
 
-  private getColumnNames(): string[] {
-    if (!this.columns) {
+  private getColumnNames(columns: AttributeListColumnModel[] | null, canExpandRows?: boolean | null): string[] {
+    if (!columns) {
       return [];
     }
-    return this.columns.map(c => c.label || c.id);
+    const names = columns.map(c => c.label || c.id);
+    if (canExpandRows && names.length > 0) {
+      names.unshift(this.EXPAND_DETAILS_COLUMN_NAME);
+    }
+    return names;
   }
 
   public columnWidthChanged(widthDelta: number, col: AttributeListColumnModel) {
@@ -135,6 +191,51 @@ export class AttributeListTableComponent {
 
   public isSelected(row: AttributeListRowModel) {
     return this.selectedRowId === row.id;
+  }
+
+  protected onRowExpandClick($event: PointerEvent, row: AttributeListRowModel) {
+    $event.stopPropagation();
+    const rowId = row.id;
+    const featureId = row.__fid;
+    if (!featureId) {
+      return;
+    }
+    const expandedRows = new Set(this.expandedRows());
+    if (expandedRows.has(rowId)) {
+      expandedRows.delete(rowId);
+    } else {
+      expandedRows.add(rowId);
+      this.loadFeatureDetailsForFeature.emit(featureId);
+    }
+    this.expandedRows.set(expandedRows);
+  }
+
+  public getStatisticResult(col: AttributeListColumnModel): StatisticValueModel | undefined {
+    return this.statisticsDictionary().get(col.id);
+  }
+
+  public isStatisticsProcessing(colName: string): boolean {
+    return this.statisticsDictionary().get(colName)?.isLoading ?? false;
+  }
+
+  public isStatisticsTypeAvailable(type: StatisticType, col: AttributeListColumnModel) {
+    return StatisticsHelper.isStatisticTypeAvailable(type, col.type);
+  }
+
+  public isStatisticsTypeSelected(type: StatisticType, col: AttributeListColumnModel) {
+    const statisticColumn = this.statisticsDictionary().get(col.id);
+    return !!statisticColumn && statisticColumn.type === type;
+  }
+
+  public loadStatistic(type: StatisticType, col: AttributeListColumnModel) {
+    this.loadStatisticsForColumn.emit({ type, columnName: col.id, dataType: col.type });
+  }
+
+  public getAriaSortValue(columnId: string): 'ascending' | 'descending' | 'none' {
+    if (!this.sort || this.sort.column !== columnId || this.sort.direction === '') {
+      return 'none';
+    }
+    return this.sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
 }

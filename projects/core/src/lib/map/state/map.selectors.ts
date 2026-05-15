@@ -3,7 +3,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import { ArrayHelper, TreeHelper, TreeModel } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
-import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerWithInitialValuesModel } from '../models';
+import { ExtendedAppLayerModel, ExtendedLayerTreeNodeModel, AppLayerStateModel } from '../models';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
 import { LayerTreeNodeWithLayerModel } from '../models/layer-tree-node-with-layer.model';
 
@@ -52,7 +52,7 @@ export const selectLayerTreeNode = (nodeId: string) => createSelector(
   (layerTreeNodes?: LayerTreeNodeModel[]) => (layerTreeNodes || []).find(node => node.id === nodeId) || null,
 );
 
-const getLayersWithServices = (layers: AppLayerWithInitialValuesModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
+const getLayersWithServices = (layers: AppLayerStateModel[], services: ServiceModel[]): ExtendedAppLayerModel[] => {
     return layers.map(layer => ({
         ...layer,
         service: services.find(s => s.id === layer.serviceId),
@@ -161,7 +161,7 @@ export const selectOrderedVisibleBackgroundLayers = createSelector(
 
 export const selectLayersMap = createSelector(
   selectLayers,
-  (layers): Map<string, AppLayerWithInitialValuesModel> => new Map(layers.map(l => [ l.id, l ])),
+  (layers): Map<string, AppLayerStateModel> => new Map(layers.map(l => [ l.id, l ])),
 );
 
 export const selectLayerTree = createSelector(
@@ -276,7 +276,7 @@ export const selectAutoRefreshableLayers = createSelector(
 
 export const selectLayer = (layerId: string) => createSelector(
   selectLayers,
-  (layers: AppLayerWithInitialValuesModel[]) => layers.find(l => l.id === layerId) || null,
+  (layers: AppLayerStateModel[]) => layers.find(l => l.id === layerId) || null,
 );
 
 export const selectLayerDetails = (layerId: string) => createSelector(

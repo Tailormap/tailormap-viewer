@@ -4,12 +4,15 @@ import { AttributeListTabModel } from '../../models/attribute-list-tab.model';
 import { AttributeListManagerService } from '../../services/attribute-list-manager.service';
 import { AttributeListDataModel } from '../../models/attribute-list-data.model';
 import { AttributeType } from '@tailormap-viewer/api';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../../models/attribute-list-default-source.const';
 
 export const createDummyAttributeListTab = (
   overrides?: Partial<AttributeListTabModel>,
 ): AttributeListTabModel => ({
+  tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE,
   id: '1',
   selectedDataId: '1',
+  initialDataId: '1',
   loadingData: true,
   layerId: '1',
   initialDataLoaded: false,
@@ -118,7 +121,7 @@ export const getLoadedStoreWithMultipleTabs = (overrides?: Partial<AttributeList
     selectedTabId: '1',
     tabs: [
       createDummyAttributeListTab({ loadingData: false, initialDataLoaded: true }),
-      createDummyAttributeListTab({ id: '2', layerId: '2', selectedDataId: '2', label: 'Tab 2', loadingData: false, initialDataLoaded: true }),
+      createDummyAttributeListTab({ id: '2', layerId: '2', initialDataId: '2', selectedDataId: '2', label: 'Tab 2', loadingData: false, initialDataLoaded: true }),
     ],
     data: [
       createDummyAttributeListData({

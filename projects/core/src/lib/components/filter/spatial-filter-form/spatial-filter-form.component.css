@@ -34,3 +34,8 @@ h2 {
   margin-left: 10px;
   flex-shrink: 0;
 }
+
+tm-error-message {
+  display: block;
+  margin-top: 16px;
+}

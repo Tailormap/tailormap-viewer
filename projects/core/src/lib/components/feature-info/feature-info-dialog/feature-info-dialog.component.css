@@ -44,17 +44,6 @@
   flex-direction: column;
 }
 
-.feature-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-tm-error-message {
-  margin: 16px;
-}
-
 .layer-list-dropdown-wrapper {
   display: flex;
   align-items: center;
@@ -66,70 +55,22 @@ tm-feature-info-layer-dropdown {
   flex: 1;
 }
 
-.content {
-  flex: 1;
-  overflow: auto;
-}
-
-.content h2 {
-  color: var(--primary-color);
-  padding: 14px 14px 0 14px;
-}
-
-.row {
-  font-size: 15px;
-  font-weight: normal;
-  line-height: 24px;
-  border-bottom: 1px solid #D8D8D8;
-  padding: 10px 14px;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-
-.row:last-of-type {
-  border-bottom: 0 none;
-}
-
-.row strong {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.row ::ng-deep img {
-  max-width: 100%;
-  max-height: 200px;
-}
-
-.template-row {
-  max-height: 50%;
-  overflow: auto;
-}
-
-.attributes-toggle {
-  padding: 3px 10px;
-  cursor: pointer;
-}
-
-.attributes-collapsed .template-row {
-  max-height: none;
-}
-
-.attributes-collapsed .attributes-list {
-  display: none;
-}
-
-.buttons {
+.mobile-feature-info-dialog {
   display: flex;
-  box-shadow: 0 -1px 4px 0 rgba(0, 0, 0, 0.09);
-  padding: 14px;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
-.buttons button {
-  flex: 1;
+.mobile-feature-info-dialog .layer-list-dropdown-wrapper {
+  flex: 0 0 auto;
 }
 
-.buttons button + button {
-  margin-left: 14px;
+.mobile-feature-info-dialog tm-feature-info-content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+tm-feature-info-content {
+  overflow: hidden;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UploadInUseItem, UploadRemoveServiceModel } from '../../shared/components/select-upload/models/upload-remove-service.model';
 import { GeoServiceService } from './geo-service.service';
 import { map, take } from 'rxjs';
@@ -6,11 +6,8 @@ import { CatalogRouteHelper } from '../helpers/catalog-route.helper';
 
 @Injectable()
 export class LegendImageRemoveService implements UploadRemoveServiceModel {
+  private geoServiceService = inject(GeoServiceService);
 
-  constructor(
-    private geoServiceService: GeoServiceService,
-  ) {
-  }
 
   public isImageInUse$(imageId: string) {
     return this.geoServiceService.getGeoServicesAndLayers$()

@@ -6,3 +6,4 @@ export * from './overlay/overlay.service';
 export * from './overlay/overlay-ref';
 export * from './overlay/overlay/overlay.component';
 export * from './router-history.service';
+export * from '../helpers/i18n-paginator-intl';

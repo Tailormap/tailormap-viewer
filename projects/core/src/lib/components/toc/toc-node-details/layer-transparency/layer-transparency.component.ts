@@ -18,6 +18,7 @@ export class LayerTransparencyComponent {
   public opacity$ = of(100);
 
   private layerId: string | undefined;
+  public label: string = $localize `:@@core.toc.opacity:Opacity`;
 
   @Input()
   public set layer(layer: string | null) {
@@ -56,4 +57,5 @@ export class LayerTransparencyComponent {
     }
     this.store$.dispatch(setLayerOpacity({ opacity: [{ id: this.layerId, opacity }] }));
   }
+
 }

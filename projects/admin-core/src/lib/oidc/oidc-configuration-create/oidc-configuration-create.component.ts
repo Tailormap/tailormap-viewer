@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
@@ -13,18 +13,16 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
   standalone: false,
 })
 export class OIDCConfigurationCreateComponent implements OnDestroy {
+  private oidcConfigurationService = inject(OIDCConfigurationService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
 
   public saving$ = this.savingSubject.asObservable();
   public oidcConfiguration: Omit<OIDCConfigurationModel, 'id'> | null = null;
-
-  constructor(
-    private oidcConfigurationService: OIDCConfigurationService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

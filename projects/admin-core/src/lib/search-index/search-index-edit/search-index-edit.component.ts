@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { FeatureSourceService } from '../../catalog/services/feature-source.serv
 import { SearchIndexService } from '../services/search-index.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
+import { loadTasks } from '../../tasks/state/tasks.actions';
 
 @Component({
   selector: 'tm-admin-search-index-edit',
@@ -19,6 +20,14 @@ import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-
   standalone: false,
 })
 export class SearchIndexEditComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private featureSourceService = inject(FeatureSourceService);
+  private searchIndexService = inject(SearchIndexService);
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
+  private confirmDelete = inject(ConfirmDialogService);
+
 
   public searchIndex$: Observable<SearchIndexModel | undefined> = of(undefined);
 
@@ -38,18 +47,9 @@ export class SearchIndexEditComponent implements OnInit {
   private indexingSubject = new BehaviorSubject(false);
   public indexing$ = this.indexingSubject.asObservable();
 
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private featureSourceService: FeatureSourceService,
-    private searchIndexService: SearchIndexService,
-    private destroyRef: DestroyRef,
-    private router: Router,
-    private confirmDelete: ConfirmDialogService,
-  ) {
-  }
-
   public ngOnInit() {
+    this.store$.dispatch(loadTasks());
+
     this.route.paramMap.pipe(
       takeUntilDestroyed(this.destroyRef),
       map(params => params.get('searchIndexId')),

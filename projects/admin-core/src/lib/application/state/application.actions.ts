@@ -139,6 +139,41 @@ export const updateApplicationFiltersConfig = createAction(
   props<{ filterGroups: FilterGroupModel<AttributeFilterModel>[] }>(),
 );
 
+export const updateApplicationFiltersConfigForSelectedGroup = createAction(
+  `${applicationActionsPrefix} Update Filters For Selected Filter Group`,
+  props<{ filters: AttributeFilterModel[] }>(),
+);
+
+export const updateApplicationFilterConfigForSelectedGroup = createAction(
+  `${applicationActionsPrefix} Update Filter For Selected Filter Group`,
+  props<{ filter: AttributeFilterModel }>(),
+);
+
+export const createApplicationAttributeFilterGroup = createAction(
+  `${applicationActionsPrefix} Create Filter Group`,
+  props<{ filterGroup: FilterGroupModel<AttributeFilterModel> }>(),
+);
+
+export const deleteApplicationAttributeFilter = createAction(
+  `${applicationActionsPrefix} Delete Filter`,
+  props<{ filterId: string }>(),
+);
+
+export const deleteApplicationAttributeFilterGroup = createAction(
+  `${applicationActionsPrefix} Delete Filter Group`,
+  props<{ filterGroupId: string }>(),
+);
+
+export const setApplicationSelectedFilterGroupId = createAction(
+  `${applicationActionsPrefix} Set Application Selected Filter Group Id`,
+  props<{ filterGroupId?: string }>(),
+);
+
+export const setApplicationSelectedFilterId = createAction(
+  `${applicationActionsPrefix} Set Application Selected Filter Id`,
+  props<{ filterId?: string }>(),
+);
+
 export const toggleApplicationNodeExpanded = createAction(
   `${applicationActionsPrefix} Toggle Node Expanded`,
   props<{ nodeId: string; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),
@@ -153,6 +188,7 @@ export const setApplicationCatalogFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Catalog Filter Term`,
   props<{ filterTerm?: string | null }>(),
 );
+
 export const setApplicationTreeFilterTerm = createAction(
   `${applicationActionsPrefix} Set Application Tree Filter Term`,
   props<{ filterTerm?: string | null; tree: 'layer' | 'baseLayer' | 'terrainLayer' }>(),

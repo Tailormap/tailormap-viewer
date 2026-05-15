@@ -2,13 +2,16 @@ import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
 import { GeoJSON, WKT } from 'ol/format';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry, Point } from 'ol/geom';
-import { fromCircle } from 'ol/geom/Polygon';
+import { Circle, Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
+import { fromCircle, fromExtent } from 'ol/geom/Polygon';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
 import { Projection } from 'ol/proj';
 import { Feature as GeoJSONFeature } from 'geojson';
+import { nanoid } from 'nanoid';
+import { WriteOptions } from 'ol/format/Feature';
+import { ProjectionsHelper } from './projections.helper';
 
 export class FeatureHelper {
 
@@ -104,25 +107,28 @@ export class FeatureHelper {
     projection?: Projection,
   ): FeatureModel<T> | null {
     const geom = feature.getGeometry();
-    if (geom && feature.get('__fid') && feature.get('attributes')) {
+    if (geom) {
       return {
-        __fid: feature.get('__fid'),
-        attributes: feature.get('attributes'),
-        geometry: !projection ? undefined : FeatureHelper.getWKT(geom, projection),
+        __fid: feature.get('__fid') || feature.getId() || nanoid(),
+        attributes: feature.get('attributes') || {},
+        geometry: FeatureHelper.getWKT(geom, projection),
       };
     }
     return null;
   }
 
-  public static getWKT(geometry: Geometry, projection: Projection, linearizeCircle = false) {
-    const units = projection.getUnits();
-    const decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum: MapUnitEnum.m);
+  public static getWKT(geometry: Geometry, projection?: Projection, linearizeCircle?: boolean): string {
+    const writeOptions: WriteOptions = {};
+    if (projection) {
+      const units = projection.getUnits();
+      writeOptions.decimals = MapSizeHelper.getCoordinatePrecision(units ? units.toLowerCase() as MapUnitEnum : MapUnitEnum.m);
+    }
 
     if (GeometryTypeHelper.isCircleGeometry(geometry) && !linearizeCircle) {
-      return FeatureHelper.writeCircleWKT(geometry, decimals);
+      return FeatureHelper.writeCircleWKT(geometry, writeOptions.decimals);
     }
     const geom = GeometryTypeHelper.isCircleGeometry(geometry) ? fromCircle(geometry) : geometry;
-    return FeatureHelper.wktFormatter.writeGeometry(geom, { decimals });
+    return FeatureHelper.wktFormatter.writeGeometry(geom, writeOptions);
   }
 
   private static writeCircleWKT(circle: Circle, decimals?: number): string {
@@ -179,7 +185,82 @@ export class FeatureHelper {
   public static translateGeometryForDuplication(wktGeom: string, deltaX: number, deltaY: number): string {
     const geom = FeatureHelper.fromWKT(wktGeom);
     geom.translate(deltaX, deltaY);
-    // XXX getWKT() only needs units, not the entire projection
-    return FeatureHelper.getWKT(geom, { getUnits: () => (MapUnitEnum.m) } as Projection);
+    return FeatureHelper.getWKT(geom);
+  }
+
+  public static createRectangleAtPoint(pointWkt: string, width: number, height: number, projection?: string): string | null {
+    const point = FeatureHelper.fromWKT(pointWkt);
+    if (!(point instanceof Point)) {
+      return null;
+    }
+    const coords = point.getFlatCoordinates();
+    let projectedWidth = width;
+    let projectedHeight = height;
+    if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
+      projectedWidth = MapSizeHelper.metersToProjectedUnitsAtPoint(coords, width, projection);
+      projectedHeight = MapSizeHelper.metersToProjectedUnitsAtPoint(coords, height, projection);
+    }
+    return FeatureHelper.getWKT(fromExtent([
+      coords[0] - projectedWidth / 2,
+      coords[1] - projectedHeight / 2,
+      coords[0] + projectedWidth / 2,
+      coords[1] + projectedHeight / 2,
+    ]));
+  }
+
+  public static createCircleAtPoint(pointWkt: string, radius: number, projection?: string) {
+    const point = FeatureHelper.fromWKT(pointWkt);
+    if (!(point instanceof Point)) {
+      return null;
+    }
+    let projectedRadius = radius;
+    if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
+      projectedRadius = MapSizeHelper.metersToProjectedUnitsAtPoint(point.getCoordinates(), radius, projection);
+    }
+    const circle = new Circle(point.getCoordinates(), projectedRadius);
+    return FeatureHelper.getWKT(circle);
+  }
+
+  public static appendMultiGeometryWKT(currentWkt: string | null, newGeometryWkt: string) {
+    const newGeom = FeatureHelper.fromWKT(newGeometryWkt);
+    if (!currentWkt) {
+      return newGeom;
+    }
+    const currentMultiGeom = this.ensureMultiGeometry(FeatureHelper.fromWKT(currentWkt));
+
+    if (currentMultiGeom instanceof MultiPoint && newGeom instanceof Point) {
+      currentMultiGeom.appendPoint(newGeom);
+    } else if (currentMultiGeom instanceof MultiLineString && newGeom instanceof LineString) {
+      currentMultiGeom.appendLineString(newGeom);
+    } else if (currentMultiGeom instanceof MultiPolygon && newGeom instanceof Polygon) {
+      currentMultiGeom.appendPolygon(newGeom);
+    } else {
+      // In case of incompatible geometry types, just return the new geometry
+      // TODO, maybe create a GeometryCollection?
+      return newGeom;
+    }
+    return currentMultiGeom;
+  }
+
+  private static ensureMultiGeometry(geometry: Geometry) {
+    if (geometry instanceof MultiPoint || geometry instanceof MultiLineString || geometry instanceof MultiPolygon) {
+      return geometry;
+    }
+    if (geometry instanceof Point) {
+      const multiPoint = new MultiPoint([]);
+      multiPoint.appendPoint(geometry);
+      return multiPoint;
+    }
+    if (geometry instanceof LineString) {
+      const multiLineString = new MultiLineString([]);
+      multiLineString.appendLineString(geometry);
+      return multiLineString;
+    }
+    if (geometry instanceof Polygon) {
+      const multiPolygon = new MultiPolygon([]);
+      multiPolygon.appendPolygon(geometry);
+      return multiPolygon;
+    }
+    throw new Error('Unsupported geometry type');
   }
 }

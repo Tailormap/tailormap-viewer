@@ -1,6 +1,4 @@
-import {
-  ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormField } from '@angular/material/select';
@@ -20,19 +18,19 @@ import { AsyncPipe } from '@angular/common';
   imports: [ ReactiveFormsModule, MatFormField, MatInput, CdkTextareaAutosize, AsyncPipe ],
 })
 export class MarkdownSourceEditorComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private sanitizer = inject(DomSanitizer);
+  private mdEditorService = inject(MarkdownEditorService);
+
+
+  @Input()
+  public useInfoPanelWidth = false;
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
 
   public editorControl = new FormControl<string>('');
   public htmlPreview$: Observable<SafeHtml | undefined> = of(undefined);
-
-  public constructor(
-    private destroyRef: DestroyRef,
-    private sanitizer: DomSanitizer,
-    private mdEditorService: MarkdownEditorService,
-  ) {
-  }
 
   public ngOnInit() {
     if (!this.editorEl) {

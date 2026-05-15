@@ -2,17 +2,41 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="core.attribute-list.attribute-list" datatype="html">
+        <source>Attribute list</source>
+        <target>Attributlisten</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
+        <source>Clear all filters</source>
+        <target>Alle Filter löschen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.clear-filters" datatype="html">
         <source>Clear filters</source>
         <target>Filter löschen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
+        <source>Close column settings</source>
+        <target>Spalteneinstellungen schließen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.column-settings" datatype="html">
+        <source>Column settings</source>
+        <target>Spalteneinstellungen</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
         <target>Exportieren</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.export-failed" datatype="html">
-        <source>Exporting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
-        <target>Daten für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> konnten nicht exportiert werden</target>
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed</source>
+        <target>Datenextrakt für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.export-failed-during-extraction" datatype="html">
+        <source>Extracting data for layer <x id="PH" equiv-text="params.serviceLayerName"/> and format <x id="PH_1" equiv-text="params.format"/> failed during extraction</source>
+        <target>Datenextrakt für Layer <x id="PH" equiv-text="params.serviceLayerName"/> und Format <x id="PH_1" equiv-text="params.format"/> während der Extraktion fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.extract-download-failed" datatype="html">
+        <source>Downloading extract failed</source>
+        <target>Fehler beim Herunterladen des Datenextrakts</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.failed-loading-data" datatype="html">
         <source>Failed to load attribute list data</source>
@@ -38,17 +62,65 @@
         <source>No rows found</source>
         <target>Keine Zeilen gefunden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
+        <source>Average</source>
+        <target>Durchschnitt</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-count" datatype="html">
+        <source>Count</source>
+        <target>Anzahl</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-error" datatype="html">
+        <source>Error loading statistic</source>
+        <target>Fehler beim Laden der Statistik</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-help" datatype="html">
+        <source>Statistics are calculated from the active filters. Use the filter button in column headers to add or remove filters.</source>
+        <target>Statistiken werden aus den aktiven Filtern berechnet. Verwenden Sie die Filterschaltfläche in den Spaltenüberschriften, um Filter hinzuzufügen oder zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-max" datatype="html">
+        <source>Max</source>
+        <target>Max</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-min" datatype="html">
+        <source>Min</source>
+        <target>Min</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-none" datatype="html">
+        <source>None</source>
+        <target>Keine</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.statistics-sum" datatype="html">
+        <source>Sum</source>
+        <target>Summe</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.title" datatype="html">
         <source>Attribute list</source>
         <target>Attributliste</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
+        <source>Toggle visibility of all columns</source>
+        <target>Sichtbarkeit aller Spalten wechseln</target>
+      </trans-unit>
+      <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
+        <source>Select basemap</source>
+        <target>Grundkarte auswählen</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.no-basemap" datatype="html">
         <source>No basemap</source>
         <target>Keine Grundkarte</target>
       </trans-unit>
+      <trans-unit id="core.background-layer-toggle.show-next-option" datatype="html">
+        <source>Show <x id="NEXT_LABEL" equiv-text="nextLabel"/></source>
+        <target><x id="NEXT_LABEL" equiv-text="nextLabel"/> Anzeigen</target>
+      </trans-unit>
       <trans-unit id="core.bookmark.layer-not-found" datatype="html">
         <source>Layer is not available</source>
         <target>Ebene ist nicht verfügbar</target>
+      </trans-unit>
+      <trans-unit id="core.color-picker.open-picker" datatype="html">
+        <source>open color picker</source>
+        <target>Farbauswahl öffnen</target>
       </trans-unit>
       <trans-unit id="core.common" datatype="html">
         <source>Login</source>
@@ -118,6 +190,10 @@
         <source>GeoPackage</source>
         <target>GeoPackage</target>
       </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+        <target>GeoPackage</target>
+      </trans-unit>
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
         <target>Linie</target>
@@ -166,6 +242,10 @@
         <source>URL</source>
         <target>URL</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window" datatype="html">
+        <source>Coordinate Link Window</source>
+        <target>Koordinaten-Link-Fenster</target>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
         <target>Link zum Öffnen auswählen</target>
@@ -173,6 +253,18 @@
       <trans-unit id="core.coordinate-link-window.title" datatype="html">
         <source>Coordinate Link Window</source>
         <target>Koordinaten-Link-Fenster</target>
+      </trans-unit>
+      <trans-unit id="core.coordinate-picker" datatype="html">
+        <source>Coordinate Picker</source>
+        <target>Koordinatenauswahl</target>
+      </trans-unit>
+      <trans-unit id="core.dialog.collapse-panel" datatype="html">
+        <source>Collapse panel</source>
+        <target>Panel einklappen</target>
+      </trans-unit>
+      <trans-unit id="core.dialog.expand-panel" datatype="html">
+        <source>Expand panel</source>
+        <target>Panel ausklappen</target>
       </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
@@ -242,6 +334,10 @@
         <source>On every segment</source>
         <target>Auf jedem Segment</target>
       </trans-unit>
+      <trans-unit id="core.drawing.circle-radius" datatype="html">
+        <source>Circle radius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Kreisradius (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+      </trans-unit>
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
         <target>Farbe</target>
@@ -270,6 +366,10 @@
         <source>Delete selected drawing object</source>
         <target>Ausgewähltes Zeichenobjekt löschen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.draw-shape" datatype="html">
+        <source>Draw shape</source>
+        <target>Form zeichnen</target>
+      </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
@@ -293,6 +393,10 @@
       <trans-unit id="core.drawing.halo" datatype="html">
         <source>Halo</source>
         <target>Halo</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.icon" datatype="html">
+        <source>Icon</source>
+        <target>Icon</target>
       </trans-unit>
       <trans-unit id="core.drawing.insert-area-label" datatype="html">
         <source>Insert area as label</source>
@@ -322,21 +426,57 @@
         <source>Line thickness</source>
         <target>Dicke der Linie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.locked-style" datatype="html">
+        <source>The style for this drawing object cannot be changed.</source>
+        <target>Der Stil für dieses Zeichenobjekt kann nicht geändert werden.</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.objects-list" datatype="html">
+        <source>Objects</source>
+        <target>Objekte</target>
+      </trans-unit>
       <trans-unit id="core.drawing.opacity" datatype="html">
         <source>Opacity</source>
         <target>Deckkraft</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-length" datatype="html">
+        <source>Length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Länge (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.rectangle-width" datatype="html">
+        <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Breite (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Drehung</target>
       </trans-unit>
-      <trans-unit id="core.drawing.select-shape" datatype="html">
-        <source>Select shape</source>
-        <target>Form auswählen</target>
+      <trans-unit id="core.drawing.show-area-size" datatype="html">
+        <source>Show area size</source>
+        <target>Flächengröße anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-length-along-line" datatype="html">
+        <source>Show length along line</source>
+        <target>Länge entlang der Linie anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-side-length" datatype="html">
+        <source>Show length along sides</source>
+        <target>Länge entlang der Seiten anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-sizes-while-drawing" datatype="html">
+        <source>Show sizes while drawing</source>
+        <target>Größen während des Zeichnens anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.show-total-line-length" datatype="html">
+        <source>Show total length of the line</source>
+        <target>Gesamtlänge der Linie anzeigen</target>
       </trans-unit>
       <trans-unit id="core.drawing.size" datatype="html">
         <source>Size</source>
         <target>Größe</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.square-length" datatype="html">
+        <source>Side length (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
+        <target>Seitenlänge (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
       <trans-unit id="core.drawing.striped-fill" datatype="html">
         <source>Striped fill</source>
@@ -362,9 +502,33 @@
         <source>Add new feature</source>
         <target>Neues Feature hinzufügen</target>
       </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.added-on-by" datatype="html">
+        <source>Added on <x id="PH" equiv-text="createdAt"/> by <x id="PH_1" equiv-text="attachment.createdBy"/></source>
+        <target>Hinzugefügt am <x id="PH" equiv-text="createdAt"/> von <x id="PH_1" equiv-text="attachment.createdBy"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.description" datatype="html">
+        <source>Description: <x id="PH" equiv-text="attachment.description"/></source>
+        <target>Beschreibung: <x id="PH" equiv-text="attachment.description"/></target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.max-size-exceeded" datatype="html">
+        <source>File size (<x id="PH" equiv-text="fileSizeMB"/> MB) exceeds maximum allowed size of <x id="PH_1" equiv-text="maxSizeMB"/> MB</source>
+        <target>Dateigröße (<x id="PH" equiv-text="fileSizeMB"/> MB) überschreitet die maximal zulässige Größe von <x id="PH_1" equiv-text="maxSizeMB"/> MB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachment.tooltip.size" datatype="html">
+        <source>Size: <x id="PH" equiv-text="sizeKB"/> KB</source>
+        <target>Größe: <x id="PH" equiv-text="sizeKB"/> KB</target>
+      </trans-unit>
+      <trans-unit id="core.edit.attachments" datatype="html">
+        <source>Attachments</source>
+        <target>Anhänge</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Feature-Erstellung fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.delete-attachment" datatype="html">
+        <source>Remove attachment</source>
+        <target>Anhang entfernen</target>
       </trans-unit>
       <trans-unit id="core.edit.delete-feature-confirm" datatype="html">
         <source>Delete feature</source>
@@ -382,7 +546,7 @@
         <source>Edit</source>
         <target>Bearbeiten</target>
       </trans-unit>
-      <trans-unit id="core.edit.edit-feature-tooltip" datatype="html">
+      <trans-unit id="core.edit.edit-feature" datatype="html">
         <source>Edit feature</source>
         <target>Objekt bearbeiten</target>
       </trans-unit>
@@ -409,6 +573,10 @@
       <trans-unit id="core.edit.hover-to-highlight" datatype="html">
         <source>Hover over the buttons to highlight the feature on the map</source>
         <target>Bewege den Mauszeiger über die Schaltflächen, um das Objekt auf der Karte hervorzuheben</target>
+      </trans-unit>
+      <trans-unit id="core.edit.keep-attachment" datatype="html">
+        <source>Keep attachment</source>
+        <target>Anhang behalten</target>
       </trans-unit>
       <trans-unit id="core.edit.no-editable-layers-tooltip" datatype="html">
         <source>There are no editable layers. Enable a layer to start editing.</source>
@@ -438,6 +606,18 @@
         <source>Update feature failed</source>
         <target>Objektaktualisierung fehlgeschlagen</target>
       </trans-unit>
+      <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
+        <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
+        <target>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.collapse-layer-list" datatype="html">
+        <source>Collapse layer list</source>
+        <target>Ebenenliste einklappen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.edit-feature" datatype="html">
+        <source>Edit feature</source>
+        <target>Objekt bearbeiten</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.error-loading-feature-info" datatype="html">
         <source>Something went wrong while getting feature info, please try again</source>
         <target>Beim Abrufen der Objektinformationen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut</target>
@@ -445,6 +625,14 @@
       <trans-unit id="core.feature-info.error-loading-features" datatype="html">
         <source>Could not load feature info</source>
         <target>Objektinformationen konnten nicht geladen werden</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.expand-layer-list" datatype="html">
+        <source>Expand layer list</source>
+        <target>Ebenenliste ausklappen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
+        <source>Feature info</source>
+        <target>Objektinformationen</target>
       </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
@@ -457,10 +645,6 @@
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
         <target>Layer auswählen</target>
-      </trans-unit>
-      <trans-unit id="core.filter.add-filter" datatype="html">
-        <source>Add filter</source>
-        <target>Filter hinzufügen</target>
       </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
@@ -501,6 +685,10 @@
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
         <target>Unterscheidung zwischen Groß- und Kleinschreibung</target>
+      </trans-unit>
+      <trans-unit id="core.filter.choose-value" datatype="html">
+        <source>Choose value</source>
+        <target>Wert auswählen</target>
       </trans-unit>
       <trans-unit id="core.filter.choose-values" datatype="html">
         <source>Choose values</source>
@@ -554,6 +742,10 @@
         <source>Switch to 2D to draw</source>
         <target>Wechseln Sie zum Zeichnen zu 2D</target>
       </trans-unit>
+      <trans-unit id="core.filter.edit-filters" datatype="html">
+        <source>Edit filters</source>
+        <target>Filter bearbeiten</target>
+      </trans-unit>
       <trans-unit id="core.filter.ends-with" datatype="html">
         <source>ends with</source>
         <target>endet mit</target>
@@ -573,6 +765,10 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fehler beim Laden der Geometrien der Referenzschicht</target>
+      </trans-unit>
+      <trans-unit id="core.filter.filter" datatype="html">
+        <source>Filter</source>
+        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -597,6 +793,38 @@
       <trans-unit id="core.filter.greater-than-or-equal-to" datatype="html">
         <source>Greater than or equal to</source>
         <target>Größer als oder gleich</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-days" datatype="html">
+        <source>Days</source>
+        <target>Tage</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-hours" datatype="html">
+        <source>Hours</source>
+        <target>Stunden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-minutes" datatype="html">
+        <source>Minutes</source>
+        <target>Minuten</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-months" datatype="html">
+        <source>Months</source>
+        <target>Monate</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-quarters" datatype="html">
+        <source>Quarters</source>
+        <target>Quartale</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-seconds" datatype="html">
+        <source>Seconds</source>
+        <target>Sekunden</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-weeks" datatype="html">
+        <source>Weeks</source>
+        <target>Wochen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.interval-years" datatype="html">
+        <source>Years</source>
+        <target>Jahre</target>
       </trans-unit>
       <trans-unit id="core.filter.invert-condition" datatype="html">
         <source>Invert condition</source>
@@ -678,6 +906,10 @@
         <source>Loading reference geometry</source>
         <target>Referenzgeometrie laden</target>
       </trans-unit>
+      <trans-unit id="core.filter.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="referenceLayerTitle"/> layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters to narrow down the selection.</source>
+        <target>In der Ebene <x id="PH_1" equiv-text="referenceLayerTitle"/> stehen mehr als <x id="PH" equiv-text="maxFeatures"/> Objekte zur Verfügung. Die maximale Anzahl beträgt <x id="PH_2" equiv-text="maxFeatures"/>. Wenden Sie Filter an, um die Auswahl einzugrenzen.</target>
+      </trans-unit>
       <trans-unit id="core.filter.no-layers-available" datatype="html">
         <source>No layers available to filter on</source>
         <target>Keine verfügbaren Ebenen zum Filtern</target>
@@ -710,6 +942,18 @@
         <source>or</source>
         <target>oder</target>
       </trans-unit>
+      <trans-unit id="core.filter.reset-filters" datatype="html">
+        <source>Reset filters</source>
+        <target>Filter zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-filters-confirm" datatype="html">
+        <source>Resetting filters will remove all your added filters. Do you want to proceed?</source>
+        <target>Das Zurücksetzen der Filter entfernt alle hinzugefügten Filter. Möchten Sie fortfahren?</target>
+      </trans-unit>
+      <trans-unit id="core.filter.reset-filters-tooltip" datatype="html">
+        <source>Reset filters to their original state</source>
+        <target>Filter auf den Ursprungszustand zurücksetzen</target>
+      </trans-unit>
       <trans-unit id="core.filter.save-filter" datatype="html">
         <source>Save filter</source>
         <target>Filter speichern</target>
@@ -737,6 +981,22 @@
       <trans-unit id="core.filter.select-reference-layer" datatype="html">
         <source>Select reference layer</source>
         <target>Referenzlayer auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-and" datatype="html">
+        <source> and </source>
+        <target> und </target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label-lower-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - lower value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - unterer Wert</target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label-upper-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - upper value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - oberer Wert</target>
       </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
@@ -766,6 +1026,14 @@
         <source>Summary</source>
         <target>Zusammenfassung</target>
       </trans-unit>
+      <trans-unit id="core.filter.switch-filter.false" datatype="html">
+        <source>False</source>
+        <target>Unwahr</target>
+      </trans-unit>
+      <trans-unit id="core.filter.switch-filter.true" datatype="html">
+        <source>True</source>
+        <target>Wahr</target>
+      </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
         <target>Bis</target>
@@ -773,6 +1041,14 @@
       <trans-unit id="core.filter.value" datatype="html">
         <source>Value</source>
         <target>Wert</target>
+      </trans-unit>
+      <trans-unit id="core.home.menu" datatype="html">
+        <source>Menu</source>
+        <target>Menü</target>
+      </trans-unit>
+      <trans-unit id="core.info.info" datatype="html">
+        <source>Info</source>
+        <target>Info</target>
       </trans-unit>
       <trans-unit id="core.legend.legend" datatype="html">
         <source>Legend</source>
@@ -789,6 +1065,70 @@
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Sie sind als <x id="PH" equiv-text="userLabel"/> angemeldet, haben jedoch nicht die erforderlichen Rollen, um auf die Anwendung zuzugreifen. Bitte kontaktieren Sie Ihren Administrator.</target>
+      </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
+        <source>Stop editing?</source>
+        <target>Bearbeitung beenden?</target>
+      </trans-unit>
+      <trans-unit id="core.mobile-panel.stop-editing-message" datatype="html">
+        <source>Are you sure you want to stop editing?</source>
+        <target>Bist du sicher, dass du die Bearbeitung beenden möchtest?</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.confirmedpassword" datatype="html">
+        <source>Confirm Password</source>
+        <target>Passwort bestätigen</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-reset" datatype="html">
+        <source>Error resetting password: <x id="PH" equiv-text="error?.error?.message || error?.message || error.toString())"/></source>
+        <target>Fehler beim Zurücksetzen des Passworts: <x id="PH" equiv-text="(error?.error?.message || error?.message || error.toString())"/></target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error-saving" datatype="html">
+        <source>Error saving password, please check the validity of your reset link, username and password and try again.</source>
+        <target>Fehler beim Speichern des Passworts, bitte überprüfen Sie Ihr Reset-Link, Ihren Benutzernamen und Ihr Passwort und versuchen Sie es erneut.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.need-match" datatype="html">
+        <source>Passwords need to match</source>
+        <target>Passwörter müssen übereinstimmen</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
+        <target>Passwort kürzer als <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
+        <source>Password too short or too easily guessable</source>
+        <target>Passwort zu kurz oder zu einfach zu erraten</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.token-expired" datatype="html">
+        <source>Your password reset token is invalid or has expired.</source>
+        <target>Ihr Passwort-Reset-Token ist ungültig oder abgelaufen.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.error.username-invalid" datatype="html">
+        <source>Username is invalid</source>
+        <target>Benutzername ist ungültig</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.newpassword" datatype="html">
+        <source>New Password</source>
+        <target>Neues Passwort</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.return" datatype="html">
+        <source>Return to Login</source>
+        <target>Zurück zum Login</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.save" datatype="html">
+        <source>Save new password</source>
+        <target>Neues Passwort speichern</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.success" datatype="html">
+        <source>Password successfully reset, you can now log in with your new password.</source>
+        <target>Passwort erfolgreich zurückgesetzt, Sie können sich jetzt mit Ihrem neuen Passwort anmelden.</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.title" datatype="html">
+        <source>Reset Password</source>
+        <target>Passwort zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="core.password-reset-form.username" datatype="html">
+        <source>Username</source>
+        <target>Benutzername</target>
       </trans-unit>
       <trans-unit id="core.print.a3" datatype="html">
         <source>A3</source>
@@ -910,6 +1250,10 @@
         <source>Range: 50 - 600</source>
         <target>Bereich: 50 - 600</target>
       </trans-unit>
+      <trans-unit id="core.profile" datatype="html">
+        <source>Profile</source>
+        <target>Profil</target>
+      </trans-unit>
       <trans-unit id="core.profile.about" datatype="html">
         <source>About</source>
         <target>Über</target>
@@ -934,9 +1278,53 @@
         <source>Location</source>
         <target>Ort</target>
       </trans-unit>
+      <trans-unit id="core.shared.close-panel" datatype="html">
+        <source>Close panel</source>
+        <target>Panel schließen</target>
+      </trans-unit>
+      <trans-unit id="core.shared.maximize-panel" datatype="html">
+        <source>Maximize panel</source>
+        <target>Panel maximieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.minimize-panel" datatype="html">
+        <source>Minimize panel</source>
+        <target>Panel minimieren</target>
+      </trans-unit>
+      <trans-unit id="core.shared.restore-panel-height" datatype="html">
+        <source>Restore panel height</source>
+        <target>Panelhöhe wiederherstellen</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
+        <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
+        <target>Im Fang-Layer <x id="PH_1" equiv-text="layerTitle"/> sind mehr als <x id="PH" equiv-text="maxFeatures"/> Objekte verfügbar. Das Maximum beträgt <x id="PH_2" equiv-text="maxFeatures"/>. Wenden Sie Filter an oder zoomen Sie heran, um die Auswahl einzuschränken.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.tooltip" datatype="html">
+        <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>
+        <target>Fang-Werkzeug. Wählen Sie (sichtbare) Layer aus, an die beim Messen, Zeichnen und Bearbeiten gefangen werden soll.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.unselect-layers-to-select-more" datatype="html">
+        <source>You can select a maximum of <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> layers for snapping. Unselect layers before selecting others.</source>
+        <target>Sie können maximal <x id="INTERPOLATION" equiv-text="{{maxSelectedLayers}}"/> Layer zum Fangen auswählen. Heben Sie die Auswahl von Layern auf, bevor Sie andere auswählen.</target>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls" datatype="html">
+        <source>Terrain controls</source>
+        <target>Geländesteuerung</target>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls.model" datatype="html">
+        <source>Terrain model</source>
+        <target>Geländemodell</target>
+      </trans-unit>
+      <trans-unit id="core.terrain-controls.opacity" datatype="html">
+        <source>Terrain opacity</source>
+        <target>Geländeopazität</target>
+      </trans-unit>
       <trans-unit id="core.terrain-layer-toggle.ellipsoid" datatype="html">
         <source>WGS84 Ellipsoid</source>
         <target>WGS84 Ellipsoid</target>
+      </trans-unit>
+      <trans-unit id="core.toc.3d-layer" datatype="html">
+        <source>Switch to 3D to see this layer</source>
+        <target>Wechseln Sie zu 3D, um diese Ebene anzuzeigen</target>
       </trans-unit>
       <trans-unit id="core.toc.available-layers" datatype="html">
         <source>Available layers</source>
@@ -946,6 +1334,10 @@
         <source>Close details</source>
         <target>Details schließen</target>
       </trans-unit>
+      <trans-unit id="core.toc.collapse-all" datatype="html">
+        <source>Collapse all groups</source>
+        <target>Alle Gruppen einklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -954,6 +1346,15 @@
         <source>Details for <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></source>
         <target>Details für <x id="INTERPOLATION" equiv-text="{{node.layer?.title || node.name}}"/></target>
       </trans-unit>
+      <trans-unit id="core.toc.edit-layer" datatype="html">
+        <source>Edit layer</source>
+        <target>Ebene bearbeiten</target>
+        <note priority="1" from="description">:</note>
+      </trans-unit>
+      <trans-unit id="core.toc.expand-all" datatype="html">
+        <source>Expand all groups</source>
+        <target>Alle Gruppen ausklappen</target>
+      </trans-unit>
       <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
         <source>Filter by layer name...</source>
         <target>Nach Ebenennamen filtern...</target>
@@ -961,6 +1362,10 @@
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
         <target>Ebenen filtern</target>
+      </trans-unit>
+      <trans-unit id="core.toc.filtered-layer" datatype="html">
+        <source>A filter is applied to this layer</source>
+        <target>Auf diese Ebene wird ein Filter angewendet</target>
       </trans-unit>
       <trans-unit id="core.toc.legend" datatype="html">
         <source>Legend</source>
@@ -985,6 +1390,10 @@
       <trans-unit id="core.toc.toggle-layers-on" datatype="html">
         <source>Toggle all layers on</source>
         <target>Alle Ebenen einschalten</target>
+      </trans-unit>
+      <trans-unit id="core.toc.zoom-to-scale" datatype="html">
+        <source>Click to zoom in to make this layer visible</source>
+        <target>Klicken Sie, um heranzuzoomen und diese Ebene sichtbar zu machen</target>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker" datatype="html">
         <source>Coordinate picker</source>

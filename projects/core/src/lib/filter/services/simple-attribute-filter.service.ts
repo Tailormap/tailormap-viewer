@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as FilterActions from '../state/filter.actions';
-import { selectEnabledFilterGroups, selectFilterGroupForType } from '../state/filter.selectors';
+import * as FilterActions from '../../state/filter-state/filter.actions';
+import { selectEnabledFilterGroups, selectFilterGroupForType } from '../../state/filter-state/filter.selectors';
 import { map, Observable, take } from 'rxjs';
 import { nanoid } from 'nanoid';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
@@ -36,19 +36,34 @@ export class SimpleAttributeFilterService {
     });
   }
 
-  public hasFilter$(source: string, layerId: string) {
-    return this.getGroup$(source, layerId)
-      .pipe(map(group => !!group));
-  }
-
-  public getFilters$(source: string, layerId: string): Observable<AttributeFilterModel[]> {
+  public hasFilter$(source: string, layerId: string, featureType?: string) {
     return this.getGroup$(source, layerId)
       .pipe(map(group => {
-        return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }));
+        return !!group && group.filters.length > 0 && group.filters.some(f => f.featureType === featureType);
       }));
   }
 
-  public getFiltersExcludingAttribute$(source: string, layerId: string, attribute: string) {
+  public hasFiltersForOtherFeatureTypes$(source: string, layerId: string, featureType?: string) {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => {
+        return !!group && group.filters.length > 0 && group.filters.some(f => f.featureType !== featureType);
+      }));
+  }
+
+  public getFilters$(source: string, layerId: string, featureType?: string): Observable<AttributeFilterModel[]> {
+    return this.getGroup$(source, layerId)
+      .pipe(map(group => {
+        return (group?.filters || []).map(f => ({ ...f, disabled: group?.disabled }))
+          .filter(f => f.featureType === featureType);
+      }));
+  }
+
+  public getFiltersExcludingAttribute$(
+    source: string,
+    layerId: string,
+    attribute: string,
+    featureType?: string,
+  ) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(take(1), map(groups => {
         return groups.map(group => {
@@ -57,7 +72,15 @@ export class SimpleAttributeFilterService {
           }
           return {
             ...group,
-            filters: group.filters.filter(f => FilterTypeHelper.isAttributeFilter(f) && f.attribute !== attribute),
+            filters: group.filters.filter(f => {
+              if (!FilterTypeHelper.isAttributeFilter(f)) {
+                return false;
+              }
+              if (featureType) {
+                return f.attribute !== attribute || f.featureType !== featureType;
+              }
+              return f.attribute !== attribute;
+            }),
           };
         });
       }));
@@ -67,12 +90,18 @@ export class SimpleAttributeFilterService {
     source: string,
     layerId: string,
     attribute: string,
+    featureType?: string,
   ): Observable<AttributeFilterModel | null> {
     return this.getGroup$(source, layerId)
       .pipe(
         map(group => {
           return group
-            ? group.filters.find(f => f.attribute === attribute) || null
+            ? group.filters.find(f => {
+            if (featureType) {
+              return f.attribute === attribute && f.featureType === featureType;
+            }
+            return f.attribute === attribute;
+          }) || null
             : null;
         }),
       );
@@ -102,7 +131,35 @@ export class SimpleAttributeFilterService {
   public removeFiltersForLayer(
     source: string,
     layerId: string,
+    featureType?: string,
   ) {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+      if (!group) {
+        return;
+      }
+      const filtersToKeep = group.filters.filter(f => {
+        if (!FilterTypeHelper.isAttributeFilter(f)) {
+          return true;
+        }
+        return f.featureType !== featureType;
+      });
+      if (filtersToKeep.length === group.filters.length) {
+        return;
+      }
+      if (filtersToKeep.length === 0) {
+        this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
+        return;
+      }
+      this.store$.dispatch(FilterActions.updateFilterGroup({
+        filterGroup: {
+          ...group,
+          filters: filtersToKeep,
+        },
+      }));
+    });
+  }
+
+  public removeAllFiltersForLayer(source: string, layerId: string) {
     this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
       if (!group) {
         return;
@@ -113,12 +170,12 @@ export class SimpleAttributeFilterService {
 
   private createGroup(source: string, layerId: string, filter: Omit<AttributeFilterModel, 'id'>) {
     const filterGroup: FilterGroupModel<AttributeFilterModel> = {
-      id: nanoid(),
+      id: nanoid(6),
       source,
       type: FilterTypeEnum.ATTRIBUTE,
       layerIds: [layerId],
       filters: [{
-        id: nanoid(),
+        id: nanoid(6),
         ...filter,
       }],
       operator: 'AND',
@@ -130,7 +187,7 @@ export class SimpleAttributeFilterService {
     this.store$.dispatch(FilterActions.addFilter({
       filterGroupId: groupId,
       filter: {
-        id: nanoid(),
+        id: nanoid(6),
         ...filter,
       },
     }));

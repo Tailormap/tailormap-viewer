@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, DestroyRef, inject } from '@angular/core';
 import { distinctUntilChanged, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { TaskDetailsModel, TaskModel } from '@tailormap-admin/admin-api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,11 +15,17 @@ import { reloadSearchIndexes } from '../../search-index/state/search-index.actio
   selector: 'tm-admin-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css'],
-  providers: [TaskMonitoringService],
-changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private taskMonitoringService = inject(TaskMonitoringService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+
 
   public task$: Observable<TaskModel | null> = of(null);
   public uuid$: Observable<string | null> = of(null);
@@ -27,17 +33,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   public loadErrorMessage$: Observable<string | undefined> = of(undefined);
   public deleteErrorMessage$: Observable<string | undefined> = of(undefined);
   public taskDetailsLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private taskMonitoringService: TaskMonitoringService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private destroyRef: DestroyRef,
-  ) {
-
-  }
 
   public ngOnInit(): void {
 
@@ -73,7 +68,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             .pipe(
               take(1),
               filter(answer => answer),
-              switchMap(() => this.taskMonitoringService.deleteTask(task.uuid, task.type)),
+              switchMap(() => this.taskMonitoringService.deleteTask$(task.uuid, task.type)),
             )
             .subscribe((response) => {
               if (response) {

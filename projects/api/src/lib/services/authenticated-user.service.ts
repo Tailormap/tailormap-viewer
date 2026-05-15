@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, take, throwError } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, filter, map, Observable, switchMap, take, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from './tailormap-security-api-v1.service.injection-token';
-import { TailormapSecurityApiV1ServiceModel } from './tailormap-security-api-v1.service.model';
 import { SecurityModel, SecurityPropertyModel } from '../models';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest } from '@angular/common/http';
 import { TailormapApiConstants } from './tailormap-api.constants';
@@ -14,11 +13,10 @@ export class AuthenticatedUserService {
 
   private authenticatedUserSubject = new BehaviorSubject<SecurityModel>({ isAuthenticated: false });
   private authenticatedUser$ = this.authenticatedUserSubject.asObservable();
+  private userDetailsFetched = new BehaviorSubject<boolean>(false);
+  public userDetailsFetched$ = this.userDetailsFetched.asObservable();
 
-  constructor(
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-  ) {
-  }
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
 
   public fetchUserDetails() {
     this.api.getUser$()
@@ -29,29 +27,34 @@ export class AuthenticatedUserService {
   }
 
   public getUserDetails$(): Observable<SecurityModel> {
-    return this.authenticatedUser$;
+    return this.userDetailsFetched$.pipe(
+      filter(loaded => loaded),
+      take(1),
+      switchMap(() => this.authenticatedUser$),
+    );
   }
 
   public isAdminUser$(): Observable<boolean> {
-    return this.authenticatedUser$.pipe(
+    return this.getUserDetails$().pipe(
       map(user => user.roles?.includes('admin') ?? false),
     );
   }
 
   public getUserProperties$(): Observable<SecurityPropertyModel[]> {
-    return this.authenticatedUser$.pipe(
+    return this.getUserDetails$().pipe(
       map(user => user.properties || []),
     );
   }
 
   public getUserGroupProperties$(): Observable<SecurityPropertyModel[]> {
-    return this.authenticatedUser$.pipe(
+    return this.getUserDetails$().pipe(
       map(user => user.groupProperties || []),
     );
   }
 
   public setUserDetails(user: SecurityModel) {
     this.authenticatedUserSubject.next(user);
+    this.userDetailsFetched.next(true);
   }
 
   public logout$(): Observable<boolean> {
@@ -60,7 +63,8 @@ export class AuthenticatedUserService {
         take(1),
         tap(loggedOut => {
           if (loggedOut) {
-            this.setUserDetails({ isAuthenticated: false });
+            this.authenticatedUserSubject.next({ isAuthenticated: false });
+            this.userDetailsFetched.next(false);
           }
         }),
       );

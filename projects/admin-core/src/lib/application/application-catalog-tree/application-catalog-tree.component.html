@@ -8,5 +8,6 @@
                         label="Filter Catalog"></tm-admin-list-filter>
   <tm-admin-catalog-base-tree [treeNodeTemplate]="treeNode"
                               [scrollToItem]="selectedLayerId$ | async"
-                              [getDropZones]="getDropZones()"></tm-admin-catalog-base-tree>
+                              [getDropZones]="getDropZones()"
+                              [onNodeDoubleClick]="onLayerDoubleClick.bind(this)"></tm-admin-catalog-base-tree>
 </div>

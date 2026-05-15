@@ -1,18 +1,19 @@
-<ng-container *ngIf="geoService$ | async as geoService">
+@if (geoService$ | async; as geoService) {
   <h2 class="page-details-title" i18n="@@admin-core.catalog.edit-geoservice">Edit {{ geoService.title }}</h2>
   <tm-admin-geo-service-form [geoService]="geoService"
-                             (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
+  (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
   <h3 i18n="@@admin-core.catalog.default-layer-settings">Default layer settings</h3>
   <tm-admin-layer-settings-form [layerSettings]="geoService.settings?.defaultLayerSettings"
-                                [protocol]="geoService.protocol"
-                                (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
+    [protocol]="geoService.protocol"
+  (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">
     <tm-admin-save-button [saving$]="saving$" [disabled]="!updatedGeoService && !updatedDefaultLayerSettings" (save)="save(geoService)"></tm-admin-save-button>
-    <tm-admin-save-button i18n-label="@@admin-core.catalog.refresh-service"
-                          *ngIf="geoService.protocol !== 'xyz'"
-                          label="Refresh service"
-                          [saving$]="refreshing$"
-                          (save)="refresh(geoService.id)"></tm-admin-save-button>
+    @if (geoService.protocol !== 'xyz') {
+      <tm-admin-save-button i18n-label="@@admin-core.catalog.refresh-service"
+        label="Refresh service"
+        [saving$]="refreshing$"
+      (save)="refresh(geoService.id)"></tm-admin-save-button>
+    }
     <button mat-flat-button color="warn" (click)="deleteService(geoService)" i18n="@@admin-core.common.delete">Delete</button>
   </div>
-</ng-container>
+}

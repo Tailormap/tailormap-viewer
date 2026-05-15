@@ -3,10 +3,13 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { selectCatalog, selectFeatureTypes, selectGeoServiceLayers, selectGeoServices } from '../../catalog/state/catalog.selectors';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
+import { AdminServerType, AppLayerSettingsModel, AppTreeNodeModel, GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigHelper } from '@tailormap-viewer/api';
 import { CatalogTreeModel } from '../../catalog/models/catalog-tree.model';
 import { CatalogFilterHelper } from '../../catalog/helpers/catalog-filter.helper';
+import { ApplicationModelHelper } from '../helpers/application-model.helper';
+import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
+import { ExtendedAppTreeLayerNodeModel } from '../models/extended-app-tree-layer-node.model';
 
 const selectApplicationState = createFeatureSelector<ApplicationState>(applicationStateKey);
 
@@ -24,6 +27,9 @@ export const selectDraftApplicationUpdated = createSelector(selectApplicationSta
 export const selectDraftApplicationValid = createSelector(selectApplicationState, state => state.draftApplicationValid);
 export const selectExpandedBaseLayerNodes = createSelector(selectApplicationState, state => state.expandedBaseLayerNodes);
 export const selectExpandedAppLayerNodes = createSelector(selectApplicationState, state => state.expandedAppLayerNodes);
+export const selectApplicationSelectedFilterGroupId = createSelector(selectApplicationState, state => state.applicationSelectedFilterGroupId);
+export const selectApplicationSelectedFilterId = createSelector(selectApplicationState, state => state.applicationSelectedFilterId);
+export const selectSelectedApplicationName = createSelector(selectApplicationState, state => state.draftApplication?.name);
 
 export const isLoadingApplicationServices = createSelector(
   selectApplicationServicesLoadStatus,
@@ -182,24 +188,123 @@ export const selectTerrainServiceLayerTreeForApplication = createSelector(
   },
 );
 
-export const selectTiles3DServiceLayerTreeForApplication = createSelector(
+export const selectServiceLayerTreeForApplication = createSelector(
+  selectDraftApplicationCrs,
   selectCatalog,
   selectGeoServices,
   selectGeoServiceLayers,
   selectFeatureTypes,
-  (catalog, services, layers, featureTypes): CatalogTreeModel[] => {
-    return CatalogFilterHelper.filterTreeByProtocol(catalog, services, layers, featureTypes, GeoServiceProtocolEnum.TILES3D);
-  },
-);
-
-export const selectServiceLayerTreeForApplication = createSelector(
-  selectBaseServiceLayerTreeForApplication,
-  selectTiles3DServiceLayerTreeForApplication,
-  (layers2D, tiles3dLayers) => {
-    return layers2D.concat(tiles3dLayers);
+  selectApplicationCatalogFilterTerm,
+  (draftApplicationCrs, catalog, services, layers, featureTypes, filterTerm): CatalogTreeModel[] => {
+    return CatalogFilterHelper.filterTreeByCrs(catalog, services, layers, featureTypes, draftApplicationCrs, filterTerm, true);
   },
 );
 
 export const selectStylingConfig = createSelector(selectDraftApplication, application => application?.styling);
 
 export const selectFilterGroups = createSelector(selectDraftApplication, application => application?.settings?.filterGroups || []);
+
+export const selectExtendedAppLayerNodesForSelectedApplication = createSelector(
+  selectAppLayerNodesForSelectedApplication,
+  selectGeoServices,
+  selectGeoServiceLayers,
+  selectSelectedApplicationLayerSettings,
+  selectFeatureTypes,
+  (appLayerTreeNodes, geoServices, geoServiceLayers, layerSettings, featureTypes) => {
+    const geoServiceLayerMap = ApplicationTreeHelper.getLayerMap(geoServiceLayers);
+    return appLayerTreeNodes
+      .filter(node => ApplicationModelHelper.isLayerTreeNode(node))
+      .map((appLayerNode): ExtendedAppTreeLayerNodeModel => {
+        const geoServiceLayer = geoServiceLayerMap.get(ApplicationTreeHelper.getLayerMapKey(appLayerNode.layerName, appLayerNode.serviceId));
+        const geoService = geoServices.find(service => service.id === geoServiceLayer?.serviceId);
+        const appLayerSettings = layerSettings[appLayerNode.id];
+        const featureType = featureTypes.find(ft => {
+          return ft.featureSourceId === geoServiceLayer?.layerSettings?.featureType?.featureSourceId.toString()
+            && ft.name === geoServiceLayer.layerSettings?.featureType?.featureTypeName;
+        });
+        return {
+          ...appLayerNode,
+          label: ApplicationTreeHelper.getTreeModelLabel(appLayerNode, geoServiceLayerMap, layerSettings, 'layer'),
+          appLayerSettings,
+          geoService,
+          geoServiceLayer,
+          featureType,
+        };
+      });
+  },
+);
+
+export const selectFilterableLayersForApplication = createSelector(
+  selectExtendedAppLayerNodesForSelectedApplication,
+  (appLayersNodes): ExtendedAppTreeLayerNodeModel[] => {
+    return appLayersNodes
+      .filter((extendedAppLayerNode) => {
+        if (!extendedAppLayerNode.geoService
+          || !extendedAppLayerNode.geoServiceLayer
+          || !extendedAppLayerNode.featureType) {
+          return false;
+        }
+        return extendedAppLayerNode.geoService.resolvedServerType === AdminServerType.GEOSERVER;
+      });
+  },
+);
+
+export const selectFilterableFilterGroups = createSelector(
+  selectFilterGroups,
+  selectFilterableLayersForApplication,
+  selectApplicationSelectedFilterGroupId,
+  (filterGroups, filterableLayers, selectedFilterId): ExtendedFilterGroupModel[] => {
+    return filterGroups.map(filterGroup => {
+      return {
+        filterGroup,
+        isSelected: filterGroup.id === selectedFilterId,
+        layers: filterGroup.layerIds.map(layerId => {
+          const layer = filterableLayers.find(l => l.id === layerId);
+          return layer ? layer : null;
+        }).filter((layer: ExtendedAppTreeLayerNodeModel | null): layer is ExtendedAppTreeLayerNodeModel => layer !== null),
+      };
+    });
+  },
+);
+
+export const selectSelectedFilterGroup = createSelector(
+  selectFilterGroups,
+  selectApplicationSelectedFilterGroupId,
+  (filterGroups, selectedFilterGroupId) => {
+    return filterGroups.find(group => group.id === selectedFilterGroupId) || null;
+  },
+);
+
+export const selectLayerIdsForSelectedFilterGroup = createSelector(
+  selectSelectedFilterGroup,
+  selectedGroup => selectedGroup?.layerIds ?? [],
+);
+
+export const selectFiltersForSelectedGroup = createSelector(
+  selectSelectedFilterGroup,
+  selectApplicationSelectedFilterId,
+  (selectedFilterGroup, selectedFilterId) => {
+    if (!selectedFilterGroup) {
+      return [];
+    }
+    return selectedFilterGroup.filters.map(filter => ({
+      filter,
+      selected: filter.id === selectedFilterId,
+    }));
+  },
+);
+
+export const selectSelectedFilterForSelectedGroup = createSelector(
+  selectFiltersForSelectedGroup,
+  filter => filter.find(f => f.selected) || null,
+);
+
+export const selectNoFilterableLayersForSelectedApplication = createSelector(
+  selectFilterableLayersForApplication,
+  filterableLayers => filterableLayers.length === 0,
+);
+
+export const selectDraftApplication3dEnabled = createSelector(
+  selectDraftApplication,
+  draftApplication => draftApplication?.settings?.uiSettings?.enable3D ?? false,
+);

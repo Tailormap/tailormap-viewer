@@ -1,23 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
-  FeatureModel, ConfigResponseModel, SearchResponseModel,
+  FeatureModel, ConfigResponseModel, SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
 import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { ApiHelper } from '../helpers/api.helper';
 import { TailormapApiConstants } from './tailormap-api.constants';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
+import { LayerExtractResponseModel } from '../models/layer-extract-response.model';
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
-  constructor(
-    private httpClient: HttpClient,
-  ) {
-  }
+
+  private httpClient = inject( HttpClient);
 
   public getVersion$(): Observable<VersionResponseModel> {
     return this.httpClient.get<VersionResponseModel>(
@@ -57,10 +56,12 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
     geometryInAttributes?: boolean;
+    withAttachments?: boolean;
   }): Observable<FeaturesResponseModel> {
     const queryParams = ApiHelper.getQueryParams({
       x: params.x,
@@ -70,10 +71,12 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       __fid: params.__fid,
       simplify: params.simplify,
       page: params.page,
+      pageSize: params.pageSize,
       sortBy: params.sortBy,
       sortOrder: params.sortOrder,
       onlyGeometries: params.onlyGeometries,
       geometryInAttributes: params.geometryInAttributes,
+      withAttachments: params.withAttachments,
     });
     return this.httpClient.post<FeaturesResponseModel>(
       `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/features`,
@@ -84,9 +87,9 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
       });
   }
 
-    public deleteFeature$(params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+    public deleteFeature$(params: { applicationId: string; layerId: string; fid: string }): Observable<HttpStatusCode> {
         return this.httpClient.delete<HttpResponse<Response>>(
-            `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.feature.__fid}`,
+            `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/edit/feature/${params.fid}`,
             { observe: 'response' },
         ).pipe(
             map(response => {
@@ -123,37 +126,43 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     );
   }
 
-  public getLayerExportCapabilities$(params: {
-    applicationId: string;
-    layerId: string;
-  }): Observable<LayerExportCapabilitiesModel> {
-    return this.httpClient.get<LayerExportCapabilitiesModel>(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/capabilities`,
-    );
+  public getLayerExtractFormats$(params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
+    return this.httpClient
+      .get<string[]>(`${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/formats`)
+      .pipe(
+        map(formatsArray => ({ outputFormats: formatsArray || [] })),
+      );
   }
 
-  public getLayerExport$(params: {
+  public requestLayerExtract$(params: {
     applicationId: string;
     layerId: string;
+    clientId: string;
     outputFormat: string;
-    filter?: string;
-    sort: { column: string; direction: string} | null;
     attributes?: string[];
-    crs?: string;
-  }): Observable<HttpResponse<Blob>> {
+    filter?: string;
+    sort: { column: string; direction: string } | null;
+  }): Observable<LayerExtractResponseModel> {
     const queryParams = ApiHelper.getQueryParams({
       outputFormat: params.outputFormat,
       attributes: params.attributes?.join(','),
       sortBy: params.sort?.column,
       sortOrder: params.sort?.direction,
-      crs: params.crs,
     });
-    return this.httpClient.post(
-      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/export/download`,
+    return this.httpClient.post<LayerExtractResponseModel>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/${params.clientId}`,
       params.filter ? this.getQueryParams({ filter: params.filter }) : '',
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: queryParams,
+      },
+    );
+  }
+
+  public downloadLayerExtract$(params: { applicationId: string; layerId: string; downloadId: string }): Observable<HttpResponse<Blob>> {
+    return this.httpClient.get(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/extract/download/${params.downloadId}`,
+      {
         observe: 'response',
         responseType: 'blob',
       },
@@ -190,4 +199,43 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
     return queryParams;
   }
 
+  public getLatestUpload$(category: string): Observable<any> {
+    return this.httpClient.get<any>(`${TailormapApiConstants.BASE_URL}/uploads/${category}/latest`);
+  }
+
+  private static getAttachmentApiUrl(params: { applicationId: string; layerId: string; featureId: string }): string {
+    return `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/feature/${params.featureId}/attachments`;
+  }
+
+  public addAttachment$(params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    const formData = new FormData();
+    formData.append('attachment', params.file);
+    formData.append('attachmentMetadata', new Blob([JSON.stringify({
+      attributeName: params.attribute,
+      fileName: params.file.name,
+      mimeType: params.file.type,
+      lastModified: params.file.lastModified,
+      description: params.description,
+    })], { type: 'application/json' }));
+    return this.httpClient.post(TailormapApiV1Service.getAttachmentApiUrl(params), formData);
+  }
+
+  public listAttachments$(params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]> {
+    return this.httpClient.get<AttachmentMetadataModel[]>(TailormapApiV1Service.getAttachmentApiUrl(params));
+  }
+
+  public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
+    return `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/attachment/${params.attachmentId}`;
+  }
+
+  public deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return this.httpClient.delete(this.getAttachmentUrl(params));
+  }
 }

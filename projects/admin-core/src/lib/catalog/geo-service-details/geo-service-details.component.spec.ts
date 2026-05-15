@@ -93,7 +93,7 @@ describe('GeoServiceDetailsComponent', () => {
         description: undefined,
         hiDpiDisabled: false,
         legendImageId: undefined,
-        tilingDisabled: false,
+        tilingDisabled: true,
         tilingGutter: undefined,
       },
     });

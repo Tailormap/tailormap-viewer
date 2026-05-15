@@ -1,8 +1,10 @@
 <div class="menubar">
-  <div class="menubar-section">
-    <tm-menubar-logo></tm-menubar-logo>
-  </div>
-  <div class="divider"></div>
+  @if (showMenubarLogo) {
+    <div class="menubar-section">
+      <tm-menubar-logo></tm-menubar-logo>
+    </div>
+    <div class="divider"></div>
+  }
   <div class="menubar-section menu-buttons">
     <tm-registered-components-renderer [config]="config" area="menu"></tm-registered-components-renderer>
   </div>

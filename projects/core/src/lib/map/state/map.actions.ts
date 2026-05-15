@@ -23,13 +23,14 @@ export const setLayerVisibility = createAction(
 );
 export const toggleAllLayersVisibility = createAction(
   `${mapActionsPrefix} Toggle All Layers Visibility`,
+  props<{ filterTerm?: string }>(),
 );
 export const toggleLevelExpansion = createAction(
   `${mapActionsPrefix} Toggle Level Expansion`,
   props<{ id: string; isBaseLayerTree?: boolean }>(),
 );
-export const setSelectedLayerId = createAction(
-  `${mapActionsPrefix} Set Selected Layer ID`,
+export const toggleSelectedLayerId = createAction(
+  `${mapActionsPrefix} Toggle Selected Layer ID`,
   props<{ layerId: string }>(),
 );
 export const addServices = createAction(
@@ -64,6 +65,12 @@ export const setLayerOpacity = createAction(
   `${mapActionsPrefix} Set Layer Opacity`,
   props<{ opacity: Array<{ id: string; opacity: number }> }>(),
 );
+
+export const setLayerStyle = createAction(
+  `${mapActionsPrefix} Set Layer Style`,
+  props<{ style: Array<{ id: string; style: string | null | undefined }> }>(),
+);
+
 export const addLayerDetails = createAction(
   `${mapActionsPrefix} Add Layer Details`,
   props<{ layerDetails: LayerDetailsModel }>(),
@@ -74,4 +81,8 @@ export const updateLayerTreeNodes = createAction(
 );
 export const toggleIn3dView = createAction(
   `${mapActionsPrefix} Toggle In3dView`,
+);
+export const updateTemporaryLayerName = createAction(
+  `${mapActionsPrefix} Update Temporary Layer Name`,
+  props<{ id: string; temporaryLayerName: string | undefined }>(),
 );

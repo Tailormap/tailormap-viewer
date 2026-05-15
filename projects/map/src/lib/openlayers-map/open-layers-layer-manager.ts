@@ -2,8 +2,8 @@ import { Map as OlMap } from 'ol';
 import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
 import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
 import { get as getProjection, Projection } from 'ol/proj';
-import { LayerManagerModel, LayerTypes } from '../models';
-import { OlLayerHelper } from '../helpers/ol-layer.helper';
+import { LayerManagerModel, LayerTypes, WMSLayerModel } from '../models';
+import { OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';
 import { VectorLayerModel } from '../models/vector-layer.model';
 import { isOpenLayersVectorLayer, isOpenLayersWMSLayer, isPossibleRealtimeLayer } from '../helpers/ol-layer-types.helper';
@@ -71,6 +71,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.backgroundLayers.set(layer.id, olLayer);
     this.backgroundLayerGroup.getLayers().push(olLayer);
     olLayer.setZIndex(this.getZIndexForBackgroundLayer(zIndex));
+    this.moveDrawingLayersToTop();
   }
 
   private removeBackgroundLayer(layerId: string) {
@@ -136,7 +137,6 @@ export class OpenLayersLayerManager implements LayerManagerModel {
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
-          this.updateFilterIfChanged(layer, existingLayer);
           existingLayer.setZIndex(getZIndexForLayer(zIndex));
           return;
         }
@@ -171,9 +171,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   // Create an identifier for each layer to quickly check if something changed and requires re-rendering
   private createLayerIdentifiers(layers: LayerModel[]): string[] {
     return layers.map(layer => {
-      const changingProps = [layer.opacity ? `${layer.opacity}` : undefined];
+      const opacity = layer.opacity !== undefined && layer.opacity !== null ? `${layer.opacity}` : undefined;
+      const changingProps = [ layer.name, opacity ];
       if (LayerTypesHelper.isServiceLayer(layer)) {
         changingProps.push(layer.filter);
+      }
+      if (LayerTypesHelper.isWmsLayer(layer) && layer.selectedStyleName) {
+        changingProps.push(layer.selectedStyleName);
       }
       return [ layer.id, ...changingProps.filter(Boolean) ].join('_');
     });
@@ -185,21 +189,31 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     if (currentOpacity !== layerOpacity) {
       olLayer.setOpacity(layerOpacity);
     }
-  }
-
-  private updateFilterIfChanged(layer: LayerModel, olLayer: BaseLayer) {
-    // For now, GeoServer & WMS only
-    if (!LayerTypesHelper.isWmsLayer(layer) || layer.serverType !== ServerType.GEOSERVER) {
+    // For now, updating layer properties works for WMS only
+    if (!LayerTypesHelper.isWmsLayer(layer) || !isOpenLayersWMSLayer(olLayer)) {
       return;
     }
-    const existingProps = OlLayerHelper.getLayerProps(olLayer);
-    if (existingProps.filter === layer.filter) {
+    const checkPropChanges: Array<{ paramName: keyof WmsServiceParamsModel; layerKey: keyof WMSLayerModel }> = [
+      { paramName: 'LAYERS', layerKey: 'name' },
+      { paramName: 'STYLES', layerKey: 'selectedStyleName' },
+    ];
+    if (layer.serverType === ServerType.GEOSERVER) {
+      // CQL filter is only supported by GeoServer, so only check for changes if the server type is GeoServer
+      checkPropChanges.push({ paramName: 'CQL_FILTER', layerKey: 'filter' });
+    }
+    const currentParams: Partial<Record<keyof WmsServiceParamsModel, any>> = olLayer.getSource()?.getParams() || {};
+    const changedParams: Partial<Record<keyof WmsServiceParamsModel, any>> = {};
+    checkPropChanges
+      .filter(({ paramName, layerKey }) => {
+        return (currentParams[paramName] ?? '') !== (layer[layerKey] ?? '');
+      })
+      .forEach(({ paramName, layerKey }) => {
+        changedParams[paramName] = layer[layerKey] ?? '';
+      });
+    if (Object.keys(changedParams).length === 0) {
       return;
     }
-    OlLayerHelper.setLayerProps(layer, olLayer);
-    if (isOpenLayersWMSLayer(olLayer)) {
-      olLayer.getSource()?.updateParams({ CQL_FILTER: layer.filter });
-    }
+    olLayer.getSource()?.updateParams(changedParams);
   }
 
   public removeLayer(id: string) {
@@ -359,6 +373,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     const updateWhileAnimating = layer.updateWhileAnimating ?? false;
     const source = new VectorSource({ wrapX: true });
     const vectorLayer = new VectorLayer({ source, visible: layer.visible, updateWhileAnimating, updateWhileInteracting: updateWhileAnimating });
+    // Set altitudeMode to clampToGround to display the layer on the terrain in 3D view
+    vectorLayer.set('altitudeMode', 'clampToGround');
     this.vectorLayers.set(layer.id, vectorLayer);
     return vectorLayer;
   }

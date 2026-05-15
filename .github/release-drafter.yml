@@ -4,7 +4,7 @@ name-template: v$NEXT_PATCH_VERSION 🎁
 version-template: "$MAJOR.$MINOR.$PATCH"
 
 template: |
-  ## Uncategorised changes
+  ## Changes
 
   $CHANGES
 
@@ -14,6 +14,7 @@ categories:
     labels:
       - enhancement
       - feature
+      - refactoring
   - title: 🐳 Docker updates
     label: docker-update
   - title: ⛓️‍💥 Breaking changes
@@ -44,3 +45,9 @@ categories:
 replacers:
   - search: '/CVE-(\d{4})-(\d+)/g'
     replace: 'https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$1-$2'
+  - search: '/HTM-(\d+)/g'
+    replace: '[HTM-$1](https://b3partners.atlassian.net/browse/HTM-$1)'
+  - search: '/EK-(\d+)/g'
+    replace: '[EK-$1](https://b3partners.atlassian.net/browse/EK-$1)'
+  - search: '/EO-(\d+)/g'
+    replace: '[EO-$1](https://b3partners.atlassian.net/browse/EO-$1)'

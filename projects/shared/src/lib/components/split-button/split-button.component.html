@@ -1,30 +1,40 @@
 <mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
-  <mat-button-toggle (click)="cycleNextOption()" class="cycle-button">
-    {{getLabel()}}
+  <mat-button-toggle (click)="cycleNextOption()" [aria-label]="getCycleAriaLabel()" [tmTooltip]="getNextLabel()"
+                     class="cycle-button">
+    {{ getLabel() }}
   </mat-button-toggle>
-  <mat-button-toggle class="drop-down-button" [matMenuTriggerFor]="dropdownMenu">
+  <mat-button-toggle [matMenuTriggerFor]="dropdownMenu" class="drop-down-button"
+                     i18n-tmTooltip="@@core.background-layer-toggle.expand-button"
+                     tmTooltip="Select basemap"
+                     aria-label="Select basemap"
+                     i18n-aria-label="@@core.background-layer-toggle.expand-button">
     <mat-icon svgIcon="drop_down"></mat-icon>
   </mat-button-toggle>
 </mat-button-toggle-group>
 
-<div class="map-control-button-container" *ngIf="small_screens_icon">
-  <button mat-flat-button
-          class="map-control-button"
-          [tmTooltip]="tooltip || ''"
-          [matMenuTriggerFor]="dropdownMenu">
-    <mat-icon [svgIcon]="small_screens_icon"></mat-icon>
-  </button>
-</div>
+@if (small_screens_icon) {
+  <div class="map-control-button-container">
+    <button mat-flat-button
+      class="map-control-button"
+      [tmTooltip]="tooltip || ''"
+      [matMenuTriggerFor]="dropdownMenu">
+      <mat-icon [svgIcon]="small_screens_icon"></mat-icon>
+    </button>
+  </div>
+}
 
 <mat-menu #dropdownMenu="matMenu" class="options-menu">
-  <button mat-menu-item
-          class="split-button-menu-item"
-          *ngFor="let option of optionsList"
-          [tmTooltip]="option.label"
-          [matTooltipPosition]="'before'"
-          [class.not-visible-on-map]="isLayerHiddenOnMap(option)"
-          (click)="selectOption(option.id)">
-    <mat-icon svgIcon="check" *ngIf="option.id === selectedOptionId"></mat-icon>
-    {{ option.label }}
-  </button>
+  @for (option of optionsList; track option.id) {
+    <button mat-menu-item
+      class="split-button-menu-item"
+      [tmTooltip]="option.label"
+      [matTooltipPosition]="'before'"
+      [class.not-visible-in-3d]="isLayerHiddenOnMap(option)"
+      (click)="selectOption(option.id)">
+      @if (option.id === selectedOptionId) {
+        <mat-icon svgIcon="check"></mat-icon>
+      }
+      {{ option.label }}
+    </button>
+  }
 </mat-menu>

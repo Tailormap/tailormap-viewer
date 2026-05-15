@@ -5,6 +5,7 @@ import { selectComponentsConfig } from '../../state/core.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { selectIn3dView } from '../../map/state/map.selectors';
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 describe('EmbeddedLayoutComponent', () => {
 
@@ -20,7 +21,7 @@ describe('EmbeddedLayoutComponent', () => {
       ],
     });
     const { container } = await render(EmbeddedLayoutComponent, {
-      providers: [store],
+      providers: [ store, { provide: HttpXsrfTokenExtractor, useValue: {} as HttpXsrfTokenExtractor }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     return container;

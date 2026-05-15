@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
@@ -11,6 +11,18 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
   standalone: false,
 })
 export class BottomPanelComponent implements OnInit {
+  private layoutService = inject(ViewerLayoutService);
+  private destroyRef = inject(DestroyRef);
+
+
+  public tooltips = {
+    minimize: $localize `:@@core.shared.minimize-panel:Minimize panel`,
+    maximize: $localize `:@@core.shared.maximize-panel:Maximize panel`,
+    close: $localize `:@@core.shared.close-panel:Close panel`,
+    restore: $localize `:@@core.shared.restore-panel-height:Restore panel height`,
+  };
+
+  public static readonly MINIMUM_PANEL_HEIGHT_PX = 115;
 
   @Input({ required: true })
   public isVisible$: Observable<boolean> = of(false);
@@ -31,6 +43,16 @@ export class BottomPanelComponent implements OnInit {
     this.isMinimized = minimized;
   }
 
+  @Input()
+  public mobile = false;
+
+  @Input()
+  public set height(height: number | null) {
+    if (height) {
+      this.heightSubject.next(height);
+    }
+  }
+
   @Output()
   public heightChanged = new EventEmitter<number>();
 
@@ -41,11 +63,7 @@ export class BottomPanelComponent implements OnInit {
 
   public isMinimized = false;
   public isMaximized = false;
-
-  constructor(
-    private layoutService: ViewerLayoutService,
-    private destroyRef: DestroyRef,
-  ) { }
+  public isUserResizing = false;
 
   public ngOnInit(): void {
     this.heightSubject.next(this.initialHeight || 350);
@@ -69,14 +87,17 @@ export class BottomPanelComponent implements OnInit {
     }
     this.isMinimized = false;
     this.isMaximized = false;
-    const height = initialHeight - changedHeight;
+    const computedHeight = initialHeight - changedHeight;
+    this.isUserResizing = true;
+    const height = Math.max(computedHeight, BottomPanelComponent.MINIMUM_PANEL_HEIGHT_PX);
     this.heightSubject.next(height);
     this.heightChanged.emit(height);
+    setTimeout(() => { this.isUserResizing = false; }, 0);
   }
 
   public getHeight() {
-    if (this.isMaximized) {
-      return '100vh';
+    if (this.isMaximized || this.isMinimized) {
+      return '';
     }
     return `${this.heightSubject.value}px`;
   }

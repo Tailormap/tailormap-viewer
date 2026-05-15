@@ -23,6 +23,7 @@ const setup = async (hasUser?: boolean) => {
     getUserByName$: () => hasUser ? of(getUser({ username: 'user1', name: 'user 1', groupNames: [] })) : of(null),
     deleteUser$: jest.fn(() => of(true)),
     addOrUpdateUser$: jest.fn(() => of(true)),
+    getUsers$: jest.fn(() => of([])),
   };
   const groupService = {
     getGroups$: jest.fn(() => of([])),

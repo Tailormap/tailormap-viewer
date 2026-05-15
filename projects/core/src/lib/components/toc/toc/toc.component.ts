@@ -1,21 +1,30 @@
-import { Component, computed, NgZone, OnDestroy, OnInit, Signal, signal } from '@angular/core';
-import { distinctUntilChanged, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import {
-  BaseTreeModel, BrowserHelper, DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService,
+  Component, computed, effect, inject, input, NgZone, OnDestroy, OnInit, signal, Signal, viewChild, ViewContainerRef,
+} from '@angular/core';
+import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
+import {
+  BaseTreeModel, BrowserHelper, DropZoneHelper, DynamicComponentsHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel,
   TreeService,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { TocMenuButtonComponent } from '../toc-menu-button/toc-menu-button.component';
 import { Store } from '@ngrx/store';
-import { AppLayerModel, BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AppLayerModel, AuthenticatedUserService, BaseComponentTypeEnum, TocConfigModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { selectFilteredLayerTree, selectFilterEnabled } from '../state/toc.selectors';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import {
-  select3dTilesLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
+  select3dTilesLayers, selectEditableLayers, selectIn3dView, selectLayersWithoutWebMercatorIds, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { moveLayerTreeNode, setLayerVisibility, setSelectedLayerId, toggleLevelExpansion } from '../../../map/state/map.actions';
+import {
+  moveLayerTreeNode, setLayerStyle, setLayerVisibility, toggleLevelExpansion, toggleSelectedLayerId,
+} from '../../../map/state/map.actions';
+import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
+import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actions';
+import { ComponentConfigHelper } from '../../../shared';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -30,6 +39,20 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
   standalone: false,
 })
 export class TocComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private treeService = inject<TreeService<AppLayerModel>>(TreeService);
+  private treeDragDropService = inject(TreeDragDropService);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+  private ngZone = inject(NgZone);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  private tocFeatureRegistrationService = inject(TocFeatureRegistrationService);
+
+  private menuBarContainer = viewChild('menuBar', { read: ViewContainerRef });
+  private belowTreeContainer = viewChild('belowTreeContainer', { read: ViewContainerRef });
+  private aboveTreeContainer = viewChild('aboveTreeContainer', { read: ViewContainerRef });
+
+  public mobileToc = input(false);
 
   private destroyed = new Subject();
   public visible$: Observable<boolean> = of(false);
@@ -37,23 +60,56 @@ export class TocComponent implements OnInit, OnDestroy {
 
   public infoVisible = signal(false);
   public infoTreeNode$ = this.store$.select(selectSelectedNode);
+  public activeMobileInfoNodes = signal<string[]>([]);
 
   public filterEnabled$ = this.store$.select(selectFilterEnabled);
   public isMobileDevice = BrowserHelper.isTouchDevice;
   public dragDropEnabled = !this.isMobileDevice;
+  public allLevelNodesCollapsed$ = this.treeService.allLevelNodesCollapsed$;
+  public hasExpandableNodes$ = this.treeService.hasExpandableNodes$;
+  public toggleExpandAllTooltip$ = this.allLevelNodesCollapsed$.pipe(
+    map(collapsed => collapsed ? $localize `:@@core.toc.expand-all:Expand all groups` : $localize `:@@core.toc.collapse-all:Collapse all groups`),
+  );
 
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
   public tiles3DLayerIds: Signal<string[]> = signal([]);
+  public filteredLayerIds: Signal<{ id: string; source: string }[]> = signal([]);
 
-  constructor(
-    private store$: Store,
-    private treeService: TreeService<AppLayerModel>,
-    private treeDragDropService: TreeDragDropService,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-    private ngZone: NgZone,
-  ) {}
+  private config = ComponentConfigHelper.componentConfigSignal<TocConfigModel>(this.store$, BaseComponentTypeEnum.TOC);
+
+  private editComponentEnabled = ComponentConfigHelper.componentEnabledConfigSignal(this.store$, BaseComponentTypeEnum.EDIT);
+  private authenticatedUserDetails = toSignal(this.authenticatedUserService.getUserDetails$());
+
+  private editableLayerIds = computed(() => {
+    const editableLayers = this.store$.selectSignal(selectEditableLayers);
+    return editableLayers().map(layer => layer.id);
+  });
+
+  public getCurrentlyEditableLayerIds = computed(() => {
+    return this.config()?.showEditLayerIcon
+        && this.authenticatedUserDetails()?.isAuthenticated // remove when HTM-1762 is implemented
+        && this.editComponentEnabled()
+      ? this.editableLayerIds()
+      : [];
+  });
+
+  constructor() {
+    effect(() => {
+      const components = this.tocFeatureRegistrationService.registeredAdditionalFeatures();
+      const menuBarContainer = this.menuBarContainer();
+      const belowTreeContainer = this.belowTreeContainer();
+      const aboveTreeContainer = this.aboveTreeContainer();
+      if (!menuBarContainer || !belowTreeContainer || !aboveTreeContainer) {
+        return;
+      }
+      DynamicComponentsHelper.createComponentsForPosition(components, {
+        'menuBar': menuBarContainer,
+        'aboveTree': aboveTreeContainer,
+        'belowTree': belowTreeContainer,
+      });
+    });
+  }
 
   public ngOnInit(): void {
     this.visible$ = this.menubarService.isComponentVisible$(BaseComponentTypeEnum.TOC);
@@ -83,10 +139,9 @@ export class TocComponent implements OnInit, OnDestroy {
         filter(isAppLayerTreeModel),
         map(node => node.metadata.id),
         tap(() => this.infoVisible.set(true)),
-        distinctUntilChanged(),
       )
       .subscribe(layerId => {
-        this.store$.dispatch(setSelectedLayerId({ layerId }));
+        this.store$.dispatch(toggleSelectedLayerId({ layerId }));
       });
 
     this.treeService.nodePositionChangedSource$
@@ -99,6 +154,17 @@ export class TocComponent implements OnInit, OnDestroy {
     this.layersWithoutWebMercator = this.store$.selectSignal(selectLayersWithoutWebMercatorIds);
     const tiles3DLayers = this.store$.selectSignal(select3dTilesLayers);
     this.tiles3DLayerIds = computed(() => tiles3DLayers().map(l => l.id));
+    this.filteredLayerIds = this.store$.selectSignal(selectFilteredLayerIdsWithSource);
+
+    if (this.mobileToc()) {
+      this.visible$
+        .pipe(takeUntil(this.destroyed))
+        .subscribe(visible => {
+          if (visible) {
+            this.menubarService.setMobilePanelHeight(500);
+          }
+      });
+    }
   }
 
   public getDropZoneConfig() {
@@ -133,5 +199,37 @@ export class TocComponent implements OnInit, OnDestroy {
   public toggleReordering() {
     this.dragDropEnabled = !this.dragDropEnabled;
     this.treeDragDropService.setDragDropEnabled(this.dragDropEnabled);
+  }
+
+  public zoomToScale(minScale: number) {
+    this.mapService.zoomToScale(minScale);
+  }
+
+  public editLayer(layer: string) {
+    this.store$.dispatch(setSelectedEditLayer( { layer }));
+    this.store$.dispatch(setEditActive({ active: true }));
+  }
+
+  public setShowMobileInfo(node: TreeModel<AppLayerModel>) {
+    const activeMobileInfoNodes = this.activeMobileInfoNodes();
+    if (activeMobileInfoNodes.includes(node.id)) {
+      this.activeMobileInfoNodes.set(activeMobileInfoNodes.filter(id => id !== node.id));
+    } else {
+      this.activeMobileInfoNodes.set([ ...activeMobileInfoNodes, node.id ]);
+    }
+  }
+
+  protected changeStyle({ layerId, selectedStyle }: { layerId: string; selectedStyle: WmsStyleModel }) {
+    this.store$.dispatch(setLayerStyle({ style: [{ id: layerId, style: selectedStyle.name }] }));
+  }
+
+  public toggleExpandAll() {
+    this.allLevelNodesCollapsed$.pipe(take(1)).subscribe(collapsed => {
+      if (collapsed) {
+        this.treeService.expandAllLevelNodes();
+      } else {
+        this.treeService.collapseAllLevelNodes();
+      }
+    });
   }
 }

@@ -1,17 +1,17 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, inject } from '@angular/core';
 
 @Directive({
   selector: '[tmAutoFocus]',
   standalone: false,
 })
 export class AutoFocusDirective implements AfterViewInit {
+  private el = inject<ElementRef<HTMLInputElement>>(ElementRef);
+
 
   @Input()
   public tmAutoFocus: boolean | string = true;
 
   private static timeout: number;
-
-  constructor(private el: ElementRef<HTMLInputElement>) {}
 
   public ngAfterViewInit(): void {
     if (typeof this.tmAutoFocus === 'boolean' && !this.tmAutoFocus) {

@@ -13,4 +13,5 @@ export interface SpatialFilterModel extends BaseFilterModel {
   geometries: SpatialFilterGeometry[];
   baseLayerId?: string;
   buffer?: number;
+  exceededMaxFeatures?: boolean;
 }

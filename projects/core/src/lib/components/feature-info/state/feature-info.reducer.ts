@@ -14,6 +14,7 @@ const onLoadFeatureInfo = (
   dialogVisible: payload.layers.length > 0,
   features: [],
   columnMetadata: [],
+  attachmentMetadata: [],
   layers: payload.layers,
   selectedLayerId: payload.layers.length === 1 ? payload.layers[0].id : state.selectedLayerId,
 });
@@ -57,6 +58,10 @@ const onFeatureInfoLoaded = (
     columnMetadata: [
       ...state.columnMetadata,
       ...payload.featureInfo.columnMetadata,
+    ],
+    attachmentMetadata: [
+      ...state.attachmentMetadata,
+      ...payload.featureInfo.attachmentMetadata,
     ],
     layers: updatedLayers,
     selectedLayerId,
@@ -119,6 +124,29 @@ const onShowNextFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState
 
 const onShowPreviousFeatureInfoFeature = (state: FeatureInfoState): FeatureInfoState => selectNextFeature(state, 'previous');
 
+const onReopenFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  dialogVisible: true,
+});
+
+const onUpdateFeatureInFeatureInfo = (
+  state: FeatureInfoState,
+  payload: ReturnType<typeof FeatureInfoActions.updateFeatureInFeatureInfo>,
+): FeatureInfoState => {
+  const featureIdx = state.features.findIndex(f => f.__fid === payload.feature.__fid);
+  if (featureIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    features: [
+      ...state.features.slice(0, featureIdx),
+      payload.feature,
+      ...state.features.slice(featureIdx + 1),
+    ],
+  };
+};
+
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   initialFeatureInfoState,
   on(FeatureInfoActions.loadFeatureInfo, onLoadFeatureInfo),
@@ -129,5 +157,7 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.setSelectedFeatureInfoLayer, onSetSelectedFeatureInfoLayer),
   on(FeatureInfoActions.showNextFeatureInfoFeature, onShowNextFeatureInfoFeature),
   on(FeatureInfoActions.showPreviousFeatureInfoFeature, onShowPreviousFeatureInfoFeature),
+  on(FeatureInfoActions.reopenFeatureInfoDialog, onReopenFeatureInfoDialog),
+  on(FeatureInfoActions.updateFeatureInFeatureInfo, onUpdateFeatureInFeatureInfo),
 );
 export const featureInfoReducer = (state: FeatureInfoState | undefined, action: Action) => featureInfoReducerImpl(state, action);

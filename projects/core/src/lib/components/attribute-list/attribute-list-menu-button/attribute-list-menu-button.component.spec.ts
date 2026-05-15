@@ -10,6 +10,7 @@ import { getLoadedStoreNoRows } from '../state/mocks/attribute-list-state-test-d
 import { TestBed } from '@angular/core/testing';
 import { setAttributeListVisibility } from '../state/attribute-list.actions';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
+import { MatBadge } from '@angular/material/badge';
 
 describe('AttributeListMenuButtonComponent', () => {
 
@@ -19,7 +20,7 @@ describe('AttributeListMenuButtonComponent', () => {
     };
     await render(AttributeListMenuButtonComponent, {
       declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
       providers: [
         { provide: MenubarService, useValue: menubarService },
         provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),

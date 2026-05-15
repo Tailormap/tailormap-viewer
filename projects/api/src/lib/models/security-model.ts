@@ -6,6 +6,7 @@ export interface SecurityPropertyModel {
 export interface SecurityModel {
   isAuthenticated: boolean;
   username?: string;
+  organisation?: string | null;
   roles?: string[];
   properties?: SecurityPropertyModel[];
   groupProperties?: SecurityPropertyModel[];

@@ -1,14 +1,13 @@
-import { Injectable, NgZone } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
-import { combineLatest, finalize, map, Observable, take, tap } from 'rxjs';
+import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerModel, LayerTypesEnum, MapStyleModel, MapViewDetailsModel, MapViewerOptionsModel, OpenlayersExtent,
-  ToolConfigModel, ToolModel,
-  VectorLayerModel,
+  LayerManagerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
+  MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import { Vector as VectorLayer } from 'ol/layer';
+import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
@@ -17,24 +16,13 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { Layer } from 'ol/layer';
 import { Source } from 'ol/source';
 import { default as LayerRenderer } from 'ol/renderer/Layer';
-import { Coordinate } from 'ol/coordinate';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
+import { ToolsStatusModel } from '../models/tools-status.model';
+import { withLatestFrom } from 'rxjs/operators';
 
 export type OlLayerFilter = (layer: Layer<Source, LayerRenderer<any>>) => boolean;
-
-export interface MapExportOptions {
-  widthInMm: number;
-  heightInMm: number;
-  dpi: number;
-  extent?: OpenlayersExtent | null;
-  center?: Coordinate;
-  layers: LayerModel[];
-  backgroundLayers: LayerModel[];
-  vectorLayerFilter?: OlLayerFilter;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -42,11 +30,10 @@ export interface MapExportOptions {
 export class MapService {
 
   private readonly map: OpenLayersMap;
+  private ngZone = inject(NgZone);
+  private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
 
-  constructor(
-    private ngZone: NgZone,
-    private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-  ) {
+  constructor() {
     this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
   }
 
@@ -89,6 +76,56 @@ export class MapService {
       );
   }
 
+  public getToolStatusChanged$(): Observable<ToolsStatusModel> {
+    return this.getToolManager$().pipe(switchMap(manager => manager.getToolStatusChanged$()));
+  }
+
+  public someToolsEnabled$(owners: string[]): Observable<boolean> {
+    return this.getToolStatusChanged$()
+      .pipe(
+        map(({ enabledTools }) => {
+          const ownerSet = new Set(owners);
+          return enabledTools.some(t => ownerSet.has(t.owner));
+        }),
+      );
+  }
+
+  public enableTool<T = Record<string, unknown>>(toolId?: string, disableOtherTools?: boolean, enableArgs?: T, forceEnableIfActivated?: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.enableTool<T>(toolId, disableOtherTools, enableArgs, forceEnableIfActivated);
+    });
+  }
+
+  public disableTool(toolId?: string, preventAutoEnableTools?: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.disableTool(toolId, preventAutoEnableTools);
+    });
+  }
+
+  public setSwitchedTool(switched: boolean) {
+    this.executeToolManagerAction(manager => {
+      manager.setSwitchedTool(switched);
+    });
+  }
+
+  public disableAllTools() {
+    this.executeToolManagerAction(manager => {
+      manager.disableAllTools();
+    });
+  }
+
+  public enableAutoEnabledTools() {
+    this.executeToolManagerAction(manager => {
+      manager.enableAutoEnabledTools();
+    });
+  }
+
+  public executeToolManagerAction(callback: (manager: ToolManagerModel) => void) {
+    this.getToolManager$()
+      .pipe(take(1))
+      .subscribe(manager => callback(manager));
+  }
+
   public createVectorLayer$<T extends FeatureModelAttributes = FeatureModelAttributes>(
     layer: VectorLayerModel,
     vectorLayerStyle?: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel),
@@ -102,10 +139,11 @@ export class MapService {
             layerManager.removeLayer(layer.id);
           }
         }),
-        map(manager => {
+        withLatestFrom(this.getProjectionCode$()),
+        map(([ manager, projectionCode ]) => {
           const vectorLayer = manager.addLayer<VectorLayer>(layer);
           if (vectorLayer) {
-            vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle));
+            vectorLayer.setStyle(MapStyleHelper.getStyle(vectorLayerStyle, projectionCode));
           }
           return vectorLayer;
         }),
@@ -236,18 +274,22 @@ export class MapService {
       this.map.setCenterAndZoom(center, zoom);
   }
 
-  public zoomTo(geometry: string, projectionCode: string) {
+  public zoomTo(geometry: string, projectionCode: string, maxZoom?: number) {
     this.getProjectionCode$()
       .pipe(take(1))
       .subscribe(mapProjection => {
-        this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection));
+        this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection), maxZoom);
       });
+  }
+
+  public zoomToScale(scale: number) {
+    this.map.zoomToScale(scale);
   }
 
   /**
    * Export the current map to an image.
    */
-  public exportMapImage$(options: MapExportOptions): Observable<string> {
+  public exportMapImage$(options: MapExportOptions): Observable<MapExportResult> {
     return this.map.exportMapImage$(options);
   }
 
@@ -273,6 +315,34 @@ export class MapService {
 
   public switch3D(){
     this.map.switch3d();
+  }
+
+  public set3dTerrainOpacity(opacity: number){
+    this.map.set3dTerrainOpacity(opacity);
+  }
+
+  public get3dTerrainOpacity$(): Observable<number> {
+    return this.map.get3dTerrainOpacity$();
+  }
+
+  public hasUserInteractedWithMap$(): Observable<boolean> {
+    return this.map.hasUserInteractedWithMap$();
+  }
+
+  public allowSnapping(allow: boolean) {
+    this.map.allowSnapping(allow);
+  }
+
+  public setSnappingLayerStyle<T extends FeatureModelAttributes = FeatureModelAttributes>(vectorLayerStyle: MapStyleModel | ((feature: FeatureModel<T>) => MapStyleModel)) {
+    this.map.setSnappingLayerStyle(MapStyleHelper.getStyle(vectorLayerStyle));
+  }
+
+  public setSnappingTolerance(tolerance: number) {
+    this.map.setSnappingTolerance(tolerance);
+  }
+
+  public setSnappingFeatures<T extends FeatureModelAttributes = FeatureModelAttributes>(features: Array<FeatureModelType<T>>) {
+    this.map.renderSnappingFeatures(features);
   }
 
 }

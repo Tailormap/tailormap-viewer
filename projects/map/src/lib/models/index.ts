@@ -21,3 +21,4 @@ export * from './projection-codes.enum';
 export * from './map-unit.enum';
 export * from './selection3d.model';
 export * from './3d-projection.const';
+export * from './map-export.model';

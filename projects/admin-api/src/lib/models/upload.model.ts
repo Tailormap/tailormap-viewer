@@ -11,4 +11,5 @@ export interface UploadModel {
   content?: string;
   contentLength: number | null;
   contentSize?: string;
+  description?: string;
 }

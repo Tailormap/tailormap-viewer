@@ -1,8 +1,8 @@
 import { map, Observable, combineLatest } from 'rxjs';
-import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentModel } from '@tailormap-viewer/api';
+import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 import { selectComponentsConfig } from '../state/core.selectors';
 import { Store } from '@ngrx/store';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { selectIn3dView } from '../map/state/map.selectors';
 import { setComponentEnabled } from '../state/core.actions';
 
@@ -15,6 +15,8 @@ export interface LayoutConfig {
   providedIn: 'root',
 })
 export class LayoutService {
+  private store$ = inject(Store);
+
 
   public componentsConfig$: Observable<LayoutConfig>;
 
@@ -25,13 +27,18 @@ export class LayoutService {
     BaseComponentTypeEnum.MOUSE_COORDINATES,
     BaseComponentTypeEnum.SCALE_BAR,
     BaseComponentTypeEnum.COORDINATE_PICKER,
+    BaseComponentTypeEnum.EDIT,
   ];
 
   private componentsOnlyIn3d = [
     BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
+    BaseComponentTypeEnum.TERRAIN_OPACITY,
+    BaseComponentTypeEnum.TERRAIN_CONTROLS,
   ];
 
-  constructor(private store$: Store) {
+  constructor() {
+    const store$ = this.store$;
+
     this.componentsConfig$ = combineLatest([
       store$.select(selectComponentsConfig),
       store$.select(selectIn3dView),
@@ -66,6 +73,11 @@ export class LayoutService {
       return false;
     }
     return BaseComponentConfigHelper.isComponentEnabled(layoutConfig.config, componentType);
+  }
+
+  public shouldDisplayLogo(layoutConfig: LayoutConfig): boolean {
+    const headerConfig = layoutConfig.config.find(c => c.type === BaseComponentTypeEnum.HEADER);
+    return !headerConfig?.config?.enabled || !((headerConfig.config as HeaderComponentConfigModel).logoFileId);
   }
 
 }

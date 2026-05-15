@@ -1,15 +1,23 @@
+import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { selectAttributeListData, selectAttributeListTabs } from '../state/attribute-list.selectors';
+import {
+  selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible, selectInitialDataSort,
+} from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
-  AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TailormapApiV1ServiceModel,
+  AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { FilterService } from '../../../filter/services/filter.service';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
+import { FeatureUpdatedService } from '../../../services/feature-updated.service';
+import { MapService } from '@tailormap-viewer/map';
+import { selectVisibleLayersWithAttributes } from '../../../map';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { AttributeListApiService } from './attribute-list-api.service';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -17,13 +25,12 @@ const setup = (
   filters?: Map<string, string | null>,
 ) => {
   const api = {
-    getFeatures$: jest.fn(() => {
-      return of(features);
-    }),
+    getFeatures$: jest.fn(() => of(features)),
   } as unknown as TailormapApiV1ServiceModel;
+
   const tabs: AttributeListTabModel[] = [
-    { id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', loadingData: false, initialDataLoaded: false },
-    { id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', loadingData: false, initialDataLoaded: false },
+    { tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE, id: '1', layerId: '1', label: 'TEST 1', selectedDataId: '1', initialDataId: '1', loadingData: false, initialDataLoaded: false },
+    { tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE, id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', initialDataId: '2', loadingData: false, initialDataLoaded: false },
   ];
   const data: AttributeListDataModel[] = [
     { id: '1', columns: [], tabId: '1', pageIndex: 0, pageSize: 10, rows: [], totalCount: null, sortDirection: '' },
@@ -31,16 +38,34 @@ const setup = (
   ];
   const store = createMockStore({
     selectors: [
+      { selector: selectAttributeListVisible, value: fillStore },
       { selector: selectAttributeListTabs, value: fillStore ? tabs : [] },
       { selector: selectAttributeListData, value: fillStore ? data : [] },
       { selector: selectViewerId, value: '1' },
+      { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
+      { selector: selectInitialDataSort, value: [] },
     ],
   }) as Store;
+
   const filterService = {
     getChangedFilters$: jest.fn(() => of(filters || new Map())),
     getFilterForLayer: jest.fn(() => undefined),
-  } as unknown as FilterService;
-  const service = new AttributeListDataService(api, store, filterService);
+  };
+
+  const mapServiceMock = { refreshLayer: jest.fn() };
+
+  TestBed.configureTestingModule({
+    providers: [
+      { provide: TAILORMAP_API_V1_SERVICE, useValue: api },
+      { provide: Store, useValue: store },
+      { provide: FilterService, useValue: filterService },
+      { provide: MapService, useValue: mapServiceMock },
+      FeatureUpdatedService,
+      AttributeListDataService,
+    ],
+  });
+
+  const service = TestBed.inject(AttributeListDataService);
   return {
     service,
     api,
@@ -52,7 +77,7 @@ const setup = (
 describe('AttributeListDataService', () => {
 
   it('creates service', () => {
-    const { service, filterService, store } = setup();
+    const { service, filterService } = setup();
     expect(service).not.toBeUndefined();
     expect(filterService.getChangedFilters$).toHaveBeenCalled();
   });
@@ -74,14 +99,17 @@ describe('AttributeListDataService', () => {
       ],
       columnMetadata: [
         getColumnMetadataModel(),
-        getColumnMetadataModel({ key: 'prop2' }),
-        getColumnMetadataModel({ key: 'geom', type: AttributeType.GEOMETRY }),
+        getColumnMetadataModel({ name: 'prop2' }),
+        getColumnMetadataModel({ name: 'geom', type: AttributeType.GEOMETRY }),
       ],
       pageSize: 10,
       page: 0,
       total: 2,
+      template: null,
     };
     const { service, api } = setup(response, true);
+    const apiService = TestBed.inject(AttributeListApiService);
+    apiService.initDefaultAttributeListSource();
     service.loadDataForTab$('1').subscribe(result => {
       expect(api.getFeatures$).toHaveBeenCalledWith({
         layerId: '1',

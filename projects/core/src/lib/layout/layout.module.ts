@@ -6,6 +6,8 @@ import { MapModule } from '@tailormap-viewer/map';
 import { EmbeddedLayoutComponent } from './embedded-layout/embedded-layout.component';
 import { ShareViewerModule } from '../components/toolbar/share-viewer/share-viewer.module';
 import { Switch3dModule } from "../components/toolbar/switch3d/switch3d.module";
+import { MobileLayoutComponent } from './mobile-layout/mobile-layout.component';
+import { SnappingModule } from "../components/toolbar/snapping/snapping.module";
 
 
 
@@ -13,6 +15,7 @@ import { Switch3dModule } from "../components/toolbar/switch3d/switch3d.module";
   declarations: [
     BaseLayoutComponent,
     EmbeddedLayoutComponent,
+    MobileLayoutComponent,
   ],
   imports: [
     CommonModule,
@@ -20,10 +23,12 @@ import { Switch3dModule } from "../components/toolbar/switch3d/switch3d.module";
     MapModule,
     ShareViewerModule,
     Switch3dModule,
+    SnappingModule,
   ],
   exports: [
     BaseLayoutComponent,
     EmbeddedLayoutComponent,
+    MobileLayoutComponent,
   ],
 })
 export class LayoutModule { }

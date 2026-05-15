@@ -7,6 +7,7 @@ export interface FilterComponentState {
   selectedFilterGroup?: string;
   selectedLayers?: string[];
   selectedReferenceLayer?: string;
+  selectedSpatialFilterFeatureId?: string | null;
 }
 
 export const initialFilterComponentState: FilterComponentState = {

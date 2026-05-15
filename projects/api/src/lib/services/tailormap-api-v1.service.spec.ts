@@ -77,15 +77,15 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
-  test('queries API for getLayerExportCapabilities$', () => {
-    service.getLayerExportCapabilities$({ applicationId: 'app/default', layerId: '1' }).subscribe();
-    const req = httpController.expectOne({ url: '/api/app/default/layer/1/export/capabilities', method: 'GET' });
+  test('queries API for getExtractFormats$', () => {
+    service.getLayerExtractFormats$({ applicationId: 'app/default', layerId: '1' }).subscribe();
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/extract/formats', method: 'GET' });
     req.flush(null);
   });
 
   test('queries API for deleteFeature$', () => {
     const feat : FeatureModel = { __fid: '1', attributes: {} };
-    service.deleteFeature$({ applicationId: 'app/default', layerId: '1', feature: feat } ).subscribe();
+    service.deleteFeature$({ applicationId: 'app/default', layerId: '1', fid: feat.__fid } ).subscribe();
     const req = httpController.expectOne({ url: '/api/app/default/layer/1/edit/feature/1', method: 'DELETE' });
     req.flush(null);
   });
@@ -104,4 +104,9 @@ describe('TailormapApiV1Service', () => {
     req.flush(null);
   });
 
+  test('queries API for latestUpload$', () => {
+    service.getLatestUpload$('drawing-style').subscribe();
+    const req = httpController.expectOne({ url: '/api/uploads/drawing-style/latest', method: 'GET' });
+    req.flush(null);
+  });
 });

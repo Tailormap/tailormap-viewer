@@ -1,8 +1,10 @@
 <mat-selection-list [multiple]="false">
-  <mat-list-item *ngFor="let component of listOfComponents$ | async"
-                 (click)="setActiveComponent(component.type)"
-                 [class.selected]="selectedComponent === component.type"
-                 [class.disabled]="disabledComponents.has(component.type)">
-    {{ component.label }}
-  </mat-list-item>
+  @for (component of listOfComponents$ | async; track component) {
+    <mat-list-item
+      (click)="setActiveComponent(component.type)"
+      [class.selected]="selectedComponent === component.type"
+      [class.disabled]="disabledComponents.has(component.type)">
+      {{ component.label }}
+    </mat-list-item>
+  }
 </mat-selection-list>

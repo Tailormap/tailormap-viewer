@@ -1,4 +1,5 @@
 <tm-menubar-button [component]="componentType"
                    [tooltip]="panelTitle$ | async"
                    [panelTitle]="panelTitle$ | async"
+                   [badgeCount]="activeFilters$ | async"
                    icon="components_filter"></tm-menubar-button>

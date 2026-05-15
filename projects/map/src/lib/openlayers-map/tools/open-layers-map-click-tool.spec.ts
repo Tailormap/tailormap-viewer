@@ -17,6 +17,7 @@ describe('OpenLayersMapClickTool', () => {
         mouseCoordinates: [ 2, 3 ],
         resolution: 0.1,
         scale: 714.2857142857143,
+        pointerType: 'mouse',
       });
       done();
     });

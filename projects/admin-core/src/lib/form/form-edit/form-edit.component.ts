@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
@@ -22,6 +22,14 @@ import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catal
   standalone: false,
 })
 export class FormEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private formService = inject(FormService);
+  private featureSourceService = inject(FeatureSourceService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -38,17 +46,6 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   private loadingFeatureTypeSubject$ = new BehaviorSubject(false);
   public loadingFeatureType$ = this.loadingFeatureTypeSubject$.asObservable();
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private formService: FormService,
-    private featureSourceService: FeatureSourceService,
-    private adminSnackbarService: AdminSnackbarService,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.form$ = this.route.paramMap.pipe(

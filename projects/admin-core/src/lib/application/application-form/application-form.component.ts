@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { BoundsModel, I18nSettingsModel, UiSettingsModel } from '@tailormap-viewer/api';
+import { BoundsModel, I18nSettingsModel, UiSettingsModel, ValidatorsHelper } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
@@ -19,6 +19,8 @@ import { Store } from '@ngrx/store';
   standalone: false,
 })
 export class ApplicationFormComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+
 
   private _application: ApplicationModel | null = null;
 
@@ -49,7 +51,7 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [
         Validators.required,
-        Validators.pattern(FormHelper.NAME_REGEX),
+        Validators.pattern(ValidatorsHelper.NAME_REGEX),
         this.isUniqueApplicationName(),
       ],
     }),
@@ -81,10 +83,9 @@ export class ApplicationFormComponent implements OnInit, OnDestroy {
   }
 
   public groups$: Observable<GroupModel[]>;
-  constructor(
-    groupDetailsService: GroupService,
-    private store$: Store,
-  ) {
+  constructor() {
+      const groupDetailsService = inject(GroupService);
+
       this.groups$ = groupDetailsService.getGroups$();
   }
 

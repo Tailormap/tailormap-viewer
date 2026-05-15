@@ -1,1 +1,32 @@
 <ng-container i18n="@@admin-core.common.welcome-to-tailormap">Welcome to Tailormap Admin</ng-container>
+
+@if (expiringOidcConfigs().length > 0) {
+  <div class="expiring-configs-container">
+    <h3 style="margin-top: 0;" i18n="@@admin-core.oidc.client-secret-expiration-warnings">OIDC client secret expiration warnings</h3>
+    @for (config of expiringOidcConfigs(); track config.configuration.id) {
+
+      <div class="config-item" [ngClass]="config.clientSecretExpirationCategory"
+           [routerLink]="['/admin/settings/oidc-configurations/oidc-configuration', config.configuration.id]">
+        <div  class="config-name"
+             [routerLink]="['/admin/settings/oidc-configurations/oidc-configuration', config.configuration.id]">
+        {{ config.configuration.name }}
+        </div>
+        <div [ngClass]="{
+               'expired-text': config.clientSecretExpirationCategory === 'expired',
+               'warning-text': config.clientSecretExpirationCategory === 'warning'
+             }">
+          @if (config.clientSecretExpired) {
+            <span
+              i18n="@@admin-core.oidc.client-secret-expired">🔴 Expired on {{ config.configuration.clientSecretExpiry | date: 'shortDate':'':locale }}</span>
+          } @else {
+            <span i18n="@@admin-core.oidc.client-secret-expires-in">⚠️ Expires in {{ config.clientSecretExpirationDays }}
+              days on {{ config.configuration.clientSecretExpiry | date: 'shortDate':'':locale }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}
+
+
+

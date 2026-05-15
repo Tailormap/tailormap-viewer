@@ -7,7 +7,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
-import { addFilterGroup, updateFilterGroup } from '../../../filter/state/filter.actions';
+import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -76,6 +76,7 @@ export class SpatialFilterCrudService {
             ...f,
             geometries,
             baseLayerId: layer,
+            exceededMaxFeatures: undefined,
           };
         }),
       }),
@@ -176,7 +177,7 @@ export class SpatialFilterCrudService {
     }
     return this.store$.select(selectViewerId).pipe(
       concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId as string, layer))),
+        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId, layer))),
       ),
       take(1),
     );
@@ -188,7 +189,7 @@ export class SpatialFilterCrudService {
     referenceLayer?: string,
   ): FilterGroupModel<SpatialFilterModel> {
     const spatialFilter: SpatialFilterModel = {
-      id: nanoid(),
+      id: nanoid(6),
       type: FilterTypeEnum.SPATIAL,
       geometries,
       baseLayerId: referenceLayer,
@@ -199,7 +200,7 @@ export class SpatialFilterCrudService {
       })),
     };
     return {
-      id: nanoid(),
+      id: nanoid(6),
       type: FilterTypeEnum.SPATIAL,
       layerIds: layers.map(layer => layer.id),
       operator: 'AND',

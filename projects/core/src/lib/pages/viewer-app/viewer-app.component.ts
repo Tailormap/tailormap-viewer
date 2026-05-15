@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DOCUMENT, inject, OnDestroy, OnInit } from '@angular/core';
 import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,8 +6,8 @@ import { loadViewer } from '../../state/core.actions';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
-import { DOCUMENT } from '@angular/common';
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
+import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -17,6 +17,14 @@ import { ApplicationBookmarkService } from '../../services/application-bookmark/
   standalone: false,
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private applicationBookmarkService = inject(ApplicationBookmarkService);
+  private appStyleService = inject(ApplicationStyleService);
+  private document = inject<Document>(DOCUMENT);
+  private mobileLayoutService = inject(MobileLayoutService);
+
 
   private static DEFAULT_TITLE = 'Tailormap';
   private destroyed = new Subject();
@@ -25,15 +33,8 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   public isLoaded = false;
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public isEmbedded$: Observable<boolean> = of(false);
+  public isMobileLayoutEnabled$ = this.mobileLayoutService.isMobileLayoutEnabled$;
 
-  constructor(
-    private store$: Store,
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
-    private applicationBookmarkService: ApplicationBookmarkService,
-    private appStyleService: ApplicationStyleService,
-    @Inject(DOCUMENT) private document: Document,
-  ) { }
 
   public ngOnInit(): void {
     this.route.url
@@ -77,6 +78,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
           this.document.title = ViewerAppComponent.DEFAULT_TITLE;
         },
       });
+
   }
 
   public ngOnDestroy() {

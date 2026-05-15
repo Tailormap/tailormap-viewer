@@ -3,7 +3,9 @@ export interface OIDCConfigurationModel {
   name: string;
   clientId: string;
   clientSecret?: string;
+  clientSecretExpiry: string | null;
   issuerUrl: string;
   userNameAttribute: string;
   status?: string;
+  image?: string | null;
 }

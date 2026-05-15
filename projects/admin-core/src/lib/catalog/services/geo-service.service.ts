@@ -1,10 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ApiResponseHelper,
-  ApplicationModel,
-  CatalogItemKindEnum, CatalogModelHelper,
-  GeoServiceModel,
+  ApiResponseHelper, ApplicationModel, CatalogItemKindEnum, CatalogModelHelper, GeoServiceModel, GeoServiceProtocolEnum,
   GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
@@ -12,9 +9,7 @@ import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, upda
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 import {
-  selectCatalogLoadStatus,
-  selectDraftGeoService, selectDraftGeoServiceLoadStatus,
-  selectGeoServiceById, selectGeoServicesAndLayers,
+  selectCatalogLoadStatus, selectDraftGeoService, selectDraftGeoServiceLoadStatus, selectGeoServiceById, selectGeoServicesAndLayers,
 } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
@@ -34,15 +29,13 @@ export interface DeleteGeoServiceResponse {
   providedIn: 'root',
 })
 export class GeoServiceService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private catalogService = inject(CatalogService);
+  private applicationService = inject(ApplicationService);
+  private sseService = inject(AdminSseService);
 
-  constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private catalogService: CatalogService,
-    private applicationService: ApplicationService,
-    private sseService: AdminSseService,
-  ) { }
 
   public listenForGeoServiceChanges() {
     this.sseService.listenForEvents$<GeoServiceWithLayersModel>('GeoService')
@@ -75,13 +68,22 @@ export class GeoServiceService {
   }
 
   public createGeoService$(geoService: GeoServiceCreateModel, catalogNodeId: string) {
+    let defaultLayerSettings = {};
+    if (geoService.protocol === GeoServiceProtocolEnum.WMS) {
+      defaultLayerSettings = {
+        hiDpiDisabled: true,
+        tilingDisabled: true,
+      };
+    } else if (geoService.protocol === GeoServiceProtocolEnum.WMTS) {
+      defaultLayerSettings = {
+        hiDpiDisabled: true,
+      };
+    }
     const geoServiceModel: Omit<GeoServiceModel, 'id' | 'type'> = {
       ...geoService,
       settings: {
         ...geoService.settings,
-        defaultLayerSettings: {
-          hiDpiDisabled: true,
-        },
+        defaultLayerSettings,
       },
     };
     return this.adminApiService.createGeoService$({ geoService: geoServiceModel, refreshCapabilities: true }).pipe(

@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFullLayerDetails } from '../state/map.selectors';
 import { filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
-import { AppLayerModel, LayerDetailsModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, LayerDetailsModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../state/core.selectors';
 import { addLayerDetails } from '../state/map.actions';
 
@@ -10,11 +10,9 @@ import { addLayerDetails } from '../state/map.actions';
   providedIn: 'root',
 })
 export class ApplicationLayerService {
+  private store$ = inject(Store);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
-  constructor(
-    private store$: Store,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {}
 
   public getLayerDetails$(layerId: string): Observable<{ layer: AppLayerModel; details: LayerDetailsModel }> {
     return this.store$.select(selectFullLayerDetails(layerId))

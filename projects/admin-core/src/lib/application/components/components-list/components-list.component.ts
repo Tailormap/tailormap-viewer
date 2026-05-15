@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { ConfigurationComponentRegistryService } from '../../services/configuration-component-registry.service';
-import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectDisabledComponentsForSelectedApplication } from '../../state/application.selectors';
+import { selectDisabledComponentsForSelectedApplication, selectDraftApplication3dEnabled } from '../../state/application.selectors';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-components-list',
@@ -12,6 +13,15 @@ import { selectDisabledComponentsForSelectedApplication } from '../../state/appl
   standalone: false,
 })
 export class ComponentsListComponent implements OnInit, OnDestroy {
+  private configurationComponentRegistryService = inject(ConfigurationComponentRegistryService);
+  private store$ = inject(Store);
+  private cdr = inject(ChangeDetectorRef);
+
+
+  private static readonly COMPONENTS_ONLY_USED_IN_3D: string[] = [
+    BaseComponentTypeEnum.TERRAIN_LAYER_TOGGLE,
+    BaseComponentTypeEnum.TERRAIN_OPACITY,
+  ];
 
   public listOfComponents$: Observable<Array<{ type: string; label: string }>>;
 
@@ -22,17 +32,18 @@ export class ComponentsListComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public disabledComponents: Set<string> = new Set();
 
-  constructor(
-    private configurationComponentRegistryService: ConfigurationComponentRegistryService,
-    private store$: Store,
-    private cdr: ChangeDetectorRef,
-  ) {
-    this.listOfComponents$ = this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()
+  constructor() {
+    this.listOfComponents$ = combineLatest([
+      this.configurationComponentRegistryService.getRegisteredConfigurationComponents$(),
+      this.store$.select(selectDraftApplication3dEnabled),
+    ])
       .pipe(
-        map((components) => {
+        map(([ components, is3dEnabled ]) => {
           const componentsList: Array<{ type: string; label: string }> = [];
           components.forEach((value, key) => {
-            componentsList.push({ type: key, label: value.label });
+            if (is3dEnabled || !ComponentsListComponent.COMPONENTS_ONLY_USED_IN_3D.includes(key)) {
+              componentsList.push({ type: key, label: value.label });
+            }
           });
           return componentsList.sort((a, b) => a.label.localeCompare(b.label));
         }),

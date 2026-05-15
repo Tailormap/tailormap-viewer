@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 import { ImageHelper } from '../helpers/image.helper';
 import { UploadHelper } from '../helpers/upload.helper';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UploadCategoryEnum } from '../models';
 
 export interface ImageUploadResult {
@@ -16,11 +16,8 @@ export interface ImageUploadResult {
   providedIn: 'root',
 })
 export class TailormapAdminUploadService {
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
-  constructor(
-    private adminApiService: TailormapAdminApiV1Service,
-  ) {
-  }
 
   public uploadImage$(file: File): Observable<ImageUploadResult | null> {
     return ImageHelper.readFileAsImage$(file, 2, 600)

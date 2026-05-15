@@ -2,15 +2,11 @@
   flex: 1;
 }
 
-.mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-  line-height: 18px;
-}
-
 .tree-node {
   padding: 5px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .tree-node__label {
@@ -33,17 +29,29 @@
   opacity: 0.7;
 }
 
-.tree-node__label .mat-icon {
-  margin-right: 5px;
-  vertical-align: top;
+.not-visible-on-map {
+  color: var(--disabled-text-color);
+}
+
+.not-visible-in-3d {
+  text-decoration: line-through;
 }
 
 .icon {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
 }
 
-.not-visible-on-map {
-  color: var(--disabled-text-color);
+.not-visible-on-map .icon {
+  color: var(--text-color);
+}
+
+.style-radio-button {
+  font-style: italic;
+  margin-left: -8px;
+}
+
+.tree-node__info {
+  flex-basis: 100%;
 }

@@ -1,57 +1,69 @@
-<tm-dialog [open]="dialogOpen$ | async"
-           [openFromRight]="true"
-           [widthMargin]="panelWidthMargin"
-           [width]="expandedList() ? panelWidth : panelWidthCollapsed"
-           class="feature-info-dialog"
-           (closeDialog)="closeDialog()"
-           [allowCollapse]="true"
-           [collapsed]="dialogCollapsed$ | async"
-           (expandCollapseDialog)="expandCollapseDialog()"
-           dialogTitle="Object Information"
-           i18n-dialogTitle="@@core.feature-info.object-information">
-  @if (expandedList()) {
-    <div class="layer-list-wrapper">
-      <div class="toggle"><button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_right"></mat-icon></button></div>
-      <div class="layer-list">
-        <tm-feature-info-layer-list></tm-feature-info-layer-list>
-      </div>
-    </div>
-  }
-  <div class="feature-list">
-    @if (selectedSingleLayer$ | async; as layer) {
-      <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
-    } @else if(!expandedList()) {
+@if ((isMobileLayoutEnabled$ | async) === true) {
+  @if (dialogOpen$ | async) {
+    <div class="mobile-feature-info-dialog">
       <div class="layer-list-dropdown-wrapper">
-        @if (isWideScreen()) {
-          <button mat-icon-button (click)="toggleListExpanded()"><mat-icon svgIcon="chevron_left"></mat-icon></button>
-        }
         <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
       </div>
+      <tm-feature-info-content class="feature-info-content--mobile"
+                               [selectedLayer]="selectedLayer$ | async"
+                               [currentFeature]="currentFeature()"
+                               [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
+                               [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
+                               [isEditPossible]="isEditPossible() ?? false"
+                               (showNextFeatureInfoFeature)="next()"
+                               (showPreviousFeatureInfoFeature)="back()"
+                               (editFeature)="editFeature()">
+      </tm-feature-info-content>
+    </div>
+  }
+} @else {
+  <tm-dialog [open]="dialogOpen$ | async"
+             [openFromRight]="true"
+             [widthMargin]="panelWidthMargin"
+             [width]="expandedList() ? panelWidth : panelWidthCollapsed"
+             class="feature-info-dialog"
+             (closeDialog)="closeDialog()"
+             [allowCollapse]="true"
+             [collapsed]="dialogCollapsed$ | async"
+             (expandCollapseDialog)="expandCollapseDialog()"
+             dialogTitle="Object Information"
+             i18n-dialogTitle="@@core.feature-info.object-information">
+    @if (expandedList()) {
+      <div class="layer-list-wrapper">
+        <div class="toggle">
+          <button mat-icon-button tmTooltip="Collapse layer list" i18n-tmTooltip="@@core.feature-info.collapse-layer-list" (click)="toggleListExpanded()">
+            <mat-icon svgIcon="chevron_right"></mat-icon>
+          </button>
+        </div>
+        <div class="layer-list">
+          <tm-feature-info-layer-list></tm-feature-info-layer-list>
+        </div>
+      </div>
     }
-    @if(selectedLayer$ | async; as layer) {
-      @if (layer.error) {
-        <tm-error-message [friendlyError]="true" [message]="layer.error"></tm-error-message>
-      }
-      @if(currentFeature$ | async; as feature) {
-        <div class="feature-info" [class.attributes-collapsed]="attributesCollapsed() && !!layer.template">
-          @if (layer.template) {
-            <div class="row template-row">
-              <tm-feature-info-template-renderer [template]="layer.template" [feature]="feature"></tm-feature-info-template-renderer>
-            </div>
-            <div class="toggle attributes-toggle" (click)="toggleAttributes()"><mat-icon [svgIcon]="toggleIcon()"></mat-icon></div>
+    <div class="feature-list">
+      @if (selectedSingleLayer$ | async; as layer) {
+        <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+      } @else if(!expandedList()) {
+        <div class="layer-list-dropdown-wrapper">
+          @if (isWideScreen()) {
+            <button mat-icon-button tmTooltip="Expand layer list" i18n-tmTooltip="@@core.feature-info.expand-layer-list" (click)="toggleListExpanded()">
+              <mat-icon svgIcon="chevron_left"></mat-icon>
+            </button>
           }
-          <div class="content attributes-list">
-            <div *ngFor="let att of feature.sortedAttributes" class="row">
-              <strong>{{att.label}}</strong>
-              <div [innerHTML]="att.attributeValue | htmlify"></div>
-            </div>
-          </div>
-          <div class="buttons">
-            <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled$ | async">Back</button>
-            <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled$ | async">Next</button>
-          </div>
+          <tm-feature-info-layer-dropdown></tm-feature-info-layer-dropdown>
         </div>
       }
-    }
-  </div>
-</tm-dialog>
+      <tm-feature-info-content
+        [selectedLayer]="selectedLayer$ | async"
+        [currentFeature]="currentFeature()"
+        [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
+        [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
+        [isEditPossible]="isEditPossible() ?? false"
+        (showNextFeatureInfoFeature)="next()"
+        (showPreviousFeatureInfoFeature)="back()"
+        (editFeature)="editFeature()">
+      </tm-feature-info-content>
+    </div>
+  </tm-dialog>
+}
+

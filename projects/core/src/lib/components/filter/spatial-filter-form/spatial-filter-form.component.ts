@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId, selectSelectedLayersCount,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectReferenceLayerLabel, selectSelectedFilterGroupError,
+  selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { closeForm } from '../state/filter-component.actions';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
@@ -15,7 +17,6 @@ import { SpatialFilterReferenceLayerService } from '../../../filter/services/spa
 import { filter } from 'rxjs/operators';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { FilterFeaturesService } from '../services/filter-features.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -25,6 +26,11 @@ import { FilterFeaturesService } from '../services/filter-features.service';
   standalone: false,
 })
 export class SpatialFilterFormComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private removeFilterService = inject(RemoveFilterService);
+  private spatialFilterReferenceLayerService = inject(SpatialFilterReferenceLayerService);
+
 
   private DEFAULT_STYLE = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style', {
     pointType: undefined,
@@ -39,23 +45,25 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public drawingLayerId = 'filter-drawing-layer';
   public availableLayers$: Observable<ExtendedAppLayerModel[]> = of([]);
 
-  private selectedFeatureId = new BehaviorSubject<string | null>(null);
-
   public currentGroup$: Observable<string | undefined> = of(undefined);
   public selectedLayersCount$: Observable<number> = of(0);
   public hasSelectedLayersAndGeometry$: Observable<boolean> = of(false);
   public isLoadingReferenceGeometry$: Observable<boolean> = of(false);
   public currentGroupError$: Observable<string | undefined> = of(undefined);
+  public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
+  public exceededMaxErrorMessage$ = this.currentGroupExceededMaxFeatures$.pipe(
+    filter(hasExceeded => !!hasExceeded),
+    switchMap(() => this.store$.select(selectReferenceLayerLabel)),
+    map((referenceLayerTitle) =>  {
+      if (!referenceLayerTitle) {
+        return '';
+      }
+      const maxFeatures = SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES;
+      // eslint-disable-next-line max-len
+      return $localize `:@@core.filter.max-features-exceeded-warning:There are more than ${maxFeatures} objects available in the ${referenceLayerTitle} layer. The maximum is ${maxFeatures}. Apply filters to narrow down the selection.`;
+    }),
+  );
   public in3dView$: Observable<boolean> = of(false);
-
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private removeFilterService: RemoveFilterService,
-    private spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService,
-    private filterFeaturesService: FilterFeaturesService,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.availableLayers$ = this.store$.select(selectFilterableLayers);
@@ -73,8 +81,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
     this.mapService.renderFeatures$<FeatureModelAttributes>(
       this.drawingLayerId,
       combineLatest([
-        this.selectedFeatureId.asObservable(),
-        this.filterFeaturesService.getFilterFeatures$(),
+        this.store$.select(selectSelectedSpatialFilterFeatureId),
+        this.store$.select(selectFilterFeatures),
       ]).pipe(map(([ selectedFeatureId, features ] ) => {
         if (selectedFeatureId) {
           return features.filter(feature => feature.__fid !== selectedFeatureId);
@@ -110,7 +118,4 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onFeatureSelected(id: string | null) {
-    this.selectedFeatureId.next(id);
-  }
 }

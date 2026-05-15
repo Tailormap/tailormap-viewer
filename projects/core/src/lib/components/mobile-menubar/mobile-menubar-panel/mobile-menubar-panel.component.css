@@ -1,0 +1,10 @@
+.mobile-menubar-panel {
+  position: absolute;
+  bottom: var(--mobile-menubar-height);
+  left: 0;
+  right: 0;
+}
+
+tm-bottom-panel ::ng-deep .panel-content > :has(*) {
+  height: 100%;
+}

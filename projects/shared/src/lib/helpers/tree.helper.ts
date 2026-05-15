@@ -21,4 +21,23 @@ export class TreeHelper {
     return nodes.find(l => l.id === id);
   }
 
+  public static findNodeInTree<N>(
+    nodes: N[],
+    matchesNode: (node: N) => boolean,
+    getChildren: (node: N) => N[],
+  ): N | null {
+    const stack = [...nodes];
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      if (matchesNode(node)) {
+        return node;
+      }
+      const children = getChildren(node);
+      if (children?.length) {
+        stack.push(...children);
+      }
+    }
+    return null;
+  }
+
 }

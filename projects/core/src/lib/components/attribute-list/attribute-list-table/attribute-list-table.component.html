@@ -1,44 +1,133 @@
+@let expandedRowsIds = expandedRows();
+
+<mat-menu #statsMenu="matMenu">
+  <ng-template matMenuContent let-column="column">
+    @for (option of statisticTypes; track $index) {
+      @if (isStatisticsTypeAvailable(option.type, column)) {
+        <button mat-menu-item (click)="loadStatistic(option.type, column)">
+          @if (isStatisticsTypeSelected(option.type, column)) {
+            <mat-icon svgIcon="check"></mat-icon>
+          }
+          {{option.label}}
+        </button>
+      }
+    }
+  </ng-template>
+</mat-menu>
+
 <mat-table [dataSource]="rows"
-           [trackBy]="trackByRowId"
-           multiTemplateDataRows>
+  [trackBy]="trackByRowId"
+  multiTemplateDataRows
+  aria-label="Attribute list"
+  i18n-aria-label="@@core.attribute-list.attribute-list"
+  [attr.aria-colcount]="columns()?.length"
+  [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount">
+
+  <ng-container [matColumnDef]="EXPAND_DETAILS_COLUMN_NAME">
+    <mat-header-cell class="column_small" *matHeaderCellDef></mat-header-cell>
+    <mat-cell class="column_small" *matCellDef="let row;">
+      <mat-icon class="row-expand-icon"
+                [svgIcon]="expandedRowsIds.has(row.id) ? 'expand_close' : 'expand_open'"
+                (click)="onRowExpandClick($event, row);"></mat-icon>
+    </mat-cell>
+    @if (showStatistics()) {
+      <mat-footer-cell class="column_small" *matFooterCellDef>
+        <button mat-icon-button
+                type="button"
+                aria-label="Show statistics help"
+                (click)="showStatisticsHelp.emit()">
+          <mat-icon svgIcon="functions"></mat-icon>
+        </button>
+      </mat-footer-cell>
+    }
+  </ng-container>
 
   <!-- Columns with data -->
-  <ng-container *ngFor="let col of columns; trackBy: trackByColumnId" matColumnDef="{{col.label || col.id}}">
-    <!-- Header -->
-    <mat-header-cell *matHeaderCellDef
-                     class="header-cell--with-resizer header-cell--with-sort"
-                     [class.header-cell--with-filter]="setFilter"
-                     (click)="onSortClick(col.id)"
-                     [style.flexBasis]="getColumnWidth(col)">
-      <span [title]="col.label">{{col.label}}</span>
-      <mat-icon *ngIf="setFilter"
-                svgIcon="filter_outline"
-                class="filter"
-                [class.filter-active]="hasFilter(col.id)"
-                [class.filter-disabled]="hasDisabledFilter(col.id)"
-                (click)="onFilterClick($event, col)"></mat-icon>
-      <mat-icon class="sort"
-                [class.sort-active]="sort?.column === col.id"
-                [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
-      <tm-panel-resize class="resizer"
-                       (mousedown)="stopEvent($event)"
-                       (positionChanged)="columnWidthChanged($event, col)"
-                       orientation="vertical"></tm-panel-resize>
-    </mat-header-cell>
+  @for (col of columns(); track trackByColumnId($index, col)) {
+    <ng-container matColumnDef="{{col.label || col.id}}">
+      <!-- Header -->
+      <mat-header-cell *matHeaderCellDef
+        class="header-cell--with-resizer header-cell--with-sort"
+        [class.header-cell--with-filter]="setFilter"
+        (click)="onSortClick(col.id)"
+        [style.flexBasis]="getColumnWidth(col)"
+        [attr.aria-sort]="getAriaSortValue(col.id)"
+        [attr.aria-colindex]="$index + 1">
+        <span [title]="col.label">{{col.label}}</span>
+        @if (setFilter) {
+          <mat-icon
+            [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
+            class="filter"
+            [class.filter-active]="hasFilter(col.id)"
+            [class.filter-disabled]="hasDisabledFilter(col.id)"
+          (click)="onFilterClick($event, col)"></mat-icon>
+        }
+        <mat-icon class="sort"
+          [class.sort-active]="sort?.column === col.id"
+        [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
+        <tm-panel-resize class="resizer"
+          (mousedown)="stopEvent($event)"
+          (positionChanged)="columnWidthChanged($event, col)"
+        orientation="vertical"></tm-panel-resize>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let currRow"
+                [style.flexBasis]="getColumnWidth(col)"
+                [attr.aria-colindex]="$index + 1"
+                [attr.aria-rowindex]="rowIndexMap().get(currRow.id)">
+        <div class="cell-content"
+        [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
+      </mat-cell>
+      @if (showStatistics()) {
+        <mat-footer-cell *matFooterCellDef class="statistics-footer-cell"
+                         [matMenuTriggerFor]="statsMenu"
+                         [matMenuTriggerData]="{column: col}"
+                         [style.flexBasis]="getColumnWidth(col)">
+          @let statisticProcessing = isStatisticsProcessing(col.id);
+          @let statisticResult = getStatisticResult(col);
+          @if (statisticProcessing) {
+            <div><mat-spinner diameter="20"></mat-spinner></div>
+          }
+          @if (!statisticProcessing && !statisticResult) {
+            <div class="statistics-placeholder"><mat-icon svgIcon="functions"></mat-icon></div>
+          }
+          @if (!statisticProcessing && statisticResult) {
+            <div [class.error]="statisticResult.hasError"
+                 [tmTooltip]="statisticResult.label">{{statisticResult.label}}</div>
+          }
+        </mat-footer-cell>
+      }
+    </ng-container>
+  }
 
-    <mat-cell *matCellDef="let currRow" [style.flexBasis]="getColumnWidth(col)">
-      <div class="cell-content"
-           [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
+  @let colNames = columnNames();
+
+  <ng-container [matColumnDef]="EXPAND_DETAILS_ROW_NAME">
+    <mat-cell *matCellDef="let currRow" [attr.colspan]="colNames.length">
+      @if (expandedRowsIds.has(currRow.id) && featureDetails()?.has(currRow.__fid)) {
+        <tm-attribute-list-feature-details [featureDetails]="featureDetails()?.get(currRow.__fid)!"></tm-attribute-list-feature-details>
+      }
+      @if (expandedRowsIds.has(currRow.id) && loadingFeatureDetailsIds()?.has(currRow.id)) {
+        <div class="loading-details-spinner">
+          <mat-spinner diameter="18"></mat-spinner>
+        </div>
+      }
     </mat-cell>
-
   </ng-container>
 
   <!-- Columns with related details data -->
-  <mat-header-row *matHeaderRowDef="columnNames; sticky: true;"></mat-header-row>
+  <mat-header-row *matHeaderRowDef="colNames; sticky: true;"></mat-header-row>
 
-  <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: columnNames;"
-           (click)="onRowClick($event, row);"
-           [class.even_row]="dataIndex % 2 === 1"
-           [class.selected_row]="isSelected(row)"></mat-row>
+  <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: colNames;"
+    (click)="onRowClick($event, row);"
+    [class.even_row]="dataIndex % 2 === 1"
+    [class.selected_row]="isSelected(row)"
+    [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>
+
+  <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"
+           [ngClass]="expandedRowsIds.has(row.id) ? 'expanded' : 'collapsed'"></mat-row>
+
+  @if (showStatistics()) {
+    <mat-footer-row *matFooterRowDef="colNames; sticky: true;"></mat-footer-row>
+  }
 
 </mat-table>

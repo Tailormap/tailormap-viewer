@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { catchError, combineLatest, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { SearchResultModel, NominatimResponseModel, LocationServerResponseModel, SearchResultItemModel } from './models';
-import { SearchResponseModel, SimpleSearchConfigModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { SearchResponseModel, SimpleSearchConfigModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { selectViewerId } from '../../../state/core.selectors';
 import { take } from 'rxjs/operators';
@@ -14,15 +14,13 @@ import { selectSearchableLayers } from '../../../map/state/map.selectors';
   providedIn: 'root',
 })
 export class SimpleSearchService {
+  private httpClient = inject(HttpClient);
+  private store$ = inject(Store);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
+
 
   private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
   private static readonly MAX_RESULTS = 5;
-
-  constructor(
-    private httpClient: HttpClient,
-    private store$: Store,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {}
 
   public search$(projection: string, searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel[]> {
     return combineLatest([

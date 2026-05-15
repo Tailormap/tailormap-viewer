@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
@@ -15,6 +15,12 @@ import { UserAddUpdateModel } from '../models/user-add-update.model';
   standalone: false,
 })
 export class UserEditComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private userService = inject(UserService);
+  private confirmDelete = inject(ConfirmDialogService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
@@ -22,14 +28,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   public user$: Observable<UserModel | null> = of(null);
   public updatedUser: UserAddUpdateModel | null = null;
-
-  constructor(
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private confirmDelete: ConfirmDialogService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnInit(): void {
     this.user$ = this.route.paramMap

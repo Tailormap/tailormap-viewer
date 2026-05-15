@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Observable, of, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -23,6 +23,11 @@ export interface GeoServiceLayerFormDialogData {
   standalone: false,
 })
 export class GeoServiceLayerFormDialogComponent {
+  public data = inject<GeoServiceLayerFormDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<GeoServiceLayerFormDialogComponent, GeoServiceWithLayersModel | null>>(MatDialogRef);
+  private store$ = inject(Store);
+  private geoServiceService = inject(GeoServiceService);
+
 
   public geoServiceLayerSettings$: Observable<GeoServiceLayerSettingsModel | null> = of(null);
 
@@ -33,13 +38,8 @@ export class GeoServiceLayerFormDialogComponent {
   public geoService: GeoServiceCreateModel | null = null;
   public updatedLayerSettings: LayerSettingsModel | null = null;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: GeoServiceLayerFormDialogData,
-    private dialogRef: MatDialogRef<GeoServiceLayerFormDialogComponent, GeoServiceWithLayersModel | null>,
-    private store$: Store,
-    private geoServiceService: GeoServiceService,
-  ) {
-    this.geoServiceLayerSettings$ = this.store$.select(selectGeoServiceLayerSettingsByLayerId(data.geoServiceLayer.id));
+  constructor() {
+    this.geoServiceLayerSettings$ = this.store$.select(selectGeoServiceLayerSettingsByLayerId(this.data.geoServiceLayer.id));
   }
 
   public static open(

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
 } from 'rxjs';
@@ -22,6 +22,14 @@ import { selectFeatureSourceById } from '../state/catalog.selectors';
   standalone: false,
 })
 export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private store$ = inject(Store);
+  private featureSourceService = inject(FeatureSourceService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private confirmDialog = inject(ConfirmDialogService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+
 
   public featureSource$: Observable<FeatureSourceModel | null> = of(null);
   private destroyed = new Subject();
@@ -32,16 +40,6 @@ export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
 
   private refreshingSubject = new BehaviorSubject(false);
   public refreshing$ = this.refreshingSubject.asObservable();
-
-  constructor(
-    private route: ActivatedRoute,
-    private store$: Store,
-    private featureSourceService: FeatureSourceService,
-    private adminSnackbarService: AdminSnackbarService,
-    private confirmDialog: ConfirmDialogService,
-    private dialog: MatDialog,
-    private router: Router,
-  ) { }
 
   public ngOnInit(): void {
     this.featureSource$ = this.route.paramMap.pipe(

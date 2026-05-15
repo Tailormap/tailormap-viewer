@@ -1,15 +1,28 @@
 import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node.component';
 import { render, screen } from '@testing-library/angular';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { TooltipDirective, TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
+  const mockTreeService = {
+    getNode: jest.fn().mockReturnValue({}),
+    descendantsPartiallySelected: jest.fn().mockReturnValue(false),
+    descendantsAllSelected: jest.fn().mockReturnValue(false),
+  };
   await render(ApplicationLayerTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule ],
+    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule, MatFormFieldModule, MatSelectModule, MatTooltipModule ],
     inputs: { node },
+    providers: [
+      { provide: TreeService, useValue: mockTreeService },
+    ],
+    declarations: [TooltipDirective],
   });
 };
 

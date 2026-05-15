@@ -1,5 +1,5 @@
 import { ServiceLayerModel } from './service-layer.model';
-import { ServerType } from '@tailormap-viewer/api';
+import { ServerType, WmsStyleModel } from '@tailormap-viewer/api';
 
 export interface WMSLayerModel extends ServiceLayerModel {
   layers: string;
@@ -8,4 +8,6 @@ export interface WMSLayerModel extends ServiceLayerModel {
   tilingDisabled?: boolean;
   tilingGutter?: number;
   language?: string;
+  styles?: WmsStyleModel[] | null;
+  selectedStyleName?: string | null;
 }

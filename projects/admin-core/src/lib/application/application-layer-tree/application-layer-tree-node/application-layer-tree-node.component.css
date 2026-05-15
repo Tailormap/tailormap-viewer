@@ -62,9 +62,9 @@
 }
 
 .tree-node__actions .mdc-icon-button mat-icon {
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-icon-size);
-  height: var(--mdc-icon-button-icon-size);
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-icon-size);
+  height: var(--mat-icon-button-icon-size);
   overflow: visible;
   vertical-align: top;
 }
@@ -77,4 +77,32 @@
   position: absolute;
   margin-top: -26px;
   z-index: 1;
+}
+
+.expand-on-startup {
+  padding-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.expand-on-startup span {
+  padding-left: 2px;
+  font-size: 16px;
+}
+
+.tree-node__label-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tree-node__startup-state-icon {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.tree-node__startup-state-icon .mat-icon {
+  width: 20px;
+  height: 20px;
 }

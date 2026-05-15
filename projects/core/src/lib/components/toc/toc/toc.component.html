@@ -4,45 +4,82 @@
     [scale]="scale"
     [in3D]="in3D()"
     [layersWithoutWebMercator]="layersWithoutWebMercator()"
-    [tiles3DLayerIds]="tiles3DLayerIds()"></tm-toc-node-layer>
+    [tiles3DLayerIds]="tiles3DLayerIds()"
+    [filteredLayerIdsWithSource]="filteredLayerIds()"
+    [editableLayerIds]="getCurrentlyEditableLayerIds()"
+    [showInfoIcon]="mobileToc()"
+    (zoomToScale)="zoomToScale($event)"
+    (editLayer)="editLayer($event)"
+    (changeStyle)="changeStyle($event)"
+    (showInfo)="setShowMobileInfo($event)"
+  ></tm-toc-node-layer>
 </ng-template>
 
-<div class="toc" *ngIf="visible$ | async">
-  <div class="toc-header">
-    <div class="toc-header-left">
-      <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
-      <button mat-icon-button
-              color="primary"
-              i18n-tmTooltip="@@core.toc.filter-layers"
-              class="map-control-button"
-              tmTooltip="Filter layers"
-              (click)="toggleLayerFilter()">
-        <mat-icon svgIcon="search"></mat-icon>
-      </button>
-    </div>
+<ng-template #nodeInfoMobile let-node>
+  <tm-toc-node-details-mobile [treeNode]="node"></tm-toc-node-details-mobile>
+</ng-template>
 
-    <div class="toc-header-right">
-      <button *ngIf="isMobileDevice"
-              mat-icon-button
-              tmTooltip="Re-order layers"
-              i18n-tmTooltip="@@core.toc.reorder-layers"
-              color="primary"
-              [class.button--active]="dragDropEnabled"
-              (click)="toggleReordering()">
-        <mat-icon svgIcon="reorder"></mat-icon>
-      </button>
+@if (visible$ | async) {
+  <div class="toc">
+    <div class="toc-header">
+      <div class="toc-header-left">
+        <tm-toggle-all-layers-button></tm-toggle-all-layers-button>
+        @if (hasExpandableNodes$ | async) {
+          <button mat-icon-button
+                  class="map-control-button"
+                  color="primary"
+                  [tmTooltip]="toggleExpandAllTooltip$ | async"
+                  (click)="toggleExpandAll()">
+            <mat-icon [svgIcon]="(allLevelNodesCollapsed$ | async) ? 'expand_all' : 'collapse_all'"></mat-icon>
+          </button>
+        }
+        <button mat-icon-button
+          color="primary"
+          i18n-tmTooltip="@@core.toc.filter-layers"
+          class="map-control-button"
+          tmTooltip="Filter layers"
+          (click)="toggleLayerFilter()">
+          <mat-icon svgIcon="search"></mat-icon>
+        </button>
+      </div>
+      <div class="toc-header-right">
+        @if (isMobileDevice) {
+          <button
+            mat-icon-button
+            tmTooltip="Re-order layers"
+            i18n-tmTooltip="@@core.toc.reorder-layers"
+            color="primary"
+            [class.button--active]="dragDropEnabled"
+            (click)="toggleReordering()">
+            <mat-icon svgIcon="reorder"></mat-icon>
+          </button>
+        }
+      </div>
+      <ng-template #menuBar></ng-template>
     </div>
-  </div>
-  <div *ngIf="filterEnabled$ | async" class="toc-search">
-    <tm-toc-filter-input></tm-toc-filter-input>
-  </div>
-  <tm-tree class="toc-tree"
-           [treeNodeTemplate]="treeNode"
-           [expandOnGroupClick]="true"
-           [getDropZones]="getDropZoneConfig()"></tm-tree>
-  @if (infoTreeNode$ | async; as infoTreeNode) {
-    @if (infoVisible()) {
-      <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
+    @if (filterEnabled$ | async) {
+      <div class="toc-search">
+        <tm-toc-filter-input></tm-toc-filter-input>
+      </div>
     }
-  }
-</div>
+
+    <ng-template #aboveTreeContainer></ng-template>
+
+    <tm-tree
+      class="toc-tree"
+      [treeNodeTemplate]="treeNode"
+      [expandOnGroupClick]="true"
+      [getDropZones]="getDropZoneConfig()"
+      [openInfoInTree]="mobileToc()"
+      [nodeInfoInTreeTemplate]="nodeInfoMobile"
+      [activeInTreeInfoNodes]="activeMobileInfoNodes()"></tm-tree>
+
+    <ng-template #belowTreeContainer></ng-template>
+
+    @if (infoTreeNode$ | async; as infoTreeNode) {
+      @if (infoVisible() && !mobileToc()) {
+        <tm-toc-node-details [node]="infoTreeNode" (closeDetails)="layerInfoClosed()"></tm-toc-node-details>
+      }
+    }
+  </div>
+}

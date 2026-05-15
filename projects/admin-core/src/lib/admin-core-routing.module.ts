@@ -43,11 +43,21 @@ import { LogsPageComponent } from './pages/logs-page/logs-page.component';
 import { TasksHomeComponent } from './tasks/tasks-home/tasks-home.component';
 import { TasksPageComponent } from './pages/tasks-page/tasks-page.component';
 import { TaskDetailsComponent } from './tasks/task-details/task-details.component';
+import { ApplicationEditFiltersHomeComponent,
+} from './application/application-edit-filters/filter-group-home/application-edit-filters-home.component';
+import {
+  ApplicationCreateFilterGroupComponent,
+} from './application/application-edit-filters/filter-group-create/application-create-filter-group.component';
+import {
+  ApplicationEditFilterComponent,
+} from './application/application-edit-filters/filter-group-edit/application-edit-filter.component';
+import { AdminAuthGuard } from './admin-auth.guard';
 
 export const adminRoutes: Routes = [
   {
     path: '',
     component: AdminTemplateComponent,
+    canActivate: [AdminAuthGuard],
     children: [
       {
         path: AdminRoutes.CATALOG,
@@ -127,6 +137,20 @@ export const adminRoutes: Routes = [
               {
                 path: AdminRoutes.APPLICATION_DETAILS_FILTERS,
                 component: ApplicationEditFiltersComponent,
+                children: [
+                  {
+                    path: '',
+                    component: ApplicationEditFiltersHomeComponent,
+                  },
+                  {
+                    path: AdminRoutes.APPLICATION_DETAILS_FILTERS_CREATE,
+                    component: ApplicationCreateFilterGroupComponent,
+                  },
+                  {
+                    path: AdminRoutes.APPLICATION_DETAILS_FILTERS_EDIT,
+                    component: ApplicationEditFilterComponent,
+                  },
+                ],
               },
             ],
           },
@@ -151,7 +175,8 @@ export const adminRoutes: Routes = [
         children: [{
           path: '',
           component: FormHomeComponent,
-        }, {
+        },
+        {
           path: AdminRoutes.FORMS_CREATE,
           component: FormCreateComponent,
         },
@@ -168,7 +193,8 @@ export const adminRoutes: Routes = [
         children: [{
           path: '',
           component: SearchIndexHomeComponent,
-        }, {
+        },
+        {
           path: AdminRoutes.SEARCH_INDEXES_CREATE,
           component: SearchIndexCreateComponent,
         },

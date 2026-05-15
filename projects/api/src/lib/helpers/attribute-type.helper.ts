@@ -13,8 +13,18 @@ export class AttributeTypeHelper {
     AttributeType.POINT,
   ]);
 
+  private static NUMERIC_TYPES: Set<AttributeType> = new Set([
+    AttributeType.NUMBER,
+    AttributeType.INTEGER,
+    AttributeType.DOUBLE,
+  ]);
+
   public static isGeometryType(type: AttributeType | undefined) {
     return type && AttributeTypeHelper.GEOMETRY_TYPES.has(type);
+  }
+
+  public static isNumericType(type: AttributeType | undefined) {
+    return type && AttributeTypeHelper.NUMERIC_TYPES.has(type);
   }
 
 }

@@ -1,5 +1,3 @@
-import { UrlHelper } from '../../helpers';
-
 export interface GeoServerLegendOptions {
   fontName?: string;
   fontStyle?: 'italic' | 'bold';
@@ -24,22 +22,12 @@ export interface GeoServerLegendOptions {
 }
 
 export class LegendHelper {
-
-  public static isGetLegendGraphicRequest(url: string): boolean {
-    try {
-      const request = UrlHelper.getParamCaseInsensitive(new URL(url), 'REQUEST');
-      return request?.toLowerCase() === 'getlegendgraphic';
-    } catch(e) {
-      return false;
-    }
-  }
-
   public static addGeoServerLegendOptions(url: string, legendOptions: GeoServerLegendOptions): string {
     try {
       const u = new URL(url);
       u.searchParams.set('LEGEND_OPTIONS', Object.entries(legendOptions).map(entry => entry.join(':')).join(';'));
       return u.toString();
-    } catch(e) {
+    } catch (e) {
       return url;
     }
   }

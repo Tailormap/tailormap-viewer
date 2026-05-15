@@ -1,11 +1,14 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, inject } from '@angular/core';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
-import { AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
+import {
+  AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
+} from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
+import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-feature-type-form',
@@ -15,6 +18,9 @@ import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.sel
   standalone: false,
 })
 export class FeatureTypeFormComponent {
+  private featureSourceService = inject(FeatureSourceService);
+  private store$ = inject(Store);
+
 
   @Input()
   public set featureType(featureType: FeatureTypeModel | null) {
@@ -46,11 +52,6 @@ export class FeatureTypeFormComponent {
 
   public featureSource$: Observable<ExtendedFeatureSourceModel | undefined> = of(undefined);
 
-  constructor(
-    private featureSourceService: FeatureSourceService,
-    private store$: Store,
-  ) { }
-
   public initFeatureTypeSettings(featureType: FeatureTypeModel | null) {
     if (featureType) {
       this.updatedFeatureTypeSubject.next(null);
@@ -74,7 +75,8 @@ export class FeatureTypeFormComponent {
       settings: {
         attributeSettings: currentUpdatedValue?.settings?.attributeSettings || featureType.settings.attributeSettings || {},
         hideAttributes: currentUpdatedValue?.settings?.hideAttributes || featureType.settings.hideAttributes || [],
-        readOnlyAttributes: currentUpdatedValue?.settings?.readOnlyAttributes || featureType.settings.readOnlyAttributes || [],
+        editableAttributes: currentUpdatedValue?.settings?.editableAttributes || featureType.settings.editableAttributes || [],
+        attachmentAttributes: currentUpdatedValue?.settings?.attachmentAttributes || featureType.settings.attachmentAttributes || [],
         attributeOrder: currentUpdatedValue?.settings?.attributeOrder || featureType.settings.attributeOrder || [],
         template: currentUpdatedValue?.settings?.template || featureType.settings.template || undefined,
       },
@@ -101,22 +103,22 @@ export class FeatureTypeFormComponent {
     this.updateAttributeChecked('hideAttributes', originalSettings, $event);
   }
 
-  public attributeReadonlyChanged(
+  public attributeEditableChanged(
     originalSettings: FeatureTypeSettingsModel,
     $event: Array<{ attribute: string; checked: boolean }>,
   ) {
-    this.updateAttributeChecked('readOnlyAttributes', originalSettings, $event);
+    this.updateAttributeChecked('editableAttributes', originalSettings, $event);
   }
 
   private updateAttributeChecked(
-    type: 'readOnlyAttributes' | 'hideAttributes',
+    type: 'editableAttributes' | 'hideAttributes',
     originalSettings: FeatureTypeSettingsModel,
     $event: Array<{ attribute: string; checked: boolean }>,
   ) {
     const settings = this.updatedFeatureTypeSubject.value?.settings || {};
     const attributes = new Set(settings[type] || originalSettings[type] || []);
     $event.forEach(change => {
-      if (change.checked) {
+      if ((type === 'hideAttributes' && change.checked) || (type === 'editableAttributes' && !change.checked)) {
         attributes.delete(change.attribute);
       } else {
         attributes.add(change.attribute);
@@ -142,6 +144,10 @@ export class FeatureTypeFormComponent {
       };
     });
     this.updateSettings('attributeSettings', attributeSettings);
+  }
+
+  public attachmentAttributesChanged(attachmentAttributes: AttachmentAttributeModel[]) {
+    this.updateSettings('attachmentAttributes', attachmentAttributes);
   }
 
   private updateSettings(type: keyof FeatureTypeSettingsModel, value: any) {

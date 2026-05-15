@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/admin-api';
 import { concatMap, debounceTime, distinctUntilChanged, filter, forkJoin, map, of, take } from 'rxjs';
@@ -18,6 +18,12 @@ import { AdminSseService } from '../../shared/services/admin-sse.service';
   standalone: false,
 })
 export class SearchIndexFormComponent implements OnInit {
+  private store$ = inject(Store);
+  private featureSourceService = inject(FeatureSourceService);
+  private destroyRef = inject(DestroyRef);
+  private sseService = inject(AdminSseService);
+  private cdr = inject(ChangeDetectorRef);
+
 
   private _searchIndex: SearchIndexModel | null = null;
 
@@ -41,15 +47,6 @@ export class SearchIndexFormComponent implements OnInit {
 
   @Output()
   public validFormChanged = new EventEmitter<boolean>();
-
-  constructor(
-    private store$: Store,
-    private featureSourceService: FeatureSourceService,
-    private destroyRef: DestroyRef,
-    private sseService: AdminSseService,
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
 
   public searchIndexForm = new FormGroup({
     name: new FormControl('', {

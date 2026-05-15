@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { nanoid } from 'nanoid';
 
@@ -17,6 +17,8 @@ import { nanoid } from 'nanoid';
   standalone: false,
 })
 export class PasswordFieldComponent implements ControlValueAccessor {
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input()
   public value: string | null = null;
@@ -34,10 +36,6 @@ export class PasswordFieldComponent implements ControlValueAccessor {
   public disabled = false;
   private onChange: any | null = null;
   private onTouched: any | null = null;
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public writeValue(obj: string | null): void {
     this.value = obj;

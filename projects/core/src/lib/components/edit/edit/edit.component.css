@@ -1,4 +1,6 @@
 .edit-container {
+  display: flex;
+  flex-direction: row;
   justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
@@ -8,8 +10,8 @@
 }
 
 .edit-container--is-active {
-  padding: 5px 6px 5px 0;
-  width: 300px;
+  padding: 5px 11px 5px 0;
+  width: 305px;
   height: 70px;
   max-width: var(--max-control-width);
 }
@@ -18,12 +20,18 @@
   border-radius: 3px;
 }
 
-.map-control-button--add-feature {
+.edit-wrapper {
+  flex: 1;
+}
+
+.edit-controls button {
   left: 3px;
 }
 
-.edit-wrapper {
-  flex: 1;
+.edit-controls {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .edit-container mat-form-field {
@@ -31,14 +39,18 @@
   padding-top: 6px;
 }
 
+.mat-mdc-menu-item.selected {
+  color: var(--primary-color);
+}
+
 @media screen and (max-width: 730px) {
-  .edit-container--is-active {
+  .edit-container--is-active:not(.edit-container--mobile) {
     padding: 0;
     width: var(--map-control-size);
     height: var(--map-control-size);
   }
 
-  .edit-wrapper {
+  .edit-container:not(.edit-container--mobile) .edit-wrapper {
     position: absolute;
     top: calc(var(--map-control-size) + 9px);
     left: 0;

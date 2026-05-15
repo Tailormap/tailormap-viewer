@@ -93,7 +93,10 @@ const addGeoServices = (
       const parentId = getParentNode(parentNodeList, CatalogItemKindEnum.GEO_SERVICE, service.id);
       const [ extService, serviceLayers ] = ExtendedCatalogModelHelper.getExtendedGeoService(service, parentId);
       services.push(extService);
-      layerModels.push(...serviceLayers);
+      layerModels.push(...serviceLayers.map(layer => ({
+        ...layer,
+        styles: layer.styles ?? null,
+      })));
     });
   return {
     geoServices: [ ...state.geoServices, ...services ],

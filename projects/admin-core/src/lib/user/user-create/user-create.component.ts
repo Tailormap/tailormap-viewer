@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
@@ -13,18 +13,16 @@ import { UserAddUpdateModel } from '../models/user-add-update.model';
   standalone: false,
 })
 export class UserCreateComponent implements OnDestroy {
+  private userDetailsService = inject(UserService);
+  private router = inject(Router);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   private savingSubject = new BehaviorSubject(false);
   private destroyed = new Subject();
 
   public saving$ = this.savingSubject.asObservable();
   public user: UserAddUpdateModel | null = null;
-
-  constructor(
-    private userDetailsService: UserService,
-    private router: Router,
-    private adminSnackbarService: AdminSnackbarService,
-  ) { }
 
   public ngOnDestroy(): void {
     this.destroyed.next(null);

@@ -17,6 +17,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: false,
 })
 export class ComponentConfigRendererComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   private _selectedComponent: string | null = null;
 
@@ -39,11 +42,6 @@ export class ComponentConfigRendererComponent implements OnInit {
   private renderedConfigurationComponent: ComponentRef<unknown> | undefined;
   private renderedConfigurationComponentSubject: Subject<null> | undefined;
   private availableComponents: Map<string, { component: Type<any>; label: string }> = new Map();
-
-  public constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public ngOnInit() {
     this.configurationComponentRegistryService.getRegisteredConfigurationComponents$()

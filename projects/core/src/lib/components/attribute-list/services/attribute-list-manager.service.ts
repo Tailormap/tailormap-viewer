@@ -1,15 +1,28 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { concatMap, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { combineLatest, forkJoin, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, of, Subject, switchMap } from 'rxjs';
 import { selectAttributeListTabs, selectAttributeListVisible } from '../state/attribute-list.selectors';
 import { changeAttributeListTabs } from '../state/attribute-list.actions';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
-import { AppLayerModel, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import {
+  FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
+} from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
+import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
+import {
+  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse, FeatureDetailsModel, GetFeatureDetailsParams,
+  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  GetStatisticParams,
+  GetStatisticResponse,
+  GetUniqueValuesParams,
+} from '../models/attribute-list-api-service.model';
+
+interface TabModelWithTabSourceId extends TabModel {
+  tabSourceId: string;
+}
 
 interface TabFromLayerResult {
   tab: AttributeListTabModel;
@@ -21,12 +34,32 @@ interface TabFromLayerResult {
 })
 export class AttributeListManagerService implements OnDestroy {
 
+  private store$ = inject(Store);
+
+  private sources$ = new BehaviorSubject<AttributeListSourceModel[]>([]);
+  private tabsFromSources$ = this.sources$.asObservable()
+    .pipe(
+      switchMap(sources => {
+        if (sources.length === 0) {
+          return of([]);
+        }
+        return combineLatest(sources.map(s => {
+          return s.tabs$.pipe(map(tabs => tabs.map(tab => ({
+            ...tab,
+            tabSourceId: s.id,
+          }))));
+        })).pipe(map(tabs => tabs.flat()));
+      }),
+    );
+
   public static readonly EMPTY_ATTRIBUTE_LIST_TAB: AttributeListTabModel = {
     id: '',
     label: '',
     selectedDataId: '',
+    initialDataId: '',
     initialDataLoaded: false,
     loadingData: false,
+    tabSourceId: '',
   };
 
   public static readonly EMPTY_ATTRIBUTE_LIST_DATA: AttributeListDataModel = {
@@ -42,22 +75,19 @@ export class AttributeListManagerService implements OnDestroy {
 
   private destroyed = new Subject();
 
-  constructor(
-    private store$: Store,
-  ) {
+  constructor() {
     combineLatest([
-      this.store$.select(selectVisibleLayersWithAttributes),
+      this.tabsFromSources$,
       this.store$.select(selectAttributeListVisible),
     ])
       .pipe(
         takeUntil(this.destroyed),
-        filter(([ _layers, attributeListVisible ]) => attributeListVisible),
-        map(([ layers, _attributeListVisible ]) => layers),
-        map(layers => layers.filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))),
+        filter(([ _tabSources, attributeListVisible ]) => attributeListVisible),
+        map(([ tabSources, _attributeListVisible ]) => tabSources),
         withLatestFrom(this.store$.select(selectAttributeListTabs)),
-        concatMap(([ layers, tabs ]) => {
-          const closedTabs = this.getClosedTabs(layers, tabs);
-          const newTabs$ = this.getNewTabs$(layers, tabs);
+        concatMap(([ tabSources, tabs ]) => {
+          const closedTabs = this.getClosedTabs(tabSources, tabs);
+          const newTabs$ = this.getNewTabs$(tabSources, tabs);
           return forkJoin([ of(closedTabs), newTabs$ ]);
         }),
         filter(([ closedTabs, newTabs ]) => closedTabs.length > 0 || newTabs.length > 0),
@@ -76,33 +106,121 @@ export class AttributeListManagerService implements OnDestroy {
     this.destroyed.complete();
   }
 
-  private getClosedTabs(visibleLayers: AppLayerModel[], currentTabs: AttributeListTabModel[]): string[] {
+  public isLoadingTabs$(): Observable<boolean> {
+    return this.sources$.asObservable().pipe(switchMap(sources => {
+      if (sources.length === 0) {
+        return of(false);
+      }
+      const loadingTabsObservables$ = sources.map(s => s.isLoadingTabs$ ?? of(false));
+      return combineLatest(loadingTabsObservables$).pipe(map(s => {
+        return s.some(isLoading => isLoading);
+      }));
+    }));
+  }
+
+  public getFeatures$(tabSourceId: string, params: GetFeaturesParams): Observable<FeaturesResponseModel> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of({ features: [], columnMetadata: [], total: null, page: null, pageSize: null, template: null });
+    }
+    return source.dataLoader.getFeatures$(params);
+  }
+
+  public getLayerExtractCapabilities$(tabSourceId: string, params: GetLayerExtractCapabilitiesParams): Observable<LayerExtractCapabilitiesModel> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of({ outputFormats: [] });
+    }
+    return source.dataLoader.getLayerExtractCapabilities$(params);
+  }
+
+  public startLayerExtract$(tabSourceId: string, params: GetLayerExtractParams): Observable<LayerExtractResponseModel | DownloadLayerExtractResponse | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(null);
+    }
+    return source.dataLoader.startLayerExtract$(params);
+  }
+
+  public downloadLayerExtract$(tabSourceId: string, params: DownloadLayerExtractParams): Observable<DownloadLayerExtractResponse | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(null);
+    }
+    return source.dataLoader.downloadLayerExtract$(params);
+  }
+
+  public getUniqueValues$(tabSourceId: string, params: GetUniqueValuesParams): Observable<UniqueValuesResponseModel> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of({ values: [], filterApplied: false });
+    }
+    return source.dataLoader.getUniqueValues$(params);
+  }
+
+  public canExpandRow$(tabSourceId: string, params: CanExpandRowParams): Observable<boolean> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(false);
+    }
+    return source.dataLoader.canExpandRow$ ? source.dataLoader.canExpandRow$(params) : of(false);
+  }
+
+  public getFeatureDetails$(tabSourceId: string, params: GetFeatureDetailsParams): Observable<FeatureDetailsModel | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source || !source.dataLoader.getFeatureDetails$) {
+      return of(null);
+    }
+    return source.dataLoader.getFeatureDetails$(params);
+  }
+
+  public canLoadStatistics(tabSourceId: string): boolean {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    return typeof source?.dataLoader.getStatisticValue$ === 'function';
+  }
+
+  public getStatistic$(tabSourceId: string, params: GetStatisticParams): Observable<GetStatisticResponse> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source || typeof source?.dataLoader.getStatisticValue$ !== 'function') {
+      return of({ result: null, success: false });
+    }
+    return source.dataLoader.getStatisticValue$(params);
+  }
+
+  public addAttributeListSource(source: AttributeListSourceModel): void {
+    this.sources$.next([
+      ...this.sources$.getValue(),
+      source,
+    ]);
+  }
+
+  private getClosedTabs(visibleTabs: TabModel[], currentTabs: AttributeListTabModel[]): string[] {
     if (!currentTabs || currentTabs.length === 0) {
       return [];
     }
     return currentTabs
-      .filter(tab => visibleLayers.findIndex(l => l.id === tab.layerId) === -1)
+      .filter(tab => visibleTabs.findIndex(l => l.id === tab.layerId) === -1)
       .map<string>(tab => tab.id);
   }
 
   private getNewTabs$(
-    visibleLayers: AppLayerModel[],
+    visibleTabs: TabModelWithTabSourceId[],
     currentTabs: AttributeListTabModel[],
   ): Observable<TabFromLayerResult[]> {
-    if (!visibleLayers || visibleLayers.length === 0) {
+    if (!visibleTabs || visibleTabs.length === 0) {
       return of([]);
     }
-    const layersWithoutTab = visibleLayers.filter(layer => currentTabs.findIndex(t => t.layerId === layer.id) === -1);
+    const layersWithoutTab = visibleTabs.filter(layer => currentTabs.findIndex(t => t.layerId === layer.id) === -1);
     if (layersWithoutTab.length === 0) {
       return of([]);
     }
     return forkJoin(layersWithoutTab.map<Observable<TabFromLayerResult>>(layer => {
-      return this.createTabFromLayer$(layer, DEFAULT_ATTRIBUTE_LIST_CONFIG.pageSize);
+      return this.createTabFromModel$(layer, DEFAULT_ATTRIBUTE_LIST_CONFIG.pageSize);
     }));
   }
 
-  private createTabFromLayer$(
-    layer: AppLayerModel,
+  private createTabFromModel$(
+    tabModel: TabModelWithTabSourceId,
     pageSize = 10,
   ): Observable<TabFromLayerResult> {
       const id = nanoid();
@@ -110,9 +228,11 @@ export class AttributeListManagerService implements OnDestroy {
       const tab: AttributeListTabModel = {
         ...AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_TAB,
         id,
-        layerId: layer.id,
-        label: layer.title || layer.layerName,
+        layerId: tabModel.id,
+        label: tabModel.label,
         selectedDataId: dataId,
+        initialDataId: dataId,
+        tabSourceId: tabModel.tabSourceId,
       };
       const data: AttributeListDataModel = {
         ...AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_DATA,

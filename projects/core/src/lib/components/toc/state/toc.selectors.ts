@@ -28,3 +28,21 @@ export const selectFilteredLayerTree = createSelector(
       .filter(layerNode => FilterHelper.matchesFilterTerm(filterTerms, layerNode.label));
   },
 );
+
+export const selectSomeLayersVisibleInToc = createSelector(
+  selectFilteredLayerTree,
+  (layerTree): boolean => {
+    const someLayersVisible = (nodes: TreeModel[]): boolean => {
+      for (const node of nodes) {
+        if (node.metadata?.visible) {
+          return true;
+        }
+        if (node.children && someLayersVisible(node.children)) {
+          return true;
+        }
+      }
+      return false;
+    };
+    return someLayersVisible(layerTree);
+  },
+);

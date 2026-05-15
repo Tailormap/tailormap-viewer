@@ -1,6 +1,7 @@
-<div class="error-message"
-     *ngIf="message || show"
-     [class.error-message--friendly]="friendlyError">
-  {{message || emptyText}}
-  <ng-content></ng-content>
-</div>
+@if (message || show) {
+  <div class="error-message"
+    [class.error-message--friendly]="friendlyError">
+    {{message || emptyText}}
+    <ng-content></ng-content>
+  </div>
+}

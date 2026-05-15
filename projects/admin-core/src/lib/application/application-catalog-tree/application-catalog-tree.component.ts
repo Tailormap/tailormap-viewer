@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, NgZone, OnInit, Output, inject } from '@angular/core';
 import {
-  DropZoneOptions, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
+  DropZoneOptions, FlatTreeModel, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
 } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { CatalogTreeModelMetadataTypes } from '../../catalog/models/catalog-tree.model';
@@ -33,6 +33,10 @@ export interface AddLayerEvent {
   standalone: false,
 })
 export class ApplicationCatalogTreeComponent implements OnInit {
+  private store$ = inject(Store);
+  private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
+  private ngZone = inject(NgZone);
+  private destroyRef = inject(DestroyRef);
 
   @Input()
   public applicationTreeService: TreeService<AppTreeNodeModel> | undefined;
@@ -46,15 +50,11 @@ export class ApplicationCatalogTreeComponent implements OnInit {
   @Input()
   public applicationStateTree: 'layer' | 'baseLayer' | 'terrainLayer' = 'layer';
 
+  @Output()
+  public layerDoubleClick = new EventEmitter<ExtendedGeoServiceLayerModel>();
+
   public catalogFilter = new FormControl('');
   public catalogFilterTerm$ = this.store$.select(selectApplicationCatalogFilterTerm);
-
-  constructor(
-    private store$: Store,
-    private treeService: TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>,
-    private ngZone: NgZone,
-    private destroyRef: DestroyRef,
-  ) {}
 
   public ngOnInit(): void {
     if (this.applicationStateTree === 'terrainLayer') {
@@ -91,7 +91,11 @@ export class ApplicationCatalogTreeComponent implements OnInit {
       isExpanded: (nodeId) => !!this.applicationTreeService?.isExpanded(nodeId),
       expandNode: (nodeId) => !!this.applicationTreeService?.expandNode(nodeId),
       getParent: (nodeId) => this.applicationTreeService?.getParent(nodeId) || null,
+      getNodeOrder: (nodeIds: string[]) => this.treeService.getNodeOrder(nodeIds),
       nodePositionChanged: (evt) => this.onNodePositionChanged(evt),
+      dragEnded: () => this.treeService.clearMultiSelectedNodeIds(),
+      getExtendedDropzoneElement: () => document.querySelector('.application-tree .extended-dropzone'),
+      getRootNodeId: () => this.applicationTreeService?.getRootNodeId() || null,
     }];
   }
 
@@ -107,5 +111,12 @@ export class ApplicationCatalogTreeComponent implements OnInit {
         });
       }
     });
+  }
+
+  public onLayerDoubleClick(evt: FlatTreeModel) {
+    const node = this.treeService.getNode(evt.id);
+    if (node && !!node.metadata && this.selectableNode(node)) {
+      this.layerDoubleClick.emit(node.metadata);
+    }
   }
 }

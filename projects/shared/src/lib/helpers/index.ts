@@ -22,3 +22,5 @@ export * from './htmlify.helper';
 export * from './overlay.helper';
 export * from './external-libs-loader.helper';
 export * from './municipality.helper';
+export * from './attribute-filter.helper';
+export * from './tileset-3d-style.helper';

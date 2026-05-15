@@ -1,19 +1,28 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
+import { OIDCConfigurationModel, UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
+import { DateTime } from 'luxon';
 import { FormHelper } from '../../helpers/form.helper';
+import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
+import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
+import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-form',
   templateUrl: './oidc-configuration-form.component.html',
   styleUrls: ['./oidc-configuration-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: UPLOAD_REMOVE_SERVICE, useClass: OidcImageRemoveService },
+  ],
   standalone: false,
 })
 export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 
   private _oidcConfiguration: OIDCConfigurationModel | null = null;
+
+  public imageCategory = UploadCategoryEnum.SSO_IMAGE;
 
   @Input()
   public set oidcConfiguration(oidcConfiguration: OIDCConfigurationModel | null) {
@@ -26,6 +35,18 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 
   public get redirectUrl(): string | undefined {
       return `${window.location.protocol}//${window.location.host}/api/oauth2/callback`;
+  }
+
+  public get daysUntilExpiry(): number {
+    const expiry = this.oidcConfigurationForm?.get('clientSecretExpiry')?.value;
+    if (!expiry) {
+      return 0;
+    }
+    return OIDCConfigurationService.getDaysUntilExpiration(expiry);
+  }
+
+  public getExpiryClass() {
+    return OIDCConfigurationService.clientSecretExpirationDaysToCategory(this.daysUntilExpiry);
   }
 
   @Output()
@@ -41,7 +62,9 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     issuerUrl: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     clientSecret: new FormControl(''),
+    clientSecretExpiry: new FormControl<DateTime | null>(null),
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    image: new FormControl<string | null>(null),
   });
 
 
@@ -60,7 +83,9 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           issuerUrl: value.issuerUrl || '',
           clientId: value.clientId || '',
           clientSecret: value.clientSecret || undefined,
+          clientSecretExpiry: value.clientSecretExpiry ? value.clientSecretExpiry.toISODate() : null,
           userNameAttribute: value.userNameAttribute || 'name',
+          image: value.image,
         });
       });
   }
@@ -76,7 +101,9 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       issuerUrl: oidcConfiguration?.issuerUrl ?? '',
       clientId: oidcConfiguration?.clientId ?? '',
       clientSecret: oidcConfiguration?.clientSecret,
+      clientSecretExpiry: oidcConfiguration?.clientSecretExpiry ? DateTime.fromISO(oidcConfiguration.clientSecretExpiry) : null,
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
+      image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
   }
 
@@ -91,4 +118,8 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       && this.oidcConfigurationForm.valid;
   }
 
+  public onImageChanged($event: string | null) {
+    this.oidcConfigurationForm.patchValue({ image: $event }, { emitEvent: true });
+    this.oidcConfigurationForm.markAsDirty();
+  }
 }

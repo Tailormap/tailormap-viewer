@@ -6,3 +6,7 @@ tm-filter-list-item {
 tm-filter-list-item + tm-filter-list-item {
   margin-top: 14px;
 }
+
+.filter-reset-button {
+  margin: 14px;
+}

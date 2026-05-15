@@ -1,6 +1,4 @@
-import {
-  Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, ViewContainerRef, ChangeDetectorRef, DestroyRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ViewChild, ViewContainerRef, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
 import { ComponentModel } from '@tailormap-viewer/api';
 import { AreaType, ComponentRegistrationService } from '../../services/component-registration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,6 +13,10 @@ import { ComponentConfigHelper } from '../../shared/helpers/component-config.hel
   standalone: false,
 })
 export class RegisteredComponentsRendererComponent implements OnInit {
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input({ required: true })
   public area: AreaType | string = '';
@@ -24,12 +26,6 @@ export class RegisteredComponentsRendererComponent implements OnInit {
 
   @ViewChild('componentsContainer', { read: ViewContainerRef, static: true })
   private componentsContainer: ViewContainerRef | null = null;
-
-  constructor(
-    private componentRegistrationService: ComponentRegistrationService,
-    private cdr: ChangeDetectorRef,
-    private destroyRef: DestroyRef,
-  ) { }
 
   public ngOnInit(): void {
     this.componentRegistrationService.getRegisteredComponents$(this.area)

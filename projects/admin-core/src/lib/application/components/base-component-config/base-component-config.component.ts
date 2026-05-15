@@ -1,7 +1,5 @@
-import { Component, ChangeDetectionStrategy, Input, DestroyRef } from '@angular/core';
-import {
-  BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel, MeasureComponentConfigModel,
-} from '@tailormap-viewer/api';
+import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
+import { BaseComponentConfigHelper, BaseComponentTypeEnum, ComponentBaseConfigModel } from '@tailormap-viewer/api';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfigurationComponentModel } from '../configuration-component.model';
@@ -26,6 +24,8 @@ import { MatLabel } from '@angular/material/select';
   ],
 })
 export class BaseComponentConfigComponent implements ConfigurationComponentModel {
+  protected componentConfigService = inject(ComponentConfigurationService);
+  protected destroyRef = inject(DestroyRef);
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;
@@ -52,10 +52,7 @@ export class BaseComponentConfigComponent implements ConfigurationComponentModel
     title: new FormControl<string>(''),
   });
 
-  public constructor(
-    private componentConfigService: ComponentConfigurationService,
-    private destroyRef: DestroyRef,
-  ) {
+  public constructor() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(values => {
@@ -75,7 +72,7 @@ export class BaseComponentConfigComponent implements ConfigurationComponentModel
   }
 
   private updateConfig(key: keyof ComponentBaseConfigModel, value: string | number | boolean | undefined | null) {
-    this.componentConfigService.updateConfig<MeasureComponentConfigModel>(this.type, key, value);
+    this.componentConfigService.updateConfigForKey<ComponentBaseConfigModel>(this.type, key, value);
   }
 
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -12,14 +12,13 @@ import { UserService } from '../services/user.service';
   standalone: false,
 })
 export class UserListComponent {
+  private userDetailsService = inject(UserService);
 
   public filteredUsers$: Observable<Array<UserModel & { selected: boolean }>>;
   public userFilter: FormControl;
   public filterString$: Observable<string>;
 
-  constructor(
-    private userDetailsService: UserService,
-  ) {
+  constructor() {
     this.userFilter = new FormControl('');
     this.filterString$ = this.userFilter.valueChanges.pipe(startWith(''));
 
@@ -30,7 +29,11 @@ export class UserListComponent {
     ]).pipe(
       map(([ users, filterString, selectedUser ]) => {
         return users
-          .filter(user => user.username.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
+          .filter(user => {
+            const t = filterString.toLowerCase();
+            return user.username.toLowerCase().includes(t)
+                || user.organisation?.toLowerCase().includes(t);
+          })
           .map(user => ({
             ...user,
             selected: !!(selectedUser && user.username === selectedUser),

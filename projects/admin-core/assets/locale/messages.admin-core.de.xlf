@@ -2,6 +2,22 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="de" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="admin-core.application-filter-multi-layer" datatype="html">
+        <source>Multi-layer filter</source>
+        <target>Mehr-Ebenen-Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-filter-single-layer" datatype="html">
+        <source>Single-layer filter</source>
+        <target>Einzel-Ebenen-Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.created" datatype="html">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ application.createdBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.createdDate | date:&apos;medium&apos; }}"/></source>
+        <target>Erstellt von <x id="INTERPOLATION" equiv-text="{{ application.createdBy }} at {{ application.createdDate | date:&apos;medium&apos; }} | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application-metadata.updated" datatype="html">
+        <source>Last updated by <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }}"/> at <x id="INTERPOLATION_1" equiv-text="{{ application.lastModifiedDate | date:&apos;medium&apos; }}"/></source>
+        <target>Zuletzt aktualisiert von <x id="INTERPOLATION" equiv-text="{{ application.lastModifiedBy }} at {{ application.lastModifiedBy | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.application.add-application" datatype="html">
         <source>Add application</source>
         <target>Anwendung hinzufügen</target>
@@ -50,6 +66,10 @@
         <source>Change folder name</source>
         <target>Ordnername ändern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
+        <source>This group is collapsed on startup</source>
+        <target>Diese Gruppe ist beim Start eingeklappt</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-attribute-list" datatype="html">
         <source>Attribute list</source>
         <target>Attributliste</target>
@@ -68,7 +88,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-edit" datatype="html">
         <source>Edit</source>
-        <target>Bearbeiten</target>
+        <target>Objekteditor</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-feature-info" datatype="html">
         <source>Feature info</source>
@@ -77,6 +97,18 @@
       <trans-unit id="admin-core.application.component-filter" datatype="html">
         <source>Filter</source>
         <target>Filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-geolocation" datatype="html">
+        <source>Geolocation</source>
+        <target>Geolokalisierung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-header" datatype="html">
+        <source>Header</source>
+        <target>Kopfzeile</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-info" datatype="html">
+        <source>Info</source>
+        <target>Info</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-legend" datatype="html">
         <source>Legend</source>
@@ -98,6 +130,10 @@
         <source>Search</source>
         <target>Suchen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-snapping" datatype="html">
+        <source>Snapping</source>
+        <target>Fangen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-streetview-tool" datatype="html">
         <source>Streetview tool</source>
         <target>Streetview-Werkzeug</target>
@@ -110,17 +146,21 @@
         <source>Terrain layer toggle</source>
         <target>Geländeebene Umschalter</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-terrain-opacity" datatype="html">
+        <source>Terrain opacity</source>
+        <target>Geländeopazität</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.components" datatype="html">
         <source>Components</source>
         <target>Komponenten</target>
       </trans-unit>
-      <trans-unit id="admin-core.application.filters" datatype="html">
-        <source>Filters</source>
-        <target>Filter</target>
-      </trans-unit>
       <trans-unit id="admin-core.application.copy-application" datatype="html">
         <source>Copy application <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></source>
         <target>Anwendung kopieren <x id="INTERPOLATION" equiv-text="{{data.application.title}}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.copy-layers-info" datatype="html">
+        <source>Select one or more layers that are available for copying features from. If no layers are selected, all layers will be available. Note that incompatible layer geometry types may prevent successful copying.</source>
+        <target>Wählen Sie eine oder mehrere Ebenen aus, von denen Features kopiert werden können. Wenn keine Ebenen ausgewählt sind, stehen alle Ebenen zur Verfügung. Beachten Sie, dass inkompatible Geometrietypen der Ebenen ein erfolgreiches Kopieren verhindern können.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.create-application" datatype="html">
         <source>Create application</source>
@@ -150,13 +190,21 @@
         <source>Are you sure you want to delete application <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
         <target>Möchten Sie die Anwendung <x id="PH" equiv-text="title"/> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.dropdown-list-filter.hint" datatype="html">
+        <source> All unique values will be displayed in the dropdown list, unless altered below. </source>
+        <target> Alle eindeutigen Werte werden in der Dropdown-Liste angezeigt, sofern sie unten nicht geändert werden. </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ application.title }}"/></source>
         <target>Bearbeiten von<x id="INTERPOLATION" equiv-text="{{ application.title }}"/></target>
       </trans-unit>
-      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+      <trans-unit id="admin-core.application.edit-application-layer-attribute-settings" datatype="html">
         <source>Edit application layer attribute settings</source>
         <target>Einstellungen für Anwendungsebenenattribute bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.edit-application-layer-attributes" datatype="html">
+        <source>Edit application layer attributes</source>
+        <target>Anwendungsebenenattribute bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint1" datatype="html">
         <source>This only shows the attributes that are enabled in the catalog. If an attribute is missing, check the catalog settings.</source>
@@ -194,17 +242,253 @@
         <source>Error while updating application.</source>
         <target>Fehler beim Aktualisieren der Anwendung.</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup" datatype="html">
+        <source>Expand on startup</source>
+        <target>Beim Start ausklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-always" datatype="html">
+        <source>Always expand</source>
+        <target>Immer ausklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-automatic" datatype="html">
+        <source>Automatic</source>
+        <target>Automatisch</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expand-on-startup-never" datatype="html">
+        <source>Never expand</source>
+        <target>Nie ausklappen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.expanded-on-startup" datatype="html">
+        <source>This group is expanded on startup</source>
+        <target>Diese Gruppe wird beim Start ausgeklappt</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filter-applications" datatype="html">
         <source>Filter applications</source>
         <target>Anwendungen filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter-filter-groups" datatype="html">
+        <source>Filter filter groups</source>
+        <target>Filtergruppen filtern</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filter-tree" datatype="html">
         <source>Filter application layers</source>
         <target>Anwendungsschichten filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filter.add" datatype="html">
+        <source>Add</source>
+        <target>Hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.alias" datatype="html">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-attribute" datatype="html">
+        <source>Choose attribute</source>
+        <target>Attribut auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.choose-value" datatype="html">
+        <source>Choose value to alter</source>
+        <target>zu ändernden Wert auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.contains" datatype="html">
+        <source>contains</source>
+        <target>enthält</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.initially-selected" datatype="html">
+        <source>Initially selected</source>
+        <target>Anfangs ausgewählt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.new-value" datatype="html">
+        <source>New value</source>
+        <target>Neuer Wert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.remove" datatype="html">
+        <source>Remove</source>
+        <target>Entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.selectable" datatype="html">
+        <source>Selectable</source>
+        <target>Auswählbar</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.sort" datatype="html">
+        <source>Sort</source>
+        <target>Sortieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.unique-value" datatype="html">
+        <source>Value</source>
+        <target>Wert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filter.use-as-partial-value" datatype="html">
+        <source> Look for values containing this value </source>
+        <target> Nach Werten suchen, die diesen Wert enthalten </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filtered-layers" datatype="html">
         <source>The catalog above shows only layers matching the application projection (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>)</source>
         <target>Der obige Katalog enthält nur Layer, die die (<x id="INTERPOLATION" equiv-text="{{draftApplicationCrs$ | async}}"/>) Projektionsanwendung unterstützen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters" datatype="html">
+        <source>Filters</source>
+        <target>Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.add-attribute" datatype="html">
+        <source>Add attribute</source>
+        <target>Attribut hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.attributes" datatype="html">
+        <source>Attributes</source>
+        <target>Attribute</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.checkbox" datatype="html">
+        <source>Checkbox</source>
+        <target>Kontrollkästchen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
+        <source>Choose filter tool</source>
+        <target>Filterwerkzeug auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
+        <source>Create filter</source>
+        <target>Filter erstellen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-filter-layer-info" datatype="html">
+        <source> Select the layers you want to filter by. You can select one or multiple layers. </source>
+        <target> Wählen Sie die Ebenen aus, nach denen Sie filtern möchten. Sie können eine oder mehrere Ebenen auswählen. </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.create-new-filter" datatype="html">
+        <source>Create new filter</source>
+        <target>Neuen Filter erstellen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker" datatype="html">
+        <source>Date picker</source>
+        <target>Datumsauswahl</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-date" datatype="html">
+        <source>Initial date</source>
+        <target>Startdatum</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-from" datatype="html">
+        <source>Initial lower date</source>
+        <target>Startdatum von</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.date-picker.initial-to" datatype="html">
+        <source>Initial upper date</source>
+        <target>Startdatum bis</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.dropdown-list" datatype="html">
+        <source>Drop-down list</source>
+        <target>Dropdown-Liste</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.edit-filter" datatype="html">
+        <source>Edit filter</source>
+        <target>Filter bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filter-layers" datatype="html">
+        <source>Filter layers</source>
+        <target>Ebenen filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.filters" datatype="html">
+        <source>Filters</source>
+        <target>Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.no-filterable-layers" datatype="html">
+        <source>There are no filterable layers for this application</source>
+        <target>Für diese Anwendung gibt es keine filterbaren Ebenen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.numeric" datatype="html">
+        <source>Numeric</source>
+        <target>Numerisch</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.preset" datatype="html">
+        <source>Preset</source>
+        <target>Vorgabe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-lower-value" datatype="html">
+        <source>Initial Lower Value</source>
+        <target>Ursprünglicher unterer Wert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-range" datatype="html">
+        <source>Initial range</source>
+        <target>Anfangsbereich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-upper-value" datatype="html">
+        <source>Initial Upper Value</source>
+        <target>Ursprünglicher oberer Wert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.initial-value" datatype="html">
+        <source>Initial Value</source>
+        <target>Anfangswert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-field" datatype="html">
+        <source>Input field</source>
+        <target>Eingabefeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.input-mode" datatype="html">
+        <source>Input mode</source>
+        <target>Eingabemodus</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.maximum-value" datatype="html">
+        <source>Maximum Value</source>
+        <target>Maximalwert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.minimum-value" datatype="html">
+        <source>Minimum Value</source>
+        <target>Mindestwert</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.range" datatype="html">
+        <source>Slider range</source>
+        <target>Schiebereglerbereich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.select-input-mode" datatype="html">
+        <source>Select input mode</source>
+        <target>Eingabemodus auswählen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider" datatype="html">
+        <source>Slider</source>
+        <target>Schieberegler</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.slider-input-field" datatype="html">
+        <source>Slider and input field</source>
+        <target>Schieberegler und Eingabefeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.step-size" datatype="html">
+        <source>Step Size</source>
+        <target>Schrittweite</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.slider.use-attribute-range" datatype="html">
+        <source>Use attribute range</source>
+        <target>Attributbereich verwenden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch" datatype="html">
+        <source>Switch</source>
+        <target>Schalter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.alias1" datatype="html">
+        <source>Alias value 1</source>
+        <target>Alias Wert 1</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.alias2" datatype="html">
+        <source>Alias value 2</source>
+        <target>Alias Wert 2</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.more-values" datatype="html">
+        <source>This Attribute has more than two unique values. Consider using a checkbox filter.</source>
+        <target>Dieses Attribut hat mehr als zwei eindeutige Werte. Verwenden Sie stattdessen einen Kontrollkästchen-Filter.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.startWithValue2" datatype="html">
+        <source> Start with value 2 </source>
+        <target>Mit Wert 2 beginnen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.value1" datatype="html">
+        <source>Value 1</source>
+        <target>Wert 1</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.switch.value2" datatype="html">
+        <source>Value 2</source>
+        <target>Wert 2</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
+        <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
+        <target>Zu viele eindeutige Werte, es werden nur die ersten <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/> angezeigt.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
@@ -222,9 +506,17 @@
         <source>Initial extent</source>
         <target>Anfangsausdehnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.invalid-json" datatype="html">
+        <source>Invalid JSON: </source>
+        <target>Ongeldige JSON: </target>
+      </trans-unit>
       <trans-unit id="admin-core.application.invalid-name-error" datatype="html">
         <source>Name can only contain letters, numbers, underscores and dashes.</source>
         <target>Der Name darf nur Buchstaben, Zahlen, Unterstriche und Bindestriche enthalten.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.invalid-tileset-style" datatype="html">
+        <source>The style does not conform to the 3D Tileset Styling Language structure</source>
+        <target>Der Stil entspricht nicht der Struktur der 3D Tileset Styling Language</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layer-not-editable" datatype="html">
         <source>This layer cannot be edited because there is no writeable feature source / type configured for this layer</source>
@@ -318,6 +610,14 @@
         <source>Remove</source>
         <target>Entfernen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.remove-attribute" datatype="html">
+        <source>Remove attribute</source>
+        <target>Attribut entfernen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.remove-filter" datatype="html">
+        <source>Remove filter</source>
+        <target>Filter entfernen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.remove-image" datatype="html">
         <source>Remove the image</source>
         <target>Bild entfernen</target>
@@ -350,6 +650,10 @@
         <source>Setting this application as default will overwrite the current default application</source>
         <target>Das Festlegen dieser Anwendung als Standard überschreibt die aktuelle Standardanwendung</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.set-tileset-style" datatype="html">
+        <source>Set a style for the 3D Tileset</source>
+        <target>Stil für das 3D Tileset festlege</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.settings" datatype="html">
         <source>Settings</source>
         <target>Einstellungen</target>
@@ -362,9 +666,21 @@
         <source>Terrain</source>
         <target>Gelände</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.terrain-lagen" datatype="html">
+        <source>The catalog above shows only terrain layers</source>
+        <target>Der obige Katalog enthält nur Geländeebene</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.terrain-layers" datatype="html">
         <source>Terrain layers</source>
         <target>Geländeebene</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style" datatype="html">
+        <source>Tileset style</source>
+        <target>Kachelstil</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.tileset-style-hint" datatype="html">
+        <source>Fill in a tileset style in json format according to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Note: The structure of the style is validated, but not the style expressions.</source>
+        <target>Geben Sie einen Kachelstil im JSON-Format gemäß der <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ein. Hinweis: Die Struktur des Stils wird validiert, nicht jedoch die Stil-Ausdrücke.</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
@@ -373,6 +689,10 @@
       <trans-unit id="admin-core.authorizations.allow-access-from" datatype="html">
         <source>Allow access from:</source>
         <target>Zugriff erlauben von:</target>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.allow-access-from-logged-in-inherited" datatype="html">
+        <source>Allow access from: Logged in (inherited)</source>
+        <target>Zugriff erlauben von: Eingelogd (vererbt)</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
@@ -415,8 +735,20 @@
         <target>(vererbt)</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.read" datatype="html">
-        <source>Read</source>
-        <target>Lesen</target>
+        <source>Allow</source>
+        <target>Gestatten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.accept-header" datatype="html">
+        <source>Accepted files</source>
+        <target>Akzeptierte Dateien</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.access-restriction-hint" datatype="html">
+        <source>Because this service requires authentication and is proxied, this service is not accessible without logging in. This is a security measure to prevent inadvertently exposing a layer with sensitive data to everyone.</source>
+        <target>Da dieser Dienst eine Authentifizierung erfordert und über einen Proxy läuft, ist er ohne Anmeldung nicht zugänglich. Dies ist eine Sicherheitsmaßnahme, um zu verhindern, dass eine Ebene mit sensiblen Daten versehentlich für jeden freigegeben wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.add-attachment-attribute-button" datatype="html">
+        <source>Add Attachment Attribute</source>
+        <target>Anhang-Attribut hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-feature-source" datatype="html">
         <source>Add feature source</source>
@@ -430,12 +762,48 @@
         <source>Add map service</source>
         <target>Kartendienst hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.all" datatype="html">
+        <source>All files</source>
+        <target>Alle Dateien</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.docs" datatype="html">
+        <source>Documents (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</source>
+        <target>Dokumente (.pdf, .docx, .xlsx, .pptx, .odt, .ods)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.images" datatype="html">
+        <source>Images</source>
+        <target>Bilder</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-accept.pdfs" datatype="html">
+        <source>PDFs</source>
+        <target>PDFs</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attachment-attributes" datatype="html">
+        <source>Attachment attributes</source>
+        <target>Attachment attributes</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attribute" datatype="html">
         <source>Attribute</source>
         <target>Attribute</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-duplicate-error" datatype="html">
+        <source>Attribute name must be unique</source>
+        <target>Der Attributname muss eindeutig sein.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-header" datatype="html">
+        <source>Attribute Name *</source>
+        <target>Attributname *</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-placeholder" datatype="html">
+        <source>Enter attribute name</source>
+        <target>Attributname eingeben</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.attribute-name-required-error" datatype="html">
+        <source>Attribute name is required</source>
+        <target>Attributname ist erforderlich</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.attribute-reorder-hint" datatype="html">
-        <source>Use the three bars and the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
+        <source>Use the three bars at the end of the row to re-order attributes. Hold Ctrl / Cmd (Mac) to select multiple rows to re-order together</source>
         <target>Verwenden Sie die drei Balken am Ende der Zeile, um Attribute neu anzuordnen. Halten Sie Ctrl / Cmd (Mac) gedrückt, um mehrere Zeilen zusammen neu anzuordnen.</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.attributes" datatype="html">
@@ -445,6 +813,10 @@
       <trans-unit id="admin-core.catalog.authentication-and-proxy" datatype="html">
         <source>Authentication and proxy</source>
         <target>Authentifizierung und Proxy</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.available-styles" datatype="html">
+        <source>Available styles</source>
+        <target>Verfügbare Stile</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.catalog" datatype="html">
         <source>Catalog</source>
@@ -731,7 +1103,7 @@
         <target>Ebene</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-authentication-hint" datatype="html">
-        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
+        <source>Enter account details below if the service requires HTTP Basic authentication. Enable reverse proxying to allow a layer which requires authentication to be used in a viewer by having Tailormap do the <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for the end user without sending the credentials to the users&apos; browser.</source>
         <target>Wenn der Service eine HTTP-Basisauthentifizierung erfordert, geben Sie unten die Kontodaten ein. Aktivieren Sie Reverse-Proxying, um eine Ebene, die eine Authentifizierung erfordert, in einem Viewer zu verwenden, indem Tailormap die <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> Anfragen für den Endbenutzer durchführt, ohne die Anmeldeinformationen an den Browser des Benutzers zu senden. </target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer-name" datatype="html">
@@ -745,6 +1117,22 @@
       <trans-unit id="admin-core.catalog.layer.crs" datatype="html">
         <source>Available projections for this layer</source>
         <target>Verfügbare Projektionen für diesen Ebene</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-file-size-warning" datatype="html">
+        <source> Global maximum file size is <x id="INTERPOLATION" equiv-text="{{maxFileSizeMB}}"/> MB. Individual attachment attribute sizes cannot exceed this limit. Contact your system administrator if you need to increase this limit. </source>
+        <target> Die globale maximale Dateigröße beträgt <x id="INTERPOLATION" equiv-text="{{maxFileSizeMB}}"/> MB. Einzelne Anhangsattribute können diese Grenze nicht überschreiten. Wenden Sie sich an Ihren Systemadministrator, wenn Sie diese Grenze erhöhen müssen. </target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-header" datatype="html">
+        <source>Max Size (MB)</source>
+        <target>Max. Größe (MB)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-min-error" datatype="html">
+        <source>Size must be positive</source>
+        <target>Größe muss positiv sein</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.max-size-placeholder" datatype="html">
+        <source>e.g. 2</source>
+        <target>z.B. 2</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.max-zoom-level" datatype="html">
         <source>Maximum zoom level</source>
@@ -831,7 +1219,7 @@
         <target>Entfernen Sie bitte zuerst die Ebenen dieses Services aus den Anwendungen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.reverse-proxy" datatype="html">
-        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/> requests for viewers</source>
+        <source>Reverse proxy <x id="INTERPOLATION" equiv-text="{{ prettyName(geoServiceForm.get(&apos;protocol&apos;)?.value) }}"/> requests for viewers</source>
         <target>Reverse-Proxy <x id="INTERPOLATION" equiv-text="{{ geoService?.protocol }}"/>-Anfragen für Viewer</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.schema" datatype="html">
@@ -1050,6 +1438,10 @@
         <source>Filter...</source>
         <target>Filtern...</target>
       </trans-unit>
+      <trans-unit id="admin-core.common.filter-values" datatype="html">
+        <source>Filter values</source>
+        <target>Werte filtern</target>
+      </trans-unit>
       <trans-unit id="admin-core.common.forms-title" datatype="html">
         <source>Forms</source>
         <target>Formulare</target>
@@ -1117,6 +1509,10 @@
       <trans-unit id="admin-core.common.ok" datatype="html">
         <source>Ok</source>
         <target>Ok</target>
+      </trans-unit>
+      <trans-unit id="admin-core.common.organisation" datatype="html">
+        <source>Organisation</source>
+        <target>Organisation</target>
       </trans-unit>
       <trans-unit id="admin-core.common.password" datatype="html">
         <source>Password</source>
@@ -1222,6 +1618,18 @@
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.drawing-open-on-startup" datatype="html">
+        <source>Open drawing component on start-up</source>
+        <target>Zeichnenkomponente beim Start öffnen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.edit-close-after-add-feature" datatype="html">
+        <source>Close window after adding new feature</source>
+        <target>Fenster nach dem Hinzufügen eines neuen Objekts schließen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.edit-title" datatype="html">
+        <source>Edit</source>
+        <target>Objekteditor</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.feature-info-defaultShowDropdown" datatype="html">
         <source>Use dropdown to select feature info layers by default</source>
         <target>Verwenden die Dropdown-Liste, um Feature-Info-Layer auszuwählen.</target>
@@ -1229,6 +1637,58 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Feature-Informationen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
+        <source>Show button to edit the feature</source>
+        <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.geolocation-no-timeout" datatype="html">
+        <source>Show location on the map until the button is toggled off.</source>
+        <target>Standort auf der Karte anzeigen, bis die Schaltfläche deaktiviert wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-add-menu-item" datatype="html">
+        <source>Add Menu Item</source>
+        <target>Menüpunkt hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-advanced-settings" datatype="html">
+        <source>Advanced settings</source>
+        <target>Erweiterte Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-background-color" datatype="html">
+        <source>Background Color</source>
+        <target>Hintergrundfarbe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-css" datatype="html">
+        <source>Extra CSS</source>
+        <target>Zusätzliches CSS</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height" datatype="html">
+        <source>Header Height</source>
+        <target>Kopfzeilenhöhe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-height-hint" datatype="html">
+        <source> In the layout for mobile phones a height of more than 50 pixels will be reduced to 50 pixels. </source>
+        <target> Im Layout für Mobiltelefone wird eine Höhe von mehr als 50 Pixeln auf 50 Pixel reduziert. </target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-layout-settings" datatype="html">
+        <source>Layout settings</source>
+        <target>Layout-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-logo" datatype="html">
+        <source>Logo</source>
+        <target>Logo</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-menu-items" datatype="html">
+        <source>Menu Items</source>
+        <target>Menüpunkte</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.header-text-color" datatype="html">
+        <source>Text Color</source>
+        <target>Textfarbe</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.info-open-on-startup" datatype="html">
+        <source>Open info component on start-up</source>
+        <target>Infokomponente beim Start öffnen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.measure-area-title" datatype="html">
         <source>Measure area title</source>
@@ -1258,6 +1718,22 @@
         <source>Search title</source>
         <target>Suchtitel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
+        <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
+        <target>Wählen Sie einen oder mehrere Layer aus, die zum Fangen verfügbar sind. Wählen Sie mindestens einen Layer aus, um das Fangen zu ermöglichen.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tolerance" datatype="html">
+        <source>Snapping tolerance (px)</source>
+        <target>Fangtoleranz (px)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
+        <source>Snapping tooltip</source>
+        <target>Fang-Tooltip</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
+        <source>Show edit layer icon</source>
+        <target>Symbol zum Bearbeiten der Ebene anzeigen</target>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
         <target>Feature-Typ-Einstellungen aktualisiert</target>
@@ -1273,6 +1749,14 @@
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Dem Benutzer erlauben, benutzerdefinierte Eingaben zu machen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillDate" datatype="html">
+        <source>Autofill Date/Time</source>
+        <target>Autofill Datum/Uhrzeit</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.autoFillUser" datatype="html">
+        <source>Autofill Username</source>
+        <target>Autofill Benutzername</target>
       </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
@@ -1546,6 +2030,22 @@
         <source>Client Secret</source>
         <target>Kunden-Geheimnis</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiration-warnings" datatype="html">
+        <source>OIDC client secret expiration warnings</source>
+        <target>OIDC Kunden-Geheimnis Ablaufwarnungen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expired" datatype="html">
+        <source>🔴 Expired on <x id="INTERPOLATION" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+        <target>🔴 Abgelaufen am <x id="INTERPOLATION" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expires-in" datatype="html">
+        <source>⚠️ Expires in <x id="INTERPOLATION" equiv-text="{{ config.clientSecretExpirationDays }}"/> days on <x id="INTERPOLATION_1" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></source>
+        <target>⚠️ Läuft in <x id="INTERPOLATION" equiv-text="{{ config.clientSecretExpirationDays }}"/> Tagen ab am <x id="INTERPOLATION_1" equiv-text="{{ config.configuration.clientSecretExpiry | date: &apos;shortDate&apos;:&apos;&apos;:locale }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.client-secret-expiry-date" datatype="html">
+        <source>Client secret expiry date</source>
+        <target>Ablaufdatum des Kunden-Geheimnisses</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.configuration-created" datatype="html">
         <source>OIDC configuration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> created</source>
         <target>OIDC-Konfiguration <x id="PH" equiv-text="createdOIDCConfiguration.name"/> erstellt</target>
@@ -1569,6 +2069,10 @@
       <trans-unit id="admin-core.oidc.create-configuration" datatype="html">
         <source>Create OIDC configuration</source>
         <target>OIDC-Konfiguration erstellen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.days-until-expiry" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {Expired} =1 {One day until expiry} other {<x id="INTERPOLATION"/> days until expiry}}</source>
+        <target>{VAR_PLURAL, plural, =0 {Abgelaufen} =1 {Ein Tag bis zum Ablauf} other {<x id="INTERPOLATION"/> Tage bis zum Ablauf}}</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
@@ -1614,6 +2118,10 @@
         <source>URL of the OpenID Connect metadata document. For Microsoft Entra, use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. The URL may optionally end with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
         <target>URL des OpenID Connect-Metadatendokuments. Für Microsoft Entra verwenden Sie <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://login.microsoftonline.com/[tenant-guid]/v2.0/<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>. Die URL kann optional mit <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.well-known/openid-configuration<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> enden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.logo" datatype="html">
+        <source>Upload logo for SSO button</source>
+        <target>Logo für SSO-Schaltfläche hochladen</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.status" datatype="html">
         <source>Status</source>
         <target>Status</target>
@@ -1641,10 +2149,6 @@
       <trans-unit id="admin-core.search-index.create-search-index" datatype="html">
         <source>Create search index</source>
         <target>Suchindex erstellen</target>
-      </trans-unit>
-      <trans-unit id="admin-core.search-index.delete-schedule-message" datatype="html">
-        <source> Deleting the schedule of a search index can be done by deleting the task on the tasks page </source>
-        <target> Der Zeitplan eines Suchindexes kann gelöscht werden, indem man die Aufgabe auf der Aufgabenseite löscht. </target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.delete-search-index" datatype="html">
         <source>Delete search index <x id="PH" equiv-text="searchIndex.name"/></source>
@@ -1698,6 +2202,10 @@
         <source>There is no schedule for this search index yet.</source>
         <target>Für diesen Suchindex gibt es noch keinen Zeitplan.</target>
       </trans-unit>
+      <trans-unit id="admin-core.search-index.pick-time" datatype="html">
+        <source>Pick a time</source>
+        <target>Wähle eine Uhrzeit</target>
+      </trans-unit>
       <trans-unit id="admin-core.search-index.priority" datatype="html">
         <source>Priority</source>
         <target>Priorität</target>
@@ -1719,20 +2227,20 @@
         <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-day" datatype="html">
-        <source>Every day at 18:00</source>
-        <target>Jeden Tag um 18:00 Uhr</target>
+        <source>Every day</source>
+        <target>Jeden Tag</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-hour" datatype="html">
         <source>Every hour</source>
         <target>Stündlich</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-month" datatype="html">
-        <source>Every first day of the month at 18:00</source>
-        <target>Jeden ersten Tag im Monat um 18:00 Uhr</target>
+        <source>Every first day of the month</source>
+        <target>Jeden ersten Tag im Monat</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.every-week" datatype="html">
-        <source>Every week Monday at 18:00</source>
-        <target>Jede Woche Montag um 18:00 Uhr</target>
+        <source>Every week on monday</source>
+        <target>Jede Woche im Montag</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.schedule.no-schedule" datatype="html">
         <source>No schedule</source>
@@ -1768,6 +2276,7 @@
       </trans-unit>
       <trans-unit id="admin-core.search-index.selected-attributes-to-index" datatype="html">
         <source>Selected attributes used to index</source>
+        <target>Selektierte Attribute zur Indexierung</target>
       </trans-unit>
       <trans-unit id="admin-core.search-index.summary" datatype="html">
         <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex?.summary?.startedAt | date:&apos;medium&apos; }}"/> and took <x id="INTERPOLATION_1" equiv-text="{{ searchIndex?.summary?.duration | number: &apos;1.1-2&apos; }}"/> seconds, skipped <x id="INTERPOLATION_2" equiv-text="{{ searchIndex?.summary?.skippedCounter }}"/> of <x id="INTERPOLATION_3" equiv-text="{{ searchIndex?.summary?.total }}"/> features.</source>
@@ -1780,6 +2289,14 @@
       <trans-unit id="admin-core.search-index.unavailable.message" datatype="html">
         <source>Error code <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, message: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></source>
         <target>Fehlercode <x id="INTERPOLATION" equiv-text="{{ pingResponse.code }}"/>, meldung: <x id="INTERPOLATION_1" equiv-text="{{ pingResponse.message }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.description" datatype="html">
+        <source>Description</source>
+        <target>Beschreibung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-hint" datatype="html">
+        <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
+        <target> Die Beschreibung wird als ARIA-Label für das Bild verwendet, um die Zugänglichkeit der Anwendung zu verbessern. </target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
@@ -1857,10 +2374,6 @@
         <source>last execution succesful</source>
         <target>letzte Ausführung erfolgreich</target>
       </trans-unit>
-      <trans-unit id="admin-core.tasks.task-details.cron-expression" datatype="html">
-        <source>Cron expression</source>
-        <target>Planung (Cron expression)</target>
-      </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.description" datatype="html">
         <source>Description</source>
         <target>Beschreibung</target>
@@ -1892,6 +2405,10 @@
       <trans-unit id="admin-core.tasks.task-details.progress" datatype="html">
         <source>Progress</source>
         <target>Fortschritt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.tasks.task-details.schedule" datatype="html">
+        <source>Schedule</source>
+        <target>Zeitplan</target>
       </trans-unit>
       <trans-unit id="admin-core.tasks.task-details.scheduling-state" datatype="html">
         <source>Scheduling state</source>
@@ -1957,6 +2474,10 @@
         <source>Tasks</source>
         <target>Aufgaben</target>
       </trans-unit>
+      <trans-unit id="admin-core.tasks.time" datatype="html">
+        <source><x id="PH" equiv-text="schedule.viewValue"/> at <x id="PH_1" equiv-text="timeString"/></source>
+        <target><x id="PH" equiv-text="schedule.viewValue"/> um <x id="PH_1" equiv-text="timeString"/> Uhr</target>
+      </trans-unit>
       <trans-unit id="admin-core.upload-select.delete-file" datatype="html">
         <source>Delete file?</source>
         <target>Datei löschen?</target>
@@ -2016,6 +2537,10 @@
       <trans-unit id="admin-core.users.filter-users" datatype="html">
         <source>Filter users</source>
         <target>Benutzer filtern</target>
+      </trans-unit>
+      <trans-unit id="admin-core.users.filter-users-placeholder" datatype="html">
+        <source>Filter on name or organisation...</source>
+        <target>Nach Name oder Organisation filtern...</target>
       </trans-unit>
       <trans-unit id="admin-core.users.password-match-error" datatype="html">
         <source>Passwords need to match</source>

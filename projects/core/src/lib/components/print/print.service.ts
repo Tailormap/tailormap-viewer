@@ -1,4 +1,4 @@
-import {  Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
+import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { ExtentHelper, LayerModel, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import {
   catchError, combineLatest, concatMap, forkJoin, map, Observable, of, pipe, Subject, take, takeUntil, UnaryFunction,
@@ -13,6 +13,7 @@ import { MapPdfPrintOptions, MapPdfService } from '../../services/map-pdf/map-pd
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectViewerLogo } from '../../state/core.selectors';
+import type { jsPDF } from 'jspdf';
 
 export interface PrintableLayers {
   layers: LayerModel[];
@@ -34,6 +35,7 @@ export interface PrintPdfOptions extends PrintOptions {
   autoPrint: boolean;
   legendLayer: string;
   showBookmark: boolean;
+  addDrawingLegendFunction?: (doc: jsPDF, width: number, height: number) => Observable<void>;
 }
 
 export interface PrintImageOptions extends PrintOptions {
@@ -51,6 +53,14 @@ const DEBUG_PRINT_EXTENT = false;
   providedIn: 'root',
 })
 export class PrintService implements OnDestroy {
+  private store$ = inject(Store);
+  private viewerLayoutService = inject(ViewerLayoutService);
+  private applicationMapService = inject(ApplicationMapService);
+  private mapPdfService = inject(MapPdfService);
+  private snackBar = inject(MatSnackBar);
+  private mapService = inject(MapService);
+  private locale = inject(LOCALE_ID);
+
 
   private destroyed = new Subject();
   private cancelled$ = new Subject();
@@ -61,15 +71,7 @@ export class PrintService implements OnDestroy {
     return `map-${dateTime}.${extension}`;
   };
 
-  constructor(
-    private store$: Store,
-    private viewerLayoutService: ViewerLayoutService,
-    private applicationMapService: ApplicationMapService,
-    private mapPdfService: MapPdfService,
-    private snackBar: MatSnackBar,
-    private mapService: MapService,
-    @Inject(LOCALE_ID) private locale: string,
-  ) {}
+  private additionalVectorLayers: string[] = [];
 
   public ngOnDestroy() {
     this.destroyed.next(null);
@@ -92,6 +94,10 @@ export class PrintService implements OnDestroy {
     this.cancelled$.next(null);
   }
 
+  public addAdditionalVectorLayer(layerId: string): void {
+    this.additionalVectorLayers.push(layerId);
+  }
+
   public downloadPdf$(options: PrintPdfOptions): PrintResult {
     const filename = this.mapFilenameFn('pdf');
     return this.getMapExtent$(options)
@@ -110,6 +116,8 @@ export class PrintService implements OnDestroy {
             filename,
             logo,
             bookmarkUrl: options.showBookmark ? `${window.location}` : null,
+            addDrawingLegendFunction: options.addDrawingLegendFunction,
+            includeDrawing: options.includeDrawing,
           };
           return this.mapPdfService.create$({
             printOptions,
@@ -145,7 +153,7 @@ export class PrintService implements OnDestroy {
         }),
         takeUntil(this.destroyed),
         takeUntil(this.cancelled$),
-        map(dataURL => ({ dataURL, filename })),
+        map(exportResult => ({ dataURL: exportResult.dataURL, filename })),
         catchError(message => this.handleExportError(message)),
       );
   }
@@ -165,10 +173,10 @@ export class PrintService implements OnDestroy {
 
   private getVectorLayerFilterFunction(options: PrintOptions): OlLayerFilter {
     const validLayers = new Set(options.includeDrawing ? ['drawing-layer'] : []);
+    this.additionalVectorLayers.forEach(layerId => validLayers.add(layerId));
     if (DEBUG_PRINT_EXTENT) {
       validLayers.add('print-preview-layer');
     }
-    // eslint-disable-next-line rxjs/finnish
     return layer => validLayers.has(layer.get('id'));
   }
 
@@ -274,5 +282,4 @@ export class PrintService implements OnDestroy {
       take(1),
     );
   }
-
 }

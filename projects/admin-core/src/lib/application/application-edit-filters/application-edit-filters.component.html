@@ -1,12 +1,19 @@
-<h3>filterGroups json</h3>
-<p>Unsupported POC for editing preset simple filters. Add or edit the proper JSON below.</p>
-<mat-form-field>
-  <mat-label>filterGroups</mat-label>
-  <mat-hint align="end"><strong>Use CTRL+ENTER to submit the filter json, there is no validation on the input</strong></mat-hint>
-  <textarea #content
-            (keyup.control.enter)="onFilterGroupsSaveManual(content.value)"
-            cdkAutosizeMinRows="10"
-            cdkTextareaAutosize
-            matInput
-  >{{ filterGroups$ | async | json }}</textarea>
-</mat-form-field>
+<div class="edit-filters">
+  <div class="filterable-layers-list">
+    <div class="filterable-layers-header">
+      <h3 i18n="@@admin-core.application.filters.filters">Filters</h3>
+      <div class="create-filter-button-wrapper" [tmTooltip]="createFilterTooltip()">
+        <button color="white"
+                mat-icon-button
+                class="size-24"
+                [disabled]="noFilterableLayers()"
+                [routerLink]="'/admin/applications/application/' + applicationId() + '/filters/create'">
+          <mat-icon svgIcon="plus"></mat-icon>
+        </button>
+      </div>
+    </div>
+    <tm-admin-application-filter-group-list></tm-admin-application-filter-group-list>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+

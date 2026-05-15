@@ -1,6 +1,4 @@
-import {
-  ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, OnInit, Output, signal, ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, OnInit, Output, signal, ViewEncapsulation, inject } from '@angular/core';
 import { TemplatePicklistConfig } from './template-picklist.model';
 import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { MarkdownEditorService } from './markdown-editor.service';
@@ -22,6 +20,9 @@ const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
   providers: [MarkdownEditorService],
 })
 export class MarkdownEditorComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private mdEditorService = inject(MarkdownEditorService);
+
 
   private _content: string | undefined;
 
@@ -40,18 +41,15 @@ export class MarkdownEditorComponent implements OnInit {
   @Input()
   public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
 
+  @Input()
+  public useInfoPanelWidth = false;
+
   @Output()
   public contentChanged = new EventEmitter<string>();
 
   public selectedEditor = signal<'milkdown' | 'source'>(window.localStorage.getItem(LOCALSTORAGE_EDITOR_KEY) === 'source' ? 'source' : 'milkdown');
   public isMilkdownEditor = computed(() => this.selectedEditor() === 'milkdown');
   public isSourceEditor = computed(() => this.selectedEditor() === 'source');
-
-  public constructor(
-    private destroyRef: DestroyRef,
-    private mdEditorService: MarkdownEditorService,
-  ) {
-  }
 
   public ngOnInit() {
     this.mdEditorService.resetContent(this.content ?? "");

@@ -9,14 +9,19 @@ import { PanelResizerComponent } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { getMockApiService } from '../../../services/load-viewer.service.spec';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('AttributeListContent', () => {
 
   it('renders content, loading, no rows', async () => {
     const store = getLoadingStore();
     await render(AttributeListContentComponent, {
-      imports: [ MatProgressSpinnerModule, MatDialogModule ],
+      imports: [ MatProgressSpinnerModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
           initialState: store,
         }),
@@ -29,8 +34,9 @@ describe('AttributeListContent', () => {
   it('renders content, not loading, no rows', async () => {
     const store = getLoadedStoreNoRows();
     await render(AttributeListContentComponent, {
-      imports: [MatDialogModule],
+      imports: [ MatDialogModule, MatSnackBarModule ],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
           initialState: store,
         }),
@@ -42,11 +48,19 @@ describe('AttributeListContent', () => {
   it('renders content, loaded and with rows', async () => {
     const store = getLoadedStoreWithRows();
     await render(AttributeListContentComponent, {
-      imports: [ MatTableModule, MatIconModule, MatIconTestingModule, MatDialogModule ],
+      imports: [ MatTableModule, MatIconModule, MatIconTestingModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
       declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent ],
       providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });

@@ -1,3 +1,2 @@
 export * from './state';
-export * from './helpers/drawing.helper';
-export * from './models/drawing-feature.model';
+export * from './services/drawing-feature-registration.service';

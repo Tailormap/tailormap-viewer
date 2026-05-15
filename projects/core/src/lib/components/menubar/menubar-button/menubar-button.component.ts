@@ -29,6 +29,9 @@ export class MenubarButtonComponent implements OnInit {
   @Input()
   public active$: Observable<boolean> = of(false);
 
+  @Input()
+  public badgeCount: number | null = null;
+
   @Output()
   public buttonClicked = new EventEmitter();
 

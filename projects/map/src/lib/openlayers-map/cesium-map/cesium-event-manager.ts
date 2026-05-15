@@ -63,7 +63,7 @@ export class CesiumEventManager {
         const propertyIds = pickedFeature.getPropertyIds();
         for (const propertyId of propertyIds) {
           selection3D.featureInfo?.properties.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
-          selection3D.featureInfo?.columnMetadata.push({ layerId: layerId, key: propertyId, type: AttributeType.STRING });
+          selection3D.featureInfo?.columnMetadata.push({ layerId: layerId, name: propertyId, type: AttributeType.STRING });
         }
         CesiumEventManager.map3DClickEvent.next(selection3D);
       }

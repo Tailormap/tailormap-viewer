@@ -24,6 +24,7 @@ const onChangeAttributeListTabs = (
   const data = [...state.data].filter(d => payload.closedTabs.indexOf(d.tabId) === -1);
   const newData = payload.newData
     .filter(featureData => !data.some(f => f.id === featureData.id && f.tabId === featureData.tabId));
+
   let selectedTabId = state.selectedTabId;
   if (updatedTabs.findIndex(t => t.id === selectedTabId) === -1) {
     selectedTabId = updatedTabs.length > 0 ? updatedTabs[0].id : undefined;
@@ -88,6 +89,8 @@ const onLoadDataSuccess = (
         ...data,
         errorMessage: payload.data.errorMessage,
         totalCount: payload.data.totalCount,
+        pageSize: payload.data.pageSize,
+        pageIndex: typeof payload.data.pageIndex !== 'undefined' ? payload.data.pageIndex : data.pageIndex,
         rows: payload.data.rows,
         columns: data.columns.length > 0 ? data.columns : payload.data.columns,
         selectedRowId: undefined,
@@ -170,6 +173,16 @@ const onUpdateSort = (
   };
 };
 
+const onSetInitialDataSort = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.setInitialDataSort>,
+): AttributeListState => {
+  return {
+    ...state,
+    initialDataSort: payload.initialDataSort,
+  };
+};
+
 const onUpdateRowSelected = (
   state: AttributeListState,
   payload: ReturnType<typeof AttributeListActions.updateRowSelected>,
@@ -211,7 +224,10 @@ const onChangeColumnPosition = (
         return data;
       }
       const updatedColumns = [...data.columns];
-      const newPosition = payload.previousColumn === null ? 0 : siblingIndex + 1;
+      const movingDown = columnIdx < siblingIndex;
+      const newPosition = payload.previousColumn === null
+        ? 0
+        : siblingIndex + (movingDown ? 0 : 1);
       updatedColumns.splice(newPosition, 0, updatedColumns.splice(columnIdx, 1)[0]);
       return {
         ...data,
@@ -239,6 +255,36 @@ const onToggleColumnVisible = (
   ),
 });
 
+const onToggleAllColumnsVisible = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.toggleAllColumnsVisible>,
+): AttributeListState => ({
+  ...state,
+  data: AttributeListStateHelper.updateData(
+    state.data,
+    payload.dataId,
+    data => {
+      const someInvisible = data.columns.some(c => !c.visible);
+      return {
+        ...data,
+        columns: data.columns.map(c => ({ ...c, visible: someInvisible })),
+      };
+    },
+  ),
+});
+
+const onSetSelectedDataId = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.setSelectedDataId>,
+): AttributeListState => ({
+  ...state,
+  tabs: AttributeListStateHelper.updateTab(
+    state.tabs,
+    payload.tabId,
+    tab => ({ ...tab, loadingData: true, selectedDataId: payload.dataId }),
+  ),
+});
+
 const attributeListReducerImpl = createReducer<AttributeListState>(
   initialAttributeListState,
   on(AttributeListActions.setAttributeListVisibility, onSetAttributeListVisibility),
@@ -249,9 +295,12 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.loadDataFailed, onLoadDataFailed),
   on(AttributeListActions.updatePage, onUpdatePage),
   on(AttributeListActions.updateSort, onUpdateSort),
+  on(AttributeListActions.setInitialDataSort, onSetInitialDataSort),
   on(AttributeListActions.updateRowSelected, onUpdateRowSelected),
   on(AttributeListActions.changeColumnPosition, onChangeColumnPosition),
   on(AttributeListActions.toggleColumnVisible, onToggleColumnVisible),
+  on(AttributeListActions.toggleAllColumnsVisible, onToggleAllColumnsVisible),
   on(AttributeListActions.setHighlightedFeature, onSetHighlightedFeature),
+  on(AttributeListActions.setSelectedDataId, onSetSelectedDataId),
 );
 export const attributeListReducer = (state: AttributeListState | undefined, action: Action) => attributeListReducerImpl(state, action);

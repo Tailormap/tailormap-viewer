@@ -10,6 +10,10 @@ import { UserResponseModel } from '@tailormap-viewer/api';
 describe('LoginFormComponent', () => {
 
   test('should render', async () => {
+    const mockLoginConfiguration = {
+      allowPasswordLogin: true,
+      ssoLinks: [],
+    };
     await render(LoginFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -18,6 +22,9 @@ describe('LoginFormComponent', () => {
       declarations: [
         AutoFocusDirective,
       ],
+      inputs: {
+        loginConfiguration: mockLoginConfiguration,
+      },
     });
     expect(screen.getByText('Username'));
     expect(screen.getByText('Password'));
@@ -25,6 +32,10 @@ describe('LoginFormComponent', () => {
   });
 
   test('triggers login method', async () => {
+    const mockLoginConfiguration = {
+      allowPasswordLogin: true,
+      ssoLinks: [],
+    };
     const loginFn = jest.fn(() => of<UserResponseModel>({
       isAuthenticated: true,
       username: 'user',
@@ -38,6 +49,7 @@ describe('LoginFormComponent', () => {
       on: { loggedIn },
       inputs: {
         login$: loginFn,
+        loginConfiguration: mockLoginConfiguration,
       },
       imports: [
         ReactiveFormsModule,

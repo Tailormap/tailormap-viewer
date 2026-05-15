@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CatalogItemKindEnum, CatalogNodeModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { catchError, combineLatest, concatMap, map, of, Subject, switchMap, take, tap } from 'rxjs';
@@ -19,15 +19,13 @@ import { DebounceHelper } from '@tailormap-viewer/shared';
   providedIn: 'root',
 })
 export class CatalogService implements OnDestroy {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private sseService = inject(AdminSseService);
+
 
   private destroyed = new Subject<null>();
-
-  constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private sseService: AdminSseService,
-  ) {}
 
   public ngOnDestroy() {
     this.destroyed.next(null);

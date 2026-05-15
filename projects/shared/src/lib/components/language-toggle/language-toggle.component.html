@@ -1,13 +1,16 @@
-<ng-container *ngIf="canChangeLanguage">
+@if (canChangeLanguage) {
   <mat-menu #languageMenu="matMenu" xPosition="after" yPosition="above">
-    <button *ngFor="let language of availableLanguages" mat-menu-item (click)="selectLanguage(language.code)">
-      <mat-icon [svgIcon]="language.icon"></mat-icon>
-      <span>{{language.nativeLabel}}</span>
-    </button>
+    @for (language of availableLanguages; track language) {
+      <button mat-menu-item (click)="selectLanguage(language.code)">
+        <mat-icon [svgIcon]="language.icon"></mat-icon>
+        <span>{{language.nativeLabel}}</span>
+      </button>
+    }
   </mat-menu>
-
   <button mat-menu-item [matMenuTriggerFor]="languageMenu">
-    <mat-icon *ngIf="selectedLanguage" [svgIcon]="selectedLanguage.icon"></mat-icon>
+    @if (selectedLanguage) {
+      <mat-icon [svgIcon]="selectedLanguage.icon"></mat-icon>
+    }
     <span>{{selectedLanguage?.nativeLabel}}</span>
   </button>
-</ng-container>
+}

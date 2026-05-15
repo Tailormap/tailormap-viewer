@@ -1,0 +1,22 @@
+.switch-filter-content {
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
+.switch-filter-content ::ng-deep .mat-button-toggle-group {
+  max-width: 100%;
+}
+
+.switch-filter-content ::ng-deep .mat-button-toggle {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.switch-filter-content ::ng-deep .mat-button-toggle-label-content {
+  width: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: clip;
+}
+
+

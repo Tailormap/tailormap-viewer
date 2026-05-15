@@ -1,12 +1,13 @@
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel,
+  SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { LayerExtractResponseModel } from '../models/layer-extract-response.model';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
 
 export interface TailormapApiV1ServiceModel {
 
@@ -31,16 +32,18 @@ export interface TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
     sortBy?: string;
     sortOrder?: Sortorder;
     onlyGeometries?: boolean;
     geometryInAttributes?: boolean;
+    withAttachments?: boolean;
   }): Observable<FeaturesResponseModel>;
 
   deleteFeature$(params: {
     applicationId: string;
     layerId: string;
-    feature: FeatureModel;
+    fid: string;
   }): Observable<HttpStatusCode>;
 
   updateFeature$(params: {
@@ -62,19 +65,25 @@ export interface TailormapApiV1ServiceModel {
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
 
-  getLayerExportCapabilities$(params: {
+  getLayerExtractFormats$(params: {
     applicationId: string;
     layerId: string;
-  }): Observable<LayerExportCapabilitiesModel>;
+  }): Observable<LayerExtractCapabilitiesModel>;
 
-  getLayerExport$(params: {
+  requestLayerExtract$(params: {
     applicationId: string;
     layerId: string;
+    clientId: string;
     outputFormat: string;
+    attributes?: string[];
     filter?: string;
     sort: { column: string; direction: string} | null;
-    attributes?: string[];
-    crs?: string;
+  }): Observable<LayerExtractResponseModel>;
+
+  downloadLayerExtract$(params: {
+    applicationId: string;
+    layerId: string;
+    downloadId: string;
   }): Observable<HttpResponse<Blob>>;
 
   getConfig$<T>(key: string): Observable<ConfigResponseModel<T>>;
@@ -86,4 +95,20 @@ export interface TailormapApiV1ServiceModel {
     start?: number;
   }): Observable<SearchResponseModel>;
 
+  getLatestUpload$<T>(category: string): Observable<T>;
+
+  addAttachment$(params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any>;
+
+  listAttachments$(params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]>;
+
+  getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string;
+
+  deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any;
 }

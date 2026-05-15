@@ -8,14 +8,22 @@ mat-form-field {
   margin-top: 16px;
 }
 
-.label a {
-  margin-left: 16px;
-  text-decoration: underline;
-  cursor: pointer;
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
 }
 
-button {
-  margin-left: 16px;
+.bounds-buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 0 16px;
+}
+
+.label a {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .hint {

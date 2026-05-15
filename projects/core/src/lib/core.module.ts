@@ -1,5 +1,5 @@
-import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer, Inject } from '@angular/core';
-import { LoginComponent, ViewerAppComponent } from './pages';
+import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
+import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -30,9 +30,11 @@ import { ApplicationStyleService } from './services/application-style.service';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
+import { PasswordResetRequestFormComponent } from './pages/login/password-reset-request-form/password-reset-request-form.component';
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
+import { CoreSharedModule } from './shared/core-shared.module';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -54,6 +56,8 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     ViewerAppComponent,
     LoginComponent,
     LoginFormComponent,
+    PasswordResetRequestFormComponent,
+    PasswordResetComponent,
   ],
   imports: [
     CoreRoutingModule,
@@ -77,6 +81,7 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     ComponentsModule,
     LayoutModule,
     RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
+    CoreSharedModule,
   ],
   exports: [
     ViewerAppComponent,
@@ -96,16 +101,16 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
   ],
 })
 export class CoreModule {
-  constructor(
-    matIconRegistry: MatIconRegistry,
-    domSanitizer: DomSanitizer,
-    iconService: IconService,
-    authenticatedUserService: AuthenticatedUserService,
-    adminAuthService: UserLoginCheckService,
-    @Inject(APP_BASE_HREF) baseHref: string,
-    _appStyleService: ApplicationStyleService,
-    _routerHistoryService: RouterHistoryService,
-  ) {
+  //eslint-disable-next-line @angular-eslint/prefer-inject
+  constructor( _appStyleService: ApplicationStyleService,
+               _routerHistoryService: RouterHistoryService) {
+    const matIconRegistry = inject(MatIconRegistry);
+    const domSanitizer = inject(DomSanitizer);
+    const iconService = inject(IconService);
+    const authenticatedUserService = inject(AuthenticatedUserService);
+    const adminAuthService = inject(UserLoginCheckService);
+    const baseHref = inject(APP_BASE_HREF);
+
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     authenticatedUserService.fetchUserDetails();
     adminAuthService.pingUserLoggedIn();

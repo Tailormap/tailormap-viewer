@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { concatMap, map, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal, input, DestroyRef } from '@angular/core';
+import { combineLatest, concatMap, filter, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
-import { deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectMapSettings } from '../../../map/state/map.selectors';
+import { ComponentRegistrationService } from '../../../services';
+import { MenubarService } from '../../menubar';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { ClickedCoordinatesMenuButtonComponent } from './clicked-coordinates-menu-button/clicked-coordinates-menu-button.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { withLatestFrom } from 'rxjs/operators';
+import { selectComponentTitle } from '../../../state';
 
 
 @Component({
@@ -20,8 +24,18 @@ import { selectMapSettings } from '../../../map/state/map.selectors';
   standalone: false,
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private clipboard = inject(Clipboard);
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
+  private destroyRef = inject(DestroyRef);
 
-  public toolActive$: Observable<boolean>;
+
+  public noExpansionPanel = input<boolean>(false);
+
+  public toolActive = signal<boolean>(false);
 
   public coordinatesForm = new FormGroup({
     x: new FormControl<number | null>(null),
@@ -36,17 +50,26 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   private clickLocationSubject = new Subject<FeatureModel[]>();
   private clickLocationSubject$ = this.clickLocationSubject.asObservable();
   private crs: string = '';
+  private tool: string | undefined;
+  public visible$ = combineLatest([
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_PICKER),
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+  ]).pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+  );
 
-  constructor(private store$: Store, private mapService: MapService, private clipboard: Clipboard) {
-    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.SELECT_COORDINATES));
-    this.toolActive$.pipe(takeUntil(this.destroyed)).subscribe(isActive => {
-      if (!isActive) {
-        //only reset the input fields, not the hidden fields
-        this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
-        this.clickLocationSubject.next([]);
-      }
-    });
-
+  constructor() {
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_PICKER])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(enabled => {
+        this.toolActive.set(enabled);
+        if (!enabled) {
+          //only reset the input fields, not the hidden fields
+          this.coordinatesForm.patchValue({ x: null, y:  null }, { emitEvent: false });
+          this.clickLocationSubject.next([]);
+        }
+      });
     this.store$.select(selectMapSettings).pipe(
       takeUntil(this.destroyed),
       map(settings => {
@@ -76,11 +99,12 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.COORDINATE_PICKER,
     })
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.SELECT_COORDINATES, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         concatMap(({ tool }) => tool?.mapClick$ || of(null)),
       ).subscribe(mapClick => this.handleMapClick(mapClick));
@@ -111,17 +135,56 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         };
       }
     }).pipe(takeUntil(this.destroyed)).subscribe();
+
+    this.componentRegistrationService.registerComponent(
+      'mobile-menu-home',
+      { type: BaseComponentTypeEnum.COORDINATE_PICKER, component: ClickedCoordinatesMenuButtonComponent },
+    );
+
+    // Toggle the coordinate picker map tool when the coordinate picker menu button is clicked in the mobile layout.
+    this.mobileLayoutService.isMobileLayoutEnabled$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(enabled => enabled),
+        switchMap(() => this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_PICKER)),
+      ).subscribe(visibleInMobileLayout => {
+      if (visibleInMobileLayout) {
+        this.menubarService.setMobilePanelHeight(190);
+        this.toggle(false);
+      } else if (this.toolActive()) {
+        this.toggle(true);
+      }
+    });
+
+    // Close the coordinate picker when the mapTool is disabled by another component.
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_PICKER])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        withLatestFrom(
+          this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_PICKER),
+          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)),
+        ),
+      )
+      .subscribe(([ enabledTool, visible, componentTitle ]) => {
+        if (!enabledTool && visible) {
+          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
+        }
+      });
   }
 
   public ngOnDestroy() {
     this.clickLocationSubject.complete();
     this.destroyed.next(null);
     this.destroyed.complete();
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.COORDINATE_PICKER);
   }
 
-  public toggle() {
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.SELECT_COORDINATES }));
+  public toggle(close?: boolean) {
+    if (close === true || this.toolActive()) {
+      this.mapService.disableTool(this.tool);
+      return;
+    }
+    this.mapService.enableTool(this.tool, true);
   }
 
   public copy() {

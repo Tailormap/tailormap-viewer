@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormFieldModel } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -20,6 +20,10 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
   standalone: false,
 })
 export class FormEditFieldComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input({ required: true })
   public set featureType(featureType: FeatureTypeModel | null) {
@@ -32,13 +36,6 @@ export class FormEditFieldComponent implements OnInit {
   private _featureType: FeatureTypeModel | null = null;
 
   public field: FormFieldModel | null = null;
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
 
   public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
 
@@ -53,6 +50,8 @@ export class FormEditFieldComponent implements OnInit {
     }),
     required: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    autoFillUser: new FormControl<boolean>(false, { nonNullable: true }),
+    autoFillDate: new FormControl<boolean>(false, { nonNullable: true }),
     uniqueValuesAsOptions: new FormControl<boolean>(false, { nonNullable: true }),
     valueList: new FormArray<ValueListFormType>([]),
     allowFreeInput: new FormControl<boolean>(false, { nonNullable: true }),
@@ -76,6 +75,8 @@ export class FormEditFieldComponent implements OnInit {
           label: value.label || this.field.name,
           required: typeof value.required === 'undefined' ? false : value.required,
           disabled: typeof value.disabled === 'undefined' ? false : value.disabled,
+          autoFillUser: typeof value.autoFillUser === 'undefined' ? false : value.autoFillUser,
+          autoFillDate: typeof value.autoFillDate === 'undefined' ? false : value.autoFillDate,
           type: EditFormFieldHelper.getFormFieldType(value.type),
           valueList,
           uniqueValuesAsOptions: value.uniqueValuesAsOptions,
@@ -107,6 +108,8 @@ export class FormEditFieldComponent implements OnInit {
       type: form.type,
       required: form.required,
       disabled: form.disabled,
+      autoFillUser: form.autoFillUser,
+      autoFillDate: form.autoFillDate,
       uniqueValuesAsOptions: form.uniqueValuesAsOptions,
       allowFreeInput: form.allowValueListOnly === false,
     }, { emitEvent: false });
@@ -129,6 +132,8 @@ export class FormEditFieldComponent implements OnInit {
       type: '',
       required: false,
       disabled: false,
+      autoFillUser: false,
+      autoFillDate: false,
       uniqueValuesAsOptions: false,
       allowFreeInput: false,
     }, { emitEvent: false });

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Signal, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterGroups } from '../state/application.selectors';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
-import { updateApplicationFiltersConfig } from '../state/application.actions';
+import { take } from 'rxjs';
+import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { loadCatalog } from '../../catalog/state/catalog.actions';
+import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
 
 @Component({
   selector: 'tm-admin-application-edit-filters',
@@ -13,19 +14,25 @@ import { updateApplicationFiltersConfig } from '../state/application.actions';
   standalone: false,
 })
 export class ApplicationEditFiltersComponent {
+  private store$ = inject(Store);
 
-  public filterGroups$: Observable<FilterGroupModel<AttributeFilterModel>[]> = new BehaviorSubject<FilterGroupModel<AttributeFilterModel>[]>([]);
-
-  constructor(private store$: Store) {
-    this.filterGroups$ = this.store$.select(selectFilterGroups);
-  }
-
-  public onFilterGroupsSaveManual(jsonString: string) {
-    try {
-      const filterGroups = JSON.parse(jsonString) as FilterGroupModel<AttributeFilterModel>[];
-      this.store$.dispatch(updateApplicationFiltersConfig({ filterGroups }));
-    } catch (e) {
-      console.error('Invalid JSON string', e);
+  public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
+  public noFilterableLayers: Signal<boolean> = this.store$.selectSignal(selectNoFilterableLayersForSelectedApplication);
+  public createFilterTooltip = computed(() => {
+    if (this.noFilterableLayers()) {
+      return $localize `:@@admin-core.application.filters.no-filterable-layers:There are no filterable layers for this application`;
     }
+    return $localize `:@@admin-core.application.filters.create-filter:Create filter`;
+  });
+
+  constructor() {
+    this.store$.select(selectCatalogLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
+          this.store$.dispatch(loadCatalog());
+        }
+      });
   }
+
 }

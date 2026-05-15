@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { DrawingFeatureModel, DrawingFeatureStyleModel } from '../models/drawing-feature.model';
+import { DrawingFeatureModel, DrawingFeatureStyleModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 
 const drawingActionsPrefix = '[Drawing]';
@@ -42,7 +42,7 @@ export const removeAllDrawingFeatures = createAction(
   `${drawingActionsPrefix} Remove All Drawing Features`,
 );
 
-export const setSelectedDrawingStyle = createAction(
-  `${drawingActionsPrefix} Set Selected Drawing Style`,
+export const setSelectedDrawingType = createAction(
+  `${drawingActionsPrefix} Set Selected Drawing Type`,
   props<{ drawingType: DrawingFeatureTypeEnum | null }>(),
 );

@@ -6,7 +6,7 @@ import {
   GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, TaskDetailsModel, TaskModel,
   UserModel,
 } from '../models';
-import { AttributeType } from '@tailormap-viewer/api';
+import { AttributeType, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
@@ -134,6 +134,7 @@ export const getGroups = (): GroupModel[] => {
 export const getUser = (overrides?: Partial<UserModel>): UserModel => ({
   username: 'admin',
   name: null,
+  organisation: null,
   validUntil: null,
   email: null,
   enabled: true,
@@ -227,4 +228,9 @@ export const getTaskDetails = (): TaskDetailsModel => ({
   description: "POC task that runs every hour",
   progress: "POC task is at 30%",
   cronExpression: "0 0 0/1 1/1 * ? *",
+});
+
+export const getUniqueValues = (): UniqueValuesResponseModel => ({
+  filterApplied: false,
+  values: ['value1', 'value2', 'value3'],
 });

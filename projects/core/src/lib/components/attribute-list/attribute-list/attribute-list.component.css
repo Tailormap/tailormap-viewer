@@ -13,3 +13,20 @@ mat-tab-group {
 tm-attribute-list-tab {
   flex: 1;
 }
+
+.tab-group .label {
+  padding-right: 6px;
+}
+
+.table-options-button {
+  --mat-icon-button-icon-size: 18px;
+
+  position: absolute;
+  right: -20px;
+  margin-top: 3px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  min-width: auto;
+  text-align: center;
+}

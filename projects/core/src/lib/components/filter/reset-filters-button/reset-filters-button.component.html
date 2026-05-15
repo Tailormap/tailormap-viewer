@@ -1,0 +1,12 @@
+@if (filters$ | async) {
+  <button mat-flat-button
+          color="primary"
+          class="filter-reset-button"
+          aria-label="Reset filters"
+          tmTooltip="Reset filters to their original state"
+          i18n-tmTooltip="@@core.filter.reset-filters-tooltip"
+          (click)="resetFilters()">
+    <span i18n="@@core.filter.reset-filters">Reset filters</span>
+    <mat-icon svgIcon="reset"></mat-icon>
+  </button>
+}

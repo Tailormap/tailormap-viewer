@@ -1,41 +1,45 @@
-import { Inject, Injectable, LOCALE_ID, OnDestroy } from '@angular/core';
+import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
-  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D,
+  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D, MapViewerOptionsModel,
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
-  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil, tap,
+  combineLatest, concatMap, distinctUntilChanged, filter, first, forkJoin, map, Observable, of, Subject, switchMap, take,
+  takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ArrayHelper, HtmlifyHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
 import {
   selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
-import { selectCQLFilters } from '../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
 import { withLatestFrom } from 'rxjs/operators';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
-import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
+import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookmark.helper';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 import { ApplicationLayerRefreshService } from './application-layer-refresh.service';
+import { FeaturesFilterHelper } from '../../filter';
+import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 
 @Injectable({
    providedIn: 'root',
 })
 export class ApplicationMapService implements OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private httpClient = inject(HttpClient);
+  private bookmarkService = inject(BookmarkService);
+  private localeId = inject(LOCALE_ID);
+  private _applicationLayerRefreshService = inject(ApplicationLayerRefreshService);
+  private mobileLayoutService = inject(MobileLayoutService);
+
   private destroyed = new Subject();
   private capabilities: Map<string, string> = new Map();
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private httpClient: HttpClient,
-    private bookmarkService: BookmarkService,
-    _applicationRefreshService: ApplicationLayerRefreshService,
-    @Inject(LOCALE_ID) private localeId: string,
-  ) {
+  constructor() {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
       .pipe(
@@ -49,15 +53,22 @@ export class ApplicationMapService implements OnDestroy {
             ArrayHelper.arrayEquals(prev.initialExtent, curr.initialExtent) &&
             ArrayHelper.arrayEquals(prev.maxExtent, curr.maxExtent);
         }),
-        withLatestFrom(this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)),
+        withLatestFrom(
+          this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR),
+          this.mobileLayoutService.isMobileLayoutEnabled$,
+        ),
       )
-      .subscribe(([ mapOptions, locationBookmark ]) => {
+      .subscribe(([ mapOptions, locationBookmark, isMobileLayoutEnabled ]) => {
         if (mapOptions === null) {
           return;
         }
         const bookmark = MapBookmarkHelper.locationAndZoomFromFragment(locationBookmark);
         const initialOptions = bookmark ? { initialCenter: bookmark[0], initialZoom: bookmark[1] } : undefined;
-        this.mapService.initMap(mapOptions, initialOptions);
+        const mapViewerOptions: MapViewerOptionsModel = {
+          ...mapOptions,
+          controlOptions: { attributionPosition: isMobileLayoutEnabled ? 'left' : 'right' },
+        };
+        this.mapService.initMap(mapViewerOptions, initialOptions);
       });
 
     combineLatest([
@@ -118,7 +129,10 @@ export class ApplicationMapService implements OnDestroy {
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
-        return layers.map(l => ({ ...l, filter: filters.get(l.id) }));
+        return layers.map(l => ({
+          ...l,
+          filter: FeaturesFilterHelper.getFilter(filters.get(l.id)),
+        }));
       }),
     );
   }
@@ -154,10 +168,12 @@ export class ApplicationMapService implements OnDestroy {
     const service = extendedAppLayer.service;
     const defaultLayerProps: ServiceLayerModel = {
       id: `${extendedAppLayer.id}`,
-      name: extendedAppLayer.layerName,
+      name: extendedAppLayer.temporaryLayerName || extendedAppLayer.layerName,
       url: extendedAppLayer.url || service.url,
       layerType: LayerTypesEnum.WMS,
       visible: extendedAppLayer.visible,
+      minScale: extendedAppLayer.minScale,
+      maxScale: extendedAppLayer.maxScale,
       // We don't want a 'tainted canvas' for features such as printing. TM requires CORS-enabled or proxied services.
       crossOrigin: 'anonymous',
       opacity: extendedAppLayer.opacity,
@@ -184,13 +200,15 @@ export class ApplicationMapService implements OnDestroy {
       const layer: WMSLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.WMS,
-        layers: extendedAppLayer.layerName,
+        layers: extendedAppLayer.temporaryLayerName || extendedAppLayer.layerName,
         serverType: service.serverType,
         tilingDisabled: extendedAppLayer.tilingDisabled,
         tilingGutter: extendedAppLayer.tilingGutter,
-        filter: extendedAppLayer.filter,
+        filter: typeof extendedAppLayer.filter === 'string' ? extendedAppLayer.filter : undefined,
         language: service.serverType === ServerType.GEOSERVER ? this.localeId : undefined,
         webMercatorAvailable: extendedAppLayer.webMercatorAvailable,
+        styles: extendedAppLayer.styles,
+        selectedStyleName: extendedAppLayer.selectedStyleName,
       };
       return of(layer);
     }
@@ -212,6 +230,7 @@ export class ApplicationMapService implements OnDestroy {
       const layer: Tiles3dLayerModel = {
         ...defaultLayerProps,
         layerType: LayerTypesEnum.TILES3D,
+        tileset3dStyle: Tileset3dStyleHelper.isTileset3dStyle(extendedAppLayer.tileset3dStyle) ? extendedAppLayer.tileset3dStyle : undefined,
       };
       return of(layer);
     }

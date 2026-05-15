@@ -1,19 +1,21 @@
-/* eslint-disable rxjs/finnish */
 import { Map as OlMap } from 'ol';
 import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
-import { LayerManagerModel, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel } from '../models';
+import {
+  LayerManagerModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
+} from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, take } from 'rxjs';
+import {
+  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
+} from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
-import { MapExportOptions } from '../map-service/map.service';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { buffer, Extent, extend, getCenter } from 'ol/extent';
@@ -24,8 +26,10 @@ import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
-import { OpenLayersHelper } from './helpers/open-layers.helper';
 import { CesiumManager } from './cesium-map/cesium-manager';
+import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
+import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
+import { FeatureModelType } from '../models/feature-model.type';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -41,6 +45,8 @@ export class OpenLayersMap implements MapViewerModel {
   private initialExtent: OpenlayersExtent = [];
   private initialCenterZoom?: [number[], number] = undefined;
   private mapPadding: number[] | undefined;
+
+  private hasUserInteractedSubject = new BehaviorSubject(false);
 
   constructor(
     private ngZone: NgZone,
@@ -96,9 +102,12 @@ export class OpenLayersMap implements MapViewerModel {
       view,
     });
     // always add the attribution control
-    olMap.addControl(new Attribution({
+    const attributionControl = new Attribution({
+      className: `ol-attribution ol-attribution--${options.controlOptions?.attributionPosition}`,
       collapsed: false,
-    }));
+      collapseLabel: options.controlOptions?.attributionPosition === 'left' ? '‹' : '›',
+    });
+    olMap.addControl(attributionControl);
 
     this.initialExtent = options.initialExtent?.length === 4
       ? options.initialExtent
@@ -117,11 +126,30 @@ export class OpenLayersMap implements MapViewerModel {
     }
 
     OpenLayersEventManager.destroy();
+    OpenLayersSnappingManager.destroy();
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
     OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
+    OpenLayersSnappingManager.init(olMap, layerManager);
+
+    // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
+    merge(
+      timer(5000),
+      OpenLayersEventManager.onMapClick$(),
+      OpenLayersEventManager.onMapMoveStart$(),
+    )
+      .pipe(
+        take(1),
+      )
+      .subscribe(() => {
+        attributionControl?.setCollapsed(true);
+      });
+
+    race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
+      .pipe(take(1))
+      .subscribe(() => this.hasUserInteractedSubject.next(true));
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -174,6 +202,19 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  public zoomToScale(scale: number) {
+    this.executeMapAction(olMap => {
+      const view = olMap.getView();
+      const resolution = OlMapScaleHelper.getResolutionForScale(view.getProjection(), scale);
+      if (resolution) {
+        const zoom = view.getZoomForResolution(resolution);
+        if (zoom) {
+          view.setZoom(zoom);
+        }
+      }
+    });
+  }
+
   private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {
     if (olFeatures.length === 0) {
       return;
@@ -217,16 +258,16 @@ export class OpenLayersMap implements MapViewerModel {
     this.zoomToExtent(totalExtent);
   }
 
-  public zoomToGeometry(geom?: Geometry) {
+  public zoomToGeometry(geom?: Geometry, maxZoom?: number) {
     if (!geom) {
       return;
     }
-    this.zoomToExtent(geom.getExtent());
+    this.zoomToExtent(geom.getExtent(), maxZoom);
   }
 
-  private zoomToExtent(extent: Extent) {
+  private zoomToExtent(extent: Extent, maxZoom?: number) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding });
+      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
     });
   }
 
@@ -289,7 +330,7 @@ export class OpenLayersMap implements MapViewerModel {
       .pipe(
         map(olMap => {
           const view = olMap.getView();
-          const { scale, resolution } = OpenLayersHelper.getResolutionAndScale(view);
+          const { scale, resolution } = OlMapScaleHelper.getResolutionAndScale(view);
           return {
             zoomLevel: view.getZoom() || 0,
             minZoomLevel: view.getMinZoom() || 0,
@@ -306,7 +347,7 @@ export class OpenLayersMap implements MapViewerModel {
       );
   }
 
-  public exportMapImage$(options: MapExportOptions): Observable<string> {
+  public exportMapImage$(options: MapExportOptions): Observable<MapExportResult> {
     return this.getMap$().pipe(
       take(1),
       concatMap((olMap: OlMap) => {
@@ -316,10 +357,10 @@ export class OpenLayersMap implements MapViewerModel {
           OpenLayersMapImageExporter.exportMapImage$(olMap.getSize() as Size, olMap.getView(), options, extraLayers, this.ngZone, this.httpXsrfTokenExtractor),
         ]);
       }),
-      map(([ extraLayers, pdfExport ]) => {
+      map(([ extraLayers, exportResult ]) => {
         // Force redraw of extra layers with normal DPI
         extraLayers.forEach(l => l.changed());
-        return pdfExport;
+        return exportResult;
       }),
     );
   }
@@ -409,6 +450,38 @@ export class OpenLayersMap implements MapViewerModel {
       cesiumManager.switch3d();
     });
     this.in3d.next(!this.in3d.value);
+  }
+
+  public set3dTerrainOpacity(opacity: number) {
+    this.executeCesiumAction(cesiumManager => {
+      cesiumManager.setTerrainOpacity(opacity);
+    });
+  }
+
+  public get3dTerrainOpacity$(): Observable<number> {
+    return this.getCesiumManager$().pipe(
+      switchMap(cesiumManager => cesiumManager.getTerrainOpacity$()),
+    );
+  }
+
+  public hasUserInteractedWithMap$(): Observable<boolean> {
+    return this.hasUserInteractedSubject.asObservable();
+  }
+
+  public allowSnapping(allow: boolean) {
+    OpenLayersSnappingManager.allowSnapping(allow);
+  }
+
+  public setSnappingLayerStyle(style: OlMapStyleType) {
+    OpenLayersSnappingManager.setSnappingLayerStyle(style);
+  }
+
+  public setSnappingTolerance(tolerance: number) {
+    OpenLayersSnappingManager.setSnappingTolerance(tolerance);
+  }
+
+  public renderSnappingFeatures(features: FeatureModelType[]) {
+    return OpenLayersSnappingManager.renderFeatures(features);
   }
 
 }

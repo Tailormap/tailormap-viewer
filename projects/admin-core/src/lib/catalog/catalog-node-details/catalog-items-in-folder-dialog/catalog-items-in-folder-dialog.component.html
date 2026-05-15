@@ -3,9 +3,11 @@
 <div mat-dialog-content>
   <p class="content" i18n="@@admin-core.catalog.folder-not-empty-body">This folder {{data.node.title}} is not empty and contains the following items.</p>
   <ul>
-    <li *ngFor="let item of data.items">
-      <a [routerLink]="getUrl(item)" (click)="onConfirm()">{{getTitle(item)}}</a>
-    </li>
+    @for (item of data.items; track item) {
+      <li>
+        <a [routerLink]="getUrl(item)" (click)="onConfirm()">{{getTitle(item)}}</a>
+      </li>
+    }
   </ul>
   <p class="content" i18n="@@admin-core.catalog.remove-items-first">Please remove these items first before removing the folder</p>
 </div>

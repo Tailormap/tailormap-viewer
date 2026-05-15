@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { NavigationError, Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,7 +10,11 @@ import { filter } from 'rxjs';
 export class NavigationErrorRouterService {
   private urlNavigatedToAfterError: string | null = null;
 
-  constructor(router: Router, @Inject(APP_BASE_HREF) baseHref: string, @Inject(LOCALE_ID) localeId: string) {
+  constructor() {
+    const router = inject(Router);
+    const baseHref = inject(APP_BASE_HREF);
+    const localeId = inject(LOCALE_ID);
+
     // Use an alternative catch-all route instead of '**', this allows libraries to add routes
     router.events.pipe(
       takeUntilDestroyed(),

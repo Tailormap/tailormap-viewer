@@ -1,21 +1,18 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { ExtendedAppLayerModel } from '../../../map/models';
 import { ImageHelper } from '../../../shared/helpers/image.helper';
-import { LegendHelper, TypesHelper } from '@tailormap-viewer/shared';
+import { TypesHelper } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LegendService {
+  private mapService = inject(MapService);
+  private localeId = inject(LOCALE_ID);
 
-  constructor(
-    private mapService: MapService,
-    @Inject(LOCALE_ID) private localeId: string,
-  ) {
-  }
 
   public getLegendInfo$(appLayers$: Observable<Array<ExtendedAppLayerModel | null> | ExtendedAppLayerModel | null>, mapResolution$?: Observable<MapViewDetailsModel>):
     Observable<LegendInfoModel[]> {
@@ -28,7 +25,7 @@ export class LegendService {
               let url = layer.legendImageUrl
                 ? layer.legendImageUrl
                 : layerManager.getLegendUrl(`${layer.id}`);
-              if (mapResolution && LegendHelper.isGetLegendGraphicRequest(url)) {
+              if (mapResolution && layer.legendType === 'dynamic') {
                 try {
                   const urlObject = new URL(url);
                   urlObject.searchParams.set('SCALE', mapResolution.scale.toString());
@@ -36,7 +33,7 @@ export class LegendService {
                     urlObject.searchParams.set('LANGUAGE', this.localeId);
                   }
                   url = urlObject.toString();
-                } catch(_ignored) {
+                } catch (_ignored) {
                   // Ignore errors
                 }
               }

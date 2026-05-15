@@ -1,7 +1,7 @@
 import { AttributeType } from './attribute-type.enum';
 
 export interface ColumnMetadataModel {
-  key: string;
+  name: string;
   type: AttributeType;
   alias?: string;
 }

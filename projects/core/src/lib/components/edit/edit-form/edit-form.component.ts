@@ -1,17 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, inject } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, map, merge, Subscription } from 'rxjs';
-import { ColumnMetadataModel, FeatureModel, LayerDetailsModel } from '@tailormap-viewer/api';
+import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
+import { AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
-
-interface EditFormInput {
-  feature: FeatureModel | undefined;
-  details: LayerDetailsModel | undefined;
-  columnMetadata: ColumnMetadataModel[];
-  isNewFeature?: boolean;
-}
+import { DateTime } from 'luxon';
+import { EditFormInput } from '../models/edit-form-input.model';
 
 @Component({
   selector: 'tm-edit-form',
@@ -21,20 +16,23 @@ interface EditFormInput {
   standalone: false,
 })
 export class EditFormComponent implements OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+  private authenticatedUserService = inject(AuthenticatedUserService);
 
-  private _feature: EditFormInput | undefined;
+  private _input: EditFormInput | undefined;
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: ViewerEditFormFieldModel[] = [];
+  public userDetails$: Observable<SecurityModel | null>;
 
   @Input({ required: true })
-  public set feature(feature: EditFormInput | undefined) {
-    this._feature = feature;
-    this.layerId = feature?.details?.id || '';
+  public set input(input: EditFormInput | undefined) {
+    this._input = input;
+    this.layerId = input?.details?.id || '';
     this.createForm();
   }
-  public get feature(): EditFormInput | undefined {
-    return this._feature;
+  public get input(): EditFormInput | undefined {
+    return this._input;
   }
 
   @Output()
@@ -47,9 +45,8 @@ export class EditFormComponent implements OnDestroy {
 
   public layerId: string = '';
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor() {
+    this.userDetails$ = this.authenticatedUserService.getUserDetails$();
   }
 
   public ngOnDestroy() {
@@ -62,31 +59,54 @@ export class EditFormComponent implements OnDestroy {
     if (this.currentFormSubscription) {
       this.currentFormSubscription.unsubscribe();
     }
-    if (!this.feature?.details || !this.feature?.feature) {
+    if (!this.input?.details || !this.input?.feature) {
       return;
     }
     this.formConfig = EditModelHelper.createEditModel(
-      this.feature.feature,
-      this.feature.details,
-      this.feature.columnMetadata,
-      this.feature.isNewFeature ?? false,
+      this.input.feature.feature,
+      this.input.details,
+      this.input.feature.columnMetadata,
+      this.input.isNewFeature ?? false,
     );
     this.form = FormHelper.createForm(this.formConfig);
+
     const changes$ = Object.keys(this.form.controls)
       .map(key => {
         const control = this.form.get(key);
         if (control) {
-          return control.valueChanges.pipe(map(value => [ key, value ]));
+          return control.valueChanges.pipe(
+            debounceTime(250),
+            map(value => [ key, value ]),
+          );
         }
         return null;
       })
       .filter((valueChanges$): valueChanges$ is FormGroup['valueChanges'] => !!valueChanges$);
     this.currentFormSubscription = merge(...changes$)
-      .pipe(debounceTime(250))
       .subscribe(([ changedKey, value ]) => {
         const val = FormHelper.getFormValue(value);
         this.featureAttributeChanged.emit({ attribute: changedKey, value: val, invalid: !this.form.valid });
       });
+
+    this.userDetails$.pipe(take(1)).subscribe(userDetails => {
+      // Auto-fill fields with username/date/timestamp
+      this.formConfig.forEach(field => {
+        const control = this.form.get(field.name);
+        if (control) {
+          if (field.autoFillUser) {
+            control.setValue(userDetails?.username ?? '');
+          }
+          if (field.autoFillDate) {
+            if (field.type === 'date') {
+              control.setValue(DateTime.now().toISODate());
+            } else if (field.type === 'timestamp') {
+              control.setValue(DateTime.now().toISO());
+            }
+          }
+        }
+      });
+    });
+
     this.form.markAllAsTouched();
     this.cdr.detectChanges();
   }
@@ -98,5 +118,4 @@ export class EditFormComponent implements OnDestroy {
     }
     return control as FormControl;
   }
-
 }

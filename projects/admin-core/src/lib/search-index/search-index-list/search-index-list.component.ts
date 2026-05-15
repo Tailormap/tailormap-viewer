@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { Observable, of, take } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
@@ -20,18 +20,15 @@ import { FormControl } from '@angular/forms';
   standalone: false,
 })
 export class SearchIndexListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   public filter = new FormControl('');
   public searchIndexes$: Observable<SearchIndexList> = of([]);
   public searchIndexesLoadStatus$: Observable<LoadingStateEnum> = of(LoadingStateEnum.INITIAL);
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public filterTerm$ = this.store$.select(selectSearchIndexesListFilter);
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

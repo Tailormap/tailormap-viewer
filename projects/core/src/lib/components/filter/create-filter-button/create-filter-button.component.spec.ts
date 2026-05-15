@@ -6,19 +6,21 @@ import { createFilter } from '../state/filter-component.actions';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('CreateFilterButtonComponent', () => {
 
   test('should render', async () => {
     const dispatch = jest.fn();
     await render(CreateFilterButtonComponent, {
-      imports: [ MatMenuModule, MatButtonModule ],
+      imports: [ MatMenuModule, MatButtonModule, MatIconModule, MatIconTestingModule ],
       providers: [
         { provide: Store, useValue: { dispatch } },
       ],
     });
-    expect(screen.getByText('Add filter'));
-    await userEvent.click(screen.getByText('Add filter'));
+    expect(screen.getByText('Filter'));
+    await userEvent.click(screen.getByText('Filter'));
     await userEvent.click(screen.getByText('Spatial'));
     expect(dispatch).toHaveBeenCalledWith(createFilter({ filterType: FilterTypeEnum.SPATIAL }));
   });

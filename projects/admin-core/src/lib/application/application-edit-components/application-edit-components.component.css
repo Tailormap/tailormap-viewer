@@ -1,7 +1,15 @@
-.components {
+.components-config-page {
+  height: 100%;
   display: flex;
 }
 
+.components-list {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .component-configuration {
-  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  flex-grow: 1;
 }

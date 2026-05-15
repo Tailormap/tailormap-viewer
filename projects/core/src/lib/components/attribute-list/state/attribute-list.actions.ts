@@ -3,6 +3,7 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { FeatureModel } from '@tailormap-viewer/api';
+import { AttributeListInitialDataSortModel } from '../models/attribute-list-initial-data-sort.model';
 
 const attributeListActionsPrefix = '[Attributelist]';
 
@@ -50,6 +51,11 @@ export const updateSort = createAction(
   props<{ dataId: string; column: string; direction: 'asc' | 'desc' | '' }>(),
 );
 
+export const setInitialDataSort = createAction(
+  `${attributeListActionsPrefix} Set Initial Data Sort`,
+  props<{ initialDataSort: AttributeListInitialDataSortModel[] }>(),
+);
+
 export const updateRowSelected = createAction(
   `${attributeListActionsPrefix} Update Row Selected`,
   props<{ dataId: string; rowId: string; selected: boolean }>(),
@@ -68,4 +74,14 @@ export const changeColumnPosition = createAction(
 export const toggleColumnVisible = createAction(
   `${attributeListActionsPrefix} Toggle Column Visibility`,
   props<{ dataId: string; columnId: string }>(),
+);
+
+export const toggleAllColumnsVisible = createAction(
+  `${attributeListActionsPrefix} Toggle All Columns Visibility`,
+  props<{ dataId: string }>(),
+);
+
+export const setSelectedDataId = createAction(
+  `${attributeListActionsPrefix} Set Selected Data Id`,
+  props<{ tabId: string; dataId: string }>(),
 );

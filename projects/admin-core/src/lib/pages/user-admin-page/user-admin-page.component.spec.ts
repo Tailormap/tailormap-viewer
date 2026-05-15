@@ -9,20 +9,24 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { initialUserState, userStateKey } from '../../user/state/user.state';
 
 const setup = async () => {
   await render(UserAdminPageComponent, {
     imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [UserListComponent],
-    providers: [ provideMockStore(), provideHttpClient(), AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser() ],
+    providers: [
+      provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
+      provideHttpClient(),
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
+    ],
   });
 };
 
 describe('UserAdminPageComponent', () => {
   test('should render', async () => {
     await setup();
-    // title
     expect(await screen.findAllByText('Users')).toHaveLength(1);
   });
 });

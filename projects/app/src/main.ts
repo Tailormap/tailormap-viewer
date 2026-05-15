@@ -36,7 +36,6 @@ const setupSentryProviders = async () => {
     ],
     // Capture 1% of traces in production
     tracesSampleRate: environment.production ? 0.01 : 1.0,
-    autoSessionTracking: false,
   });
   return [
     { provide: ErrorHandler, useValue: sentry.createErrorHandler({ showDialog: false }) },

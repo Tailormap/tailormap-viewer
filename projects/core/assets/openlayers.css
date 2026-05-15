@@ -79,3 +79,13 @@
 .ol-attribution ul li:not(:last-child):after {
   content: ", ";
 }
+
+.ol-attribution--left {
+  right: auto;
+  left: calc(var(--body-margin) - 8px);
+}
+
+.ol-attribution--left button {
+  font-size: 14px !important;
+}
+

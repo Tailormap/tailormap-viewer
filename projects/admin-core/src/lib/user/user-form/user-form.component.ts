@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { AdditionalPropertyModel, GroupModel, UserModel } from '@tailormap-admin/admin-api';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
@@ -6,8 +6,8 @@ import { GroupService } from '../services/group.service';
 import { formatDate } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
-import { FormHelper } from '../../helpers/form.helper';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
+import { ValidatorsHelper } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -17,11 +17,15 @@ import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } fr
   standalone: false,
 })
 export class UserFormComponent implements OnInit, OnDestroy {
+  private groupDetailsService = inject(GroupService);
+  private userDetailsService = inject(UserService);
+  private adminFieldRegistryService = inject(AdminFieldRegistrationService);
+
 
   public userForm = new FormGroup({
     username: new FormControl<string>('', {
       nonNullable: true,
-      validators: [ Validators.required, Validators.pattern(FormHelper.NAME_REGEX) ],
+      validators: [ Validators.required, Validators.pattern(ValidatorsHelper.NAME_REGEX) ],
     }),
     password: new FormControl<string>('', {
       nonNullable: true,
@@ -32,6 +36,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     confirmedPassword: new FormControl<string>('', { nonNullable: true, validators: [ Validators.required, Validators.minLength(8) ] }),
     email: new FormControl<string>('', { nonNullable: false, validators: [Validators.email] }),
     name: new FormControl<string>('', { nonNullable: false }),
+    organisation: new FormControl<string>('', { nonNullable: false }),
     enabled: new FormControl<boolean>(true, { nonNullable: true }),
     validUntil: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false, validators: [Validators.maxLength(10000)] }),
@@ -53,6 +58,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       username: user ? user.username : '',
       email: user ? user.email : '',
       name: user ? user.name : '',
+      organisation: user ? user.organisation : '',
       enabled: user ? user.enabled : true,
       // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
       validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
@@ -77,19 +83,22 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public userUpdated = new EventEmitter<UserAddUpdateModel | null>();
 
   public allGroups$: Observable<GroupModel[]> | undefined;
+  public organisations$: Observable<string[]> | undefined;
   private destroyed = new Subject();
   private _user: UserModel | null = null;
   public additionalProperties: AdditionalPropertyModel[] = [];
 
-  constructor(
-    private groupDetailsService: GroupService,
-    private userDetailsService: UserService,
-    private adminFieldRegistryService: AdminFieldRegistrationService,
-  ) {
+  constructor() {
     this.allGroups$ = this.groupDetailsService.getGroups$();
   }
 
   public ngOnInit(): void {
+    this.organisations$ = this.userDetailsService.getUsers$().pipe(
+      map(users => {
+        const organisations = users.map(user => user.organisation).filter(org => org != null);
+        return Array.from(new Set(organisations));
+      }),
+    );
     this.registeredFields$ = this.adminFieldRegistryService.getRegisteredFields$(AdminFieldLocation.USER);
     this.userForm.valueChanges.pipe(
       takeUntil(this.destroyed),
@@ -115,6 +124,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       username: this.userForm.get('username')?.value || '',
       email: this.userForm.get('email')?.value || null,
       name: this.userForm.get('name')?.value || null,
+      organisation: this.userForm.get('organisation')?.value || null,
       enabled: this.userForm.get('enabled')?.value || false,
       validUntil: validUntilFromFormValue ? new Date(validUntilFromFormValue) : null,
       notes: this.userForm.get('notes')?.value || null,

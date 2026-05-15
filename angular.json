@@ -42,11 +42,15 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "preserveSymlinks": true,
             "outputPath": {
               "base": "dist/app"
             },
             "index": "projects/app/src/index.html",
-            "polyfills": ["projects/app/src/polyfills.ts", "@angular/localize/init"],
+            "polyfills": [
+              "projects/app/src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -97,14 +101,21 @@
               "color-convert",
               "lodash.debounce",
               "lodash.throttle",
-              "extend"
+              "extend",
+              "urijs",
+              "mersenne-twister",
+              "bitmap-sdf",
+              "grapheme-splitter",
+              "nosleep.js"
             ],
             "i18nMissingTranslation": "error",
             "browser": "projects/app/src/main.ts"
           },
           "configurations": {
             "nl": {
-              "localize": ["nl"]
+              "localize": [
+                "nl"
+              ]
             },
             "production": {
               "tsConfig": "projects/app/tsconfig.prod.json",
@@ -179,7 +190,8 @@
             "sort": "idAsc",
             "targetFiles": [
               "messages.nl.xlf"
-            ]
+            ],
+            "prettyNestedTags": true
           }
         },
         "lint": {
@@ -388,6 +400,32 @@
           }
         }
       }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

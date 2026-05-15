@@ -1,16 +1,22 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MapActions from './map.actions';
 import { combineLatest, catchError, concatMap, map, of, take } from 'rxjs';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
+import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 
 import * as CoreActions from '../../state/core.actions';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
-import { MapBookmarkHelper } from '../../services/application-bookmark/bookmark.helper';
-import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
+import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookmark.helper';
+import {
+  ApplicationBookmarkFragments, LayerTreeOrderBookmarkFragment, LayerSettingsBookmarkFragment,
+} from '../../services/application-bookmark/application-bookmark-fragments';
 
 @Injectable()
 export class MapEffects {
+  private actions$ = inject(Actions);
+  private apiService = inject(TAILORMAP_API_V1_SERVICE);
+  private bookmarkService = inject(BookmarkService);
+
 
   private static LOAD_MAP_ERROR = $localize `:@@core.common.error-loading-map:Could not load map settings`;
 
@@ -33,13 +39,13 @@ export class MapEffects {
                 return of(MapActions.loadMapFailed({ error: response }));
               }
               return combineLatest([
-                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.VISIBILITY_BOOKMARK_DESCRIPTOR),
-                this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$<LayerSettingsBookmarkFragment>(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR),
+                this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR),
               ])
                 .pipe(
                   take(1),
-                  map(([ opacityVisibilityFragment, layerOrderFragment ]) => {
-                    const extendedMapResponse = MapBookmarkHelper.mergeMapResponseWithBookmarkData(response, opacityVisibilityFragment, layerOrderFragment);
+                  map(([ layerSettingsFragment, layerOrderFragment ]) => {
+                    const extendedMapResponse = MapBookmarkHelper.mergeMapResponseWithBookmarkData(response, layerSettingsFragment, layerOrderFragment);
                     return MapActions.loadMapSuccess(extendedMapResponse);
                   }),
                 );
@@ -48,11 +54,5 @@ export class MapEffects {
       }),
     );
   });
-
-  constructor(
-    private actions$: Actions,
-    @Inject(TAILORMAP_API_V1_SERVICE) private apiService: TailormapApiV1ServiceModel,
-    private bookmarkService: BookmarkService,
-  ) {}
 
 }

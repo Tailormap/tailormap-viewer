@@ -30,7 +30,7 @@
 
 .navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button,
 .navigation-bar ::ng-deep .menu-button .mat-mdc-menu-item {
-  --mdc-filled-button-container-color: transparent;
+  --mat-button-filled-container-color: transparent;
 
   color: var(--palette-primary-contrast-500);
   display: flex;
@@ -57,7 +57,7 @@
 
 .navigation-bar ::ng-deep .menu-button.mat-mdc-unelevated-button.active:not(.has-submenu),
 .navigation-bar .submenu ::ng-deep .menu-button.mat-mdc-unelevated-button.active {
-  --mdc-filled-button-container-color: #fff;
+  --mat-button-filled-container-color: #fff;
   color: var(--primary-color);
 }
 

@@ -1,12 +1,17 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapSecurityApiV1ServiceModel,
+  AuthenticatedUserService, LoginConfigurationModel, TAILORMAP_SECURITY_API_V1_SERVICE,
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
+import { Location } from '@angular/common';
+
+export interface RouterNavigationState {
+  hasInsufficientRights?: boolean;
+  userName?: string;
+  routeBeforeLogin?: string;
+}
 
 @Component({
   selector: 'tm-login',
@@ -16,20 +21,22 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: false,
 })
 export class LoginComponent implements OnInit {
+  private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);
+  private authenticatedUserService = inject(AuthenticatedUserService);
+  private dialog = inject(MatDialog);
+  private location = inject(Location);
+
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
+  public requestPasswordReset$ = (email: string):Observable<boolean> => this.api.requestPasswordReset$(email);
   public loginConfiguration$: Observable<LoginConfigurationModel>;
   public routeBeforeLogin: string | undefined;
   public insufficientRightsMessage: string | undefined;
+  public showPasswordResetForm = false;
 
-  constructor(
-    private store$: Store,
-    private router: Router,
-    @Inject(TAILORMAP_SECURITY_API_V1_SERVICE) private api: TailormapSecurityApiV1ServiceModel,
-    private authenticatedUserService: AuthenticatedUserService,
-    private dialog: MatDialog,
-  ) {
-    const state = this.router.getCurrentNavigation()?.extras.state;
+  constructor() {
+    const routerState = this.location.getState();
+    const state: RouterNavigationState = this.isRouterNavigationState(routerState) ? routerState : {};
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
     this.routeBeforeLogin = state ? state['routeBeforeLogin'] : undefined;
     const userLabel = state ? $localize `:@@core.login.as:as ${state['userName']}` : '';
@@ -44,8 +51,20 @@ export class LoginComponent implements OnInit {
   }
 
   public loggedIn($event: UserResponseModel) {
-    this.router.navigateByUrl(this.routeBeforeLogin || '/');
     this.authenticatedUserService.setUserDetails($event);
+    window.location.href = this.routeBeforeLogin || '/';
+  }
+
+  public onRequestPasswordReset() {
+    this.showPasswordResetForm = true;
+  }
+
+  private isRouterNavigationState(obj: unknown): obj is RouterNavigationState {
+    // check if obj is an object
+    if (typeof obj === 'object' && !Array.isArray(obj) && obj !== null) {
+      return ('routeBeforeLogin' in obj || 'hasInsufficientRights' in obj);
+    }
+    return false;
   }
 
 }

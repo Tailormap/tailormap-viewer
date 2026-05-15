@@ -18,29 +18,23 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: 'actions/checkout@v4'
+      - uses: 'actions/checkout@v6'
 
       - name: 'Build images'
         run: |
           docker buildx build --pull --build-arg VERSION=snapshot --build-arg BASE_HREF=/ -t ghcr.io/tailormap/tailormap:snapshot . --load
 
-      - name: Trivy Cache
-        uses: yogeshlonkar/trivy-cache-action@v0.1.14
-        with:
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 'Run Trivy vulnerability scanner on tailormap'
-        uses: 'aquasecurity/trivy-action@0.30.0'
+        uses: 'aquasecurity/trivy-action@v0.36.0'
         # docker run --rm -v trivy_cache:/root/.cache/ aquasec/trivy image ghcr.io/tailormap/tailormap:snapshot
         with:
           image-ref: 'ghcr.io/tailormap/tailormap:snapshot'
           format: 'sarif'
           output: 'tailormap-trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
-          cache-dir: .trivy
 
-      - name: 'Upload tailormap-viewer Trivy scan results to GitHub Security tab'
-        uses: 'github/codeql-action/upload-sarif@v3'
+      - name: 'Upload tailormap Trivy scan results to GitHub Security tab'
+        uses: 'github/codeql-action/upload-sarif@v4'
         if: always()
         with:
           sarif_file: 'tailormap-trivy-results.sarif'

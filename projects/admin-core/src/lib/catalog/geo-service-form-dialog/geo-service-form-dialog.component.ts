@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
@@ -18,6 +18,9 @@ export interface GeoServiceFormDialogData {
   standalone: false,
 })
 export class GeoServiceFormDialogComponent {
+  public data = inject<GeoServiceFormDialogData>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<GeoServiceFormDialogComponent, GeoServiceWithLayersModel | null>>(MatDialogRef);
+  private geoServiceService = inject(GeoServiceService);
 
   private destroyed = new Subject();
   private savingSubject = new BehaviorSubject(false);
@@ -25,12 +28,6 @@ export class GeoServiceFormDialogComponent {
 
   public geoService: GeoServiceCreateModel | null = null;
   public updatedDefaultLayerSettings: LayerSettingsModel | null = null;
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: GeoServiceFormDialogData,
-    private dialogRef: MatDialogRef<GeoServiceFormDialogComponent, GeoServiceWithLayersModel | null>,
-    private geoServiceService: GeoServiceService,
-  ) { }
 
   public static open(
     dialog: MatDialog,

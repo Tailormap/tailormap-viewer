@@ -1,4 +1,6 @@
-<div class="form-field criteria-description" *ngIf="description">
-  <label i18n="@@core.filter.summary">Summary</label>
-  <div [innerHTML]="description"></div>
-</div>
+@if (description) {
+  <div class="form-field criteria-description">
+    <label i18n="@@core.filter.summary">Summary</label>
+    <div [innerHTML]="description"></div>
+  </div>
+}

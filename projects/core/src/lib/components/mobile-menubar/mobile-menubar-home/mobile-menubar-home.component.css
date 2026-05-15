@@ -1,0 +1,71 @@
+:host {
+  max-height: 100%;
+}
+
+.mobile-menubar-home {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mobile-panel-content {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+.mobile-menubar-home-buttons {
+  flex: 0 0 58px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: row;
+  margin-left: 4px;
+  margin-right: 4px;
+  overflow-x: scroll;
+}
+
+.mobile-menubar-home-buttons * {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menubar-home-buttons ::ng-deep tm-menubar-button {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button {
+  height: 45px;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: auto !important;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button mat-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.mobile-menubar-home-buttons ::ng-deep button svg {
+  width: 100%;
+  height: 100%;
+}
+
+tm-switch3-d ::ng-deep mat-icon,
+tm-streetview ::ng-deep button:not(.toggle-button--active),
+.zoom-to-extent-button button,
+tm-measure ::ng-deep button:not(.toggle-button--active) {
+  color: rgba(19, 9, 54, 0.4);
+}
+
+.mobile-menubar-home-buttons ::ng-deep .map-control-button-container {
+  box-shadow: none;
+}
+
+.mobile-menubar-home-buttons ::ng-deep .mat-badge-content {
+  transform: translateY(4px) translateX(-4px);
+}
+
+

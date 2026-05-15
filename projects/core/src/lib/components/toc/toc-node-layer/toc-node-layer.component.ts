@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TreeModel } from '@tailormap-viewer/shared';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
+import { FilterSourceHelper } from '../../../filter';
 
 @Component({
   selector: 'tm-toc-node-layer',
@@ -26,14 +27,97 @@ export class TocNodeLayerComponent {
   @Input()
   public tiles3DLayerIds: string[] = [];
 
+  @Input()
+  public filteredLayerIdsWithSource: { id: string; source: string}[] = [];
+
+  @Input()
+  public editableLayerIds: string[] = [];
+
+  @Input()
+  public showInfoIcon: boolean = false;
+
+  @Output()
+  public zoomToScale = new EventEmitter<number>();
+
+  @Output()
+  public editLayer = new EventEmitter<string>();
+
+  @Output()
+  public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
+
+  @Output()
+  public showInfo= new EventEmitter<TreeModel<AppLayerModel>>();
+
   public isLevel() {
     return this.node?.type === 'level';
   }
 
   public isLayerHiddenOnMap() {
-    return !ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale)
-      || (this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || ''))
-      || (!this.in3D && this.tiles3DLayerIds.includes(this.node?.id || ''));
+    return !this.isInScale() || this.isLayerHiddenIn2d();
+  }
+
+  public isInScale() {
+    return ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale);
+  }
+
+  public isLayerHiddenIn2d() {
+    return !this.in3D && this.tiles3DLayerIds.includes(this.node?.id || '');
+  }
+
+  public isLayerHiddenIn3d() {
+    return this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || '');
+  }
+
+  public isLayerFiltered() {
+    return this.filteredLayerIdsWithSource.some(l => l.id === this.node?.id);
+  }
+
+  public getLayerFilterSourceInfo() {
+    const filterSource = this.filteredLayerIdsWithSource.find(l => l.id === this.node?.id)?.source;
+    return FilterSourceHelper.getFilterInfoBySource().get(filterSource || '') ?? {
+      icon: 'components_filter',
+      tooltip: $localize`:@@core.toc.filtered-layer:A filter is applied to this layer`,
+    };
+  }
+
+  public isLayerEditable() {
+    return this.editableLayerIds.includes(this.node?.id || '');
+  }
+
+  public zoomToLayer($event: MouseEvent, node: TreeModel<AppLayerModel>) {
+    $event.stopPropagation();
+    const scales: number[] = [];
+    if (typeof node?.metadata?.minScale === 'number') {
+      scales.push(node?.metadata?.minScale * 1.001);
+    }
+    if (typeof node?.metadata?.maxScale === 'number') {
+      scales.push(node?.metadata?.maxScale * 0.999);
+    }
+    if (scales.length === 0) {
+      return;
+    }
+    const zoomToScale = Math.min(...scales);
+    this.zoomToScale.emit(zoomToScale);
+  }
+
+  public editLayerClicked($event: MouseEvent, node: TreeModel<AppLayerModel>) {
+    $event.stopPropagation();
+    this.editLayer.emit(node.id);
+  }
+
+  protected hasStylesToShow() {
+    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 1;
+  }
+
+  protected styleChanged(style: WmsStyleModel) {
+    this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
+  }
+
+  public emitShowInfo($event: MouseEvent) {
+    $event.stopPropagation();
+    if (this.node) {
+      this.showInfo.emit(this.node);
+    }
   }
 
 }

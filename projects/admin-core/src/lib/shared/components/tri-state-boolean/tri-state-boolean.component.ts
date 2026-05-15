@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, forwardRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, forwardRef, ChangeDetectorRef, inject } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -17,6 +17,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   standalone: false,
 })
 export class TriStateBooleanComponent implements ControlValueAccessor {
+  private cdr = inject(ChangeDetectorRef);
+
 
   @Input()
   public value: boolean | null = null;
@@ -36,10 +38,6 @@ export class TriStateBooleanComponent implements ControlValueAccessor {
   public disabled = false;
   private onChange: any | null = null;
   private onTouched: any | null = null;
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-  ) { }
 
   public writeValue(obj: boolean | null): void {
       this.value = obj;

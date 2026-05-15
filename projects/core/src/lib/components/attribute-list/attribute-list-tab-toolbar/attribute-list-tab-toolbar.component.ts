@@ -1,16 +1,20 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper } from '@tailormap-viewer/shared';
-import { Observable, of, switchMap, take } from 'rxjs';
-import { selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
-import { PageEvent } from '@angular/material/paginator';
+import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl } from '@tailormap-viewer/shared';
+import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
+import {
+  selectDataForSelectedTab, selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab,
+} from '../state/attribute-list.selectors';
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
+
 
 @Component({
   selector: 'tm-attribute-list-tab-toolbar',
@@ -18,8 +22,18 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
   styleUrls: ['./attribute-list-tab-toolbar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
+  ],
 })
 export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private popoverService = inject(PopoverService);
+  private attributeListStateService = inject(AttributeListStateService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
+
+  private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -27,25 +41,47 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
+  public hasFiltersForOtherFeatureTypes$: Observable<boolean> = of(false);
 
-  constructor(
-    private store$: Store,
-    private popoverService: PopoverService,
-    private attributeListStateService: AttributeListStateService,
-    private simpleAttributeFilterService: SimpleAttributeFilterService,
-  ) {
+  constructor() {
+    effect(() => {
+      const components = this.attributeListFeatureRegistrationService.registeredAdditionalFeatures();
+      const attributeListFeaturesContainer = this.attributeListFeaturesContainer();
+      if (!attributeListFeaturesContainer) {
+        return;
+      }
+      attributeListFeaturesContainer.clear();
+      components.forEach(component => {
+        attributeListFeaturesContainer.createComponent(component.component);
+      });
+    });
   }
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
     this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
-    this.hasFilters$ = this.store$.select(selectSelectedTab)
+    this.hasFilters$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
       .pipe(
-        switchMap(tab => {
+        switchMap(([ tab, data ]) => {
           if (!tab?.layerId) {
             return of(false);
           }
-          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+          return this.simpleAttributeFilterService.hasFilter$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
+        }),
+      );
+    this.hasFiltersForOtherFeatureTypes$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(
+        switchMap(([ tab, data ]) => {
+          if (!tab?.layerId) {
+            return of(false);
+          }
+          return this.simpleAttributeFilterService.hasFiltersForOtherFeatureTypes$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
         }),
       );
   }
@@ -66,7 +102,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     if (!$event.target || !($event.target instanceof HTMLElement)) {
       return;
     }
-    if ($event.target.classList.contains('mat-paginator-range-label')) {
+    if ($event.target.className.indexOf('paginator-range-label') !== -1) {
       if (this.pagingPopover && this.pagingPopover.isOpen) {
         this.pagingPopover.close();
         return;
@@ -75,7 +111,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       this.pagingPopover = this.popoverService.open({
         origin: $event.target,
         content: AttributeListPagingDialogComponent,
-        height: 100,
+        height: 80,
         width: Math.min(WINDOW_WIDTH, BrowserHelper.getScreenWith()),
         closeOnClickOutside: true,
         position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
@@ -84,14 +120,28 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearFilter() {
+  public clearAllFilters() {
     this.store$.select(selectSelectedTab)
       .pipe(take(1))
       .subscribe(tab => {
         if (!tab?.layerId) {
           return;
         }
-        return this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        this.simpleAttributeFilterService.removeAllFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+      });
+  }
+
+  public clearFilters() {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(take(1))
+      .subscribe(([ tab, data ]) => {
+        if (!tab?.layerId) {
+          return;
+        }
+        this.simpleAttributeFilterService.removeFiltersForLayer(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       });
   }
 

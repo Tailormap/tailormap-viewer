@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, first, interval, map, of } from 'rxjs';
 import { selectTask } from '../state/tasks.selectors';
@@ -7,19 +7,23 @@ import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TaskMonitoringService {
+  private store$ = inject(Store);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private adminSnackbarService = inject(AdminSnackbarService);
+  private destroyRef = inject(DestroyRef);
+
 
   private uuid$ = new BehaviorSubject<string>('');
   private type$ = new BehaviorSubject<string> ('');
   private monitoring$ = new BehaviorSubject<boolean>(false);
 
-  constructor(
-    private store$: Store,
-    private adminApiService: TailormapAdminApiV1Service,
-    private adminSnackbarService: AdminSnackbarService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
+    const destroyRef = this.destroyRef;
+
     interval(1000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
       () => {
         if (this.uuid$.value && this.type$.value && this.monitoring$) {
@@ -62,7 +66,7 @@ export class TaskMonitoringService {
     this.adminApiService.stopTask$(this.uuid$.value, this.type$.value).subscribe();
   }
 
-  public deleteTask(uuid: string, type: string ) {
+  public deleteTask$(uuid: string, type: string ) {
     return this.adminApiService.deleteTask$(uuid, type)
       .pipe(
         catchError(() => {

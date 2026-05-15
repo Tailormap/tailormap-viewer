@@ -2,6 +2,9 @@ import { TileLayerHiDpiMode } from './layer-hi-dpi-mode.enum';
 import { BoundsModel } from './bounds.model';
 import { LayerSearchIndexModel } from './layer-search-index.model';
 import { HiddenLayerFunctionality } from './hidden-layer-functionality.model';
+import { Tileset3dStyle } from './tileset-3d-style.model';
+
+import { WmsStyleModel } from './wms-style.model';
 
 export interface AppLayerModel {
   id: string;
@@ -15,6 +18,7 @@ export interface AppLayerModel {
   minScale?: number;
   maxScale?: number;
   legendImageUrl?: string;
+  legendType?: 'static' | 'dynamic';
   tilingDisabled?: boolean;
   tilingGutter?: number;
   hiDpiDisabled?: boolean;
@@ -30,5 +34,8 @@ export interface AppLayerModel {
   autoRefreshInSeconds?: number | null;
   searchIndex: LayerSearchIndexModel | null;
   webMercatorAvailable?: boolean;
+  tileset3dStyle?: Tileset3dStyle;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
+  styles?: WmsStyleModel[] | null;
+  selectedStyleName?: string | null;
 }

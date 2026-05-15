@@ -4,6 +4,7 @@ import { GeoServerLegendOptions, LegendHelper } from './legend.helper';
 export interface LegendImageModel {
   url: string;
   serverType: 'generic' | 'geoserver' | 'mapserver';
+  legendType: 'static' | 'dynamic';
   title: string;
 }
 
@@ -59,7 +60,7 @@ export class LegendImageComponent {
       scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith(".svg"),
       failedToLoadMessage: `${FAILED_TO_LOAD_MESSAGE} ${legend.title}`,
     };
-    if (LegendHelper.isGetLegendGraphicRequest(legend.url)) {
+    if (legend.legendType == 'dynamic') {
       if (legend.serverType === 'geoserver') {
         const legendOptions: GeoServerLegendOptions = {
           fontAntiAliasing: true,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, take } from 'rxjs';
 import { FilterHelper } from '@tailormap-viewer/shared';
@@ -17,6 +17,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   standalone: false,
 })
 export class FormFieldListComponent implements OnInit {
+  private store$ = inject(Store);
+  private destroyRef = inject(DestroyRef);
+
 
   @Input({ required: true })
   public featureTypeName: string = '';
@@ -27,12 +30,6 @@ export class FormFieldListComponent implements OnInit {
   public fields$: Observable<Array<FormFieldModel & { selected?: boolean }>> = of([]);
 
   public filterTerm$ = this.attributeFilter.asObservable();
-
-  constructor(
-    private store$: Store,
-    private destroyRef: DestroyRef,
-  ) {
-  }
 
   public ngOnInit(): void {
     this.filter.valueChanges

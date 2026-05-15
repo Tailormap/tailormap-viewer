@@ -3,23 +3,25 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
   select3dTilesLayers,
   selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
-import { setLayerVisibility, setSelectedLayerId } from '../../../map/state/map.actions';
+import { setLayerVisibility, toggleSelectedLayerId } from '../../../map/state/map.actions';
 import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
-import { getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
 import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
 const buildMockStore = (selectedLayer = '') => {
   const layers = [
@@ -42,6 +44,9 @@ const buildMockStore = (selectedLayer = '') => {
       { selector: selectIn3dView, value: false },
       { selector: selectLayersWithoutWebMercatorIds, value: [] },
       { selector: select3dTilesLayers, value: [] },
+      { selector: selectFilteredLayerIdsWithSource, value: [] },
+      { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+      { selector: selectComponentsConfig, value: [] },
     ],
   });
 };
@@ -67,6 +72,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
+      { provide: AuthenticatedUserService, useValue: { getUserDetails$: jest.fn(() => of({ isAuthenticated: false })) } },
     ],
   });
   return { registerComponentFn, mockStore, mockDispatch };
@@ -101,7 +107,7 @@ describe('TocComponent', () => {
     const { mockStore, mockDispatch } = await setup(true, '1');
     expect((await screen.findByText('Disaster map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     await userEvent.click(await screen.findByText('Some other map'));
-    expect(mockDispatch).toHaveBeenCalledWith({ type: setSelectedLayerId.type, layerId: '2' });
+    expect(mockDispatch).toHaveBeenCalledWith({ type: toggleSelectedLayerId.type, layerId: '2' });
     mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
     await waitFor(() => {

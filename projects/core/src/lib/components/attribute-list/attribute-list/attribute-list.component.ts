@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -6,17 +6,19 @@ import {
   selectAttributeListVisible,
   selectCurrentlySelectedFeatureGeometry,
 } from '../state/attribute-list.selectors';
-import { map, Observable, of, Subject } from 'rxjs';
-import {  takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
 import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/attribute-list-menu-button.component';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import { MapService } from '@tailormap-viewer/map';
-import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { OverlayRef, PopoverPositionEnum, PopoverService } from '@tailormap-viewer/shared';
+import { AttributeListColumnSelectionComponent } from '../attribute-list-column-selection/attribute-list-column-selection.component';
 
 @Component({
   selector: 'tm-attribute-list',
@@ -25,35 +27,28 @@ import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-view
   standalone: false,
 })
 export class AttributeListComponent implements OnInit, OnDestroy {
+  private store$ = inject<Store<AttributeListState>>(Store);
+  private menubarService = inject(MenubarService);
+  private mapService = inject(MapService);
+  private popoverService = inject(PopoverService);
+  public isLoadingTabs$ = inject(AttributeListManagerService).isLoadingTabs$();
 
   public isVisible$: Observable<boolean>;
 
-  public tabs: AttributeListTabModel[] = [];
+  public tabs = this.store$.selectSignal(selectAttributeListTabs);
   private destroyed = new Subject();
 
   public selectedTab?: string;
-  public hasLayersWithAttributes$: Observable<boolean>;
   public title$: Observable<string> = of('');
 
-  constructor(
-    private store$: Store<AttributeListState>,
-    private menubarService: MenubarService,
-    private mapService: MapService,
-  ) {
+  private columnSelectionOverlayRef: OverlayRef | undefined;
+
+  constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.title$ = this.store$.select(selectAttributeListPanelTitle);
-    this.store$.select(selectAttributeListTabs)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(tabs => {
-        this.tabs = tabs;
-      });
     this.store$.select(selectAttributeListSelectedTab)
       .pipe(takeUntil(this.destroyed))
       .subscribe(selectedTab => this.selectedTab = selectedTab);
-    this.hasLayersWithAttributes$ = this.store$.select(selectVisibleLayersWithAttributes).pipe(
-      map(layers => layers.filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))),
-      map(layers => (layers || []).length > 0),
-    );
   }
 
   public ngOnInit() {
@@ -72,6 +67,9 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.ATTRIBUTE_LIST);
     this.store$.dispatch(setAttributeListVisibility({ visible: false }));
+    if (this.columnSelectionOverlayRef) {
+      this.columnSelectionOverlayRef.close();
+    }
     this.destroyed.next(null);
     this.destroyed.complete();
   }
@@ -81,11 +79,31 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   }
 
   public onSelectedTabChange($event: MatTabChangeEvent): void {
-    this.store$.dispatch(setSelectedTab({ tabId: this.tabs[$event.index].id }));
+    this.store$.dispatch(setSelectedTab({ tabId: this.tabs()[$event.index].id }));
   }
 
   public trackByTabId(idx: number, layer: AttributeListTabModel) {
     return layer.id;
+  }
+
+  public openColumnSelection($event: MouseEvent, tab: AttributeListTabModel) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    if (this.columnSelectionOverlayRef && this.columnSelectionOverlayRef.isOpen) {
+      this.columnSelectionOverlayRef.close();
+      return;
+    }
+    const WINDOW_WIDTH = 300;
+    this.columnSelectionOverlayRef = this.popoverService.open({
+      origin: $event.currentTarget as HTMLElement,
+      content: AttributeListColumnSelectionComponent,
+      data: { dataId: tab.selectedDataId },
+      height: 250,
+      width: Math.min(WINDOW_WIDTH, window.innerWidth),
+      closeOnClickOutside: true,
+      position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
+      positionOffset: 10,
+    });
   }
 
 }

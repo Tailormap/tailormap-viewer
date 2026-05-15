@@ -26,6 +26,11 @@
 
 .has-selected-layer .application-layer-settings {
   display: block;
+  height: 100%;
+}
+
+.application-layer-settings tm-admin-application-layer-settings {
+  height: 100%;
 }
 
 .has-catalog-tree-visible .catalog-tree-wrapper {

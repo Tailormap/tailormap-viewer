@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject, signal, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
@@ -9,10 +9,12 @@ import { UploadRemoveServiceModel } from '../models/upload-remove-service.model'
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
+import { FormControl } from '@angular/forms';
 
 export interface SelectUploadData {
   uploadId: string | null;
   category: UploadCategoryEnum | string;
+  showDescriptionField: boolean;
 }
 
 export interface SelectUploadResult {
@@ -56,20 +58,22 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
   standalone: false,
 })
 export class SelectUploadDialogComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);
+  public data = inject<SelectUploadData>(MAT_DIALOG_DATA);
+  private uploadRemoveService = inject<UploadRemoveServiceModel>(UPLOAD_REMOVE_SERVICE);
+  private adminApiService = inject(TailormapAdminApiV1Service);
+  private dialog = inject(MatDialog);
+  private confirmDialogService = inject(ConfirmDialogService);
+  private adminSnackbarService = inject(AdminSnackbarService);
+
 
   public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
   public loading = signal(false);
   public dialogProps: DialogProps;
+  public pendingImage = signal<{ image: string; fileName: string} | null>(null);
+  public descriptionControl = new FormControl<string | null>(null);
 
-  constructor(
-    private dialogRef: MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>,
-    @Inject(MAT_DIALOG_DATA) public data: SelectUploadData,
-    @Inject(UPLOAD_REMOVE_SERVICE) private uploadRemoveService: UploadRemoveServiceModel,
-    private adminApiService: TailormapAdminApiV1Service,
-    private dialog: MatDialog,
-    private confirmDialogService: ConfirmDialogService,
-    private adminSnackbarService: AdminSnackbarService,
-  ) {
+  constructor() {
     this.dialogProps = CATEGORY_PROPS[this.data.category]
       ? CATEGORY_PROPS[this.data.category]
       : CATEGORY_PROPS['defaultProps'];
@@ -122,13 +126,27 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public imageSelected($event: { image: string; fileName: string }) {
+    if ($event.image === '' && $event.fileName === '') {
+      this.pendingImage.set(null);
+      return;
+    }
+    this.pendingImage.set($event);
+  }
+
+  public saveImage() {
     this.loading.set(true);
-    const { image, mimeType } = UploadHelper.prepareBase64($event.image);
+    const pendingImage = this.pendingImage();
+    if (!pendingImage) {
+      this.loading.set(false);
+      return;
+    }
+    const { image, mimeType } = UploadHelper.prepareBase64(pendingImage.image);
     this.adminApiService.createUpload$({
       content: image,
-      filename: $event.fileName,
+      filename: pendingImage.fileName,
       category: this.data.category,
       mimeType,
+      description: this.descriptionControl.value || undefined,
     })
       .pipe(take(1), catchError(() => of(null)))
       .subscribe(upload => {

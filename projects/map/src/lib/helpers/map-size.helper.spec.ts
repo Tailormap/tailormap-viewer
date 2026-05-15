@@ -13,11 +13,11 @@ describe('MapSizeHelper', () => {
 
   test('get the formatted area', () => {
     expect(MapSizeHelper.getFormattedArea()).toEqual('');
-    expect(MapSizeHelper.getFormattedArea(100)).toEqual('100 m');
-    expect(MapSizeHelper.getFormattedArea(10000)).toEqual('10000 m');
-    expect(MapSizeHelper.getFormattedArea(10001)).toEqual('10001 m');
-    expect(MapSizeHelper.getFormattedArea(50000)).toEqual('50000 m');
-    expect(MapSizeHelper.getFormattedArea(5000000)).toEqual('5 km');
+    expect(MapSizeHelper.getFormattedArea(100)).toEqual('100 m\xB2');
+    expect(MapSizeHelper.getFormattedArea(10000)).toEqual('10000 m\xB2');
+    expect(MapSizeHelper.getFormattedArea(10001)).toEqual('10001 m\xB2');
+    expect(MapSizeHelper.getFormattedArea(50000)).toEqual('50000 m\xB2');
+    expect(MapSizeHelper.getFormattedArea(5000000)).toEqual('5 km\xB2');
   });
 
 });

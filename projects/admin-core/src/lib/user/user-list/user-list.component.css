@@ -9,5 +9,17 @@
   overflow-y: auto;
 }
 
-.userdetail {
+.user-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.organisation {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 12px;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

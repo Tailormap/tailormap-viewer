@@ -1,14 +1,26 @@
 <mat-button-toggle-group [value]="getValue()" (change)="setValue($event)" [disabled]="disabled">
   <mat-button-toggle value="INHERIT" name="Default">
-    <ng-container *ngIf="labelDefault">{{labelDefault}}</ng-container>
-    <ng-container *ngIf="!labelDefault" i18n="@@admin-core.common.default">Default</ng-container>
+    @if (labelDefault) {
+      {{labelDefault}}
+    }
+    @if (!labelDefault) {
+      <ng-container i18n="@@admin-core.common.default">Default</ng-container>
+    }
   </mat-button-toggle>
   <mat-button-toggle [value]="false" name="Disabled">
-    <ng-container *ngIf="labelDisabled">{{labelDisabled}}</ng-container>
-    <ng-container *ngIf="!labelDisabled" i18n="@@admin-core.common.disabled">Disabled</ng-container>
+    @if (labelDisabled) {
+      {{labelDisabled}}
+    }
+    @if (!labelDisabled) {
+      <ng-container i18n="@@admin-core.common.disabled">Disabled</ng-container>
+    }
   </mat-button-toggle>
   <mat-button-toggle [value]="true" name="Enabled">
-    <ng-container *ngIf="labelEnabled">{{labelEnabled}}</ng-container>
-    <ng-container *ngIf="!labelEnabled" i18n="@@admin-core.common.enabled">Enabled</ng-container>
+    @if (labelEnabled) {
+      {{labelEnabled}}
+    }
+    @if (!labelEnabled) {
+      <ng-container i18n="@@admin-core.common.enabled">Enabled</ng-container>
+    }
   </mat-button-toggle>
 </mat-button-toggle-group>

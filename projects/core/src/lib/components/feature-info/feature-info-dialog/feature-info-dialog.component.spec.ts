@@ -8,7 +8,7 @@ import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
-import { getAppLayerModel } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
@@ -16,12 +16,19 @@ import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../s
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
+import { of } from 'rxjs';
+import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import { selectIn3dView } from '../../../map/state/map.selectors';
+import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
     __fid: '1',
     geometry: null,
     layer: getAppLayerModel(),
+    sortedAttachmentsByAttribute: [],
+    attachmentCount: 0,
     sortedAttributes: [
       { key: 'prop', attributeValue: 'test', label: 'Property' },
       { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
@@ -31,6 +38,7 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
 };
 
 const setup = async (withState = false) => {
+  const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
       SharedModule,
@@ -38,7 +46,7 @@ const setup = async (withState = false) => {
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
-    declarations: [FeatureInfoLayerListComponent],
+    declarations: [ FeatureInfoLayerListComponent, FeatureInfoContentComponent ],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
       provideMockStore({
@@ -46,12 +54,26 @@ const setup = async (withState = false) => {
         selectors: withState ? [
           { selector: selectSelectedFeatureInfoLayer, value: { id: '1', title: 'test', loading: LoadingStateEnum.LOADED } },
           { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
-          { selector: selectCurrentlySelectedFeature, value: getFeatureInfo() },
           { selector: selectFeatureInfoDialogVisible, value: true },
           { selector: selectIsPrevButtonDisabled, value: false },
           { selector: selectIsNextButtonDisabled, value: false },
-        ] : [],
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [] },
+          { selector: selectIn3dView, value: false },
+        ] : [
+          { selector: selectSelectedFeatureInfoLayer, value: null },
+          { selector: selectCurrentlySelectedFeature, value: null },
+          { selector: selectFeatureInfoDialogVisible, value: true },
+          { selector: selectIsPrevButtonDisabled, value: false },
+          { selector: selectIsNextButtonDisabled, value: false },
+          { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
+          { selector: selectComponentsConfig, value: [] },
+          { selector: selectIn3dView, value: false },
+        ],
       }),
+      { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+      { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
   });
 };
@@ -76,6 +98,12 @@ describe('FeatureInfoDialogComponent', () => {
   });
 
   test('updates feature info when state changes', async () => {
+    // Silence the console wanings for:
+    // NG0956: The configured tracking expression (track by identity) caused re-creation of the entire collection of size 3.
+    //   This is an expensive operation requiring destruction and subsequent creation of DOM nodes, directives, components etc.
+    //   Please review the "track expression" and make sure that it uniquely identifies items in a collection.
+    //   Find more at https://angular.dev/errors/NG0956
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
     await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     const store = TestBed.inject(MockStore);

@@ -1,12 +1,25 @@
+import { TestBed } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
 import { HtmlifyPipe } from './htmlify.pipe';
 
 const sanitizerMock: any = {
   bypassSecurityTrustHtml: (str: string | null) => str,
 };
 
-const htmlify = (str: string) => new HtmlifyPipe(sanitizerMock).transform(str);
-
 describe('TransformUrlsDirective', () => {
+  let pipe: HtmlifyPipe;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: DomSanitizer, useValue: sanitizerMock },
+        HtmlifyPipe,
+      ],
+    });
+    pipe = TestBed.inject(HtmlifyPipe);
+  });
+
+  const htmlify = (str: string) => pipe.transform(str);
 
   it('renders back normal text', async () => {
     expect(htmlify('Some text')).toEqual('Some text');

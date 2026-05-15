@@ -20,6 +20,7 @@ export class ExtendedCatalogModelHelper {
       authorizationRules: service.authorizationRules,
       title: service.title,
       layers: service.layers,
+      resolvedServerType: service.resolvedServerType,
     };
   }
 
@@ -68,6 +69,7 @@ export class ExtendedCatalogModelHelper {
         abstractText: layer.abstractText,
         serviceId: geoServiceId,
         originalId: layer.id,
+        layerTitle: layerSettings?.[layer.name]?.title ?? layer.title,
         catalogNodeId,
         children: layer.children // map children to point to ID instead of name
           ? layer.children.map<string>(id => `${geoServiceId}_${id}`)
@@ -75,6 +77,7 @@ export class ExtendedCatalogModelHelper {
         parentId: parent ? `${geoServiceId}_${parent.id}` : undefined,
         layerSettings: layerSettings?.[layer.name],
         protocol: protocol,
+        styles: layer.styles,
       };
     });
   }
@@ -101,6 +104,7 @@ export class ExtendedCatalogModelHelper {
       authorizationRules: geoServiceWithLayers.authorizationRules,
       catalogNodeId,
       layerIds: serviceLayers.map(layer => layer.id),
+      resolvedServerType: geoServiceWithLayers.resolvedServerType,
     };
     return [ service, serviceLayers ];
   }

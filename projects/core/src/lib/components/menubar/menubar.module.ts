@@ -7,6 +7,8 @@ import { MenubarPanelComponent } from './menubar-panel/menubar-panel.component';
 import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
 import { RegisteredComponentsModule } from '../registered-components-renderer/registered-components.module';
 import { CoreSharedModule } from '../../shared';
+import { MatBadge } from '@angular/material/badge';
+import { ProfileMenuButtonComponent } from './profile/profile-menu-button/profile-menu-button.component';
 
 
 @NgModule({
@@ -16,16 +18,20 @@ import { CoreSharedModule } from '../../shared';
     ProfileComponent,
     MenubarPanelComponent,
     MenubarLogoComponent,
+    ProfileMenuButtonComponent,
   ],
   imports: [
     SharedModule,
     RegisteredComponentsModule,
     CoreSharedModule,
+    MatBadge,
   ],
   exports: [
     MenubarComponent,
     MenubarButtonComponent,
     MenubarPanelComponent,
+    ProfileComponent,
+    MenubarLogoComponent,
   ],
 })
 export class MenubarModule { }

@@ -1,4 +1,3 @@
-import { MapExportOptions } from '../map-service/map.service';
 import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer } from 'ol/layer';
@@ -7,7 +6,7 @@ import { Size } from 'ol/size';
 import { ScaleLine } from 'ol/control';
 import type html2canvas from 'html2canvas';
 import { ExtentHelper } from '../helpers/extent.helper';
-import { OpenlayersExtent } from '../models';
+import { MapExportOptions, MapExportResult, OpenlayersExtent } from '../models';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { NgZone } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
@@ -26,9 +25,8 @@ export class OpenLayersMapImageExporter {
     extraLayers: BaseLayer[],
     ngZone: NgZone,
     httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
-  ): Observable<string> {
+  ): Observable<MapExportResult> {
     const viewResolution = olView.getResolution();
-
     if (!olSize || !viewResolution) {
       throw new Error('Map has no size or resolution');
     }
@@ -85,7 +83,6 @@ export class OpenLayersMapImageExporter {
     const imageExportOlMap = new OlMap({
       controls: [scaleLineControl],
       interactions: [],
-      target,
       pixelRatio: sizeRatio,
       view: new View({
         projection: olView.getProjection(),
@@ -101,7 +98,7 @@ export class OpenLayersMapImageExporter {
     manager.setLayers(layers);
     extraLayers.forEach(l => imageExportOlMap.addLayer(l));
 
-    const renderedMapCanvasDataURL$ = new Subject<string>();
+    const renderedMapCanvasDataURL$ = new Subject<MapExportResult>();
     imageExportOlMap.once('rendercomplete', () => {
       try {
         const imageExportCanvas = document.createElement('canvas');
@@ -122,6 +119,10 @@ export class OpenLayersMapImageExporter {
         // Set element visible otherwise html2canvas won't render it
         target.style.visibility = 'visible';
 
+        const heightExportPixels = height / sizeRatio;
+        const scaleBarMarginFromBottom = 50;
+        const scaleBarMarginFromLeft = 16;
+
         from(import('html2canvas'))
           .pipe(
             map(i => i.default),
@@ -133,14 +134,21 @@ export class OpenLayersMapImageExporter {
                 scale: sizeRatio,
                 width,
                 height,
-                x: -16,
-                y: -(height / sizeRatio) + 50,
+                x: -scaleBarMarginFromLeft,
+                y: -heightExportPixels + scaleBarMarginFromBottom,
               }));
             }),
             take(1),
           )
           .subscribe(() => {
-            renderedMapCanvasDataURL$.next(imageExportCanvas.toDataURL());
+            renderedMapCanvasDataURL$.next({
+              dataURL: imageExportCanvas.toDataURL(),
+              scaleBarPosition: {
+                // Emit the position of top left of the scale bar in ratio to the image size
+                x: scaleBarMarginFromLeft / (width / sizeRatio),
+                y: (heightExportPixels - scaleBarMarginFromBottom) / heightExportPixels,
+              },
+            });
             renderedMapCanvasDataURL$.complete();
             manager.destroy();
             imageExportOlMap.dispose();
@@ -152,12 +160,7 @@ export class OpenLayersMapImageExporter {
       }
     });
 
-    imageExportOlMap.setSize(imageExportOlSize);
-    imageExportOlMap.render();
-
-    // const imageExportExtent = imageExportOlMap.getView().calculateExtent(imageExportOlMap.getSize());
-    // console.log(`Map image export OL size set to ${imageExportOlSize[0]} x ${imageExportOlSize[1]} px, for final image size ${width} x ${height}, ` +
-    //   `pixelRatio ${sizeRatio.toFixed(3)}, view extent ${imageExportExtent.map(n => n.toFixed(3))}`);
+    imageExportOlMap.setTarget(target);
 
     return renderedMapCanvasDataURL$.asObservable();
   }

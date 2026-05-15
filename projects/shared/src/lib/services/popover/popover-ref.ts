@@ -36,7 +36,6 @@ export class PopoverRef<R = any, T = any> extends OverlayRef {
   }
 
   public listenToClickInside(event: MouseEvent | TouchEvent) {
-    event.preventDefault();
     event.stopPropagation();
   }
 

@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel,
+  SearchResponseModel, AttachmentMetadataModel,
 } from '../models';
-import { delay, Observable, of } from 'rxjs';
+import { delay, Observable, of, throwError } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
 import { FeaturesResponseModel } from '../models/features-response.model';
 import { UniqueValuesResponseModel } from '../models/unique-values-response.model';
 import {
   getViewerResponseData, getFeaturesResponseModel, getLayerDetailsModel, getMapResponseData,
   getUniqueValuesResponseModel,
-  getVersionResponseModel, getLayerExportCapabilitiesModel, getFeatureModel, getConfigModel,
+  getVersionResponseModel, getFeatureModel, getConfigModel, getLayerExtractFormatsModel,
 } from '../mock-data';
-import { LayerExportCapabilitiesModel } from '../models/layer-export-capabilities.model';
-import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { LayerExtractCapabilitiesModel } from '../models/layer-extract-capabilities.model';
+import { LayerExtractResponseModel } from '../models/layer-extract-response.model';
 
 @Injectable()
 export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
@@ -48,6 +49,9 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     simplify?: boolean;
     filter?: string;
     page?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
   }): Observable<FeaturesResponseModel> {
     return of(getFeaturesResponseModel()).pipe(delay(3000));
   }
@@ -61,22 +65,25 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getUniqueValuesResponseModel());
   }
 
-  public getLayerExportCapabilities$(_params: {
-    applicationId: string;
-    layerId: string;
-  }): Observable<LayerExportCapabilitiesModel> {
-    return of(getLayerExportCapabilitiesModel());
+  public getLayerExtractFormats$(_params: { applicationId: string; layerId: string }): Observable<LayerExtractCapabilitiesModel> {
+    return of(getLayerExtractFormatsModel());
   }
 
-  public getLayerExport$(_params: {
+  public requestLayerExtract$(_params: {
     applicationId: string;
     layerId: string;
+    clientId: string;
     outputFormat: string;
-    filter?: string;
-    sort: { column: string; direction: string} | null;
     attributes?: string[];
-    crs?: string;
-  }): Observable<HttpResponse<Blob>> {
+    filter?: string;
+    sort: { column: string; direction: string } | null;
+  }): Observable<LayerExtractResponseModel> {
+    return of({
+      downloadId: crypto.randomUUID(), message: 'Layer extract request received',
+    });
+  }
+
+  public downloadLayerExtract$(_params: { applicationId: string; layerId: string; downloadId: string }): Observable<HttpResponse<Blob>> {
     return of(new HttpResponse<Blob>({ body: new Blob(['']) }));
   }
 
@@ -84,7 +91,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of(getFeatureModel({ "__fid": params.feature.__fid }));
   }
 
-  public deleteFeature$(_params: { applicationId: string; layerId: string; feature: FeatureModel }): Observable<HttpStatusCode> {
+  public deleteFeature$(_params: { applicationId: string; layerId: string; fid: string }): Observable<HttpStatusCode> {
     return of(HttpStatusCode.NoContent);
   }
 
@@ -100,4 +107,61 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
     return of({ start: 0, documents: [], maxScore: 0, total: 0 });
   }
 
+  public getLatestUpload$(category: string): Observable<any> {
+    switch (category) {
+      case 'drawing-style':
+        return of({
+          styles: [{
+            'type': 'IMAGE', 'style': {
+              'markerImage': '/uploads/drawing-style-image/07d2f7aa-6eb1-442a-822d-896514a9bc0d/drinkwater.svg',
+              'description': 'Drinkwater',
+              'marker': 'circle',
+              'markerSize': 11,
+              'markerRotation': 0,
+              'markerFillColor': 'rgb(0, 136, 85)',
+              'markerStrokeColor': 'rgb(255, 255, 255)',
+              'markerStrokeWidth': 1,
+              'label': '',
+              'labelSize': 8,
+              'labelColor': 'rgb(0, 0, 0)',
+              'labelOutlineColor': 'rgb(255, 255, 255)',
+              'fillOpacity': 30,
+              'strokeColor': 'rgb(98, 54, 255)',
+              'strokeWidth': 3,
+              'strokeOpacity': 100,
+              'fillColor': 'rgb(98, 54, 255)',
+            },
+          }],
+        });
+      default:
+        // return a 404 error by default
+        return throwError(() => new HttpErrorResponse({
+          status: HttpStatusCode.NotFound,
+          statusText: 'Not Found',
+        }));
+    }
+  }
+
+  public addAttachment$(_params: {
+    applicationId: string;
+    layerId: string;
+    featureId: string;
+    attribute: string;
+    file: File;
+    description: string | undefined;
+  }): Observable<any> {
+    return of({ id: crypto.randomUUID() });
+  }
+
+  public listAttachments$(_params: { applicationId: string; layerId: string; featureId: string }): Observable<AttachmentMetadataModel[]> {
+    return of([]);
+  }
+
+  public getAttachmentUrl(params: { applicationId: string; layerId: string; attachmentId: string }): string {
+    return 'url-to-attachment/' + params.attachmentId;
+  }
+
+  public deleteAttachment$(_params: { applicationId: string; layerId: string; attachmentId: string }): any {
+    return of();
+  }
 }

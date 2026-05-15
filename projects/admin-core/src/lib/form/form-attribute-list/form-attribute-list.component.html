@@ -6,13 +6,15 @@
   <h2 i18n="@@admin-core.forms.available-attributes">Available attributes</h2>
   <div class="form-group has-search flex">
     <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
-                          label="Filter attributes"
-                          i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
+      [filterTerm]="filterTerm$ | async"
+      label="Filter attributes"
+    i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
     <mat-selection-list>
-      <mat-list-item *ngFor="let attribute of attributes$ | async" (click)="addAttribute(attribute)">
-        <span class="detail">{{attribute.name}}</span>
-      </mat-list-item>
+      @for (attribute of attributes$ | async; track attribute) {
+        <mat-list-item (click)="addAttribute(attribute)">
+          <span class="detail">{{attribute.name}}</span>
+        </mat-list-item>
+      }
     </mat-selection-list>
   </div>
 }

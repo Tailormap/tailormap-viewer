@@ -1,19 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, OnDestroy, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
-import { selectComponentsConfigForType } from '../../../state/core.selectors';
+import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import {
   BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
 } from '@tailormap-viewer/api';
-import { concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { take } from 'rxjs/operators';
-import { deactivateTool, deregisterTool, registerTool, toggleTool } from '../state/toolbar.actions';
-import { ToolbarComponentEnum } from '../models/toolbar-component.enum';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { isActiveToolbarTool } from '../state/toolbar.selectors';
+import { take, withLatestFrom } from 'rxjs/operators';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { ComponentRegistrationService } from '../../../services';
+import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
+import { MenubarService } from '../../menubar';
+import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -23,23 +24,35 @@ import { isActiveToolbarTool } from '../state/toolbar.selectors';
   standalone: false,
 })
 export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
+  private store$ = inject(Store);
+  private mapService = inject(MapService);
+  private destroyRef = inject(DestroyRef);
+  private componentRegistrationService = inject(ComponentRegistrationService);
+  private menubarService = inject(MenubarService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
-  public toolActive$: Observable<boolean>;
+
+  public noExpansionPanel = input<boolean>(false);
+
+  public toolActive = toSignal(this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW]));
   public urls$: Observable<CoordinateLinkWindowConfigUrlModel[]>;
   public title$: Observable<string>;
+  private tool: string | undefined;
+  public visible$ = combineLatest([
+    this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW),
+    this.mobileLayoutService.isMobileLayoutEnabled$,
+  ]).pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+  );
 
   public urlControl = new FormControl<CoordinateLinkWindowConfigUrlModel | null>(null);
 
-  constructor(
-    private store$: Store,
-    private mapService: MapService,
-    private destroyRef: DestroyRef,
-  ) {
+  constructor() {
     const config$ = this.store$.select(selectComponentsConfigForType<CoordinateLinkWindowConfigModel>(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW))
       .pipe(map(config => config?.config));
     this.urls$ = config$.pipe(map(conf => conf?.urls || []));
     this.title$ = config$.pipe(map(conf => conf?.title || $localize `:@@core.coordinate-link-window.title:Coordinate Link Window`));
-    this.toolActive$ = this.store$.select(isActiveToolbarTool(ToolbarComponentEnum.COORDINATE_LINK_WINDOW));
   }
 
   public ngOnInit(): void {
@@ -54,28 +67,60 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
           this.createMapClickTool();
         }
       });
-  }
 
-  public ngOnDestroy() {
-    this.store$.dispatch(deregisterTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+    this.componentRegistrationService.registerComponent(
+      'mobile-menu-home',
+      { type: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW, component: CoordinateLinkWindowMenuButtonComponent },
+    );
+
+    // Toggle the CLW map tool when the CLW menu button is clicked in the mobile layout.
+    this.mobileLayoutService.isMobileLayoutEnabled$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(enabled => enabled),
+        switchMap(() => this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW)),
+      ).subscribe(visibleInMobileLayout => {
+        if (visibleInMobileLayout) {
+          this.menubarService.setMobilePanelHeight(230);
+          this.toggle(false);
+        } else if (this.toolActive()) {
+          this.toggle(true);
+        }
+      });
+
+    // Close the CLW when the mapTool is disabled by another component.
+    this.mapService.someToolsEnabled$([BaseComponentTypeEnum.COORDINATE_LINK_WINDOW])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        withLatestFrom(
+          this.menubarService.isComponentVisible$(BaseComponentTypeEnum.COORDINATE_LINK_WINDOW),
+          this.store$.select(selectComponentTitle(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, $localize `:@@core.home.menu:Menu`)),
+          ),
+      )
+      .subscribe(([ enabledTool, visible, componentTitle ]) => {
+        if (!enabledTool && visible) {
+          this.menubarService.toggleActiveComponent(BaseComponentTypeEnum.MOBILE_MENUBAR_HOME, componentTitle);
+        }
+      });
   }
 
   public toggle(close?: boolean) {
-    if (close === true) {
-      this.store$.dispatch(deactivateTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+    if (close === true || this.toolActive()) {
+      this.mapService.disableTool(this.tool);
       return;
     }
-    this.store$.dispatch(toggleTool({ tool: ToolbarComponentEnum.COORDINATE_LINK_WINDOW }));
+    this.mapService.enableTool(this.tool, true);
   }
 
   private createMapClickTool() {
     this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
       type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
     })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(({ tool }) => {
-          this.store$.dispatch(registerTool({ tool: { id: ToolbarComponentEnum.COORDINATE_LINK_WINDOW, mapToolId: tool.id } }));
+          this.tool = tool.id;
         }),
         concatMap(({ tool }) => tool.mapClick$),
         switchMap(({ mapCoordinates }) => {
@@ -99,6 +144,10 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         window.open(replaced, '_blank', 'popup=1, noopener, noreferrer');
       },
     );
+  }
+
+  public ngOnDestroy() {
+    this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.COORDINATE_LINK_WINDOW);
   }
 
 }

@@ -30,6 +30,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatListModule,
     MatExpansionModule,
     MatChipsModule,
+    MatRippleModule,
     DragDropModule,
   ],
 })

@@ -44,22 +44,30 @@ export class ImageHelper {
    * @param asciiData The data to encode in the QR code
    * @param foreground The color of the QR code
    * @param background The background color of the QR code
+   * @param minimumOutputWidthPx Optional minimum width for the generated QR code image in pixels
    * @returns An observable that emits the base64 encoded QR code GIF image and the size of the image
    */
-  public static string2Base64QRcode$(asciiData: string, foreground: string, background: string): Observable<{
-    imageData: string; widthPx: number; heightPx: number;
-  }> {
+  public static string2Base64QRcode$(
+    asciiData: string,
+    foreground: string,
+    background: string,
+    minimumOutputWidthPx = 0,
+  ): Observable<{ imageData: string; widthPx: number; heightPx: number }> {
 
     return from(import('@nuintun/qrcode')).pipe(map(({ Encoder, Byte, Charset }) => {
       const encoder = new Encoder({
         level: 'M', version: 'Auto', hints: { fnc1: ['GS1'] },
       });
       const qrcode = encoder.encode(new Byte(asciiData, Charset.ASCII));
+      const scale = Math.max(1, Math.ceil(minimumOutputWidthPx / qrcode.size));
+      const imageSizePx = qrcode.size * scale;
 
       return {
-        imageData: qrcode.toDataURL(1, {
+        imageData: qrcode.toDataURL(scale, {
           margin: 1, foreground: this.hex2rgb(foreground), background: this.hex2rgb(background),
-        }), widthPx: qrcode.size, heightPx: qrcode.size,
+        }),
+        widthPx: imageSizePx,
+        heightPx: imageSizePx,
       };
     }));
   }

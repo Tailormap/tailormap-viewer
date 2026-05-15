@@ -3,12 +3,14 @@
 <div mat-dialog-content>
   <p class="content" i18n="@@admin-core.catalog.feature-source-used-body">The feature source {{data.featureSource.title}} is used in the following layers.</p>
   <ul>
-    <li *ngFor="let layer of data.layers">
-      <a href="#" (click)="updateGeoServiceLayerSetting($event, layer)">
-        {{layer.title || layer.name}}
-        <mat-icon svgIcon="edit"></mat-icon>
-      </a>
-    </li>
+    @for (layer of data.layers; track layer) {
+      <li>
+        <a href="#" (click)="updateGeoServiceLayerSetting($event, layer)">
+          {{layer.title || layer.name}}
+          <mat-icon svgIcon="edit"></mat-icon>
+        </a>
+      </li>
+    }
   </ul>
   <p class="content" i18n="@@admin-core.catalog.remove-feature-source-first">Please remove the feature source and type from these layers first</p>
 </div>

@@ -1,5 +1,5 @@
 .mat-button-toggle,
-.mat-button-toggle-checked {
+.mat-button-toggle.mat-button-toggle-checked {
   background-color: #fff;
 }
 
@@ -32,6 +32,7 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
 
 .map-control-button-container {
   display: none;
+  overflow: hidden;
 }
 
 ::ng-deep .mat-mdc-menu-panel.options-menu {
@@ -61,6 +62,6 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   }
 }
 
-.not-visible-on-map {
-  color: var(--disabled-text-color);
+.not-visible-in-3d {
+  text-decoration: line-through;
 }

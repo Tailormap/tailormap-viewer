@@ -1,6 +1,6 @@
 import { combineLatest, from, take } from 'rxjs';
 import type { Ctx } from '@milkdown/ctx';
-import type { BlockEditFeatureConfig } from '@milkdown/crepe/lib/types/feature/block-edit';
+import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 
 export class MilkdownHelper {
@@ -38,6 +38,7 @@ export class MilkdownHelper {
 
   public static getBlockEditConfiguration(templatePicklistConfig?: TemplatePicklistConfig): BlockEditFeatureConfig {
     return {
+      // @ts-expect-error TS2353: Object literal may only specify known properties, and 'slashMenuTextGroupLabel' does not exist in type etc...
       slashMenuTextGroupLabel: $localize `:@@shared.markdown-editor.textgroup:Text`,
       slashMenuTextLabel: $localize `:@@shared.markdown-editor.text:Text`,
       slashMenuH1Label: $localize `:@@shared.markdown-editor.h1:H1`,
@@ -69,7 +70,7 @@ export class MilkdownHelper {
         templatePicklistConfig.variables.forEach(v => {
           group.addItem(`insert_${v.value}`, {
             label: v.label,
-            onRun: ctx => MilkdownHelper.insertTextInEditor(ctx, `{{${v.value}}}`),
+            onRun: (ctx: Ctx) => MilkdownHelper.insertTextInEditor(ctx, `{{${v.value}}}`),
             icon: '',
           });
         });

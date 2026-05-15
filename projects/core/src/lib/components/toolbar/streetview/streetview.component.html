@@ -3,7 +3,7 @@
           class="map-control-button toggle-button"
           i18n-tmTooltip="@@core.toolbar.open-streetview"
           tmTooltip="Open Streetview"
-          [class.toggle-button--active]="toolActive$ | async"
+          [class.toggle-button--active]="toolActive()"
           (click)="toggle()">
     <mat-icon svgIcon="tools_streetview"></mat-icon>
   </button>

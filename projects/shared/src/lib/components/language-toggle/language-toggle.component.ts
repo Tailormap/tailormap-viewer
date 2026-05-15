@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject, LOCALE_ID } from '@angular/core';
+import { Component, ChangeDetectionStrategy, LOCALE_ID, inject } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { LanguageDescriptionModel } from './language-description.model';
 import { LanguageHelper } from './language.helper';
@@ -11,16 +11,17 @@ import { LanguageHelper } from './language.helper';
   standalone: false,
 })
 export class LanguageToggleComponent {
+  private baseHref = inject(APP_BASE_HREF);
+
 
   public availableLanguages = LanguageHelper.availableLanguages;
   public selectedLanguage: LanguageDescriptionModel | undefined;
 
   public canChangeLanguage = false;
 
-  constructor(
-    @Inject(APP_BASE_HREF) private baseHref: string,
-    @Inject(LOCALE_ID) locale: string,
-  ) {
+  constructor() {
+    const locale = inject(LOCALE_ID);
+
     this.selectedLanguage = this.availableLanguages.find(l => l.code === locale);
     if (this.selectedLanguage) {
       this.canChangeLanguage = this.baseHref.indexOf(`/${this.selectedLanguage.code}`) !== -1;

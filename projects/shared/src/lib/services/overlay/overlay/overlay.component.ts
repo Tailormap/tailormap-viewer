@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { OverlayRef } from '../overlay-ref';
 import { OverlayContent } from '../overlay-content';
 
@@ -8,14 +8,11 @@ import { OverlayContent } from '../overlay-content';
   standalone: false,
 })
 export class OverlayComponent implements OnInit {
+  private ref = inject(OverlayRef);
+  public content = inject(OverlayContent);
 
   public contentType: 'template' | 'string' = 'string';
   public context: { $implicit: any; close: () => void } | null = null;
-
-  constructor(
-    private ref: OverlayRef,
-    public content: OverlayContent,
-  ) {}
 
   public close() {
     this.ref.close(null);

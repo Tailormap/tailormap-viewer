@@ -15,7 +15,7 @@ import { Options } from 'ol/source/ImageWMS';
 import { ServerType } from 'ol/source/wms';
 import { ServerType as TMServerType } from '@tailormap-viewer/api';
 import { ObjectHelper } from '@tailormap-viewer/shared';
-import { ImageTile } from 'ol';
+import { ImageWrapper, Tile } from 'ol';
 import { NgZone } from '@angular/core';
 import { default as TileState } from 'ol/TileState';
 import { createForProjection, createXYZ, extentFromProjection } from 'ol/tilegrid';
@@ -23,16 +23,18 @@ import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { default as TileGrid } from 'ol/tilegrid/TileGrid';
 import { get as getProjection } from 'ol/proj.js';
 import { PROJECTION_REQUIRED_FOR_3D } from '../models/3d-projection.const';
+import { ServiceLayerModel } from '../models';
+import { OlMapScaleHelper } from './ol-map-scale.helper';
 
 export interface LayerProperties {
   id: string;
   visible: boolean;
   name: string;
-  filter?: string;
   language?: string;
 }
 
-interface WmsServiceParamsModel {
+export interface WmsServiceParamsModel {
+  STYLES: string;
   LAYERS: string;
   VERSION: string;
   QUERY_LAYERS?: string;
@@ -51,7 +53,6 @@ export class OlLayerHelper {
       id: layer.id,
       visible: layer.visible,
       name: layer.name,
-      filter: LayerTypesHelper.isServiceLayer(layer) ? layer.filter : undefined,
     };
     olLayer.setProperties(layerProps);
   }
@@ -65,15 +66,14 @@ export class OlLayerHelper {
       id: props['id'],
       visible: props['visible'],
       name: props['name'],
-      filter: props['filter'],
     };
   }
 
   public static createLayer(
     layer: LayerModel,
     projection: Projection,
-    ngZone?: NgZone,
-    httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> | TileLayer<XYZ> | TileLayer<WMTS> | null {
     if (LayerTypesHelper.isXyzLayer(layer)) {
       return OlLayerHelper.createXYZLayer(layer, projection);
@@ -153,9 +153,12 @@ export class OlLayerHelper {
     options.attributions = layer.attribution ? [layer.attribution] : undefined;
 
     const source = new WMTS(options);
+    const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
     return new TileLayer({
       visible: layer.visible,
       source,
+      minResolution,
+      maxResolution,
     });
   }
 
@@ -170,7 +173,7 @@ export class OlLayerHelper {
     const maxZoom = layer.maxZoom || 21;
     const tileSize = layer.tileSize || 256;
     const extent = layer.tileGridExtent
-      ? [ layer.tileGridExtent.minx,  layer.tileGridExtent.miny,  layer.tileGridExtent.maxx,  layer.tileGridExtent.maxy ]
+      ? [ layer.tileGridExtent.minx, layer.tileGridExtent.miny, layer.tileGridExtent.maxx, layer.tileGridExtent.maxy ]
       : extentFromProjection(projection);
 
     tileGrid = createXYZ({
@@ -209,17 +212,20 @@ export class OlLayerHelper {
       attributions: layer.attribution ? [layer.attribution] : undefined,
     });
 
+    const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
     return new TileLayer({
       visible: layer.visible,
       source,
+      minResolution,
+      maxResolution,
     });
   }
 
   public static createWMSLayer(
     layer: WMSLayerModel,
     projection: Projection,
-    ngZone?: NgZone,
-    httpXsrfTokenExtractor?: HttpXsrfTokenExtractor,
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ): TileLayer<TileWMS> | ImageLayer<ImageWMS> {
     let serverType: ServerType | undefined;
     let hidpi = true;
@@ -241,15 +247,26 @@ export class OlLayerHelper {
       attributions: layer.attribution ? [layer.attribution] : undefined,
     };
 
-    if (layer.tilingDisabled) {
-      const source = new ImageWMS(sourceOptions);
+    if (layer.tilingDisabled !== false) {
+      const imageLoadFunction = OlLayerHelper.getWmsPOSTImageLoadFunction(
+        ngZone,
+        httpXsrfTokenExtractor,
+        MAX_URL_LENGTH_BEFORE_POST,
+        ['CQL_FILTER']);
+      const source = new ImageWMS({
+        ...sourceOptions,
+        imageLoadFunction,
+      });
       source.set('olcs_projection', getProjection(PROJECTION_REQUIRED_FOR_3D));
+      const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
       return new ImageLayer({
         visible: layer.visible,
+        minResolution,
+        maxResolution,
         source,
       });
     } else {
-      const tileLoadFunction = !(ngZone && httpXsrfTokenExtractor) ? null : OlLayerHelper.getWmsPOSTTileLoadFunction(
+      const tileLoadFunction = OlLayerHelper.getWmsPOSTTileLoadFunction(
         ngZone,
         httpXsrfTokenExtractor,
         MAX_URL_LENGTH_BEFORE_POST,
@@ -262,15 +279,24 @@ export class OlLayerHelper {
         tileGrid,
       });
       source.set('olcs_tileLoadFunction', tileLoadFunction);
+      const { minResolution, maxResolution } = OlLayerHelper.getMinMaxResolution(layer, projection);
       return new TileLayer({
         visible: layer.visible,
+        minResolution,
+        maxResolution,
         source,
       });
     }
   }
 
-  private static getWmsPOSTTileLoadFunction(ngZone: NgZone, httpXsrfTokenExtractor: HttpXsrfTokenExtractor, maxUrlLength: number, paramsToPutInBody: string[]) {
-    return (tile: ImageTile, src: string) => {
+  private static getWmsPOSTLoadFunction(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+    onError?: (tileOrImage: ImageWrapper | Tile) => void,
+  ) {
+    return (tileOrImage: ImageWrapper, src: string) => {
       if (src.length > maxUrlLength) {
         ngZone.runOutsideAngular(() => {
           const url = new URL(src);
@@ -296,32 +322,68 @@ export class OlLayerHelper {
           }).then(response => {
             if (response.ok) {
               response.blob().then(blob => {
-                const image: HTMLImageElement = tile.getImage() as HTMLImageElement;
-                const objectUrl = URL.createObjectURL(blob);
-                image.src = objectUrl;
-                image.onload = () => {
-                  URL.revokeObjectURL(objectUrl);
-                };
+                const image = tileOrImage.getImage();
+                if (image instanceof HTMLImageElement) {
+                  const objectUrl = URL.createObjectURL(blob);
+                  image.src = objectUrl;
+                  image.onload = () => {
+                    URL.revokeObjectURL(objectUrl);
+                  };
+                }
               });
-            } else {
-              tile.setState(TileState.ERROR);
+            } else if (onError) {
+              onError(tileOrImage);
             }
           });
         });
       } else {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tile.getImage().src = src;
+        tileOrImage.getImage().src = src;
       }
     };
+  }
+
+  private static getWmsPOSTImageLoadFunction(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+  ) {
+    return OlLayerHelper.getWmsPOSTLoadFunction(
+      ngZone,
+      httpXsrfTokenExtractor,
+      maxUrlLength,
+      paramsToPutInBody,
+    );
+  }
+
+  private static getWmsPOSTTileLoadFunction(
+    ngZone: NgZone,
+    httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    maxUrlLength: number,
+    paramsToPutInBody: string[],
+  ) {
+    return OlLayerHelper.getWmsPOSTLoadFunction(
+      ngZone,
+      httpXsrfTokenExtractor,
+      maxUrlLength,
+      paramsToPutInBody,
+      (tile) => {
+        if (tile instanceof Tile) {
+          tile.setState(TileState.ERROR);
+        }
+      },
+    );
   }
 
   public static getWmsServiceParams(layer: WMSLayerModel, addCacheBust?: boolean): WmsServiceParamsModel {
     const params: WmsServiceParamsModel = {
       LAYERS: layer.layers,
-      VERSION: '1.1.1',
+      VERSION: '1.3.0',
       QUERY_LAYERS: layer.queryLayers,
       TRANSPARENT: 'TRUE',
+      STYLES: '',
     };
     if (layer.filter && layer.serverType === TMServerType.GEOSERVER) {
       // TODO: implement filtering for other servers than geoserver (transform CQL to SLD for SLD_BODY param)
@@ -333,7 +395,22 @@ export class OlLayerHelper {
     if (addCacheBust) {
       params.CACHE = Date.now();
     }
+    if (layer.styles && layer.selectedStyleName) {
+      params.STYLES = layer.selectedStyleName;
+    }
     return params;
+  }
+
+  private static getMinMaxResolution(layer: ServiceLayerModel, projection: Projection) {
+    let minResolution: number | undefined;
+    let maxResolution: number | undefined;
+    if (typeof layer.minScale === 'number') {
+      minResolution = OlMapScaleHelper.getResolutionForScale(projection, layer.minScale);
+    }
+    if (typeof layer.maxScale === 'number') {
+      maxResolution = OlMapScaleHelper.getResolutionForScale(projection, layer.maxScale);
+    }
+    return { minResolution, maxResolution };
   }
 
 }

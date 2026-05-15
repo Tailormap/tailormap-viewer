@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  max-height: 100%;
+}
+
+.mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 22px;
+  vertical-align: middle;
+}
+
+ .mat-icon ::ng-deep svg > g {
+  stroke: var(--stroke);
+  fill: var(--fill);
+}

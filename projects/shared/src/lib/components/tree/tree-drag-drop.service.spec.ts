@@ -1,4 +1,3 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
 import { FlatTreeModel } from './models';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { TreeDragDropService } from './tree-drag-drop.service';
@@ -41,8 +40,7 @@ describe('Tree Drag Drop Service', () => {
   treeEl.appendChild(treeNode3);
   const treeNode4 = createTreeNode(4);
   treeEl.appendChild(treeNode4);
-  const treeControl = new FlatTreeControl<FlatTreeModel>(() => 0, () => false);
-  treeControl.dataNodes = [
+  const dataNodes = [
     createNodes(1),
     createNodes(2),
     createNodes(3),
@@ -52,7 +50,7 @@ describe('Tree Drag Drop Service', () => {
   it ('handles drag drop', fakeAsync(() => {
     const positionChangedFn = jest.fn();
     const dragStartEvent = new Event('dragstart') as DragEvent;
-    service.handleDragStart(dragStartEvent, treeControl.dataNodes[0], [{
+    service.handleDragStart(dragStartEvent, dataNodes[0], [{
       getTargetElement: (): HTMLDivElement => {
         return treeEl;
       },
@@ -63,7 +61,7 @@ describe('Tree Drag Drop Service', () => {
         return null;
       },
       dropAllowed: (id: string): boolean => {
-        return treeControl.dataNodes.findIndex(d => d.id === id) !== -1;
+        return dataNodes.findIndex(d => d.id === id) !== -1;
       },
       getParent: (_id: string): string | null => {
         return null;

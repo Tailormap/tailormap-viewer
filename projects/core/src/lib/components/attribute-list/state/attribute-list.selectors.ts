@@ -6,7 +6,9 @@ import { AttributeListColumnModel } from '../models/attribute-list-column.model'
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { selectComponentTitle } from '../../../state/core.selectors';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import { selectVisibleLayersWithAttributes } from '../../../map';
+import { AttributeListInitialDataSortModelWithoutSource } from '../models/attribute-list-initial-data-sort.model';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
@@ -15,19 +17,94 @@ export const selectAttributeListTabs = createSelector(selectAttributeListState, 
 export const selectAttributeListData = createSelector(selectAttributeListState, state => state.data);
 export const selectAttributeListSelectedTab = createSelector(selectAttributeListState, state => state.selectedTabId);
 export const selectCurrentlyHighlightedFeature = createSelector(selectAttributeListState, state => state.highlightedFeature);
+export const selectInitialDataSort = createSelector(selectAttributeListState, state => state.initialDataSort || []);
+
+export const selectTabsForVisibleLayers = createSelector(
+  selectVisibleLayersWithAttributes,
+  layers => {
+    return layers
+      .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.attributeList))
+      .map(l => ({ id: l.id, label: l.title || l.layerName }));
+  },
+);
+
+export const selectIsLoadingTabs = createSelector(
+  selectTabsForVisibleLayers,
+  selectAttributeListTabs,
+  (tabsForLayers, createdTabs) => {
+    // When we have layers with attributes but no tabs created yet, we are in the process of loading tabs, so we show a loading state.
+    // If we have tabs created, we assume loading is done.
+    return tabsForLayers.length > 0 && createdTabs.length === 0;
+  },
+);
 
 export const selectAttributeListTab = (tabId: string) => createSelector(
   selectAttributeListTabs,
   tabs => tabs.find(t => t.id === tabId),
 );
 
-export const selectAttributeListTabData = (tabId: string) => createSelector(
+export const selectDataWithSort = createSelector(
+  selectAttributeListTabs,
   selectAttributeListData,
+  selectInitialDataSort,
+  (tabs, data, initialDataSort): AttributeListDataModel[] => {
+    const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
+    const getKey = (tabSourceId: string, layerId: string, source: string, featureType: string | undefined) => {
+      return [ tabSourceId, layerId, featureType ?? '', source ].join('___');
+    };
+    const sortDict = new Map<string, AttributeListInitialDataSortModelWithoutSource>(initialDataSort.map(s => {
+      return [ getKey(s.tabSourceId, s.layerId, s.source, s.featureType), s ];
+    }));
+    return data.map(d => {
+      const tab = tabsById.get(d.tabId);
+      if (!tab || !tab.layerId) {
+        return d;
+      }
+      const bookmarkKey = getKey(tab.tabSourceId, tab.layerId, 'bookmark', d.featureType);
+      const configKey = getKey(tab.tabSourceId, tab.layerId, 'config', d.featureType);
+      const sortToApply = sortDict.get(bookmarkKey) || sortDict.get(configKey);
+      const hasExplicitSort = typeof d.sortedColumn !== 'undefined';
+      if (hasExplicitSort || !sortToApply || (sortToApply.sortDirection === d.sortDirection && sortToApply.sortedColumn === d.sortedColumn)) {
+        return d;
+      }
+      return {
+        ...d,
+        sortDirection: sortToApply.sortDirection ?? '',
+        sortedColumn: sortToApply.sortedColumn,
+      };
+    });
+  },
+);
+
+export const selectAttributeListDataSort = createSelector(
+  selectAttributeListTabs,
+  selectDataWithSort,
+  (tabs, data): AttributeListInitialDataSortModelWithoutSource[] => {
+    const tabsById = new Map<string, AttributeListTabModel>(tabs.map(tab => [ tab.id, tab ]));
+    return data
+      .map<AttributeListInitialDataSortModelWithoutSource | null>(dataForTab => {
+        const tab = tabsById.get(dataForTab.tabId);
+        if (!tab || !dataForTab.sortedColumn || dataForTab.sortDirection === '' || !tab.layerId) {
+          return null;
+        }
+        return {
+          tabSourceId: tab.tabSourceId,
+          layerId: tab.layerId,
+          featureType: dataForTab.featureType,
+          sortedColumn: dataForTab.sortedColumn,
+          sortDirection: dataForTab.sortDirection,
+        };
+      })
+      .filter((item): item is AttributeListInitialDataSortModelWithoutSource => item !== null);
+  });
+
+export const selectAttributeListTabData = (tabId: string) => createSelector(
+  selectDataWithSort,
   data => data.filter(t => t.tabId === tabId),
 );
 
 export const selectAttributeListDataForId = (dataId: string) => createSelector(
-  selectAttributeListData,
+  selectDataWithSort,
   data => data.find(t => t.id === dataId),
 );
 
@@ -73,7 +150,7 @@ export const selectDataIdForSelectedTab = createSelector(
 
 export const selectDataForSelectedTab = createSelector(
   selectSelectedTab,
-  selectAttributeListData,
+  selectDataWithSort,
   (selectedTab, data): AttributeListDataModel | null => {
     if (!selectedTab) {
       return null;
@@ -104,6 +181,14 @@ export const selectRowsForSelectedTab = createSelector(
 export const selectColumnsForSelectedTab = createSelector(
   selectDataForSelectedTab,
   (data): AttributeListColumnModel[] => {
+    return data ? data.columns.filter(c => c.visible) : [];
+  },
+);
+
+export const selectColumnsForData = (dataId: string) => createSelector(
+  selectDataWithSort,
+  (allData): AttributeListColumnModel[] => {
+    const data = allData.find(d => d.id === dataId);
     return data ? data.columns : [];
   },
 );

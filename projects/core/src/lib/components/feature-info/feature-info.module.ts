@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
@@ -16,6 +16,7 @@ import { BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
 import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions';
 import { FeatureInfoTemplateRendererComponent } from './feature-info-template-renderer/feature-info-template-renderer.component';
+import { FeatureInfoContentComponent } from './feature-info-content/feature-info-content.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { FeatureInfoTemplateRendererComponent } from './feature-info-template-re
     FeatureInfoLayerListComponent,
     FeatureInfoLayerItemComponent,
     FeatureInfoLayerDropdownComponent,
+    FeatureInfoContentComponent,
   ],
   imports: [
     CommonModule,
@@ -38,10 +40,13 @@ import { FeatureInfoTemplateRendererComponent } from './feature-info-template-re
   ],
   exports: [
     FeatureInfoComponent,
+    FeatureInfoDialogComponent,
   ],
 })
 export class FeatureInfoModule {
-  constructor(store$: Store) {
+  constructor() {
+    const store$ = inject(Store);
+
     ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
       store$,
       BaseComponentTypeEnum.FEATURE_INFO,

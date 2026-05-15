@@ -3,28 +3,28 @@ import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayersAndGeometry, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
-  selectSelectedLayersCount,
+  hasSelectedLayersAndGeometry, selectReferenceLayerLabel, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
-import { getFilterGroup } from '../../../filter/helpers/attribute-filter.helper.spec';
+import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
-import { createMapServiceMock } from '../../../map/components/map-drawing-buttons/map-drawing-buttons.component.spec';
 import { TestBed } from '@angular/core/testing';
 import { FilterGroupModel } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
-import { FilterFeaturesService } from '../services/filter-features.service';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
 
 const setup = async (conf: {
   layers?: AppLayerModel[];
   selectedLayers?: boolean;
   selectedLayersAndGeometry?: boolean;
   selectedFilterGroup?: FilterGroupModel;
+  exceededMax?: boolean;
 }) => {
   const store = provideMockStore({
     initialState: {},
@@ -34,10 +34,12 @@ const setup = async (conf: {
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
+      { selector: selectSpatialFilterHasExceededMaxFeatures, value: conf.exceededMax ?? false },
+      { selector: selectReferenceLayerLabel, value: conf.selectedFilterGroup ? 'the_reference_layer' : null },
       { selector: selectIn3dView, value: false },
     ],
   });
-  const mapServiceMock = createMapServiceMock();
+  const mapServiceMock = createMapServiceMockWithDrawingTools();
   const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -47,7 +49,6 @@ const setup = async (conf: {
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
       { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
-      { provide: FilterFeaturesService, useValue: { getFilterFeatures$: () => of([]) } },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
@@ -120,6 +121,19 @@ describe('SpatialFilterFormComponent', () => {
       selectedFilterGroup: { ...group, error: 'This group has some error' },
     });
     expect(await screen.findByText('This group has some error')).toBeInTheDocument();
+  });
+
+  test('shows an error message when the group exceeded max features', async () => {
+    const group = getFilterGroup();
+    await setup({
+      layers,
+      selectedFilterGroup: group,
+      exceededMax: true,
+    });
+    // eslint-disable-next-line max-len
+    expect(await screen.findByText('There are more than 250 objects available in the the_reference_layer layer. The maximum is 250. Apply filters to narrow down the selection.')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Save filter')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Save filter')).toBeDisabled();
   });
 
 });

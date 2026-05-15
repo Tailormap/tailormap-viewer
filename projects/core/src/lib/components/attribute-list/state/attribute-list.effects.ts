@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
@@ -7,16 +7,29 @@ import { AttributeListDataService } from '../services/attribute-list-data.servic
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel } from '@tailormap-viewer/api';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 
 @Injectable()
 export class AttributeListEffects {
+  private actions$ = inject(Actions);
+  private store$ = inject(Store);
+  private attributeListDataService = inject(AttributeListDataService);
+  private mapService = inject(MapService);
+  private managerService = inject(AttributeListManagerService);
 
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
+      filter(action => !!action.tabId),
+      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+    );
+  });
+
+  public loadDataAfterSelectedDataIdChange$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
       mergeMap(action => this.loadDataForTabId$(action.tabId)),
     );
@@ -47,7 +60,7 @@ export class AttributeListEffects {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
-        return this.api.getFeatures$({
+        return this.managerService.getFeatures$(tab.tabSourceId, {
           applicationId,
           layerId: tab.layerId,
           __fid: row.__fid,
@@ -72,15 +85,6 @@ export class AttributeListEffects {
         return AttributeListActions.loadDataSuccess({ tabId, data: result });
       }),
     );
-  }
-
-  constructor(
-    private actions$: Actions,
-    private store$: Store,
-    private attributeListDataService: AttributeListDataService,
-    private mapService: MapService,
-    @Inject(TAILORMAP_API_V1_SERVICE) private api: TailormapApiV1ServiceModel,
-  ) {
   }
 
 }

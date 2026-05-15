@@ -1,9 +1,73 @@
 @if (node) {
   <div class="tree-node"
        [class.not-visible-on-map]="isLayerHiddenOnMap()"
+       [class.not-visible-in-3d]="isLayerHiddenIn3d()"
        [class.level]="isLevel()">
     <div class="tree-node__label">
       <span class="tree-node__label-content">{{node.label}}</span>
     </div>
+    @if (!isInScale() && node.checked) {
+      <mat-icon class="icon"
+                (click)="zoomToLayer($event, node)"
+                svgIcon="zoom_to_scale"
+                tmTooltip="Click to zoom in to make this layer visible"
+                i18n-tmTooltip="@@core.toc.zoom-to-scale"
+                matListItemMeta>
+      </mat-icon>
+    }
+    @if (isLayerHiddenIn2d()) {
+      <mat-icon class="icon"
+                (click)="$event.stopPropagation()"
+                svgIcon="tools_3d"
+                tmTooltip="Switch to 3D to see this layer"
+                i18n-tmTooltip="@@core.toc.3d-layer"
+                matListItemMeta>
+      </mat-icon>
+    }
+    @if (isLayerFiltered()) {
+      @let filterSourceInfo = getLayerFilterSourceInfo();
+      <mat-icon class="icon"
+                (click)="$event.stopPropagation()"
+                [svgIcon]="filterSourceInfo.icon"
+                [tmTooltip]="filterSourceInfo.tooltip"
+                matListItemMeta>
+      </mat-icon>
+    }
+    @if (isInScale() && isLayerEditable() && node.checked && !in3D) {
+      <mat-icon class="icon"
+                (click)="editLayerClicked($event, node)"
+                svgIcon="edit"
+                tmTooltip="Edit layer"
+                i18n-tmTooltip=":@@core.toc.edit-layer"
+                matListItemMeta>
+      </mat-icon>
+    }
+    @if (showInfoIcon && !isLevel()) {
+      <mat-icon class="icon"
+                (click)="emitShowInfo($event)"
+                svgIcon="components_info_menu_button">
+      </mat-icon>
+    }
+
   </div>
+
+  @if (hasStylesToShow()) {
+    <div class="styles-list-container" (click)="$event.stopPropagation()">
+      <mat-radio-group
+        (change)="styleChanged($event.value)"
+        class="styles-list"
+      >
+        @for (style of node.metadata?.styles || []; track style) {
+          <mat-radio-button [checked]="style === node.metadata?.styles?.[0]"
+                            [value]="style"
+                            class="style-radio-button"
+                            tmTooltip="{{ style.abstractText ?? '' }}"
+                            matTooltipPosition="right"
+          >
+            {{ style.title ?? style.name }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    </div>
+  }
 }

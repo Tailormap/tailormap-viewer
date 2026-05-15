@@ -4,4 +4,5 @@ export interface RegisteredComponent {
   component: Type<any>;
   type: string;
   enableIn3d?: boolean;
+  position?: string;
 }

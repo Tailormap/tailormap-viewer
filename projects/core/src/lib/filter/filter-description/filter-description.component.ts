@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AttributeFilterHelper } from '../helpers/attribute-filter.helper';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
 import { BaseFilterModel, AttributeFilterModel } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../helpers/filter-type.helper';
@@ -37,6 +37,7 @@ export class FilterDescriptionComponent {
 
   public convertGroupToDescription(filterGroup: ExtendedFilterGroupModel) {
     return filterGroup.filters
+      .filter(filter => FilterTypeHelper.isAttributeFilter(filter) && !filter.editConfiguration && !filter.generatedByFilterId)
       .map(filter => this.convertFilterToDescription(filter))
       .join(` ${this.convertOperator(filterGroup.operator)} `);
   }
@@ -60,7 +61,7 @@ export class FilterDescriptionComponent {
     if (values.length === 2) {
       value = `${values[0]} ${this.AND} ${values[1]}`;
     }
-    return `<strong>${filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
+    return `<strong>${filter.attributeAlias ?? filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
   }
 
   private convertOperator(operator: 'AND' | 'OR') {

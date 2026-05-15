@@ -1,4 +1,5 @@
 import { map, Observable, of, Subject } from 'rxjs';
+import { UploadHelper } from './upload.helper';
 
 export interface ImageResult {
   error?: string;
@@ -9,6 +10,7 @@ export interface ImageResult {
 export class ImageHelper {
 
   public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600): Observable<ImageResult | null> {
+
     const errorMsg = ImageHelper.checkSizeAndType(file, maxSize);
     if (errorMsg.length > 0) {
       return of({ error: errorMsg.join('. ') });

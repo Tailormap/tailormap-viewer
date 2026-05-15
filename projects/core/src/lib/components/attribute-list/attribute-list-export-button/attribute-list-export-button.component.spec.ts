@@ -5,14 +5,14 @@ import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { of } from 'rxjs';
-import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
+import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 
-const setup = async (layerId: string | null = null, supportedFormats: SupportedExportFormats[] = []) => {
+const setup = async (layerId: string | null = null, supportedFormats: SupportedExtractFormats[] = []) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -52,8 +52,8 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  test('should render button for selected layer and supported formats', async () => {
-    const { exportService } = await setup('1', [ SupportedExportFormats.CSV, SupportedExportFormats.XLSX ]);
+  test('should render button for selected layer and supported formats, CSV, XLSX', async () => {
+    const { exportService } = await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX ]);
     expect(screen.getByRole('button')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button'));
     expect(screen.getByText('CSV')).toBeInTheDocument();
@@ -61,6 +61,18 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('CSV'));
     expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
+  });
+
+  test('should render button for selected layer and supported formats, CSV, XLSX, DFX', async () => {
+    const { exportService } = await setup('1', [ SupportedExtractFormats.CSV, SupportedExtractFormats.XLSX, SupportedExtractFormats.DXF ]);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button'));
+    expect(screen.getByText('CSV')).toBeInTheDocument();
+    expect(screen.getByText('Excel')).toBeInTheDocument();
+    expect(screen.getByText('DXF')).toBeInTheDocument();
+    expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
+    await userEvent.click(screen.getByText('DXF'));
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'dxf', filter: undefined, sort: null, attributes: [] });
   });
 
 });

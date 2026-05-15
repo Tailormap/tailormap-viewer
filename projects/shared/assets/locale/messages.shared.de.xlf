@@ -29,6 +29,10 @@
         <source>Color is required</source>
         <target>Farbe ist erforderlich</target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopie</target>
+      </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
         <target>Schließen</target>
@@ -56,6 +60,10 @@
       <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
         <source>Failed to load legend for</source>
         <target>Legende konnte nicht geladen werden für</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.forgot-password" datatype="html">
+        <source>Forgot your password?</source>
+        <target>Passwort vergessen?</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
@@ -168,6 +176,62 @@
       <trans-unit id="shared.overlay-helper.windows" datatype="html">
         <source>Use ctrl + scroll to zoom the map</source>
         <target>Verwende ctrl + Scrollen, um die Karte zu vergrößern.</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.first-page" datatype="html">
+        <source>First page</source>
+        <target>Erste Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.items-per-page" datatype="html">
+        <source>Items per page</source>
+        <target>Elemente pro Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.last-page" datatype="html">
+        <source>Last page</source>
+        <target>Letzte Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.next-page" datatype="html">
+        <source>Next page</source>
+        <target>Nächste Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.previous-page" datatype="html">
+        <source>Previous page</source>
+        <target>Vorherige Seite</target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label" datatype="html">
+        <source><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="length"/></source>
+        <target><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> von <x id="PH_2" equiv-text="length"/></target>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label-empty" datatype="html">
+        <source>0 of 0</source>
+        <target>0 von 0</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
+        <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
+        <target>Ihre Anfrage wurde akzeptiert. Wenn die von Ihnen angegebene E-Mail-Adresse registriert ist, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts.</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.email" datatype="html">
+        <source>Email</source>
+        <target>E-Mail</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.error-message" datatype="html">
+        <source>An error occurred processing your request.</source>
+        <target>Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.submit" datatype="html">
+        <source>Request password reset</source>
+        <target>Passwort zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="shared.password-reset-request-form.title" datatype="html">
+        <source>Reset Password</source>
+        <target>Passwort zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
+        <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>
+        <target state="new">Zeige <x id="PH" equiv-text="this.getLabel()"/> – zum Wechseln auf <x id="PH_1" equiv-text="nextLabel"/> klicken</target>
+      </trans-unit>
+      <trans-unit id="shared.tree.items" datatype="html">
+        <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>
+        <target><x id="PH" equiv-text="dragNodeIds.length"/> Elemente</target>
       </trans-unit>
     </body>
   </file>

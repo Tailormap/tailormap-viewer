@@ -1,13 +1,13 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import {
-  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest,
+  BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest, finalize,
 } from 'rxjs';
-import { AttributeListExportService, SupportedExportFormats } from '../services/attribute-list-export.service';
+import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import { Store } from '@ngrx/store';
 import {
-  selectColumnsForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
+  selectColumnsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { selectCQLFilters } from '../../../filter/state/filter.selectors';
+import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 
@@ -19,38 +19,34 @@ import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
   standalone: false,
 })
 export class AttributeListExportButtonComponent implements OnDestroy {
-
+  private store$ = inject(Store);
+  private exportService = inject(AttributeListExportService);
+  public extractProgress$ = this.exportService.extractProgress$;
   private destroyed = new Subject();
-
-  public supportedFormats = SupportedExportFormats;
-
-  private supportedFormatsSubject = new BehaviorSubject<SupportedExportFormats[]>([]);
-  private supportedFormats$: Observable<SupportedExportFormats[]> = this.supportedFormatsSubject.asObservable();
+  public supportedFormats = SupportedExtractFormats;
+  private supportedFormatsSubject = new BehaviorSubject<SupportedExtractFormats[]>([]);
+  private supportedFormats$: Observable<SupportedExtractFormats[]> = this.supportedFormatsSubject.asObservable();
   public showExportButton$ = this.supportedFormats$.pipe(map(formats => formats.length > 0));
-
   private isExportingSubject = new BehaviorSubject(false);
   public isExporting$ = this.isExportingSubject.asObservable();
 
-  constructor(
-    private store$: Store,
-    private exportService: AttributeListExportService,
-  ) {
+  constructor() {
     combineLatest([
       this.store$.select(selectLayers),
-      this.store$.select(selectSelectedTabLayerId),
+      this.store$.select(selectSelectedTab),
     ])
       .pipe(
         takeUntil(this.destroyed),
         distinctUntilChanged(),
-        concatMap(([ layers, layerId ]) => {
-          if (layerId === null) {
+        concatMap(([ layers, selectedTab ]) => {
+          if (!selectedTab || selectedTab.layerId === null || typeof selectedTab.layerId === 'undefined') {
             return of([]);
           }
-          const layer = layers.find(l => l.id === layerId);
+          const layer = layers.find(l => l.id === selectedTab.layerId);
           if (layer?.hiddenFunctionality?.includes(HiddenLayerFunctionality.export)) {
             return of([]);
           }
-          return this.exportService.getExportFormats$(layerId);
+          return this.exportService.getExportFormats$(selectedTab.tabSourceId, selectedTab.layerId);
         }),
       )
       .subscribe(formats => this.supportedFormatsSubject.next(formats));
@@ -61,7 +57,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
     this.destroyed.complete();
   }
 
-  public onExportClick(format: SupportedExportFormats) {
+  public onExportClick(format: SupportedExtractFormats) {
     this.isExportingSubject.next(true);
     this.store$.select(selectSelectedTab)
       .pipe(
@@ -77,15 +73,16 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           }
           const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
-          return this.exportService.export$({ layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
-        }))
+          return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
+        }),
+        finalize(() => this.isExportingSubject.next(false)),
+      )
       .subscribe(() => {
-        this.isExportingSubject.next(false);
+        // finalization/reset handled by finalize() above
       });
   }
 
-  public isFormatSupported$(format: SupportedExportFormats) {
+  public isFormatSupported$(format: SupportedExtractFormats) {
     return this.supportedFormats$.pipe(map(formats => formats.includes(format)));
   }
-
 }

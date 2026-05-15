@@ -9,6 +9,7 @@ import { AuthorizationEditComponent } from './authorization-edit/authorization-e
 import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fields-renderer.component';
 import { SelectUploadModule } from './select-upload/select-upload.module';
 import { ListFilterComponent } from './list-filter/list-filter.component';
+import { LayerSelectionConfigComponent } from './layer-selection/layer-selection-config.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ListFilterComponent } from './list-filter/list-filter.component';
     AuthorizationEditComponent,
     AdminFieldsRendererComponent,
     ListFilterComponent,
+    LayerSelectionConfigComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { ListFilterComponent } from './list-filter/list-filter.component';
     AdminFieldsRendererComponent,
     SelectUploadModule,
     ListFilterComponent,
+    LayerSelectionConfigComponent,
   ],
 })
 export class SharedAdminComponentsModule {

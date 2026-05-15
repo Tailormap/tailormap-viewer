@@ -93,6 +93,9 @@ export class EditFormFieldHelper {
     if (fieldType === 'date') {
       return FormFieldTypeEnum.DATE;
     }
+    if (fieldType === 'timestamp') {
+      return FormFieldTypeEnum.TIMESTAMP;
+    }
     return FormFieldTypeEnum.TEXT;
   }
 

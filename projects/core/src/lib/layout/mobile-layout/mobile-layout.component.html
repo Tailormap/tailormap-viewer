@@ -1,0 +1,49 @@
+@let layoutConfig = layoutService.componentsConfig$ | async;
+@if (layoutConfig) {
+  @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.HEADER)) { <tm-header role="banner" [mobileHeader]="true"></tm-header> }
+  <main class="viewer">
+    <div class="map">
+      @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info></tm-feature-info> }
+      <tm-map></tm-map>
+      <div class="map-controls-left">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SIMPLE_SEARCH)) { <tm-simple-search role="search"></tm-simple-search> }
+      </div>
+      <div class="map-controls-right">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.GEOLOCATION)) { <tm-geolocation></tm-geolocation> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.BACKGROUND_LAYER_TOGGLE)) { <tm-background-layer-toggle></tm-background-layer-toggle> }
+      </div>
+      <div class="map-controls-left--on-bottom">
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.SCALE_BAR)) { <tm-scale-bar></tm-scale-bar> }
+
+      </div>
+      <div class="map-controls-right--on-bottom">
+        @if (layoutService.shouldDisplayLogo(layoutConfig)) {
+          <div class="menubar-logo-container">
+            <tm-menubar-logo></tm-menubar-logo>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="mobile-menubar-panel">
+      <tm-mobile-menubar-panel>
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TOC)) { <tm-toc [mobileToc]="true"></tm-toc> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.LEGEND)) { <tm-legend></tm-legend> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.EDIT)) { <tm-edit-mobile-panel></tm-edit-mobile-panel> }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.MOBILE_MENUBAR_HOME)) {
+          <tm-mobile-menubar-home>
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.PROFILE)) { <tm-profile [inMobilePanel]="true"></tm-profile> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.INFO)) { <tm-info></tm-info> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.TERRAIN_CONTROLS)) { <tm-terrain-controls [noExpansionPanel]="true"></tm-terrain-controls> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FILTER)) { <tm-filter></tm-filter> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_LINK_WINDOW)) { <tm-coordinate-link-window [noExpansionPanel]="true"></tm-coordinate-link-window> }
+            @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.COORDINATE_PICKER)) { <tm-clicked-coordinates [noExpansionPanel]="true"></tm-clicked-coordinates> }
+          </tm-mobile-menubar-home>
+        }
+        @if (layoutService.isComponentEnabled(layoutConfig, componentTypes.FEATURE_INFO)) { <tm-feature-info-dialog></tm-feature-info-dialog> }
+      </tm-mobile-menubar-panel>
+    </div>
+    <nav class="mobile-menubar-buttons">
+      <tm-mobile-menubar-bottom [config]="layoutConfig.config"></tm-mobile-menubar-bottom>
+    </nav>
+  </main>
+}

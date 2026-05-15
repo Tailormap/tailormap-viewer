@@ -16,6 +16,7 @@ import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } 
 import { InfoMessageComponent } from './info-message';
 import { LegendImageComponent } from './legend-image/legend-image.component';
 import { SpinnerButtonComponent } from './spinner-button/spinner-button.component';
+import { AttributeFilterComponent } from './attribute-filter/attribute-filter.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { SpinnerButtonComponent } from './spinner-button/spinner-button.componen
     LanguageToggleComponent,
     LegendImageComponent,
     SpinnerButtonComponent,
+    AttributeFilterComponent,
   ],
   imports: [
     SharedImportsModule,
@@ -54,6 +56,7 @@ import { SpinnerButtonComponent } from './spinner-button/spinner-button.componen
     InfoMessageComponent,
     LegendImageComponent,
     SpinnerButtonComponent,
+    AttributeFilterComponent,
   ],
 })
 export class SharedComponentsModule {

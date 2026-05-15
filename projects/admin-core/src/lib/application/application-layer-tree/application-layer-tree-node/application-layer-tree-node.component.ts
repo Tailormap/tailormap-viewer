@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
+import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 
 @Component({
   selector: 'tm-admin-application-layer-tree-node',
@@ -10,6 +11,7 @@ import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
   standalone: false,
 })
 export class ApplicationLayerTreeNodeComponent {
+  private treeService = inject(TreeService);
 
   @Input()
   public node: TreeModel<AppTreeNodeModel> | null = null;
@@ -25,6 +27,9 @@ export class ApplicationLayerTreeNodeComponent {
 
   @Output()
   public deleteNode = new EventEmitter<string>();
+
+  @Output()
+  public expandOnStartup = new EventEmitter<{ nodeId: string; expandOnStartup: ExpandOnStartupEnum }>();
 
   public isLevel() {
     return this.node?.type === 'level';
@@ -49,6 +54,10 @@ export class ApplicationLayerTreeNodeComponent {
     this.deleteNode.emit(nodeId);
   }
 
+  public removeNodeFromMenu(nodeId: string) {
+    this.deleteNode.emit(nodeId);
+  }
+
   public isNonRoot() {
     const isRoot = ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.root;
     return !isRoot;
@@ -61,5 +70,52 @@ export class ApplicationLayerTreeNodeComponent {
       return 'admin_terrain';
     }
     return 'admin_catalog';
+  }
+
+  public getExpandOnStartup() {
+    if (ApplicationTreeHelper.isLevelTreeNode(this.node) && this.node.metadata?.expandOnStartup) {
+      return this.node.metadata?.expandOnStartup;
+    }
+    return "automatic";
+  }
+
+  public setExpandOnStartup(expandOnStartup: ExpandOnStartupEnum) {
+    if (ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+      this.expandOnStartup.emit({ nodeId: this.node.id, expandOnStartup });
+    }
+  }
+
+  public someChildrenChecked() {
+    const node = this.treeService.getNode(this.node?.id || '');
+    if (!node) {
+      return false;
+    }
+    return this.treeService.descendantsPartiallySelected(node) || this.treeService.descendantsAllSelected(node);
+  }
+
+  public isExpandedOnStartup() {
+    if (!ApplicationTreeHelper.isLevelTreeNode(this.node)) {
+      return false;
+    }
+    const expandOnStartup = this.node.metadata?.expandOnStartup;
+    if (expandOnStartup === ExpandOnStartupEnum.ALWAYS_EXPAND) {
+      return true;
+    }
+    if (expandOnStartup === ExpandOnStartupEnum.NEVER_EXPAND) {
+      return false;
+    }
+    return this.someChildrenChecked();
+  }
+
+  public getExpandedOnStartupIcon() {
+    return this.isExpandedOnStartup()
+      ? 'admin_expanded'
+      : 'admin_collapsed';
+  }
+
+  public getExpandOnStartupTooltip() {
+    return this.isExpandedOnStartup()
+      ? $localize `:@@admin-core.application.expanded-on-startup:This group is expanded on startup`
+      : $localize `:@@admin-core.application.collapsed-on-startup:This group is collapsed on startup`;
   }
 }

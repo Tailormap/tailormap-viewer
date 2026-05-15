@@ -5,7 +5,8 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
-  selectColumnsForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab, selectLoadingDataSelectedTab,
+  selectColumnsForSelectedTab, selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab,
+  selectLoadingDataSelectedTab, selectPagingDataSelectedTab,
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
@@ -17,7 +18,13 @@ import { AttributeListFilterComponent, FilterDialogData } from '../attribute-lis
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { CssHelper, SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StatisticsHelper } from '../helpers/statistics-helper';
+import { StatisticType } from '../models/attribute-list-api-service.model';
+import { AttributeListStatisticsService } from '../services/attribute-list-statistics.service';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 @Component({
   selector: 'tm-attribute-list-content',
@@ -27,6 +34,13 @@ import { CssHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class AttributeListContentComponent implements OnInit {
+  private store$ = inject(Store);
+  private attributeListStateService = inject(AttributeListStateService);
+  private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
+  private attributeListStatisticsService = inject(AttributeListStatisticsService);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
@@ -37,11 +51,14 @@ export class AttributeListContentComponent implements OnInit {
   public errorMessage$: Observable<string | undefined> = of(undefined);
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
+  public pagingDataSelectedTab$: Observable<AttributeListPagingDataType> = this.store$.select(selectPagingDataSelectedTab);
 
-  private store$ = inject(Store);
-  private attributeListStateService = inject(AttributeListStateService);
-  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
-  private dialog = inject(MatDialog);
+  public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
+  public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
+  public loadingFeatureDetailsIds$ = this.attributeListFeatureDetailsService.loadingFeatureDetailsIds$;
+
+  public showStatistics$ = this.attributeListStatisticsService.canLoadStatistics$;
+  public statistics$ = this.attributeListStatisticsService.statistics$;
 
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
@@ -51,12 +68,15 @@ export class AttributeListContentComponent implements OnInit {
     this.hasNoRows$ = this.store$.select(selectHasNoRowsForSelectedTab);
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
     this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
-    this.filters$ = this.store$.select(selectSelectedTab)
-      .pipe(switchMap(tab => {
+    this.filters$ = combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
+    ])
+      .pipe(switchMap(([ tab, data ]) => {
         if (!tab || !tab.layerId) {
           return of([]);
         }
-        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId);
+        return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       }));
     this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
   }
@@ -84,20 +104,35 @@ export class AttributeListContentComponent implements OnInit {
   public onSetFilter($event: { columnId: string; attributeType: AttributeType }) {
     combineLatest([
       this.store$.select(selectSelectedTab),
+      this.store$.select(selectDataForSelectedTab),
       this.store$.select(selectViewerId),
     ])
       .pipe(
         pipe(take(1)),
-        concatMap(([ selectedTab, applicationId ]) => {
+        concatMap(([ selectedTab, selectedData, applicationId ]) => {
           if (!selectedTab || !selectedTab.layerId) {
             return of(null);
           }
-          const layerId = selectedTab.layerId;
           return forkJoin([
-            this.simpleAttributeFilterService.getFilterForAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(BaseComponentTypeEnum.ATTRIBUTE_LIST, layerId, $event.columnId).pipe(take(1)),
-            of(layerId),
+            this.simpleAttributeFilterService.getFilterForAttribute$(
+              BaseComponentTypeEnum.ATTRIBUTE_LIST,
+              selectedTab.layerId,
+              $event.columnId,
+              selectedData?.featureType,
+            ).pipe(take(1)),
+            this.simpleAttributeFilterService.getFiltersExcludingAttribute$(
+              BaseComponentTypeEnum.ATTRIBUTE_LIST,
+              selectedTab.layerId,
+              $event.columnId,
+              selectedData?.featureType,
+            ).pipe(take(1)),
+            of(selectedTab),
+            of(selectedData),
             of(applicationId),
+            this.columns$.pipe(
+              take(1),
+              map(columns => columns.find(col => col.id === $event.columnId)?.label || undefined),
+            ),
           ]);
         }),
       )
@@ -105,17 +140,21 @@ export class AttributeListContentComponent implements OnInit {
         if (!result) {
           return;
         }
-        const [ attributeFilterModel, otherFilters, layerId, applicationId ] = result;
-        if (applicationId === null) {
+        const [ attributeFilterModel, otherFilters, selectedTab, selectedData, applicationId, attributeAlias ] = result;
+        if (applicationId === null || !selectedTab.layerId) {
           return;
         }
+        const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
         const data: FilterDialogData = {
+          tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
-          layerId,
+          layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilter: CqlFilterHelper.getFilters(otherFilters).get(layerId),
+          cqlFilters: filtersForLayer,
           applicationId,
+          attributeAlias,
+          featureType: selectedData?.featureType,
         };
         this.dialog.open(AttributeListFilterComponent, { data, maxHeight: CssHelper.MAX_SCREEN_HEIGHT });
       });
@@ -130,6 +169,22 @@ export class AttributeListContentComponent implements OnInit {
         }
         this.store$.dispatch(loadData({ tabId: tab.id }));
       });
+  }
+
+  public loadFeatureDetailsForFeature($event: string) {
+    this.attributeListFeatureDetailsService.loadFeatureDetailsForFeature($event);
+  }
+
+  public showStatisticsHelp() {
+    SnackBarMessageComponent.open$(this.snackBar, {
+      message: StatisticsHelper.getStatisticsHelpMessage(),
+      duration: 5000,
+    });
+    return;
+  }
+
+  public loadStatisticsForColumn($event: { type: StatisticType; columnName: string; dataType: string }) {
+    this.attributeListStatisticsService.loadStatistics($event);
   }
 
 }

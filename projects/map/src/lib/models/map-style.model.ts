@@ -1,19 +1,29 @@
 export type MapStylePointType = 'label' | 'square' | 'triangle' | 'star' | 'cross' | 'circle' | 'arrow' | 'diamond' | 'view_orientation';
 
-export interface MapStyleModel {
-  styleKey: string;
-  zIndex: number;
+export interface StrokeStyleModel {
+  strokeColor?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+  strokeType?: 'solid' | 'dash' | 'dot' | number[];
+  arrowType?: 'none' | 'start' | 'end' | 'both' | 'along';
+  strokeOffset?: number;
+  dashOffset?: number;
+}
+
+export interface MapStyleModel extends StrokeStyleModel {
+  styleKey?: string;
+  zIndex?: number;
+  pointImage?: string;
+  pointImageWidth?: number;
+  pointImageHeight?: number;
   pointType?: MapStylePointType;
   pointFillColor?: string;
   pointStrokeColor?: string;
   pointStrokeWidth?: number;
   pointSize?: number;
   pointRotation?: number;
-  strokeColor?: string;
-  strokeWidth?: number;
-  strokeOpacity?: number;
-  strokeType?: 'solid' | 'dash' | 'dot';
-  arrowType?: 'none' | 'start' | 'end' | 'both' | 'along';
+  secondaryStroke?: StrokeStyleModel;
+  tertiaryStroke?: StrokeStyleModel;
   fillColor?: string;
   fillOpacity?: number;
   stripedFill?: boolean;
@@ -24,5 +34,8 @@ export interface MapStyleModel {
   labelStyle?: Array<'bold'|'italic'>;
   labelRotation?: number;
   labelOutlineColor?: string;
-  buffer?: string;
+  buffer?: number;
+  showTotalSize?: boolean;
+  showSegmentSize?: boolean;
+  showVertices?: boolean;
 }
