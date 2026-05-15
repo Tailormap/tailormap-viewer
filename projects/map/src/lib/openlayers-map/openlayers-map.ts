@@ -484,10 +484,4 @@ export class OpenLayersMap implements MapViewerModel {
     return OpenLayersSnappingManager.renderFeatures(features);
   }
 
-  public clickMapCenter() {
-    this.executeMapAction(olMap => {
-      OpenLayersEventManager.emitMapClick(olMap);
-    });
-  }
-
 }
