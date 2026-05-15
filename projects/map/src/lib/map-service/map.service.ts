@@ -345,4 +345,8 @@ export class MapService {
     this.map.renderSnappingFeatures(features);
   }
 
+  public clickMapCenter() {
+    this.map.clickMapCenter();
+  }
+
 }

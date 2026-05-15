@@ -43,4 +43,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.mapFocusedByKeyboard = true;
   }
 
+  public onEnterKey() {
+    if (this.mapFocusedByKeyboard) {
+      this.mapService.clickMapCenter();
+    }
+  }
+
 }

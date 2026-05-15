@@ -101,4 +101,20 @@ export class OpenLayersEventManager {
         skipUntil(OpenLayersEventManager.renderCompleteEvent.stream.asObservable()),
       );
   }
+
+  public static emitMapClick(olMap: OlMap): void {
+    const center = olMap.getView().getCenter();
+    if (!center) {
+      return;
+    }
+    const pixel = olMap.getPixelFromCoordinate(center);
+    if (!pixel) {
+      return;
+    }
+    const event = new PointerEvent('click', { bubbles: true });
+    const browserEvent = new MapBrowserEvent('singleclick', olMap, event);
+    (browserEvent as any).coordinate = center;
+    (browserEvent as any).pixel = pixel;
+    OpenLayersEventManager.mapClickEvent.stream.next(browserEvent);
+  }
 }
