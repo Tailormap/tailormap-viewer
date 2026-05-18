@@ -101,5 +101,4 @@ export class OpenLayersEventManager {
         skipUntil(OpenLayersEventManager.renderCompleteEvent.stream.asObservable()),
       );
   }
-
 }
