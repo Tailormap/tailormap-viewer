@@ -6,7 +6,7 @@ import {
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import {
   ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder, ExtractProgressEventModel,
@@ -20,6 +20,7 @@ export enum SupportedExtractFormats {
   GEOJSON = 'geojson',
   XLSX = 'xlsx',
   GEOPACKAGE = 'geopackage',
+  DXF = 'dxf',
 }
 
 @Injectable({
@@ -56,7 +57,7 @@ export class AttributeListExportService {
     filter: LayerFeaturesFilters | undefined;
     sort: { column: string; direction: string } | null;
     attributes: string[];
-  }): Observable<boolean> {
+  }): Observable<LayerExtractResponseModel | DownloadLayerExtractResponse | null> {
     return combineLatest([
       this.getOutputFormat$(params.tabSourceId, params.layerId, params.format),
       this.store$.select(selectViewerId),
@@ -95,7 +96,6 @@ export class AttributeListExportService {
             }
 
             if (AttributeListExportService.isDownloadLayerExtractResponse(response)) {
-              FileHelper.saveAsFile(response.file, response.fileName);
               return of(response);
             }
 
@@ -149,14 +149,7 @@ export class AttributeListExportService {
                       console.error('Error downloading extract', err);
                       this.showSnackbarMessage($localize `:@@core.attribute-list.extract-download-failed:Downloading extract failed`);
                       return of(null);
-                    }),
-                    tap(extractResponse => {
-                      if (extractResponse) {
-                        FileHelper.saveAsFile(extractResponse.file, extractResponse.fileName);
-                      }
-                    }),
-                    // emit the original response regardless of HTTP result so outer map can use it
-                    map(() => response));
+                    }));
                 } else {
                   // extraction process failed server side -> show message and emit response
                   this.extractProgressSubject.next(0);
@@ -173,18 +166,14 @@ export class AttributeListExportService {
           }),
         );
       }),
-      // Convert the final response (possibly emitted multiple times) to boolean
-      map((response: LayerExtractResponseModel | DownloadLayerExtractResponse | null) => {
-        return AttributeListExportService.isLayerExtractResponseModel(response)  || AttributeListExportService.isDownloadLayerExtractResponse(response);
-      }),
     );
   }
 
-  private static isLayerExtractResponseModel(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is LayerExtractResponseModel {
+  public static isLayerExtractResponseModel(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is LayerExtractResponseModel {
     return !!response && 'downloadId' in response && 'message' in response;
   }
 
-  private static isDownloadLayerExtractResponse(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is DownloadLayerExtractResponse {
+  public static isDownloadLayerExtractResponse(response: LayerExtractResponseModel | DownloadLayerExtractResponse | null): response is DownloadLayerExtractResponse {
     return !!response && 'file' in response && 'fileName' in response;
   }
 

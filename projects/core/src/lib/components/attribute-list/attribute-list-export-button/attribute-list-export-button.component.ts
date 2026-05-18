@@ -10,6 +10,7 @@ import {
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
+import { FileHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-attribute-list-export-button',
@@ -21,14 +22,18 @@ import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 export class AttributeListExportButtonComponent implements OnDestroy {
   private store$ = inject(Store);
   private exportService = inject(AttributeListExportService);
-  public extractProgress$ = this.exportService.extractProgress$;
+
   private destroyed = new Subject();
   public supportedFormats = SupportedExtractFormats;
   private supportedFormatsSubject = new BehaviorSubject<SupportedExtractFormats[]>([]);
   private supportedFormats$: Observable<SupportedExtractFormats[]> = this.supportedFormatsSubject.asObservable();
   public showExportButton$ = this.supportedFormats$.pipe(map(formats => formats.length > 0));
+
   private isExportingSubject = new BehaviorSubject(false);
   public isExporting$ = this.isExportingSubject.asObservable();
+
+  public extractProgress$ = this.exportService.extractProgress$;
+  public useProgressSpinner$ = this.extractProgress$.pipe(map(progress => progress > 0));
 
   constructor() {
     combineLatest([
@@ -69,7 +74,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
         take(1),
         concatMap(([ tab, filters, sort, columns ]) => {
           if (tab === null || typeof tab.layerId === 'undefined') {
-            return of(false);
+            return of(null);
           }
           const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
@@ -77,8 +82,13 @@ export class AttributeListExportButtonComponent implements OnDestroy {
         }),
         finalize(() => this.isExportingSubject.next(false)),
       )
-      .subscribe(() => {
-        // finalization/reset handled by finalize() above
+      .subscribe(response => {
+        if (response === null || AttributeListExportService.isDownloadLayerExtractResponse(response)) {
+          this.isExportingSubject.next(false);
+        }
+        if (AttributeListExportService.isDownloadLayerExtractResponse(response)) {
+          FileHelper.saveAsFile(response.file, response.fileName);
+        }
       });
   }
 

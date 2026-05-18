@@ -10,6 +10,7 @@
     [value]="terrainOpacity$ | async"
     [step]="0.01"
     [displayWith]="toPercentageString"
+    [label]="label()"
     (valueChange)="setTerrainOpacity($event)">
   </tm-slider>
   <div class="terrain-opacity-reset">

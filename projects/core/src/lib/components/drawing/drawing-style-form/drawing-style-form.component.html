@@ -14,7 +14,7 @@
       </mat-expansion-panel-header>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.size">Size</label>
+        <label>{{ labelSize }}</label>
         <span>{{style.markerSize}}%</span>
       </div>
       <div class="form-field form-field__slider">
@@ -23,12 +23,13 @@
           [step]="25"
           [changeValueWhileSliding]="true"
           (valueChange)="changeMarkerSize($event)"
-          [value]="style.markerSize">
+          [value]="style.markerSize"
+          [label]="labelSize">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <label>{{ labelRotation }}</label>
         <span>{{style.markerRotation}}&deg;</span>
       </div>
       <div class="form-field form-field__slider">
@@ -37,7 +38,8 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeMarkerRotation($event)"
-          [value]="style.markerRotation">
+          [value]="style.markerRotation"
+          [label]="labelRotation">
         </tm-slider>
       </div>
 
@@ -72,7 +74,7 @@
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.line-thickness">Line thickness</label>
+        <label>{{ labelLineThickness }}</label>
         <span>{{style.markerStrokeWidth}}px</span>
       </div>
 
@@ -82,12 +84,13 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeMarkerStrokeWidth($event)"
-          [value]="style.markerStrokeWidth">
+          [value]="style.markerStrokeWidth"
+          [label]="labelLineThickness">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.size">Size</label>
+        <label>{{ labelSize }}</label>
         <span>{{style.markerSize}}px</span>
       </div>
 
@@ -97,12 +100,13 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeMarkerSize($event)"
-          [value]="style.markerSize">
+          [value]="style.markerSize"
+          [label]="labelSize">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <label>{{ labelRotation }}</label>
         <span>{{style.markerRotation}}&deg;</span>
       </div>
 
@@ -112,7 +116,8 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeMarkerRotation($event)"
-          [value]="style.markerRotation">
+          [value]="style.markerRotation"
+          [label]="labelRotation">
         </tm-slider>
       </div>
     </mat-expansion-panel>
@@ -175,7 +180,7 @@
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.size">Size</label>
+        <label>{{ labelSize }}</label>
         <span>{{style.labelSize}}px</span>
       </div>
 
@@ -185,7 +190,8 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeLabelSize($event)"
-          [value]="style.labelSize">
+          [value]="style.labelSize"
+          [label]="labelSize">
         </tm-slider>
       </div>
 
@@ -203,7 +209,7 @@
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.rotation">Rotation</label>
+        <label>{{ labelRotation }}</label>
         <span>{{style.labelRotation}}&deg;</span>
       </div>
 
@@ -213,7 +219,8 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeLabelRotation($event)"
-          [value]="style.labelRotation">
+          [value]="style.labelRotation"
+          [label]="labelRotation">
         </tm-slider>
       </div>
     </mat-expansion-panel>
@@ -230,7 +237,7 @@
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.thickness">Thickness</label>
+        <label>{{ labelThickness }}</label>
         <span>{{style.strokeWidth}}px</span>
       </div>
 
@@ -240,12 +247,13 @@
           [step]="1"
           [changeValueWhileSliding]="true"
           (valueChange)="changeStrokeWidth($event)"
-          [value]="style.strokeWidth">
+          [value]="style.strokeWidth"
+          [label]="labelThickness">
         </tm-slider>
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.opacity">Opacity</label>
+        <label>{{ labelOpacity }}</label>
         <span>{{style.strokeOpacity}}%</span>
       </div>
 
@@ -256,7 +264,8 @@
           [displayWith]="formatThumb"
           [changeValueWhileSliding]="true"
           (valueChange)="changeStrokeOpacity($event)"
-          [value]="style.strokeOpacity">
+          [value]="style.strokeOpacity"
+          [label]="labelOpacity">
         </tm-slider>
       </div>
 
@@ -320,7 +329,7 @@
       </div>
 
       <div class="form-field form-field__columns">
-        <label i18n="@@core.drawing.opacity">Opacity</label>
+        <label>{{ labelOpacity }}</label>
         <span>{{style.fillOpacity}}%</span>
       </div>
 
@@ -331,7 +340,8 @@
           [displayWith]="formatThumb"
           [value]="style.fillOpacity"
           [changeValueWhileSliding]="true"
-          (valueChange)="changeFillOpacity($event)">
+          (valueChange)="changeFillOpacity($event)"
+          [label]="labelOpacity">
         </tm-slider>
       </div>
 

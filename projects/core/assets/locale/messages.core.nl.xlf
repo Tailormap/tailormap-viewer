@@ -190,6 +190,10 @@
         <source>GeoPackage</source>
         <target>GeoPackage</target>
       </trans-unit>
+      <trans-unit id="core.common.geopackage" datatype="html">
+        <source>GeoPackage</source>
+        <target>GeoPackage</target>
+      </trans-unit>
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
         <target>Lijn</target>
@@ -229,10 +233,6 @@
       <trans-unit id="core.common.shapefile" datatype="html">
         <source>Shapefile</source>
         <target>Shapefile</target>
-      </trans-unit>
-      <trans-unit id="core.common.geopackage" datatype="html">
-        <source>GeoPackage</source>
-        <target>GeoPackage</target>
       </trans-unit>
       <trans-unit id="core.common.square" datatype="html">
         <source>Square</source>
@@ -985,6 +985,18 @@
       <trans-unit id="core.filter.slider-and" datatype="html">
         <source> and </source>
         <target> en </target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/></target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label-lower-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - lower value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - ondergrens</target>
+      </trans-unit>
+      <trans-unit id="core.filter.slider-filter.label-upper-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - upper value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - bovengrens</target>
       </trans-unit>
       <trans-unit id="core.filter.smaller-than" datatype="html">
         <source>Smaller than</source>
