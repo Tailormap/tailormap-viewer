@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
 
@@ -11,11 +11,12 @@ import { OverlayHelper } from '@tailormap-viewer/shared';
 export class MapComponent implements AfterViewInit, OnDestroy {
 
   public inIframe = window.self !== window.top;
-  public mapFocusedByKeyboard = false;
-  public mouseDown = false;
   private overlayHelper: OverlayHelper | undefined;
   private el = inject( ElementRef);
   private mapService= inject(MapService);
+
+  public mapFocusedByKeyboard = signal(false);
+  public mouseDown = signal(false);
 
   private mapContainer = viewChild<ElementRef<HTMLElement>>('mapContainer');
 
@@ -38,16 +39,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public onFocus() {
-    if (this.mouseDown) {
-      this.mouseDown = false;
+    if (this.mouseDown()) {
+      this.mouseDown.set(false);
       return;
     }
-    this.mapFocusedByKeyboard = true;
+    this.mapFocusedByKeyboard.set(true);
   }
 
   public onEnterKey() {
     const mapContainer = this.mapContainer();
-    if (!this.mapFocusedByKeyboard || !mapContainer) {
+    if (!this.mapFocusedByKeyboard() || !mapContainer) {
       return;
     }
     const target = mapContainer.nativeElement.querySelector('canvas')

@@ -2,11 +2,11 @@
   class="map-container"
   #mapContainer
   tabindex="0"
-  (mousedown)="mouseDown = true"
+  (mousedown)="mouseDown.set(true)"
   (focus)="onFocus()"
-  (blur)="mapFocusedByKeyboard = false"
+  (blur)="mapFocusedByKeyboard.set(false)"
   (keydown.enter)="onEnterKey()"></div>
-<div class="map-focus-indicator" [class.map-focus-indicator--visible]="mapFocusedByKeyboard">
+<div class="map-focus-indicator" [class.map-focus-indicator--visible]="mapFocusedByKeyboard()">
   <svg class="map-focus-crosshair" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <line x1="12" y1="2" x2="12" y2="9"/>
     <line x1="12" y1="15" x2="12" y2="22"/>
