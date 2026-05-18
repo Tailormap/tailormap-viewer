@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
 
@@ -17,8 +17,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private el = inject( ElementRef);
   private mapService= inject(MapService);
 
-  @ViewChild('mapContainer')
-  private mapContainer: ElementRef<HTMLElement> | undefined;
+  private mapContainer = viewChild<ElementRef<HTMLElement>>('mapContainer');
 
   public ngAfterViewInit() {
     const nativeEl: HTMLElement | undefined = this.el.nativeElement;
@@ -47,12 +46,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public onEnterKey() {
-    if (!this.mapFocusedByKeyboard || !this.mapContainer) {
+    const mapContainer = this.mapContainer();
+    if (!this.mapFocusedByKeyboard || !mapContainer) {
       return;
     }
-    console.debug('Enter key pressed, focus on map');
-    const target = this.mapContainer.nativeElement.querySelector('canvas')
-      ?? this.mapContainer.nativeElement.querySelector('.ol-viewport');
+    const target = mapContainer.nativeElement.querySelector('canvas')
+      ?? mapContainer.nativeElement.querySelector('.ol-viewport');
     if (!target) {
       return;
     }
@@ -70,7 +69,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       buttons: 1,
       button: 0,
     };
-    console.debug("x:", clientX, "y:", clientY);
     target.dispatchEvent(new PointerEvent('pointermove', eventInit));
     target.dispatchEvent(new PointerEvent('pointerdown', eventInit));
     target.dispatchEvent(new PointerEvent('pointerup', { ...eventInit, buttons: 0 }));
