@@ -55,16 +55,33 @@
         [attr.aria-colindex]="$index + 1">
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
-          <mat-icon
-            [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
-            class="filter"
-            [class.filter-active]="hasFilter(col.id)"
-            [class.filter-disabled]="hasDisabledFilter(col.id)"
-          (click)="onFilterClick($event, col)"></mat-icon>
+          <button mat-icon-button
+                  type="button"
+                  [attr.aria-label]="'Filter ' + col.label"
+                  i18n-aria-label="@@core.attribute-list.filter-column"
+                  class="filter-button"
+                  [class.filter-active]="hasFilter(col.id)"
+                  [class.filter-disabled]="hasDisabledFilter(col.id)"
+                  (click)="onFilterClick($event, col)">
+            <mat-icon
+              [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
+              class="filter"
+              [class.filter-active]="hasFilter(col.id)"
+              [class.filter-disabled]="hasDisabledFilter(col.id)">
+            </mat-icon>
+          </button>
         }
-        <mat-icon class="sort"
-          [class.sort-active]="sort?.column === col.id"
-        [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
+        <button mat-icon-button
+                type="button"
+                [attr.aria-label]="'Sort by ' + col.label"
+                i18n-aria-label="@@core.attribute-list.sort-column"
+                class="sort-button"
+                (click)="onSortClick(col.id)">
+          <mat-icon class="sort"
+                    [class.sort-active]="sort?.column === col.id"
+                    [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'">
+          </mat-icon>
+        </button>
         <tm-panel-resize class="resizer"
           (mousedown)="stopEvent($event)"
           (positionChanged)="columnWidthChanged($event, col)"

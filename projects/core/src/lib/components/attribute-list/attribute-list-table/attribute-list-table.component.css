@@ -94,6 +94,28 @@ mat-table {
   width: 10px;
 }
 
+.filter-button,
+.sort-button {
+  --mat-icon-button-state-layer-size: 28px;
+  --mat-icon-button-icon-size: 18px;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.sort-button .sort {
+  visibility: hidden;
+}
+
+.sort-button:hover .sort,
+.sort-button:focus-visible .sort {
+  visibility: visible;
+}
+
+.sort-button .sort-active {
+  visibility: visible;
+}
+
 .header-cell--with-filter ::ng-deep .mat-sort-header-container,
 .header-cell--with-filter ::ng-deep .mat-sort-header-content {
   overflow: hidden;
