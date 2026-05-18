@@ -165,6 +165,12 @@ export class AttributeListTableComponent {
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
+  public onRowKeydown($event: Event, row: AttributeListRowModel): void {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
+  }
+
   public onSortClick(columnId: string): void {
     if (this.isResizing) {
       return;

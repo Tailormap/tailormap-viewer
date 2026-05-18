@@ -119,6 +119,8 @@
 
   <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: colNames;"
     (click)="onRowClick($event, row);"
+    (keydown.enter)="onRowKeydown($event, row)"
+    tabindex="0"
     [class.even_row]="dataIndex % 2 === 1"
     [class.selected_row]="isSelected(row)"
     [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>

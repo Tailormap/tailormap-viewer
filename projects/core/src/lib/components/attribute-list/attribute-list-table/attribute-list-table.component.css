@@ -255,3 +255,8 @@ mat-table {
 .error {
   color: var(--error-color);
 }
+
+.mat-mdc-row:focus {
+  outline: 2px solid var(--primary-color-0_5);
+  outline-offset: -2px;
+}
