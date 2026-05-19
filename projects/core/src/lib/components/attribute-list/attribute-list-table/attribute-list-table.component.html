@@ -59,8 +59,6 @@
                   type="button"
                   [tmTooltip]="getColumnFilterLabel(col.label)"
                   class="filter-button"
-                  [class.filter-active]="hasFilter(col.id)"
-                  [class.filter-disabled]="hasDisabledFilter(col.id)"
                   (click)="onFilterClick($event, col)">
             <mat-icon
               [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
