@@ -57,8 +57,7 @@
         @if (setFilter) {
           <button mat-icon-button
                   type="button"
-                  [attr.aria-label]="'Filter ' + col.label"
-                  i18n-aria-label="@@core.attribute-list.filter-column"
+                  [tmTooltip]="getColumnFilterLabel(col.label)"
                   class="filter-button"
                   [class.filter-active]="hasFilter(col.id)"
                   [class.filter-disabled]="hasDisabledFilter(col.id)"
@@ -73,8 +72,7 @@
         }
         <button mat-icon-button
                 type="button"
-                [attr.aria-label]="'Sort by ' + col.label"
-                i18n-aria-label="@@core.attribute-list.sort-column"
+                [tmTooltip]="getColumnSortLabel(col.label)"
                 class="sort-button"
                 (click)="onSortClick(col.id)">
           <mat-icon class="sort"

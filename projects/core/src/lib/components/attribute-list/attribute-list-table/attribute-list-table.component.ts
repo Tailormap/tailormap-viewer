@@ -244,4 +244,12 @@ export class AttributeListTableComponent {
     return this.sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
+  public getColumnFilterLabel(columnLabel: string): string {
+    return $localize `:@@core.attribute-list.filter-column:Filter on ${columnLabel}`;
+  }
+
+  public getColumnSortLabel(columnLabel: string): string {
+    return $localize `:@@core.attribute-list.sort-column:Sort by ${columnLabel}`;
+  }
+
 }

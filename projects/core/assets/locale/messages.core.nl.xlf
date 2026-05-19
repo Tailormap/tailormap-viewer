@@ -46,6 +46,10 @@
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
         <target>Het is niet gelukt om de gegevens voor de attributenlijst te laden voor <x id="PH" equiv-text="tab.label"/></target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.filter-column" datatype="html">
+        <source>Filter on <x id="PH" equiv-text="columnLabel"/></source>
+        <target>Filter op <x id="PH" equiv-text="columnLabel"/></target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
         <target>Filter op <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></target>
@@ -61,6 +65,10 @@
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.sort-column" datatype="html">
+        <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
+        <target>Sorteer op <x id="PH" equiv-text="columnLabel"/></target>
       </trans-unit>
       <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
         <source>Average</source>
