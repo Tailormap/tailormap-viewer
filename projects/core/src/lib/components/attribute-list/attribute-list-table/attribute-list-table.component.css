@@ -70,7 +70,7 @@ mat-table {
   left: 1px;
 }
 
-.header-cell--with-sort .sort {
+.header-cell--with-sort .sort-button {
   cursor: pointer;
   visibility: hidden;
   color: rgba(0, 0, 0, 0.26);
@@ -87,6 +87,10 @@ mat-table {
 .header-cell--with-sort .sort-active {
   visibility: visible;
   color: var(--primary-color);
+}
+
+.sort-button:focus-visible .sort {
+  visibility: visible;
 }
 
 .header-cell--with-resizer .resizer {
@@ -123,19 +127,6 @@ mat-table {
 .sort-button mat-icon ::ng-deep svg {
   width: 20px;
   height: 20px;
-}
-
-.sort-button .sort {
-  visibility: hidden;
-}
-
-.sort-button:hover .sort,
-.sort-button:focus-visible .sort {
-  visibility: visible;
-}
-
-.sort-button .sort-active {
-  visibility: visible;
 }
 
 .header-cell--with-filter ::ng-deep .mat-sort-header-container,
