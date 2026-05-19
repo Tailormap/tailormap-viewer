@@ -56,7 +56,6 @@
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
           <button mat-icon-button
-                  type="button"
                   [tmTooltip]="getColumnFilterLabel(col.label)"
                   class="filter-button"
                   (click)="onFilterClick($event, col)">
@@ -69,7 +68,6 @@
           </button>
         }
         <button mat-icon-button
-                type="button"
                 [tmTooltip]="getColumnSortLabel(col.label)"
                 class="sort-button"
                 (click)="onSortClick(col.id)">
