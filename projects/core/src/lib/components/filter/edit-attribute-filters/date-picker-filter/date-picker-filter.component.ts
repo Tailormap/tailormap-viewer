@@ -4,6 +4,7 @@ import { AttributeFilterModel, FilterConditionEnum, FilterToolEnum } from '@tail
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-date-picker-filter',
@@ -17,6 +18,9 @@ export class DatePickerFilterComponent implements OnInit {
 
 
   public isBetweenCondition: boolean = false;
+  public label: string = '';
+  public labelFromValue: string = '';
+  public labelUntilValue: string = '';
 
   @Input()
   public set datePickerFilter(filter: AttributeFilterModel) {
@@ -29,6 +33,7 @@ export class DatePickerFilterComponent implements OnInit {
       lowerDate: this.isBetweenCondition ? DateTime.fromISO(filter.value[0]) : null,
       upperDate: this.isBetweenCondition ? DateTime.fromISO(filter.value[1]) : null,
     }, { emitEvent: false });
+    this.setLabels(filter);
   }
 
   @Output()
@@ -59,6 +64,17 @@ export class DatePickerFilterComponent implements OnInit {
           this.dateChange.emit(value.date);
         }
       });
+  }
+
+  private setLabels(filter: AttributeFilterModel) {
+    const conditionType = AttributeFilterHelper.getConditionTypes()
+      .find(type => type.condition === filter.condition);
+    const conditionLabel = filter.invertCondition ? conditionType?.inverseReadableLabel : conditionType?.readableLabel;
+    this.label = $localize `:@@core.filter.date-filter.label:Filter: ${filter.attribute} ${conditionLabel} - value`;
+    if (this.isBetweenCondition) {
+      this.labelFromValue = $localize `:@@core.filter.date-filter.label-from-value:Filter: ${filter.attribute} ${conditionLabel} - from value`;
+      this.labelUntilValue = $localize `:@@core.filter.date-filter.label-until-value:Filter: ${filter.attribute} ${conditionLabel} - until value`;
+    }
   }
 
 }
