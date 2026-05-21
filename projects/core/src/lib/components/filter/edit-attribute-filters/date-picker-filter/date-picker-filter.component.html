@@ -2,22 +2,22 @@
   <form [formGroup]="datePickerFilterForm">
     @if (isBetweenCondition) {
       <mat-form-field appearance="outline">
-        <mat-label i18n="@@core.filter.from">From</mat-label>
-        <input matInput [matDatepicker]="dp" formControlName="lowerDate" />
+        <mat-label id="date-filter-from-label" i18n="@@core.filter.from">From</mat-label>
+        <input matInput [matDatepicker]="dp" formControlName="lowerDate" aria-labelledby="date-filter-from-label" />
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label i18n="@@core.filter.until">Until</mat-label>
-        <input matInput [matDatepicker]="dp2" formControlName="upperDate" />
+        <mat-label id="date-filter-until-label" i18n="@@core.filter.until">Until</mat-label>
+        <input matInput [matDatepicker]="dp2" formControlName="upperDate" aria-labelledby="date-filter-until-label" />
         <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
         <mat-datepicker #dp2></mat-datepicker>
       </mat-form-field>
     } @else {
       <mat-form-field appearance="outline">
-        <mat-label i18n="@@core.filter.value">Value</mat-label>
-        <input matInput [matDatepicker]="dp3" formControlName="date" />
+        <mat-label id="date-filter-value-label" i18n="@@core.filter.value">Value</mat-label>
+        <input matInput [matDatepicker]="dp3" formControlName="date" aria-labelledby="date-filter-value-label" />
         <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
         <mat-datepicker #dp3></mat-datepicker>
       </mat-form-field>
