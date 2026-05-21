@@ -42,7 +42,7 @@ export class HeaderComponentConfigComponent implements ConfigurationComponentMod
   @Input()
   public set config(config: HeaderComponentConfigModel | undefined) {
     this._config = config;
-    this.heightControl.patchValue(config?.height ?? 100, { emitEvent: false, onlySelf: true });
+    this.heightControl.patchValue(config?.height ?? 100, { onlySelf: true });
     this.cssControl.patchValue(config?.css ?? '', { emitEvent: false, onlySelf: true });
     this.initMenuItems(config);
   }
