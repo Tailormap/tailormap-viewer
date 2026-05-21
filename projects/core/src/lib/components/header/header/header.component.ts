@@ -32,7 +32,8 @@ export class HeaderComponent implements OnDestroy {
       const headerContainer = this.headerContainer();
       const mobileHeader = this.mobileHeader();
       if (config && config.config && headerContainer) {
-        const componentHeight = mobileHeader ? Math.min(50, config.config.height) : config.config.height;
+        const configuredHeight = config.config.height || 100;
+        const componentHeight = mobileHeader ? Math.min(50, configuredHeight) : configuredHeight;
         CssHelper.setCssVariableValue('--header-component-height', componentHeight + 'px');
         CssHelper.setCssVariableValue('--header-text-color', config.config.textColor || '#000000', headerContainer.nativeElement);
         CssHelper.setCssVariableValue('--header-background-color', config.config.backgroundColor || '#ffffff', headerContainer.nativeElement);
