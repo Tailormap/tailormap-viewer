@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { MatTableModule } from '@angular/material/table';
-import { PanelResizerComponent } from '@tailormap-viewer/shared';
+import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -49,7 +49,7 @@ describe('AttributeListContent', () => {
     const store = getLoadedStoreWithRows();
     await render(AttributeListContentComponent, {
       imports: [ MatTableModule, MatIconModule, MatIconTestingModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
-      declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent ],
+      declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent, TooltipDirective ],
       providers: [
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         provideMockStore({

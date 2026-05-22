@@ -55,16 +55,27 @@
         [attr.aria-colindex]="$index + 1">
         <span [title]="col.label">{{col.label}}</span>
         @if (setFilter) {
-          <mat-icon
-            [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
-            class="filter"
-            [class.filter-active]="hasFilter(col.id)"
-            [class.filter-disabled]="hasDisabledFilter(col.id)"
-          (click)="onFilterClick($event, col)"></mat-icon>
+          <button mat-icon-button
+                  [tmTooltip]="getColumnFilterLabel(col.label)"
+                  class="filter-button"
+                  (click)="onFilterClick($event, col)">
+            <mat-icon
+              [svgIcon]="hasFilter(col.id) ? 'filter_filled' : 'filter_outline'"
+              class="filter"
+              [class.filter-active]="hasFilter(col.id)"
+              [class.filter-disabled]="hasDisabledFilter(col.id)">
+            </mat-icon>
+          </button>
         }
-        <mat-icon class="sort"
-          [class.sort-active]="sort?.column === col.id"
-        [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'"></mat-icon>
+        <button mat-icon-button
+                [tmTooltip]="getColumnSortLabel(col.label)"
+                class="sort-button"
+                (click)="onSortClick(col.id)">
+          <mat-icon class="sort"
+                    [class.sort-active]="sort?.column === col.id"
+                    [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'">
+          </mat-icon>
+        </button>
         <tm-panel-resize class="resizer"
           (mousedown)="stopEvent($event)"
           (positionChanged)="columnWidthChanged($event, col)"
@@ -119,6 +130,8 @@
 
   <mat-row *matRowDef="let row; let dataIndex = dataIndex; columns: colNames;"
     (click)="onRowClick($event, row);"
+    (keydown.enter)="onRowKeydown($event, row)"
+    tabindex="0"
     [class.even_row]="dataIndex % 2 === 1"
     [class.selected_row]="isSelected(row)"
     [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>
