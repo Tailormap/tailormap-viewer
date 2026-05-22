@@ -1,4 +1,21 @@
-<div class="map-container"></div>
+<div
+  class="map-container"
+  #mapContainer
+  tabindex="0"
+  (mousedown)="mouseDown.set(true)"
+  (focus)="onFocus()"
+  (blur)="mapFocusedByKeyboard.set(false)"
+  (keydown.enter)="onEnterKey()"></div>
+<div class="map-focus-indicator" [class.map-focus-indicator--visible]="mapFocusedByKeyboard()">
+  <svg class="map-focus-crosshair" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <line x1="12" y1="2" x2="12" y2="9"/>
+    <line x1="12" y1="15" x2="12" y2="22"/>
+    <line x1="2" y1="12" x2="9" y2="12"/>
+    <line x1="15" y1="12" x2="22" y2="12"/>
+    <circle cx="12" cy="12" r="3" fill="none"/>
+  </svg>
+</div>
+
 
 @if (inIframe) {
   <div class="embedded-overlay"><div class="message"></div></div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
 
@@ -14,6 +14,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private overlayHelper: OverlayHelper | undefined;
   private el = inject( ElementRef);
   private mapService= inject(MapService);
+
+  public mapFocusedByKeyboard = signal(false);
+  public mouseDown = signal(false);
+
+  private mapContainer = viewChild<ElementRef<HTMLElement>>('mapContainer');
 
   public ngAfterViewInit() {
     const nativeEl: HTMLElement | undefined = this.el.nativeElement;
@@ -33,5 +38,42 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  public onFocus() {
+    if (this.mouseDown()) {
+      this.mouseDown.set(false);
+      return;
+    }
+    this.mapFocusedByKeyboard.set(true);
+  }
+
+  public onEnterKey() {
+    const mapContainer = this.mapContainer();
+    if (!this.mapFocusedByKeyboard() || !mapContainer) {
+      return;
+    }
+    const target = mapContainer.nativeElement.querySelector('canvas')
+      ?? mapContainer.nativeElement.querySelector('.ol-viewport');
+    if (!target) {
+      return;
+    }
+    const rect = target.getBoundingClientRect();
+    const clientX = rect.left + rect.width / 2;
+    const clientY = rect.top + rect.height / 2;
+    const eventInit: PointerEventInit = {
+      bubbles: true,
+      cancelable: true,
+      clientX,
+      clientY,
+      pointerId: 1,
+      pointerType: 'mouse',
+      isPrimary: true,
+      buttons: 1,
+      button: 0,
+    };
+    target.dispatchEvent(new PointerEvent('pointermove', eventInit));
+    target.dispatchEvent(new PointerEvent('pointerdown', eventInit));
+    target.dispatchEvent(new PointerEvent('pointerup', { ...eventInit, buttons: 0 }));
+    target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX, clientY }));
+  }
 
 }
