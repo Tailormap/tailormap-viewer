@@ -67,6 +67,7 @@ export class CesiumManager {
           index => this.getLayerId(index),
           this.projection2D?.getCode(),
         );
+        CesiumEventManager.enableKeyboardControl(scene3d);
       });
     });
   }

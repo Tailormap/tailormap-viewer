@@ -92,4 +92,75 @@ export class CesiumEventManager {
     return silhouette;
   }
 
+  public static enableKeyboardControl(scene3D: Scene): void {
+    const canvas = scene3D.canvas;
+    if (!canvas) {
+      return;
+    }
+    canvas.setAttribute('tabindex', '0');
+    canvas.focus();
+
+    const MOVE_AMOUNT = 100.0;
+    const LOOK_AMOUNT = 0.02;
+
+    canvas.addEventListener('keydown', (e: KeyboardEvent) => {
+      const camera = scene3D.camera;
+      switch (e.key) {
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+          e.preventDefault();
+          if (e.shiftKey) {
+            camera.lookUp(LOOK_AMOUNT);
+          } else {
+            camera.moveForward(MOVE_AMOUNT);
+          }
+          break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+          e.preventDefault();
+          if (e.shiftKey) {
+            camera.lookDown(LOOK_AMOUNT);
+          } else {
+            camera.moveBackward(MOVE_AMOUNT);
+          }
+          break;
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          e.preventDefault();
+          if (e.shiftKey) {
+            camera.lookLeft(LOOK_AMOUNT);
+          } else {
+            camera.moveLeft(MOVE_AMOUNT);
+          }
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          e.preventDefault();
+          if (e.shiftKey) {
+            camera.lookRight(LOOK_AMOUNT);
+          } else {
+            camera.moveRight(MOVE_AMOUNT);
+          }
+          break;
+        case '+':
+        case '=':
+          e.preventDefault();
+          camera.zoomIn(MOVE_AMOUNT);
+          break;
+        case '-':
+        case '_':
+          e.preventDefault();
+          camera.zoomOut(MOVE_AMOUNT);
+          break;
+        default:
+          return;
+      }
+      scene3D.requestRender();
+    });
+  }
+
 }
