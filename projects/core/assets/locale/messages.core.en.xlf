@@ -542,6 +542,15 @@
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
       </trans-unit>
+      <trans-unit id="core.filter.date-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
+      </trans-unit>
       <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
         <source>Delete filter?</source>
       </trans-unit>

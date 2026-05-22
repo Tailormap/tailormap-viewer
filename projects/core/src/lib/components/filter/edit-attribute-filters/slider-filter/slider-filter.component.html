@@ -1,4 +1,4 @@
-<form [formGroup]="viewerSliderFilterForm">
+<form [formGroup]="viewerSliderFilterForm" [aria-label]="label">
   <div class="form-field form-field__slider">
     @if (betweenInput) {
       @if (inputMode === "INPUT_FIELD" || inputMode === "SLIDER_AND_INPUT_FIELD") {
