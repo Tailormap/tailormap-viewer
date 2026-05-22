@@ -6,6 +6,8 @@
     <mat-checkbox (change)="toggleSelectAll()"
                   i18n-tmTooltip="@@core.attribute-list.toggle-all-columns-visibility"
                   tmTooltip="Toggle visibility of all columns"
+                  i18n-aria-label="@@core.attribute-list.toggle-all-columns-visibility"
+                  aria-label="Toggle visibility of all columns"
                   [checked]="allVisible"
                   [indeterminate]="someVisible && !allVisible"></mat-checkbox>
     <div class="label"></div>
@@ -21,8 +23,9 @@
       <div class="row" cdkDrag [cdkDragData]="column" cdkDragLockAxis="y">
         <div class="placeholder" *cdkDragPlaceholder>{{column.label}}</div>
         <div class="preview" *cdkDragPreview></div>
-        <mat-checkbox (change)="toggleVisible(column)" [checked]="column.visible"></mat-checkbox>
-        <div class="label">{{column.label}}</div>
+        <mat-checkbox (change)="toggleVisible(column)" [checked]="column.visible" class="toggle-column-checkbox">
+            {{column.label}}
+        </mat-checkbox>
         <mat-icon class="drag-handle" svgIcon="reorder" cdkDragHandle></mat-icon>
       </div>
     }

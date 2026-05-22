@@ -13,9 +13,17 @@
   align-items: center;
 }
 
-.row .label {
+.toggle-column-checkbox, .label {
   flex: 1;
-  padding: 0 4px;
+  overflow: hidden;
+}
+
+.toggle-column-checkbox ::ng-deep > * {
+  max-width: 100%;
+}
+
+.toggle-column-checkbox ::ng-deep label {
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -72,4 +80,5 @@ mat-checkbox,
 
 .drag-handle {
   cursor: move;
+  justify-self: flex-end;
 }
