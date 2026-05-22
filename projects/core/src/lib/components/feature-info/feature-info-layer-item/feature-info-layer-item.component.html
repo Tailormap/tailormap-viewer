@@ -1,5 +1,11 @@
 @if (layer) {
-  <div class="layer-item" [class.disabled]="layer.disabled" [class.selected]="layer.selected" (click)="selectLayer(layer)">
+  <div
+    class="layer-item"
+    [class.disabled]="layer.disabled"
+    [class.selected]="layer.selected"
+    (click)="selectLayer(layer)"
+    [tabindex]="layer.disabled ? -1 : 0"
+    (keydown.enter)="selectLayer(layer)">
     @if (layer.loading === 'LOADING') {
       <mat-spinner [attr.aria-label]="'Loading feature info for layer ' + layer.title" diameter="15" color="primary"></mat-spinner>
     } @else if(layer.loading === 'LOADED') {

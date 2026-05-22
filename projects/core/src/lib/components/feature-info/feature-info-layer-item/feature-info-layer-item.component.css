@@ -31,3 +31,8 @@
 .error {
   color: var(--error-color);
 }
+
+.layer-item:focus-visible {
+  outline: 2px solid var(--primary-color-0_5);
+  outline-offset: -2px;
+}
