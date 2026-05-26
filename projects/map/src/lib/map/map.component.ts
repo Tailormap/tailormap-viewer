@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
+import { take } from 'rxjs';
+import { CesiumEventManager } from '../openlayers-map/cesium-map/cesium-event-manager';
 
 @Component({
   selector: 'tm-map',
@@ -44,6 +46,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.mapFocusedByKeyboard.set(true);
+    this.mapService.getCesiumManager$().pipe(take(1)).subscribe((manager) => {
+      if (manager) {
+        manager.executeScene3dAction(scene3d => {
+          const mapContainer = this.mapContainer();
+          if (mapContainer) {
+            CesiumEventManager.enableKeyboardControl(scene3d, mapContainer.nativeElement);
+          }
+        });
+      }
+    });
   }
 
   public onEnterKey() {
@@ -53,6 +65,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
     const target = mapContainer.nativeElement.querySelector('canvas')
       ?? mapContainer.nativeElement.querySelector('.ol-viewport');
+    console.debug("enter key with target:", target);
     if (!target) {
       return;
     }

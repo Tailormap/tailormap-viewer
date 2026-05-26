@@ -1,4 +1,4 @@
-import { Cartesian3, Cartographic, Cesium3DTileFeature, Math, PostProcessStage, Scene } from 'cesium';
+import { Cartesian3, Cartographic, Cesium3DTileFeature, Math, PostProcessStage, Scene, Camera } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
 import { Observable, Subject } from 'rxjs';
 import { AttributeType } from '@tailormap-viewer/api';
@@ -92,18 +92,11 @@ export class CesiumEventManager {
     return silhouette;
   }
 
-  public static enableKeyboardControl(scene3D: Scene): void {
-    const canvas = scene3D.canvas;
-    if (!canvas) {
-      return;
-    }
-    canvas.setAttribute('tabindex', '0');
-    canvas.focus();
-
+  public static enableKeyboardControl(scene3D: Scene, element: HTMLElement): void {
     const MOVE_AMOUNT = 100.0;
     const LOOK_AMOUNT = 0.02;
 
-    canvas.addEventListener('keydown', (e: KeyboardEvent) => {
+    element.addEventListener('keydown', (e: KeyboardEvent) => {
       const camera = scene3D.camera;
       switch (e.key) {
         case 'ArrowUp':
@@ -113,8 +106,7 @@ export class CesiumEventManager {
           if (e.shiftKey) {
             camera.lookUp(LOOK_AMOUNT);
           } else {
-            camera.moveForward(MOVE_AMOUNT);
-          }
+            CesiumEventManager.moveHorizontal(camera, MOVE_AMOUNT);          }
           break;
         case 'ArrowDown':
         case 's':
@@ -123,7 +115,7 @@ export class CesiumEventManager {
           if (e.shiftKey) {
             camera.lookDown(LOOK_AMOUNT);
           } else {
-            camera.moveBackward(MOVE_AMOUNT);
+            CesiumEventManager.moveHorizontal(camera, -MOVE_AMOUNT);
           }
           break;
         case 'ArrowLeft':
@@ -131,7 +123,8 @@ export class CesiumEventManager {
         case 'A':
           e.preventDefault();
           if (e.shiftKey) {
-            camera.lookLeft(LOOK_AMOUNT);
+            const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
+            camera.look(surfaceNormal, -LOOK_AMOUNT);
           } else {
             camera.moveLeft(MOVE_AMOUNT);
           }
@@ -141,7 +134,8 @@ export class CesiumEventManager {
         case 'D':
           e.preventDefault();
           if (e.shiftKey) {
-            camera.lookRight(LOOK_AMOUNT);
+            const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
+            camera.look(surfaceNormal, LOOK_AMOUNT);
           } else {
             camera.moveRight(MOVE_AMOUNT);
           }
@@ -161,6 +155,21 @@ export class CesiumEventManager {
       }
       scene3D.requestRender();
     });
+  }
+
+  private static moveHorizontal(camera: Camera, amount: number): void {
+    // Get the surface normal (points "up" from the ground) at the camera's position
+    const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
+
+    // Project the camera direction onto the ground plane by removing the vertical component
+    const dot = Cesium.Cartesian3.dot(camera.direction, surfaceNormal);
+    const verticalComponent = Cesium.Cartesian3.multiplyByScalar(surfaceNormal, dot, new Cesium.Cartesian3());
+    const horizontalDirection = Cesium.Cartesian3.subtract(camera.direction, verticalComponent, new Cesium.Cartesian3());
+    Cesium.Cartesian3.normalize(horizontalDirection, horizontalDirection);
+
+    // Move the camera along the horizontal direction
+    const movement = Cesium.Cartesian3.multiplyByScalar(horizontalDirection, amount, new Cesium.Cartesian3());
+    Cesium.Cartesian3.add(camera.position, movement, camera.position);
   }
 
 }
