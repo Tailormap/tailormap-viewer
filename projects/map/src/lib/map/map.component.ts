@@ -36,9 +36,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       .pipe(take(1))
       .subscribe((manager) => {
         manager.executeScene3dAction(scene3d => {
-          const mapContainer = this.mapContainer();
-          if (mapContainer) {
-            CesiumEventManager.enableKeyboardControl(scene3d, mapContainer.nativeElement);
+          const mapContainerElementRef = this.mapContainer();
+          if (mapContainerElementRef) {
+            CesiumEventManager.enableKeyboardControl(scene3d, mapContainerElementRef.nativeElement);
           }
         });
       });
