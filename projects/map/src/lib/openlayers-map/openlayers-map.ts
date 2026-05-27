@@ -452,6 +452,10 @@ export class OpenLayersMap implements MapViewerModel {
     this.in3d.next(!this.in3d.value);
   }
 
+  public getIn3d$(): Observable<boolean> {
+    return this.in3d.asObservable();
+  }
+
   public set3dTerrainOpacity(opacity: number) {
     this.executeCesiumAction(cesiumManager => {
       cesiumManager.setTerrainOpacity(opacity);

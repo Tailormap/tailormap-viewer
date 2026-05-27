@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper } from '@tailormap-viewer/shared';
-import { take } from 'rxjs';
+import { combineLatest, take } from 'rxjs';
 import { CesiumEventManager } from '../openlayers-map/cesium-map/cesium-event-manager';
 
 @Component({
@@ -69,6 +69,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!target) {
       return;
     }
+    combineLatest([
+      this.mapService.getCesiumManager$(),
+      this.mapService.getIn3d$(),
+    ])
+      .pipe(take(1))
+      .subscribe(([ manager, in3d ]) => {
+        if (manager && in3d) {
+          manager.simulateCenterClick();
+        }
+    });
     const rect = target.getBoundingClientRect();
     const clientX = rect.left + rect.width / 2;
     const clientY = rect.top + rect.height / 2;
