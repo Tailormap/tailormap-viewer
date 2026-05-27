@@ -1,4 +1,4 @@
-import { Map as OlMap } from 'ol';
+import { Feature, Map as OlMap } from 'ol';
 import { Snap } from 'ol/interaction';
 import { LayerTypesEnum, OlMapStyleType } from '../models';
 import { Vector as VectorLayer, Vector } from 'ol/layer';
@@ -7,6 +7,8 @@ import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { FeatureModelType } from '../models/feature-model.type';
 import { BehaviorSubject, combineLatest, filter, take } from 'rxjs';
 import { FeatureHelper } from '../helpers/feature.helper';
+import { Fill, RegularShape, Stroke, Style } from 'ol/style';
+import { Point } from 'ol/geom';
 
 export class OpenLayersSnappingManager {
 
@@ -17,6 +19,7 @@ export class OpenLayersSnappingManager {
 
   private static snappingInteraction = new BehaviorSubject<Snap | null>(null);
   private static snappingLayer = new BehaviorSubject<Vector | null>(null);
+  private static snappingCursorLayer = new BehaviorSubject<Vector | null>(null);
   private static snappingAllowed = false;
 
   private static initialized = new BehaviorSubject(false);
@@ -46,6 +49,7 @@ export class OpenLayersSnappingManager {
     if (OpenLayersSnappingManager.snappingLayer.value) {
       OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_LAYER_ID);
       OpenLayersSnappingManager.snappingLayer.next(null);
+      OpenLayersSnappingManager.snappingCursorLayer.next(null);
       OpenLayersSnappingManager.layerInitialized = false;
       OpenLayersSnappingManager.layerInitializing = false;
     }
@@ -66,9 +70,7 @@ export class OpenLayersSnappingManager {
   }
 
   public static setSnappingTolerance(tolerance: number) {
-    OpenLayersSnappingManager.executeSnapAction(snap => {
-      snap.setProperties({ pixelTolerance: tolerance });
-    });
+    OpenLayersSnappingManager.initSnap({ pixelTolerance: tolerance });
   }
 
   public static enableSnappingIfAllowed(enable: boolean) {
@@ -137,15 +139,22 @@ export class OpenLayersSnappingManager {
           layerType: LayerTypesEnum.Vector,
           visible: true,
         });
-        if (vectorLayer) {
+        const vectorCursorLayer = OpenLayersSnappingManager.layerManager?.addLayer<VectorLayer>({
+          id: OpenLayersSnappingManager.SNAPPING_LAYER_ID + '_Pointer',
+          name: `Snapping layer pointer`,
+          layerType: LayerTypesEnum.Vector,
+          visible: true,
+        });
+        if (vectorLayer && vectorCursorLayer) {
           OpenLayersSnappingManager.snappingLayer.next(vectorLayer);
+          OpenLayersSnappingManager.snappingCursorLayer.next(vectorCursorLayer);
           OpenLayersSnappingManager.layerInitialized = true;
         }
         OpenLayersSnappingManager.layerInitializing = false;
       });
   }
 
-  private static initSnap() {
+  private static initSnap(snapOptions?: { pixelTolerance: number }) {
     if (OpenLayersSnappingManager.snapInitializing) {
       return;
     }
@@ -163,7 +172,28 @@ export class OpenLayersSnappingManager {
         if (!source) {
           return;
         }
-        OpenLayersSnappingManager.snappingInteraction.next(new Snap({ source }));
+        OpenLayersSnappingManager.snappingInteraction.next(new Snap({
+          source,
+          pixelTolerance: snapOptions?.pixelTolerance ?? 10,
+        }));
+        OpenLayersSnappingManager.snappingInteraction.value?.on('snap', e => {
+          const snapFeature = new Feature(new Point(e.vertex));
+          snapFeature.setStyle(new Style({
+            image: new RegularShape({
+              fill: new Fill({ color: '#000' }),
+              stroke: new Stroke({ color: '#000', width: 2 }),
+              points: 4,
+              radius: 12,
+              radius2: 0,
+              angle: 0,
+            }),
+          }));
+          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.clear(true);
+          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.addFeature(snapFeature);
+        });
+        OpenLayersSnappingManager.snappingInteraction.value?.on('unsnap', () => {
+          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.clear(true);
+        });
         OpenLayersSnappingManager.snapInitializing = false;
         OpenLayersSnappingManager.snapInitialized = true;
       });

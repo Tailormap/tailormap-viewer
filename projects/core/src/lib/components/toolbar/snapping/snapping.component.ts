@@ -47,7 +47,13 @@ export class SnappingComponent implements OnInit {
       styleKey: 'snapping-style',
       zIndex: 999,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
+      strokeType: 'dash',
       strokeWidth: 3,
+      secondaryStroke: {
+        strokeType: 'solid',
+        strokeColor: '#FFF',
+        strokeWidth: 3,
+      },
       pointFillColor: ApplicationStyleService.getPrimaryColor(),
       pointSize: 3,
       pointType: 'circle',
