@@ -35,6 +35,9 @@
       <trans-unit id="core.attribute-list.failed-loading-data-for" datatype="html">
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.filter-column" datatype="html">
+        <source>Filter on <x id="PH" equiv-text="columnLabel"/></source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
       </trans-unit>
@@ -46,6 +49,9 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.sort-column" datatype="html">
+        <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
       </trans-unit>
       <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
         <source>Average</source>
@@ -535,6 +541,15 @@
       </trans-unit>
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
       </trans-unit>
       <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
         <source>Delete filter?</source>

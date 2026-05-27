@@ -46,6 +46,10 @@
         <source>Failed to load attribute list data for <x id="PH" equiv-text="tab.label"/></source>
         <target>Fehler beim Laden der Attributlisten-Daten für <x id="PH" equiv-text="tab.label"/></target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.filter-column" datatype="html">
+        <source>Filter on <x id="PH" equiv-text="columnLabel"/></source>
+        <target>Filter für <x id="PH" equiv-text="columnLabel"/></target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.filter-on" datatype="html">
         <source>Filter on <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></source>
         <target>Filtern nach <x id="INTERPOLATION" equiv-text="{{getColumnName()}}"/></target>
@@ -61,6 +65,10 @@
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
         <target>Keine Zeilen gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.sort-column" datatype="html">
+        <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
+        <target>Sortieren nach <x id="PH" equiv-text="columnLabel"/></target>
       </trans-unit>
       <trans-unit id="core.attribute-list.statistics-avg" datatype="html">
         <source>Average</source>
@@ -717,6 +725,18 @@
       <trans-unit id="core.filter.create-new-filter" datatype="html">
         <source>Create new filter</source>
         <target>Neuen Filter erstellen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - Wert</target>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - von Wert</target>
+      </trans-unit>
+      <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - bis Wert</target>
       </trans-unit>
       <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
         <source>Delete filter?</source>

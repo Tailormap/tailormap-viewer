@@ -13,7 +13,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { LoadingStateEnum, PanelResizerComponent, SharedImportsModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, PanelResizerComponent, SharedImportsModule, TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListContentComponent } from '../attribute-list-content/attribute-list-content.component';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { AttributeListTabToolbarComponent } from '../attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
@@ -73,7 +73,7 @@ const getStore = (
 const setup = async (store: StoreDef) => {
   await render(AttributeListComponent, {
     imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, CoreSharedModule ],
-    declarations: [ AttributeListComponent, PanelResizerComponent ],
+    declarations: [ AttributeListComponent, PanelResizerComponent, TooltipDirective ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       getMapServiceMock().provider,
@@ -195,6 +195,7 @@ const setupWithActualState = async (store?: StoreDef) => {
       AttributeListTabComponent,
       AttributeListTabToolbarComponent,
       AttributeListExportButtonComponent,
+      TooltipDirective,
     ],
   });
   const apiService = TestBed.inject(AttributeListApiService);
