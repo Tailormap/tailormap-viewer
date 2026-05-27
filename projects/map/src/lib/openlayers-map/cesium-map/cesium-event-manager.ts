@@ -115,34 +115,28 @@ export class CesiumEventManager {
   }
 
   public static enableKeyboardControl(scene3D: Scene, element: HTMLElement): void {
-    const MOVE_AMOUNT = 100.0;
+    const MOVE_AMOUNT = 50.0;
     const LOOK_AMOUNT = 0.02;
 
     element.addEventListener('keydown', (e: KeyboardEvent) => {
       const camera = scene3D.camera;
       switch (e.key) {
         case 'ArrowUp':
-        case 'w':
-        case 'W':
           e.preventDefault();
           if (e.shiftKey) {
             camera.lookUp(LOOK_AMOUNT);
           } else {
-            CesiumEventManager.moveHorizontal(camera, MOVE_AMOUNT);          }
+            CesiumEventManager.moveForwardHorizontally(camera, MOVE_AMOUNT);          }
           break;
         case 'ArrowDown':
-        case 's':
-        case 'S':
           e.preventDefault();
           if (e.shiftKey) {
             camera.lookDown(LOOK_AMOUNT);
           } else {
-            CesiumEventManager.moveHorizontal(camera, -MOVE_AMOUNT);
+            CesiumEventManager.moveForwardHorizontally(camera, -MOVE_AMOUNT);
           }
           break;
         case 'ArrowLeft':
-        case 'a':
-        case 'A':
           e.preventDefault();
           if (e.shiftKey) {
             const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
@@ -152,8 +146,6 @@ export class CesiumEventManager {
           }
           break;
         case 'ArrowRight':
-        case 'd':
-        case 'D':
           e.preventDefault();
           if (e.shiftKey) {
             const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
@@ -179,19 +171,15 @@ export class CesiumEventManager {
     });
   }
 
-  private static moveHorizontal(camera: Camera, amount: number): void {
-    // Get the surface normal (points "up" from the ground) at the camera's position
-    const surfaceNormal = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
-
-    // Project the camera direction onto the ground plane by removing the vertical component
-    const dot = Cesium.Cartesian3.dot(camera.direction, surfaceNormal);
-    const verticalComponent = Cesium.Cartesian3.multiplyByScalar(surfaceNormal, dot, new Cesium.Cartesian3());
-    const horizontalDirection = Cesium.Cartesian3.subtract(camera.direction, verticalComponent, new Cesium.Cartesian3());
-    Cesium.Cartesian3.normalize(horizontalDirection, horizontalDirection);
-
-    // Move the camera along the horizontal direction
-    const movement = Cesium.Cartesian3.multiplyByScalar(horizontalDirection, amount, new Cesium.Cartesian3());
-    Cesium.Cartesian3.add(camera.position, movement, camera.position);
+  private static moveForwardHorizontally(camera: Camera, amount: number): void {
+    // Get the horizontal component of the camera direction vector
+    const surfaceNormal: Cartesian3 = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
+    const directionDotSurfaceNormal: number = Cesium.Cartesian3.dot(camera.direction, surfaceNormal);
+    const verticalComponent: Cartesian3 = Cesium.Cartesian3.multiplyByScalar(surfaceNormal, directionDotSurfaceNormal, new Cesium.Cartesian3());
+    const horizontalComponent: Cartesian3 = Cesium.Cartesian3.subtract(camera.direction, verticalComponent, new Cesium.Cartesian3());
+    // The horizontal vector needs to be normalized because camera.move multiplies the direction vector by the amount without normalizing it
+    const normalizedHorizontalDirection: Cartesian3 = Cesium.Cartesian3.normalize(horizontalComponent, new Cesium.Cartesian3());
+    camera.move(normalizedHorizontalDirection, amount);
   }
 
 }
