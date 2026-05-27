@@ -32,6 +32,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (this.inIframe && nativeEl) {
       this.overlayHelper = new OverlayHelper(nativeEl);
     }
+    this.mapService.getCesiumManager$()
+      .pipe(take(1))
+      .subscribe((manager) => {
+        manager.executeScene3dAction(scene3d => {
+          const mapContainer = this.mapContainer();
+          if (mapContainer) {
+            CesiumEventManager.enableKeyboardControl(scene3d, mapContainer.nativeElement);
+          }
+        });
+      });
   }
 
   public ngOnDestroy() {
@@ -46,16 +56,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.mapFocusedByKeyboard.set(true);
-    this.mapService.getCesiumManager$().pipe(take(1)).subscribe((manager) => {
-      if (manager) {
-        manager.executeScene3dAction(scene3d => {
-          const mapContainer = this.mapContainer();
-          if (mapContainer) {
-            CesiumEventManager.enableKeyboardControl(scene3d, mapContainer.nativeElement);
-          }
-        });
-      }
-    });
   }
 
   public onEnterKey() {
@@ -65,7 +65,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     }
     const target = mapContainer.nativeElement.querySelector('canvas')
       ?? mapContainer.nativeElement.querySelector('.ol-viewport');
-    console.debug("enter key with target:", target);
     if (!target) {
       return;
     }
