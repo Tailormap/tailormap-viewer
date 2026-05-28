@@ -11,6 +11,10 @@
       </mat-form-field>
     </div>
     <div class="row">
+      <div class="label" i18n="@@admin-core.components.snapping-color">Snapping color</div>
+      <tm-color-picker [color]="config?.color" (colorChange)="updateColor($event)"></tm-color-picker>
+    </div>
+    <div class="row">
       <div class="label" i18n="@@admin-core.components.snapping-select-layers">Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</div>
       <tm-admin-layer-selection-config-component [formControl]="selectedLayers" [withAttributesOnly]="true"></tm-admin-layer-selection-config-component>
     </div>

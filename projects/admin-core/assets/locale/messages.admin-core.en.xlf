@@ -1268,6 +1268,9 @@
       <trans-unit id="admin-core.components.simple-search-title" datatype="html">
         <source>Search title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.snapping-color" datatype="html">
+        <source>Snapping color</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
         <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
       </trans-unit>
