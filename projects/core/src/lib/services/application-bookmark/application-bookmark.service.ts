@@ -9,7 +9,7 @@ import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
-  LayerSettingsBookmarkFragment,
+  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkFragment,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerStyle, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -21,6 +21,8 @@ import { FilterGroupModel } from '@tailormap-viewer/api';
 import { selectAttributeListDataSort } from '../../components/attribute-list/state/attribute-list.selectors';
 import { setInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
 import { SortBookmarkHelper } from './sort-bookmark.helper';
+import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
+import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +34,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private router = inject(Router);
   private bookmarkService = inject(BookmarkService);
   private readableVisibilityBookmarkHandler = inject(ReadableVisibilityBookmarkHandlerService);
+  private featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
 
 
   private destroyed = new Subject();
@@ -40,6 +43,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
   private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
+  private lastFeatureSelectionBookmark: FeatureSelectionBookmarkFragment | undefined;
 
   constructor() {
     let initialRun = true;
@@ -218,6 +222,29 @@ export class ApplicationBookmarkService implements OnDestroy {
 
         if (newAndUpdatedFilterGroups.length > 0) {
           this.store$.dispatch(addOrUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
+        }
+      });
+
+    this.bookmarkService.registerFragment$<FeatureSelectionBookmarkFragment>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)
+      .pipe(
+        skip(1),
+        takeUntil(this.destroyed),
+        filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
+      )
+      .subscribe(FeatureSelectionFragment => {
+        this.featureSelectionBookmarkService.clearFilter();
+
+        if (FeatureSelectionFragment === null) {
+          return;
+        }
+
+        const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmark(FeatureSelectionFragment);
+
+        if (filterOrError && !('errorMessage' in filterOrError)) {
+          this.featureSelectionBookmarkService.applyFilter(filterOrError);
+        } else if (filterOrError && 'errorMessage' in filterOrError) {
+          // todo: show error to user instead of console
+          console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);
         }
       });
   }
