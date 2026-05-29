@@ -52,7 +52,7 @@ export class CqlFilterHelper {
     return result;
   }
 
-  private static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
+  public static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
     const result: LayerFeaturesFilters = new Map();
 
     // Group filters by featureType (or default feature type if no featureType)
@@ -167,7 +167,7 @@ export class CqlFilterHelper {
     return `(${cql})`;
   }
 
-  private static wrapFilters(cqlFilters: string[], operator: 'AND' | 'OR') {
+  public static wrapFilters(cqlFilters: string[], operator: 'AND' | 'OR') {
     if (cqlFilters.length === 0) {
       return '';
     }
