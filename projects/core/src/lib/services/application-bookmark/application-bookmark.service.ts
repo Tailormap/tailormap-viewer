@@ -225,21 +225,23 @@ export class ApplicationBookmarkService implements OnDestroy {
         }
       });
 
-    this.bookmarkService.registerFragment$<FeatureSelectionBookmarkFragment>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)
+    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
         takeUntil(this.destroyed),
         filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
       )
-      .subscribe(FeatureSelectionFragment => {
+      .subscribe(featureSelectionFragmentString => {
+        console.debug(`Applying feature selection bookmark string: `, featureSelectionFragmentString);
+        const featureSelectionFragment = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearFilter();
-
-        if (FeatureSelectionFragment === null) {
+        console.debug(`Applying feature selection bookmark: `, featureSelectionFragment);
+        if (featureSelectionFragment === null) {
           return;
         }
 
-        const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmark(FeatureSelectionFragment);
-
+        const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmarkFragment(featureSelectionFragment);
+        console.debug(`Created filter from bookmark fragment: `, filterOrError);
         if (filterOrError && !('errorMessage' in filterOrError)) {
           this.featureSelectionBookmarkService.applyFilter(filterOrError);
         } else if (filterOrError && 'errorMessage' in filterOrError) {

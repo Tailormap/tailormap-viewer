@@ -11,7 +11,7 @@ export const onAddAllFilterGroupsInConfig = (
   return {
     ...state,
     configuredFilterGroups: payload.filterGroups,
-    currentFilterGroups: payload.filterGroups,
+    currentFilterGroups: [...state.currentFilterGroups, ...payload.filterGroups],
   };
 };
 
