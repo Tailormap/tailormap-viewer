@@ -82,11 +82,13 @@ export class FeatureHelper {
           const geometry = FeatureHelper.fromWKT(feature);
           return new Feature(geometry);
         } catch (e) {
+          console.error("Failed to parse WKT geometry:", feature, e);
           return null;
         }
       }
       if (FeatureHelper.isFeatureModel(feature)) {
         if (!feature.geometry) {
+          console.error("FeatureModel has no geometry:", feature);
           return null;
         }
         return new Feature<Geometry>({
