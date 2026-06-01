@@ -325,6 +325,10 @@ export class MapService {
     return this.map.get3dTerrainOpacity$();
   }
 
+  public getIn3d$(): Observable<boolean> {
+    return this.map.getIn3d$();
+  }
+
   public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.map.hasUserInteractedWithMap$();
   }

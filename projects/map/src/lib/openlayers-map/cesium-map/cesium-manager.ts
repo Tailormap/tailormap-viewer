@@ -4,7 +4,7 @@ import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, EllipsoidTerrainProvider, Scene } from 'cesium';
+import { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, EllipsoidTerrainProvider, PostProcessStage, Scene } from 'cesium';
 import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
@@ -21,6 +21,7 @@ export class CesiumManager {
   private currentTerrainLayerId: string = CesiumManager.ELLIPSOID_TERRAIN_ID;
   private prevLayerIdentifiers: string[] = [];
   private createdTiles3dLayerIds: string[] = [];
+  private silhouette: PostProcessStage | null = null;
 
   private terrainOpacity$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
 
@@ -42,6 +43,7 @@ export class CesiumManager {
 
   private setupOlCesium() {
     this.ngZone.runOutsideAngular(() => {
+      this.silhouette = CesiumEventManager.createSilhouette(CssHelper.getCssVariableValue('--primary-color').trim(), 0.01);
       from(from(import('olcs')))
         .pipe(take(1))
         .subscribe(olCsModule => {
@@ -63,7 +65,7 @@ export class CesiumManager {
         scene3d.globe.depthTestAgainstTerrain = true;
         CesiumEventManager.initClickEvent(
           scene3d,
-          CssHelper.getCssVariableValue('--primary-color').trim(),
+          this.silhouette,
           index => this.getLayerId(index),
           this.projection2D?.getCode(),
         );
@@ -243,6 +245,17 @@ export class CesiumManager {
 
   public getTerrainOpacity$(): Observable<number> {
     return this.terrainOpacity$.asObservable();
+  }
+
+  public simulateCenterClick(): void {
+    this.executeScene3dAction(scene3d => {
+      CesiumEventManager.simulateCenterClick(
+        scene3d,
+        this.silhouette,
+        index => this.getLayerId(index),
+        this.projection2D?.getCode(),
+      );
+    });
   }
 
 }
