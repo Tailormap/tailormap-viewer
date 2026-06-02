@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
 import { selectLayers, selectLoadStatus } from '../../map';
@@ -9,6 +9,8 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { catchError, combineLatest, concatMap, filter, first, forkJoin, map, of, take } from 'rxjs';
 import { AttributeListApiService } from '../../components/attribute-list/services/attribute-list-api.service';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
+import { expandCollapseFeatureInfoDialog, featureInfoLoaded } from '../../components/feature-info/state/feature-info.actions';
+import { FeatureInfoResponseModel } from '../../components';
 
 @Injectable({
   providedIn: 'root',
@@ -39,15 +41,6 @@ export class FeatureSelectionBookmarkService {
       this.getAndZoomToFeatures(filterGroup);
     });
   }
-
-  // private getAndZoomToFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>): void {
-  //   // todo: implement this
-  //   filterGroup.layerIds.forEach(_layerId => {
-  //     // Call features API with the filter
-  //     // Then zoom to the returned features using:
-  //     // this.mapService.zoomToFeatures(features);
-  //   });
-  // }
 
   private getAndZoomToFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>): void {
     combineLatest([
@@ -82,8 +75,8 @@ export class FeatureSelectionBookmarkService {
             page: 1,
             geometryInAttributes: true,
           }).pipe(
-            map(response => response.features || []),
-            catchError(() => of([])),
+            map(response => this.mapToFeatureInfoResponse(response, layerId)),
+            catchError(() => of<FeatureInfoResponseModel>(this.createEmptyResponse(layerId))),
           );
         });
 
@@ -91,10 +84,44 @@ export class FeatureSelectionBookmarkService {
           map(results => results.flat()), // Combine all features from all layers
         );
       }),
-    ).subscribe(features => {
-      if (features.length > 0) {
-        this.mapService.zoomToFeatures(features);
+    ).subscribe(responses => {
+      // Dispatch feature info loaded actions for each layer
+      responses.forEach(response => {
+        this.store$.dispatch(featureInfoLoaded({
+          featureInfo: response,
+        }));
+      });
+
+      // Zoom to all features
+      const allFeatures = responses.flatMap(r => r.features);
+      if (allFeatures.length > 0) {
+        this.mapService.zoomToFeatures(allFeatures);
       }
+
+      this.store$.dispatch(expandCollapseFeatureInfoDialog());
     });
+  }
+
+  private mapToFeatureInfoResponse(
+    response: FeaturesResponseModel,
+    layerId: string,
+  ): FeatureInfoResponseModel {
+    return {
+      features: (response.features || []).map(f => ({ ...f, layerId })),
+      columnMetadata: (response.columnMetadata || []).map(cm => ({ ...cm, layerId })),
+      attachmentMetadata: (response.attachmentMetadata || []).map(am => ({ ...am, layerId })),
+      template: response.template || null,
+      layerId,
+    };
+  }
+
+  private createEmptyResponse(layerId: string): FeatureInfoResponseModel {
+    return {
+      features: [],
+      columnMetadata: [],
+      attachmentMetadata: [],
+      template: null,
+      layerId,
+    };
   }
 }
