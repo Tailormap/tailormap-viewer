@@ -232,18 +232,15 @@ export class ApplicationBookmarkService implements OnDestroy {
         filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
       )
       .subscribe(featureSelectionFragmentString => {
-        console.debug(`Applying feature selection bookmark string: `, featureSelectionFragmentString);
         const featureSelectionFragment = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearFilter();
-        console.debug(`Applying feature selection bookmark: `, featureSelectionFragment);
         if (featureSelectionFragment === null) {
           return;
         }
-
+        const createFilter: boolean | null = featureSelectionFragment.createFilter || null;
         const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmarkFragment(featureSelectionFragment);
-        console.debug(`Created filter from bookmark fragment: `, filterOrError);
         if (filterOrError && !('errorMessage' in filterOrError)) {
-          this.featureSelectionBookmarkService.applyFilter(filterOrError);
+          this.featureSelectionBookmarkService.applyFilter(filterOrError, createFilter || false);
         } else if (filterOrError && 'errorMessage' in filterOrError) {
           // todo: show error to user instead of console
           console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);

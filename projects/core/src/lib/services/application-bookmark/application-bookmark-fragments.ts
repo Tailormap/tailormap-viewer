@@ -125,4 +125,5 @@ export interface FeatureSelectionBookmarkData {
   }>;
   attributeName: string;
   attributeValue: string;
+  createFilter?: boolean;
 }

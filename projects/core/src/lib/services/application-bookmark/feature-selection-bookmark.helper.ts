@@ -19,7 +19,9 @@ export class FeatureSelectionBookmarkHelper {
     const attributeValue: string | null = parts.find(
       part => part.startsWith('attributeValue=')
     )?.substring('attributeValue='.length) || null;
-    console.debug(`Parsed feature selection bookmark - layers: ${layersString}, attributeName: ${attributeName}, attributeValue: ${attributeValue}`);
+    const createFilter: boolean = parts.find(
+      part => part.startsWith('createFilter=')
+    )?.substring('createFilter='.length) === 'true' || false;
     if (!attributeName || !attributeValue || !layersString) {
       return null;
     }
@@ -40,6 +42,7 @@ export class FeatureSelectionBookmarkHelper {
       layers,
       attributeName,
       attributeValue,
+      createFilter,
     };
   }
 

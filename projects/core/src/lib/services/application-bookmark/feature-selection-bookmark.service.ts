@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FilterGroupModel, AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
 import { selectLayers, selectLoadStatus } from '../../map';
@@ -8,7 +8,7 @@ import { selectViewerId, selectViewerLoadingState } from '../../state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { catchError, combineLatest, concatMap, filter, first, forkJoin, map, of, take } from 'rxjs';
 import { AttributeListApiService } from '../../components/attribute-list/services/attribute-list-api.service';
-import { CqlFilterHelper } from '../../filter';
+import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +17,7 @@ export class FeatureSelectionBookmarkService {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private attributeListApiService = inject(AttributeListApiService);
+  private api = inject(TAILORMAP_API_V1_SERVICE);
 
   private currentFilterGroupId: string | null = null;
 
@@ -27,12 +28,14 @@ export class FeatureSelectionBookmarkService {
     }
   }
 
-  public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>): void {
+  public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>, createFilter: boolean): void {
     this.currentFilterGroupId = filterGroup.id;
     this.store$.select(selectViewerLoadingState).pipe(
       first(status => status === LoadingStateEnum.LOADED)
     ).subscribe(() => {
-      this.store$.dispatch(addFilterGroup({ filterGroup }));
+      if (createFilter) {
+        this.store$.dispatch(addFilterGroup({ filterGroup }));
+      }
       this.getAndZoomToFeatures(filterGroup);
     });
   }
@@ -57,7 +60,7 @@ export class FeatureSelectionBookmarkService {
           return [];
         }
         // Get the CQL filters from the filter group for each layer
-        const cqlFilters = CqlFilterHelper.getFilters([filterGroup]);
+        const featuresFilters = CqlFilterHelper.getFilters([filterGroup]);
 
         const featureRequests$ = filterGroup.layerIds.map(layerId => {
           const layer = layers.find(l => l.id === layerId);
@@ -66,15 +69,18 @@ export class FeatureSelectionBookmarkService {
           }
 
           // Get the filter for this layer
-          const layerFilters = cqlFilters.get(layerId);
+          const layerFilters = featuresFilters.get(layerId);
+          const cqlFilter =  layerFilters
+            ? FeaturesFilterHelper.getFilter(layerFilters) || undefined
+            : undefined;
 
           // Call the API to get features
-          return this.attributeListApiService.getFeatures$({
+          return this.api.getFeatures$({
             applicationId: applicationId,
             layerId: layerId,
-            filter: layerFilters || undefined,
-            includeGeometry: true, // Important for zooming
+            filter: cqlFilter || undefined,
             page: 1,
+            geometryInAttributes: true,
           }).pipe(
             map(response => response.features || []),
             catchError(() => of([])),
