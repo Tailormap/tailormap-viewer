@@ -64,6 +64,8 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     clientSecret: new FormControl(''),
     clientSecretExpiry: new FormControl<DateTime | null>(null),
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    defaultAuthorities: new FormControl<string | null>(null),
+    rolesClaimFilterRegex: new FormControl<string | null>(null),
     image: new FormControl<string | null>(null),
   });
 
@@ -85,6 +87,8 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           clientSecret: value.clientSecret || undefined,
           clientSecretExpiry: value.clientSecretExpiry ? value.clientSecretExpiry.toISODate() : null,
           userNameAttribute: value.userNameAttribute || 'name',
+          defaultAuthorities: value.defaultAuthorities ? value.defaultAuthorities.split(',') : null,
+          rolesClaimFilterRegex: value.rolesClaimFilterRegex || null,
           image: value.image,
         });
       });
@@ -103,6 +107,8 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       clientSecret: oidcConfiguration?.clientSecret,
       clientSecretExpiry: oidcConfiguration?.clientSecretExpiry ? DateTime.fromISO(oidcConfiguration.clientSecretExpiry) : null,
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
+      defaultAuthorities: oidcConfiguration?.defaultAuthorities?.join(',') ?? null,
+      rolesClaimFilterRegex: oidcConfiguration?.rolesClaimFilterRegex ?? null,
       image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
   }
