@@ -1,13 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AttributeListStatisticsService } from './attribute-list-statistics.service';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { FilterService } from '../../../filter/services/filter.service';
+import { LayerFeaturesFilters } from '../../../filter';
 import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
-import { GetStatisticResponse, StatisticType } from '../models/attribute-list-api-service.model';
+import { GetStatisticParams, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { AttributeListStatisticColumnModel } from '../models/attribute-list-statistic-column.model';
@@ -39,24 +40,38 @@ const setup = (options: {
   viewerId?: string | null;
   tab?: AttributeListTabModel | null;
   data?: AttributeListDataModel | null;
-  getStatisticResponse?: GetStatisticResponse;
+  statisticValue?: number;
+  statisticSuccess?: boolean;
   canLoadStatistics?: boolean;
 } = {}) => {
   const {
     viewerId = 'viewer1',
     tab = createMockTab('layer1'),
     data = createMockData(),
-    getStatisticResponse = { result: 42, success: true },
+    statisticValue = 42,
+    statisticSuccess = true,
     canLoadStatistics = true,
   } = options;
 
+  const changedFilters$ = new Subject<Map<string, LayerFeaturesFilters | null>>();
+
   const managerService = {
     canLoadStatistics: jest.fn().mockReturnValue(canLoadStatistics),
-    getStatistic$: jest.fn().mockReturnValue(of(getStatisticResponse)),
+    getStatistic$: jest.fn().mockImplementation((_tabSourceId: string, params: GetStatisticParams) => {
+      return of({
+        success: statisticSuccess,
+        result: params.statistics.map(s => ({
+          column: s.column,
+          type: s.type,
+          value: statisticValue,
+        })),
+      });
+    }),
   };
 
   const filterService = {
     getFilterForLayer: jest.fn().mockReturnValue(undefined),
+    getChangedFilters$: jest.fn().mockReturnValue(changedFilters$),
   };
 
   TestBed.configureTestingModule({
@@ -76,7 +91,7 @@ const setup = (options: {
 
   const service = TestBed.inject(AttributeListStatisticsService);
   const store = TestBed.inject(MockStore);
-  return { service, store, managerService, filterService };
+  return { service, store, managerService, filterService, changedFilters$ };
 };
 
 describe('AttributeListStatisticsService', () => {
@@ -141,7 +156,7 @@ describe('AttributeListStatisticsService', () => {
   describe('loadStatistics', () => {
 
     it('loading -> success: should set isLoading=true then resolve with value after success', () => {
-      const { service } = setup({ getStatisticResponse: { result: 99, success: true } });
+      const { service } = setup({ statisticValue: 99 });
       const emissions: AttributeListStatisticColumnModel[][] = [];
       service.statistics$.subscribe(stats => emissions.push(stats));
       service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
@@ -154,7 +169,7 @@ describe('AttributeListStatisticsService', () => {
     });
 
     it('loading -> error: should set hasError=true and value=null when loading fails', () => {
-      const { service } = setup({ getStatisticResponse: { result: null, success: false } });
+      const { service } = setup({ statisticValue: 0, statisticSuccess: false });
       const emissions: AttributeListStatisticColumnModel[][] = [];
       service.statistics$.subscribe(stats => emissions.push(stats));
 
@@ -266,6 +281,86 @@ describe('AttributeListStatisticsService', () => {
       const { service, managerService } = setup({ viewerId: null });
       service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
       expect(managerService.getStatistic$).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe('filter change refresh', () => {
+
+    it('should refresh statistics and set isLoading=true during refresh when filters change', () => {
+      const { service, managerService, changedFilters$ } = setup({ statisticValue: 99 });
+      const emissions: AttributeListStatisticColumnModel[][] = [];
+      service.statistics$.subscribe(stats => emissions.push(stats));
+
+      service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
+
+      const afterLoad = emissions[emissions.length - 1];
+      expect(afterLoad[0].value).toBe(99);
+      expect(afterLoad[0].isLoading).toBe(false);
+
+      changedFilters$.next(new Map([[ 'layer1', null ]]));
+
+      // An intermediate emission with isLoading=true should have occurred
+      const isLoadingEmission = emissions.find(e => e.length > 0 && e[0].isLoading === true);
+      expect(isLoadingEmission).toBeDefined();
+
+      // getStatistic$ called once for initial load, once for refresh
+      expect(managerService.getStatistic$).toHaveBeenCalledTimes(2);
+
+      const afterRefresh = emissions[emissions.length - 1];
+      expect(afterRefresh[0].isLoading).toBe(false);
+      expect(afterRefresh[0].value).toBe(99);
+    });
+
+    it('should pass the filter from the changed filters map to getStatistic$', () => {
+      const { service, managerService, changedFilters$ } = setup();
+      const filter: LayerFeaturesFilters = new Map();
+
+      service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
+
+      changedFilters$.next(new Map([[ 'layer1', filter ]]));
+
+      const refreshCall = managerService.getStatistic$.mock.calls[1];
+      expect(refreshCall[1].filter).toBe(filter);
+    });
+
+    it('should not refresh statistics when no selected tab is available at the time of filter change', () => {
+      const { service, store, managerService, changedFilters$ } = setup();
+
+      service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
+      expect(managerService.getStatistic$).toHaveBeenCalledTimes(1);
+
+      store.overrideSelector(selectSelectedTab, null);
+      store.refreshState();
+
+      changedFilters$.next(new Map([[ 'layer1', null ]]));
+
+      // getStatistic$ should not have been called again
+      expect(managerService.getStatistic$).toHaveBeenCalledTimes(1);
+    });
+
+    it('should refresh statistics for each changed layer independently', () => {
+      const tab1 = createMockTab('layer1');
+      const tab2 = createMockTab('layer2');
+      const { service, store, managerService, changedFilters$ } = setup();
+
+      // Load a statistic for layer1
+      service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
+
+      // Switch to layer2 and load a statistic there
+      store.overrideSelector(selectSelectedTab, tab2);
+      store.refreshState();
+      service.loadStatistics({ type: StatisticType.COUNT, columnName: 'name', dataType: 'string' });
+
+      const callsAfterLoad = managerService.getStatistic$.mock.calls.length;
+
+      // Trigger filter changes for both layers simultaneously
+      store.overrideSelector(selectSelectedTab, tab1);
+      store.refreshState();
+      changedFilters$.next(new Map([[ 'layer1', null ], [ 'layer2', null ]]));
+
+      // Both layers should have been refreshed
+      expect(managerService.getStatistic$).toHaveBeenCalledTimes(callsAfterLoad + 2);
     });
 
   });
