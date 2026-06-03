@@ -25,6 +25,11 @@ export const updateFeatureInFeatureInfo = createAction(
   props<{ feature: FeatureInfoFeatureModel }>(),
 );
 
+export const setFeatureInfoLayers = createAction(
+  `${featureInfoActionsPrefix} Set Feature Info Layers`,
+  props<{ layers: FeatureInfoLayerModel[] }>(),
+);
+
 export const hideFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Hide Feature Info Dialog`);
 export const expandCollapseFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Dialog`);
 export const expandCollapseFeatureInfoLayerList = createAction(`${featureInfoActionsPrefix} Expand/Collapse Feature Info Layer List`);

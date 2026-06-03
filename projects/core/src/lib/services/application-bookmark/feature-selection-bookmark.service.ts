@@ -3,13 +3,15 @@ import { Store } from '@ngrx/store';
 import { FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
-import { selectLayers, selectLoadStatus } from '../../map';
+import { selectLayers, selectLoadStatus, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map';
 import { selectViewerId, selectViewerLoadingState } from '../../state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { catchError, combineLatest, concatMap, filter, first, forkJoin, map, of, take } from 'rxjs';
 import { AttributeListApiService } from '../../components/attribute-list/services/attribute-list-api.service';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
-import { expandCollapseFeatureInfoDialog, featureInfoLoaded } from '../../components/feature-info/state/feature-info.actions';
+import {
+  expandCollapseFeatureInfoDialog, featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers
+} from '../../components/feature-info/state/feature-info.actions';
 import { FeatureInfoResponseModel } from '../../components';
 
 @Injectable({
@@ -18,7 +20,6 @@ import { FeatureInfoResponseModel } from '../../components';
 export class FeatureSelectionBookmarkService {
   private store$ = inject(Store);
   private mapService = inject(MapService);
-  private attributeListApiService = inject(AttributeListApiService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
 
   private currentFilterGroupId: string | null = null;
@@ -54,6 +55,8 @@ export class FeatureSelectionBookmarkService {
         }
         // Get the CQL filters from the filter group for each layer
         const featuresFilters = CqlFilterHelper.getFilters([filterGroup]);
+
+        this.setFeatureInfoLayers(filterGroup.layerIds);
 
         const featureRequests$ = filterGroup.layerIds.map(layerId => {
           const layer = layers.find(l => l.id === layerId);
@@ -98,7 +101,7 @@ export class FeatureSelectionBookmarkService {
         this.mapService.zoomToFeatures(allFeatures);
       }
 
-      this.store$.dispatch(expandCollapseFeatureInfoDialog());
+      // this.store$.dispatch(reopenFeatureInfoDialog());
     });
   }
 
@@ -123,5 +126,20 @@ export class FeatureSelectionBookmarkService {
       template: null,
       layerId,
     };
+  }
+
+  private setFeatureInfoLayers(layerIds: string[]) {
+    this.store$.select(selectVisibleLayersWithAttributes)
+      .pipe(take(1))
+      .subscribe(layers => {
+        const featureInfoLayers = layers
+          .filter(layer => layerIds.includes(layer.id))
+          .map(layer => ({
+            id: layer.id,
+            title: layer.title,
+            loading: LoadingStateEnum.LOADING,
+          }));
+        this.store$.dispatch(setFeatureInfoLayers({ layers: featureInfoLayers }));
+      });
   }
 }

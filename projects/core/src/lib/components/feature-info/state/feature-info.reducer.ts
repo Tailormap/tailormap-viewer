@@ -147,6 +147,16 @@ const onUpdateFeatureInFeatureInfo = (
   };
 };
 
+const onSetFeatureInfoLayers = (
+  state: FeatureInfoState,
+  payload: ReturnType<typeof FeatureInfoActions.setFeatureInfoLayers>,
+): FeatureInfoState => {
+  return {
+    ...state,
+    layers: payload.layers,
+  };
+};
+
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   initialFeatureInfoState,
   on(FeatureInfoActions.loadFeatureInfo, onLoadFeatureInfo),
@@ -159,5 +169,6 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.showPreviousFeatureInfoFeature, onShowPreviousFeatureInfoFeature),
   on(FeatureInfoActions.reopenFeatureInfoDialog, onReopenFeatureInfoDialog),
   on(FeatureInfoActions.updateFeatureInFeatureInfo, onUpdateFeatureInFeatureInfo),
+  on(FeatureInfoActions.setFeatureInfoLayers, onSetFeatureInfoLayers),
 );
 export const featureInfoReducer = (state: FeatureInfoState | undefined, action: Action) => featureInfoReducerImpl(state, action);
