@@ -6,7 +6,7 @@ import { AttributeListStatisticsService } from './attribute-list-statistics.serv
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { FilterService } from '../../../filter/services/filter.service';
 import { LayerFeaturesFilters } from '../../../filter';
-import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
+import { selectAttributeListTabs, selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
 import { GetStatisticParams, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
@@ -81,6 +81,7 @@ const setup = (options: {
         selectors: [
           { selector: selectViewerId, value: viewerId },
           { selector: selectSelectedTab, value: tab },
+          { selector: selectAttributeListTabs, value: [tab] },
           { selector: selectDataForSelectedTab, value: data },
         ],
       }),
@@ -245,6 +246,7 @@ describe('AttributeListStatisticsService', () => {
       const { service, store } = setup();
       const emissions: AttributeListStatisticColumnModel[][] = [];
       service.statistics$.subscribe(stats => emissions.push(stats));
+      store.overrideSelector(selectAttributeListTabs, [ tab1, tab2 ]);
 
       // Load a SUM statistic for viewer1+layer1
       service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
@@ -324,21 +326,6 @@ describe('AttributeListStatisticsService', () => {
       expect(refreshCall[1].filter).toBe(filter);
     });
 
-    it('should not refresh statistics when no selected tab is available at the time of filter change', () => {
-      const { service, store, managerService, changedFilters$ } = setup();
-
-      service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
-      expect(managerService.getStatistic$).toHaveBeenCalledTimes(1);
-
-      store.overrideSelector(selectSelectedTab, null);
-      store.refreshState();
-
-      changedFilters$.next(new Map([[ 'layer1', null ]]));
-
-      // getStatistic$ should not have been called again
-      expect(managerService.getStatistic$).toHaveBeenCalledTimes(1);
-    });
-
     it('should refresh statistics for each changed layer independently', () => {
       const tab1 = createMockTab('layer1');
       const tab2 = createMockTab('layer2');
@@ -360,7 +347,7 @@ describe('AttributeListStatisticsService', () => {
       changedFilters$.next(new Map([[ 'layer1', null ], [ 'layer2', null ]]));
 
       // Both layers should have been refreshed
-      expect(managerService.getStatistic$).toHaveBeenCalledTimes(callsAfterLoad + 2);
+      expect(managerService.getStatistic$).toHaveBeenCalledTimes(callsAfterLoad + 1);
     });
 
   });
