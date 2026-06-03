@@ -216,12 +216,14 @@ export class AttributeListStatisticsService {
     const key = this.getStatisticsKey(statistic.applicationId, statistic.layerId);
     const currentStatistics = this.statistics.value.get(key) || [];
     const updatedStatisticsForLayer: AttributeListStatisticColumnModel[] = currentStatistics.map(c => {
-      const response = statistic.response?.result.find(r => c.columnName === r.column && c.type === r.type);
+      const resultItem = statistic.response?.result.find(r => c.columnName === r.column && c.type === r.type);
+      if (resultItem === undefined) {
+        return c;
+      }
       const hasError = !statistic.response || !statistic.response.success;
-      const value = response?.value ?? null;
       return {
         ...c,
-        value: hasError ? null : value,
+        value: hasError ? null : resultItem.value,
         hasError,
         isLoading: false,
       };
