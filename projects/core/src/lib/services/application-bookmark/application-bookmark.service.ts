@@ -23,6 +23,7 @@ import { setInitialDataSort } from '../../components/attribute-list/state/attrib
 import { SortBookmarkHelper } from './sort-bookmark.helper';
 import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -68,7 +69,10 @@ export class ApplicationBookmarkService implements OnDestroy {
 
   public isEmbeddedApplication$() {
     return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR)
-      .pipe(map(embedded => embedded === '1'));
+      .pipe(
+        tap(embedded => console.debug("embedded from register fragment", embedded)),
+        map(embedded => embedded === '1'),
+      );
   }
 
   public getMobileLayoutOption$(): Observable<'enabled' | 'disabled' | 'auto'> {
@@ -122,6 +126,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       .subscribe(bookmark => {
         this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
+
   }
 
   private updateMapOnUrlChanges() {
@@ -225,13 +230,15 @@ export class ApplicationBookmarkService implements OnDestroy {
         }
       });
 
-    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)
-      .pipe(
-        skip(1),
-        takeUntil(this.destroyed),
-        filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
-      )
-      .subscribe(featureSelectionFragmentString => {
+    this.store$.select(selectLoadStatus).pipe(
+      skip(1),
+      takeUntil(this.destroyed),
+      filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+      switchMap(() => this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)),
+      filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
+      withLatestFrom(this.isEmbeddedApplication$()),
+    ).subscribe(([featureSelectionFragmentString, isEmbedded]) => {
+        console.debug("is embedded (in feature selection)", isEmbedded);
         const featureSelectionFragment = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearFilter();
         if (featureSelectionFragment === null) {
@@ -240,7 +247,7 @@ export class ApplicationBookmarkService implements OnDestroy {
         const createFilter: boolean | null = featureSelectionFragment.createFilter || null;
         const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmarkFragment(featureSelectionFragment);
         if (filterOrError && !('errorMessage' in filterOrError)) {
-          this.featureSelectionBookmarkService.applyFilter(filterOrError, createFilter || false);
+          this.featureSelectionBookmarkService.applyFilter(filterOrError, createFilter || false, isEmbedded);
         } else if (filterOrError && 'errorMessage' in filterOrError) {
           // todo: show error to user instead of console
           console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);
