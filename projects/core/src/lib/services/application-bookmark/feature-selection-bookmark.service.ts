@@ -9,7 +9,8 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { catchError, combineLatest, concatMap, first, forkJoin, map, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
-import { FeatureInfoResponseModel } from '../../components';
+import { FeatureInfoFeatureModel, FeatureInfoResponseModel } from '../../components';
+import { FeatureStylingHelper } from '../../shared';
 
 @Injectable({
   providedIn: 'root',
@@ -30,14 +31,10 @@ export class FeatureSelectionBookmarkService {
 
   public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>, createFilter: boolean, isEmbedded: boolean): void {
     this.currentFilterGroupId = filterGroup.id;
-    this.store$.select(selectViewerLoadingState).pipe(
-      first(status => status === LoadingStateEnum.LOADED)
-    ).subscribe(() => {
-      if (createFilter) {
-        this.store$.dispatch(addFilterGroup({ filterGroup }));
-      }
-      this.getAndZoomToFeatures(filterGroup, isEmbedded);
-    });
+    if (createFilter) {
+      this.store$.dispatch(addFilterGroup({ filterGroup }));
+    }
+    this.getAndZoomToFeatures(filterGroup, isEmbedded);
   }
 
   private getAndZoomToFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>, isEmbedded: boolean): void {
@@ -88,7 +85,7 @@ export class FeatureSelectionBookmarkService {
       }),
     ).subscribe(responses => {
       // Zoom to all features
-      const allFeatures = responses.flatMap(r => r.features);
+      const allFeatures: FeatureInfoFeatureModel[] = responses.flatMap(r => r.features);
       if (allFeatures.length > 0) {
         this.mapService.zoomToFeatures(allFeatures);
       }
@@ -101,6 +98,7 @@ export class FeatureSelectionBookmarkService {
           }));
         });
         this.store$.dispatch(reopenFeatureInfoDialog());
+      } else {
       }
     });
   }

@@ -238,7 +238,6 @@ export class ApplicationBookmarkService implements OnDestroy {
       filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
       withLatestFrom(this.isEmbeddedApplication$()),
     ).subscribe(([featureSelectionFragmentString, isEmbedded]) => {
-        console.debug("is embedded (in feature selection)", isEmbedded);
         const featureSelectionFragment = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearFilter();
         if (featureSelectionFragment === null) {
