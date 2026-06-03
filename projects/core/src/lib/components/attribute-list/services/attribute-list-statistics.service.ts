@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
-import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
+import { selectAttributeListTabs, selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { catchError, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { selectViewerId } from '../../../state';
@@ -67,17 +67,24 @@ export class AttributeListStatisticsService {
     this.filterService.getChangedFilters$()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        withLatestFrom(this.store$.select(selectViewerId), this.store$.select(selectSelectedTab)),
+        withLatestFrom(this.store$.select(selectViewerId), this.store$.select(selectAttributeListTabs)),
       )
-      .subscribe(([ changedFilters, viewerId, selectedTab ]) => {
-        if (!selectedTab || !viewerId) {
+      .subscribe(([ changedFilters, viewerId, tabs ]) => {
+        if (!tabs || tabs.length === 0 || !viewerId) {
           return;
         }
         const changedLayers = Array.from(changedFilters.keys());
         changedLayers.forEach(layerId => {
-          const key = this.getStatisticsKey(viewerId || '', layerId);
+          const tab = tabs.find(t => t.layerId === layerId);
+          if (!tab) {
+            return;
+          }
+          const key = this.getStatisticsKey(viewerId, layerId);
           const filter = changedFilters.get(layerId);
           const currentStatistics = this.statistics.value.get(key) || [];
+          if (currentStatistics.length === 0) {
+            return;
+          }
           const updatedStatistics = currentStatistics.map(statistic => ({
             ...statistic,
             isLoading: true,
@@ -85,7 +92,7 @@ export class AttributeListStatisticsService {
           const updatedMap = new Map(this.statistics.value);
           updatedMap.set(key, updatedStatistics);
           this.statistics.next(updatedMap);
-          this.refreshStatistics$({ key, viewerId, layerId, tabSourceId: selectedTab.tabSourceId, statistics: currentStatistics, filter });
+          this.refreshStatistics$({ key, viewerId, layerId, tabSourceId: tab.tabSourceId, statistics: currentStatistics, filter });
         });
       });
   }
@@ -193,7 +200,6 @@ export class AttributeListStatisticsService {
       statistics: params.statistics.map(s => ({
         column: s.columnName,
         type: s.type,
-        dataType: s.dataType,
       })),
       filter: params.filter,
     })
@@ -202,9 +208,6 @@ export class AttributeListStatisticsService {
         catchError(() => of(null)),
       )
       .subscribe(response => {
-        if (!response) {
-          return;
-        }
         this.updateStatistic({ applicationId: params.viewerId, layerId: params.layerId, response });
       });
   }
@@ -214,17 +217,14 @@ export class AttributeListStatisticsService {
     const currentStatistics = this.statistics.value.get(key) || [];
     const updatedStatisticsForLayer: AttributeListStatisticColumnModel[] = currentStatistics.map(c => {
       const response = statistic.response?.result.find(r => c.columnName === r.column && c.type === r.type);
-      if (response) {
-        const hasError = !statistic.response || !statistic.response.success;
-        const value = response.value;
-        return {
-          ...c,
-          value: hasError ? null : value,
-          hasError,
-          isLoading: false,
-        };
-      }
-      return c;
+      const hasError = !statistic.response || !statistic.response.success;
+      const value = response?.value ?? null;
+      return {
+        ...c,
+        value: hasError ? null : value,
+        hasError,
+        isLoading: false,
+      };
     });
     const updatedStatistics = new Map(this.statistics.value);
     updatedStatistics.set(key, updatedStatisticsForLayer);
