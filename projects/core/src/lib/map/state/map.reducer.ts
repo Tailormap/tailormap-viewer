@@ -4,6 +4,57 @@ import { MapState, initialMapState } from './map.state';
 import { ChangePositionHelper, FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
+import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+
+type LayerTreeStateKey = 'baseLayerTreeNodes' | 'layerTreeNodes';
+
+const getLayerTreeStateKey = (isBaseLayerTree?: boolean): LayerTreeStateKey => (isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes');
+
+const appendServices = (services: ServiceModel[], servicesToAdd: ServiceModel[]): ServiceModel[] => [ ...services, ...servicesToAdd ];
+
+const appendServiceIfMissing = (services: ServiceModel[], service?: ServiceModel): ServiceModel[] => {
+  if (!service || services.some(currentService => currentService.id === service.id)) {
+    return services;
+  }
+  return [ ...services, service ];
+};
+
+const appendAppLayers = (layers: MapState['layers'], appLayers: AppLayerModel[]): MapState['layers'] => ([
+  ...layers,
+  ...appLayers.map(LayerModelHelper.getLayerWithInitialValues),
+]);
+
+const appendLayerTreeNodes = (
+  layerTreeNodes: MapState['layerTreeNodes'],
+  nodesToAdd: LayerTreeNodeModel[],
+): MapState['layerTreeNodes'] => [ ...layerTreeNodes, ...nodesToAdd.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)) ];
+
+const placeNodeAfterSibling = (
+  layerTreeNodes: MapState['layerTreeNodes'],
+  nodeId: string,
+  siblingLayerTreeNodeId?: string,
+): MapState['layerTreeNodes'] => {
+  const parentNodeIndex = siblingLayerTreeNodeId
+    ? layerTreeNodes.findIndex(node => node.childrenIds?.includes(siblingLayerTreeNodeId))
+    : layerTreeNodes.findIndex(node => node.root);
+  if (parentNodeIndex === -1) {
+    return layerTreeNodes;
+  }
+  return layerTreeNodes.map((node, index) => {
+    if (index !== parentNodeIndex) {
+      return node;
+    }
+    return {
+      ...node,
+      childrenIds: ChangePositionHelper.updateOrderInList(
+        node.childrenIds ?? [],
+        nodeId,
+        'after',
+        siblingLayerTreeNodeId,
+      ),
+    };
+  });
+};
 
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
@@ -88,7 +139,7 @@ const onToggleSelectedLayerId = (state: MapState, payload: ReturnType<typeof Map
 });
 
 const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapActions.toggleLevelExpansion>): MapState => {
-  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   const idx = state[tree].findIndex(l => l.id === payload.id);
   if (idx === -1) {
     return state;
@@ -105,24 +156,75 @@ const onToggleLevelExpansion = (state: MapState, payload: ReturnType<typeof MapA
 
 const onAddServices = (state: MapState, payload: ReturnType<typeof MapActions.addServices>): MapState => ({
   ...state,
-  services: [ ...state.services, ...payload.services ],
+  services: appendServices(state.services, payload.services),
 });
 
 const onAddAppLayers = (state: MapState, payload: ReturnType<typeof MapActions.addAppLayers>): MapState => ({
   ...state,
-  layers: [ ...state.layers, ...payload.appLayers.map(LayerModelHelper.getLayerWithInitialValues) ],
+  layers: appendAppLayers(state.layers, payload.appLayers),
 });
 
 const onAddLayerTreeNodes = (state: MapState, payload: ReturnType<typeof MapActions.addLayerTreeNodes>): MapState => {
-  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   return {
     ...state,
-    [tree]: [ ...state[tree], ...payload.layerTreeNodes.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)) ],
+    [tree]: appendLayerTreeNodes(state[tree], payload.layerTreeNodes),
+  };
+};
+
+const onAddLayerWithServicesToMap = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.addLayerWithServicesToMap>,
+): MapState => {
+  if (state.layers.some(layer => layer.id === payload.appLayer.id)) {
+    return state;
+  }
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
+  const services = appendServiceIfMissing(state.services, payload.service);
+  const layers = appendAppLayers(state.layers, [payload.appLayer]);
+
+  if (!payload.layerTreeNode) {
+    return {
+      ...state,
+      services,
+      layers,
+    };
+  }
+
+  const existingNode = state[tree].find(node => node.id === payload.layerTreeNode?.id || node.appLayerId === payload.appLayer.id);
+  if (existingNode) {
+    return {
+      ...state,
+      services,
+      layers,
+    };
+  }
+
+  const treeWithNode = appendLayerTreeNodes(state[tree], [payload.layerTreeNode]);
+  const insertedNode = treeWithNode.find(node => node.id === payload.layerTreeNode?.id);
+  const updatedTree = insertedNode
+    ? placeNodeAfterSibling(treeWithNode, insertedNode.id, payload.siblingLayerTreeNodeId)
+    : treeWithNode;
+
+  return {
+    ...state,
+    services,
+    [tree]: updatedTree,
+    layers: layers.map(layer => {
+      if (layer.id === payload.appLayer.id) {
+        return {
+          ...layer,
+          visible: true,
+        };
+      }
+      return layer;
+    }),
+    selectedLayer: payload.appLayer.id,
   };
 };
 
 const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActions.moveLayerTreeNode>): MapState => {
-  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   const newParentIdx = payload.parentId
     ? state[tree].findIndex(n => n.id === payload.parentId)
     : state[tree].findIndex(n => n.root);
@@ -158,7 +260,7 @@ const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActi
 
 
 const onSetLayerTreeNodeChildren = (state: MapState, payload: ReturnType<typeof MapActions.setLayerTreeNodeChildren>): MapState => {
-  const tree: keyof MapState = payload.isBaseLayerTree ? 'baseLayerTreeNodes' : 'layerTreeNodes';
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   return {
     ...state,
     [tree]: state[tree].map(node => {
@@ -287,6 +389,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.addServices, onAddServices),
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),
+  on(MapActions.addLayerWithServicesToMap, onAddLayerWithServicesToMap),
   on(MapActions.moveLayerTreeNode, onMoveLayerTreeNode),
   on(MapActions.setLayerTreeNodeChildren, onSetLayerTreeNodeChildren),
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),

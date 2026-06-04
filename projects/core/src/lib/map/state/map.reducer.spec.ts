@@ -204,6 +204,45 @@ describe('MapReducer', () => {
     expect(updatedState.layerTreeNodes.map(s => s.id)).toEqual([ '1', '2', '3' ]);
   });
 
+  test('handles MapActions.addLayerWithServicesToMap', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      services: [getServiceModel({ id: 'service-1' })],
+      layers: [getAppLayerModel({ id: 'layer-1', serviceId: 'service-1', visible: true })],
+      layerTreeNodes: [
+        getLayerTreeNode({ id: 'root', root: true, childrenIds: ['level-1'] }),
+        getLayerTreeNode({ id: 'level-1', root: false, childrenIds: ['node-1'] }),
+        getLayerTreeNode({ id: 'node-1', appLayerId: 'layer-1', root: false }),
+      ],
+    };
+    const action = MapActions.addLayerWithServicesToMap({
+      appLayer: getAppLayerModel({ id: 'layer-2', serviceId: 'service-2', visible: false }),
+      service: getServiceModel({ id: 'service-2' }),
+      layerTreeNode: mockGetLayerTreeNode({ id: 'node-2', appLayerId: 'layer-2', root: false }),
+      siblingLayerTreeNodeId: 'node-1',
+    });
+
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.services.map(service => service.id)).toEqual([ 'service-1', 'service-2' ]);
+    expect(updatedState.layers.map(layer => layer.id)).toEqual([ 'layer-1', 'layer-2' ]);
+    expect(updatedState.layers.find(layer => layer.id === 'layer-2')?.visible).toEqual(true);
+    expect(updatedState.layerTreeNodes.map(node => node.id)).toEqual([ 'root', 'level-1', 'node-1', 'node-2' ]);
+    expect(updatedState.layerTreeNodes.find(node => node.id === 'level-1')?.childrenIds).toEqual([ 'node-1', 'node-2' ]);
+    expect(updatedState.selectedLayer).toEqual('layer-2');
+  });
+
+  test('handles MapActions.addLayerWithServicesToMap - existing layer is ignored', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layers: [getAppLayerModel({ id: 'layer-1' })],
+    };
+    const action = MapActions.addLayerWithServicesToMap({
+      appLayer: getAppLayerModel({ id: 'layer-1' }),
+    });
+
+    expect(mapReducer(initialState, action) === initialState).toEqual(true);
+  });
+
   test('handles MapActions.moveLayerTreeNode - move to root', () => {
     const initialState: MapState = {
       ...initialMapState,
