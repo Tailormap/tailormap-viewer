@@ -42,6 +42,7 @@ services:
       - "TAILORMAPAPI_PROXY_PASSTHROUGH_LAYERPATTERNS=${PROXY_PASSTHROUGH_LAYERPATTERNS:-}"
       - "TAILORMAPAPI_PROXY_PASSTHROUGH_HOSTNAMES=${PROXY_PASSTHROUGH_HOSTNAMES:-}"
       - "ADMIN_HASHED_PASSWORD=${ADMIN_HASHED_PASSWORD:-}"
+      - "MANAGEMENT_HASHED_PASSWORD=${MANAGEMENT_HASHED_PASSWORD:-}"
       # The container binds to localhost for running the tailormap container by itself in host network mode
       # Change to 0.0.0.0, so it is reachable by a reverse proxy such as Traefik
       - "SERVER_ADDRESS=0.0.0.0"
@@ -133,7 +134,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.11.3
+    image: prom/prometheus:v3.12.0
     profiles:
       - prometheus
     environment:
@@ -153,6 +154,9 @@ services:
               - source_labels: [__name__]
                 regex: '^tailormap_.*'
                 action: keep
+            basic_auth:
+              username: 'actuator'
+              password: '${MANAGEMENT_PASSWORD:-}'
       # see: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
       # and  https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects
       # keep data for 2 years or 1GB by default

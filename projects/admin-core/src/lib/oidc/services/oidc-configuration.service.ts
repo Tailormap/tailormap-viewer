@@ -126,6 +126,8 @@ export class OIDCConfigurationService implements OnDestroy {
               clientSecretExpiry: oidcConfiguration.clientSecretExpiry,
               issuerUrl: oidcConfiguration.issuerUrl,
               userNameAttribute: oidcConfiguration.userNameAttribute,
+              defaultAuthorities: oidcConfiguration.defaultAuthorities,
+              rolesClaimFilterRegex: oidcConfiguration.rolesClaimFilterRegex,
               image: oidcConfiguration.image,
            };
             return this.updateOIDCConfiguration$(draftOIDCConfiguration.id, draftOIDCConfiguration);
