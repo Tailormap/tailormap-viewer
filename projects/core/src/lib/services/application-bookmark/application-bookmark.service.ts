@@ -70,7 +70,6 @@ export class ApplicationBookmarkService implements OnDestroy {
   public isEmbeddedApplication$() {
     return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR)
       .pipe(
-        tap(embedded => console.debug("embedded from register fragment", embedded)),
         map(embedded => embedded === '1'),
       );
   }

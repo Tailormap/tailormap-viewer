@@ -1,12 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel } from '@tailormap-viewer/api';
+import {
+  FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel, FeatureModel, FeatureModelAttributes,
+} from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
 import { selectLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes } from '../../map';
 import { selectViewerId, selectViewerLoadingState } from '../../state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { catchError, combineLatest, concatMap, first, forkJoin, map, of, take } from 'rxjs';
+import { catchError, combineLatest, concatMap, filter, first, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureInfoFeatureModel, FeatureInfoResponseModel } from '../../components';
@@ -34,11 +36,24 @@ export class FeatureSelectionBookmarkService {
     if (createFilter) {
       this.store$.dispatch(addFilterGroup({ filterGroup }));
     }
-    this.getAndZoomToFeatures(filterGroup, isEmbedded);
+    if (isEmbedded) {
+      const featureGeometries$: Observable<FeatureModel> = this.getFeatures$(filterGroup)
+        .pipe(
+          concatMap(responses => responses.flatMap(response => response.featuresResponse.features)),
+        );
+      this.mapService.renderFeatures$(
+        'feature-selection-layer',
+        featureGeometries$,
+        FeatureStylingHelper.getDefaultHighlightStyle('attribute-list-highlight-style'),
+        { zoomToFeature: true },
+      )
+    } else {
+      this.getFeaturesAndAddToFeatureInfo(filterGroup);
+    }
   }
 
-  private getAndZoomToFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>, isEmbedded: boolean): void {
-    combineLatest([
+  private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string, featuresResponse: FeaturesResponseModel }[]> {
+    return combineLatest([
       this.store$.select(selectViewerId),
       this.store$.select(selectLayers),
     ]).pipe(
@@ -49,10 +64,6 @@ export class FeatureSelectionBookmarkService {
         }
         // Get the CQL filters from the filter group for each layer
         const featuresFilters = CqlFilterHelper.getFilters([filterGroup]);
-
-        if (!isEmbedded) {
-          this.setFeatureInfoLayers(filterGroup.layerIds);
-        }
 
         const featureRequests$ = filterGroup.layerIds.map(layerId => {
           const layer = layers.find(l => l.id === layerId);
@@ -74,8 +85,8 @@ export class FeatureSelectionBookmarkService {
             page: 1,
             geometryInAttributes: true,
           }).pipe(
-            map(response => this.mapToFeatureInfoResponse(response, layerId)),
-            catchError(() => of<FeatureInfoResponseModel>(this.createEmptyResponse(layerId))),
+            map(featuresResponse => ({ layerId, featuresResponse })),
+            catchError(() => of([])),
           );
         });
 
@@ -83,24 +94,25 @@ export class FeatureSelectionBookmarkService {
           map(results => results.flat()), // Combine all features from all layers
         );
       }),
-    ).subscribe(responses => {
-      // Zoom to all features
-      const allFeatures: FeatureInfoFeatureModel[] = responses.flatMap(r => r.features);
-      if (allFeatures.length > 0) {
-        this.mapService.zoomToFeatures(allFeatures);
-      }
+    )
+  }
 
-      // Dispatch feature info loaded actions for each layer
-      if (!isEmbedded) {
-        responses.forEach(response => {
+  private getFeaturesAndAddToFeatureInfo(filterGroup: FilterGroupModel<AttributeFilterModel>) {
+    this.setFeatureInfoLayers(filterGroup.layerIds);
+    this.getFeatures$(filterGroup)
+      .pipe(take(1))
+      .subscribe((responses) => {
+        const featureInfoResponses = responses
+          .map(response => this.mapToFeatureInfoResponse(response.featuresResponse, response.layerId));
+
+        featureInfoResponses.forEach(response => {
           this.store$.dispatch(featureInfoLoaded({
             featureInfo: response,
           }));
         });
+        this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
         this.store$.dispatch(reopenFeatureInfoDialog());
-      } else {
-      }
-    });
+      });
   }
 
   private mapToFeatureInfoResponse(
@@ -112,16 +124,6 @@ export class FeatureSelectionBookmarkService {
       columnMetadata: (response.columnMetadata || []).map(cm => ({ ...cm, layerId })),
       attachmentMetadata: (response.attachmentMetadata || []).map(am => ({ ...am, layerId })),
       template: response.template || null,
-      layerId,
-    };
-  }
-
-  private createEmptyResponse(layerId: string): FeatureInfoResponseModel {
-    return {
-      features: [],
-      columnMetadata: [],
-      attachmentMetadata: [],
-      template: null,
       layerId,
     };
   }
