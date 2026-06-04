@@ -181,7 +181,16 @@ const onAddLayerWithServicesToMap = (
   }
   const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   const services = appendServiceIfMissing(state.services, payload.service);
-  const layers = appendAppLayers(state.layers, [payload.appLayer]);
+  const layers = appendAppLayers(state.layers, [payload.appLayer])
+    .map(layer => {
+      if (layer.id === payload.appLayer.id) {
+        return {
+          ...layer,
+          visible: true,
+        };
+      }
+      return layer;
+    });
 
   if (!payload.layerTreeNode) {
     return {
@@ -210,15 +219,7 @@ const onAddLayerWithServicesToMap = (
     ...state,
     services,
     [tree]: updatedTree,
-    layers: layers.map(layer => {
-      if (layer.id === payload.appLayer.id) {
-        return {
-          ...layer,
-          visible: true,
-        };
-      }
-      return layer;
-    }),
+    layers,
     selectedLayer: payload.appLayer.id,
   };
 };
