@@ -55,6 +55,10 @@ export const addLayerWithServicesToMap = createAction(
     isBaseLayerTree?: boolean;
   }>(),
 );
+export const removeAppLayer = createAction(
+  `${mapActionsPrefix} Remove App Layer`,
+  props<{ appLayerId: string; isBaseLayerTree?: boolean }>(),
+);
 export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
   props<{ nodeId: string; position: 'before' | 'after' | 'inside'; parentId?: string; sibling?: string; isBaseLayerTree?: boolean }>(),

@@ -224,6 +224,33 @@ const onAddLayerWithServicesToMap = (
   };
 };
 
+const onRemoveAppLayer = (state: MapState, payload: ReturnType<typeof MapActions.removeAppLayer>): MapState => {
+  const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
+  const nodeIdx = state[tree].findIndex(n => n.appLayerId === payload.appLayerId);
+  const node = state[tree][nodeIdx];
+  if (nodeIdx === -1 || !node) {
+    return state;
+  }
+  const updatedTree = [
+    ...state[tree].slice(0, nodeIdx),
+    ...state[tree].slice(nodeIdx + 1),
+  ].map(n => {
+    if (n.childrenIds?.includes(node.id)) {
+      return {
+        ...n,
+        childrenIds: n.childrenIds.filter(id => id !== node.id),
+      };
+    }
+    return n;
+  });
+  return {
+    ...state,
+    layers: state.layers.filter(layer => layer.id !== payload.appLayerId),
+    [tree]: updatedTree,
+    selectedLayer: state.selectedLayer === payload.appLayerId ? undefined : state.selectedLayer,
+  };
+};
+
 const onMoveLayerTreeNode = (state: MapState, payload: ReturnType<typeof MapActions.moveLayerTreeNode>): MapState => {
   const tree = getLayerTreeStateKey(payload.isBaseLayerTree);
   const newParentIdx = payload.parentId
@@ -391,6 +418,7 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.addAppLayers, onAddAppLayers),
   on(MapActions.addLayerTreeNodes, onAddLayerTreeNodes),
   on(MapActions.addLayerWithServicesToMap, onAddLayerWithServicesToMap),
+  on(MapActions.removeAppLayer, onRemoveAppLayer),
   on(MapActions.moveLayerTreeNode, onMoveLayerTreeNode),
   on(MapActions.setLayerTreeNodeChildren, onSetLayerTreeNodeChildren),
   on(MapActions.setSelectedBackgroundNodeId, onSetSelectedBackgroundNodeId),
