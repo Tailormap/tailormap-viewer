@@ -1,14 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel, FeatureModel, FeatureModelAttributes,
+  FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel, FeatureModel,
 } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
 import { selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { catchError, combineLatest, concatMap, filter, first, forkJoin, map, Observable, of, take } from 'rxjs';
+import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureInfoResponseModel } from '../../components';
@@ -74,13 +74,13 @@ export class FeatureSelectionBookmarkService {
     ).subscribe();
   }
 
-  private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string, featuresResponse: FeaturesResponseModel }[]> {
+  private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
     return combineLatest([
       this.store$.select(selectViewerId),
       this.store$.select(selectLayers),
     ]).pipe(
       take(1),
-      concatMap(([applicationId, layers]) => {
+      concatMap(([ applicationId, layers ]) => {
         if (!applicationId || !layers) {
           return [];
         }
@@ -116,7 +116,7 @@ export class FeatureSelectionBookmarkService {
           map(results => results.flat()), // Combine all features from all layers
         );
       }),
-    )
+    );
   }
 
   private mapToFeatureInfoResponse(

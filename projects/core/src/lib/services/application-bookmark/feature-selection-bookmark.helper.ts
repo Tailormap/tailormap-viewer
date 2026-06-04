@@ -14,13 +14,13 @@ export class FeatureSelectionBookmarkHelper {
     const parts = bookmark.split(this.PART_SEPARATOR);
     const layersString: string | null = parts.find(part => part.startsWith('layers='))?.substring('layers='.length) || null;
     const attributeName: string | null = parts.find(
-      part => part.startsWith('attributeName=')
+      part => part.startsWith('attributeName='),
     )?.substring('attributeName='.length) || null;
     const attributeValue: string | null = parts.find(
-      part => part.startsWith('attributeValue=')
+      part => part.startsWith('attributeValue='),
     )?.substring('attributeValue='.length) || null;
     const createFilter: boolean = parts.find(
-      part => part.startsWith('createFilter=')
+      part => part.startsWith('createFilter='),
     )?.substring('createFilter='.length) === 'true' || false;
     if (!attributeName || !attributeValue || !layersString) {
       return null;
@@ -31,7 +31,7 @@ export class FeatureSelectionBookmarkHelper {
       .map(layerPair => layerPair.trim())
       .filter(layerPair => layerPair.length > 0)
       .map(layerPair => {
-        const [serviceId, layerId] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
+        const [ serviceId, layerId ] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
         if (!serviceId || !layerId) {
           throw new Error(`Invalid layer format: ${layerPair}`);
         }
