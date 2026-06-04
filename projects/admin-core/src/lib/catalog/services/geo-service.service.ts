@@ -9,7 +9,8 @@ import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, upda
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 import {
-  selectCatalogLoadStatus, selectDraftGeoService, selectDraftGeoServiceLoadStatus, selectGeoServiceById, selectGeoServicesAndLayers,
+  selectCatalogLoadStatus, selectDraftGeoService, selectDraftGeoServiceLoadStatus, selectGeoServiceById, selectGeoServices,
+  selectGeoServicesAndLayers,
 } from '../state/catalog.selectors';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ApplicationService } from '../../application/services/application.service';
@@ -195,16 +196,25 @@ export class GeoServiceService {
       );
   }
 
+  public getGeoServices$(): Observable<ExtendedGeoServiceModel[]> {
+    return this.ensureLoadedCatalog$()
+      .pipe(switchMap(() => this.store$.select(selectGeoServices)));
+  }
+
   public getGeoServicesAndLayers$(): Observable<{ services: ExtendedGeoServiceModel[]; layers: ExtendedGeoServiceLayerModel[] }> {
+    return this.ensureLoadedCatalog$()
+      .pipe(switchMap(() => this.store$.select(selectGeoServicesAndLayers)));
+  }
+
+  private ensureLoadedCatalog$() {
     return this.store$.select(selectCatalogLoadStatus)
       .pipe(
         tap(loadStatus => {
-            if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-              this.store$.dispatch(loadCatalog());
-            }
+          if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
+            this.store$.dispatch(loadCatalog());
+          }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-        switchMap(() => this.store$.select(selectGeoServicesAndLayers)),
       );
   }
 
