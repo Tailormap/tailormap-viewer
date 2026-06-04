@@ -1,6 +1,9 @@
-import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterGroupModel, FilterTypeEnum } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, AttributeType, FeaturesResponseModel, FilterConditionEnum, FilterGroupModel, FilterTypeEnum,
+} from '@tailormap-viewer/api';
 import { FeatureSelectionBookmarkFragment } from './application-bookmark-fragments';
 import { v4 as uuidv4 } from 'uuid';
+import { FeatureInfoResponseModel } from '../../components';
 
 export class FeatureSelectionBookmarkHelper {
   private static PART_SEPARATOR = ';';
@@ -31,11 +34,11 @@ export class FeatureSelectionBookmarkHelper {
       .map(layerPair => layerPair.trim())
       .filter(layerPair => layerPair.length > 0)
       .map(layerPair => {
-        const [ serviceId, layerId ] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
-        if (!serviceId || !layerId) {
+        const [ serviceId, layerName ] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
+        if (!serviceId || !layerName) {
           throw new Error(`Invalid layer format: ${layerPair}`);
         }
-        return { serviceId, layerId };
+        return { serviceId, layerName: layerName };
       });
 
     return {
@@ -46,49 +49,54 @@ export class FeatureSelectionBookmarkHelper {
     };
   }
 
-  public static createFilterFromBookmarkFragment(
-    featureSelectionFragment: FeatureSelectionBookmarkFragment | null,
+  public static createFilterGroup(
+    appLayerIds: string[],
+    attributeName: string,
+    attributeValue: string,
   ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } | null {
-    if (!featureSelectionFragment) {
-      return null;
-    }
-
-    if (!featureSelectionFragment.layers || featureSelectionFragment.layers.length === 0) {
+    if (!appLayerIds || appLayerIds.length === 0) {
       return {
         errorMessage: 'No layers specified in FeatureSelectionBookmark',
       };
     }
 
-    if (!featureSelectionFragment.attributeName || !featureSelectionFragment.attributeValue) {
+    if (!attributeName || !attributeValue) {
       return {
         errorMessage: 'Attribute name and value are required in FeatureSelectionBookmark',
       };
     }
 
-    // todo: properly get correct appLayerIds
-    const layerIds = featureSelectionFragment.layers.map(layer =>
-      `lyr:${layer.serviceId}:${layer.layerId}`,
-    );
-
     return {
       id: uuidv4(),
       source: 'FeatureSelectionBookmark',
-      layerIds,
+      layerIds: appLayerIds,
       type: FilterTypeEnum.ATTRIBUTE,
       operator: 'AND',
       filters: [
         {
           id: uuidv4(),
           type: FilterTypeEnum.ATTRIBUTE,
-          attribute: featureSelectionFragment.attributeName,
+          attribute: attributeName,
           attributeType: AttributeType.STRING,
           condition: FilterConditionEnum.STRING_EQUALS_KEY,
-          value: [featureSelectionFragment.attributeValue],
+          value: [attributeValue],
           invertCondition: false,
           caseSensitive: false,
         },
       ],
     };
+  }
 
+  public static featuresToFeatureInfo(
+    response: FeaturesResponseModel,
+    layerId: string,
+  ): FeatureInfoResponseModel {
+    return {
+      features: (response.features || []).map(f => ({ ...f, layerId })),
+      columnMetadata: (response.columnMetadata || []).map(cm => ({ ...cm, layerId })),
+      attachmentMetadata: (response.attachmentMetadata || []).map(am => ({ ...am, layerId })),
+      template: response.template || null,
+      layerId,
+    };
   }
 }

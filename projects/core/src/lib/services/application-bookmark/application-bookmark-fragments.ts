@@ -121,7 +121,7 @@ export type FeatureSelectionBookmarkFragment = FeatureSelectionBookmarkData;
 export interface FeatureSelectionBookmarkData {
   layers: Array<{
     serviceId: string;
-    layerId: string; // layer id in the service, not the appLayerId
+    layerName: string; // layer id in the service, not the appLayerId
   }>;
   attributeName: string;
   attributeValue: string;

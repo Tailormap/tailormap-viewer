@@ -9,7 +9,7 @@ import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
-  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkFragment,
+  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkFragment, FeatureSelectionBookmarkData,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerStyle, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -234,19 +234,9 @@ export class ApplicationBookmarkService implements OnDestroy {
       filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
       withLatestFrom(this.isEmbeddedApplication$()),
     ).subscribe(([ featureSelectionFragmentString, isEmbedded ]) => {
-        const featureSelectionFragment = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
+        const featureSelectionFragment: FeatureSelectionBookmarkData | null = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearFilter();
-        if (featureSelectionFragment === null) {
-          return;
-        }
-        const createFilter: boolean | null = featureSelectionFragment.createFilter || null;
-        const filterOrError = FeatureSelectionBookmarkHelper.createFilterFromBookmarkFragment(featureSelectionFragment);
-        if (filterOrError && !('errorMessage' in filterOrError)) {
-          this.featureSelectionBookmarkService.applyFilter(filterOrError, createFilter || false, isEmbedded);
-        } else if (filterOrError && 'errorMessage' in filterOrError) {
-          // todo: show error to user instead of console
-          console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);
-        }
+        this.featureSelectionBookmarkService.applyBookmarkFragment(featureSelectionFragment, isEmbedded);
       });
   }
 

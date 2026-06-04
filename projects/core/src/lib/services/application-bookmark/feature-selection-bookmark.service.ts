@@ -5,7 +5,7 @@ import {
 } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
-import { selectLayers, selectVisibleLayersWithAttributes } from '../../map';
+import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -13,6 +13,9 @@ import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureInfoResponseModel } from '../../components';
 import { FeatureStylingHelper } from '../../shared';
+import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
+import { FeatureSelectionBookmarkData } from './application-bookmark-fragments';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +32,25 @@ export class FeatureSelectionBookmarkService {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
       this.currentFilterGroupId = null;
     }
+  }
+
+  public applyBookmarkFragment(fragment: FeatureSelectionBookmarkData | null, isEmbedded: boolean) {
+    if (!fragment) {
+      return;
+    }
+    this.store$.select(selectAppLayerIds(fragment.layers))
+      .pipe(
+        take(1),
+        tap(appLayerIds => console.debug(`Applying filter for layers: ${appLayerIds.join(', ')}`)),
+        map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue))
+      ).subscribe(filterOrError => {
+        if (filterOrError && !('errorMessage' in filterOrError)) {
+          this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
+        } else if (filterOrError && 'errorMessage' in filterOrError) {
+          // todo: show error to user instead of console
+          console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);
+        }
+      });
   }
 
   public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>, createFilter: boolean, isEmbedded: boolean): void {
@@ -49,7 +71,7 @@ export class FeatureSelectionBookmarkService {
       .pipe(take(1))
       .subscribe((responses) => {
         const featureInfoResponses = responses
-          .map(response => this.mapToFeatureInfoResponse(response.featuresResponse, response.layerId));
+          .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
 
         featureInfoResponses.forEach(response => {
           this.store$.dispatch(featureInfoLoaded({
@@ -117,19 +139,6 @@ export class FeatureSelectionBookmarkService {
         );
       }),
     );
-  }
-
-  private mapToFeatureInfoResponse(
-    response: FeaturesResponseModel,
-    layerId: string,
-  ): FeatureInfoResponseModel {
-    return {
-      features: (response.features || []).map(f => ({ ...f, layerId })),
-      columnMetadata: (response.columnMetadata || []).map(cm => ({ ...cm, layerId })),
-      attachmentMetadata: (response.attachmentMetadata || []).map(am => ({ ...am, layerId })),
-      template: response.template || null,
-      layerId,
-    };
   }
 
   private setFeatureInfoLayers(layerIds: string[]) {

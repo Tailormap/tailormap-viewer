@@ -196,9 +196,7 @@ export class MapService {
 
   public zoomToFeatures(features: FeatureModelType | Array<FeatureModelType>) {
     this.map.getProjection$().pipe(take(1)).subscribe(projection => {
-      console.debug("zoomToFeatures:", features, "projection:", projection.getCode());
       const featureModels = FeatureHelper.getFeatures(features, projection.getCode());
-      console.debug("featureModels:", featureModels);
       this.map.zoomToFeatures(featureModels);
     });
   }
