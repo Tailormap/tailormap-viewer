@@ -10,7 +10,7 @@ import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.compo
 import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getLayerTreeNode } from '@tailormap-viewer/api';
+import { getLayerTreeNode, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList } from '../../../map/state/map.selectors';
 
 describe('TerrainControlsComponent', () => {
@@ -39,6 +39,7 @@ describe('TerrainControlsComponent', () => {
             { selector: selectInitiallySelectedTerrainNodes, value: [ getLayerTreeNode({ name: 'Test' }), getLayerTreeNode({ name: 'Test 2' }) ] },
           ],
         }),
+        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
     });
     expect(screen.findByText('Opacity'));

@@ -3,7 +3,7 @@ import { CoordinateLinkWindowComponent } from './coordinate-link-window.componen
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { of, Subject } from 'rxjs';
-import { CoordinateLinkWindowConfigModel } from '@tailormap-viewer/api';
+import { CoordinateLinkWindowConfigModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { CoordinateHelper } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
@@ -32,6 +32,7 @@ const setup = async (withConfig?: boolean) => {
     providers: [
       { provide: Store, useValue: storeMock },
       mapServiceMock.provider,
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
     ],
   });
   return {

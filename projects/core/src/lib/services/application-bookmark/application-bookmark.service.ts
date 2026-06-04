@@ -68,9 +68,7 @@ export class ApplicationBookmarkService implements OnDestroy {
 
   public isEmbeddedApplication$() {
     return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR)
-      .pipe(
-        map(embedded => embedded === '1'),
-      );
+      .pipe(map(embedded => embedded === '1'));
   }
 
   public getMobileLayoutOption$(): Observable<'enabled' | 'disabled' | 'auto'> {
