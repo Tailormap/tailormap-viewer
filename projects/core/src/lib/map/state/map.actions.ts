@@ -45,6 +45,16 @@ export const addLayerTreeNodes = createAction(
   `${mapActionsPrefix} Add Layer Tree Nodes`,
   props<{ layerTreeNodes: LayerTreeNodeModel[]; isBaseLayerTree?: boolean }>(),
 );
+export const addLayerWithServicesToMap = createAction(
+  `${mapActionsPrefix} Add Layer with Services To Map`,
+  props<{
+    appLayer: AppLayerModel;
+    service?: ServiceModel;
+    layerTreeNode?: LayerTreeNodeModel;
+    siblingLayerTreeNodeId?: string;
+    isBaseLayerTree?: boolean;
+  }>(),
+);
 export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
   props<{ nodeId: string; position: 'before' | 'after' | 'inside'; parentId?: string; sibling?: string; isBaseLayerTree?: boolean }>(),
