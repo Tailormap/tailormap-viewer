@@ -479,4 +479,17 @@ describe('MapReducer', () => {
     expect(updatedState.layers[1].temporaryLayerName).toEqual(undefined);
   });
 
+  test('handles MapActions.updateAppLayerTitle', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layers: [
+        getAppLayerModel({ id: '1', title: 'TEST' }),
+        getAppLayerModel({ id: '2', title: 'TEST2' }),
+      ],
+    };
+    const action = MapActions.updateAppLayerTitle({ id: '1', title: 'TEST WITH SOMETHING' });
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.layers[0].title).toEqual('TEST WITH SOMETHING');
+  });
+
 });
