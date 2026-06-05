@@ -1,21 +1,26 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
-import { selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { selectAttributeListTabs, selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
+import { catchError, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { selectViewerId } from '../../../state';
 import { GetStatisticResponse, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticColumnModel } from '../models/attribute-list-statistic-column.model';
-import { FilterService } from '../../../filter';
+import { FilterService, LayerFeaturesFilters } from '../../../filter';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+interface StatisticParam {
+  type: StatisticType;
+  column: string;
+  dataType: string;
+}
 
 interface LoadStatisticParams {
-  type: StatisticType;
-  columnName: string;
-  dataType: string;
   applicationId: string;
   layerId: string;
+  statistics: StatisticParam[];
 }
 
 @Injectable({
@@ -26,6 +31,7 @@ export class AttributeListStatisticsService {
   private store$ = inject(Store);
   private attributeListManagerService = inject(AttributeListManagerService);
   private filterService = inject(FilterService);
+  private destroyRef = inject(DestroyRef);
 
   public canLoadStatistics$ = combineLatest([
     this.store$.select(selectViewerId),
@@ -57,6 +63,40 @@ export class AttributeListStatisticsService {
     return statisticsMap.get(key ?? '') || [];
   }));
 
+  constructor() {
+    this.filterService.getChangedFilters$()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        withLatestFrom(this.store$.select(selectViewerId), this.store$.select(selectAttributeListTabs)),
+      )
+      .subscribe(([ changedFilters, viewerId, tabs ]) => {
+        if (!tabs || tabs.length === 0 || !viewerId) {
+          return;
+        }
+        const changedLayers = Array.from(changedFilters.keys());
+        changedLayers.forEach(layerId => {
+          const tab = tabs.find(t => t.layerId === layerId);
+          if (!tab) {
+            return;
+          }
+          const key = this.getStatisticsKey(viewerId, layerId);
+          const filter = changedFilters.get(layerId);
+          const currentStatistics = this.statistics.value.get(key) || [];
+          if (currentStatistics.length === 0) {
+            return;
+          }
+          const updatedStatistics = currentStatistics.map(statistic => ({
+            ...statistic,
+            isLoading: true,
+          }));
+          const updatedMap = new Map(this.statistics.value);
+          updatedMap.set(key, updatedStatistics);
+          this.statistics.next(updatedMap);
+          this.refreshStatistics$({ key, viewerId, layerId, tabSourceId: tab.tabSourceId, statistics: currentStatistics, filter });
+        });
+      });
+  }
+
   private getStatisticsKey(applicationId: string, layerId: string) {
     return `${applicationId}_${layerId}`;
   }
@@ -73,14 +113,22 @@ export class AttributeListStatisticsService {
           if (!selectedTab || !selectedTab.layerId || applicationId === null || !selectedData) {
             return of(null);
           }
-          const loadParams: LoadStatisticParams = { type: params.type, columnName: params.columnName, dataType: params.dataType, applicationId, layerId: selectedTab.layerId };
+          const loadParams: LoadStatisticParams = {
+            statistics: [{
+              type: params.type,
+              column: params.columnName,
+              dataType: params.dataType,
+            }],
+            applicationId,
+            layerId: selectedTab.layerId,
+          };
           const key = this.getStatisticsKey(loadParams.applicationId, loadParams.layerId);
           const layerStatistics = this.statistics.value.get(key) || [];
           if (params.type === StatisticType.NONE) {
             return this.clearStatistic$(layerStatistics, key, params);
           }
           const currentStatistic = layerStatistics?.find(s => {
-            return s.dataType === loadParams.dataType && s.columnName === loadParams.columnName && s.type === loadParams.type;
+            return s.dataType === params.dataType && s.columnName === params.columnName && s.type === params.type;
           });
           if (currentStatistic) {
             // already loaded
@@ -99,8 +147,8 @@ export class AttributeListStatisticsService {
           return this.fetchStatistic$(loadParams, selectedTab);
         }),
       )
-      .subscribe((statistic: { params: LoadStatisticParams; response: GetStatisticResponse | null } | null) => {
-        if (!statistic || !statistic.params) {
+      .subscribe((statistic: { applicationId: string; layerId: string; response: GetStatisticResponse | null } | null) => {
+        if (!statistic) {
           return;
         }
         this.updateStatistic(statistic);
@@ -128,32 +176,57 @@ export class AttributeListStatisticsService {
     return this.attributeListManagerService.getStatistic$(selectedTab.tabSourceId, {
       applicationId: loadParams.applicationId,
       layerId: loadParams.layerId,
-      column: loadParams.columnName,
-      type: loadParams.type,
+      statistics: loadParams.statistics,
       filter,
     })
       .pipe(
         take(1),
-        map(response => ({ response, params: loadParams })),
-        catchError(() => of({ response: null, params: loadParams })),
+        map(response => ({ response, applicationId: loadParams.applicationId, layerId: loadParams.layerId  })),
+        catchError(() => of({ response: null, applicationId: loadParams.applicationId, layerId: loadParams.layerId  })),
       );
   }
 
-  private updateStatistic(statistic: { params: LoadStatisticParams; response: GetStatisticResponse | null }) {
-    const key = this.getStatisticsKey(statistic.params.applicationId, statistic.params.layerId);
+  private refreshStatistics$(params: {
+    key: string;
+    viewerId: string;
+    layerId: string;
+    tabSourceId: string;
+    statistics: AttributeListStatisticColumnModel[];
+    filter: LayerFeaturesFilters | null | undefined;
+  }) {
+    return this.attributeListManagerService.getStatistic$(params.tabSourceId, {
+      applicationId: params.viewerId,
+      layerId: params.layerId,
+      statistics: params.statistics.map(s => ({
+        column: s.columnName,
+        type: s.type,
+      })),
+      filter: params.filter,
+    })
+      .pipe(
+        take(1),
+        catchError(() => of(null)),
+      )
+      .subscribe(response => {
+        this.updateStatistic({ applicationId: params.viewerId, layerId: params.layerId, response });
+      });
+  }
+
+  private updateStatistic(statistic: { applicationId: string; layerId: string; response: GetStatisticResponse | null }) {
+    const key = this.getStatisticsKey(statistic.applicationId, statistic.layerId);
     const currentStatistics = this.statistics.value.get(key) || [];
     const updatedStatisticsForLayer: AttributeListStatisticColumnModel[] = currentStatistics.map(c => {
-      if (c.columnName === statistic.params.columnName && c.dataType === statistic.params.dataType && c.type === statistic.params.type) {
-        const hasError = !statistic.response || !statistic.response.success;
-        const value = statistic.response?.result ?? null;
-        return {
-          ...c,
-          value: hasError ? null : value,
-          hasError,
-          isLoading: false,
-        };
+      const resultItem = statistic.response?.result.find(r => c.columnName === r.column && c.type === r.type);
+      if (resultItem === undefined) {
+        return c;
       }
-      return c;
+      const hasError = !statistic.response || !statistic.response.success;
+      return {
+        ...c,
+        value: hasError ? null : resultItem.value,
+        hasError,
+        isLoading: false,
+      };
     });
     const updatedStatistics = new Map(this.statistics.value);
     updatedStatistics.set(key, updatedStatisticsForLayer);

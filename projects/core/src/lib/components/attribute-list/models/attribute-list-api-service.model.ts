@@ -7,7 +7,7 @@ export enum StatisticType {
   SUM = 'SUM',
   MIN = 'MIN',
   MAX = 'MAX',
-  AVERAGE = 'AVERAGE',
+  AVERAGE = 'AVG',
   COUNT = 'COUNT',
   NONE = 'NONE',
 }
@@ -216,13 +216,18 @@ export interface GetStatisticParams {
    */
   layerId: string;
   /**
-   * Key of the column
+   * List of statistics to fetch
    */
-  column: string;
-  /**
-   * Type of statistic needed
-   */
-  type: StatisticType;
+  statistics: Array<{
+    /**
+     * Key of the column
+     */
+    column: string;
+    /**
+     * Type of statistic needed
+     */
+    type: StatisticType;
+  }>;
   /**
    * Optional filters to apply when fetching features, grouped by feature type.
    * Map keys are feature type names, and values are CQL filter strings.
@@ -236,7 +241,20 @@ export interface GetStatisticResponse {
   /**
    * The statistic value. May be null if the statistic could not be calculated successfully.
    */
-  result: number | null;
+  result: Array<{
+    /**
+     * Key of the column
+     */
+    column: string;
+    /**
+     * Type of statistic needed
+     */
+    type: StatisticType;
+    /**
+     * The statistical value
+     */
+    value: number;
+  }>;
   /**
    * Indicates whether the statistic was successfully calculated. If false, the result may be null or invalid.
    */

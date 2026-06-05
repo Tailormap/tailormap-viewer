@@ -45,6 +45,20 @@ export const addLayerTreeNodes = createAction(
   `${mapActionsPrefix} Add Layer Tree Nodes`,
   props<{ layerTreeNodes: LayerTreeNodeModel[]; isBaseLayerTree?: boolean }>(),
 );
+export const addLayerWithServicesToMap = createAction(
+  `${mapActionsPrefix} Add Layer with Services To Map`,
+  props<{
+    appLayer: AppLayerModel;
+    service?: ServiceModel;
+    layerTreeNode?: LayerTreeNodeModel;
+    siblingLayerTreeNodeId?: string;
+    isBaseLayerTree?: boolean;
+  }>(),
+);
+export const removeAppLayer = createAction(
+  `${mapActionsPrefix} Remove App Layer`,
+  props<{ appLayerId: string; isBaseLayerTree?: boolean }>(),
+);
 export const moveLayerTreeNode = createAction(
   `${mapActionsPrefix} Move Layer Tree Nodes`,
   props<{ nodeId: string; position: 'before' | 'after' | 'inside'; parentId?: string; sibling?: string; isBaseLayerTree?: boolean }>(),
@@ -85,4 +99,8 @@ export const toggleIn3dView = createAction(
 export const updateTemporaryLayerName = createAction(
   `${mapActionsPrefix} Update Temporary Layer Name`,
   props<{ id: string; temporaryLayerName: string | undefined }>(),
+);
+export const updateAppLayerTitle = createAction(
+  `${mapActionsPrefix} Update App Layer Title`,
+  props<{ id: string; title: string }>(),
 );

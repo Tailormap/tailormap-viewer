@@ -182,7 +182,7 @@ export class AttributeListManagerService implements OnDestroy {
   public getStatistic$(tabSourceId: string, params: GetStatisticParams): Observable<GetStatisticResponse> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source || typeof source?.dataLoader.getStatisticValue$ !== 'function') {
-      return of({ result: null, success: false });
+      return of({ result: [], success: false });
     }
     return source.dataLoader.getStatisticValue$(params);
   }
