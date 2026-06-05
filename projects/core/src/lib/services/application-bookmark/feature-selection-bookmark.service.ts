@@ -7,15 +7,15 @@ import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
 import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { catchError, combineLatest, concatMap, forkJoin, map, Observable, of, take } from 'rxjs';
+import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
-import { FeatureInfoResponseModel } from '../../components';
 import { FeatureStylingHelper } from '../../shared';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { FeatureSelectionBookmarkData } from './application-bookmark-fragments';
 import { tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,7 @@ export class FeatureSelectionBookmarkService {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
+  private snackBar = inject(MatSnackBar);
 
   private currentFilterGroupId: string | null = null;
 
@@ -41,14 +42,12 @@ export class FeatureSelectionBookmarkService {
     this.store$.select(selectAppLayerIds(fragment.layers))
       .pipe(
         take(1),
-        tap(appLayerIds => console.debug(`Applying filter for layers: ${appLayerIds.join(', ')}`)),
         map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue))
       ).subscribe(filterOrError => {
         if (filterOrError && !('errorMessage' in filterOrError)) {
           this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
         } else if (filterOrError && 'errorMessage' in filterOrError) {
-          // todo: show error to user instead of console
-          console.error(`ObjectSelectionBookmark Error: ${filterOrError.errorMessage}`);
+          this.showSnackbarMessage(filterOrError.errorMessage);
         }
       });
   }
@@ -68,7 +67,16 @@ export class FeatureSelectionBookmarkService {
   private getFeaturesAndAddToFeatureInfo(filterGroup: FilterGroupModel<AttributeFilterModel>) {
     this.setFeatureInfoLayers(filterGroup.layerIds);
     this.getFeatures$(filterGroup)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        filter(responses => {
+          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+            return false;
+          }
+          return true;
+        }),
+      )
       .subscribe((responses) => {
         const featureInfoResponses = responses
           .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
@@ -86,6 +94,11 @@ export class FeatureSelectionBookmarkService {
   private getAndHighlightFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>) {
     const featureGeometries$: Observable<FeatureModel> = this.getFeatures$(filterGroup)
       .pipe(
+        tap(responses => {
+          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+          }
+        }),
         concatMap(responses => responses.flatMap(response => response.featuresResponse.features)),
       );
     this.mapService.renderFeatures$(
@@ -154,5 +167,15 @@ export class FeatureSelectionBookmarkService {
           }));
         this.store$.dispatch(setFeatureInfoLayers({ layers: featureInfoLayers }));
       });
+  }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 }

@@ -56,13 +56,17 @@ export class FeatureSelectionBookmarkHelper {
   ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } | null {
     if (!appLayerIds || appLayerIds.length === 0) {
       return {
-        errorMessage: 'No layers specified in FeatureSelectionBookmark',
+        errorMessage: $localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`,
       };
     }
-
     if (!attributeName || !attributeValue) {
       return {
-        errorMessage: 'Attribute name and value are required in FeatureSelectionBookmark',
+        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-name:No attribute name specified Feature Selection Bookmark`,
+      };
+    }
+    if (!attributeValue) {
+      return {
+        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-value:No attribute value specified Feature Selection Bookmark`,
       };
     }
 
