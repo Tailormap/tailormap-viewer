@@ -5,6 +5,7 @@ import { ChangePositionHelper, FilterHelper, LoadingStateEnum } from '@tailormap
 import { LayerTreeNodeHelper } from '../helpers/layer-tree-node.helper';
 import { LayerModelHelper } from '../helpers/layer-model.helper';
 import { AppLayerModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
+import { AppLayerStateModel } from '../models';
 
 type LayerTreeStateKey = 'baseLayerTreeNodes' | 'layerTreeNodes';
 
@@ -56,7 +57,7 @@ const placeNodeAfterSibling = (
   });
 };
 
-const updateLayer = (state: MapState, layerId: string, cb: (appLayer: AppLayerModel) => AppLayerModel) => {
+const updateLayer = (state: MapState, layerId: string, cb: (appLayer: AppLayerStateModel) => AppLayerStateModel) => {
   const layerIdx = state.layers.findIndex(layer => layer.id === layerId);
   if (layerIdx === -1) {
     return state;
