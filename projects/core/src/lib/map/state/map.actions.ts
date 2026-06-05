@@ -100,3 +100,7 @@ export const updateTemporaryLayerName = createAction(
   `${mapActionsPrefix} Update Temporary Layer Name`,
   props<{ id: string; temporaryLayerName: string | undefined }>(),
 );
+export const updateAppLayerTitle = createAction(
+  `${mapActionsPrefix} Update Layer Title`,
+  props<{ id: string; title: string }>(),
+);

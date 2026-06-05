@@ -56,6 +56,21 @@ const placeNodeAfterSibling = (
   });
 };
 
+const updateLayer = (state: MapState, layerId: string, cb: (appLayer: AppLayerModel) => AppLayerModel) => {
+  const layerIdx = state.layers.findIndex(layer => layer.id === layerId);
+  if (layerIdx === -1) {
+    return state;
+  }
+  return {
+    ...state,
+    layers: [
+      ...state.layers.slice(0, layerIdx),
+      cb({ ...state.layers[layerIdx] }),
+      ...state.layers.slice(layerIdx + 1),
+    ],
+  };
+};
+
 const onLoadMap = (state: MapState): MapState => ({
   ...state,
   loadStatus: LoadingStateEnum.LOADING,
@@ -388,21 +403,20 @@ const onUpdateTemporaryLayerName = (
   state: MapState,
   payload: ReturnType<typeof MapActions.updateTemporaryLayerName>,
 ): MapState => {
-  const layerIdx = state.layers.findIndex(layer => layer.id === payload.id);
-  if (layerIdx === -1) {
-    return state;
-  }
-  return {
-    ...state,
-    layers: [
-      ...state.layers.slice(0, layerIdx),
-      {
-        ...state.layers[layerIdx],
-        temporaryLayerName: payload.temporaryLayerName,
-      },
-      ...state.layers.slice(layerIdx + 1),
-    ],
-  };
+  return updateLayer(state, payload.id, layer => ({
+    ...layer,
+    temporaryLayerName: payload.temporaryLayerName,
+  }));
+};
+
+const onUpdateAppLayerTitle = (
+  state: MapState,
+  payload: ReturnType<typeof MapActions.updateAppLayerTitle>,
+): MapState => {
+  return updateLayer(state, payload.id, layer => ({
+    ...layer,
+    title: payload.title,
+  }));
 };
 
 const mapReducerImpl = createReducer<MapState>(
@@ -429,5 +443,6 @@ const mapReducerImpl = createReducer<MapState>(
   on(MapActions.updateLayerTreeNodes, onUpdateLayerTreeNodes),
   on(MapActions.toggleIn3dView, onToggleIn3DView),
   on(MapActions.updateTemporaryLayerName, onUpdateTemporaryLayerName),
+  on(MapActions.updateAppLayerTitle, onUpdateAppLayerTitle),
 );
 export const mapReducer = (state: MapState | undefined, action: Action) => mapReducerImpl(state, action);
