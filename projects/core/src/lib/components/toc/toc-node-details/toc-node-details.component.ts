@@ -1,9 +1,11 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef,
+  Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject, viewChild, ViewContainerRef,
+  effect,
 } from '@angular/core';
-import { BrowserHelper } from '@tailormap-viewer/shared';
+import { BrowserHelper, DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
+import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
 
 @Component({
   selector: 'tm-toc-node-details',
@@ -13,6 +15,10 @@ import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node
   standalone: false,
 })
 export class TocNodeDetailsComponent implements OnInit {
+
+  private tocFeatureRegistrationService = inject(TocFeatureRegistrationService);
+
+  private detailsContent = viewChild('detailsContent', { read: ViewContainerRef });
 
   @Input()
   public node: LayerTreeNodeWithLayerModel | null | undefined = null;
@@ -25,6 +31,19 @@ export class TocNodeDetailsComponent implements OnInit {
 
   private panelHeightSubject = new BehaviorSubject<number | undefined>(undefined);
   public panelHeight$ = this.panelHeightSubject.asObservable().pipe(map(height => height ? `${height}px` : undefined));
+
+  constructor() {
+    effect(() => {
+      const detailsContent = this.detailsContent();
+      const components = this.tocFeatureRegistrationService.registeredAdditionalFeatures();
+      if (!detailsContent) {
+        return;
+      }
+      DynamicComponentsHelper.createComponentsForPosition(components, {
+         'layerDetails': detailsContent,
+      });
+    });
+  }
 
   public ngOnInit(): void {
     this.updateHeight();
