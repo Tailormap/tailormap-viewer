@@ -39,7 +39,7 @@ export class ApplicationBookmarkFragments {
     'mobile',
   );
 
-  public static FEATURE_SELECTION_BOOKMARK_DESCRIPTOR = new BookmarkJsonFragmentDescriptor(
+  public static FEATURE_SELECTION_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
     'featureselection',
   );
 

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   FilterGroupModel, AttributeFilterModel, TAILORMAP_API_V1_SERVICE, FeaturesResponseModel, FeatureModel,
@@ -8,14 +8,17 @@ import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filt
 import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
-import { featureInfoLoaded, reopenFeatureInfoDialog, setFeatureInfoLayers } from '../../components/feature-info/state/feature-info.actions';
+import {
+  featureInfoLoaded, hideFeatureInfoDialog, reopenFeatureInfoDialog, setFeatureInfoLayers,
+} from '../../components/feature-info/state/feature-info.actions';
 import { FeatureStylingHelper } from '../../shared';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { FeatureSelectionBookmarkData } from './application-bookmark-fragments';
 import { tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -25,14 +28,30 @@ export class FeatureSelectionBookmarkService {
   private mapService = inject(MapService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
   private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
 
   private currentFilterGroupId: string | null = null;
+  private selectedFeatures: BehaviorSubject<FeatureModel[]> = new BehaviorSubject<FeatureModel[]>([]);
+  private selectedFeatures$ = this.selectedFeatures.asObservable();
 
-  public clearFilter(): void {
+  private static FEATURE_SELECTION_BOOKMARK_LAYER_NAME = 'feature-selection-bookmark-layer';
+
+  constructor() {
+    this.mapService.renderFeatures$(
+      FeatureSelectionBookmarkService.FEATURE_SELECTION_BOOKMARK_LAYER_NAME,
+      this.selectedFeatures$,
+      FeatureStylingHelper.getDefaultHighlightStyle('attribute-list-highlight-style'),
+      { zoomToFeature: true },
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+  }
+
+  public clearSelection(): void {
+    this.store$.dispatch(hideFeatureInfoDialog());
     if (this.currentFilterGroupId) {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
       this.currentFilterGroupId = null;
     }
+    this.selectedFeatures.next([]);
   }
 
   public applyBookmarkFragment(fragment: FeatureSelectionBookmarkData | null, isEmbedded: boolean) {
@@ -42,7 +61,7 @@ export class FeatureSelectionBookmarkService {
     this.store$.select(selectAppLayerIds(fragment.layers))
       .pipe(
         take(1),
-        map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue))
+        map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue)),
       ).subscribe(filterOrError => {
         if (filterOrError && !('errorMessage' in filterOrError)) {
           this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
@@ -92,21 +111,16 @@ export class FeatureSelectionBookmarkService {
   }
 
   private getAndHighlightFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>) {
-    const featureGeometries$: Observable<FeatureModel> = this.getFeatures$(filterGroup)
+    this.getFeatures$(filterGroup)
       .pipe(
         tap(responses => {
           if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
             this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
           }
         }),
-        concatMap(responses => responses.flatMap(response => response.featuresResponse.features)),
-      );
-    this.mapService.renderFeatures$(
-      'feature-selection-layer',
-      featureGeometries$,
-      FeatureStylingHelper.getDefaultHighlightStyle('attribute-list-highlight-style'),
-      { zoomToFeature: true },
-    ).subscribe();
+        map(responses => responses.flatMap(response => response.featuresResponse.features)),
+      )
+      .subscribe(features => this.selectedFeatures.next(features));
   }
 
   private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {

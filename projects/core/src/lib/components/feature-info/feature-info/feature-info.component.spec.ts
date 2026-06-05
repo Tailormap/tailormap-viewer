@@ -54,7 +54,7 @@ describe('FeatureInfoComponent', () => {
   test('should render', async () => {
     const { mapServiceMock, mockSelect } = await setup();
     expect(mapServiceMock.mapService.createTool$).toHaveBeenCalled();
-    const highlightArgs = Array.from(mapServiceMock.mapService.renderFeatures$.mock.calls[0]);
+    const highlightArgs = Array.from(mapServiceMock.mapService.renderFeatures$.mock.calls[1]);
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
     expect(mockSelect).toHaveBeenCalled();

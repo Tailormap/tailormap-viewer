@@ -337,7 +337,7 @@ export const selectLayersWithoutWebMercatorTitles = createSelector(
 );
 
 export const selectAppLayerIds = (
-  layers: Array<{ serviceId: string; layerName: string }>
+  layers: Array<{ serviceId: string; layerName: string }>,
 ) => createSelector(
   selectLayers,
   (appLayers: AppLayerStateModel[]): string[] => {
