@@ -9,7 +9,7 @@ import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } fr
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
-import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
+import { CqlFilterHelper, FeaturesFilterHelper, FeaturesFilters } from '../../filter';
 import {
   featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, setFeatureInfoLayers,
 } from '../../components/feature-info/state/feature-info.actions';
@@ -134,7 +134,7 @@ export class FeatureSelectionBookmarkService {
           return [];
         }
         // Get the CQL filters from the filter group for each layer
-        const featuresFilters = CqlFilterHelper.getFilters([filterGroup]);
+        const allFeaturesFilters: FeaturesFilters = CqlFilterHelper.getFilters([filterGroup]);
 
         const featureRequests$ = filterGroup.layerIds.map(layerId => {
           const layer = layers.find(l => l.id === layerId);
@@ -143,16 +143,15 @@ export class FeatureSelectionBookmarkService {
           }
 
           // Get the filter for this layer
-          const layerFilters = featuresFilters.get(layerId);
-          const cqlFilter =  layerFilters
-            ? FeaturesFilterHelper.getFilter(layerFilters) || undefined
+          const layerFeaturesFilters = allFeaturesFilters.get(layerId);
+          const cqlFilter: string | undefined =  layerFeaturesFilters
+            ? FeaturesFilterHelper.getFilter(layerFeaturesFilters) || undefined
             : undefined;
 
-          // Call the API to get features
           return this.api.getFeatures$({
             applicationId: applicationId,
             layerId: layerId,
-            filter: cqlFilter || undefined,
+            filter: cqlFilter,
             page: 1,
             geometryInAttributes: true,
           }).pipe(

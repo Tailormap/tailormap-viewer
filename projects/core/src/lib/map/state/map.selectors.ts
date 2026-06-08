@@ -346,6 +346,6 @@ export const selectAppLayerIds = (
         const layer = appLayers.find(l => l.serviceId === serviceId && l.layerName === layerName);
         return layer?.id;
       })
-      .filter((id): id is string => typeof id !== 'undefined');
+      .filter(id => id !== undefined);
   },
 );

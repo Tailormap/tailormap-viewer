@@ -66,10 +66,10 @@ export class ApplicationBookmarkService implements OnDestroy {
     fromEvent<MessageEvent>(window, 'message')
       .pipe(takeUntil(this.destroyed))
       .subscribe(event => {
-        if (event.data && typeof event.data === 'object' && event.data.type === 'tailormap-set-feature-selection') {
+        if (FeatureSelectionBookmarkHelper.isFeatureSelectionMessage(event.data)) {
           this.bookmarkService.updateFragment(
             ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR,
-            event.data.value ?? '',
+            event.data.value,
           );
         }
       });

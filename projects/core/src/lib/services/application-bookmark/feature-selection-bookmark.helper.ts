@@ -5,6 +5,11 @@ import { FeatureSelectionBookmarkFragment } from './application-bookmark-fragmen
 import { v4 as uuidv4 } from 'uuid';
 import { FeatureInfoResponseModel } from '../../components';
 
+export interface FeatureSelectionMessage {
+  type: 'tailormap-set-feature-selection';
+  value: string;
+}
+
 export class FeatureSelectionBookmarkHelper {
   private static PART_SEPARATOR = ';';
   private static SERVICE_LAYER_SEPARATOR = '/';
@@ -36,10 +41,11 @@ export class FeatureSelectionBookmarkHelper {
       .map(layerPair => {
         const [ serviceId, layerName ] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
         if (!serviceId || !layerName) {
-          throw new Error(`Invalid layer format: ${layerPair}`);
+          return null;
         }
-        return { serviceId, layerName: layerName };
-      });
+        return { serviceId, layerName };
+      })
+      .filter(layer => layer !== null);
 
     return {
       layers,
@@ -53,7 +59,7 @@ export class FeatureSelectionBookmarkHelper {
     appLayerIds: string[],
     attributeName: string,
     attributeValue: string,
-  ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } | null {
+  ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } {
     if (!appLayerIds || appLayerIds.length === 0) {
       return {
         errorMessage: $localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`,
@@ -102,5 +108,14 @@ export class FeatureSelectionBookmarkHelper {
       template: response.template || null,
       layerId,
     };
+  }
+
+  public static isFeatureSelectionMessage(data: unknown): data is FeatureSelectionMessage {
+    return !!data
+      && typeof data === 'object'
+      && 'type' in data
+      && data.type === 'tailormap-feature-selection'
+      && 'value' in data
+      && typeof data.value === 'string';
   }
 }
