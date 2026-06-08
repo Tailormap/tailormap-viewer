@@ -46,7 +46,6 @@ export class FeatureSelectionBookmarkService {
   }
 
   public clearSelection(): void {
-    console.debug("hide feature info from bookmark service");
     this.store$.dispatch(hideFeatureInfoDialog());
     if (this.currentFilterGroupId) {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
@@ -107,7 +106,6 @@ export class FeatureSelectionBookmarkService {
           }));
         });
         this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
-        console.debug("opening feature info with bookmark features");
         this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
       });
   }
@@ -188,7 +186,7 @@ export class FeatureSelectionBookmarkService {
   private showSnackbarMessage(msg: string) {
     const config: SnackBarMessageOptionsModel = {
       message: msg,
-      duration: 5000,
+      duration: 10000,
       showDuration: true,
       showCloseButton: true,
     };

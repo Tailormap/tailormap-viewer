@@ -26,7 +26,6 @@ import { SortBookmarkHelper } from './sort-bookmark.helper';
 import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -257,7 +256,6 @@ export class ApplicationBookmarkService implements OnDestroy {
       filter(featureSelectionFragment => featureSelectionFragment !== this.lastFeatureSelectionBookmark),
       withLatestFrom(this.isEmbeddedApplication$()),
     ).subscribe(([ featureSelectionFragmentString, isEmbedded ]) => {
-      console.debug("feature selection bookmark string:", featureSelectionFragmentString);
         this.lastFeatureSelectionBookmark = featureSelectionFragmentString || undefined;
         const featureSelectionFragment: FeatureSelectionBookmarkData | null = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearSelection();
@@ -331,7 +329,6 @@ export class ApplicationBookmarkService implements OnDestroy {
         takeUntil(this.destroyed),
         skipWhile(showingBookmarkFeatures => !showingBookmarkFeatures),
         map(showingBookmarkFeatures => !showingBookmarkFeatures),
-        tap(showingBookmarkFeatures => console.debug("features removed from feature info:", showingBookmarkFeatures)),
       );
   }
 }
