@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, Observable, of, switchMap, take } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, switchMap, take } from 'rxjs';
 import { FilterableLayerModel, FilterApiServiceModel, FilterSourceModel } from '../models/filter-source.model';
 import { map } from 'rxjs/operators';
 import { GetFeaturesParams } from '../../models/get-features-param.model';
@@ -17,10 +17,13 @@ type FilterDataLoaderResult<K extends FilterDataLoaderAction> =
 export class FilterManagerService {
 
   private sources$ = new BehaviorSubject<FilterSourceModel[]>([]);
-  private sourcesWithLayer$ = this.sources$.asObservable().pipe(
+  private sourcesWithLayer$: Observable<Array<{ source: FilterSourceModel; layers: FilterableLayerModel[] }>> = this.sources$.asObservable().pipe(
     switchMap(sources => {
-      return forkJoin(sources.map(source => {
-        return source.availableLayers$.pipe(take(1), map(layers => ({
+      if (sources.length === 0) {
+        return of([]);
+      }
+      return combineLatest(sources.map(source => {
+        return source.availableLayers$.pipe(map(layers => ({
           source,
           layers,
         })));

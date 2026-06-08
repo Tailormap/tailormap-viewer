@@ -70,11 +70,11 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
       this.store$.select(selectLayer(referenceLayer)),
     ])
       .pipe(
-        take(1),
         filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
           const [ applicationId, layer ] = result;
           return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
         }),
+        take(1),
         switchMap(([ applicationId, layer ]) => {
           const getFeatures$ = this.filterManagerService.getFeatures$({
             applicationId,

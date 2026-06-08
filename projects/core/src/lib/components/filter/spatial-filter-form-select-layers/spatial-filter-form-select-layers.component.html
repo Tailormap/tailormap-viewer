@@ -1,4 +1,4 @@
-@let availableLayers = this.availableLayers$ | async;
+@let availableLayers = availableLayers$ | async;
 @if (availableLayers && availableLayers.length > 0) {
   <mat-form-field appearance="fill">
     <mat-label i18n="@@core.filter.select-layer">Select layer(s)</mat-label>

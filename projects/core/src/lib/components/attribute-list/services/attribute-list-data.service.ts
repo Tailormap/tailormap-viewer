@@ -97,7 +97,6 @@ export class AttributeListDataService implements OnDestroy {
             ? Sortorder.DESC
             : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
-      ).pipe(
       catchError(_e => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {

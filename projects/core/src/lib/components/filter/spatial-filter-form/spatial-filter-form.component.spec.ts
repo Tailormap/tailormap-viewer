@@ -4,6 +4,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import {
   hasSelectedLayersAndGeometry, selectSelectedFilterGroup, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  selectSelectedLayers,
   selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { SharedModule } from '@tailormap-viewer/shared';
@@ -30,6 +31,7 @@ const setup = async (conf: {
   const store = provideMockStore({
     initialState: {},
     selectors: [
+      { selector: selectSelectedLayers, value: conf.selectedLayers ? ['1'] : [] },
       { selector: selectSelectedLayersCount, value: conf.selectedLayers ? 1 : 0 },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
       { selector: selectSelectedFilterGroup, value: conf.selectedFilterGroup || null },

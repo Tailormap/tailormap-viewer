@@ -178,16 +178,19 @@ export class SpatialFilterCrudService {
       return of([]);
     }
     return this.store$.select(selectViewerId).pipe(
-      concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.store$.select(selectLayer(layer)).pipe(
+      concatMap(applicationId => {
+        if (!applicationId) {
+          return of([]);
+        }
+        return forkJoin(layers.map(layer => this.store$.select(selectLayer(layer)).pipe(
           take(1),
-          switchMap(lyr => this.filterManagerService.getDescribeLayer$({
+          switchMap(lyr => lyr ? this.filterManagerService.getDescribeLayer$({
             layerId: layer,
-            layerName: lyr?.layerName ?? '',
-            applicationId: applicationId ?? '',
-          }))),
-        )),
-      ),
+            layerName: lyr.layerName,
+            applicationId: applicationId,
+          }) : of(null))),
+        ));
+      }),
       map(results => results.filter((result): result is LayerDetailsModel => !!result)),
       take(1),
     );

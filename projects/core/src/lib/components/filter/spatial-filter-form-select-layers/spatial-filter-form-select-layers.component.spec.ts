@@ -1,14 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormSelectLayersComponent } from './spatial-filter-form-select-layers.component';
 import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
-import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
-import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { FilterableLayerModel, FilterManagerService } from '../../../filter';
 import { of } from 'rxjs';
 
 const availableLayers: FilterableLayerModel[] = [
