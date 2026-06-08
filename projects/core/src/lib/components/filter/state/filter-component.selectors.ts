@@ -3,7 +3,6 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { selectActiveFilterGroups } from '../../../state/filter-state/filter.selectors';
 import { FeatureModel, FilterTypeEnum, SpatialFilterGeometry } from '@tailormap-viewer/api';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 
 const selectFilterComponentState = createFeatureSelector<FilterComponentState>(filterComponentStateKey);
 export const selectCreateFilterType = createSelector(selectFilterComponentState, state => state.createFilterType);
@@ -11,7 +10,6 @@ export const selectSelectedFilterGroupId = createSelector(selectFilterComponentS
 export const selectSelectedLayers = createSelector(selectFilterComponentState, state => state.selectedLayers || []);
 export const selectSelectedSpatialFilterFeatureId = createSelector(selectFilterComponentState, state => state.selectedSpatialFilterFeatureId);
 export const selectSelectedLayersCount = createSelector(selectSelectedLayers, selectedLayers => selectedLayers.length);
-export const hasSelectedLayers = createSelector(selectSelectedLayersCount, selectedLayersCount => selectedLayersCount > 0);
 
 export const selectSelectedFilterGroup = createSelector(
   selectActiveFilterGroups,
@@ -41,14 +39,6 @@ export const selectBuffer = createSelector(
       return undefined;
     }
     return group.filters[0].buffer;
-  },
-);
-
-export const selectReferencableLayers = createSelector(
-  selectSelectedLayers,
-  selectVisibleLayersWithAttributes,
-  (selectedLayers, availableLayers) => {
-    return availableLayers.filter(layer => !selectedLayers.includes(layer.id));
   },
 );
 
@@ -111,16 +101,5 @@ export const selectSpatialFilterHasExceededMaxFeatures = createSelector(
       return undefined;
     }
     return group.filters[0].exceededMaxFeatures;
-  },
-);
-
-export const selectReferenceLayerLabel = createSelector(
-  selectReferencableLayers,
-  selectReferenceLayer,
-  (layers, layerId) => {
-    if (!layerId || layers.length === 0) {
-      return null;
-    }
-    return layers.find(layer => layer.id === layerId)?.title ?? null;
   },
 );

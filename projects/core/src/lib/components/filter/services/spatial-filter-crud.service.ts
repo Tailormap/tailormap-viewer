@@ -1,20 +1,22 @@
 import { inject, Injectable } from '@angular/core';
-import { DescribeAppLayerService, LayerDetailsModel, SpatialFilterGeometry, FilterTypeEnum, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { LayerDetailsModel, SpatialFilterGeometry, FilterTypeEnum, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { nanoid } from 'nanoid';
-import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of } from 'rxjs';
+import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of, switchMap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
+import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { selectLayer } from '../../../map';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SpatialFilterCrudService {
 
-  private describeAppLayerService = inject(DescribeAppLayerService);
+  private filterManagerService = inject(FilterManagerService);
   private store$ = inject(Store);
 
   public updateSelectedLayers(layers: string[]) {
@@ -176,9 +178,20 @@ export class SpatialFilterCrudService {
       return of([]);
     }
     return this.store$.select(selectViewerId).pipe(
-      concatMap(applicationId =>
-        forkJoin(layers.map(layer => this.describeAppLayerService.getDescribeAppLayer$(applicationId, layer))),
-      ),
+      concatMap(applicationId => {
+        if (!applicationId) {
+          return of([]);
+        }
+        return forkJoin(layers.map(layer => this.store$.select(selectLayer(layer)).pipe(
+          take(1),
+          switchMap(lyr => lyr ? this.filterManagerService.getDescribeLayer$({
+            layerId: layer,
+            layerName: lyr.layerName,
+            applicationId: applicationId,
+          }) : of(null))),
+        ));
+      }),
+      map(results => results.filter((result): result is LayerDetailsModel => !!result)),
       take(1),
     );
   }

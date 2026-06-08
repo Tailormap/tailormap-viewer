@@ -1,12 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
-import { selectFilterableLayers } from '../../../map/state/map.selectors';
-import { Observable, of, Subject } from 'rxjs';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-select-layers',
@@ -20,14 +19,14 @@ export class SpatialFilterFormSelectLayersComponent implements OnInit, OnDestroy
   private destroyed = new Subject();
   private store$ = inject(Store);
   private filterCrudService = inject(SpatialFilterCrudService);
+  private filterManagerService = inject(FilterManagerService);
 
-  public availableLayers$: Observable<AppLayerModel[]> = of([]);
+  public availableLayers$ = this.filterManagerService.filterableLayers$;
   public selectedLayersControl = new FormControl<string[]>([], {
     nonNullable: true,
   });
 
   public ngOnInit(): void {
-    this.availableLayers$ = this.store$.select(selectFilterableLayers);
     this.store$.select(selectSelectedLayers)
       .pipe(takeUntil(this.destroyed))
       .subscribe((layers) => {

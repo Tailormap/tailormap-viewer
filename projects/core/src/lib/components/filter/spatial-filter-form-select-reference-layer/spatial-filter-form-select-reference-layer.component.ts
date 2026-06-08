@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { AppLayerModel } from '@tailormap-viewer/api';
+import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectReferencableLayers, selectReferenceLayer } from '../state/filter-component.selectors';
+import { selectReferenceLayer } from '../state/filter-component.selectors';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { ReferenceLayerService } from '../services/reference-layer.service';
 
 @Component({
   selector: 'tm-spatial-filter-form-select-reference-layer',
@@ -19,14 +19,14 @@ export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, O
   private destroyed = new Subject();
   private store$ = inject(Store);
   private filterCrudService = inject(SpatialFilterCrudService);
+  private referenceLayerService = inject(ReferenceLayerService);
 
-  public availableLayers$: Observable<AppLayerModel[]> = of([]);
+  public referencableLayers$ = this.referenceLayerService.referencableLayers$;
   public referenceLayerControl = new FormControl<string | undefined>(undefined, {
     nonNullable: true,
   });
 
   public ngOnInit(): void {
-    this.availableLayers$ = this.store$.select(selectReferencableLayers);
     this.store$.select(selectReferenceLayer)
       .pipe(takeUntil(this.destroyed))
       .subscribe((layer) => {

@@ -1,5 +1,5 @@
 import {
-  AttributeListApiServiceModel, DownloadLayerExtractParams, DownloadLayerExtractResponse, GetFeaturesParams,
+  AttributeListApiServiceModel, DownloadLayerExtractParams, DownloadLayerExtractResponse,
   GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
@@ -12,6 +12,7 @@ import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectIsLoadingTabs, selectTabsForVisibleLayers } from '../state/attribute-list.selectors';
+import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
 @Injectable({
   providedIn: 'root',
