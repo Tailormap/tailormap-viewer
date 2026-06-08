@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import {
-  combineLatest, debounceTime, filter, first, map, Observable, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
+  combineLatest, debounceTime, filter, map, Observable, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
 } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -11,7 +11,7 @@ import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
-  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkFragment, FeatureSelectionBookmarkData,
+  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkData,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerStyle, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -26,7 +26,6 @@ import { SortBookmarkHelper } from './sort-bookmark.helper';
 import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -322,6 +321,6 @@ export class ApplicationBookmarkService implements OnDestroy {
         skipWhile(showingBookmarkFeatures => !showingBookmarkFeatures),
         map(showingBookmarkFeatures => !showingBookmarkFeatures),
         tap(showingBookmarkFeatures => console.debug("features removed from feature info:", showingBookmarkFeatures)),
-      )
+      );
   }
 }

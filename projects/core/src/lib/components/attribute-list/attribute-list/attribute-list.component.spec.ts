@@ -45,7 +45,7 @@ import { selectIsLoadingTabs } from '../state/attribute-list.selectors';
 import { FeatureInfoState, featureInfoStateKey, initialFeatureInfoState } from '../../feature-info/state/feature-info.state';
 import { featureInfoReducer } from '../../feature-info/state/feature-info.reducer';
 
-type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState, [featureInfoStateKey]: FeatureInfoState };
+type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState; [featureInfoStateKey]: FeatureInfoState };
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },

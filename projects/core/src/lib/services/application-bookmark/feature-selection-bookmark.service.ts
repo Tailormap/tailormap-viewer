@@ -11,7 +11,7 @@ import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import {
-  featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, reopenFeatureInfoDialog, setFeatureInfoLayers,
+  featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, setFeatureInfoLayers,
 } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureStylingHelper } from '../../shared';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
