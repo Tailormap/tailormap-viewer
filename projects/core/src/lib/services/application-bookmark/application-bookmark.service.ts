@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import {
-  combineLatest, debounceTime, filter, map, Observable, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
+  combineLatest, debounceTime, filter, fromEvent, map, Observable, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
 } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -62,6 +62,17 @@ export class ApplicationBookmarkService implements OnDestroy {
           this.readableVisibilityBookmarkHandler.updateMapOnBookmarkChanges();
         }
         initialRun = false;
+      });
+
+    fromEvent<MessageEvent>(window, 'message')
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(event => {
+        if (event.data && typeof event.data === 'object' && event.data.type === 'tailormap-set-feature-selection') {
+          this.bookmarkService.updateFragment(
+            ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR,
+            event.data.value ?? '',
+          );
+        }
       });
   }
 
