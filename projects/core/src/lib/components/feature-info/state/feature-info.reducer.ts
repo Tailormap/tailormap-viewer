@@ -17,6 +17,7 @@ const onLoadFeatureInfo = (
   attachmentMetadata: [],
   layers: payload.layers,
   selectedLayerId: payload.layers.length === 1 ? payload.layers[0].id : state.selectedLayerId,
+  showingBookmarkFeatures: false,
 });
 
 const onFeatureInfoLoaded = (
@@ -72,6 +73,7 @@ const onHideFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => (
   ...state,
   dialogVisible: false,
   dialogCollapsed: false,
+  showingBookmarkFeatures: false,
 });
 
 const onExpandCollapseFeatureInfoDialog = (state: FeatureInfoState): FeatureInfoState => ({
@@ -157,6 +159,12 @@ const onSetFeatureInfoLayers = (
   };
 };
 
+const onFeatureInfoOpenWithBookmarkFeatures = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  dialogVisible: true,
+  showingBookmarkFeatures: true,
+});
+
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   initialFeatureInfoState,
   on(FeatureInfoActions.loadFeatureInfo, onLoadFeatureInfo),
@@ -170,5 +178,6 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.reopenFeatureInfoDialog, onReopenFeatureInfoDialog),
   on(FeatureInfoActions.updateFeatureInFeatureInfo, onUpdateFeatureInFeatureInfo),
   on(FeatureInfoActions.setFeatureInfoLayers, onSetFeatureInfoLayers),
+  on(FeatureInfoActions.openFeatureInfoWithBookmarkFeatures, onFeatureInfoOpenWithBookmarkFeatures),
 );
 export const featureInfoReducer = (state: FeatureInfoState | undefined, action: Action) => featureInfoReducerImpl(state, action);

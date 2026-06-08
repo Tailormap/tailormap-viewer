@@ -11,7 +11,7 @@ import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper } from '../../filter';
 import {
-  featureInfoLoaded, hideFeatureInfoDialog, reopenFeatureInfoDialog, setFeatureInfoLayers,
+  featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, reopenFeatureInfoDialog, setFeatureInfoLayers,
 } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureStylingHelper } from '../../shared';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
@@ -46,6 +46,7 @@ export class FeatureSelectionBookmarkService {
   }
 
   public clearSelection(): void {
+    console.debug("hide feature info from bookmark service");
     this.store$.dispatch(hideFeatureInfoDialog());
     if (this.currentFilterGroupId) {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
@@ -106,7 +107,8 @@ export class FeatureSelectionBookmarkService {
           }));
         });
         this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
-        this.store$.dispatch(reopenFeatureInfoDialog());
+        console.debug("opening feature info with bookmark features");
+        this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
       });
   }
 

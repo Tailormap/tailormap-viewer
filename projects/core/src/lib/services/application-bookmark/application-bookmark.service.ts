@@ -1,7 +1,9 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, debounceTime, filter, map, Observable, skip, Subject, switchMap, takeUntil, withLatestFrom } from 'rxjs';
+import {
+  combineLatest, debounceTime, filter, first, map, Observable, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
+} from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
@@ -23,6 +25,9 @@ import { setInitialDataSort } from '../../components/attribute-list/state/attrib
 import { SortBookmarkHelper } from './sort-bookmark.helper';
 import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
+import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +48,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
   private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
-  private lastFeatureSelectionBookmark: FeatureSelectionBookmarkFragment | undefined;
+  private lastFeatureSelectionBookmark: string | undefined;
 
   constructor() {
     let initialRun = true;
@@ -115,6 +120,14 @@ export class ApplicationBookmarkService implements OnDestroy {
       .subscribe(bookmark => {
         this.lastSortBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR, bookmark);
+      });
+
+    this.getFeaturesRemovedFromFeatureInfo$()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((featuresRemoved) => {
+        if (featuresRemoved) {
+          this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR, '');
+        }
       });
 
     this.bookmarkService.getBookmarkValue$()
@@ -231,9 +244,11 @@ export class ApplicationBookmarkService implements OnDestroy {
       takeUntil(this.destroyed),
       filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
       switchMap(() => this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)),
-      filter(FeatureSelectionFragment => !deepEqual(this.lastFeatureSelectionBookmark, FeatureSelectionFragment)),
+      filter(featureSelectionFragment => featureSelectionFragment !== this.lastFeatureSelectionBookmark),
       withLatestFrom(this.isEmbeddedApplication$()),
     ).subscribe(([ featureSelectionFragmentString, isEmbedded ]) => {
+      console.debug("feature selection bookmark string:", featureSelectionFragmentString);
+        this.lastFeatureSelectionBookmark = featureSelectionFragmentString || undefined;
         const featureSelectionFragment: FeatureSelectionBookmarkData | null = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
         this.featureSelectionBookmarkService.clearSelection();
         this.featureSelectionBookmarkService.applyBookmarkFragment(featureSelectionFragment, isEmbedded);
@@ -295,5 +310,18 @@ export class ApplicationBookmarkService implements OnDestroy {
       debounceTime(250),
       map(([sortState]) => SortBookmarkHelper.fragmentFromSortState(sortState)),
     );
+  }
+
+  /*
+  Emit true after features from bookmark have been shown and then removed from feature info
+   */
+  private getFeaturesRemovedFromFeatureInfo$() {
+    return this.store$.select(selectFeatureInfoShowingBookmarkFeatures)
+      .pipe(
+        takeUntil(this.destroyed),
+        skipWhile(showingBookmarkFeatures => !showingBookmarkFeatures),
+        map(showingBookmarkFeatures => !showingBookmarkFeatures),
+        tap(showingBookmarkFeatures => console.debug("features removed from feature info:", showingBookmarkFeatures)),
+      )
   }
 }
