@@ -18,7 +18,6 @@ import { CoreSharedModule } from '../../../shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
-import { Store } from '@ngrx/store';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {

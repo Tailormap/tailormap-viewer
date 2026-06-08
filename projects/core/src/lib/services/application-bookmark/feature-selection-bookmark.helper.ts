@@ -59,7 +59,7 @@ export class FeatureSelectionBookmarkHelper {
         errorMessage: $localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`,
       };
     }
-    if (!attributeName || !attributeValue) {
+    if (!attributeName) {
       return {
         errorMessage: $localize `:@@core.feature-bookmark.no-attribute-name:No attribute name specified Feature Selection Bookmark`,
       };
