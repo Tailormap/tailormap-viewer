@@ -10,7 +10,6 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { withLatestFrom } from 'rxjs/operators';
 import { selectLayer } from '../../../map';
 
 @Injectable()
