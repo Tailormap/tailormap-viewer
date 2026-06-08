@@ -42,8 +42,10 @@ import { AttributeListEffects } from '../state/attribute-list.effects';
 import { AttributeListApiService } from '../services/attribute-list-api.service';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 import { selectIsLoadingTabs } from '../state/attribute-list.selectors';
+import { FeatureInfoState, featureInfoStateKey, initialFeatureInfoState } from '../../feature-info/state/feature-info.state';
+import { featureInfoReducer } from '../../feature-info/state/feature-info.reducer';
 
-type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState };
+type StoreDef = { [mapStateKey]: MapState; [attributeListStateKey]: AttributeListState; [coreStateKey]: CoreState, [featureInfoStateKey]: FeatureInfoState };
 
 const getStore = (
   attributeListStore: { [attributeListStateKey]: AttributeListState },
@@ -66,6 +68,9 @@ const getStore = (
         id: 'viewer_1',
         components: [],
       }, // <-- Ensure viewer is always present
+    },
+    [featureInfoStateKey]: {
+      ...initialFeatureInfoState,
     },
   };
 };
@@ -123,6 +128,7 @@ const setupWithActualState = async (store?: StoreDef) => {
     [attributeListStateKey]: attributeListReducer,
     [mapStateKey]: mapReducer,
     [coreStateKey]: coreReducer,
+    [featureInfoStateKey]: featureInfoReducer,
   };
   const mockService = new TailormapApiV1MockService();
   mockService.getFeatures$ = jest.fn(({ layerId }) => {
