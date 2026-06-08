@@ -12,7 +12,7 @@ import {
   AttributeListApiServiceModel,
   CanExpandRowParams, DownloadLayerExtractResponse, FeatureDetailsModel,
   GetFeatureDetailsParams,
-  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
 import { AttributeListSourceModel } from '../models/attribute-list-source.model';
@@ -20,6 +20,7 @@ import {
   FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
 describe('AttributeListManagerService', () => {
   let managerService: AttributeListManagerService;
@@ -268,6 +269,7 @@ describe('AttributeListManagerService', () => {
       const params: GetFeaturesParams = {
         applicationId: '1',
         layerId: '1',
+        layerName: 'layer1',
       };
 
       managerService.getFeatures$('non-existent-source', params).subscribe(result => {
@@ -280,6 +282,7 @@ describe('AttributeListManagerService', () => {
       const params: GetFeaturesParams = {
         applicationId: '1',
         layerId: '1',
+        layerName: 'layer1',
         page: 0,
       };
 
@@ -489,7 +492,7 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source2);
 
       // Verify both sources are accessible by testing getFeatures$ on each
-      const params: GetFeaturesParams = { applicationId: '1', layerId: '1' };
+      const params: GetFeaturesParams = { applicationId: '1', layerId: '1', layerName: 'layer1' };
       const featuresResponse: FeaturesResponseModel = {
         features: [],
         columnMetadata: [],
@@ -531,7 +534,7 @@ describe('AttributeListManagerService', () => {
 
       // Verify the default source is added by checking that it can be accessed
       // Since the default source uses the mock API service, we can test getFeatures$
-      const params: GetFeaturesParams = { applicationId: '1', layerId: '1' };
+      const params: GetFeaturesParams = { applicationId: '1', layerId: '1', layerName: 'layer1' };
       const featuresResponse: FeaturesResponseModel = {
         features: [],
         columnMetadata: [],

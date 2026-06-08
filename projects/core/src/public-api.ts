@@ -17,3 +17,4 @@ export * from './lib/services';
 export * from './lib/layout/layout.service';
 export * from './lib/map';
 export * from './lib/filter';
+export * from './lib/models';

@@ -1,15 +1,14 @@
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
+import { selectIn3dView } from '../../../map/state/map.selectors';
 import {
-  hasSelectedLayersAndGeometry, selectReferenceLayerLabel, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
+  hasSelectedLayersAndGeometry, selectSelectedFilterGroup, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
-import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
-import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
+import { FilterTypeEnum, SpatialFilterModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { FilterGroupModel } from '@tailormap-viewer/api';
@@ -18,24 +17,25 @@ import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
 import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
+import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 
 const setup = async (conf: {
-  layers?: AppLayerModel[];
+  layers?: FilterableLayerModel[];
   selectedLayers?: boolean;
   selectedLayersAndGeometry?: boolean;
-  selectedFilterGroup?: FilterGroupModel;
+  selectedFilterGroup?: FilterGroupModel<SpatialFilterModel>;
   exceededMax?: boolean;
 }) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
-      { selector: selectFilterableLayers, value: conf.layers || [] },
       { selector: selectSelectedLayersCount, value: conf.selectedLayers ? 1 : 0 },
       { selector: hasSelectedLayersAndGeometry, value: conf.selectedLayersAndGeometry || false },
+      { selector: selectSelectedFilterGroup, value: conf.selectedFilterGroup || null },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
       { selector: selectSpatialFilterHasExceededMaxFeatures, value: conf.exceededMax ?? false },
-      { selector: selectReferenceLayerLabel, value: conf.selectedFilterGroup ? 'the_reference_layer' : null },
       { selector: selectIn3dView, value: false },
     ],
   });
@@ -49,6 +49,10 @@ const setup = async (conf: {
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
       { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
+      { provide: FilterManagerService, useValue: {
+        filterableLayers$: of(conf.layers || []),
+        referencableLayers$: of(conf.layers || []),
+      } },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
@@ -60,10 +64,30 @@ const setup = async (conf: {
   };
 };
 
-const layers = [
-  getAppLayerModel({ id: '1', title: 'Layer 1' }),
-  getAppLayerModel({ id: '2', title: 'Layer 2' }),
+const layers: FilterableLayerModel[] = [
+  { id: '1', label: 'Layer 1', filterable: true, referencable: true },
+  { id: '2', label: 'Layer 2', filterable: true, referencable: true },
 ];
+
+const getSpatialFilterGroup = (
+  groupOverrides?: Partial<FilterGroupModel<SpatialFilterModel>>,
+  filterOverrides?: Partial<SpatialFilterModel>,
+): FilterGroupModel<SpatialFilterModel> => ({
+  id: 'group1',
+  type: FilterTypeEnum.SPATIAL,
+  layerIds: [],
+  source: 'FILTERFORM',
+  operator: 'AND',
+  filters: [{
+    id: 'filter1',
+    type: FilterTypeEnum.SPATIAL,
+    geometryColumns: [{ layerId: '1', column: ['geom'] }],
+    geometries: [{ id: '1', geometry: 'POINT(0 0)' }],
+    baseLayerId: '1',
+    ...filterOverrides,
+  }],
+  ...groupOverrides,
+});
 
 describe('SpatialFilterFormComponent', () => {
 
@@ -101,7 +125,7 @@ describe('SpatialFilterFormComponent', () => {
   });
 
   test('should save/remove buttons', async () => {
-    const group = getFilterGroup();
+    const group = getSpatialFilterGroup();
     const { dispatch, removeFilter$ } = await setup({
       layers,
       selectedFilterGroup: group,
@@ -115,23 +139,23 @@ describe('SpatialFilterFormComponent', () => {
   });
 
   test('shows an error message for a filter group', async () => {
-    const group = getFilterGroup();
+    const group = getSpatialFilterGroup({ error: 'This group has some error' });
     await setup({
       layers,
-      selectedFilterGroup: { ...group, error: 'This group has some error' },
+      selectedFilterGroup: group,
     });
     expect(await screen.findByText('This group has some error')).toBeInTheDocument();
   });
 
   test('shows an error message when the group exceeded max features', async () => {
-    const group = getFilterGroup();
+    const group = getSpatialFilterGroup();
     await setup({
       layers,
       selectedFilterGroup: group,
       exceededMax: true,
     });
     // eslint-disable-next-line max-len
-    expect(await screen.findByText('There are more than 250 objects available in the the_reference_layer layer. The maximum is 250. Apply filters to narrow down the selection.')).toBeInTheDocument();
+    expect(await screen.findByText('There are more than 250 objects available in the Layer 1 layer. The maximum is 250. Apply filters to narrow down the selection.')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save filter')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save filter')).toBeDisabled();
   });

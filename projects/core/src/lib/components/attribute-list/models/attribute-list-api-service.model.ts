@@ -1,7 +1,8 @@
 import {
-  FeaturesResponseModel, LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel,
+  LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
+import { GetFeaturesApiModel } from '../../../models/get-features-api.model';
 
 export enum StatisticType {
   SUM = 'SUM',
@@ -10,47 +11,6 @@ export enum StatisticType {
   AVERAGE = 'AVG',
   COUNT = 'COUNT',
   NONE = 'NONE',
-}
-
-/**
- * Parameters for fetching features from a specific layer.
- */
-export interface GetFeaturesParams {
-  /**
-   * The ID of the application.
-   */
-  applicationId: string;
-  /**
-   * The ID of the layer to fetch features from.
-   */
-  layerId: string;
-  /**
-   * Optional feature ID to fetch a specific feature.
-   */
-  __fid?: string;
-  /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
-   */
-  filter?: Map<string | symbol, string> | null;
-  /**
-   * Optional page number for paginated results (1, 2, 3, ...).
-   */
-  page?: number;
-  /**
-   * Optional attribute name to sort by.
-   */
-  sortBy?: string;
-  /**
-   * Optional sort order (ascending or descending).
-   */
-  sortOrder?: Sortorder;
-  /**
-   * Whether to include geometry in the response.
-   */
-  includeGeometry?: boolean;
 }
 
 /**
@@ -265,14 +225,7 @@ export interface GetStatisticResponse {
  * Interface for implementing custom attribute list data loaders.
  * Implementations of this interface can be registered as data sources for the attribute list.
  */
-export interface AttributeListApiServiceModel {
-  /**
-   * Retrieves features for a given layer.
-   * @param params Parameters for fetching features including layer ID, filtering, sorting, and pagination.
-   * @returns Observable emitting the features response containing rows and metadata.
-   */
-  getFeatures$(params: GetFeaturesParams): Observable<FeaturesResponseModel>;
-
+export interface AttributeListApiServiceModel extends GetFeaturesApiModel {
   /**
    * Retrieves the export capabilities for a given layer.
    * @param params Parameters specifying the application and layer ID.

@@ -7,24 +7,30 @@ import { selectFilterableLayers } from '../../../map/state/map.selectors';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
+import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { of } from 'rxjs';
 
-const availableLayers = [
-  getAppLayerModel({ id: '1', title: 'Layer 1' }),
-  getAppLayerModel({ id: '2', title: 'Layer 2' }),
+const availableLayers: FilterableLayerModel[] = [
+  { id: '1', label: 'Layer 1', filterable: true, referencable: true },
+  { id: '2', label: 'Layer 2', filterable: true, referencable: true },
 ];
 
-const setup = async (layers: AppLayerModel[], selectedLayers: string[]) => {
+const setup = async (layers: FilterableLayerModel[], selectedLayers: string[]) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
-      { selector: selectFilterableLayers, value: layers },
       { selector: selectSelectedLayers, value: selectedLayers },
     ],
   });
   const mockSpatialCrudService = { updateSelectedLayers: jest.fn() };
+  const mockFilterManagerService = { filterableLayers$: of(layers) };
   await render(SpatialFilterFormSelectLayersComponent, {
     imports: [SharedImportsModule],
-    providers: [ store, { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService }],
+    providers: [ store,
+      { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },
+      { provide: FilterManagerService, useValue: mockFilterManagerService },
+    ],
   });
   return { updateLayers: mockSpatialCrudService.updateSelectedLayers };
 };
@@ -33,10 +39,10 @@ describe('SpatialFilterFormSelectLayersComponent', () => {
 
   test('should render', async () => {
     await setup([], []);
-    expect(screen.getByText('Select layer(s)')).toBeInTheDocument();
+    expect(screen.queryByText('Select layer(s)')).not.toBeInTheDocument();
   });
 
-  test('select layers from list', async () => {
+  test('should select layers from list', async () => {
     const { updateLayers } = await setup(availableLayers, []);
     expect(screen.getByText('Select layer(s)')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('combobox'));

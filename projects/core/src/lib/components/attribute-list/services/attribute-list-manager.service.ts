@@ -13,12 +13,12 @@ import {
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse, FeatureDetailsModel, GetFeatureDetailsParams,
-  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse, FeatureDetailsModel, GetFeatureDetailsParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetStatisticParams,
   GetStatisticResponse,
   GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
+import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
 interface TabModelWithTabSourceId extends TabModel {
   tabSourceId: string;

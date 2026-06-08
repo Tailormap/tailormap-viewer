@@ -10,6 +10,8 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { withLatestFrom } from 'rxjs/operators';
+import { selectLayer } from '../../../map';
 
 @Injectable()
 export class AttributeListEffects {
@@ -55,14 +57,16 @@ export class AttributeListEffects {
         this.store$.select(selectViewerId),
         this.mapService.getProjectionCode$(),
       ]),
-      filter(([ _action, tab, row, applicationId ]) => !!tab && !!row && applicationId !== null),
-      mergeMap(([ _action, tab, row, applicationId ]) => {
+      concatLatestFrom(([ _action, tab ]) => this.store$.select(selectLayer(tab?.layerId || ''))),
+      filter(([[ _action, tab, row, applicationId ], layer ]) => !!tab && !!row && applicationId !== null && !!layer),
+      mergeMap(([[ _action, tab, row, applicationId ], layer ]) => {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
         return this.managerService.getFeatures$(tab.tabSourceId, {
           applicationId,
           layerId: tab.layerId,
+          layerName: layer?.layerName || '',
           __fid: row.__fid,
         }).pipe(
           map(result => {
