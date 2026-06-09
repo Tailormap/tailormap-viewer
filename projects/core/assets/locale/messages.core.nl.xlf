@@ -731,8 +731,8 @@
         <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
-        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
-        <target state="new">Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - vanaf waarde</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
