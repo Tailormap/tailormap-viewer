@@ -1,16 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Tailormap embed test</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <h1>Tailormap iframe embed test</h1>
-    <div style="margin: 30px; padding: 10px; background-color: pink; height: 60vh; font-family: Arial, sans-serif; font-size: xx-large; display: flex; align-items: center; justify-content: center">scroll me</div>
-    <div style="margin: 30px; border: 1px solid black; width: auto; height: 400px">
-      <iframe allow="geolocation" src="EMBED_SRC" style="border: none; width: 100%; height: 100%" name="tailormap" loading="lazy"></iframe>
-    </div>
-    <div style="margin: 30px; padding: 10px; background-color: paleturquoise; font-family: Arial, sans-serif; font-size: xx-large; height: 80vh; display: flex; align-items: center; justify-content: center">scroll me</div>
-  </body>
+<head>
+  <title>Tailormap embed test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .fragment-buttons {
+      margin: 10px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fragment-buttons button {
+      padding: 8px 12px;
+      font-family: Arial, sans-serif;
+      font-size: small;
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+    .fragment-buttons button:hover {
+      background-color: #d0d0d0;
+    }
+  </style>
+</head>
+<body>
+<h1>Tailormap iframe embed test</h1>
+<div style="margin: 30px; padding: 10px; background-color: pink; height: 60vh; font-family: Arial, sans-serif; font-size: xx-large; display: flex; align-items: center; justify-content: center">scroll me</div>
+<div class="fragment-buttons">
+  <button onclick="setFeatureSelection('layers=snapshot-geoserver/postgis:begroeidterreindeel;attributeName=identificatie;attributeValue=G0344.4cc6248390684de0b36a07894946791f;createFilter=true')">
+    identificatie = G0344…91f (createFilter)
+  </button>
+  <button onclick="setFeatureSelection('layers=snapshot-geoserver/postgis:begroeidterreindeel;attributeName=identificatie;attributeValue=G0344.4cc6248390684de0b36a07894946791f')">
+    identificatie = G0344…91f
+  </button>
+  <button onclick="setFeatureSelection('layers=snapshot-geoserver/postgis:begroeidterreindeel;attributeName=bronhouder;attributeValue=W0636')">
+    bronhouder = W0636
+  </button>
+  <button onclick="setFeatureSelection('layers=snapshot-geoserver/postgis:begroeidterreindeel;attributeName=bronhouder;attributeValue=W0636;createFilter=true')">
+    bronhouder = W0636 (createFilter)
+  </button>
+</div>
+<div style="margin: 30px; border: 1px solid black; width: auto; height: 400px">
+  <iframe allow="geolocation" id="tailormap-iframe" src="http://localhost:4200/#!embed:1" style="border: none; width: 100%; height: 100%" name="tailormap" loading="lazy"></iframe>
+</div>
+<div style="margin: 30px; padding: 10px; background-color: paleturquoise; font-family: Arial, sans-serif; font-size: xx-large; height: 80vh; display: flex; align-items: center; justify-content: center">scroll me</div>
+<script>
+  function setFeatureSelection(value) {
+    /** @type {HTMLIFrameElement} */
+    var iframe = document.getElementById('tailormap-iframe');
+    iframe.contentWindow.postMessage(
+      { type: 'tailormap-feature-selection', value: value },
+      '*'
+    );
+  }
+</script>
+</body>
 </html>

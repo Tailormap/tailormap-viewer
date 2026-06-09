@@ -14,8 +14,11 @@
          class="mat-tree-node"
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.--tree-node-indent]="depth(node) * 20 + 'px'"
+         tabindex="0"
+         role="button"
          (click)="setNodeSelected(node, $event)"
-         (dblclick)="onNodeDoubleClick ? onNodeDoubleClick(node) : null">
+         (dblclick)="onNodeDoubleClick ? onNodeDoubleClick(node) : null"
+         (keydown.enter)="setNodeSelected(node)">
       <div [className]="getNodeClassName(node)"
            [attr.data-nodeid]="node.id"
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
