@@ -23,13 +23,13 @@ export class FeatureSelectionBookmarkHelper {
     const layersString: string | null = parts.find(part => part.startsWith('layers='))?.substring('layers='.length) || null;
     const attributeName: string | null = parts.find(
       part => part.startsWith('attributeName='),
-    )?.substring('attributeName='.length) || null;
+    )?.substring('attribute='.length) || null;
     const attributeValue: string | null = parts.find(
       part => part.startsWith('attributeValue='),
-    )?.substring('attributeValue='.length) || null;
+    )?.substring('value='.length) || null;
     const createFilter: boolean = parts.find(
       part => part.startsWith('createFilter='),
-    )?.substring('createFilter='.length) === 'true' || false;
+    )?.substring('filter='.length) === 'true' || false;
     if (!attributeName || !attributeValue || !layersString) {
       return null;
     }

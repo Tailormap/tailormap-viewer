@@ -40,7 +40,7 @@ export class ApplicationBookmarkFragments {
   );
 
   public static FEATURE_SELECTION_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
-    'featureselection',
+    'feature',
   );
 
 }
