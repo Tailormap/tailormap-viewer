@@ -94,3 +94,5 @@ export default class OlExtTransform extends Pointer {
   ): EventsKey;
 }
 }
+
+declare function $localize(messageParts: TemplateStringsArray, ...expressions: readonly any[]): string;
