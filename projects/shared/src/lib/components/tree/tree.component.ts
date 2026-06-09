@@ -177,11 +177,11 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.toggleNodeChecked(node);
   }
 
-  public setNodeSelected(node: FlatTreeModel, $event: MouseEvent) {
+  public setNodeSelected(node: FlatTreeModel, $event?: MouseEvent) {
     if (this.openInfoInTree) {
       return;
     }
-    if ($event.ctrlKey || $event.metaKey) {
+    if ($event && ($event.ctrlKey || $event.metaKey)) {
       this.treeService.toggleMultiSelectedNodeId(node.id);
     } else {
       this.treeService.selectionStateChanged(node);
