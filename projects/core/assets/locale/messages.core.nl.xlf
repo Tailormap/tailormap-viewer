@@ -731,8 +731,8 @@
         <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
-        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - vanaf waarde</source>
-        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
+        <target state="new">Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
@@ -1085,6 +1085,10 @@
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Je bent ingelogd <x id="PH" equiv-text="userLabel"/> maar je hebt niet de juiste rollen om toegang te krijgen tot de applicatie. Neem contact op met uw beheerder.</target>
+      </trans-unit>
+      <trans-unit id="core.map.control-3d-hint" datatype="html">
+        <source>Use the arrow keys to move and shift + arrow keys to rotate</source>
+        <target>Gebruik pijltoetsen om te verplaatsen en shift + pijltoetsen om te draaien</target>
       </trans-unit>
       <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
         <source>Stop editing?</source>
