@@ -1,13 +1,18 @@
 <mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
-  <mat-button-toggle (click)="cycleNextOption()" [aria-label]="getCycleAriaLabel()" [tmTooltip]="getNextLabel()"
+  <mat-button-toggle (click)="cycleNextOption()"
+                     [aria-label]="getCycleAriaLabel()"
+                     [tmTooltip]="getNextLabel()"
+                     (keydown.enter)="cycleNextOption()"
                      class="cycle-button">
     {{ getLabel() }}
   </mat-button-toggle>
   <mat-button-toggle [matMenuTriggerFor]="dropdownMenu" class="drop-down-button"
+                     #splitButtonDropdownTrigger="matMenuTrigger"
                      i18n-tmTooltip="@@core.background-layer-toggle.expand-button"
                      tmTooltip="Select basemap"
                      aria-label="Select basemap"
-                     i18n-aria-label="@@core.background-layer-toggle.expand-button">
+                     i18n-aria-label="@@core.background-layer-toggle.expand-button"
+                     (keydown.enter)="splitButtonDropdownTrigger.toggleMenu()">
     <mat-icon svgIcon="drop_down"></mat-icon>
   </mat-button-toggle>
 </mat-button-toggle-group>
