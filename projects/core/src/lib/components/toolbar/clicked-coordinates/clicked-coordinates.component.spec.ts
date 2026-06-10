@@ -6,7 +6,6 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { selectMapSettings } from '../../../map/state/map.selectors';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 
 describe('ClickedCoordinatesComponent', () => {
   test('should render button', async () => {
@@ -21,7 +20,6 @@ describe('ClickedCoordinatesComponent', () => {
             { selector: selectMapSettings, value: { crs: { code: 'EPSG:4326' }, maxExtent: { minx: -180, miny: -90, maxx: 180, maxy: 90 } } },
           ],
         }),
-        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
     });
     expect(mapServiceMock.createTool$).toHaveBeenCalled();

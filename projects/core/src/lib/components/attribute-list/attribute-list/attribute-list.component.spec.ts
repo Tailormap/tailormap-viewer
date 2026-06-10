@@ -86,7 +86,6 @@ const setup = async (store: StoreDef) => {
       provideMockStore({
         initialState: store,
       }),
-      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
     ],
   });
 };

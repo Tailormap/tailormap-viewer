@@ -5,7 +5,6 @@ import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 import { FeatureInfoService } from '../feature-info.service';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 
 const setup = async (returnError = false) => {
   const mapServiceMock = getMapServiceMock(tool => ({
@@ -19,9 +18,6 @@ const setup = async (returnError = false) => {
   const mockSelect = jest.fn(() => of('POINT(1 2)'));
   await render(FeatureInfoComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
-      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
-    ],
     componentProviders: [
       mapServiceMock.provider,
       {
@@ -54,7 +50,7 @@ describe('FeatureInfoComponent', () => {
   test('should render', async () => {
     const { mapServiceMock, mockSelect } = await setup();
     expect(mapServiceMock.mapService.createTool$).toHaveBeenCalled();
-    const highlightArgs = Array.from(mapServiceMock.mapService.renderFeatures$.mock.calls[1]);
+    const highlightArgs = Array.from(mapServiceMock.mapService.renderFeatures$.mock.calls[0]);
     expect(highlightArgs.length).toEqual(3);
     expect(highlightArgs[0]).toEqual('feature-info-highlight-layer');
     expect(mockSelect).toHaveBeenCalled();

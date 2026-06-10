@@ -6,13 +6,10 @@ import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
-import {
-  BaseComponentTypeEnum, getAppLayerModel, getServiceModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService,
-} from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { LegendService } from '../services/legend.service';
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -46,7 +43,6 @@ describe('LegendComponent', () => {
             deregisterComponent: jest.fn(),
           },
         },
-        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
     });
     expect(await screen.queryByText('Legend')).toBeNull();
@@ -60,7 +56,6 @@ describe('LegendComponent', () => {
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
-        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
     });
     TestBed.inject(MenubarService).toggleActiveComponent(BaseComponentTypeEnum.LEGEND, 'Legend');
