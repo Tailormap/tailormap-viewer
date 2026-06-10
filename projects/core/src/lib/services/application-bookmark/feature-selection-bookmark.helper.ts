@@ -3,7 +3,7 @@ import {
 } from '@tailormap-viewer/api';
 import { FeatureSelectionBookmarkFragment } from './application-bookmark-fragments';
 import { v4 as uuidv4 } from 'uuid';
-import { FeatureInfoResponseModel } from '../../components';
+import { FeatureInfoResponseModel } from "../../components/feature-info/models/feature-info-response.model";
 
 export interface FeatureSelectionMessage {
   type: 'tailormap-set-feature-selection';
