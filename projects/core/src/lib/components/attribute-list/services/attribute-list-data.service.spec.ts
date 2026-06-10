@@ -15,7 +15,7 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { MapService } from '@tailormap-viewer/map';
-import { selectVisibleLayersWithAttributes } from '../../../map';
+import { selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../../map';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 import { AttributeListApiService } from './attribute-list-api.service';
 
@@ -44,6 +44,7 @@ const setup = (
       { selector: selectViewerId, value: '1' },
       { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
       { selector: selectInitialDataSort, value: [] },
+      { selector: selectLayers, value: [{ id: '1', layerName: 'layer1', title: '' }, { id: '2', layerName: 'layer2', title: '' }] },
     ],
   }) as Store;
 
@@ -113,6 +114,7 @@ describe('AttributeListDataService', () => {
     service.loadDataForTab$('1').subscribe(result => {
       expect(api.getFeatures$).toHaveBeenCalledWith({
         layerId: '1',
+        layerName: 'layer1',
         applicationId: '1',
         page: 0,
         filter: undefined,

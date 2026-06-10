@@ -267,13 +267,20 @@ describe('AttributeList', () => {
   });
 
   it('renders tabs from other source', async () => {
-    await setupWithActualState();
+    await setupWithActualState(getStore(
+      { [attributeListStateKey]: { ...initialAttributeListState, visible: true } },
+      // : getLoadedStoreWithMultipleTabs(),
+      [
+        { ...getAppLayerModel({ id: '1', title: 'Layer 1', hasAttributes: true,  visible: true }) },
+        { ...getAppLayerModel({ id: '2', title: 'Layer 2', hasAttributes: true,  visible: true }) },
+        { ...getAppLayerModel({ id: '3', layerName: 'layer3', title: 'Layer 3', hasAttributes: false,  visible: true }) },
+      ],
+    ));
     const source: AttributeListSourceModel = {
       id: 'source_2',
       tabs$: of([{
-        id: 'tab_3',
+        id: '3',
         label: 'Third tab',
-        layerId: '3',
       }]),
       dataLoader: {
         getFeatures$: jest.fn((): Observable<FeaturesResponseModel> => {
@@ -292,10 +299,13 @@ describe('AttributeList', () => {
             pageSize: null,
           });
         }),
-        getLayerExportCapabilities$(): Observable<any> {
+        getLayerExtractCapabilities$(): Observable<any> {
           return of({ exportable: false, outputFormats: [] });
         },
-        getLayerExport$(): Observable<any> {
+        startLayerExtract$(): Observable<any> {
+          return of(null);
+        },
+        downloadLayerExtract$(): Observable<any> {
           return of(null);
         },
         getUniqueValues$(): Observable<any> {

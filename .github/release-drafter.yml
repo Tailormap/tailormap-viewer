@@ -15,6 +15,7 @@ categories:
       - enhancement
       - feature
       - refactoring
+      - Accessibility
   - title: 🐳 Docker updates
     label: docker-update
   - title: ⛓️‍💥 Breaking changes

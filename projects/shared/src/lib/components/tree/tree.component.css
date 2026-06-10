@@ -184,3 +184,8 @@ mat-checkbox {
 .tree-node__info {
   margin: 0 8px 0 8px;
 }
+
+.mat-tree-node:focus-visible {
+  outline: 2px solid var(--primary-color-0_5);
+  outline-offset: -2px;
+}

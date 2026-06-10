@@ -824,6 +824,9 @@
       <trans-unit id="core.login.insufficient-rights-error" datatype="html">
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
       </trans-unit>
+      <trans-unit id="core.map.control-3d-hint" datatype="html">
+        <source>Use the arrow keys to move and shift + arrow keys to rotate</source>
+      </trans-unit>
       <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
         <source>Stop editing?</source>
       </trans-unit>

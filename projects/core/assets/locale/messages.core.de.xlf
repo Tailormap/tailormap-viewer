@@ -1102,6 +1102,10 @@
         <source>You are logged in <x id="PH" equiv-text="userLabel"/> but do not have proper roles to access the application. Please contact your administrator.</source>
         <target>Sie sind als <x id="PH" equiv-text="userLabel"/> angemeldet, haben jedoch nicht die erforderlichen Rollen, um auf die Anwendung zuzugreifen. Bitte kontaktieren Sie Ihren Administrator.</target>
       </trans-unit>
+      <trans-unit id="core.map.control-3d-hint" datatype="html">
+        <source>Use the arrow keys to move and shift + arrow keys to rotate</source>
+        <target>Verwenden Sie die Pfeiltasten zum Bewegen und Umschalt + Pfeiltasten zum Drehen</target>
+      </trans-unit>
       <trans-unit id="core.mobile-panel.stop-editing" datatype="html">
         <source>Stop editing?</source>
         <target>Bearbeitung beenden?</target>
