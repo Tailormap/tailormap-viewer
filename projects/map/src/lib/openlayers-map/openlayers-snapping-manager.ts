@@ -13,6 +13,7 @@ import { Point } from 'ol/geom';
 export class OpenLayersSnappingManager {
 
   private static SNAPPING_LAYER_ID = 'snapping-layer';
+  private static SNAPPING_CURSOR_LAYER_ID = 'snapping-layer-cursor';
 
   private static olMap: OlMap | undefined;
   private static layerManager: OpenLayersLayerManager | undefined;
@@ -48,6 +49,7 @@ export class OpenLayersSnappingManager {
     }
     if (OpenLayersSnappingManager.snappingLayer.value) {
       OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_LAYER_ID);
+      OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_CURSOR_LAYER_ID);
       OpenLayersSnappingManager.snappingLayer.next(null);
       OpenLayersSnappingManager.snappingCursorLayer.next(null);
       OpenLayersSnappingManager.layerInitialized = false;
@@ -138,7 +140,7 @@ export class OpenLayersSnappingManager {
           visible: true,
         });
         const vectorCursorLayer = OpenLayersSnappingManager.layerManager?.addLayer<VectorLayer>({
-          id: OpenLayersSnappingManager.SNAPPING_LAYER_ID + '_Pointer',
+          id: OpenLayersSnappingManager.SNAPPING_CURSOR_LAYER_ID,
           name: `Snapping layer pointer`,
           layerType: LayerTypesEnum.Vector,
           visible: true,
