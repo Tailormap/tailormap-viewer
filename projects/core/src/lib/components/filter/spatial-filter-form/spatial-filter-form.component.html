@@ -1,28 +1,28 @@
 <h2 i18n="@@core.filter.add-spatial-filter">Add spatial filter</h2>
 
-<ng-template #formTemplate let-availableLayers>
-
-
-  @if (availableLayers.length > 0) {
-    <div class="form-section form-section--with-form-field">
-      <div i18n="@@core.filter.select-layer-to-filter" class="form-section-label">Select the layer(s) you want to filter</div>
-      <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
-    </div>
-    @if (selectedLayersCount$ | async; as layerCount) {
-      @if (layerCount > 0) {
-        <div class="form-section-label">
-          <ng-template #layerLabel><ng-container i18n="@@core.filter.layerPlural">{layerCount, plural, =1 {layer} other {layers}}</ng-container></ng-template>
-          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected <ng-container [ngTemplateOutlet]="layerLabel" /> can be done by drawing geometry and/or selecting a reference layer.</p>
-          <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected <ng-container [ngTemplateOutlet]="layerLabel" />.</p>
-        </div>
-        <div class="form-section">
-          @if (( in3dView$ | async ) === false) {
-            <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
-            <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
-          } @else {
-            <div i18n="@@core.filter.draw-message-3D" class="draw-message-3d">Switch to 2D to draw</div>
-          }
-        </div>
+@let availableLayers = availableLayers$ | async;
+@if (availableLayers && availableLayers.length > 0) {
+  <div class="form-section form-section--with-form-field">
+    <div i18n="@@core.filter.select-layer-to-filter" class="form-section-label">Select the layer(s) you want to filter</div>
+    <tm-spatial-filter-form-select-layers></tm-spatial-filter-form-select-layers>
+  </div>
+  @if (selectedLayersCount$ | async; as layerCount) {
+    @if (layerCount > 0) {
+      <div class="form-section-label">
+        <ng-template #layerLabel><ng-container i18n="@@core.filter.layerPlural">{layerCount, plural, =1 {layer} other {layers}}</ng-container></ng-template>
+        <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference">Filtering the selected <ng-container [ngTemplateOutlet]="layerLabel" /> can be done by drawing geometry and/or selecting a reference layer.</p>
+        <p i18n="@@core.filter.filtering-layer-by-drawing-or-reference-hint">The geometries from this reference layer will then be used to filter the selected <ng-container [ngTemplateOutlet]="layerLabel" />.</p>
+      </div>
+      <div class="form-section">
+        @if (( in3dView$ | async ) === false) {
+          <div i18n="@@core.filter.draw-filter-geometry" class="form-section-label">Draw filter geometry</div>
+          <tm-spatial-filter-form-draw-geometries [drawingLayerId]="drawingLayerId"></tm-spatial-filter-form-draw-geometries>
+        } @else {
+          <div i18n="@@core.filter.draw-message-3D" class="draw-message-3d">Switch to 2D to draw</div>
+        }
+      </div>
+      @let referencableLayers = referencableLayers$ | async;
+      @if (referencableLayers && referencableLayers.length > 0) {
         <div class="form-section">
           <div i18n="@@core.filter.select-reference-layer" class="form-section-label">Select reference layer</div>
           <tm-spatial-filter-form-select-reference-layer></tm-spatial-filter-form-select-reference-layer>
@@ -35,47 +35,45 @@
         </div>
       }
     }
-    @if (currentGroupError$ | async; as currentGroupError) {
-      <tm-error-message
-        [message]="currentGroupError"
-      [friendlyError]="true"></tm-error-message>
-    }
-    @if (hasSelectedLayersAndGeometry$ | async) {
-      <div class="form-section form-section--with-form-field">
-        <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>
-        <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
-      </div>
-    }
-    @let currentGroupExceededMaxFeatures = currentGroupExceededMaxFeatures$ | async;
-    @if (currentGroupExceededMaxFeatures) {
-      <tm-error-message [message]="exceededMaxErrorMessage$ | async"></tm-error-message>
-    }
-    <div class="form-section buttons">
-      @if (currentGroup$ | async; as currentGroup) {
-        <button mat-stroked-button
-          color="warn"
-          (click)="remove(currentGroup)"
-          tmTooltip="Delete this filter"
-          i18n-tmTooltip="@@core.filter.delete-this-filter"
-        i18n="@@core.common.delete">Delete</button>
-        <button mat-flat-button
-          color="primary"
-          [disabled]="currentGroupExceededMaxFeatures"
-          (click)="save()"
-          tmTooltip="Save filter"
-          i18n-tmTooltip="@@core.filter.save-filter"
-        i18n="@@core.common.save">Save</button>
-      } @else {
-        <button mat-stroked-button
-          (click)="cancel()"
-          tmTooltip="Close filter form"
-          i18n-tmTooltip="@@core.filter.close-filter-form"
-        i18n="@@core.common.cancel">Cancel</button>
-      }
-    </div>
-  } @else {
-    <div i18n="@@core.filter.no-layers-available">No layers available to filter on</div>
   }
-</ng-template>
-
-<ng-container *ngTemplateOutlet="formTemplate; context: { $implicit: availableLayers$ | async }"></ng-container>
+  @if (currentGroupError$ | async; as currentGroupError) {
+    <tm-error-message
+      [message]="currentGroupError"
+    [friendlyError]="true"></tm-error-message>
+  }
+  @if (hasSelectedLayersAndGeometry$ | async) {
+    <div class="form-section form-section--with-form-field">
+      <div i18n="@@core.filter.buffer-filter-geometry" class="form-section-label">Optionally you can buffer the geometry</div>
+      <tm-spatial-filter-form-buffer></tm-spatial-filter-form-buffer>
+    </div>
+  }
+  @let currentGroupExceededMaxFeatures = currentGroupExceededMaxFeatures$ | async;
+  @if (currentGroupExceededMaxFeatures) {
+    <tm-error-message [message]="exceededMaxErrorMessage$ | async"></tm-error-message>
+  }
+  <div class="form-section buttons">
+    @if (currentGroup$ | async; as currentGroup) {
+      <button mat-stroked-button
+        color="warn"
+        (click)="remove(currentGroup)"
+        tmTooltip="Delete this filter"
+        i18n-tmTooltip="@@core.filter.delete-this-filter"
+      i18n="@@core.common.delete">Delete</button>
+      <button mat-flat-button
+        color="primary"
+        [disabled]="currentGroupExceededMaxFeatures"
+        (click)="save()"
+        tmTooltip="Save filter"
+        i18n-tmTooltip="@@core.filter.save-filter"
+      i18n="@@core.common.save">Save</button>
+    } @else {
+      <button mat-stroked-button
+        (click)="cancel()"
+        tmTooltip="Close filter form"
+        i18n-tmTooltip="@@core.filter.close-filter-form"
+      i18n="@@core.common.cancel">Cancel</button>
+    }
+  </div>
+} @else {
+  <div i18n="@@core.filter.no-layers-available">No layers available to filter on</div>
+}

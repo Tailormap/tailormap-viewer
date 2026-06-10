@@ -13,12 +13,11 @@ import {
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse, FeatureDetailsModel, GetFeatureDetailsParams,
-  GetFeaturesParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
-  GetStatisticParams,
-  GetStatisticResponse,
-  GetUniqueValuesParams,
+  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
+  FeatureDetailsModel, GetFeatureDetailsParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
+  GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams,
 } from '../models/attribute-list-api-service.model';
+import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
 interface TabModelWithTabSourceId extends TabModel {
   tabSourceId: string;
@@ -182,7 +181,7 @@ export class AttributeListManagerService implements OnDestroy {
   public getStatistic$(tabSourceId: string, params: GetStatisticParams): Observable<GetStatisticResponse> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source || typeof source?.dataLoader.getStatisticValue$ !== 'function') {
-      return of({ result: null, success: false });
+      return of({ result: [], success: false });
     }
     return source.dataLoader.getStatisticValue$(params);
   }

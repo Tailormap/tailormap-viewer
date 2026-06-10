@@ -12,6 +12,7 @@
         (click)="close()"><mat-icon svgIcon="close"></mat-icon></button>
     </div>
     <div class="toc-node-details-panel-content">
+      <ng-template #detailsContent></ng-template>
       @if ((node.layer?.description || node.description); as description) {
         <div class="toc-node-details-panel-section">
           <h3 i18n="@@core.toc.description">Description</h3>

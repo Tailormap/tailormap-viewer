@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SpatialFilterCrudService } from './spatial-filter-crud.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
-import { DescribeAppLayerService, LayerDetailsModel } from '@tailormap-viewer/api';
+import { DescribeAppLayerService, getAppLayerModel, LayerDetailsModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
@@ -11,6 +11,8 @@ import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-compo
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { waitFor } from '@testing-library/angular';
 import { SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { selectLayers } from '../../../map';
+import { FilterManagerService } from '../../../filter';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -34,11 +36,12 @@ const setup = (
       { selector: selectSelectedFilterGroup, value: hasSelectedFilterGroup ? (overrideGroup || selectedGroup) : undefined },
       { selector: selectSelectedLayers, value: hasSelectedLayers ? ['1'] : [] },
       { selector: selectViewerId, value: '1' },
+      { selector: selectLayers, value: [ getAppLayerModel({ id: '1' }), getAppLayerModel({ id: '2' }), getAppLayerModel({ id: '3' }) ] },
     ],
   });
   const describeLayerMock = {
-    getDescribeAppLayer$: jest.fn((_appId, layerId): Observable<Partial<LayerDetailsModel>> => of({
-      id: layerId,
+    getDescribeLayer$: jest.fn((params): Observable<Partial<LayerDetailsModel>> => of({
+      id: params.layerId,
       geometryAttribute: 'geom',
     })),
   };
@@ -46,7 +49,7 @@ const setup = (
     providers: [
       SpatialFilterCrudService,
       mockStore,
-      { provide: DescribeAppLayerService, useValue: describeLayerMock },
+      { provide: FilterManagerService, useValue: describeLayerMock },
     ],
   });
   const service = TestBed.inject(SpatialFilterCrudService);

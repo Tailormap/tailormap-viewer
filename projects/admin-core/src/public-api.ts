@@ -24,3 +24,4 @@ export * from './lib/helpers/form.helper';
 export * from './lib/templates/admin-navigation.service';
 export * from './lib/catalog/state';
 export * from './lib/catalog/services/feature-source.service';
+export * from './lib/catalog/services/geo-service.service';

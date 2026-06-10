@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectFilterableLayers, selectIn3dView } from '../../../map/state/map.selectors';
-import { ExtendedAppLayerModel } from '../../../map/models';
-import { combineLatest, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { selectIn3dView } from '../../../map/state/map.selectors';
+import { combineLatest, map, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
 import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.helper';
 import {
-  hasSelectedLayersAndGeometry, selectFilterFeatures, selectReferenceLayerLabel, selectSelectedFilterGroupError,
+  hasSelectedLayersAndGeometry, selectFilterFeatures, selectReferenceLayer,
+  selectSelectedFilterGroupError,
   selectSelectedFilterGroupId,
   selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
@@ -17,6 +17,8 @@ import { SpatialFilterReferenceLayerService } from '../../../filter/services/spa
 import { filter } from 'rxjs/operators';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { ReferenceLayerService } from '../services/reference-layer.service';
 
 @Component({
   selector: 'tm-spatial-filter-form',
@@ -30,6 +32,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private removeFilterService = inject(RemoveFilterService);
   private spatialFilterReferenceLayerService = inject(SpatialFilterReferenceLayerService);
+  private filterManagerService = inject(FilterManagerService);
+  private referenceLayerService = inject(ReferenceLayerService);
 
 
   private DEFAULT_STYLE = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-drawing-style', {
@@ -43,7 +47,8 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public drawingLayerId = 'filter-drawing-layer';
-  public availableLayers$: Observable<ExtendedAppLayerModel[]> = of([]);
+  public availableLayers$ = this.filterManagerService.filterableLayers$;
+  public referencableLayers$ = this.referenceLayerService.referencableLayers$;
 
   public currentGroup$: Observable<string | undefined> = of(undefined);
   public selectedLayersCount$: Observable<number> = of(0);
@@ -53,7 +58,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public currentGroupExceededMaxFeatures$ = this.store$.select(selectSpatialFilterHasExceededMaxFeatures);
   public exceededMaxErrorMessage$ = this.currentGroupExceededMaxFeatures$.pipe(
     filter(hasExceeded => !!hasExceeded),
-    switchMap(() => this.store$.select(selectReferenceLayerLabel)),
+    switchMap(() => this.getLabelForReferenceLayer$()),
     map((referenceLayerTitle) =>  {
       if (!referenceLayerTitle) {
         return '';
@@ -66,7 +71,6 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   public in3dView$: Observable<boolean> = of(false);
 
   public ngOnInit(): void {
-    this.availableLayers$ = this.store$.select(selectFilterableLayers);
     this.selectedLayersCount$ = this.store$.select(selectSelectedLayersCount);
     this.hasSelectedLayersAndGeometry$ = this.store$.select(hasSelectedLayersAndGeometry);
     this.currentGroup$ = this.store$.select(selectSelectedFilterGroupId);
@@ -116,6 +120,20 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
           this.store$.dispatch(closeForm());
         }
       });
+  }
+
+  private getLabelForReferenceLayer$() {
+    return combineLatest([
+      this.store$.select(selectReferenceLayer),
+      this.filterManagerService.referencableLayers$,
+    ]).pipe(
+      take(1),
+      map(([ selectedLayer, referencableLayers ]) => {
+        if (!selectedLayer || (referencableLayers || []).length === 0) {
+          return null;
+        }
+        return referencableLayers.find(layer => layer.id === selectedLayer)?.label ?? null;
+      }));
   }
 
 }

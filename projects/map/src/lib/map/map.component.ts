@@ -1,6 +1,9 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
 import { MapService } from '../map-service/map.service';
-import { OverlayHelper } from '@tailormap-viewer/shared';
+import { OverlayHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { combineLatest, take } from 'rxjs';
+import { CesiumEventManager } from '../openlayers-map/cesium-map/cesium-event-manager';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tm-map',
@@ -9,14 +12,11 @@ import { OverlayHelper } from '@tailormap-viewer/shared';
   standalone: false,
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-
   public inIframe = window.self !== window.top;
   private overlayHelper: OverlayHelper | undefined;
   private el = inject( ElementRef);
   private mapService= inject(MapService);
-
-  public mapFocusedByKeyboard = signal(false);
-  public mouseDown = signal(false);
+  private snackBar = inject(MatSnackBar);
 
   private mapContainer = viewChild<ElementRef<HTMLElement>>('mapContainer');
 
@@ -30,6 +30,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (this.inIframe && nativeEl) {
       this.overlayHelper = new OverlayHelper(nativeEl);
     }
+    this.mapService.getCesiumManager$()
+      .pipe(take(1))
+      .subscribe((manager) => {
+        manager.executeScene3dAction(scene3d => {
+          const mapContainerElementRef = this.mapContainer();
+          if (mapContainerElementRef) {
+            CesiumEventManager.enableKeyboardControl(scene3d, mapContainerElementRef.nativeElement);
+          }
+        });
+      });
   }
 
   public ngOnDestroy() {
@@ -39,16 +49,20 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public onFocus() {
-    if (this.mouseDown()) {
-      this.mouseDown.set(false);
+    const mapContainer = this.mapContainer();
+    if (!mapContainer || !mapContainer.nativeElement.matches(':focus-visible')) {
       return;
     }
-    this.mapFocusedByKeyboard.set(true);
+    this.mapService.getIn3d$().pipe(take(1)).subscribe(in3d => {
+      if (in3d) {
+        this.showSnackbarMessage($localize `:@@core.map.control-3d-hint:Use the arrow keys to move and shift + arrow keys to rotate`);
+      }
+    });
   }
 
   public onEnterKey() {
     const mapContainer = this.mapContainer();
-    if (!this.mapFocusedByKeyboard() || !mapContainer) {
+    if (!mapContainer || !mapContainer.nativeElement.matches(':focus-visible')) {
       return;
     }
     const target = mapContainer.nativeElement.querySelector('canvas')
@@ -56,6 +70,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!target) {
       return;
     }
+    combineLatest([
+      this.mapService.getCesiumManager$(),
+      this.mapService.getIn3d$(),
+    ])
+      .pipe(take(1))
+      .subscribe(([ manager, in3d ]) => {
+        if (manager && in3d) {
+          manager.simulateCenterClick();
+        }
+    });
     const rect = target.getBoundingClientRect();
     const clientX = rect.left + rect.width / 2;
     const clientY = rect.top + rect.height / 2;
@@ -74,6 +98,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     target.dispatchEvent(new PointerEvent('pointerdown', eventInit));
     target.dispatchEvent(new PointerEvent('pointerup', { ...eventInit, buttons: 0 }));
     target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX, clientY }));
+  }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 10000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
 }

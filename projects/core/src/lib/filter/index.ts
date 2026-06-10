@@ -1,5 +1,6 @@
 export * from './models/extended-filter-group.model';
 export * from './services/filter.service';
+export * from './services/filter-manager.service';
 export * from './filter-description/filter-description.component';
 export * from './helpers/cql-filter.helper';
 export * from './helpers/cql-spatial-filter.helper';
@@ -7,4 +8,5 @@ export * from './helpers/features-filter.helper';
 export * from './helpers/filter-type.helper';
 export * from './filter.module';
 export * from './models/feature-filter.model';
+export * from './models/filter-source.model';
 export * from './helpers/filter-source.helper';

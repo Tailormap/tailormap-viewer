@@ -2078,6 +2078,14 @@
         <source>{VAR_PLURAL, plural, =0 {Expired} =1 {One day until expiry} other {<x id="INTERPOLATION"/> days until expiry}}</source>
         <target>{VAR_PLURAL, plural, =0 {Abgelaufen} =1 {Ein Tag bis zum Ablauf} other {<x id="INTERPOLATION"/> Tage bis zum Ablauf}}</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.default-authorities" datatype="html">
+        <source>Groups assigned to every user</source>
+        <target>Gruppen, die jedem Benutzer zugewiesen sind</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.default-authorities-hint" datatype="html">
+        <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
+        <target>Komma-getrennte Liste von Gruppen, die allen angemeldeten Benutzern zugewiesen sind (einschließlich Aliase für diese Gruppen).</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
         <target>Bearbeiten von <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>
@@ -2125,6 +2133,14 @@
       <trans-unit id="admin-core.oidc.logo" datatype="html">
         <source>Upload logo for SSO button</source>
         <target>Logo für SSO-Schaltfläche hochladen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.roles-claim-filter-regex" datatype="html">
+        <source>Roles claim filter regex</source>
+        <target>Regex für Rollen-Claim-Filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.roles-claim-filter-regex-hint" datatype="html">
+        <source>Only roles from the identity provider matching this regular expression will be accepted. Use <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span style=&quot;font-family: monospace&quot;&gt;"/>(?i)<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> for case-insensitive matching and <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span style=&quot;font-family: monospace&quot;&gt;"/>^regex$<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> to match the entire role name instead of a substring. Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://regex101.com/?flavor=java&quot;&gt;"/>regex101.com<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for testing. </source>
+        <target>Nur Rollen vom Identitätsanbieter, die diesem regulären Ausdruck entsprechen, werden akzeptiert. Verwenden Sie <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span style=&quot;font-family: monospace&quot;&gt;"/>(?i)<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> für eine Groß-/Kleinschreibung-unabhängige Übereinstimmung und <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span style=&quot;font-family: monospace&quot;&gt;"/>^regex$<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> um den gesamten Rollennamen anstelle eines Teilstrings zu matchen. Verwenden Sie <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://regex101.com/?flavor=java&quot;&gt;"/>regex101.com<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> zum Testen. </target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.status" datatype="html">
         <source>Status</source>

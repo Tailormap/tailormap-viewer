@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FeatureModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { FeatureModel, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { catchError, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectViewerId } from '../state';
 import { TypesHelper } from '@tailormap-viewer/shared';
@@ -28,13 +28,18 @@ interface LoadedFeaturesResponse {
 export class LoadGeometriesService {
   private store$ = inject(Store);
   private api = inject(TAILORMAP_API_V1_SERVICE);
-  public loadGeometries$(maxFeatures: number, layerId: string, cqlFilter: string | undefined): Observable<LoadedFeaturesResponse> {
+  public loadGeometries$(
+    maxFeatures: number,
+    layerId: string,
+    cqlFilter: string | undefined,
+    getFeatures$?: Observable<FeaturesResponseModel>,
+  ): Observable<LoadedFeaturesResponse> {
     return this.store$.select(selectViewerId)
       .pipe(
         take(1),
         filter(TypesHelper.isDefined),
         switchMap(applicationId => {
-          return this.api.getFeatures$({
+          return (getFeatures$ ?? this.api.getFeatures$({
             layerId,
             applicationId,
             page: 1,
@@ -42,7 +47,7 @@ export class LoadGeometriesService {
             filter: cqlFilter === '' ? undefined : cqlFilter,
             simplify: false,
             onlyGeometries: true,
-          }).pipe(
+          })).pipe(
             map((response): LoadFeaturesResponse => ({
               features: response.features,
               error: false,
@@ -53,7 +58,7 @@ export class LoadGeometriesService {
             }),
           );
         }),
-        map((response): LoadedFeaturesResponse => {
+        map((response: LoadFeaturesResponse): LoadedFeaturesResponse => {
           const features: LoadedFeature[] = response.features.map<LoadedFeature | undefined>(feat => {
             if (!feat.geometry) {
               return undefined;

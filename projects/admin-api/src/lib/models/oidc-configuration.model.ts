@@ -8,4 +8,6 @@ export interface OIDCConfigurationModel {
   userNameAttribute: string;
   status?: string;
   image?: string | null;
+  defaultAuthorities?: string[] | null;
+  rolesClaimFilterRegex?: string | null;
 }

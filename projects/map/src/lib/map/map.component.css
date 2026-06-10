@@ -63,7 +63,7 @@
   justify-content: center;
 }
 
-.map-focus-indicator--visible {
+.map-container:focus-visible .map-focus-indicator {
   opacity: 1;
 }
 

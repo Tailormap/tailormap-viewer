@@ -17,6 +17,7 @@ import { FilterService } from '../../../filter/services/filter.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { AttributeListManagerService } from './attribute-list-manager.service';
+import { selectLayer } from '../../../map';
 
 @Injectable({
   providedIn: 'root',
@@ -79,12 +80,16 @@ export class AttributeListDataService implements OnDestroy {
     }
     const start = selectedData.pageIndex;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
-    return this.store$.select(selectViewerId)
+    return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))) ])
       .pipe(
-        filter(TypesHelper.isDefined),
-        concatMap(applicationId => this.api.getFeatures$(tab.tabSourceId, {
+        filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
+          const [ applicationId, layer ] = result;
+          return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
+        }),
+        concatMap(([ applicationId, layer ]) => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
-          applicationId,
+          applicationId: applicationId,
+          layerName: layer.layerName,
           page: start,
           filter: layerFilter,
           sortBy: selectedData.sortedColumn,
@@ -92,7 +97,6 @@ export class AttributeListDataService implements OnDestroy {
             ? Sortorder.DESC
             : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
-      ).pipe(
       catchError(_e => of(null)),
       map((response): LoadAttributeListDataResultModel => {
         if (response === null) {
