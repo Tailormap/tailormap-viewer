@@ -58,9 +58,7 @@ export class OpenLayersSnappingManager {
 
   public static allowSnapping(allow: boolean) {
     OpenLayersSnappingManager.snappingAllowed = allow;
-    if (!allow) {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(false);
-    }
+    OpenLayersSnappingManager.enableSnappingIfAllowed(allow);
   }
 
   public static setSnappingLayerStyle(style: OlMapStyleType) {
