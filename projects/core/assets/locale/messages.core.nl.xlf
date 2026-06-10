@@ -619,11 +619,11 @@
         <target>Uploaden van bijlage &quot;<x id="PH" equiv-text="file.name"/>&quot; mislukt: </target>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
-        <source>No attribute name specified Feature Selection Bookmark</source>
+        <source>No attribute name specified in Feature Selection Bookmark</source>
         <target>Geen attribuutnaam opgegeven in Feature Selection Bookmark</target>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-value" datatype="html">
-        <source>No attribute value specified Feature Selection Bookmark</source>
+        <source>No attribute value specified in Feature Selection Bookmark</source>
         <target>Geen attribuutwaarde opgegeven in Feature Selection Bookmark</target>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-feature-found" datatype="html">

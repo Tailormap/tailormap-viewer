@@ -462,10 +462,10 @@
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
-        <source>No attribute name specified Feature Selection Bookmark</source>
+        <source>No attribute name specified in Feature Selection Bookmark</source>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-value" datatype="html">
-        <source>No attribute value specified Feature Selection Bookmark</source>
+        <source>No attribute value specified in Feature Selection Bookmark</source>
       </trans-unit>
       <trans-unit id="core.feature-bookmark.no-feature-found" datatype="html">
         <source>No feature found</source>

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FeatureInfoResponseModel } from "../../components/feature-info/models/feature-info-response.model";
 
 export interface FeatureSelectionMessage {
-  type: 'tailormap-set-feature-selection';
+  type: 'tailormap-feature-selection';
   value: string;
 }
 
@@ -67,12 +67,12 @@ export class FeatureSelectionBookmarkHelper {
     }
     if (!attributeName) {
       return {
-        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-name:No attribute name specified Feature Selection Bookmark`,
+        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-name:No attribute name specified in Feature Selection Bookmark`,
       };
     }
     if (!attributeValue) {
       return {
-        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-value:No attribute value specified Feature Selection Bookmark`,
+        errorMessage: $localize `:@@core.feature-bookmark.no-attribute-value:No attribute value specified in Feature Selection Bookmark`,
       };
     }
 
