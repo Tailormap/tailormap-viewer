@@ -39,13 +39,21 @@ export class FeatureSelectionBookmarkHelper {
       .map(layerPair => layerPair.trim())
       .filter(layerPair => layerPair.length > 0)
       .map(layerPair => {
-        const [ serviceId, layerName ] = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
+        const layerParts = layerPair.split(this.SERVICE_LAYER_SEPARATOR);
+        if (layerParts.length !== 2) {
+          return null;
+        }
+        const [ serviceId, layerName ] = layerParts;
         if (!serviceId || !layerName) {
           return null;
         }
         return { serviceId, layerName };
       })
       .filter(layer => layer !== null);
+
+    if (layers.length === 0) {
+      return null;
+    }
 
     return {
       layers,
