@@ -66,7 +66,10 @@ export class ApplicationBookmarkService implements OnDestroy {
       });
 
     fromEvent<MessageEvent>(window, 'message')
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        filter(event => window.self !== window.top && event.source === window.parent),
+      )
       .subscribe(event => {
         if (FeatureSelectionBookmarkHelper.isFeatureSelectionMessage(event.data)) {
           this.bookmarkService.updateFragment(
