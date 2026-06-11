@@ -131,7 +131,7 @@ export class FeatureSelectionBookmarkService {
       take(1),
       concatMap(([ applicationId, layers ]) => {
         if (!applicationId || !layers) {
-          return [];
+          return of([]);
         }
         // Get the CQL filters from the filter group for each layer
         const allFeaturesFilters: FeaturesFilters = CqlFilterHelper.getFilters([filterGroup]);
