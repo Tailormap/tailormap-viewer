@@ -2,7 +2,7 @@ import { Map as OlMap } from 'ol';
 import { Projection } from 'ol/proj';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
-import { defaults as defaultInteractions, DragPan, MouseWheelZoom } from 'ol/interaction';
+import { defaults as defaultInteractions, DragPan, Interaction, MouseWheelZoom } from 'ol/interaction';
 import {
   LayerManagerModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
 } from '../models';
@@ -91,14 +91,27 @@ export class OpenLayersMap implements MapViewerModel {
         pinchRotate: false,
         mouseWheelZoom: !isInIframe,
         dragPan: !isInIframe,
-      }).extend(isInIframe ? [
-        new DragPan({
-          condition: function (event) {
-            return event.activePointers?.length === 2 || mouseOnly(event);
+      }).extend([
+        new Interaction({
+          handleEvent: event => {
+            if (event.originalEvent instanceof KeyboardEvent && event.originalEvent.key === '=') {
+              event.originalEvent.preventDefault();
+              const mapView = event.map.getView();
+              mapView.animate({ zoom: (mapView.getZoom() ?? 0) + 1, duration: 100 });
+              return false;
+            }
+            return true;
           },
         }),
-        new MouseWheelZoom({ condition: platformModifierKeyOnly }),
-      ] : []),
+        ...(isInIframe ? [
+          new DragPan({
+            condition: function (event) {
+              return event.activePointers?.length === 2 || mouseOnly(event);
+            },
+          }),
+          new MouseWheelZoom({ condition: platformModifierKeyOnly }),
+        ] : []),
+      ]),
       view,
     });
     // always add the attribution control
