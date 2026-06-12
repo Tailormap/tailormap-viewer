@@ -16,6 +16,7 @@ export interface FeatureInfoState {
   columnMetadata: FeatureInfoColumnMetadataModel[];
   attachmentMetadata: FeatureInfoAttachmentAttributeMetadata[];
   selectedLayerId?: string;
+  showingBookmarkFeatures: boolean;
 }
 
 export const initialFeatureInfoState: FeatureInfoState = {
@@ -26,4 +27,5 @@ export const initialFeatureInfoState: FeatureInfoState = {
   features: [],
   columnMetadata: [],
   attachmentMetadata: [],
+  showingBookmarkFeatures: false,
 };

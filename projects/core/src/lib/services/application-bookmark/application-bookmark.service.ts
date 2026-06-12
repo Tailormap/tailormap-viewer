@@ -1,7 +1,9 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
-import { combineLatest, debounceTime, filter, map, Observable, skip, Subject, switchMap, takeUntil, withLatestFrom } from 'rxjs';
+import {
+  combineLatest, debounceTime, filter, fromEvent, map, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
+} from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BookmarkService } from '../bookmark/bookmark.service';
@@ -9,7 +11,7 @@ import { MapBookmarkHelper } from './map-bookmark.helper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApplicationBookmarkFragments, CompactFilterBookmarkFragment, LayerSortBookmarkFragment, LayerTreeOrderBookmarkFragment,
-  LayerSettingsBookmarkFragment,
+  LayerSettingsBookmarkFragment, FeatureSelectionBookmarkData,
 } from './application-bookmark-fragments';
 import { setLayerOpacity, setLayerStyle, setLayerVisibility, updateLayerTreeNodes } from '../../map/state/map.actions';
 import { ReadableVisibilityBookmarkHandlerService } from './bookmark-fragment-handlers/readable-visibility-bookmark-handler.service';
@@ -21,6 +23,10 @@ import { FilterGroupModel } from '@tailormap-viewer/api';
 import { selectAttributeListDataSort } from '../../components/attribute-list/state/attribute-list.selectors';
 import { setInitialDataSort } from '../../components/attribute-list/state/attribute-list.actions';
 import { SortBookmarkHelper } from './sort-bookmark.helper';
+import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.service';
+import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
+import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
+import { MobileLayoutBookmarkEnum, MobileLayoutService } from '../viewer-layout/mobile-layout.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +38,8 @@ export class ApplicationBookmarkService implements OnDestroy {
   private router = inject(Router);
   private bookmarkService = inject(BookmarkService);
   private readableVisibilityBookmarkHandler = inject(ReadableVisibilityBookmarkHandlerService);
+  private featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
+  private mobileLayoutService = inject(MobileLayoutService);
 
 
   private destroyed = new Subject();
@@ -40,6 +48,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
   private lastSortBookmark: LayerSortBookmarkFragment | undefined;
   private lastFilterBookmark: CompactFilterBookmarkFragment | undefined;
+  private lastFeatureSelectionBookmark: string | undefined;
 
   constructor() {
     let initialRun = true;
@@ -55,6 +64,20 @@ export class ApplicationBookmarkService implements OnDestroy {
         }
         initialRun = false;
       });
+
+    fromEvent<MessageEvent>(window, 'message')
+      .pipe(
+        takeUntil(this.destroyed),
+        filter(event => window.self !== window.top && event.source === window.parent),
+      )
+      .subscribe(event => {
+        if (FeatureSelectionBookmarkHelper.isFeatureSelectionMessage(event.data)) {
+          this.bookmarkService.updateFragment(
+            ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR,
+            event.data.value,
+          );
+        }
+      });
   }
 
   public ngOnDestroy() {
@@ -65,19 +88,6 @@ export class ApplicationBookmarkService implements OnDestroy {
   public isEmbeddedApplication$() {
     return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.EMBED_BOOKMARK_DESCRIPTOR)
       .pipe(map(embedded => embedded === '1'));
-  }
-
-  public getMobileLayoutOption$(): Observable<'enabled' | 'disabled' | 'auto'> {
-    return this.bookmarkService.registerFragment$(ApplicationBookmarkFragments.MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR)
-      .pipe(map(mobile => {
-        if (mobile === '1') {
-          return 'enabled';
-        } else if (mobile === '0') {
-          return 'disabled';
-        } else {
-          return 'auto';
-        }
-      }));
   }
 
   private updateBookmarkOnChanges() {
@@ -113,11 +123,20 @@ export class ApplicationBookmarkService implements OnDestroy {
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
+    this.getFeaturesRemovedFromFeatureInfo$()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((featuresRemoved) => {
+        if (featuresRemoved) {
+          this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR, '');
+        }
+      });
+
     this.bookmarkService.getBookmarkValue$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(bookmark => {
         this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
+
   }
 
   private updateMapOnUrlChanges() {
@@ -220,6 +239,33 @@ export class ApplicationBookmarkService implements OnDestroy {
           this.store$.dispatch(addOrUpdateFilterGroups({ filterGroups: newAndUpdatedFilterGroups }));
         }
       });
+
+    this.store$.select(selectLoadStatus).pipe(
+      skip(1),
+      takeUntil(this.destroyed),
+      filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
+      switchMap(() => this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)),
+      filter(featureSelectionFragment => featureSelectionFragment !== this.lastFeatureSelectionBookmark),
+      withLatestFrom(this.isEmbeddedApplication$()),
+    ).subscribe(([ featureSelectionFragmentString, isEmbedded ]) => {
+        this.lastFeatureSelectionBookmark = featureSelectionFragmentString || undefined;
+        const featureSelectionFragment: FeatureSelectionBookmarkData | null = FeatureSelectionBookmarkHelper.getFragmentFromBookmark(featureSelectionFragmentString || null);
+        this.featureSelectionBookmarkService.clearSelection();
+        this.featureSelectionBookmarkService.applyBookmarkFragment(featureSelectionFragment, isEmbedded);
+      });
+
+    this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR)
+      .pipe(
+        takeUntil(this.destroyed),
+      ).subscribe(mobile => {
+        if (mobile === '1') {
+          this.mobileLayoutService.setMobileLayoutBookmark(MobileLayoutBookmarkEnum.ENABLED);
+        } else if (mobile === '0') {
+          this.mobileLayoutService.setMobileLayoutBookmark(MobileLayoutBookmarkEnum.DISABLED);
+        } else {
+          this.mobileLayoutService.setMobileLayoutBookmark(MobileLayoutBookmarkEnum.AUTO);
+        }
+      });
   }
 
   private getLayerSettingsBookmarkData$() {
@@ -277,5 +323,17 @@ export class ApplicationBookmarkService implements OnDestroy {
       debounceTime(250),
       map(([sortState]) => SortBookmarkHelper.fragmentFromSortState(sortState)),
     );
+  }
+
+  /*
+  Emit true after features from bookmark have been shown and then removed from feature info
+   */
+  private getFeaturesRemovedFromFeatureInfo$() {
+    return this.store$.select(selectFeatureInfoShowingBookmarkFeatures)
+      .pipe(
+        takeUntil(this.destroyed),
+        skipWhile(showingBookmarkFeatures => !showingBookmarkFeatures),
+        map(showingBookmarkFeatures => !showingBookmarkFeatures),
+      );
   }
 }

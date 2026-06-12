@@ -38,6 +38,11 @@ export class ApplicationBookmarkFragments {
   public static MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
     'mobile',
   );
+
+  public static FEATURE_SELECTION_BOOKMARK_DESCRIPTOR = new BookmarkStringFragmentDescriptor(
+    'feature',
+  );
+
 }
 
 export type LayerSettingsBookmarkFragment = Array<BookmarkLayerSettings>;
@@ -110,3 +115,15 @@ export type BookmarkSortModel = {
   c: string; /* column */
   d?: boolean; /* descending instead ascending? */
 };
+
+export type FeatureSelectionBookmarkFragment = FeatureSelectionBookmarkData;
+
+export interface FeatureSelectionBookmarkData {
+  layers: Array<{
+    serviceId: string;
+    layerName: string; // layer id in the service, not the appLayerId
+  }>;
+  attributeName: string;
+  attributeValue: string;
+  createFilter?: boolean;
+}

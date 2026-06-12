@@ -618,6 +618,22 @@
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
         <target>Uploaden van bijlage &quot;<x id="PH" equiv-text="file.name"/>&quot; mislukt: </target>
       </trans-unit>
+      <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
+        <source>No attribute name specified in Feature Selection Bookmark</source>
+        <target>Geen attribuutnaam opgegeven in Feature Selection Bookmark</target>
+      </trans-unit>
+      <trans-unit id="core.feature-bookmark.no-attribute-value" datatype="html">
+        <source>No attribute value specified in Feature Selection Bookmark</source>
+        <target>Geen attribuutwaarde opgegeven in Feature Selection Bookmark</target>
+      </trans-unit>
+      <trans-unit id="core.feature-bookmark.no-feature-found" datatype="html">
+        <source>No feature found</source>
+        <target>Geen object gevonden</target>
+      </trans-unit>
+      <trans-unit id="core.feature-bookmark.no-layers" datatype="html">
+        <source>No layers specified in Feature Selection Bookmark</source>
+        <target>Geen lagen opgegeven in Feature Selection Bookmark</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.collapse-layer-list" datatype="html">
         <source>Collapse layer list</source>
         <target>Lagenlijst inklappen</target>
@@ -731,12 +747,12 @@
         <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-from-value" datatype="html">
-        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - vanaf waarde</source>
-        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - from value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - van waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label-until-value" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</source>
-        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - until value</target>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - tot waarde</target>
       </trans-unit>
       <trans-unit id="core.filter.delete-filter-confirm" datatype="html">
         <source>Delete filter?</source>

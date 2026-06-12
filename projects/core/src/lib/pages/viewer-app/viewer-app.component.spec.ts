@@ -9,6 +9,7 @@ import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/share
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
+import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
   return { provide: ActivatedRoute, useValue: {
@@ -37,6 +38,7 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
           { selector: selectViewerTitle, value: 'my fancy title' },
         ],
       }),
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });

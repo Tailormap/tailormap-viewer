@@ -19,6 +19,7 @@ export const selectFeatureInfoLayerListCollapsed = createSelector(selectFeatureI
 export const selectFeatureInfoFeatures = createSelector(selectFeatureInfoState, state => state.features);
 export const selectFeatureInfoMetadata = createSelector(selectFeatureInfoState, state => ({ columnMetadata: state.columnMetadata, attachmentMetadata: state.attachmentMetadata }));
 export const selectFeatureInfoLayers = createSelector(selectFeatureInfoState, state => state.layers);
+export const selectFeatureInfoShowingBookmarkFeatures = createSelector(selectFeatureInfoState, (state): boolean => state.showingBookmarkFeatures);
 
 export const selectFeatureInfoList = createSelector(
   selectFeatureInfoFeatures,
