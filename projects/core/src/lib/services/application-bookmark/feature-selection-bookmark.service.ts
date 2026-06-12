@@ -20,6 +20,22 @@ import { tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * This service applies a feature selection bookmark fragment when starting the application and when the bookmark changes.
+ * It reads the 'feature' part of the URL bookmark, fetches matching features, highlights
+ * them on the map, and, in base layout, opens the feature info panel.
+ *
+ * Format is feature:layers=service_id/layername;attribute=attributeName;value=attributeValue.
+ * The layers are identified by the service id and the layer name, separated by a '/'. Layers of incorrect format will be ignored.
+ * Supports multiple layers, separated by a comma:
+ * feature:layers=service_id/layername,other_service/other_layer;attribute=attributeName;value=attributeValue
+ * Optionally include a filter parameter to add an attribute filter:
+ * feature:layers=service_id/layername;attribute=attributeName;value=attributeValue;filter=true
+ *
+ * The fragment can also be set by a parent window via a postMessage event, to prevent reloading when the application is in an IFrame,
+ * using the format:
+ * { type: 'tailormap-feature-selection', value: 'layers=service_id/layername;attribute=attributeName;value=attributeValue' }
+ */
 @Injectable({
   providedIn: 'root',
 })
