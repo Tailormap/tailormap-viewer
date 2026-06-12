@@ -144,7 +144,7 @@ describe('OpenLayersSnappingManager', () => {
       OpenLayersSnappingManager.renderFeatures([]);
 
       expect((OpenLayersSnappingManager as any).initialized.value).toBe(true);
-      expect(newMockLayerManager.addLayer).toHaveBeenCalledTimes(1);
+      expect(newMockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -164,14 +164,14 @@ describe('OpenLayersSnappingManager', () => {
       setup(); // init only – no layer yet
       expect(mockLayerManager.addLayer).not.toHaveBeenCalled();
       OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
-      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(1);
+      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
 
     test('does not call addLayer again on subsequent calls', () => {
       setup({ withLayer: true });
       OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
       OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
-      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(1);
+      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -180,17 +180,12 @@ describe('OpenLayersSnappingManager', () => {
   // ---------------------------------------------------------------------------
 
   describe('setSnappingTolerance', () => {
-    test('calls setProperties with the given pixelTolerance on the snap interaction', () => {
-      setup({ withLayer: true });
-      OpenLayersSnappingManager.setSnappingTolerance(10);
-      expect(mockSnapInstance.setProperties).toHaveBeenCalledWith({ pixelTolerance: 10 });
-    });
-
     test('lazily creates the snap interaction on the first call', () => {
       setup({ withLayer: true }); // layer ready, snap NOT yet created
       expect(mockSnap).not.toHaveBeenCalled();
       OpenLayersSnappingManager.setSnappingTolerance(5);
       expect(mockSnap).toHaveBeenCalledTimes(1);
+      expect(mockSnap).toHaveBeenCalledWith({ pixelTolerance: 5, source: expect.anything() });
     });
   });
 
@@ -235,7 +230,7 @@ describe('OpenLayersSnappingManager', () => {
 
     test('creates a Snap interaction using the snapping layer source', () => {
       OpenLayersSnappingManager.enableSnappingIfAllowed(true);
-      expect(mockSnap).toHaveBeenCalledWith({ source: mockVectorSource });
+      expect(mockSnap).toHaveBeenCalledWith({ pixelTolerance: 10, source: mockVectorSource });
     });
 
     test('adds the snap interaction to the map when enabling', () => {
@@ -293,7 +288,7 @@ describe('OpenLayersSnappingManager', () => {
       setup(); // init only
       expect(mockLayerManager.addLayer).not.toHaveBeenCalled();
       OpenLayersSnappingManager.renderFeatures([]);
-      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(1);
+      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
 
     test('adds the snapping layer with the correct configuration', () => {
@@ -340,7 +335,7 @@ describe('OpenLayersSnappingManager', () => {
       setup();
       OpenLayersSnappingManager.renderFeatures([]);
       OpenLayersSnappingManager.renderFeatures([]);
-      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(1);
+      expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
 });

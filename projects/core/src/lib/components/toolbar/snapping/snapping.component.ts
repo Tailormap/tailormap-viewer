@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal } from '@angular/core';
 import { MapService } from '@tailormap-viewer/map';
-import { map } from 'rxjs';
+import { map, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ApplicationStyleService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -42,16 +42,8 @@ export class SnappingComponent implements OnInit {
         if (config?.config.title) {
           this.tooltip.set(config.config.title);
         }
+        this.setSnappingLayerStyle(config?.config.color);
       });
-    this.mapService.setSnappingLayerStyle({
-      styleKey: 'snapping-style',
-      zIndex: 999,
-      strokeColor: ApplicationStyleService.getPrimaryColor(),
-      strokeWidth: 3,
-      pointFillColor: ApplicationStyleService.getPrimaryColor(),
-      pointSize: 3,
-      pointType: 'circle',
-    });
     this.snappingService.snappingGeometries$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(geometries => {
@@ -61,6 +53,13 @@ export class SnappingComponent implements OnInit {
 
   public toggleLayer(layer: ExtendedAppLayerModel) {
     this.snappingService.toggleLayer(layer);
+    this.snappingService.snappingLayers$.pipe(take(1)).subscribe(layers => {
+      if (layers.length > 0 && !this.snappingService.isSnappingActive()) {
+        this.toggleTool();
+      } else if (layers.length === 0 && this.snappingService.isSnappingActive()) {
+        this.toggleTool();
+      }
+    });
   }
 
   public toggleTool() {
@@ -71,6 +70,18 @@ export class SnappingComponent implements OnInit {
       this.mapService.allowSnapping(false);
       this.snappingService.disableSnapping();
     }
+  }
+
+  private setSnappingLayerStyle(color?: string) {
+    this.mapService.setSnappingLayerStyle({
+      styleKey: 'snapping-style',
+      zIndex: 999,
+      strokeColor: color || ApplicationStyleService.getPrimaryColor(),
+      strokeWidth: 3,
+      pointFillColor: color || ApplicationStyleService.getPrimaryColor(),
+      pointSize: 3,
+      pointType: 'circle',
+    });
   }
 
 }

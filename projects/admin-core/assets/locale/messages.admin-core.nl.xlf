@@ -1717,6 +1717,10 @@
         <source>Search title</source>
         <target>Zoeken titel</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.snapping-color" datatype="html">
+        <source>Snapping color</source>
+        <target>Snapping kleur</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
         <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
         <target>Selecteer één of meerdere lagen die beschikbaar zijn voor snapping. Selecteer er tenminste 1 om snapping toe te staan.</target>

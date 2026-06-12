@@ -25,7 +25,9 @@ export class SnappingComponentConfigComponent implements ConfigurationComponentM
   @Input()
   public set config(config: SnappingComponentConfigModel | undefined) {
     this._config = config;
-    this.tolerance.patchValue(config?.tolerance ?? DEFAULT_SNAPPING_TOLERANCE, { emitEvent: false, onlySelf: true });
+    if (config?.tolerance || config?.tolerance === 0) {
+      this.tolerance.patchValue(config.tolerance, { emitEvent: false, onlySelf: true });
+    }
     this.selectedLayers.patchValue(config?.selectedLayers || [], { emitEvent: false, onlySelf: true });
   }
   public get config() {
@@ -33,7 +35,7 @@ export class SnappingComponentConfigComponent implements ConfigurationComponentM
   }
   private _config: SnappingComponentConfigModel | undefined;
 
-  public tolerance = new FormControl<number>(DEFAULT_SNAPPING_TOLERANCE);
+  public tolerance = new FormControl<number | undefined>(DEFAULT_SNAPPING_TOLERANCE);
   public selectedLayers = new FormControl<string[]>([]);
 
   constructor() {
@@ -47,6 +49,10 @@ export class SnappingComponentConfigComponent implements ConfigurationComponentM
       .subscribe(selectedLayers => {
         this.componentConfigService.updateConfigForKey<SnappingComponentConfigModel>(this.type, 'selectedLayers', selectedLayers);
       });
+  }
+
+  public updateColor(color: string) {
+    this.componentConfigService.updateConfigForKey<SnappingComponentConfigModel>(this.type, 'color', color);
   }
 
 }

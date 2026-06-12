@@ -4,5 +4,6 @@ export const DEFAULT_SNAPPING_TOLERANCE = 10;
 
 export interface SnappingComponentConfigModel extends ComponentBaseConfigModel {
   tolerance?: number;
+  color?: string;
   selectedLayers?: string[];
 }
