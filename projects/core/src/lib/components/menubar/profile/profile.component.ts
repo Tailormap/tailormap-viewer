@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject, OnInit, input, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
-import { combineLatest, map, Observable, Subject } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, Observable, Subject } from 'rxjs';
 import { BaseComponentTypeEnum, SecurityModel } from '@tailormap-viewer/api';
 import { Router } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ]).pipe(
       takeUntilDestroyed(this.destroyRef),
       map(([ visible, mobileLayoutEnabled ]) => visible || !mobileLayoutEnabled),
+      distinctUntilChanged(),
     );
 
     this.icon$ = combineLatest([
