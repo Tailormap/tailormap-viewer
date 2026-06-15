@@ -1,3 +1,5 @@
+import { UrlHelper } from '../../helpers';
+
 export interface GeoServerLegendOptions {
   fontName?: string;
   fontStyle?: 'italic' | 'bold';
@@ -32,4 +34,7 @@ export class LegendHelper {
     }
   }
 
+  public static isDynamicLegend(legendUrl: string): boolean {
+    return legendUrl ? UrlHelper.getParamCaseInsensitive(new URL(legendUrl), 'REQUEST') === 'GetLegendGraphic' : false;
+  }
 }

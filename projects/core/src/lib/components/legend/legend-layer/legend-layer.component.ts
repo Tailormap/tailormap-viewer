@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
-import { LegendImageModel } from '@tailormap-viewer/shared';
+import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
 import { ServerType } from '@tailormap-viewer/api';
 
 @Component({
@@ -18,10 +18,13 @@ export class LegendLayerComponent {
 
   public getLegend(legendInfo: LegendInfoModel): LegendImageModel {
     const selectedStyle = legendInfo.layer.styles?.find(s => s.name === legendInfo.layer.selectedStyleName);
+    const url = selectedStyle?.legendUrl ?? legendInfo.url;
+    // Can be set to dynamic because it is a hidden proxied URL, or is an actual WMS GetLegendGraphic request
+    const dynamicLegend = legendInfo.layer.legendType === 'dynamic' || LegendHelper.isDynamicLegend(url);
     return {
-      url: selectedStyle?.legendUrl ?? legendInfo.url,
+      url,
       serverType: legendInfo.layer.service?.serverType ?? ServerType.GENERIC,
-      legendType: legendInfo.layer.legendType ?? 'static',
+      legendType: dynamicLegend ? 'dynamic' : 'static',
       title: legendInfo.layer.title,
     };
   }
