@@ -58,7 +58,7 @@
         class="styles-list"
       >
         @for (style of node.metadata?.styles || []; track style) {
-          <mat-radio-button [checked]="style === node.metadata?.styles?.[0]"
+          <mat-radio-button [checked]="style.name === node.metadata?.selectedStyleName"
                             [value]="style"
                             class="style-radio-button"
                             tmTooltip="{{ style.abstractText ?? '' }}"
