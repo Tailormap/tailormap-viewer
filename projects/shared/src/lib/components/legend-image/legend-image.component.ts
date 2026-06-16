@@ -43,6 +43,22 @@ export class LegendImageComponent {
     }
   }
 
+  private _width: number | undefined;
+
+  @Input()
+  public set width(width: number | undefined) {
+    if (this._width !== width) {
+      this._width = width;
+      if (this.prevLegend) {
+        this.createSettings(this.prevLegend);
+      }
+    }
+  }
+
+  public get width(): number | undefined {
+    return this._width;
+  }
+
   public legendSettings = signal<LegendImageSettingsModel | null>(null);
 
   public createSettings(legend: LegendImageModel | null) {
@@ -54,6 +70,7 @@ export class LegendImageComponent {
     if (legend === null) {
       return;
     }
+    console.log(`Legend image width: ${this._width}`);
     const legendSettings: LegendImageSettingsModel = {
       url: legend.url,
       srcset: '',
@@ -62,15 +79,21 @@ export class LegendImageComponent {
     };
     if (legend.legendType == 'dynamic') {
       if (legend.serverType === 'geoserver') {
+        const wrapOptions = this._width ? { wrap: true, wrap_limit: Math.floor(this._width * 1.5) } : {};
         const legendOptions: GeoServerLegendOptions = {
           fontAntiAliasing: true,
           labelMargin: 0,
           forceLabels: 'on',
+          ...wrapOptions,
         };
         legendSettings.url = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions);
         if (window.devicePixelRatio > 1) {
+          const wrapOptions2x = this._width ? { wrap: true, wrap_limit: Math.floor(this._width * 3.8) } : {};
           legendOptions.dpi = 180;
-          legendSettings.srcset = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions) + ' 2x';
+          legendSettings.srcset = LegendHelper.addGeoServerLegendOptions(legend.url, {
+            ...legendOptions,
+            ...wrapOptions2x,
+          }) + ' 2x';
         }
       } else if (legend.serverType === 'mapserver') {
         const u = new URL(legend.url);

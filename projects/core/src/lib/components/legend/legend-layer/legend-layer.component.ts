@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, inject,
+} from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
 import { ServerType } from '@tailormap-viewer/api';
@@ -10,7 +12,38 @@ import { ServerType } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class LegendLayerComponent {
+export class LegendLayerComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('container')
+  private container: ElementRef<HTMLElement> | undefined;
+  private resizeObserver: ResizeObserver | null = null;
+
+  private cdr = inject(ChangeDetectorRef);
+
+  public width: number | undefined;
+
+  public ngAfterViewInit(): void {
+    const containerElement = this.container?.nativeElement;
+    if (containerElement) {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const offsetWidth = entry.target instanceof HTMLElement ? entry.target.offsetWidth : undefined;
+          if (offsetWidth && offsetWidth > 0 && offsetWidth !== this.width) {
+            this.width = offsetWidth;
+            this.cdr.markForCheck();
+          }
+        }
+      });
+      this.resizeObserver.observe(containerElement);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+  }
+
   @Input()
   public legendInfo: LegendInfoModel | null = null;
   @Input()
