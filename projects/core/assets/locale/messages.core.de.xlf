@@ -710,6 +710,14 @@
         <source>Case sensitive</source>
         <target>Unterscheidung zwischen Groß- und Kleinschreibung</target>
       </trans-unit>
+      <trans-unit id="core.filter.checkbox.check-all" datatype="html">
+        <source>Check all values</source>
+        <target>Alle Werte prüfen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.uncheck-all" datatype="html">
+        <source>Uncheck all values</source>
+        <target>Alle Werte abwählen</target>
+      </trans-unit>
       <trans-unit id="core.filter.choose-value" datatype="html">
         <source>Choose value</source>
         <target>Wert auswählen</target>

@@ -100,6 +100,32 @@ export class EditAttributeFiltersComponent {
     }
   }
 
+  public updateAllCheckboxFilterValues(
+    checked: boolean,
+    regularValues: string[],
+    substringValues: string[],
+    filter: AttributeFilterModel,
+  ) {
+    const filterGroupId = this.filterGroupId() ?? '';
+    const newValue = checked
+      ? regularValues
+      : [];
+    const newFilter: AttributeFilterModel = {
+      ...filter,
+      value: newValue,
+    };
+    this.store$.dispatch(updateFilter({ filterGroupId, filter: newFilter }));
+
+    // Update each substring filter
+    substringValues.forEach(value => {
+      this.store$.dispatch(setSingleFilterDisabled({
+        filterGroupId,
+        filterId: `${filter.id}-substring-${value}`,
+        disabled: !checked,
+      }));
+    });
+  }
+
   public getConditionLabel(condition: FilterConditionEnum): string {
     return AttributeFilterHelper.getConditionTypes(true).find(c => c.condition === condition)?.label || '';
   }
