@@ -20,6 +20,7 @@ import { UploadInUseDialogComponent } from './upload-in-use-dialog/upload-in-use
   exports: [
     SelectUploadDialogComponent,
     SelectUploadComponent,
+    ImageUploadFieldComponent,
   ],
 })
 export class SelectUploadModule {

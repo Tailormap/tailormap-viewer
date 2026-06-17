@@ -16,21 +16,20 @@ let firstRun = true;
   standalone: false,
 })
 export class AdminTemplateComponent {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   public className$: Observable<string>;
   public pageTitle$: Observable<string>;
 
   constructor() {
-    const route = inject(ActivatedRoute);
-    const router = inject(Router);
-    const destroyRef = inject(DestroyRef);
-
-    this.className$ = RoutePropertyHelper.getPropForRoute$(router, route, 'templateCls')
-      .pipe(takeUntilDestroyed(destroyRef));
-    this.pageTitle$ = RoutePropertyHelper.getPropForRoute$(router, route, 'pageTitle')
-      .pipe(takeUntilDestroyed(destroyRef));
+    this.className$ = RoutePropertyHelper.getPropForRoute$(this.router, this.route, 'templateCls')
+      .pipe(takeUntilDestroyed(this.destroyRef));
+    this.pageTitle$ = RoutePropertyHelper.getPropForRoute$(this.router, this.route, 'pageTitle')
+      .pipe(takeUntilDestroyed(this.destroyRef));
     if (firstRun) {
-      router.navigateByUrl(router.routerState.snapshot.url);
+      this.router.navigateByUrl(this.router.routerState.snapshot.url);
       firstRun = false;
     }
   }

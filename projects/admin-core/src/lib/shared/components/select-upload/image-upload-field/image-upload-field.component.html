@@ -1,17 +1,20 @@
+@let imgError = imageError();
+@let imgContent = imageContent();
+@let isSaved = isImageSaved();
 <div class="form-field">
-  @if (imageError) {
-    <tm-error-message [message]="imageError" [friendlyError]="true"></tm-error-message>
+  @if (imgError) {
+    <tm-error-message [message]="imgError" [friendlyError]="true"></tm-error-message>
   }
   <div class="img-space">
-    @if (imageContent) {
-      <img [src]="imageContent" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
+    @if (imgContent) {
+      <img [src]="imgContent" i18n-alt="@@admin-core.application.current-image" alt="Current image"/>
     }
-    <div class="upload-wrapper" [class.upload-complete]="isImageSaved">
+    <div class="upload-wrapper" [class.upload-complete]="isSaved">
       <input type="file"
-        accept="image/*"
+        [accept]="acceptedImageTypes()"
         (change)="fileChangeEvent($event)"
         class="fileInputProfile">
-      @if (isImageSaved || imageContent) {
+      @if (isSaved || imgContent) {
         <button mat-stroked-button
           color="warn"
           tmTooltip="Remove the image"

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal, output } from '@angular/core';
 import { ImageHelper } from '@tailormap-admin/admin-api';
 
 @Component({
@@ -9,28 +9,22 @@ import { ImageHelper } from '@tailormap-admin/admin-api';
   standalone: false,
 })
 export class ImageUploadFieldComponent {
-  private cdr = inject(ChangeDetectorRef);
+  public isImageSaved = signal(false);
+  public isImageRemoved = signal(false);
+  public imageContent = signal<string | null>(null);
+  public imageError = signal<string | null>(null);
 
+  public currentImage = input<string | null | undefined>();
+  public maxSize  = input(2);
+  public resizeSize  = input(600);
+  public acceptedImageTypes = input<string[]>(['image/*']);
+  public emitRawImage = input<boolean>(false);
 
-  public isImageSaved = false;
-  public isImageRemoved = false;
-  public imageContent: string | null = null;
-  public imageError: string | null = null;
-
-  @Input()
-  public currentImage: string | null | undefined;
-
-  @Input()
-  public maxSize = 2;
-
-  @Input()
-  public resizeSize = 600;
-
-  @Output()
-  public imageChanged = new EventEmitter<{ image: string; fileName: string }>();
+  public imageChanged = output<{ image: string; fileName: string }>();
+  public rawImageChanged = output<{ image: File; fileName: string }>();
 
   public fileChangeEvent($event: Event) {
-    this.imageError = null;
+    this.imageError.set(null);
     if (!$event.target || !($event.target instanceof HTMLInputElement)) {
       return;
     }
@@ -38,10 +32,17 @@ export class ImageUploadFieldComponent {
     if (!fileInput.files || fileInput.files.length === 0) {
       return;
     }
-    ImageHelper.readFileAsImage$(fileInput.files[0], this.maxSize, this.resizeSize)
+    if (this.emitRawImage()) {
+      const errorMsg = ImageHelper.checkSizeAndType(fileInput.files[0], this.maxSize(), this.acceptedImageTypes());
+      if (errorMsg.length > 0) {
+        this.imageError.set(errorMsg.join('. '));
+        return;
+      }
+    }
+    ImageHelper.readFileAsImage$(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes())
       .subscribe(result => {
         if (result?.error) {
-          this.imageError = result.error;
+          this.imageError.set(result.error);
         }
         if (result?.image && result?.fileName) {
           this.updateValue(result.image, result.fileName);
@@ -50,11 +51,10 @@ export class ImageUploadFieldComponent {
   }
 
   private updateValue(image: string, fileName: string) {
-    this.imageContent = image ? image : null;
-    this.isImageSaved = !!image;
-    this.isImageRemoved = !image;
+    this.imageContent.set(image ? image : null);
+    this.isImageSaved.set(!!image);
+    this.isImageRemoved.set(!image);
     this.imageChanged.emit({ image, fileName });
-    this.cdr.detectChanges();
   }
 
   public clearImage() {

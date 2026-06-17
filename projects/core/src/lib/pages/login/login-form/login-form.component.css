@@ -7,6 +7,8 @@
 }
 
 .login-form__header {
+  --header-height: 40px;
+
   padding: 14px 17px;
   border-bottom: 1px solid var(--border-color);
   font-size: 22px;
@@ -14,8 +16,31 @@
   align-items: center;
 }
 
-.login-form__header > div {
+.login-form__header .login-title {
   flex: 1;
+}
+
+.login-form__header .logo-container {
+  width: 40px;
+  height: var(--header-height);
+}
+
+.logo-background {
+  display: none;
+  flex: 1;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+:host-context([data-has-login-logo="true"]) .logo {
+  display: none;
+}
+
+:host-context([data-has-login-logo="true"]) .logo-background {
+  display: block;
+  background-image: var(--login-logo);
 }
 
 .logo {
