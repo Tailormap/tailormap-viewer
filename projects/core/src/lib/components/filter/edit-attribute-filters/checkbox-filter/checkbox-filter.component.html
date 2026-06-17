@@ -1,6 +1,6 @@
 <mat-expansion-panel class="checkbox-expansion-panel mat-elevation-z0" [expanded]="true">
   <mat-expansion-panel-header>{{ label }}</mat-expansion-panel-header>
-  <button mat-icon-button color="primary"
+  <button mat-icon-button
           (click)="toggleAll()"
           [tmTooltip]="getToggleAllTooltip()">
     @if (someValuesSelected()) {

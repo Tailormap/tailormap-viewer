@@ -15,7 +15,6 @@ export class CheckboxFilterComponent {
 
   @Input()
   public set checkboxFilter(config: {filter: AttributeFilterModel; substringFilters: { id: string; disabled: boolean }[]}) {
-    console.debug("new input");
     if (config.filter?.editConfiguration?.filterTool !== FilterToolEnum.CHECKBOX) {
       return;
     }
