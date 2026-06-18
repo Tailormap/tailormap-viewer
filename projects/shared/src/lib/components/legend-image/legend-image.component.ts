@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, Input, input, signal } from '@angular/core';
 import { GeoServerLegendOptions, LegendHelper } from './legend.helper';
 
 export interface LegendImageModel {
@@ -43,23 +43,20 @@ export class LegendImageComponent {
     }
   }
 
-  private _width: number | undefined;
+  public width = input<number | undefined>();
 
-  @Input()
-  public set width(width: number | undefined) {
-    if (this._width !== width) {
-      this._width = width;
+  public legendSettings = signal<LegendImageSettingsModel | null>(null);
+
+  constructor() {
+    effect(() => {
+      // Track width changes
+      this.width();
+      // Recreate settings when width changes
       if (this.prevLegend) {
         this.createSettings(this.prevLegend);
       }
-    }
+    });
   }
-
-  public get width(): number | undefined {
-    return this._width;
-  }
-
-  public legendSettings = signal<LegendImageSettingsModel | null>(null);
 
   public createSettings(legend: LegendImageModel | null) {
     // Always set legend settings to null first and detect changes
@@ -70,16 +67,15 @@ export class LegendImageComponent {
     if (legend === null) {
       return;
     }
-    console.log(`Legend image width: ${this._width}`);
     const legendSettings: LegendImageSettingsModel = {
       url: legend.url,
       srcset: '',
-      scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith(".svg"),
+      scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith('.svg'),
       failedToLoadMessage: `${FAILED_TO_LOAD_MESSAGE} ${legend.title}`,
     };
     if (legend.legendType == 'dynamic') {
       if (legend.serverType === 'geoserver') {
-        const wrapOptions = this._width ? { wrap: true, wrap_limit: Math.floor(this._width * 1.5) } : {};
+        const wrapOptions = this.width() ? { wrap: true, wrap_limit: Math.floor(this.width()! * 1.5) } : {};
         const legendOptions: GeoServerLegendOptions = {
           fontAntiAliasing: true,
           labelMargin: 0,
@@ -88,7 +84,7 @@ export class LegendImageComponent {
         };
         legendSettings.url = LegendHelper.addGeoServerLegendOptions(legend.url, legendOptions);
         if (window.devicePixelRatio > 1) {
-          const wrapOptions2x = this._width ? { wrap: true, wrap_limit: Math.floor(this._width * 3.8) } : {};
+          const wrapOptions2x = this.width() ? { wrap: true, wrap_limit: Math.floor(this.width()! * 3.8) } : {};
           legendOptions.dpi = 180;
           legendSettings.srcset = LegendHelper.addGeoServerLegendOptions(legend.url, {
             ...legendOptions,

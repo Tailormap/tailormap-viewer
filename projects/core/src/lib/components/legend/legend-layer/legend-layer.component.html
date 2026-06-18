@@ -3,6 +3,6 @@
     @if (showTitle) {
       <strong [class.out-of-scale]="!legendInfo.isInScale">{{legendInfo.layer.title}}</strong>
     }
-    <tm-legend-image [legend]="getLegend(legendInfo)" [width]="width" />
+    <tm-legend-image [legend]="getLegend(legendInfo)" [width]="this.width()" />
   </div>
 }

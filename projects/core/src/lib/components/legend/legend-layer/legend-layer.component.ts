@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, inject,
+  ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, viewChild, effect, signal,
 } from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
@@ -12,36 +12,38 @@ import { ServerType } from '@tailormap-viewer/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class LegendLayerComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('container')
-  private container: ElementRef<HTMLElement> | undefined;
+export class LegendLayerComponent implements OnDestroy {
+  private container = viewChild('container', { read: ElementRef });
   private resizeObserver: ResizeObserver | null = null;
+  public width = signal<number | undefined>(undefined);
 
-  private cdr = inject(ChangeDetectorRef);
-
-  public width: number | undefined;
-
-  public ngAfterViewInit(): void {
-    const containerElement = this.container?.nativeElement;
-    if (containerElement) {
-      this.resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          const offsetWidth = entry.target instanceof HTMLElement ? entry.target.offsetWidth : undefined;
-          if (offsetWidth && offsetWidth > 0 && offsetWidth !== this.width) {
-            this.width = offsetWidth;
-            this.cdr.markForCheck();
+  public constructor() {
+    effect(() => {
+      const containerElement = this.container()?.nativeElement;
+      if (containerElement) {
+        this.destroyResizeObserver();
+        this.resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            const offsetWidth = entry.target instanceof HTMLElement ? entry.target.offsetWidth : undefined;
+            if (offsetWidth && offsetWidth > 0 && offsetWidth !== this.width()) {
+              this.width.set(offsetWidth);
+            }
           }
-        }
-      });
-      this.resizeObserver.observe(containerElement);
-    }
+        });
+        this.resizeObserver.observe(containerElement);
+      }
+    });
   }
 
-  public ngOnDestroy(): void {
+  private destroyResizeObserver() {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyResizeObserver();
   }
 
   @Input()
