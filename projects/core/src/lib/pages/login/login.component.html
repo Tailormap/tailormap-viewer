@@ -13,7 +13,6 @@
   }
 
   @if (showPasswordResetForm) {
-    <tm-password-reset-request-form [requestReset$]="requestPasswordReset$">
-    </tm-password-reset-request-form>
+    <tm-password-reset-request-form [requestReset$]="requestPasswordReset$" (backToLogin)="onBackToLogin()"></tm-password-reset-request-form>
   }
 </div>
