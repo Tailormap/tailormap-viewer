@@ -59,6 +59,10 @@ export class LoginComponent implements OnInit {
     this.showPasswordResetForm = true;
   }
 
+  public onBackToLogin() {
+    this.showPasswordResetForm = false;
+  }
+
   private isRouterNavigationState(obj: unknown): obj is RouterNavigationState {
     // check if obj is an object
     if (typeof obj === 'object' && !Array.isArray(obj) && obj !== null) {

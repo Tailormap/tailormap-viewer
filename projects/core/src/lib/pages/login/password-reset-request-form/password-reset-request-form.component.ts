@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { BehaviorSubject, Observable, take } from 'rxjs';
 })
 export class PasswordResetRequestFormComponent {
   @Input() public requestReset$!: (email: string) => Observable<boolean>;
+  @Output() public backToLogin = new EventEmitter<void>();
   // eslint-disable-next-line max-len
   private acceptedMessage = $localize`:@@shared.password-reset-request-form.accepted-message:Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.`;
   private errorMessage = $localize`:@@shared.password-reset-request-form.error-message:An error occurred processing your request.`;
@@ -43,4 +44,11 @@ export class PasswordResetRequestFormComponent {
         this.requestResetForm.reset();
       });
   }
+
+  public returnToLogin(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.backToLogin.emit();
+  }
+
 }
