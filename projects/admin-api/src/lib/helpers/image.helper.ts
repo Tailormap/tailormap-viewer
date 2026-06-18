@@ -64,11 +64,11 @@ export class ImageHelper {
     return false;
   }
 
-  public static isResizableImage(file: File) {
+  public static isResizableImage(file: File | Blob) {
     return /jpeg|jpg|png/.test(file.type);
   }
 
-  public static readUploadAsImage$(file: File, resizeSize = 600): Observable<string | null> {
+  public static readUploadAsImage$(file: File | Blob, resizeSize = 600): Observable<string | null> {
     const subject = new Subject<string | null>();
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {

@@ -38,6 +38,8 @@ export class ImageUploadFieldComponent {
         this.imageError.set(errorMsg.join('. '));
         return;
       }
+      this.rawImageChanged.emit({ image: fileInput.files[0], fileName: fileInput.files[0].name });
+      return;
     }
     ImageHelper.readFileAsImage$(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes())
       .subscribe(result => {
