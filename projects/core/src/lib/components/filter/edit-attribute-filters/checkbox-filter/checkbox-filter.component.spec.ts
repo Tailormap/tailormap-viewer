@@ -3,7 +3,6 @@ import { CheckboxFilterComponent } from './checkbox-filter.component';
 import { FilterConditionEnum, FilterToolEnum, AttributeType, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SharedImportsModule, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('CheckboxFilterComponent', () => {
 
