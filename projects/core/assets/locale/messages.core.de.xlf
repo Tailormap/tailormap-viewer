@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="core.filter.checkbox.check-all" datatype="html">
         <source>Check all values</source>
-        <target>Alle Werte prüfen</target>
+        <target>Alle Werte wählen</target>
       </trans-unit>
       <trans-unit id="core.filter.checkbox.uncheck-all" datatype="html">
         <source>Uncheck all values</source>
