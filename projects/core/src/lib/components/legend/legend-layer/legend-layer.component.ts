@@ -25,7 +25,7 @@ export class LegendLayerComponent implements OnDestroy {
         this.resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
             const offsetWidth = entry.target instanceof HTMLElement ? entry.target.offsetWidth : undefined;
-            if (offsetWidth && offsetWidth > 0 && offsetWidth !== this.width()) {
+            if (offsetWidth && offsetWidth > 0) {
               this.width.set(offsetWidth);
             }
           }
