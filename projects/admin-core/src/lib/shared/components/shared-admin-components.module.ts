@@ -10,7 +10,6 @@ import { AdminFieldsRendererComponent } from './admin-fields-renderer/admin-fiel
 import { SelectUploadModule } from './select-upload/select-upload.module';
 import { ListFilterComponent } from './list-filter/list-filter.component';
 import { LayerSelectionConfigComponent } from './layer-selection/layer-selection-config.component';
-import { ImageUploadFieldComponent } from './image-upload-field/image-upload-field.component';
 
 @NgModule({
   declarations: [
