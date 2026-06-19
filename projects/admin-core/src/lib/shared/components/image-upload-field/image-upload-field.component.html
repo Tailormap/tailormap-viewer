@@ -11,7 +11,7 @@
     }
     <div class="upload-wrapper" [class.upload-complete]="isSaved">
       <input type="file"
-        [accept]="acceptedImageTypes()"
+        [accept]="acceptedImageTypes().join(',')"
         (change)="fileChangeEvent($event)"
         class="fileInputProfile">
       @if (isSaved || imgContent) {
