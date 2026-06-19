@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   ConfigModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
-import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class ConfigService {
 
   private configSubject = new BehaviorSubject(new Map<string, ConfigModel>());
 
-  public getConfig$(key: string): Observable<ConfigModel | null> {
+  public getConfig$(key: string, filterUntilLoaded = false): Observable<ConfigModel | null> {
     return this.configSubject.asObservable()
       .pipe(
         tap(configMap => {
@@ -24,6 +24,7 @@ export class ConfigService {
             this.fetchConfig$(key);
           }
         }),
+        filter(configMap => !filterUntilLoaded || configMap.has(key)),
         map(configMap => {
           return configMap.get(key) || null;
         }),
@@ -42,15 +43,15 @@ export class ConfigService {
       });
   }
 
-  public getConfigValue$(key: string): Observable<string | null> {
-    return this.getConfig$(key)
+  public getConfigValue$(key: string, filterUntilLoaded = false): Observable<string | null> {
+    return this.getConfig$(key, filterUntilLoaded)
       .pipe(
         map(c => c?.value ?? null),
       );
   }
 
-  public getConfigObject$<T>(key: string): Observable<T | null> {
-    return this.getConfig$(key)
+  public getConfigObject$<T>(key: string, filterUntilLoaded = false): Observable<T | null> {
+    return this.getConfig$(key, filterUntilLoaded)
       .pipe(
         map(c => c?.jsonValue as T || null),
       );
