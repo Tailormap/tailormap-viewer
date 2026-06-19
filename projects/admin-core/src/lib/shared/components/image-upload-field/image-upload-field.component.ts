@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, input, signal, output } from '@angular/core';
 import { ImageHelper } from '@tailormap-admin/admin-api';
+import { SharedModule } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-image-upload-field',
   templateUrl: './image-upload-field.component.html',
   styleUrls: ['./image-upload-field.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  imports: [SharedModule],
 })
 export class ImageUploadFieldComponent {
   public isImageSaved = signal(false);
