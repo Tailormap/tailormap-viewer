@@ -22,7 +22,7 @@ jobs:
       HOST: ${{ secrets.DEPLOY_HOST_SNAPSHOT }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: 'Set Docker context for deployment'
         uses: arwynfr/actions-docker-context@v2
