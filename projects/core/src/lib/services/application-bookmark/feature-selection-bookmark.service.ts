@@ -77,14 +77,18 @@ export class FeatureSelectionBookmarkService {
     this.store$.select(selectAppLayerIds(fragment.layers))
       .pipe(
         take(1),
-        map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue)),
-      ).subscribe(filterOrError => {
+      ).subscribe(layerIds => {
+      if (fragment.attributeName === '__fid') {
+        this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
+      } else {
+        const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
         if (filterOrError && !('errorMessage' in filterOrError)) {
           this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
         } else if (filterOrError && 'errorMessage' in filterOrError) {
           this.showSnackbarMessage(filterOrError.errorMessage);
         }
-      });
+      }
+    });
   }
 
   public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>, createFilter: boolean, isEmbedded: boolean): void {
@@ -178,6 +182,79 @@ export class FeatureSelectionBookmarkService {
 
         return forkJoin(featureRequests$).pipe(
           map(results => results.flat()), // Combine all features from all layers
+        );
+      }),
+    );
+  }
+
+  private applyFidSelection(layerIds: string[], fid: string, isEmbedded: boolean): void {
+    if (!layerIds || layerIds.length === 0) {
+      this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
+      return;
+    }
+    if (isEmbedded) {
+      this.getFeaturesByFid$(layerIds, fid)
+        .pipe(
+          tap(responses => {
+            if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+              this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+            }
+          }),
+          map(responses => responses.flatMap(response => response.featuresResponse.features)),
+        )
+        .subscribe(features => this.selectedFeatures.next(features));
+    } else {
+      this.setFeatureInfoLayers(layerIds);
+      this.getFeaturesByFid$(layerIds, fid)
+        .pipe(
+          take(1),
+          filter(responses => {
+            if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+              this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+              return false;
+            }
+            return true;
+          }),
+        )
+        .subscribe(responses => {
+          const featureInfoResponses = responses
+            .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
+          featureInfoResponses.forEach(response => {
+            this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
+          });
+          this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
+          this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
+        });
+    }
+  }
+
+  private getFeaturesByFid$(layerIds: string[], fid: string): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
+    return combineLatest([
+      this.store$.select(selectViewerId),
+      this.store$.select(selectLayers),
+    ]).pipe(
+      take(1),
+      concatMap(([applicationId, layers]) => {
+        if (!applicationId || !layers) {
+          return of([]);
+        }
+        const featureRequests$ = layerIds.map(layerId => {
+          const layer = layers.find(l => l.id === layerId);
+          if (!layer) {
+            return of([]);
+          }
+          return this.api.getFeatures$({
+            applicationId,
+            layerId,
+            __fid: fid,
+            geometryInAttributes: true,
+          }).pipe(
+            map(featuresResponse => ({ layerId, featuresResponse })),
+            catchError(() => of([])),
+          );
+        });
+        return forkJoin(featureRequests$).pipe(
+          map(results => results.flat()),
         );
       }),
     );
