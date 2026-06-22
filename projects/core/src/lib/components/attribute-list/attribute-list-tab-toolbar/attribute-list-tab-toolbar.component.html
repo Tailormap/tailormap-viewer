@@ -12,6 +12,8 @@
     @if (loadingData$ | async) {
       <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
     }
+    <button (click)="zoomToDataBounds()" color="primary" i18n="@@core.attribute-list.zoom-to-bounds" i18n-tmTooltip="@@core.attribute-list.zoom-to-bounds.tooltip"
+            mat-flat-button tmTooltip="Zoom to data bounds">Zoom to</button>
   </div>
 
   @if (pagingData$ | async; as pagingData) {

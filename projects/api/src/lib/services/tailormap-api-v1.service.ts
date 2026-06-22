@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ViewerResponseModel, FeaturesResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel,
-  FeatureModel, ConfigResponseModel, SearchResponseModel, AttachmentMetadataModel,
+  FeatureModel, ConfigResponseModel, SearchResponseModel, AttachmentMetadataModel, BoundsModel,
 } from '../models';
 import { map, Observable } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -14,7 +14,6 @@ import { LayerExtractResponseModel } from '../models/layer-extract-response.mode
 
 @Injectable()
 export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
-
 
   private httpClient = inject( HttpClient);
 
@@ -237,5 +236,15 @@ export class TailormapApiV1Service implements TailormapApiV1ServiceModel {
 
   public deleteAttachment$(params: { applicationId: string; layerId: string; attachmentId: string }): any {
     return this.httpClient.delete(this.getAttachmentUrl(params));
+  }
+
+  public retrieveZoomToExtentBounds$(params: { applicationId: string; layerId: string; filter?: string }): Observable<BoundsModel> {
+    return this.httpClient.post<BoundsModel>(
+      `${TailormapApiConstants.BASE_URL}/${params.applicationId}/layer/${params.layerId}/bounds`,
+      params.filter ? this.getQueryParams({ filter: params.filter }) : '',
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+      },
+    );
   }
 }

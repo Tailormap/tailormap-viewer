@@ -1,5 +1,5 @@
 import {
-  LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel,
+  LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel, BoundsModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 import { GetFeaturesApiModel } from '../../../models/get-features-api.model';
@@ -105,6 +105,24 @@ export interface GetUniqueValuesParams {
    * The attribute name for which to retrieve unique values.
    */
   attribute: string;
+  /**
+   * Optional filters to apply when fetching features, grouped by feature type.
+   * Map keys are feature type names, and values are CQL filter strings.
+   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
+   * @example new Map([['featureTypeName', 'attribute > 100']])
+   */
+  filter?: Map<string | symbol, string> | null;
+}
+
+export interface ZoomToExtentBoundsParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer to zoom to.
+   */
+  layerId: string;
   /**
    * Optional filters to apply when fetching features, grouped by feature type.
    * Map keys are feature type names, and values are CQL filter strings.
@@ -272,4 +290,11 @@ export interface AttributeListApiServiceModel extends GetFeaturesApiModel {
    * @returns Observable emitting the statistic value and success status.
    */
   getStatisticValue$?(params: GetStatisticParams): Observable<GetStatisticResponse>;
+
+  /**
+   * retrieve the Bounds for the current filter and layer, so the map can zoom to the extent of the current filter.
+   * @param params Parameters specifying the application, layer ID, and optional filter.
+   * @returns Observable emitting the bounds model or null on error.
+   */
+  retrieveZoomToExtentBounds$(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null>;
 }

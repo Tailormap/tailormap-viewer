@@ -1,6 +1,6 @@
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, Sortorder, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel, AttachmentMetadataModel,
+  SearchResponseModel, AttachmentMetadataModel, BoundsModel,
 } from '../models';
 import { Observable } from 'rxjs';
 import { FeaturesResponseModel } from '../models/features-response.model';
@@ -85,6 +85,12 @@ export interface TailormapApiV1ServiceModel {
     layerId: string;
     downloadId: string;
   }): Observable<HttpResponse<Blob>>;
+
+  retrieveZoomToExtentBounds$(params: {
+    applicationId: string;
+    layerId: string;
+    filter?: string;
+  }): Observable<BoundsModel>;
 
   getConfig$<T>(key: string): Observable<ConfigResponseModel<T>>;
 

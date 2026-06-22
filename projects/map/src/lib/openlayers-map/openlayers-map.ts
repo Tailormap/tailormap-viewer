@@ -278,7 +278,7 @@ export class OpenLayersMap implements MapViewerModel {
     this.zoomToExtent(geom.getExtent(), maxZoom);
   }
 
-  private zoomToExtent(extent: Extent, maxZoom?: number) {
+  public zoomToExtent(extent: Extent, maxZoom?: number) {
     this.executeMapAction(olMap => {
       olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
     });
