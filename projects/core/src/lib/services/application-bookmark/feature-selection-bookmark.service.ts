@@ -5,7 +5,7 @@ import {
 } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
-import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
+import { selectAppLayerIds, selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
@@ -19,6 +19,7 @@ import { FeatureSelectionBookmarkData } from './application-bookmark-fragments';
 import { tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BookmarkService } from '../bookmark/bookmark.service';
 
 /**
  * This service applies a feature selection bookmark fragment when starting the application and when the bookmark changes.
@@ -44,6 +45,7 @@ export class FeatureSelectionBookmarkService {
   private mapService = inject(MapService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
   private snackBar = inject(MatSnackBar);
+  private bookmarkService = inject(BookmarkService);
   private destroyRef = inject(DestroyRef);
 
   private currentFilterGroupId: string | null = null;
@@ -283,5 +285,22 @@ export class FeatureSelectionBookmarkService {
       showCloseButton: true,
     };
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
+  public getFidSelectionUrl$(appLayerId: string, fid: string): Observable<string | null> {
+    return combineLatest([
+      this.store$.select(selectLayer(appLayerId)),
+      this.bookmarkService.getBookmarkValue$(),
+    ]).pipe(
+      take(1),
+      map(([ layer, bookmark ]) => {
+        if (!layer) {
+          return null;
+        }
+        const fragment = FeatureSelectionBookmarkHelper.createFidSelectionFragment(layer.serviceId, layer.layerName, fid);
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        return `${baseUrl}#${bookmark + fragment}`;
+      }),
+    );
   }
 }

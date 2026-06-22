@@ -126,4 +126,12 @@ export class FeatureSelectionBookmarkHelper {
       && 'value' in data
       && typeof data.value === 'string';
   }
+
+  public static createFidSelectionFragment(serviceId: string, layerName: string, fid: string): string {
+    return [
+      `!feature:layers=${serviceId}${this.SERVICE_LAYER_SEPARATOR}${layerName}`,
+      `attribute=__fid`,
+      `value=${fid}`,
+    ].join(this.PART_SEPARATOR);
+  }
 }
