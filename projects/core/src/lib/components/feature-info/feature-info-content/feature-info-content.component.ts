@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, signal, computed, inject, output } from '@angular/core';
 import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
+import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 
 @Component({
   selector: 'tm-feature-info-content',
@@ -11,6 +12,7 @@ import { AttachmentService } from '../../../services';
 })
 export class FeatureInfoContentComponent {
   public attachmentHelper = inject(AttachmentService);
+  public featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
 
 
   public selectedLayer = input<FeatureInfoLayerModel | null>(null);
@@ -50,5 +52,14 @@ export class FeatureInfoContentComponent {
 
   public toggleAttachments() {
     this.attachmentsCollapsed.set(!this.attachmentsCollapsed());
+  }
+
+  public shareFeatureClicked() {
+    this.featureSelectionBookmarkService.getFidSelectionUrl$(this.currentFeature()?.layer?.id ?? '', this.currentFeature()?.__fid ?? '')
+      .subscribe((url) => {
+        if (url) {
+          navigator.clipboard.writeText(url);
+        }
+      });
   }
 }
