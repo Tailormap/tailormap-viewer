@@ -670,6 +670,14 @@
         <source>Select layer</source>
         <target>Selecteer laag</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.share-feature" datatype="html">
+        <source>Share feature</source>
+        <target>Object delen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-copied" datatype="html">
+        <source>Link copied to clipboard</source>
+        <target>Link naar klembord gekopieerd</target>
+      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
         <target>Ruimtelijk filter toevoegen</target>

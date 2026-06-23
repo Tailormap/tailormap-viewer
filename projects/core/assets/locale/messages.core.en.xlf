@@ -500,6 +500,12 @@
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.share-feature" datatype="html">
+        <source>Share feature</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-copied" datatype="html">
+        <source>Link copied to clipboard</source>
+      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
       </trans-unit>

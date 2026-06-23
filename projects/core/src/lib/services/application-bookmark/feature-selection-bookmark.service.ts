@@ -236,7 +236,7 @@ export class FeatureSelectionBookmarkService {
       this.store$.select(selectLayers),
     ]).pipe(
       take(1),
-      concatMap(([applicationId, layers]) => {
+      concatMap(([ applicationId, layers ]) => {
         if (!applicationId || !layers) {
           return of([]);
         }

@@ -6,6 +6,8 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FeatureInfoModel } from '../models';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { AttachmentService } from '../../../services';
+import { of } from 'rxjs';
+import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -29,6 +31,7 @@ describe('FeatureInfoContentComponent', () => {
       getAttachmentUrl: () => '',
       getAttachmentTooltip: () => '',
     };
+    const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
     await render(FeatureInfoContentComponent, {
       imports: [
         SharedModule,
@@ -37,6 +40,7 @@ describe('FeatureInfoContentComponent', () => {
       ],
       providers: [
         { provide: AttachmentService, useValue: mockAttachmentService },
+        { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },
       ],
       inputs: {
         selectedLayer: { id: '1', title: 'Layer1', loading: LoadingStateEnum.LOADED },

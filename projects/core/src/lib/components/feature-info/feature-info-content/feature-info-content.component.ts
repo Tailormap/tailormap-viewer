@@ -2,6 +2,9 @@ import { Component, ChangeDetectionStrategy, input, signal, computed, inject, ou
 import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
+import { take } from 'rxjs';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tm-feature-info-content',
@@ -13,7 +16,7 @@ import { FeatureSelectionBookmarkService } from '../../../services/application-b
 export class FeatureInfoContentComponent {
   public attachmentHelper = inject(AttachmentService);
   public featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
-
+  public snackBar = inject(MatSnackBar);
 
   public selectedLayer = input<FeatureInfoLayerModel | null>(null);
   public currentFeature = input<FeatureInfoModel | null>(null);
@@ -56,10 +59,24 @@ export class FeatureInfoContentComponent {
 
   public shareFeatureClicked() {
     this.featureSelectionBookmarkService.getFidSelectionUrl$(this.currentFeature()?.layer?.id ?? '', this.currentFeature()?.__fid ?? '')
+      .pipe(take(1))
       .subscribe((url) => {
         if (url) {
-          navigator.clipboard.writeText(url);
+          navigator.clipboard.writeText(url).then(() => {
+            this.showSnackbarMessage($localize `:@@core.feature-info.share-feature-copied:Link copied to clipboard`);
+          });
         }
       });
   }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
 }
