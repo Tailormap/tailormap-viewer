@@ -55,3 +55,8 @@
 .tree-node__info {
   flex-basis: 100%;
 }
+
+.styles-list {
+  display: flex;
+  flex-direction: column;
+}
