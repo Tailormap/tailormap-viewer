@@ -13,7 +13,7 @@ jobs:
     name: 'Remove Docker Compose deployment'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: 'Set variables for PR'
         env:
