@@ -33,6 +33,9 @@ import { BookmarkService } from '../bookmark/bookmark.service';
  * Optionally include a filter parameter to add an attribute filter:
  * feature:layers=service_id/layername;attribute=attributeName;value=attributeValue;filter=true
  *
+ * The fid can be used to select a single feature by its fid. This can be done by setting the attribute to '__fid'.
+ * No filter can be created in this case, so the filter parameter will be ignored.
+ *
  * The fragment can also be set by a parent window via a postMessage event, to prevent reloading when the application is in an IFrame,
  * using the format:
  * { type: 'tailormap-feature-selection', value: 'layers=service_id/layername;attribute=attributeName;value=attributeValue' }
@@ -98,16 +101,56 @@ export class FeatureSelectionBookmarkService {
     if (createFilter) {
       this.store$.dispatch(addFilterGroup({ filterGroup }));
     }
+    this.applyFeatureSelection(
+      filterGroup.layerIds,
+      this.getFeatures$(filterGroup),
+      isEmbedded,
+    );
+  }
+
+  private applyFidSelection(layerIds: string[], fid: string, isEmbedded: boolean): void {
+    if (!layerIds || layerIds.length === 0) {
+      this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
+      return;
+    }
+    this.applyFeatureSelection(
+      layerIds,
+      this.getFeaturesByFid$(layerIds, fid),
+      isEmbedded,
+    );
+  }
+
+  private applyFeatureSelection(
+    layerIds: string[],
+    features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>,
+    isEmbedded: boolean,
+  ): void {
     if (isEmbedded) {
-      this.getAndHighlightFeatures(filterGroup);
+      this.highlightFeatures(features$);
     } else {
-      this.getFeaturesAndAddToFeatureInfo(filterGroup);
+      this.addFeaturesToFeatureInfo(layerIds, features$);
     }
   }
 
-  private getFeaturesAndAddToFeatureInfo(filterGroup: FilterGroupModel<AttributeFilterModel>) {
-    this.setFeatureInfoLayers(filterGroup.layerIds);
-    this.getFeatures$(filterGroup)
+  private highlightFeatures(features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>): void {
+    features$
+      .pipe(
+        tap(responses => {
+          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+          }
+        }),
+        map(responses => responses.flatMap(response => response.featuresResponse.features)),
+      )
+      .subscribe(features => this.selectedFeatures.next(features));
+  }
+
+  private addFeaturesToFeatureInfo(
+    layerIds: string[],
+    features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>,
+  ): void {
+    this.setFeatureInfoLayers(layerIds);
+    features$
       .pipe(
         take(1),
         filter(responses => {
@@ -118,7 +161,7 @@ export class FeatureSelectionBookmarkService {
           return true;
         }),
       )
-      .subscribe((responses) => {
+      .subscribe(responses => {
         const featureInfoResponses = responses
           .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
 
@@ -130,19 +173,6 @@ export class FeatureSelectionBookmarkService {
         this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
         this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
       });
-  }
-
-  private getAndHighlightFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>) {
-    this.getFeatures$(filterGroup)
-      .pipe(
-        tap(responses => {
-          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
-            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
-          }
-        }),
-        map(responses => responses.flatMap(response => response.featuresResponse.features)),
-      )
-      .subscribe(features => this.selectedFeatures.next(features));
   }
 
   private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
@@ -187,47 +217,6 @@ export class FeatureSelectionBookmarkService {
         );
       }),
     );
-  }
-
-  private applyFidSelection(layerIds: string[], fid: string, isEmbedded: boolean): void {
-    if (!layerIds || layerIds.length === 0) {
-      this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
-      return;
-    }
-    if (isEmbedded) {
-      this.getFeaturesByFid$(layerIds, fid)
-        .pipe(
-          tap(responses => {
-            if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
-              this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
-            }
-          }),
-          map(responses => responses.flatMap(response => response.featuresResponse.features)),
-        )
-        .subscribe(features => this.selectedFeatures.next(features));
-    } else {
-      this.setFeatureInfoLayers(layerIds);
-      this.getFeaturesByFid$(layerIds, fid)
-        .pipe(
-          take(1),
-          filter(responses => {
-            if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
-              this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
-              return false;
-            }
-            return true;
-          }),
-        )
-        .subscribe(responses => {
-          const featureInfoResponses = responses
-            .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
-          featureInfoResponses.forEach(response => {
-            this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
-          });
-          this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
-          this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
-        });
-    }
   }
 
   private getFeaturesByFid$(layerIds: string[], fid: string): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
