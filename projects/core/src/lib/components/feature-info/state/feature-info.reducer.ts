@@ -171,6 +171,9 @@ const onEmptyFeatureInfo = (state: FeatureInfoState): FeatureInfoState => ({
   columnMetadata: [],
   attachmentMetadata: [],
   layers: [],
+  dialogVisible: false,
+  dialogCollapsed: false,
+  showingBookmarkFeatures: false,
 });
 
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
