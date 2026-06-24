@@ -120,8 +120,9 @@ export class MapBookmarkHelper {
       layers.forEach(currentLayer => {
         const id = currentLayer.id;
         const layer = fragment?.find(l => l.id === id);
-        if (!layer && currentLayer.visible) {
-          visibilityData.push({ id, checked: false });
+        const initialVisible = currentLayer.initialValues?.visible ?? true;
+        if (!layer && currentLayer.visible !== initialVisible) {
+          visibilityData.push({ id, checked: initialVisible });
         }
       });
     }
