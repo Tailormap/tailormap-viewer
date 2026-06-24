@@ -40,3 +40,4 @@ export const expandCollapseFeatureInfoLayerList = createAction(`${featureInfoAct
 export const showNextFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Next Feature Info Feature`);
 export const showPreviousFeatureInfoFeature = createAction(`${featureInfoActionsPrefix} Show Previous Feature Info Feature`);
 export const reopenFeatureInfoDialog = createAction(`${featureInfoActionsPrefix} Reopen Feature Info Dialog`);
+export const emptyFeatureInfo = createAction(`${featureInfoActionsPrefix} Empty Feature Info`);

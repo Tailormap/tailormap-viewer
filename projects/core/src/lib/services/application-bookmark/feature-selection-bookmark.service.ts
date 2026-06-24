@@ -11,6 +11,7 @@ import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper, FeaturesFilters } from '../../filter';
 import {
+  emptyFeatureInfo,
   featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, setFeatureInfoLayers,
 } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureStylingHelper } from '../../shared';
@@ -68,6 +69,7 @@ export class FeatureSelectionBookmarkService {
 
   public clearSelection(): void {
     this.store$.dispatch(hideFeatureInfoDialog());
+    this.store$.dispatch(emptyFeatureInfo());
     if (this.currentFilterGroupId) {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
       this.currentFilterGroupId = null;

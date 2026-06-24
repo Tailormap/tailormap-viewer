@@ -165,6 +165,14 @@ const onFeatureInfoOpenWithBookmarkFeatures = (state: FeatureInfoState): Feature
   showingBookmarkFeatures: true,
 });
 
+const onEmptyFeatureInfo = (state: FeatureInfoState): FeatureInfoState => ({
+  ...state,
+  features: [],
+  columnMetadata: [],
+  attachmentMetadata: [],
+  layers: [],
+});
+
 const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   initialFeatureInfoState,
   on(FeatureInfoActions.loadFeatureInfo, onLoadFeatureInfo),
@@ -179,5 +187,6 @@ const featureInfoReducerImpl = createReducer<FeatureInfoState>(
   on(FeatureInfoActions.updateFeatureInFeatureInfo, onUpdateFeatureInFeatureInfo),
   on(FeatureInfoActions.setFeatureInfoLayers, onSetFeatureInfoLayers),
   on(FeatureInfoActions.openFeatureInfoWithBookmarkFeatures, onFeatureInfoOpenWithBookmarkFeatures),
+  on(FeatureInfoActions.emptyFeatureInfo, onEmptyFeatureInfo),
 );
 export const featureInfoReducer = (state: FeatureInfoState | undefined, action: Action) => featureInfoReducerImpl(state, action);
