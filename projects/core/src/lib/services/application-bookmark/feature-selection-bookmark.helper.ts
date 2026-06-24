@@ -129,9 +129,9 @@ export class FeatureSelectionBookmarkHelper {
 
   public static createFidSelectionFragment(serviceId: string, layerName: string, fid: string): string {
     return [
-      `!feature:layers=${serviceId}${this.SERVICE_LAYER_SEPARATOR}${layerName}`,
+      `!feature:layers=${encodeURIComponent(serviceId)}${this.SERVICE_LAYER_SEPARATOR}${encodeURIComponent(layerName)}`,
       `attribute=__fid`,
-      `value=${fid}`,
+      `value=${encodeURIComponent(fid)}`,
     ].join(this.PART_SEPARATOR);
   }
 }
