@@ -8,6 +8,7 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import {
+  BoundsModel,
   FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
@@ -186,7 +187,7 @@ export class AttributeListManagerService implements OnDestroy {
     return source.dataLoader.getStatisticValue$(params);
   }
 
-  public retrieveZoomToExtentBounds$(tabSourceId: string, params: ZoomToExtentBoundsParams) {
+  public retrieveZoomToExtentBounds$(tabSourceId: string, params: ZoomToExtentBoundsParams): Observable<BoundsModel | null> {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     if (!source || typeof source?.dataLoader.retrieveZoomToExtentBounds$ !== 'function') {
       return of(null);
