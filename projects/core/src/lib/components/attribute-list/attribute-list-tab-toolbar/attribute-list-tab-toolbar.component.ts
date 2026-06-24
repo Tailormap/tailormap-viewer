@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl } from '@tailormap-viewer/shared';
 import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
 import {
-  selectDataForSelectedTab, selectLoadingDataSelectedTab, selectPagingDataSelectedTab, selectSelectedTab,
+  selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
+  selectPagingDataSelectedTab, selectSelectedTab,
 } from '../state/attribute-list.selectors';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { updatePage } from '../state/attribute-list.actions';
@@ -15,8 +16,9 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
 import { MapService } from '@tailormap-viewer/map';
-import { AttributeListApiService } from '../services/attribute-list-api.service';
 import { selectCQLFilters, selectViewerId } from '../../../state';
+import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -36,7 +38,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
   private mapService = inject(MapService);
-  private attributeListApiService = inject(AttributeListApiService);
+  private attributeListApiService = inject(AttributeListManagerService);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
@@ -46,6 +48,12 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
   public hasFiltersForOtherFeatureTypes$: Observable<boolean> = of(false);
+  public showZoomToButton$ = combineLatest([
+    this.store$.select(selectHasNoRowsForSelectedTab),
+    this.store$.select(selectSelectedTab),
+  ]).pipe(map(([ noRows, selectedTab ]) => {
+    return !!selectedTab && this.attributeListApiService.canZoomToBounds(selectedTab.tabSourceId) && !selectedTab.loadingError && !noRows;
+  }));
 
   constructor() {
     effect(() => {
@@ -162,7 +170,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
             return of(null);
           }
           const filter = filters.get(tab.layerId);
-          return this.attributeListApiService.retrieveZoomToExtentBounds$({ applicationId, layerId: tab.layerId, filter });
+          return this.attributeListApiService.retrieveZoomToExtentBounds$(tab.tabSourceId, { applicationId, layerId: tab.layerId, filter });
       }))
       .subscribe(bounds => {
         if (!bounds) {

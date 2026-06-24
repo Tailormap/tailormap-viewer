@@ -15,7 +15,7 @@ import { AttributeListSourceModel, TabModel } from '../models/attribute-list-sou
 import {
   CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
   FeatureDetailsModel, GetFeatureDetailsParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
-  GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams,
+  GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams, ZoomToExtentBoundsParams,
 } from '../models/attribute-list-api-service.model';
 import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
@@ -184,6 +184,19 @@ export class AttributeListManagerService implements OnDestroy {
       return of({ result: [], success: false });
     }
     return source.dataLoader.getStatisticValue$(params);
+  }
+
+  public retrieveZoomToExtentBounds$(tabSourceId: string, params: ZoomToExtentBoundsParams) {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source || typeof source?.dataLoader.retrieveZoomToExtentBounds$ !== 'function') {
+      return of(null);
+    }
+    return source.dataLoader.retrieveZoomToExtentBounds$(params);
+  }
+
+  public canZoomToBounds(tabSourceId: string): boolean {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    return typeof source?.dataLoader.retrieveZoomToExtentBounds$ === 'function';
   }
 
   public addAttributeListSource(source: AttributeListSourceModel): void {
