@@ -5,6 +5,12 @@
       <trans-unit id="core.attribute-list.attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
       </trans-unit>
@@ -538,6 +544,12 @@
       </trans-unit>
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.check-all" datatype="html">
+        <source>Check all values</source>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.uncheck-all" datatype="html">
+        <source>Uncheck all values</source>
       </trans-unit>
       <trans-unit id="core.filter.choose-value" datatype="html">
         <source>Choose value</source>

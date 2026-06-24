@@ -17,6 +17,8 @@
   --100vw: calc(100 * var(--vw));
   --header-component-height: 0px;
   --mobile-menubar-height: 60px;
+  --login-logo: none; /* default is mat-icon logo */
+  --admin-logo: none; /* default is mat-icon logo */
 
   --dark-primary-text: rgb(0, 10, 30);
   --light-primary-text: rgb(255, 255, 255);

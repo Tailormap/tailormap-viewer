@@ -6,6 +6,14 @@
         <source>Attribute list</source>
         <target>Attributenlijst</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+        <target>Inzoomen op</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+        <target>Inzoomen op data grenzen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
         <target>Alle filters wissen</target>
@@ -16,11 +24,11 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.close-column-settings" datatype="html">
         <source>Close column settings</source>
-        <target>Sluit kolom instellingen</target>
+        <target>Sluit kolominstellingen</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.column-settings" datatype="html">
         <source>Column settings</source>
-        <target>Kolom instellingen</target>
+        <target>Kolominstellingen</target>
       </trans-unit>
       <trans-unit id="core.attribute-list.export" datatype="html">
         <source>Export</source>
@@ -721,6 +729,14 @@
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
         <target>Hoofdlettergevoelig</target>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.check-all" datatype="html">
+        <source>Check all values</source>
+        <target>Vink alle waarden aan</target>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.uncheck-all" datatype="html">
+        <source>Uncheck all values</source>
+        <target>Vink alle waarden uit</target>
       </trans-unit>
       <trans-unit id="core.filter.choose-value" datatype="html">
         <source>Choose value</source>

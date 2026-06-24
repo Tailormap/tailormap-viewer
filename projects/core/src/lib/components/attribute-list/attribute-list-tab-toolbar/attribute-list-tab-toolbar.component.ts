@@ -14,6 +14,9 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
+import { MapService } from '@tailormap-viewer/map';
+import { AttributeListApiService } from '../services/attribute-list-api.service';
+import { selectCQLFilters, selectViewerId } from '../../../state';
 
 
 @Component({
@@ -32,7 +35,8 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
-
+  private mapService = inject(MapService);
+  private attributeListApiService = inject(AttributeListApiService);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
@@ -145,4 +149,26 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       });
   }
 
+  public zoomToDataBounds() {
+    combineLatest([
+      this.store$.select(selectSelectedTab),
+      this.store$.select(selectViewerId),
+      this.store$.select(selectCQLFilters),
+    ])
+      .pipe(
+        take(1),
+        switchMap(([ tab, applicationId, filters ]) => {
+          if (!tab?.layerId || !applicationId) {
+            return of(null);
+          }
+          const filter = filters.get(tab.layerId);
+          return this.attributeListApiService.retrieveZoomToExtentBounds$({ applicationId, layerId: tab.layerId, filter });
+      }))
+      .subscribe(bounds => {
+        if (!bounds) {
+          return;
+        }
+        this.mapService.zoomToBounds(bounds);
+      });
+  }
 }

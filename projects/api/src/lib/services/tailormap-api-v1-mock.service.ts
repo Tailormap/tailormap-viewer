@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel, AttachmentMetadataModel,
+  SearchResponseModel, AttachmentMetadataModel, BoundsModel,
 } from '../models';
 import { delay, Observable, of, throwError } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -163,5 +163,11 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public deleteAttachment$(_params: { applicationId: string; layerId: string; attachmentId: string }): any {
     return of();
+  }
+
+  public retrieveZoomToExtentBounds$(_params: { applicationId: string; layerId: string; filter?: string }): Observable<BoundsModel> {
+    return of({
+      minx: 130015, miny: 459147, maxx: 130997, maxy: 460030,
+    });
   }
 }

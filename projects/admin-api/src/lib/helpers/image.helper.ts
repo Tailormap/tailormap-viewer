@@ -9,9 +9,9 @@ export interface ImageResult {
 
 export class ImageHelper {
 
-  public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600): Observable<ImageResult | null> {
+  public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600, restrictTypes?: string[] | null): Observable<ImageResult | null> {
 
-    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize);
+    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize, restrictTypes);
     if (errorMsg.length > 0) {
       return of({ error: errorMsg.join('. ') });
     }
@@ -25,22 +25,50 @@ export class ImageHelper {
       }));
   }
 
-  public static checkSizeAndType(file: File, maxSize = 2): string[] {
+  public static checkSizeAndType(file: File, maxSize = 2, restrictTypes?: string[] | null): string[] {
     const result = [];
     if (!ImageHelper.isResizableImage(file) && file.size > (maxSize * 1000 * 1000)) {
       result.push('Maximum size allowed is ' + maxSize + 'MB');
     }
-    if (!(/image\//.test(file.type))) {
-      result.push('Only images are allowed.');
+    try {
+      ImageHelper.assertValidImageFile(file, restrictTypes);
+    } catch (error: any) {
+      result.push(error.message);
     }
     return result;
   }
 
-  public static isResizableImage(file: File) {
+  public static assertValidImageFile(file: File, restrictTypes?: string[] | null): boolean {
+    const mime = file.type;
+    if (!mime.startsWith('image/')) {
+      throw new Error('Only images are allowed.');
+    }
+    if (!restrictTypes || restrictTypes.length === 0) {
+      return true;
+    }
+    if (!restrictTypes.some((allowed) => ImageHelper.mimeMatchesAllowed(mime, allowed))) {
+      throw new Error(`Only images of type ${restrictTypes.join(', ')} are allowed.`);
+    }
+    return true;
+  }
+
+  private static mimeMatchesAllowed(mime: string, allowed: string): boolean {
+    if (allowed === mime) return true;
+
+    if (allowed.endsWith('/*')) {
+      const allowedGroup = allowed.slice(0, -2); // e.g. 'image'
+      const [mimeGroup] = mime.split('/');
+      return mimeGroup === allowedGroup;
+    }
+
+    return false;
+  }
+
+  public static isResizableImage(file: File | Blob) {
     return /jpeg|jpg|png/.test(file.type);
   }
 
-  public static readUploadAsImage$(file: File, resizeSize = 600): Observable<string | null> {
+  public static readUploadAsImage$(file: File | Blob, resizeSize = 600): Observable<string | null> {
     const subject = new Subject<string | null>();
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {

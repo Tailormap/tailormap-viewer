@@ -6,6 +6,14 @@
         <source>Attribute list</source>
         <target>Attributlisten</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+        <target>Zoomen auf</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+        <target>Auf Datenbereich zoomen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
         <target>Alle Filter löschen</target>
@@ -721,6 +729,14 @@
       <trans-unit id="core.filter.case-sensitive" datatype="html">
         <source>Case sensitive</source>
         <target>Unterscheidung zwischen Groß- und Kleinschreibung</target>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.check-all" datatype="html">
+        <source>Check all values</source>
+        <target>Alle Werte wählen</target>
+      </trans-unit>
+      <trans-unit id="core.filter.checkbox.uncheck-all" datatype="html">
+        <source>Uncheck all values</source>
+        <target>Alle Werte abwählen</target>
       </trans-unit>
       <trans-unit id="core.filter.choose-value" datatype="html">
         <source>Choose value</source>

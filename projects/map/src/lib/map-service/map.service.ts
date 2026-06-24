@@ -13,7 +13,7 @@ import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
 import { FeatureModelType } from '../models/feature-model.type';
 import { FeatureHelper } from '../helpers/feature.helper';
-import { ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
+import { BoundsModel, ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { Source } from 'ol/source';
@@ -280,6 +280,10 @@ export class MapService {
       .subscribe(mapProjection => {
         this.map.zoomToGeometry(FeatureHelper.fromWKT(geometry, projectionCode, mapProjection), maxZoom);
       });
+  }
+
+  public zoomToBounds(bounds: BoundsModel, maxZoom?: number) {
+    this.map.zoomToExtent([ bounds.minx, bounds.miny, bounds.maxx, bounds.maxy ], maxZoom);
   }
 
   public zoomToScale(scale: number) {

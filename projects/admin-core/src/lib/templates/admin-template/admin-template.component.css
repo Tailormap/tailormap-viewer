@@ -56,6 +56,7 @@
 
 .logo {
   width: var(--navigation-size);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,6 +65,24 @@
 .logo mat-icon {
   width: 40px;
   height: 40px;
+}
+
+.admin-template-logo-container {
+  display: none;
+  flex: 1;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+:host-context([data-has-admin-logo="true"]) .logo mat-icon {
+  display: none;
+}
+
+:host-context([data-has-admin-logo="true"]) .admin-template-logo-container {
+  display: block;
+  background-image: var(--admin-logo);
 }
 
 .title {
