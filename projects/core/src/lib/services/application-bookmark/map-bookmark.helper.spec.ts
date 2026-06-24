@@ -138,6 +138,24 @@ describe('MapBookmarkHelper', () => {
       twoFlippedLayers)).toEqual({ visibilityChanges: [{ id: '1', checked: false }, { id: '2', checked: true }], opacityChanges: [], styleChanges: [] });
   });
 
+  test('layerSettingsFromFragment with checkInitialValues=false does not disable default-visible layers absent from bookmark', () => {
+    const layers = [
+      getAppLayerWithInitialValuesModel({ id: '1', visible: true }),
+      getAppLayerWithInitialValuesModel({ id: '256', visible: false }),
+    ];
+    const bookmark = [{ id: '256', v: 1 }];
+    expect(MapBookmarkHelper.layerSettingsFromFragment(bookmark, layers, false))
+      .toEqual({ visibilityChanges: [{ id: '256', checked: true }], opacityChanges: [], styleChanges: [] });
+  });
+
+  test('layerSettingsFromFragment with checkInitialValues=false resets user-enabled layers not in new bookmark to initial', () => {
+    const layers = [
+      getAppLayerWithInitialValuesModel({ id: '256', visible: true }, false),
+    ];
+    expect(MapBookmarkHelper.layerSettingsFromFragment([], layers, false))
+      .toEqual({ visibilityChanges: [{ id: '256', checked: false }], opacityChanges: [], styleChanges: [] });
+  });
+
   test('fragmentFromLayerSettings serializes changes', () => {
     expect(MapBookmarkHelper.fragmentFromLayerSettings(initialLayers)).toEqual(undefined);
     expect(MapBookmarkHelper.fragmentFromLayerSettings(twoFlippedLayers)).toEqual([
