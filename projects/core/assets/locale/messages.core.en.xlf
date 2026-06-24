@@ -5,6 +5,12 @@
       <trans-unit id="core.attribute-list.attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
       </trans-unit>

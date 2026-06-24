@@ -1,11 +1,13 @@
 import {
   AttributeListApiServiceModel, DownloadLayerExtractParams, DownloadLayerExtractResponse,
   GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
-  GetUniqueValuesParams,
+  GetUniqueValuesParams, ZoomToExtentBoundsParams,
 } from '../models/attribute-list-api-service.model';
 import { inject, Injectable } from '@angular/core';
-import { FeaturesResponseModel, LayerExtractResponseModel, TAILORMAP_API_V1_SERVICE, UniqueValuesService } from '@tailormap-viewer/api';
-import { map, Observable } from 'rxjs';
+import {
+  BoundsModel, FeaturesResponseModel, LayerExtractResponseModel, TAILORMAP_API_V1_SERVICE, UniqueValuesService,
+} from '@tailormap-viewer/api';
+import { catchError, map, Observable, of, timeout } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
 import { FeaturesFilterHelper } from '../../../filter';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
@@ -85,4 +87,16 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
     return this.uniqueValuesService.getUniqueValues$({ ...getUniqueValueParams, filter: cqlFilter });
   }
 
+  public retrieveZoomToExtentBounds$(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null> {
+    const { filter, ...zoomParams } = params;
+    const cqlFilter = filter ? FeaturesFilterHelper.getFilter(filter) || undefined : undefined;
+    return this.api.retrieveZoomToExtentBounds$({ ...zoomParams, filter: cqlFilter })
+      .pipe(
+        timeout(30000),
+        map(bounds => bounds ?? null),
+        catchError(() => {
+          return of(null);
+        }),
+      );
+  }
 }

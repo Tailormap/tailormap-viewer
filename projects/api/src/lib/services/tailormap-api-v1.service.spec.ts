@@ -1,7 +1,7 @@
 import { TailormapApiV1Service } from './tailormap-api-v1.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { FeatureModel } from '../models';
+import { BoundsModel, FeatureModel } from '../models';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { TailormapApiConstants } from './tailormap-api.constants';
 
@@ -108,5 +108,37 @@ describe('TailormapApiV1Service', () => {
     service.getLatestUpload$('drawing-style').subscribe();
     const req = httpController.expectOne({ url: '/api/uploads/drawing-style/latest', method: 'GET' });
     req.flush(null);
+  });
+
+  test('queries API for retrieveZoomToExtentBounds$', () => {
+    const expectedBounds: BoundsModel = {
+      minx: 130015, miny: 459147, maxx: 130997, maxy: 460030,
+    };
+
+    service.retrieveZoomToExtentBounds$({ applicationId: 'app/default', layerId: '1' }).subscribe(bounds => {
+      expect(bounds).toEqual(expectedBounds);
+    });
+
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/bounds', method: 'POST' });
+    expect(req.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded');
+    expect(req.request.body).toEqual('');
+    req.flush(expectedBounds);
+  });
+
+  test('queries API for retrieveZoomToExtentBounds$ - with filter', () => {
+    const expectedBounds: BoundsModel = {
+      minx: 130015, miny: 459147, maxx: 130997, maxy: 460030,
+    };
+
+    service.retrieveZoomToExtentBounds$({
+      applicationId: 'app/default', layerId: '1', filter: '(attribute2 LIKE \'%test%\')',
+    }).subscribe(bounds => {
+      expect(bounds).toEqual(expectedBounds);
+    });
+
+    const req = httpController.expectOne({ url: '/api/app/default/layer/1/bounds', method: 'POST' });
+    expect(req.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded');
+    expect(req.request.body.get('filter')).toEqual('(attribute2 LIKE \'%test%\')');
+    req.flush(expectedBounds);
   });
 });
