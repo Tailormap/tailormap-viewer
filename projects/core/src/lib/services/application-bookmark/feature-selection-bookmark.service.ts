@@ -5,13 +5,14 @@ import {
 } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
-import { selectAppLayerIds, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
+import { selectAppLayerIds, selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper, FeaturesFilters } from '../../filter';
 import {
-  featureInfoLoaded, hideFeatureInfoDialog, openFeatureInfoWithBookmarkFeatures, setFeatureInfoLayers,
+  emptyFeatureInfo,
+  featureInfoLoaded, openFeatureInfoWithBookmarkFeatures, setFeatureInfoLayers,
 } from '../../components/feature-info/state/feature-info.actions';
 import { FeatureStylingHelper } from '../../shared';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
@@ -19,6 +20,7 @@ import { FeatureSelectionBookmarkData } from './application-bookmark-fragments';
 import { tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BookmarkService } from '../bookmark/bookmark.service';
 
 /**
  * This service applies a feature selection bookmark fragment when starting the application and when the bookmark changes.
@@ -32,6 +34,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
  * Optionally include a filter parameter to add an attribute filter:
  * feature:layers=service_id/layername;attribute=attributeName;value=attributeValue;filter=true
  *
+ * The fid can be used to select a single feature by its fid. This can be done by setting the attribute to '__fid'.
+ * No filter can be created in this case, so the filter parameter will be ignored.
+ *
  * The fragment can also be set by a parent window via a postMessage event, to prevent reloading when the application is in an IFrame,
  * using the format:
  * { type: 'tailormap-feature-selection', value: 'layers=service_id/layername;attribute=attributeName;value=attributeValue' }
@@ -44,6 +49,7 @@ export class FeatureSelectionBookmarkService {
   private mapService = inject(MapService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
   private snackBar = inject(MatSnackBar);
+  private bookmarkService = inject(BookmarkService);
   private destroyRef = inject(DestroyRef);
 
   private currentFilterGroupId: string | null = null;
@@ -62,7 +68,7 @@ export class FeatureSelectionBookmarkService {
   }
 
   public clearSelection(): void {
-    this.store$.dispatch(hideFeatureInfoDialog());
+    this.store$.dispatch(emptyFeatureInfo());
     if (this.currentFilterGroupId) {
       this.store$.dispatch(removeFilterGroup({ filterGroupId: this.currentFilterGroupId }));
       this.currentFilterGroupId = null;
@@ -77,14 +83,18 @@ export class FeatureSelectionBookmarkService {
     this.store$.select(selectAppLayerIds(fragment.layers))
       .pipe(
         take(1),
-        map(layersIds => FeatureSelectionBookmarkHelper.createFilterGroup(layersIds, fragment.attributeName, fragment.attributeValue)),
-      ).subscribe(filterOrError => {
+      ).subscribe(layerIds => {
+      if (fragment.attributeName === '__fid') {
+        this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
+      } else {
+        const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
         if (filterOrError && !('errorMessage' in filterOrError)) {
           this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
         } else if (filterOrError && 'errorMessage' in filterOrError) {
           this.showSnackbarMessage(filterOrError.errorMessage);
         }
-      });
+      }
+    });
   }
 
   public applyFilter(filterGroup: FilterGroupModel<AttributeFilterModel>, createFilter: boolean, isEmbedded: boolean): void {
@@ -92,16 +102,56 @@ export class FeatureSelectionBookmarkService {
     if (createFilter) {
       this.store$.dispatch(addFilterGroup({ filterGroup }));
     }
+    this.applyFeatureSelection(
+      filterGroup.layerIds,
+      this.getFeatures$(filterGroup),
+      isEmbedded,
+    );
+  }
+
+  private applyFidSelection(layerIds: string[], fid: string, isEmbedded: boolean): void {
+    if (!layerIds || layerIds.length === 0) {
+      this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
+      return;
+    }
+    this.applyFeatureSelection(
+      layerIds,
+      this.getFeaturesByFid$(layerIds, fid),
+      isEmbedded,
+    );
+  }
+
+  private applyFeatureSelection(
+    layerIds: string[],
+    features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>,
+    isEmbedded: boolean,
+  ): void {
     if (isEmbedded) {
-      this.getAndHighlightFeatures(filterGroup);
+      this.highlightFeatures(features$);
     } else {
-      this.getFeaturesAndAddToFeatureInfo(filterGroup);
+      this.addFeaturesToFeatureInfo(layerIds, features$);
     }
   }
 
-  private getFeaturesAndAddToFeatureInfo(filterGroup: FilterGroupModel<AttributeFilterModel>) {
-    this.setFeatureInfoLayers(filterGroup.layerIds);
-    this.getFeatures$(filterGroup)
+  private highlightFeatures(features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>): void {
+    features$
+      .pipe(
+        tap(responses => {
+          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
+            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
+          }
+        }),
+        map(responses => responses.flatMap(response => response.featuresResponse.features)),
+      )
+      .subscribe(features => this.selectedFeatures.next(features));
+  }
+
+  private addFeaturesToFeatureInfo(
+    layerIds: string[],
+    features$: Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]>,
+  ): void {
+    this.setFeatureInfoLayers(layerIds);
+    features$
       .pipe(
         take(1),
         filter(responses => {
@@ -112,7 +162,7 @@ export class FeatureSelectionBookmarkService {
           return true;
         }),
       )
-      .subscribe((responses) => {
+      .subscribe(responses => {
         const featureInfoResponses = responses
           .map(response => FeatureSelectionBookmarkHelper.featuresToFeatureInfo(response.featuresResponse, response.layerId));
 
@@ -124,19 +174,6 @@ export class FeatureSelectionBookmarkService {
         this.mapService.zoomToFeatures(featureInfoResponses.flatMap(r => r.features));
         this.store$.dispatch(openFeatureInfoWithBookmarkFeatures());
       });
-  }
-
-  private getAndHighlightFeatures(filterGroup: FilterGroupModel<AttributeFilterModel>) {
-    this.getFeatures$(filterGroup)
-      .pipe(
-        tap(responses => {
-          if (responses.length === 0 || responses.every(r => r.featuresResponse.total === 0)) {
-            this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-feature-found:No feature found`);
-          }
-        }),
-        map(responses => responses.flatMap(response => response.featuresResponse.features)),
-      )
-      .subscribe(features => this.selectedFeatures.next(features));
   }
 
   private getFeatures$(filterGroup: FilterGroupModel<AttributeFilterModel>): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
@@ -183,6 +220,38 @@ export class FeatureSelectionBookmarkService {
     );
   }
 
+  private getFeaturesByFid$(layerIds: string[], fid: string): Observable<{ layerId: string; featuresResponse: FeaturesResponseModel }[]> {
+    return combineLatest([
+      this.store$.select(selectViewerId),
+      this.store$.select(selectLayers),
+    ]).pipe(
+      take(1),
+      concatMap(([ applicationId, layers ]) => {
+        if (!applicationId || !layers) {
+          return of([]);
+        }
+        const featureRequests$ = layerIds.map(layerId => {
+          const layer = layers.find(l => l.id === layerId);
+          if (!layer) {
+            return of([]);
+          }
+          return this.api.getFeatures$({
+            applicationId,
+            layerId,
+            __fid: fid,
+            geometryInAttributes: true,
+          }).pipe(
+            map(featuresResponse => ({ layerId, featuresResponse })),
+            catchError(() => of([])),
+          );
+        });
+        return forkJoin(featureRequests$).pipe(
+          map(results => results.flat()),
+        );
+      }),
+    );
+  }
+
   private setFeatureInfoLayers(layerIds: string[]) {
     this.store$.select(selectVisibleLayersWithAttributes)
       .pipe(take(1))
@@ -206,5 +275,22 @@ export class FeatureSelectionBookmarkService {
       showCloseButton: true,
     };
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
+  public getFidSelectionUrl$(appLayerId: string, fid: string): Observable<string | null> {
+    return combineLatest([
+      this.store$.select(selectLayer(appLayerId)),
+      this.bookmarkService.getBookmarkValue$(),
+    ]).pipe(
+      take(1),
+      map(([ layer, bookmark ]) => {
+        if (!layer || !fid) {
+          return null;
+        }
+        const fragment = FeatureSelectionBookmarkHelper.createFidSelectionFragment(layer.serviceId, layer.layerName, fid);
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        return `${baseUrl}#${bookmark + fragment}`;
+      }),
+    );
   }
 }

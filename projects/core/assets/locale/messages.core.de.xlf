@@ -678,6 +678,18 @@
         <source>Select layer</source>
         <target>Layer auswählen</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.share-feature" datatype="html">
+        <source>Share feature</source>
+        <target>Objekt teilen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-copied" datatype="html">
+        <source>Link copied to clipboard</source>
+        <target>Link in die Zwischenablage kopiert</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-not-copied" datatype="html">
+        <source>Failed to copy link to clipboard</source>
+        <target>Link konnte nicht in die Zwischenablage kopiert werden</target>
+      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
         <target>Räumlichen Filter hinzufügen</target>

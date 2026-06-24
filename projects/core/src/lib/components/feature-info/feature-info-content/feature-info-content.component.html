@@ -57,6 +57,14 @@
             </button>
           </div>
         }
+        <div class="share-feature-button">
+          <button mat-icon-button
+                  tmTooltip="Share feature"
+                  i18n-tmTooltip="@@core.feature-info.share-feature"
+                  (click)="shareFeatureClicked()">
+            <mat-icon svgIcon="tools_share"></mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   }

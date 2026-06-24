@@ -21,6 +21,7 @@ import { selectComponentsConfig, selectViewerLoadingState } from '../../../state
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -39,6 +40,7 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
 
 const setup = async (withState = false) => {
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
+  const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
       SharedModule,
@@ -74,6 +76,7 @@ const setup = async (withState = false) => {
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },
+      { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },
     ],
   });
 };

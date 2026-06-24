@@ -108,7 +108,7 @@ tm-error-message {
   margin-left: 14px;
 }
 
-.edit-feature-button {
+.edit-feature-button, .share-feature-button {
   flex: 0 0 36px;
   margin-left: 14px;
 }
