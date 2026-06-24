@@ -64,6 +64,8 @@ export class FeatureInfoContentComponent {
         if (url) {
           navigator.clipboard.writeText(url).then(() => {
             this.showSnackbarMessage($localize `:@@core.feature-info.share-feature-copied:Link copied to clipboard`);
+          }).catch(() => {
+            this.showSnackbarMessage($localize `:@@core.feature-info.share-feature-not-copied:Failed to copy link to clipboard`);
           });
         }
       });

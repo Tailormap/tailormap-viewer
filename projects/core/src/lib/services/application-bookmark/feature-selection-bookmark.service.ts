@@ -283,7 +283,7 @@ export class FeatureSelectionBookmarkService {
     ]).pipe(
       take(1),
       map(([ layer, bookmark ]) => {
-        if (!layer) {
+        if (!layer || !fid) {
           return null;
         }
         const fragment = FeatureSelectionBookmarkHelper.createFidSelectionFragment(layer.serviceId, layer.layerName, fid);

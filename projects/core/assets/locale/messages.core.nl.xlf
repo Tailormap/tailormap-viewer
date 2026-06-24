@@ -678,6 +678,10 @@
         <source>Link copied to clipboard</source>
         <target>Link naar klembord gekopieerd</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-not-copied" datatype="html">
+        <source>Failed to copy link to clipboard</source>
+        <target>Link naar klembord kopiëren mislukt</target>
+      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
         <target>Ruimtelijk filter toevoegen</target>

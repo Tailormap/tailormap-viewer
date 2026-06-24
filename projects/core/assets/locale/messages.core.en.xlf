@@ -506,6 +506,9 @@
       <trans-unit id="core.feature-info.share-feature-copied" datatype="html">
         <source>Link copied to clipboard</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.share-feature-not-copied" datatype="html">
+        <source>Failed to copy link to clipboard</source>
+      </trans-unit>
       <trans-unit id="core.filter.add-spatial-filter" datatype="html">
         <source>Add spatial filter</source>
       </trans-unit>
