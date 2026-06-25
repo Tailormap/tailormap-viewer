@@ -219,7 +219,8 @@ export class MapPdfService {
   private addImage2PDF$(doc: jsPDF, url: string, x: number, y: number): Observable<jsPDF> {
     return ImageHelper.imageUrlToPng$(url)
       .pipe(take(1), map(img => {
-        return doc.addImage(img.imageData, 'PNG', x, y, 20, 20, '', 'FAST');
+        const ratio = img.width / img.height;
+        return doc.addImage(img.imageData, 'PNG', x, y, 20, 20 / ratio, '', 'FAST');
       }));
   }
 
