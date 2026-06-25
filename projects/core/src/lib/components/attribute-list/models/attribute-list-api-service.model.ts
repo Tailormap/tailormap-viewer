@@ -296,5 +296,5 @@ export interface AttributeListApiServiceModel extends GetFeaturesApiModel {
    * @param params Parameters specifying the application, layer ID, and optional filter.
    * @returns Observable emitting the bounds model or null on error.
    */
-  retrieveZoomToExtentBounds$(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null>;
+  retrieveZoomToExtentBounds$?(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null>;
 }
