@@ -978,7 +978,10 @@
         <source>Tiling gutter</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
-        <source>Leave empty to use the title as provided by the service.</source>
+        <source>Leave empty to use the title as provided by the service</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
+        <source>Leave empty to use the description as provided by the service</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
