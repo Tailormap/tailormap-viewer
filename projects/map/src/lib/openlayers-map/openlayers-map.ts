@@ -284,7 +284,7 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public zoomTo(x: number, y: number, zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
+  public zoomTo(center: number[], zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
     this.executeMapAction(olMap => {
       if (olMap.getView().getAnimating() && ignoreWhileAnimating) {
         return;
@@ -294,10 +294,10 @@ export class OpenLayersMap implements MapViewerModel {
         return;
       }
       if (animationDuration === 0) {
-        olMap.getView().setCenter([ x, y ]);
+        olMap.getView().setCenter(center);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center });
       }
     });
   }

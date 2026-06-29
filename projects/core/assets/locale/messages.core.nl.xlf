@@ -6,14 +6,6 @@
         <source>Attribute list</source>
         <target>Attributenlijst</target>
       </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
-        <source>Zoom to</source>
-        <target>Inzoomen op</target>
-      </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
-        <source>Zoom to data bounds</source>
-        <target>Inzoomen op data grenzen</target>
-      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
         <target>Alle filters wissen</target>
@@ -117,6 +109,14 @@
       <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
         <source>Toggle visibility of all columns</source>
         <target>Zichtbaarheid van alle kolommen aanpassen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+        <target>Inzoomen op</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+        <target>Inzoomen op data grenzen</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
         <source>Select basemap</source>
@@ -1558,6 +1558,18 @@
       <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
         <source>Fetching location failed: timeout</source>
         <target>Locatie ophalen mislukt: time-out</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-following" datatype="html">
+        <source>Following location</source>
+        <target>Locatie aan het volgen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-waiting" datatype="html">
+        <source>Waiting for location fix</source>
+        <target>Wacht op locatie</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoomed-to-location" datatype="html">
+        <source>Location found (click to follow)</source>
+        <target>Locatie gevonden (klik om te volgen)</target>
       </trans-unit>
       <trans-unit id="core.user-login-check-admin-message" datatype="html">
         <source>You are logged out and need to log in first before continuing</source>

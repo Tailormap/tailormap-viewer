@@ -32,6 +32,8 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
+  public isFollowing = false;
+  private ignoreFollowingPositionChanges = false;
   public hasFix = false;
   private noTimeout = false;
 
@@ -72,6 +74,13 @@ export class GeolocationComponent implements OnInit, OnDestroy {
         };
       }
      }).pipe(takeUntil(this.destroyed)).subscribe();
+
+    this.mapService.getMapViewDetails$().pipe(takeUntil(this.destroyed)).subscribe(() => {
+      if (this.isFollowing && !this.ignoreFollowingPositionChanges) {
+        this.isFollowing = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   public ngOnDestroy(): void {
@@ -83,12 +92,9 @@ export class GeolocationComponent implements OnInit, OnDestroy {
     this.mapService.getProjectionCode$()
       .pipe(take(1))
       .subscribe(projectionCode => {
-          const point = CoordinateHelper.projectCoordinates([ pos.coords.longitude, pos.coords.latitude ], 'EPSG:4326', projectionCode);
-          if (point === undefined) {
-              return;
-          }
+          const location = CoordinateHelper.projectCoordinates([ pos.coords.longitude, pos.coords.latitude ], 'EPSG:4326', projectionCode);
 
-          const pointWkt = `POINT(${point[0]} ${point[1]})`;
+          const pointWkt = `POINT(${location[0]} ${location[1]})`;
           const circleWkt = CoordinateHelper.circleFromWGS84CoordinatesAndRadius([ pos.coords.longitude, pos.coords.latitude ], pos.coords.accuracy, projectionCode);
 
           this.featureGeom.next([
@@ -96,13 +102,21 @@ export class GeolocationComponent implements OnInit, OnDestroy {
             { __fid: 'geolocation-shadow', geometry: circleWkt, attributes: {} },
           ]);
 
-          if (!this.hasFix) {
+          if (!this.hasFix || this.isFollowing) {
             this.hasFix = true;
             const maxZoom = projectionCode === 'EPSG:28992'
               ? GeolocationComponent.MAX_ZOOM_EPSG_28992
               : GeolocationComponent.MAX_ZOOM_DEFAULT;
-            this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
-            if (!this.noTimeout) {
+
+            if (this.isFollowing) {
+              this.ignoreFollowingPositionChanges = true;
+              this.mapService.zoomToXY(location, undefined, 500);
+              setTimeout(() => this.ignoreFollowingPositionChanges = false, 1000);
+            } else {
+              this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
+            }
+
+            if (!this.isFollowing && !this.noTimeout) {
               this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
             }
             this.cdr.detectChanges();
@@ -120,6 +134,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
 
       this.featureGeom.next([]);
       this.isWatching = false;
+      this.isFollowing = false;
       this.hasFix = false;
       this.cdr.detectChanges();
   }
@@ -146,8 +161,27 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       this.isWatching = true;
       this.cdr.detectChanges();
     } else {
-      this.cancelGeolocation();
+      if (this.hasFix && !this.isFollowing) {
+        this.isFollowing = true;
+        clearTimeout(this.activeWatchTimeout);
+        this.cdr.detectChanges();
+      } else {
+        this.cancelGeolocation();
+      }
     }
   }
 
+  public getTooltip() {
+    if (this.isFollowing) {
+      return $localize `:@@core.toolbar.zoom-to-location-following:Following location`;
+    }
+    if (this.activeWatch) {
+      if (!this.hasFix) {
+        return $localize`:@@core.toolbar.zoom-to-location-waiting:Waiting for location fix`;
+      } else {
+        return $localize `:@@core.toolbar.zoomed-to-location:Location found (click to follow)`;
+      }
+    }
+    return $localize `:@@core.toolbar.zoom-to-location:Zoom to location`;
+  }
 }

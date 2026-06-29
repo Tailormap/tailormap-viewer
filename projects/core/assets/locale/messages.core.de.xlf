@@ -6,14 +6,6 @@
         <source>Attribute list</source>
         <target>Attributlisten</target>
       </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
-        <source>Zoom to</source>
-        <target>Zoomen auf</target>
-      </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
-        <source>Zoom to data bounds</source>
-        <target>Auf Datenbereich zoomen</target>
-      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
         <target>Alle Filter löschen</target>
@@ -117,6 +109,14 @@
       <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
         <source>Toggle visibility of all columns</source>
         <target>Sichtbarkeit aller Spalten wechseln</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+        <target>Zoomen auf</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
+        <target>Auf Datenbereich zoomen</target>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
         <source>Select basemap</source>
@@ -1558,6 +1558,18 @@
       <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
         <source>Fetching location failed: timeout</source>
         <target>Standort abrufen fehlgeschlagen: Zeitüberschreitung</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-following" datatype="html">
+        <source>Following location</source>
+        <target>Standort verfolgen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-waiting" datatype="html">
+        <source>Waiting for location fix</source>
+        <target>Warten auf Standortfix</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoomed-to-location" datatype="html">
+        <source>Location found (click to follow)</source>
+        <target>Standort gefunden (klicken zum Verfolgen)</target>
       </trans-unit>
       <trans-unit id="core.user-login-check-admin-message" datatype="html">
         <source>You are logged out and need to log in first before continuing</source>
