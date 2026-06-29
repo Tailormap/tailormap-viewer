@@ -29,10 +29,6 @@ services:
     labels:
       - "traefik.enable=false"
 
-  solr-metrics:
-    labels:
-      - "traefik.enable=false"
-
   prometheus:
     labels:
       - "traefik.enable=false"

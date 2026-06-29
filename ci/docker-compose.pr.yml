@@ -37,6 +37,4 @@ services:
   # Disable Solr and Prometheus containers for PR deployment (even though currently only enabled with a profile by default, this might be changed again)
   solr: !reset
 
-  solr-metrics: !reset
-
   prometheus: !reset
