@@ -114,24 +114,6 @@ services:
       retries: 3
 
 
-  solr-metrics:
-    container_name: ${COMPOSE_PROJECT_NAME}-solr-status
-    depends_on:
-      - solr
-    image: ghcr.io/tailormap/solr:10.0.0
-    profiles:
-      - solr
-    environment:
-      TZ: Europe/Amsterdam
-      PORT: 9854
-      SCRAPE_INTERVAL: 15
-      SOLR_URL: http://solr:8983/solr/
-      SOLR_HEAP: 128m
-    command:
-      # this script should be in the path for the current (solr) user
-      - solr-exporter
-
-
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
     image: prom/prometheus:v3.12.0
