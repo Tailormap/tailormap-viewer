@@ -18,8 +18,6 @@
     "@ngrx/operators": "^20.0.0",
     "@ngrx/store": "^20.0.0",
     "@ngrx/store-devtools": "^20.0.0",
-    "@sentry/angular": "^10.1.0",
-    "@sentry/browser": "^10.1.0",
     "@stardazed/zlib": "^1.0.1",
     "@tailormap-viewer/shared": "^12.8.0",
     "@tailormap-viewer/map": "^12.8.0",
