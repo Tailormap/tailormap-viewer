@@ -15,7 +15,7 @@
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "lint-per-rule": "eslint --ext .ts,.html -f ./lint-formatter.js ./projects/**",
-    "12.8.1": "tm-publish-all-libraries",
+    "release-packages": "tm-publish-all-libraries",
     "analyze-bundle": "ng build app --stats-json && mv dist/app/stats.json ./tailormap-bundle-stats.json && echo \"Open https://esbuild.github.io/analyze/ and use tailormap-bundle-stats.json to analyze\"",
     "extract-locale": "npm run extract-locale-shared && npm run extract-locale-core && npm run extract-locale-admin-core",
     "extract-locale-shared": "tm-extract-i18n --library=shared",
