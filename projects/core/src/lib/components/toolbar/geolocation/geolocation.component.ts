@@ -6,6 +6,7 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-geolocation',
@@ -33,7 +34,6 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   public hasGeolocation = navigator.geolocation !== undefined;
   public isWatching = false;
   public isFollowing = false;
-  private ignoreFollowingPositionChanges = false;
   public hasFix = false;
   private noTimeout = false;
 
@@ -75,9 +75,10 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       }
      }).pipe(takeUntil(this.destroyed)).subscribe();
 
-    this.mapService.getMapViewDetails$().pipe(takeUntil(this.destroyed)).subscribe(() => {
-      if (this.isFollowing && !this.ignoreFollowingPositionChanges) {
+    this.mapService.getPointerDrag$().pipe(takeUntil(this.destroyed)).subscribe(() => {
+      if (this.isFollowing) {
         this.isFollowing = false;
+        this.showSnackbarMessage($localize `:@@core.toolbar.zoom-following-canceled:Stopped following location`, 2000);
         this.cdr.detectChanges();
       }
     });
@@ -109,9 +110,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
               : GeolocationComponent.MAX_ZOOM_DEFAULT;
 
             if (this.isFollowing) {
-              this.ignoreFollowingPositionChanges = true;
               this.mapService.zoomToXY(location, undefined, 500);
-              setTimeout(() => this.ignoreFollowingPositionChanges = false, 1000);
             } else {
               this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
             }
@@ -139,17 +138,27 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
   }
 
+  private showSnackbarMessage(msg: string, duration?: number) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: duration || 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
   private positionError(e: GeolocationPositionError) {
       switch (e.code) {
         case GeolocationPositionError.PERMISSION_DENIED:
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`);
           break;
         case GeolocationPositionError.POSITION_UNAVAILABLE:
           // eslint-disable-next-line max-len
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`);
           break;
         case GeolocationPositionError.TIMEOUT:
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-timeout:Fetching location failed: timeout`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-timeout:Fetching location failed: timeout`);
           break;
       }
       this.cancelGeolocation();

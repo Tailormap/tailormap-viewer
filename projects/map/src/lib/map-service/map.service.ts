@@ -341,6 +341,10 @@ export class MapService {
     return this.map.hasUserInteractedWithMap$();
   }
 
+  public getPointerDrag$(): Observable<void> {
+    return this.map.getPointerDrag$();
+  }
+
   public allowSnapping(allow: boolean) {
     this.map.allowSnapping(allow);
   }
