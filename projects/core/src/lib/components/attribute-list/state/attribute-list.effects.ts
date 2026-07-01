@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { filter, map, mergeMap, of } from 'rxjs';
+import { filter, map, switchMap, of, tap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
@@ -11,6 +11,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 import { selectLayer } from '../../../map';
+import { debounceTime } from 'rxjs/operators';
 
 @Injectable()
 export class AttributeListEffects {
@@ -20,11 +21,13 @@ export class AttributeListEffects {
   private mapService = inject(MapService);
   private managerService = inject(AttributeListManagerService);
 
+  private loadingForTab = new Set<string>();
+
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      switchMap(action => this.loadDataForTabId$(action.tabId)),
     );
   });
 
@@ -32,17 +35,20 @@ export class AttributeListEffects {
     return this.actions$.pipe(
       ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      switchMap(action => this.loadDataForTabId$(action.tabId)),
     );
   });
 
   public loadDataAfterChanges$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.updatePage, AttributeListActions.updateSort),
-      concatLatestFrom(action => this.store$.select(selectAttributeListDataForId(action.dataId))),
+      debounceTime(10),
+      concatLatestFrom(action => {
+        return this.store$.select(selectAttributeListDataForId(action.dataId));
+      }),
       map(([ _action, data ]) => data),
       filter(TypesHelper.isDefined),
-      mergeMap(data => this.loadDataForTabId$(data.tabId)),
+      switchMap(data => this.loadDataForTabId$(data.tabId)),
     );
   });
 
@@ -58,7 +64,7 @@ export class AttributeListEffects {
       ]),
       concatLatestFrom(([ _action, tab ]) => this.store$.select(selectLayer(tab?.layerId || ''))),
       filter(([[ _action, tab, row, applicationId ], layer ]) => !!tab && !!row && applicationId !== null && !!layer),
-      mergeMap(([[ _action, tab, row, applicationId ], layer ]) => {
+      switchMap(([[ _action, tab, row, applicationId ], layer ]) => {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
@@ -80,7 +86,12 @@ export class AttributeListEffects {
   });
 
   private loadDataForTabId$(tabId: string) {
+    if (this.loadingForTab.has(tabId)) {
+      return of({ type: 'noop' });
+    }
+    this.loadingForTab.add(tabId);
     return this.attributeListDataService.loadDataForTab$(tabId).pipe(
+      tap(() => this.loadingForTab.delete(tabId)),
       map(result => {
         if (!result.success) {
           return AttributeListActions.loadDataFailed({ tabId, data: result });

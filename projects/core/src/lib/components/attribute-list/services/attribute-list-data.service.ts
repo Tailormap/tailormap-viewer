@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
-import { catchError, concatMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { catchError, switchMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
@@ -56,7 +56,7 @@ export class AttributeListDataService implements OnDestroy {
       this.store$.select(selectAttributeListTabData(tabId)),
     ]).pipe(
       take(1),
-      concatMap(([ tab, data ]) => {
+      switchMap(([ tab, data ]) => {
         if (!tab || !tab.layerId) {
           return of(AttributeListDataService.getErrorResult(''));
         }
@@ -82,11 +82,12 @@ export class AttributeListDataService implements OnDestroy {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))) ])
       .pipe(
+        take(1),
         filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
           const [ applicationId, layer ] = result;
           return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
         }),
-        concatMap(([ applicationId, layer ]) => this.api.getFeatures$(tab.tabSourceId, {
+        switchMap(([ applicationId, layer ]) => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
           applicationId: applicationId,
           layerName: layer.layerName,
