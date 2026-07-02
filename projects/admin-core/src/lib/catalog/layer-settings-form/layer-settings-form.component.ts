@@ -120,8 +120,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public changed = new EventEmitter<LayerSettingsModel | null>();
 
   public groups$: Observable<GroupModel[]>;
-  // public serviceLayer$: Observable<ExtendedGeoServiceLayerModel | undefined> = of(undefined);
-  public serviceLayer: ExtendedGeoServiceLayerModel | undefined;
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');
