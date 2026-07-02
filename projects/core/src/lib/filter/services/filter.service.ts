@@ -2,7 +2,7 @@ import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
 import { filter, tap } from 'rxjs/operators';
-import { map, Observable, Subject } from 'rxjs';
+import { delay, map, Observable, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
 
@@ -51,6 +51,11 @@ export class FilterService {
         tap(([filters]) => this.currentFilters = filters),
         map(([ , changedFilters ]) => changedFilters),
         filter((filters) => filters.size > 0),
+        // We add a little delay - filters also change when a layer is unchecked (made invisible)
+        // This code is listened to by (among others) the attribute list.
+        // The attribute list also listens to layer changes to hide tabs if layer is made invisible. Since these are two separate code paths
+        // we add a little delay here to ensure state is updated before triggering filter changes
+        delay(10),
       )
       .subscribe((filters) => this.changedFiltersSubject$.next(filters));
   }

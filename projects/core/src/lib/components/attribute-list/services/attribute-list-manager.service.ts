@@ -55,6 +55,7 @@ export class AttributeListManagerService implements OnDestroy {
   public static readonly EMPTY_ATTRIBUTE_LIST_TAB: AttributeListTabModel = {
     id: '',
     label: '',
+    layerId: '',
     selectedDataId: '',
     initialDataId: '',
     initialDataLoaded: false,
