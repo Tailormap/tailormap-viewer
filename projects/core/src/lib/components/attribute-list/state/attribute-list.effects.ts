@@ -5,7 +5,9 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { debounceTime, filter, groupBy, map, mergeMap, of, Subject, switchMap, tap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
-import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
+import {
+  selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId, selectAttributeListTabs,
+} from './attribute-list.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
@@ -52,7 +54,15 @@ export class AttributeListEffects {
 
   public loadData$ = createEffect(() => {
     return this.loadDataForTabSubject.asObservable().pipe(
-      groupBy(tabId => tabId),
+      groupBy(
+        tabId => tabId,
+        {
+          // Added duration to clean up non-existing tab id streams
+          duration: group$ => this.store$.select(selectAttributeListTabs).pipe(
+            filter(tabs => !tabs.some(tab => tab.id === group$.key)),
+          ),
+        },
+      ),
       mergeMap(tabIds$ => tabIds$.pipe(
         debounceTime(50),
         switchMap(tabId => this.attributeListDataService.loadDataForTab$(tabId).pipe(
