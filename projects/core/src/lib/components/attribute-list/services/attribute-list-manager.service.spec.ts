@@ -727,6 +727,7 @@ describe('AttributeListManagerService', () => {
       expect(AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_TAB).toEqual({
         id: '',
         label: '',
+        layerId: '',
         selectedDataId: '',
         initialDataId: '',
         initialDataLoaded: false,
