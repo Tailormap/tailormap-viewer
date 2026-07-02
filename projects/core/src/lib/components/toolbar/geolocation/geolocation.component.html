@@ -3,13 +3,12 @@
     <button mat-flat-button
       class="toggle-button map-control-button"
       [tmTooltip]="getTooltip()"
-      [class.toggle-button--active]="isWatching"
+      [class.toggle-button--active]="isWatching()"
       (click)="onClick()">
-      @if (!hasFix) {
+      @if (!hasFix()) {
         <mat-icon svgIcon="location_searching"></mat-icon>
-      }
-      @if (hasFix) {
-        <mat-icon svgIcon="{{ isFollowing ? 'location_following' : 'my_location' }}"></mat-icon>
+      } @else {
+        <mat-icon svgIcon="{{ isFollowing() ? 'location_following' : 'my_location' }}"></mat-icon>
       }
     </button>
   </div>

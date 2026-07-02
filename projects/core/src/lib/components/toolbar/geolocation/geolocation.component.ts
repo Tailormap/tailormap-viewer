@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
 import { Subject, take, takeUntil } from 'rxjs';
 import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
@@ -19,7 +19,6 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private snackBar = inject(MatSnackBar);
-  private cdr = inject(ChangeDetectorRef);
 
   private destroyed = new Subject();
   private featureGeom = new Subject<FeatureModel[]>();
@@ -32,10 +31,10 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private static MAX_ZOOM_DEFAULT = 18;
 
   public hasGeolocation = navigator.geolocation !== undefined;
-  public isWatching = false;
-  public isFollowing = false;
-  public hasFix = false;
-  private noTimeout = false;
+  public isWatching = signal(false);
+  public isFollowing = signal(false);
+  public hasFix = signal(false);
+  private noTimeout = signal(false);
 
   constructor() {
     const store$ = this.store$;
@@ -44,7 +43,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       store$,
       BaseComponentTypeEnum.GEOLOCATION,
       config => {
-        this.noTimeout = config.noTimeout ?? false;
+        this.noTimeout.set(config.noTimeout ?? false);
       },
     );
   }
@@ -76,10 +75,9 @@ export class GeolocationComponent implements OnInit, OnDestroy {
      }).pipe(takeUntil(this.destroyed)).subscribe();
 
     this.mapService.getPointerDrag$().pipe(takeUntil(this.destroyed)).subscribe(() => {
-      if (this.isFollowing) {
-        this.isFollowing = false;
+      if (this.isFollowing()) {
+        this.isFollowing.set(false);
         this.showSnackbarMessage($localize `:@@core.toolbar.zoom-following-canceled:Stopped following location`, 2000);
-        this.cdr.detectChanges();
       }
     });
   }
@@ -103,22 +101,21 @@ export class GeolocationComponent implements OnInit, OnDestroy {
             { __fid: 'geolocation-shadow', geometry: circleWkt, attributes: {} },
           ]);
 
-          if (!this.hasFix || this.isFollowing) {
-            this.hasFix = true;
+          if (!this.hasFix() || this.isFollowing()) {
+            this.hasFix.set(true);
             const maxZoom = projectionCode === 'EPSG:28992'
               ? GeolocationComponent.MAX_ZOOM_EPSG_28992
               : GeolocationComponent.MAX_ZOOM_DEFAULT;
 
-            if (this.isFollowing) {
+            if (this.isFollowing()) {
               this.mapService.zoomToXY(location, undefined, 500);
             } else {
               this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
             }
 
-            if (!this.isFollowing && !this.noTimeout) {
+            if (!this.isFollowing() && !this.noTimeout()) {
               this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
             }
-            this.cdr.detectChanges();
           }
       });
   }
@@ -132,10 +129,9 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       }
 
       this.featureGeom.next([]);
-      this.isWatching = false;
-      this.isFollowing = false;
-      this.hasFix = false;
-      this.cdr.detectChanges();
+      this.isWatching.set(false);
+      this.isFollowing.set(false);
+      this.hasFix.set(false);
   }
 
   private showSnackbarMessage(msg: string, duration?: number) {
@@ -167,13 +163,11 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   public onClick(): void {
     if (this.activeWatch === undefined) {
       this.activeWatch = navigator.geolocation.watchPosition(this.positionSuccess.bind(this), this.positionError.bind(this), { enableHighAccuracy: true });
-      this.isWatching = true;
-      this.cdr.detectChanges();
+      this.isWatching.set(true);
     } else {
-      if (this.hasFix && !this.isFollowing) {
-        this.isFollowing = true;
+      if (this.hasFix() && !this.isFollowing()) {
+        this.isFollowing.set(true);
         clearTimeout(this.activeWatchTimeout);
-        this.cdr.detectChanges();
       } else {
         this.cancelGeolocation();
       }
@@ -181,11 +175,11 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   }
 
   public getTooltip() {
-    if (this.isFollowing) {
+    if (this.isFollowing()) {
       return $localize `:@@core.toolbar.zoom-to-location-following:Following location`;
     }
     if (this.activeWatch) {
-      if (!this.hasFix) {
+      if (!this.hasFix()) {
         return $localize`:@@core.toolbar.zoom-to-location-waiting:Waiting for location fix`;
       } else {
         return $localize `:@@core.toolbar.zoomed-to-location:Location found (click to follow)`;
