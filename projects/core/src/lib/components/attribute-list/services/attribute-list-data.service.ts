@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
-import { catchError, switchMap, map, take, takeUntil, withLatestFrom, debounceTime } from 'rxjs/operators';
+import { catchError, switchMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
@@ -163,7 +163,6 @@ export class AttributeListDataService implements OnDestroy {
     source$
       .pipe(
         takeUntil(this.destroyed),
-        debounceTime(10),
         withLatestFrom(this.store$.select(selectAttributeListTabs)),
         map(([ sourceResult, tabs ]) => {
           return tabs.filter(tab => typeof tab.layerId === 'undefined' ? false : shouldUpdateTab(sourceResult, tab.layerId));
