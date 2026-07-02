@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { filter, finalize, map, mergeMap, of, switchMap } from 'rxjs';
+import { debounceTime, filter, groupBy, map, mergeMap, of, Subject, switchMap, tap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
@@ -20,23 +20,23 @@ export class AttributeListEffects {
   private mapService = inject(MapService);
   private managerService = inject(AttributeListManagerService);
 
-  private loadingForTab = new Set<string>();
+  private loadDataForTabSubject = new Subject<string>();
 
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      tap(action => this.loadDataForTabId(action.tabId)),
     );
-  });
+  }, { dispatch: false });
 
   public loadDataAfterSelectedDataIdChange$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      tap(action => this.loadDataForTabId(action.tabId)),
     );
-  });
+  }, { dispatch: false });
 
   public loadDataAfterChanges$ = createEffect(() => {
     return this.actions$.pipe(
@@ -46,7 +46,24 @@ export class AttributeListEffects {
       }),
       map(([ _action, data ]) => data),
       filter(TypesHelper.isDefined),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      tap(data => this.loadDataForTabId(data.tabId)),
+    );
+  }, { dispatch: false });
+
+  public loadData$ = createEffect(() => {
+    return this.loadDataForTabSubject.asObservable().pipe(
+      groupBy(tabId => tabId),
+      mergeMap(tabIds$ => tabIds$.pipe(
+        debounceTime(50),
+        switchMap(tabId => this.attributeListDataService.loadDataForTab$(tabId).pipe(
+          map(result => {
+            if (!result.success) {
+              return AttributeListActions.loadDataFailed({ tabId, data: result });
+            }
+            return AttributeListActions.loadDataSuccess({ tabId, data: result });
+          }),
+        )),
+      )),
     );
   });
 
@@ -83,20 +100,8 @@ export class AttributeListEffects {
     );
   });
 
-  private loadDataForTabId$(tabId: string) {
-    if (this.loadingForTab.has(tabId)) {
-      return of({ type: 'noop' });
-    }
-    this.loadingForTab.add(tabId);
-    return this.attributeListDataService.loadDataForTab$(tabId).pipe(
-      finalize(() => this.loadingForTab.delete(tabId)),
-      map(result => {
-        if (!result.success) {
-          return AttributeListActions.loadDataFailed({ tabId, data: result });
-        }
-        return AttributeListActions.loadDataSuccess({ tabId, data: result });
-      }),
-    );
+  private loadDataForTabId(tabId: string) {
+    this.loadDataForTabSubject.next(tabId);
   }
 
 }
