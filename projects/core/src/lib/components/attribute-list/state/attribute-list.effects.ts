@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { filter, map, switchMap, of, tap } from 'rxjs';
+import { filter, map, switchMap, of, finalize } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
@@ -91,7 +91,7 @@ export class AttributeListEffects {
     }
     this.loadingForTab.add(tabId);
     return this.attributeListDataService.loadDataForTab$(tabId).pipe(
-      tap(() => this.loadingForTab.delete(tabId)),
+      finalize(() => this.loadingForTab.delete(tabId)),
       map(result => {
         if (!result.success) {
           return AttributeListActions.loadDataFailed({ tabId, data: result });

@@ -82,11 +82,11 @@ export class AttributeListDataService implements OnDestroy {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))) ])
       .pipe(
-        take(1),
         filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
           const [ applicationId, layer ] = result;
           return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
         }),
+        take(1),
         switchMap(([ applicationId, layer ]) => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
           applicationId: applicationId,
