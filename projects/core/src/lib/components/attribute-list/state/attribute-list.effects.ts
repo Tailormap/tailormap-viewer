@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { filter, map, switchMap, of, finalize } from 'rxjs';
+import { filter, finalize, groupBy, map, mergeMap, of, switchMap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
 import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
@@ -35,7 +35,10 @@ export class AttributeListEffects {
     return this.actions$.pipe(
       ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
-      switchMap(action => this.loadDataForTabId$(action.tabId)),
+      groupBy(action => action.tabId),
+      mergeMap(group$ => group$.pipe(
+        switchMap(action => this.loadDataForTabId$(action.tabId)),
+      )),
     );
   });
 
