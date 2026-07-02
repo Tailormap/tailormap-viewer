@@ -1303,8 +1303,12 @@
         <target>Kachel-Zwischenraum</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
-        <source>Leave empty to use the title as provided by the service.</source>
+        <source>Leave empty to use the title as provided by the service</source>
         <target>Leer lassen, um den Titel zu verwenden, wie er vom Dienst bereitgestellt wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
+        <source>Leave empty to use the description as provided by the service</source>
+        <target>Leer lassen, um die Beschreibung zu verwenden, wie sie vom Dienst bereitgestellt wird</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>

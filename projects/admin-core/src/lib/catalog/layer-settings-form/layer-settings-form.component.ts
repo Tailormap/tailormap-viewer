@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   AuthorizationGroups, AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel,
@@ -30,6 +30,7 @@ export class LayerSettingsFormComponent implements OnInit {
   private _isLayerSpecific = false;
   private _serviceId: string | undefined = undefined;
   private _protocol: GeoServiceProtocolEnum | undefined;
+  private _layerName: string | null | undefined;
 
   @Input()
   public set protocol(protocol: GeoServiceProtocolEnum) {
@@ -53,6 +54,7 @@ export class LayerSettingsFormComponent implements OnInit {
   @Input()
   public set serviceId(serviceId: string | undefined) {
     this._serviceId = serviceId;
+    this.serviceId$.next(serviceId);
 
     if (serviceId === undefined) {
       this.geoServiceAuthorizations$ = of([]);
@@ -84,8 +86,32 @@ export class LayerSettingsFormComponent implements OnInit {
   @Input()
   public isLeaf: boolean | null = null;
 
+  public get layerName() {
+    return this._layerName;
+  }
+
   @Input()
-  public layerName: string | null | undefined;
+  public set layerName(layerName: string | null | undefined) {
+    this._layerName = layerName;
+    this.layerName$.next(layerName);
+  }
+
+  private readonly serviceId$ = new BehaviorSubject<string | undefined>(undefined);
+  private readonly layerName$ = new BehaviorSubject<string | null | undefined>(undefined);
+
+  public serviceLayer$: Observable<ExtendedGeoServiceLayerModel | undefined> = combineLatest([
+    this.serviceId$,
+    this.layerName$,
+  ]).pipe(
+    switchMap(([ serviceId, layerName ]) => {
+      if (!serviceId) {
+        return of(undefined);
+      }
+      return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(
+        map(layers => layers.find(layer => layer.name === layerName)),
+      );
+    }),
+  );
 
   @Input()
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
@@ -94,7 +120,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public changed = new EventEmitter<LayerSettingsModel | null>();
 
   public groups$: Observable<GroupModel[]>;
-
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');

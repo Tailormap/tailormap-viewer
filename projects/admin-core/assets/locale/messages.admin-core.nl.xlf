@@ -1302,8 +1302,12 @@
         <target>Tegelraster overlap</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
-        <source>Leave empty to use the title as provided by the service.</source>
-        <target>Laat leeg om de titel te gebruiken zoals aangeleverd door de service.</target>
+        <source>Leave empty to use the title as provided by the service</source>
+        <target>Laat leeg om de titel te gebruiken zoals aangeleverd door de service</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
+        <source>Leave empty to use the description as provided by the service.</source>
+        <target>Laat leeg om de beschrijving te gebruiken zoals aangeleverd door de service</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
