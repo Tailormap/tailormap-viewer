@@ -10,7 +10,7 @@ import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import {
-  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
+  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, Subject, Subscription, switchMap, take, timer,
 } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -43,10 +43,12 @@ export class OpenLayersMap implements MapViewerModel {
 
   private readonly resizeObserver: ResizeObserver;
   private initialExtent: OpenlayersExtent = [];
-  private initialCenterZoom?: [number[], number] = undefined;
+  private initialCenterZoom?: [ number[], number ] = undefined;
   private mapPadding: number[] | undefined;
 
   private hasUserInteractedSubject = new BehaviorSubject(false);
+  private pointerDragSubject = new Subject<void>();
+  private pointerDragSubscription: Subscription | null = null;
 
   constructor(
     private ngZone: NgZone,
@@ -163,6 +165,14 @@ export class OpenLayersMap implements MapViewerModel {
     race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
       .pipe(take(1))
       .subscribe(() => this.hasUserInteractedSubject.next(true));
+
+    if (this.pointerDragSubscription != null) {
+      this.pointerDragSubscription.unsubscribe();
+      this.pointerDragSubscription = null;
+    }
+    this.pointerDragSubscription = OpenLayersEventManager.onPointerDrag$().subscribe(() => {
+      this.pointerDragSubject.next();
+    });
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -284,7 +294,7 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public zoomTo(x: number, y: number, zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
+  public zoomTo(center: number[], zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
     this.executeMapAction(olMap => {
       if (olMap.getView().getAnimating() && ignoreWhileAnimating) {
         return;
@@ -294,10 +304,10 @@ export class OpenLayersMap implements MapViewerModel {
         return;
       }
       if (animationDuration === 0) {
-        olMap.getView().setCenter([ x, y ]);
+        olMap.getView().setCenter(center);
         olMap.getView().setZoom(zoomLevel);
       } else {
-        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center: [ x, y ] });
+        olMap.getView().animate({ duration: animationDuration, zoom: zoomLevel, center });
       }
     });
   }
@@ -483,6 +493,10 @@ export class OpenLayersMap implements MapViewerModel {
 
   public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.hasUserInteractedSubject.asObservable();
+  }
+
+  public getPointerDrag$(): Observable<void> {
+    return this.pointerDragSubject.asObservable();
   }
 
   public allowSnapping(allow: boolean) {
