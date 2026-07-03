@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
 import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-geolocation',
@@ -15,12 +16,12 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class GeolocationComponent implements OnInit, OnDestroy {
+export class GeolocationComponent implements OnInit {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private snackBar = inject(MatSnackBar);
 
-  private destroyed = new Subject();
+  private destroyRef = inject(DestroyRef);
   private featureGeom = new Subject<FeatureModel[]>();
 
   private activeWatch: number | undefined = undefined;
@@ -72,19 +73,14 @@ export class GeolocationComponent implements OnInit, OnDestroy {
           strokeOpacity: 40,
         };
       }
-     }).pipe(takeUntil(this.destroyed)).subscribe();
+     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
-    this.mapService.getPointerDrag$().pipe(takeUntil(this.destroyed)).subscribe(() => {
+    this.mapService.getPointerDrag$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.isFollowing()) {
         this.isFollowing.set(false);
         this.showSnackbarMessage($localize `:@@core.toolbar.zoom-following-canceled:Stopped following location`, 2000);
       }
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
   private positionSuccess(pos: GeolocationPosition) {
