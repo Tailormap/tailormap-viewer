@@ -641,7 +641,11 @@ describe('AttributeListReducer', () => {
 
     test('unchecks all current rows while keeping rows not on the current page', () => {
       const state = createState({
-        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }, { id: 'row-other', __fid: 'fid-other' }] })],
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [
+          { id: 'row-1', __fid: 'fid-1' },
+          { id: 'row-2', __fid: 'fid-2' },
+          { id: 'row-other', __fid: 'fid-other' },
+        ] })],
       });
       const result = attributeListReducer(state, AttributeListActions.updateAllRowsChecked({
         tabId: 'tab-1', dataId: 'data-1', checked: false,
