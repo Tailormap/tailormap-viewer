@@ -32,6 +32,7 @@ const createData = (overrides: Partial<AttributeListDataModel> = {}): AttributeL
   tabId: 'tab-1',
   columns: [],
   rows: [],
+  checkedRows: [],
   pageSize: 10,
   pageIndex: 0,
   totalCount: null,
@@ -562,6 +563,90 @@ describe('AttributeListReducer', () => {
       const result = attributeListReducer(state, AttributeListActions.setSelectedDataId({ tabId: 'tab-1', dataId: 'data-2' }));
       expect(result.tabs[0].selectedDataId).toBe('data-2');
       expect(result.tabs[0].loadingData).toBe(true);
+    });
+  });
+
+  describe('updateRowChecked', () => {
+    const rowsFixture = [
+      { id: 'row-1', __fid: 'fid-1', attributes: {} },
+      { id: 'row-2', __fid: 'fid-2', attributes: {} },
+    ] as AttributeListRowModel[];
+
+    test('adds rowId to checkedRows when checked', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateRowChecked({
+        tabId: 'tab-1', dataId: 'data-1', rowId: 'row-1', checked: true,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-1', __fid: 'fid-1' }]);
+    });
+
+    test('does not duplicate an already-checked row', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-1', __fid: 'fid-1' }] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateRowChecked({
+        tabId: 'tab-1', dataId: 'data-1', rowId: 'row-1', checked: true,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-1', __fid: 'fid-1' }]);
+    });
+
+    test('removes rowId from checkedRows when unchecked', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateRowChecked({
+        tabId: 'tab-1', dataId: 'data-1', rowId: 'row-1', checked: false,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-2', __fid: 'fid-2' }]);
+    });
+
+    test('leaves checkedRows unchanged when unchecking a row that is not checked', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-2', __fid: 'fid-2' }] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateRowChecked({
+        tabId: 'tab-1', dataId: 'data-1', rowId: 'row-1', checked: false,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-2', __fid: 'fid-2' }]);
+    });
+  });
+
+  describe('updateAllRowsChecked', () => {
+    const rowsFixture = [
+      { id: 'row-1', __fid: 'fid-1', attributes: {} },
+      { id: 'row-2', __fid: 'fid-2', attributes: {} },
+    ] as AttributeListRowModel[];
+
+    test('checks all current rows', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateAllRowsChecked({
+        tabId: 'tab-1', dataId: 'data-1', checked: true,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }]);
+    });
+
+    test('merges current rows with already-checked rows without duplicates', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-other', __fid: 'fid-other' }] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateAllRowsChecked({
+        tabId: 'tab-1', dataId: 'data-1', checked: true,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-other', __fid: 'fid-other' }, { id: 'row-2', __fid: 'fid-2' }]);
+    });
+
+    test('unchecks all current rows while keeping rows not on the current page', () => {
+      const state = createState({
+        data: [createData({ id: 'data-1', tabId: 'tab-1', rows: rowsFixture, checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }, { id: 'row-other', __fid: 'fid-other' }] })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateAllRowsChecked({
+        tabId: 'tab-1', dataId: 'data-1', checked: false,
+      }));
+      expect(result.data[0].checkedRows).toEqual([{ id: 'row-other', __fid: 'fid-other' }]);
     });
   });
 

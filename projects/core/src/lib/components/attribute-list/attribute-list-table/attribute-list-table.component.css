@@ -11,6 +11,11 @@ mat-table {
   width: 40px !important;
 }
 
+.column_checkbox {
+  flex: none !important;
+  width: 50px !important;
+}
+
 .expand-enabled,
 .expand-disabled {
   font-size: 20px;

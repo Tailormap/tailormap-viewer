@@ -15,13 +15,34 @@
   </ng-template>
 </mat-menu>
 
-<mat-table [dataSource]="rows"
+<mat-table [dataSource]="rows() ?? []"
   [trackBy]="trackByRowId"
   multiTemplateDataRows
   aria-label="Attribute list"
   i18n-aria-label="@@core.attribute-list.attribute-list"
   [attr.aria-colcount]="columns()?.length"
   [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount">
+
+  <ng-container [matColumnDef]="CHECK_ROW_COLUMN_NAME">
+    <mat-header-cell class="column_checkbox" *matHeaderCellDef>
+      <mat-checkbox
+        [checked]="allRowsChecked()"
+        [indeterminate]="someRowsChecked()"
+        (change)="toggleAllRowsChecked()"
+        aria-label="Select all rows"
+        i18n-aria-label="@@core.attribute-list.select-all-rows">
+      </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell class="column_checkbox" *matCellDef="let row;">
+      <mat-checkbox
+        [checked]="checkedRowsSet().has(row.id)"
+        (change)="toggleRowChecked(row)"
+        (click)="$event.stopPropagation()"
+        aria-label="Select row"
+        i18n-aria-label="@@core.attribute-list.select-row">
+      </mat-checkbox>
+    </mat-cell>
+  </ng-container>
 
   <ng-container [matColumnDef]="EXPAND_DETAILS_COLUMN_NAME">
     <mat-header-cell class="column_small" *matHeaderCellDef></mat-header-cell>

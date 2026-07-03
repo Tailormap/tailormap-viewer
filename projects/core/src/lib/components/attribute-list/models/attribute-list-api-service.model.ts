@@ -239,6 +239,34 @@ export interface GetStatisticResponse {
   success: boolean;
 }
 
+export interface CanCheckRowsParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer.
+   */
+  layerId: string;
+}
+
+export interface CheckedRowsChangedParams {
+  /**
+   * The ID of the application.
+   */
+  applicationId: string;
+  /**
+   * The ID of the layer.
+   */
+  layerId: string;
+  /**
+   * The full current set of checked features, not a delta. Implementations should replace
+   * any previously received set with this one. Includes checked rows that are not on the
+   * currently visible page.
+   */
+  checkedRows: Array<{ __fid: string }>;
+}
+
 /**
  * Interface for implementing custom attribute list data loaders.
  * Implementations of this interface can be registered as data sources for the attribute list.
@@ -297,4 +325,18 @@ export interface AttributeListApiServiceModel extends GetFeaturesApiModel {
    * @returns Observable emitting the bounds model or null on error.
    */
   retrieveZoomToExtentBounds$?(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null>;
+
+  /**
+   * Determines if rows in the specified layer can be checked/unchecked using a checkbox for each row.
+   * @param params Parameters specifying the application and layer ID.
+   * @returns Observable emitting a boolean indicating if rows can be checked/unchecked.
+   */
+  canCheckRows$(params: CanCheckRowsParams): Observable<boolean>;
+
+  /**
+   * Called by the attribute list whenever the set of checked rows changes for a tab of this source.
+   * Only triggered for layers where checkboxes are rendered (see canCheckRows$).
+   * @param params Parameters specifying the application, layer ID and the full current set of checked features.
+   */
+  onCheckedRowsChanged?(params: CheckedRowsChangedParams): void;
 }

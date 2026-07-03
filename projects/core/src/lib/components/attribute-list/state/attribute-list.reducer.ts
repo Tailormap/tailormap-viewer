@@ -285,6 +285,66 @@ const onSetSelectedDataId = (
   ),
 });
 
+const onUpdateRowChecked = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.updateRowChecked>,
+): AttributeListState => {
+  return {
+    ...state,
+    data: AttributeListStateHelper.updateData(
+      state.data,
+      payload.dataId,
+      data => {
+        const isChecked = data.checkedRows.some(r => r.id === payload.rowId);
+        if (isChecked === payload.checked) {
+          return data;
+        }
+        if (payload.checked) {
+          const row = data.rows.find(r => r.id === payload.rowId);
+          return {
+            ...data,
+            checkedRows: [ ...data.checkedRows, { id: payload.rowId, __fid: row?.__fid ?? '' }],
+          };
+        }
+        return {
+          ...data,
+          checkedRows: data.checkedRows.filter(r => r.id !== payload.rowId),
+        };
+      },
+    ),
+  };
+};
+
+const onUpdateAllRowsChecked = (
+  state: AttributeListState,
+  payload: ReturnType<typeof AttributeListActions.updateAllRowsChecked>,
+): AttributeListState => {
+  return {
+    ...state,
+    data: AttributeListStateHelper.updateData(
+      state.data,
+      payload.dataId,
+      data => {
+        if (payload.checked) {
+          const existingIds = new Set(data.checkedRows.map(r => r.id));
+          const newCheckedRows = data.rows
+            .filter(r => !existingIds.has(r.id))
+            .map(r => ({ id: r.id, __fid: r.__fid ?? '' }));
+          return {
+            ...data,
+            checkedRows: [ ...data.checkedRows, ...newCheckedRows ],
+          };
+        }
+        const rowSet = new Set(data.rows.map(r => r.id));
+        return {
+          ...data,
+          checkedRows: data.checkedRows.filter(r => !rowSet.has(r.id)),
+        };
+      },
+    ),
+  };
+};
+
 const attributeListReducerImpl = createReducer<AttributeListState>(
   initialAttributeListState,
   on(AttributeListActions.setAttributeListVisibility, onSetAttributeListVisibility),
@@ -302,5 +362,7 @@ const attributeListReducerImpl = createReducer<AttributeListState>(
   on(AttributeListActions.toggleAllColumnsVisible, onToggleAllColumnsVisible),
   on(AttributeListActions.setHighlightedFeature, onSetHighlightedFeature),
   on(AttributeListActions.setSelectedDataId, onSetSelectedDataId),
+  on(AttributeListActions.updateRowChecked, onUpdateRowChecked),
+  on(AttributeListActions.updateAllRowsChecked, onUpdateAllRowsChecked),
 );
 export const attributeListReducer = (state: AttributeListState | undefined, action: Action) => attributeListReducerImpl(state, action);

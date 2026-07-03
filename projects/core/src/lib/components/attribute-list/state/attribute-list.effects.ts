@@ -110,6 +110,27 @@ export class AttributeListEffects {
     );
   });
 
+  public notifyCheckedRowsChanged$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AttributeListActions.updateRowChecked, AttributeListActions.updateAllRowsChecked),
+      concatLatestFrom(action => [
+        this.store$.select(selectAttributeListDataForId(action.dataId)),
+        this.store$.select(selectAttributeListTabForDataId(action.dataId)),
+        this.store$.select(selectViewerId),
+      ]),
+      tap(([ _action, data, tab, applicationId ]) => {
+        if (!data || !tab || !tab.layerId || applicationId === null) {
+          return;
+        }
+        this.managerService.notifyCheckedRowsChanged(tab.tabSourceId, {
+          applicationId,
+          layerId: tab.layerId,
+          checkedRows: data.checkedRows.map(r => ({ __fid: r.__fid })),
+        });
+      }),
+    );
+  }, { dispatch: false });
+
   private loadDataForTabId(tabId: string) {
     this.loadDataForTabSubject.next(tabId);
   }

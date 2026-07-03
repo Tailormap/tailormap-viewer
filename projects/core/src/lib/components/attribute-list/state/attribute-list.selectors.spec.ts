@@ -5,6 +5,8 @@ import {
   selectDataWithSort,
   selectAttributeListDataSort,
   selectAttributeListTabData,
+  selectCheckedFeaturesForSelectedTab,
+  selectCurrentlyVisibleCheckedFeaturesForSelectedTab,
 } from './attribute-list.selectors';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -32,6 +34,7 @@ const createData = (overrides: Partial<AttributeListDataModel> = {}): AttributeL
   tabId: 'tab-1',
   columns: [],
   rows: [],
+  checkedRows: [],
   pageSize: 10,
   pageIndex: 0,
   totalCount: null,
@@ -289,6 +292,58 @@ describe('AttributeListSelectors', () => {
       ];
       const projector = selectAttributeListTabData('tab-1').projector;
       expect(projector(allData)).toHaveLength(2);
+    });
+  });
+
+  describe('selectCheckedFeaturesForSelectedTab', () => {
+    const projector = selectCheckedFeaturesForSelectedTab.projector;
+
+    test('returns the __fid of each checked row', () => {
+      const data = createData({
+        checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }],
+      });
+      expect(projector(data)).toEqual([ 'fid-1', 'fid-2' ]);
+    });
+
+    test('returns an empty array when no rows are checked', () => {
+      const data = createData({ checkedRows: [] });
+      expect(projector(data)).toEqual([]);
+    });
+
+    test('returns an empty array when there is no data for the selected tab', () => {
+      expect(projector(null)).toEqual([]);
+    });
+  });
+
+  describe('selectCurrentlyVisibleCheckedFeaturesForSelectedTab', () => {
+    const projector = selectCurrentlyVisibleCheckedFeaturesForSelectedTab.projector;
+
+    test('returns the __fid of checked rows that are currently visible', () => {
+      const data = createData({
+        rows: [{ id: 'row-1', attributes: {} }, { id: 'row-2', attributes: {} }],
+        checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-2', __fid: 'fid-2' }],
+      });
+      expect(projector(data)).toEqual([ 'fid-1', 'fid-2' ]);
+    });
+
+    test('excludes checked rows that are not on the current page', () => {
+      const data = createData({
+        rows: [{ id: 'row-1', attributes: {} }],
+        checkedRows: [{ id: 'row-1', __fid: 'fid-1' }, { id: 'row-other', __fid: 'fid-other' }],
+      });
+      expect(projector(data)).toEqual(['fid-1']);
+    });
+
+    test('returns an empty array when no visible rows are checked', () => {
+      const data = createData({
+        rows: [{ id: 'row-1', attributes: {} }],
+        checkedRows: [{ id: 'row-other', __fid: 'fid-other' }],
+      });
+      expect(projector(data)).toEqual([]);
+    });
+
+    test('returns an empty array when there is no data for the selected tab', () => {
+      expect(projector(null)).toEqual([]);
     });
   });
 
