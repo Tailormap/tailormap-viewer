@@ -10,7 +10,7 @@ import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import {
-  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, Subject, Subscription, switchMap, take, timer,
+  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
 } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -47,8 +47,6 @@ export class OpenLayersMap implements MapViewerModel {
   private mapPadding: number[] | undefined;
 
   private hasUserInteractedSubject = new BehaviorSubject(false);
-  private pointerDragSubject = new Subject<void>();
-  private pointerDragSubscription: Subscription | null = null;
 
   constructor(
     private ngZone: NgZone,
@@ -165,14 +163,6 @@ export class OpenLayersMap implements MapViewerModel {
     race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
       .pipe(take(1))
       .subscribe(() => this.hasUserInteractedSubject.next(true));
-
-    if (this.pointerDragSubscription != null) {
-      this.pointerDragSubscription.unsubscribe();
-      this.pointerDragSubscription = null;
-    }
-    this.pointerDragSubscription = OpenLayersEventManager.onPointerDrag$().subscribe(() => {
-      this.pointerDragSubject.next();
-    });
 
     this.map.next(olMap);
     this.layerManager.next(layerManager);
@@ -496,7 +486,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public getPointerDrag$(): Observable<void> {
-    return this.pointerDragSubject.asObservable();
+    return OpenLayersEventManager.onPointerDrag$().pipe(map(() => undefined));
   }
 
   public allowSnapping(allow: boolean) {
