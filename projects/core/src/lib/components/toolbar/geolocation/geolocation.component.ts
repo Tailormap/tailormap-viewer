@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
 import { CoordinateHelper, MapService } from '@tailormap-viewer/map';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { BaseComponentTypeEnum, FeatureModel, GeolocationConfigModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tm-geolocation',
@@ -14,13 +16,12 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class GeolocationComponent implements OnInit, OnDestroy {
+export class GeolocationComponent implements OnInit {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private snackBar = inject(MatSnackBar);
-  private cdr = inject(ChangeDetectorRef);
 
-  private destroyed = new Subject();
+  private destroyRef = inject(DestroyRef);
   private featureGeom = new Subject<FeatureModel[]>();
 
   private activeWatch: number | undefined = undefined;
@@ -31,9 +32,10 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   private static MAX_ZOOM_DEFAULT = 18;
 
   public hasGeolocation = navigator.geolocation !== undefined;
-  public isWatching = false;
-  public hasFix = false;
-  private noTimeout = false;
+  public isWatching = signal(false);
+  public isFollowing = signal(false);
+  public hasFix = signal(false);
+  private noTimeout = signal(false);
 
   constructor() {
     const store$ = this.store$;
@@ -42,7 +44,7 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       store$,
       BaseComponentTypeEnum.GEOLOCATION,
       config => {
-        this.noTimeout = config.noTimeout ?? false;
+        this.noTimeout.set(config.noTimeout ?? false);
       },
     );
   }
@@ -71,24 +73,23 @@ export class GeolocationComponent implements OnInit, OnDestroy {
           strokeOpacity: 40,
         };
       }
-     }).pipe(takeUntil(this.destroyed)).subscribe();
-  }
+     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
+    this.mapService.getPointerDrag$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      if (this.isFollowing()) {
+        this.isFollowing.set(false);
+        this.showSnackbarMessage($localize `:@@core.toolbar.zoom-following-canceled:Stopped following location`, 2000);
+      }
+    });
   }
 
   private positionSuccess(pos: GeolocationPosition) {
     this.mapService.getProjectionCode$()
       .pipe(take(1))
       .subscribe(projectionCode => {
-          const point = CoordinateHelper.projectCoordinates([ pos.coords.longitude, pos.coords.latitude ], 'EPSG:4326', projectionCode);
-          if (point === undefined) {
-              return;
-          }
+          const location = CoordinateHelper.projectCoordinates([ pos.coords.longitude, pos.coords.latitude ], 'EPSG:4326', projectionCode);
 
-          const pointWkt = `POINT(${point[0]} ${point[1]})`;
+          const pointWkt = `POINT(${location[0]} ${location[1]})`;
           const circleWkt = CoordinateHelper.circleFromWGS84CoordinatesAndRadius([ pos.coords.longitude, pos.coords.latitude ], pos.coords.accuracy, projectionCode);
 
           this.featureGeom.next([
@@ -96,16 +97,21 @@ export class GeolocationComponent implements OnInit, OnDestroy {
             { __fid: 'geolocation-shadow', geometry: circleWkt, attributes: {} },
           ]);
 
-          if (!this.hasFix) {
-            this.hasFix = true;
+          if (!this.hasFix() || this.isFollowing()) {
+            this.hasFix.set(true);
             const maxZoom = projectionCode === 'EPSG:28992'
               ? GeolocationComponent.MAX_ZOOM_EPSG_28992
               : GeolocationComponent.MAX_ZOOM_DEFAULT;
-            this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
-            if (!this.noTimeout) {
+
+            if (this.isFollowing()) {
+              this.mapService.zoomToXY(location, undefined, 500);
+            } else {
+              this.mapService.zoomTo(circleWkt, projectionCode, maxZoom);
+            }
+
+            if (!this.isFollowing() && !this.noTimeout()) {
               this.activeWatchTimeout = window.setTimeout(() => this.cancelGeolocation(), GeolocationComponent.GEOLOCATION_TIMEOUT_MS);
             }
-            this.cdr.detectChanges();
           }
       });
   }
@@ -119,22 +125,32 @@ export class GeolocationComponent implements OnInit, OnDestroy {
       }
 
       this.featureGeom.next([]);
-      this.isWatching = false;
-      this.hasFix = false;
-      this.cdr.detectChanges();
+      this.isWatching.set(false);
+      this.isFollowing.set(false);
+      this.hasFix.set(false);
+  }
+
+  private showSnackbarMessage(msg: string, duration?: number) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: duration || 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
   private positionError(e: GeolocationPositionError) {
       switch (e.code) {
         case GeolocationPositionError.PERMISSION_DENIED:
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`);
           break;
         case GeolocationPositionError.POSITION_UNAVAILABLE:
           // eslint-disable-next-line max-len
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`);
           break;
         case GeolocationPositionError.TIMEOUT:
-          this.snackBar.open($localize `:@@core.toolbar.zoom-to-location-failed-timeout:Fetching location failed: timeout`, undefined, { duration: 5000 });
+          this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-timeout:Fetching location failed: timeout`);
           break;
       }
       this.cancelGeolocation();
@@ -143,11 +159,28 @@ export class GeolocationComponent implements OnInit, OnDestroy {
   public onClick(): void {
     if (this.activeWatch === undefined) {
       this.activeWatch = navigator.geolocation.watchPosition(this.positionSuccess.bind(this), this.positionError.bind(this), { enableHighAccuracy: true });
-      this.isWatching = true;
-      this.cdr.detectChanges();
+      this.isWatching.set(true);
     } else {
-      this.cancelGeolocation();
+      if (this.hasFix() && !this.isFollowing()) {
+        this.isFollowing.set(true);
+        clearTimeout(this.activeWatchTimeout);
+      } else {
+        this.cancelGeolocation();
+      }
     }
   }
 
+  public getTooltip() {
+    if (this.isFollowing()) {
+      return $localize `:@@core.toolbar.zoom-to-location-following:Following location`;
+    }
+    if (this.activeWatch) {
+      if (!this.hasFix()) {
+        return $localize`:@@core.toolbar.zoom-to-location-waiting:Waiting for location fix`;
+      } else {
+        return $localize `:@@core.toolbar.zoomed-to-location:Location found (click to follow)`;
+      }
+    }
+    return $localize `:@@core.toolbar.zoom-to-location:Zoom to location`;
+  }
 }

@@ -282,6 +282,10 @@ export class MapService {
       });
   }
 
+  public zoomToXY(center: [number, number], zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
+    this.map.zoomTo(center, zoomLevel, animationDuration, ignoreWhileAnimating);
+  }
+
   public zoomToBounds(bounds: BoundsModel, maxZoom?: number) {
     this.map.zoomToExtent([ bounds.minx, bounds.miny, bounds.maxx, bounds.maxy ], maxZoom);
   }
@@ -335,6 +339,10 @@ export class MapService {
 
   public hasUserInteractedWithMap$(): Observable<boolean> {
     return this.map.hasUserInteractedWithMap$();
+  }
+
+  public getPointerDrag$(): Observable<void> {
+    return this.map.getPointerDrag$();
   }
 
   public allowSnapping(allow: boolean) {

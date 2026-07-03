@@ -5,12 +5,6 @@
       <trans-unit id="core.attribute-list.attribute-list" datatype="html">
         <source>Attribute list</source>
       </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
-        <source>Zoom to</source>
-      </trans-unit>
-      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
-        <source>Zoom to data bounds</source>
-      </trans-unit>
       <trans-unit id="core.attribute-list.clear-all-filters" datatype="html">
         <source>Clear all filters</source>
       </trans-unit>
@@ -88,6 +82,12 @@
       </trans-unit>
       <trans-unit id="core.attribute-list.toggle-all-columns-visibility" datatype="html">
         <source>Toggle visibility of all columns</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds" datatype="html">
+        <source>Zoom to</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.zoom-to-bounds.tooltip" datatype="html">
+        <source>Zoom to data bounds</source>
       </trans-unit>
       <trans-unit id="core.background-layer-toggle.expand-button" datatype="html">
         <source>Select basemap</source>
@@ -1146,6 +1146,9 @@
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.zoom-following-canceled" datatype="html">
+        <source>Stopped following location</source>
+      </trans-unit>
       <trans-unit id="core.toolbar.zoom-in" datatype="html">
         <source>Zoom in</source>
       </trans-unit>
@@ -1166,6 +1169,15 @@
       </trans-unit>
       <trans-unit id="core.toolbar.zoom-to-location-failed-timeout" datatype="html">
         <source>Fetching location failed: timeout</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-following" datatype="html">
+        <source>Following location</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoom-to-location-waiting" datatype="html">
+        <source>Waiting for location fix</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.zoomed-to-location" datatype="html">
+        <source>Location found (click to follow)</source>
       </trans-unit>
       <trans-unit id="core.user-login-check-admin-message" datatype="html">
         <source>You are logged out and need to log in first before continuing</source>

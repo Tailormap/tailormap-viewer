@@ -20,7 +20,7 @@ export class IconService {
     'expand_close', 'expand_open', 'table_filled', 'selection_outline', 'selection_filled',
     'trash_filled', 'table_outline', 'logo', 'layers_filled', 'zoom_max', 'zoom_to_scale', 'coordinates',
     'folder_filled', 'folder_outline', 'filter_filled', 'filter_outline', 'user', 'login', 'plus', 'minus',
-    'check', 'check_all', 'uncheck_all', 'edit', 'edit_square', 'info', 'reset', 'reorder', 'location_searching',
+    'check', 'check_all', 'uncheck_all', 'edit', 'edit_square', 'info', 'reset', 'reorder', 'location_searching', 'location_following',
     'visibility_off', 'visibility', 'my_location', 'key', 'settings', 'fullscreen', 'fullscreen_exit', 'show_position', 'map',
     'expand_all', 'collapse_all', 'more', 'functions',
     { folder: 'markers', icons: [ 'arrow', 'circle', 'cross', 'square', 'star', 'triangle', 'diamond' ] },
