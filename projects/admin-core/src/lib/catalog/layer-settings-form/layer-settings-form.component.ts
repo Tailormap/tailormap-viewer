@@ -349,17 +349,15 @@ export class LayerSettingsFormComponent implements OnInit {
     return this.layerSettingsForm.get('hiddenKeywords')?.value?.includes(keyword) ?? false;
   }
 
-  public layerKeywordClick(keyword: string) {
-    let newHiddenKeywords;
-    if (this.layerSettingsForm.get('hiddenKeywords')?.value?.includes(keyword)) {
-      newHiddenKeywords = this.layerSettingsForm.get('hiddenKeywords')?.value?.filter(k => k !== keyword) || [];
-    } else {
-      newHiddenKeywords = [ ...(this.layerSettingsForm.get('hiddenKeywords')?.value ?? []), keyword ];
-    }
-    this.layerSettingsForm.patchValue({
-      hiddenKeywords: newHiddenKeywords,
-    });
-  }
+public layerKeywordClick(keyword: string): void {
+  const current = this.layerSettingsForm.get('hiddenKeywords')?.value ?? [];
+  const newHiddenKeywords = current.includes(keyword)
+    ? current.filter(k => k !== keyword)
+    : [ ...current, keyword ];
+  this.layerSettingsForm.patchValue({
+    hiddenKeywords: newHiddenKeywords,
+  });
+}
 
   public addExtraKeyword(keyword: string) {
     this.layerSettingsForm.patchValue({
