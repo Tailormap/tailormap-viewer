@@ -1,3 +1,7 @@
-@for (layer of layers$ | async; track layer.id; let index = $index) {
-  <tm-feature-info-layer-item [layer]="layer"></tm-feature-info-layer-item>
+@if ((layers$ | async)?.length === 0) {
+  <div class="no-result-message" i18n="@@core.feature-info.no-features-found">No features found</div>
+} @else {
+  @for (layer of layers$ | async; track layer.id; let index = $index) {
+    <tm-feature-info-layer-item [layer]="layer"></tm-feature-info-layer-item>
+  }
 }

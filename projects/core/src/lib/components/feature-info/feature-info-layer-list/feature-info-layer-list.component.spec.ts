@@ -30,7 +30,7 @@ describe('FeatureInfoLayerListComponent', () => {
 
   test('should render', async () => {
     const { container } = await setup();
-    expect(container).toBeEmptyDOMElement();
+    expect(await screen.findByText('No features found')).toBeInTheDocument();
   });
 
   test('should render layers', async () => {
