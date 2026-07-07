@@ -239,6 +239,8 @@ export class LayerSettingsFormComponent implements OnInit {
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
       [ values.attribution, this._layerSettings.attribution ],
+      [ values.hiddenKeywords, this._layerSettings.hiddenKeywords ],
+      [ values.extraKeywords, this._layerSettings.extraKeywords ],
       [ values.legendImageId, this._layerSettings.legendImageId ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
