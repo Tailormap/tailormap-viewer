@@ -9,7 +9,7 @@ import { emptyFeaturesResponse, FeatureInfoResponseModel } from './models/featur
 import {
   selectEditableLayers, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
-import { FeatureInfo3DModel, MapService, MapViewDetailsModel } from '@tailormap-viewer/map';
+import { FeatureInfo3DModel, MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FilterService } from '../../filter/services/filter.service';
 import { FeatureInfoLayerModel } from './models/feature-info-layer.model';
@@ -47,18 +47,19 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       cesiumFeatureInfo?.layerId ? this.store$.select(selectLayer(cesiumFeatureInfo.layerId)) : of(null),
-      this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
+      this.store$.select(selectViewerId),
     ])
       .pipe(
         take(1),
-        tap(([ layers, wmsLayers, cesiumLayer ]) => {
+        tap(([ layers, wmsLayers, cesiumLayer, mapViewDetails ]) => {
           const allLayers = [ ...layers, ...wmsLayers ];
           if (cesiumLayer) {
             allLayers.push(cesiumLayer);
           }
           const featureInfoLayers = allLayers
             .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
+            .filter(l => ScaleHelper.isInScale(mapViewDetails.scale, l.minScale, l.maxScale))
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
               id: l.id,
@@ -67,7 +68,7 @@ export class FeatureInfoService {
             }));
           this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
         }),
-        mergeMap(([ layers, wmsLayers, _cesiumLayer, viewerId, mapViewDetails ]) => {
+        mergeMap(([ layers, wmsLayers, _cesiumLayer, mapViewDetails, viewerId ]) => {
           if (!viewerId) {
             return [];
           }

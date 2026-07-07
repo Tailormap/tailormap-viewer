@@ -41,6 +41,7 @@ export class SpatialFilterFormDrawGeometriesComponent {
     DrawingFeatureTypeEnum.LINE,
     DrawingFeatureTypeEnum.POLYGON,
     DrawingFeatureTypeEnum.CIRCLE,
+    DrawingFeatureTypeEnum.POINT,
   ];
 
   public drawingAdded($event: DrawingToolEvent) {
