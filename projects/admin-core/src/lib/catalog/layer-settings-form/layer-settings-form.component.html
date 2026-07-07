@@ -38,7 +38,7 @@
     </mat-expansion-panel-header>
     <mat-selection-list>
       @for (keyword of layerKeywords$ | async; track keyword) {
-        <mat-list-item [class.hidden]="isKeywordHidden(keyword)"  (click)="layerKeywordClick(keyword)">
+        <mat-list-item [class.hidden]="isKeywordHidden(keyword)" (click)="layerKeywordClick(keyword)" tabindex="0" role="button" (keydown.enter)="layerKeywordClick(keyword)" (keydown.space)="$event.preventDefault(); layerKeywordClick(keyword)">
           <span class="detail">{{ keyword }}</span>
           <mat-icon class="list-icon" [svgIcon]="isKeywordHidden(keyword) ? 'plus' : 'close'"></mat-icon>
         </mat-list-item>
