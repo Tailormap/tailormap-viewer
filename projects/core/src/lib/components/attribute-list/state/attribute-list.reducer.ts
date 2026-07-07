@@ -306,7 +306,7 @@ const onUpdateRowChecked = (
           }
           return {
             ...data,
-            checkedRows: [ ...data.checkedRows, { id: payload.rowId, __fid: row.__fid } ],
+            checkedRows: [ ...data.checkedRows, { id: payload.rowId, __fid: row.__fid }],
           };
         }
         return {
