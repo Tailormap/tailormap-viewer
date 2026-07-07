@@ -5,6 +5,7 @@ import { setSelectedFeatureInfoLayer } from '../state/feature-info.actions';
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'tm-feature-info-layer-dropdown',
@@ -22,12 +23,17 @@ export class FeatureInfoLayerDropdownComponent {
   public layerSelector = new FormControl<string | null>(null);
 
   constructor() {
-    this.store$.select(selectFeatureInfoLayerListItems)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.store$
+      .select(selectFeatureInfoLayerListItems)
+      .pipe(
+        map(layers => layers.filter(layer => layer.totalCount !== 0)),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(layers => {
-        this.layerSelector.patchValue(layers.find(l => l.selected)?.id ?? null);
+        this.layerSelector.patchValue(layers.find(layer => layer.selected)?.id ?? null);
         this.layers.set(layers);
       });
+
     this.layerSelector.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(layer => {
