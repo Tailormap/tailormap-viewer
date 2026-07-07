@@ -359,11 +359,19 @@ public layerKeywordClick(keyword: string): void {
   });
 }
 
-  public addExtraKeyword(keyword: string) {
-    this.layerSettingsForm.patchValue({
-      extraKeywords: [ ...(this.layerSettingsForm.get('extraKeywords')?.value ?? []), keyword ],
-    });
+public addExtraKeyword(keyword: string): void {
+  const trimmed = keyword.trim();
+  if (!trimmed) {
+    return;
   }
+  const current = this.layerSettingsForm.get('extraKeywords')?.value ?? [];
+  if (current.includes(trimmed)) {
+    return;
+  }
+  this.layerSettingsForm.patchValue({
+    extraKeywords: [ ...current, trimmed ],
+  });
+}
 
   public removeExtraKeyword(keyword: string) {
     this.layerSettingsForm.patchValue({
