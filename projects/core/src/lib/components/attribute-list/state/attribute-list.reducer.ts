@@ -301,9 +301,12 @@ const onUpdateRowChecked = (
         }
         if (payload.checked) {
           const row = data.rows.find(r => r.id === payload.rowId);
+          if (!row?.__fid) {
+            return data;
+          }
           return {
             ...data,
-            checkedRows: [ ...data.checkedRows, { id: payload.rowId, __fid: row?.__fid ?? '' }],
+            checkedRows: [ ...data.checkedRows, { id: payload.rowId, __fid: row.__fid } ],
           };
         }
         return {

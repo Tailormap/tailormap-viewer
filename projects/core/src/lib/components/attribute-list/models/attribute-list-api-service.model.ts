@@ -331,7 +331,7 @@ export interface AttributeListApiServiceModel extends GetFeaturesApiModel {
    * @param params Parameters specifying the application and layer ID.
    * @returns Observable emitting a boolean indicating if rows can be checked/unchecked.
    */
-  canCheckRows$(params: CanCheckRowsParams): Observable<boolean>;
+  canCheckRows$?(params: CanCheckRowsParams): Observable<boolean>;
 
   /**
    * Called by the attribute list whenever the set of checked rows changes for a tab of this source.

@@ -125,7 +125,7 @@ export class AttributeListEffects {
         this.managerService.notifyCheckedRowsChanged(tab.tabSourceId, {
           applicationId,
           layerId: tab.layerId,
-          checkedRows: data.checkedRows.map(r => ({ __fid: r.__fid })),
+          checkedRows: data.checkedRows.filter(r => !!r.__fid).map(r => ({ __fid: r.__fid })),
         });
       }),
     );
