@@ -44,7 +44,7 @@
         </mat-list-item>
       }
       @for (keyword of layerSettingsForm.get('extraKeywords')?.value; track keyword) {
-        <mat-list-item (click)="removeExtraKeyword(keyword)">
+        <mat-list-item (click)="removeExtraKeyword(keyword)" tabindex="0" role="button" (keydown.enter)="removeExtraKeyword(keyword)" (keydown.space)="$event.preventDefault(); removeExtraKeyword(keyword)">
           <span class="detail" style="font-style: italic">{{ keyword }}</span>
           <mat-icon class="list-icon" svgIcon="close"></mat-icon>
         </mat-list-item>
