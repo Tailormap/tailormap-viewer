@@ -66,6 +66,14 @@
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
+        <source>Select all rows</source>
+        <target>Selecteer alle rijen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.select-row" datatype="html">
+        <source>Select row</source>
+        <target>Selecteer rij</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
         <target>Sorteer op <x id="PH" equiv-text="columnLabel"/></target>

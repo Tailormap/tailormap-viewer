@@ -50,6 +50,12 @@
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
+        <source>Select all rows</source>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.select-row" datatype="html">
+        <source>Select row</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
       </trans-unit>
