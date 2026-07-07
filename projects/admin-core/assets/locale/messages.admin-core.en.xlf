@@ -569,6 +569,9 @@
       <trans-unit id="admin-core.catalog.add-folder" datatype="html">
         <source>Add folder</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.add-keyword" datatype="html">
+        <source>Add keyword</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
       </trans-unit>
@@ -677,6 +680,9 @@
       <trans-unit id="admin-core.catalog.delete-service-confirm-message" datatype="html">
         <source>Are you sure you want to delete service <x id="PH" equiv-text="geoService.title"/>? This action cannot be undone.</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
+        <source>Leave empty to use the description as provided by the service</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
       </trans-unit>
@@ -691,6 +697,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
+        <source>Enter keyword</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -823,6 +832,9 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.insert-feature-type-attribute" datatype="html">
         <source>Insert feature type attribute</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords" datatype="html">
+        <source>Keywords (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>
@@ -979,9 +991,6 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service</source>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
-        <source>Leave empty to use the description as provided by the service</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>

@@ -113,6 +113,18 @@ export class LayerSettingsFormComponent implements OnInit {
     }),
   );
 
+  public layerKeywords$ = this.serviceLayer$.pipe(
+    map(layer => layer?.keywords ?? []),
+  );
+
+  public getKeywords(layerKeywords: string[] | null) {
+    const hiddenKeywords = this.layerSettingsForm.get('hiddenKeywords')?.value ?? [];
+    const extraKeywords = this.layerSettingsForm.get('extraKeywords')?.value ?? [];
+    const keywords = (layerKeywords || []).filter(keyword => !hiddenKeywords.includes(keyword));
+    return keywords.concat(extraKeywords);
+
+  }
+
   @Input()
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
 
@@ -135,6 +147,8 @@ export class LayerSettingsFormComponent implements OnInit {
     title: new FormControl('', { nonNullable: true }),
     description: new FormControl<string | null>(null),
     attribution: new FormControl<string | null>(null),
+    hiddenKeywords: new FormControl<string[] | null>(null),
+    extraKeywords: new FormControl<string[] | null>(null),
     legendImageId: new FormControl<string | null>(null),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
@@ -178,6 +192,8 @@ export class LayerSettingsFormComponent implements OnInit {
       attribution: value.attribution || undefined,
       legendImageId: value.legendImageId || undefined,
       description: value.description || undefined,
+      hiddenKeywords: value.hiddenKeywords || [],
+      extraKeywords: value.extraKeywords || [],
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
@@ -259,6 +275,8 @@ export class LayerSettingsFormComponent implements OnInit {
       title: this.layerSettings?.title ? this.layerSettings.title : '',
       description: this.layerSettings?.description || null,
       attribution: this.layerSettings?.attribution || null,
+      hiddenKeywords: this.layerSettings?.hiddenKeywords || [],
+      extraKeywords: this.layerSettings?.extraKeywords || [],
       legendImageId: this.layerSettings?.legendImageId || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
@@ -325,5 +343,33 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private isXyzSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsXyzModel {
     return !!settings && this.isXYZ;
+  }
+
+  public isKeywordHidden(keyword: string) {
+    return this.layerSettingsForm.get('hiddenKeywords')?.value?.includes(keyword) ?? false;
+  }
+
+  public layerKeywordClick(keyword: string) {
+    let newHiddenKeywords;
+    if (this.layerSettingsForm.get('hiddenKeywords')?.value?.includes(keyword)) {
+      newHiddenKeywords = this.layerSettingsForm.get('hiddenKeywords')?.value?.filter(k => k !== keyword) || [];
+    } else {
+      newHiddenKeywords = [ ...(this.layerSettingsForm.get('hiddenKeywords')?.value ?? []), keyword ];
+    }
+    this.layerSettingsForm.patchValue({
+      hiddenKeywords: newHiddenKeywords,
+    });
+  }
+
+  public addExtraKeyword(keyword: string) {
+    this.layerSettingsForm.patchValue({
+      extraKeywords: [ ...(this.layerSettingsForm.get('extraKeywords')?.value ?? []), keyword ],
+    });
+  }
+
+  public removeExtraKeyword(keyword: string) {
+    this.layerSettingsForm.patchValue({
+      extraKeywords: (this.layerSettingsForm.get('extraKeywords')?.value ?? []).filter(k => k !== keyword),
+    });
   }
 }
