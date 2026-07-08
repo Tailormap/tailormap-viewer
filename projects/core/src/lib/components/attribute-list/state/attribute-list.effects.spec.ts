@@ -8,8 +8,10 @@ import { AttributeListDataService } from '../services/attribute-list-data.servic
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
-import { getLoadedStoreWithMultipleTabs } from './mocks/attribute-list-state-test-data';
+import { createDummyAttributeListData, createDummyRows, getLoadedStoreWithMultipleTabs } from './mocks/attribute-list-state-test-data';
 import * as AttributeListActions from './attribute-list.actions';
+import { selectViewerId } from '../../../state/core.selectors';
+import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 
 const createResult = (id: string, success = true): LoadAttributeListDataResultModel => ({
   id,
@@ -22,16 +24,20 @@ const createResult = (id: string, success = true): LoadAttributeListDataResultMo
 
 describe('AttributeListEffects', () => {
 
-  const setup = (loadDataForTabMock?: jest.Mock) => {
+  const setup = (loadDataForTabMock?: jest.Mock, initialState = getLoadedStoreWithMultipleTabs()) => {
     const actions$ = new Subject<Action>();
     const loadDataForTab$ = loadDataForTabMock ?? jest.fn((tabId: string) => of(createResult(tabId)));
+    const notifyCheckedRowsChanged = jest.fn();
     TestBed.configureTestingModule({
       providers: [
         AttributeListEffects,
         provideMockActions(() => actions$),
-        provideMockStore({ initialState: getLoadedStoreWithMultipleTabs() }),
+        provideMockStore({
+          initialState,
+          selectors: [{ selector: selectViewerId, value: 'app1' }],
+        }),
         { provide: AttributeListDataService, useValue: { loadDataForTab$ } },
-        { provide: AttributeListManagerService, useValue: {} },
+        { provide: AttributeListManagerService, useValue: { notifyCheckedRowsChanged } },
         getMapServiceMock().provider,
       ],
     });
@@ -41,7 +47,8 @@ describe('AttributeListEffects', () => {
     effects.loadDataForTab$.subscribe();
     effects.loadDataAfterSelectedDataIdChange$.subscribe();
     effects.loadDataAfterChanges$.subscribe();
-    return { actions$, loadDataForTab$, dispatched };
+    effects.notifyCheckedRowsChanged$.subscribe();
+    return { actions$, loadDataForTab$, dispatched, notifyCheckedRowsChanged };
   };
 
   beforeEach(() => {
@@ -124,6 +131,49 @@ describe('AttributeListEffects', () => {
     expect(dispatched).toEqual([
       AttributeListActions.loadDataFailed({ tabId: '1', data: createResult('1', false) }),
     ]);
+  });
+
+  describe('notifyCheckedRowsChanged$', () => {
+
+    const getStoreWithCheckedRows = () => getLoadedStoreWithMultipleTabs({
+      data: [
+        createDummyAttributeListData({
+          id: '1',
+          tabId: '1',
+          rows: createDummyRows(10),
+          checkedRows: [{ id: '1', __fid: '1' }, { id: '3', __fid: '3' }],
+        }),
+      ],
+    });
+
+    it('notifies the manager service with the full checked set when a row is checked', () => {
+      const { actions$, notifyCheckedRowsChanged } = setup(undefined, getStoreWithCheckedRows());
+      actions$.next(AttributeListActions.updateRowChecked({ tabId: '1', dataId: '1', rowId: '3', checked: true }));
+      expect(notifyCheckedRowsChanged).toHaveBeenCalledTimes(1);
+      expect(notifyCheckedRowsChanged).toHaveBeenCalledWith(ATTRIBUTE_LIST_DEFAULT_SOURCE, {
+        applicationId: 'app1',
+        layerId: '1',
+        checkedRows: [{ __fid: '1' }, { __fid: '3' }],
+      });
+    });
+
+    it('notifies the manager service when all rows are checked or unchecked', () => {
+      const { actions$, notifyCheckedRowsChanged } = setup(undefined, getStoreWithCheckedRows());
+      actions$.next(AttributeListActions.updateAllRowsChecked({ tabId: '1', dataId: '1', checked: true }));
+      expect(notifyCheckedRowsChanged).toHaveBeenCalledTimes(1);
+      expect(notifyCheckedRowsChanged).toHaveBeenCalledWith(ATTRIBUTE_LIST_DEFAULT_SOURCE, {
+        applicationId: 'app1',
+        layerId: '1',
+        checkedRows: [{ __fid: '1' }, { __fid: '3' }],
+      });
+    });
+
+    it('does not notify for unknown data ids', () => {
+      const { actions$, notifyCheckedRowsChanged } = setup(undefined, getStoreWithCheckedRows());
+      actions$.next(AttributeListActions.updateRowChecked({ tabId: '1', dataId: 'unknown', rowId: '3', checked: true }));
+      expect(notifyCheckedRowsChanged).not.toHaveBeenCalled();
+    });
+
   });
 
 });

@@ -15,33 +15,13 @@ export class AttributeListFeatureDetailsService {
   private store$ = inject(Store);
   private attributeListManagerService = inject(AttributeListManagerService);
 
-  private canExpandRowsCache = new Map<string, boolean>();
+  private featureEnabledCache = {
+    'canExpandRow$': new Map<string, boolean>(),
+    'canCheckRows$': new Map<string, boolean>(),
+  };
 
-  public canExpandRows$ = combineLatest([
-    this.store$.select(selectViewerId),
-    this.store$.select(selectSelectedTab),
-  ]).pipe(
-    concatMap(([ applicationId, tab ]): Observable<[ boolean, string ]> => {
-      if (!applicationId || !tab || !tab.layerId) {
-        return of([ false, '' ]);
-      }
-      const key = `${applicationId}_${tab?.layerId}`;
-      const canExpandCached = this.canExpandRowsCache.get(key);
-      if (typeof canExpandCached === 'boolean') {
-        return of([ canExpandCached, key ]);
-      }
-      return forkJoin([
-        this.attributeListManagerService.canExpandRow$(tab.tabSourceId, { layerId: tab.layerId, applicationId }),
-        of(key),
-      ]);
-    }),
-    tap(([ canExpand, key ]) => {
-      if (key) {
-        this.canExpandRowsCache.set(key, canExpand);
-      }
-    }),
-    map(([ canExpand, _key ]) => canExpand),
-  );
+  public canExpandRows$ = this.isFeatureEnabled$('canExpandRow$');
+  public canCheckRows$ = this.isFeatureEnabled$('canCheckRows$');
 
   private featureDetailsKey$ = combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectSelectedTab) ]).pipe(
     map(([ applicationId, tab ]) => {
@@ -127,5 +107,32 @@ export class AttributeListFeatureDetailsService {
     this.loadingFeatureDetailsIds.next(newLoadingMap);
   }
 
+  private isFeatureEnabled$(method: 'canExpandRow$' | 'canCheckRows$'): Observable<boolean> {
+    return combineLatest([
+      this.store$.select(selectViewerId),
+      this.store$.select(selectSelectedTab),
+    ]).pipe(
+      concatMap(([ applicationId, tab ]): Observable<[ boolean, string ]> => {
+        if (!applicationId || !tab || !tab.layerId) {
+          return of([ false, '' ]);
+        }
+        const key = `${applicationId}_${tab?.layerId}`;
+        const canExpandCached = this.featureEnabledCache[method].get(key);
+        if (typeof canExpandCached === 'boolean') {
+          return of([ canExpandCached, key ]);
+        }
+        return forkJoin([
+          this.attributeListManagerService[method](tab.tabSourceId, { layerId: tab.layerId, applicationId }),
+          of(key),
+        ]);
+      }),
+      tap(([ canExpand, key ]) => {
+        if (key) {
+          this.featureEnabledCache[method].set(key, canExpand);
+        }
+      }),
+      map(([ canExpand, _key ]) => canExpand),
+    );
+  }
 
 }

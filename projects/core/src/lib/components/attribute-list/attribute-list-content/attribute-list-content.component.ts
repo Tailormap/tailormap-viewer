@@ -5,12 +5,13 @@ import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import {
+  selectCheckedRowsForSelectedTab,
   selectColumnsForSelectedTab, selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab,
   selectLoadingDataSelectedTab, selectPagingDataSelectedTab,
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { loadData, updateRowSelected, updateSort } from '../state/attribute-list.actions';
+import { loadData, updateAllRowsChecked, updateRowChecked, updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { BaseComponentTypeEnum, AttributeType, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -52,8 +53,10 @@ export class AttributeListContentComponent implements OnInit {
   public hasRows$: Observable<boolean> = of(false);
   public hasNoRows$: Observable<boolean> = of(true);
   public pagingDataSelectedTab$: Observable<AttributeListPagingDataType> = this.store$.select(selectPagingDataSelectedTab);
+  public checkedRows$ = this.store$.select(selectCheckedRowsForSelectedTab);
 
   public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
+  public canCheckRows$ = this.attributeListFeatureDetailsService.canCheckRows$;
   public featureDetails$ = this.attributeListFeatureDetailsService.featureDetails$;
   public loadingFeatureDetailsIds$ = this.attributeListFeatureDetailsService.loadingFeatureDetailsIds$;
 
@@ -185,6 +188,28 @@ export class AttributeListContentComponent implements OnInit {
 
   public loadStatisticsForColumn($event: { type: StatisticType; columnName: string; dataType: string }) {
     this.attributeListStatisticsService.loadStatistics($event);
+  }
+
+  public onSetAllRowsChecked($event: { checked: boolean }) {
+    this.store$.select(selectSelectedTab)
+      .pipe(take(1))
+      .subscribe(tab => {
+        if (!tab || !tab.layerId) {
+          return;
+        }
+        this.store$.dispatch(updateAllRowsChecked({ tabId: tab.id, dataId: tab.selectedDataId, checked: $event.checked }));
+      });
+  }
+
+  public onSetRowChecked($event: { id: string; checked: boolean }) {
+    this.store$.select(selectSelectedTab)
+      .pipe(take(1))
+      .subscribe(tab => {
+        if (!tab || !tab.layerId) {
+          return;
+        }
+        this.store$.dispatch(updateRowChecked({ tabId: tab.id, dataId: tab.selectedDataId, rowId: $event.id, checked: $event.checked }));
+      });
   }
 
 }

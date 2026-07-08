@@ -19,18 +19,7 @@ const DEFAULT_COLUMN_WIDTH = 170;
 })
 export class AttributeListTableComponent {
 
-  @Input()
-  public set rows(rows: AttributeListRowModel[] | null) {
-    if (rows === null) {
-      return;
-    }
-    this._rows = rows;
-  }
-
-  public get rows(): AttributeListRowModel[] {
-    return this._rows;
-  }
-
+  public rows = input<AttributeListRowModel[] | null>(null);
   public columns = input<AttributeListColumnModel[] | null>([]);
 
   @Input()
@@ -49,6 +38,8 @@ export class AttributeListTableComponent {
   public selectedRowId: string | undefined | null;
 
   public canExpandRows = input<boolean | null>(false);
+  public canCheckRows = input<boolean | null>(false);
+  public checkedRows = input<string[] | null>(null);
   public featureDetails = input<Map<string, FeatureDetailsModel> | null>(new Map());
   public loadingFeatureDetailsIds = input<Set<string> | null>(new Set());
 
@@ -74,9 +65,14 @@ export class AttributeListTableComponent {
   @Output()
   public loadStatisticsForColumn = new EventEmitter<{ type: StatisticType; columnName: string; dataType: string }>();
 
-  private _rows: AttributeListRowModel[] = [];
+  @Output()
+  public setAllRowsChecked = new EventEmitter<{ checked: boolean }>();
+
+  @Output()
+  public setRowChecked = new EventEmitter<{ id: string; checked: boolean }>();
+
   public columnNames = computed(() => {
-    return this.getColumnNames(this.columns(), this.canExpandRows());
+    return this.getColumnNames(this.columns(), this.canExpandRows(), this.canCheckRows());
   });
   private filtersDictionary: Map<string, AttributeFilterModel> = new Map();
 
@@ -87,6 +83,7 @@ export class AttributeListTableComponent {
 
   public readonly EXPAND_DETAILS_COLUMN_NAME = '__tm_attribute_list_expand_details__';
   public readonly EXPAND_DETAILS_ROW_NAME = '__tm_attribute_list_expand_details_row__';
+  public readonly CHECK_ROW_COLUMN_NAME = '__tm_attribute_list_check_rows__';
 
   public statisticTypes = StatisticsHelper.getStatisticOptions();
   private statisticsDictionary = computed<Map<string, StatisticValueModel>>(() => {
@@ -109,10 +106,22 @@ export class AttributeListTableComponent {
     const paging = this.pagingDataSelectedTab();
     const pageOffset = paging ? (paging.pageIndex - 1) * paging.pageSize : 0;
     const rowIndexMap = new Map<string, number>();
-    this._rows.forEach((row, index) => {
+    (this.rows() ?? []).forEach((row, index) => {
       rowIndexMap.set(row.id, pageOffset + index + 1);
     });
     return rowIndexMap;
+  });
+
+  public checkedRowsSet = computed(() => new Set((this.checkedRows() || [])));
+  public allRowsChecked = computed(() => {
+    const checkedRows = this.checkedRowsSet();
+    const rows = (this.rows() ?? []);
+    return rows.length > 0 && rows.every(row => checkedRows.has(row.id));
+  });
+  public someRowsChecked = computed(() => {
+    const checkedRows = this.checkedRowsSet();
+    const rows = (this.rows() ?? []);
+    return !this.allRowsChecked() && rows.length > 0 && rows.some(row => checkedRows.has(row.id));
   });
 
   constructor() {
@@ -131,13 +140,16 @@ export class AttributeListTableComponent {
     return column.id;
   }
 
-  private getColumnNames(columns: AttributeListColumnModel[] | null, canExpandRows?: boolean | null): string[] {
+  private getColumnNames(columns: AttributeListColumnModel[] | null, canExpandRows?: boolean | null, canCheckRows?: boolean | null): string[] {
     if (!columns) {
       return [];
     }
     const names = columns.map(c => c.label || c.id);
     if (canExpandRows && names.length > 0) {
       names.unshift(this.EXPAND_DETAILS_COLUMN_NAME);
+    }
+    if (canCheckRows && names.length > 0) {
+      names.unshift(this.CHECK_ROW_COLUMN_NAME);
     }
     return names;
   }
@@ -250,6 +262,16 @@ export class AttributeListTableComponent {
 
   public getColumnSortLabel(columnLabel: string): string {
     return $localize `:@@core.attribute-list.sort-column:Sort by ${columnLabel}`;
+  }
+
+  public toggleRowChecked(row: AttributeListRowModel) {
+    const curChecked = this.checkedRowsSet().has(row.id);
+    this.setRowChecked.emit({ id: row.id, checked: !curChecked });
+  }
+
+  public toggleAllRowsChecked() {
+    const allChecked = this.allRowsChecked();
+    this.setAllRowsChecked.emit({ checked: !allChecked });
   }
 
 }
