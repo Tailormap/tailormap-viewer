@@ -270,6 +270,10 @@
         <source>Coordinate Link Window</source>
         <target>Coördinatenlinkvenster</target>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window.no-location" datatype="html">
+        <source>Failed to determine your location: <x id="PH" equiv-text="err"/>. Your location is needed for this link.</source>
+        <target>Niet gelukt om uw locatie te bepalen: <x id="PH" equiv-text="err"/>. Uw locatie is nodig voor deze link.</target>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
         <target>Selecteer een link</target>

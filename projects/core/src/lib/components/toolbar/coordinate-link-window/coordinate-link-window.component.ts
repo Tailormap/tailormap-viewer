@@ -11,6 +11,8 @@ import { ComponentRegistrationService } from '../../../services';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
 import { MenubarService } from '../../menubar';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -26,6 +28,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   private componentRegistrationService = inject(ComponentRegistrationService);
   private menubarService = inject(MenubarService);
   private mobileLayoutService = inject(MobileLayoutService);
+  private snackBar = inject(MatSnackBar);
 
 
   public noExpansionPanel = input<boolean>(false);
@@ -139,7 +142,11 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
           .replace(/\[(y|lat)]/i, "" + coordinates[1]);
         if (/\[GPS-(X|Y|lat|lon)]/i.test(urlWithCoordinates)) {
           this.replaceGeoLocationPlaceholders(urlWithCoordinates, currentUrl.projection)
-            .then(finalUrl => window.open(finalUrl, '_blank', 'popup=1, noopener, noreferrer'));
+            .then(finalUrl => window.open(finalUrl, '_blank', 'popup=1, noopener, noreferrer'))
+            .catch((err: string) => this.showSnackbarMessage(
+              $localize `:@@core.coordinate-link-window.no-location:Failed to determine your location: ${err}.
+              Your location is needed for this link.`
+            ));
         } else {
           window.open(urlWithCoordinates, '_blank', 'popup=1, noopener, noreferrer');
         }
@@ -152,7 +159,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   }
 
   private replaceGeoLocationPlaceholders(url: string, projection: string): Promise<string> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const [x, y] = CoordinateHelper.projectCoordinates(
@@ -167,17 +174,23 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
             .replace(/\[GPS-lon]/i, `${pos.coords.longitude}`);
           resolve(result);
         },
-        () => {
-          const result = url
-            .replace(/\[GPS-X]/i, '')
-            .replace(/\[GPS-Y]/i, '')
-            .replace(/\[GPS-lat]/i, '')
-            .replace(/\[GPS-lon]/i, '');
-          resolve(result);
+        (err) => {
+          reject(err.message);
         },
         { enableHighAccuracy: true },
       );
     });
   }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
 
 }

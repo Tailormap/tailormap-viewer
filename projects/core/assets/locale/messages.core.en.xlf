@@ -200,6 +200,9 @@
       <trans-unit id="core.coordinate-link-window" datatype="html">
         <source>Coordinate Link Window</source>
       </trans-unit>
+      <trans-unit id="core.coordinate-link-window.no-location" datatype="html">
+        <source>Failed to determine your location: <x id="PH" equiv-text="err"/>. Your location is needed for this link.</source>
+      </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
       </trans-unit>
