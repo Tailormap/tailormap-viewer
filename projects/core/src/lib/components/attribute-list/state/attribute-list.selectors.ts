@@ -244,3 +244,27 @@ export const selectAttributeListPanelTitle = selectComponentTitle(
   BaseComponentTypeEnum.ATTRIBUTE_LIST,
   $localize `:@@core.attribute-list.title:Attribute list`,
 );
+
+export const selectCheckedRowsForSelectedTab = createSelector(
+  selectDataForSelectedTab,
+  data => {
+    return data ? data.checkedRows.map(r => r.id) : [];
+  },
+);
+
+export const selectCheckedFeaturesForSelectedTab = createSelector(
+  selectDataForSelectedTab,
+  data => {
+    return data ? data.checkedRows.map(r => r.__fid) : [];
+  },
+);
+
+export const selectCurrentlyVisibleCheckedFeaturesForSelectedTab = createSelector(
+  selectDataForSelectedTab,
+  data => {
+    const visibleRows = new Set((data?.rows ?? []).map(r => r.id));
+    return data ? data.checkedRows
+      .filter(r => visibleRows.has(r.id))
+      .map(r => r.__fid) : [];
+  },
+);

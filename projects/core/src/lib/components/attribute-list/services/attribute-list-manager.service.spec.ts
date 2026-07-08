@@ -10,7 +10,7 @@ import {
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import {
   AttributeListApiServiceModel,
-  CanExpandRowParams, DownloadLayerExtractResponse, FeatureDetailsModel,
+  CanExpandRowParams, CheckedRowsChangedParams, DownloadLayerExtractResponse, FeatureDetailsModel,
   GetFeatureDetailsParams,
   GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetUniqueValuesParams,
@@ -474,6 +474,45 @@ describe('AttributeListManagerService', () => {
     });
   });
 
+  describe('notifyCheckedRowsChanged', () => {
+    const params: CheckedRowsChangedParams = {
+      applicationId: '1',
+      layerId: '1',
+      checkedRows: [{ __fid: '1' }, { __fid: '2' }],
+    };
+
+    it('should do nothing when source is not found', () => {
+      expect(() => managerService.notifyCheckedRowsChanged('non-existent-source', params)).not.toThrow();
+    });
+
+    it('should do nothing when dataLoader does not implement onCheckedRowsChanged', () => {
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([]),
+        dataLoader: mockApiService,
+      };
+
+      managerService.addAttributeListSource(source);
+
+      expect(() => managerService.notifyCheckedRowsChanged('test-source', params)).not.toThrow();
+    });
+
+    it('should call onCheckedRowsChanged on the dataLoader when available', () => {
+      const onCheckedRowsChanged = jest.fn();
+      const source: AttributeListSourceModel = {
+        id: 'test-source',
+        tabs$: of([]),
+        dataLoader: { ...mockApiService, onCheckedRowsChanged },
+      };
+
+      managerService.addAttributeListSource(source);
+      managerService.notifyCheckedRowsChanged('test-source', params);
+
+      expect(onCheckedRowsChanged).toHaveBeenCalledTimes(1);
+      expect(onCheckedRowsChanged).toHaveBeenCalledWith(params);
+    });
+  });
+
   describe('addAttributeListSource', () => {
     it('should add a new source to the sources list', () => {
       const source1: AttributeListSourceModel = {
@@ -727,6 +766,7 @@ describe('AttributeListManagerService', () => {
       expect(AttributeListManagerService.EMPTY_ATTRIBUTE_LIST_TAB).toEqual({
         id: '',
         label: '',
+        layerId: '',
         selectedDataId: '',
         initialDataId: '',
         initialDataLoaded: false,
@@ -741,6 +781,7 @@ describe('AttributeListManagerService', () => {
         tabId: '',
         columns: [],
         rows: [],
+        checkedRows: [],
         pageIndex: 1,
         pageSize: 100,
         totalCount: null,

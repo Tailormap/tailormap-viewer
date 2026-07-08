@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   AuthorizationGroups, AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel,
@@ -30,6 +30,7 @@ export class LayerSettingsFormComponent implements OnInit {
   private _isLayerSpecific = false;
   private _serviceId: string | undefined = undefined;
   private _protocol: GeoServiceProtocolEnum | undefined;
+  private _layerName: string | null | undefined;
 
   @Input()
   public set protocol(protocol: GeoServiceProtocolEnum) {
@@ -53,6 +54,7 @@ export class LayerSettingsFormComponent implements OnInit {
   @Input()
   public set serviceId(serviceId: string | undefined) {
     this._serviceId = serviceId;
+    this.serviceId$.next(serviceId);
 
     if (serviceId === undefined) {
       this.geoServiceAuthorizations$ = of([]);
@@ -84,8 +86,44 @@ export class LayerSettingsFormComponent implements OnInit {
   @Input()
   public isLeaf: boolean | null = null;
 
+  public get layerName() {
+    return this._layerName;
+  }
+
   @Input()
-  public layerName: string | null | undefined;
+  public set layerName(layerName: string | null | undefined) {
+    this._layerName = layerName;
+    this.layerName$.next(layerName);
+  }
+
+  private readonly serviceId$ = new BehaviorSubject<string | undefined>(undefined);
+  private readonly layerName$ = new BehaviorSubject<string | null | undefined>(undefined);
+
+  public serviceLayer$: Observable<ExtendedGeoServiceLayerModel | undefined> = combineLatest([
+    this.serviceId$,
+    this.layerName$,
+  ]).pipe(
+    switchMap(([ serviceId, layerName ]) => {
+      if (!serviceId) {
+        return of(undefined);
+      }
+      return this.store$.select(selectGeoServiceLayersByGeoServiceId(serviceId)).pipe(
+        map(layers => layers.find(layer => layer.name === layerName)),
+      );
+    }),
+  );
+
+  public layerKeywords$ = this.serviceLayer$.pipe(
+    map(layer => layer?.keywords ?? []),
+  );
+
+  public getKeywords(layerKeywords: string[] | null) {
+    const hiddenKeywords = this.layerSettingsForm.get('hiddenKeywords')?.value ?? [];
+    const extraKeywords = this.layerSettingsForm.get('extraKeywords')?.value ?? [];
+    const keywords = (layerKeywords || []).filter(keyword => !hiddenKeywords.includes(keyword));
+    return keywords.concat(extraKeywords);
+
+  }
 
   @Input()
   public projectionAvailability$: Observable<ProjectionAvailability[] | null> = of(null);
@@ -94,7 +132,6 @@ export class LayerSettingsFormComponent implements OnInit {
   public changed = new EventEmitter<LayerSettingsModel | null>();
 
   public groups$: Observable<GroupModel[]>;
-
   public geoServiceAuthorizations$: Observable<AuthorizationRuleGroup[]> = of([]);
   public layers$: Observable<ExtendedGeoServiceLayerModel[]> = of([]);
   public xyzProjection$: Observable<string> = of('');
@@ -110,6 +147,8 @@ export class LayerSettingsFormComponent implements OnInit {
     title: new FormControl('', { nonNullable: true }),
     description: new FormControl<string | null>(null),
     attribution: new FormControl<string | null>(null),
+    hiddenKeywords: new FormControl<string[] | null>(null),
+    extraKeywords: new FormControl<string[] | null>(null),
     legendImageId: new FormControl<string | null>(null),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
@@ -153,6 +192,8 @@ export class LayerSettingsFormComponent implements OnInit {
       attribution: value.attribution || undefined,
       legendImageId: value.legendImageId || undefined,
       description: value.description || undefined,
+      hiddenKeywords: value.hiddenKeywords || [],
+      extraKeywords: value.extraKeywords || [],
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
@@ -198,6 +239,8 @@ export class LayerSettingsFormComponent implements OnInit {
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
       [ values.attribution, this._layerSettings.attribution ],
+      [ values.hiddenKeywords, this._layerSettings.hiddenKeywords ],
+      [ values.extraKeywords, this._layerSettings.extraKeywords ],
       [ values.legendImageId, this._layerSettings.legendImageId ],
       [ values.hiDpiDisabled, this._layerSettings.hiDpiDisabled ],
       [ values.hiDpiMode, this._layerSettings.hiDpiMode ],
@@ -234,6 +277,8 @@ export class LayerSettingsFormComponent implements OnInit {
       title: this.layerSettings?.title ? this.layerSettings.title : '',
       description: this.layerSettings?.description || null,
       attribution: this.layerSettings?.attribution || null,
+      hiddenKeywords: this.layerSettings?.hiddenKeywords || [],
+      extraKeywords: this.layerSettings?.extraKeywords || [],
       legendImageId: this.layerSettings?.legendImageId || null,
       featureSourceId: this.layerSettings?.featureType?.featureSourceId || null,
       featureTypeName: this.layerSettings?.featureType?.featureTypeName || null,
@@ -300,5 +345,39 @@ export class LayerSettingsFormComponent implements OnInit {
 
   private isXyzSettingsModel(settings?: LayerSettingsModel | null): settings is LayerSettingsXyzModel {
     return !!settings && this.isXYZ;
+  }
+
+  public isKeywordHidden(keyword: string) {
+    return this.layerSettingsForm.get('hiddenKeywords')?.value?.includes(keyword) ?? false;
+  }
+
+public layerKeywordClick(keyword: string): void {
+  const current = this.layerSettingsForm.get('hiddenKeywords')?.value ?? [];
+  const newHiddenKeywords = current.includes(keyword)
+    ? current.filter(k => k !== keyword)
+    : [ ...current, keyword ];
+  this.layerSettingsForm.patchValue({
+    hiddenKeywords: newHiddenKeywords,
+  });
+}
+
+public addExtraKeyword(keyword: string): void {
+  const trimmed = keyword.trim();
+  if (!trimmed) {
+    return;
+  }
+  const current = this.layerSettingsForm.get('extraKeywords')?.value ?? [];
+  if (current.includes(trimmed)) {
+    return;
+  }
+  this.layerSettingsForm.patchValue({
+    extraKeywords: [ ...current, trimmed ],
+  });
+}
+
+  public removeExtraKeyword(keyword: string) {
+    this.layerSettingsForm.patchValue({
+      extraKeywords: (this.layerSettingsForm.get('extraKeywords')?.value ?? []).filter(k => k !== keyword),
+    });
   }
 }

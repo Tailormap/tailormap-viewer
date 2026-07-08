@@ -16,10 +16,6 @@ services:
     networks:
       - geodata
 
-  solr-metrics:
-    networks:
-      - geodata
-
   prometheus:
     labels:
       - geodata

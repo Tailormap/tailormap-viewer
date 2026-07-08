@@ -27,3 +27,22 @@ mat-slide-toggle + mat-slide-toggle {
   font-weight: bold;
   margin-top: 16px;
 }
+
+.service-default {
+  border-left: 4px solid var(--palette-primary-A400);
+  margin: 4px 0 0;
+  padding: 0 0 0 4px;
+}
+
+.hidden {
+  text-decoration: line-through;
+}
+
+mat-selection-list {
+  flex: 1;
+  overflow: auto;
+}
+
+.list-icon {
+  float: right;
+}

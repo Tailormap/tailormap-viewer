@@ -26,6 +26,7 @@ export class OpenLayersEventManager {
   private static changeViewEvent: EventManagerEvent<ObjectEvent> = { stream: new Subject<ObjectEvent>() };
   private static renderCompleteEvent: EventManagerEvent<RenderEvent> = { stream: new Subject<RenderEvent>() };
   private static mapMoveStartEvent: EventManagerEvent<MapEvent> = { stream: new Subject<MapEvent>() };
+  private static pointerDragEvent: EventManagerEvent<MapBrowserEvent<PointerEvent>> = { stream: new Subject<MapBrowserEvent<PointerEvent>>() };
   private static in3d = false;
   private static destroyed = new Subject();
 
@@ -41,6 +42,7 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'change:view', OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'rendercomplete', OpenLayersEventManager.renderCompleteEvent);
     OpenLayersEventManager.registerEvent(olMap, ngZone, 'movestart', OpenLayersEventManager.mapMoveStartEvent);
+    OpenLayersEventManager.registerEvent(olMap, ngZone, 'pointerdrag', OpenLayersEventManager.pointerDragEvent);
     in3d$
       .pipe(takeUntil(OpenLayersEventManager.destroyed))
       .subscribe(in3d => OpenLayersEventManager.in3d = in3d);
@@ -55,6 +57,7 @@ export class OpenLayersEventManager {
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.changeViewEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.renderCompleteEvent);
     OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.mapMoveStartEvent);
+    OpenLayersEventManager.deregisterEvent(OpenLayersEventManager.pointerDragEvent);
   }
 
   private static deregisterEvent<EventType extends BaseEvent>(event: EventManagerEvent<EventType>) {
@@ -100,5 +103,9 @@ export class OpenLayersEventManager {
       .pipe(
         skipUntil(OpenLayersEventManager.renderCompleteEvent.stream.asObservable()),
       );
+  }
+
+  public static onPointerDrag$(): Observable<MapBrowserEvent<PointerEvent>> {
+    return OpenLayersEventManager.pointerDragEvent.stream.asObservable();
   }
 }

@@ -67,6 +67,7 @@ export class ExtendedCatalogModelHelper {
         maxScale: layer.maxScale,
         minScale: layer.minScale,
         abstractText: layer.abstractText,
+        keywords: layer.keywords,
         serviceId: geoServiceId,
         originalId: layer.id,
         layerTitle: layerSettings?.[layer.name]?.title ?? layer.title,

@@ -19,6 +19,8 @@
       [filters]="filters$ | async"
       [selectedRowId]="selectedRowId$ | async"
       [canExpandRows]="canExpandRows$ | async"
+      [canCheckRows]="canCheckRows$ | async"
+      [checkedRows]="checkedRows$ | async"
       [featureDetails]="featureDetails$ | async"
       [loadingFeatureDetailsIds]="loadingFeatureDetailsIds$ | async"
       [showStatistics]="showStatistics$ | async"
@@ -27,6 +29,8 @@
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"
+      (setAllRowsChecked)="onSetAllRowsChecked($event)"
+      (setRowChecked)="onSetRowChecked($event)"
       (loadFeatureDetailsForFeature)="loadFeatureDetailsForFeature($event)"
       (loadStatisticsForColumn)="loadStatisticsForColumn($event)"
       (showStatisticsHelp)="showStatisticsHelp()"></tm-attribute-list-table>

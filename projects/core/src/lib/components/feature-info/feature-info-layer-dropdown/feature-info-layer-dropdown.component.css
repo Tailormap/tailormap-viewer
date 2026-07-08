@@ -15,3 +15,11 @@
 .layer-selector-item ::ng-deep .layer-item.selected {
   background-color: transparent;
 }
+
+.no-result-message{
+  color: var(--error-color);
+  margin: 10px;
+  border: var(--error-color) solid 1px;
+  padding: 10px;
+  border-radius: 4px;
+}

@@ -2,10 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import * as AttributeListActions from './attribute-list.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { filter, map, mergeMap, of } from 'rxjs';
+import { debounceTime, filter, groupBy, map, mergeMap, of, Subject, switchMap, tap } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { Store } from '@ngrx/store';
-import { selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId } from './attribute-list.selectors';
+import {
+  selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTabForDataId, selectAttributeListTabs,
+} from './attribute-list.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { selectViewerId } from '../../../state/core.selectors';
 import { MapService } from '@tailormap-viewer/map';
@@ -20,29 +22,58 @@ export class AttributeListEffects {
   private mapService = inject(MapService);
   private managerService = inject(AttributeListManagerService);
 
+  private loadDataForTabSubject = new Subject<string>();
+
   public loadDataForTab$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.loadData),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      tap(action => this.loadDataForTabId(action.tabId)),
     );
-  });
+  }, { dispatch: false });
 
   public loadDataAfterSelectedDataIdChange$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.setSelectedDataId),
       filter(action => !!action.tabId),
-      mergeMap(action => this.loadDataForTabId$(action.tabId)),
+      tap(action => this.loadDataForTabId(action.tabId)),
     );
-  });
+  }, { dispatch: false });
 
   public loadDataAfterChanges$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AttributeListActions.updatePage, AttributeListActions.updateSort),
-      concatLatestFrom(action => this.store$.select(selectAttributeListDataForId(action.dataId))),
+      concatLatestFrom(action => {
+        return this.store$.select(selectAttributeListDataForId(action.dataId));
+      }),
       map(([ _action, data ]) => data),
       filter(TypesHelper.isDefined),
-      mergeMap(data => this.loadDataForTabId$(data.tabId)),
+      tap(data => this.loadDataForTabId(data.tabId)),
+    );
+  }, { dispatch: false });
+
+  public loadData$ = createEffect(() => {
+    return this.loadDataForTabSubject.asObservable().pipe(
+      groupBy(
+        tabId => tabId,
+        {
+          // Added duration to clean up non-existing tab id streams
+          duration: group$ => this.store$.select(selectAttributeListTabs).pipe(
+            filter(tabs => !tabs.some(tab => tab.id === group$.key)),
+          ),
+        },
+      ),
+      mergeMap(tabIds$ => tabIds$.pipe(
+        debounceTime(50),
+        switchMap(tabId => this.attributeListDataService.loadDataForTab$(tabId).pipe(
+          map(result => {
+            if (!result.success) {
+              return AttributeListActions.loadDataFailed({ tabId, data: result });
+            }
+            return AttributeListActions.loadDataSuccess({ tabId, data: result });
+          }),
+        )),
+      )),
     );
   });
 
@@ -58,7 +89,7 @@ export class AttributeListEffects {
       ]),
       concatLatestFrom(([ _action, tab ]) => this.store$.select(selectLayer(tab?.layerId || ''))),
       filter(([[ _action, tab, row, applicationId ], layer ]) => !!tab && !!row && applicationId !== null && !!layer),
-      mergeMap(([[ _action, tab, row, applicationId ], layer ]) => {
+      switchMap(([[ _action, tab, row, applicationId ], layer ]) => {
         if (!row || !row.__fid || !tab || !tab.layerId || applicationId === null) {
           return of({ type: 'noop' });
         }
@@ -79,15 +110,29 @@ export class AttributeListEffects {
     );
   });
 
-  private loadDataForTabId$(tabId: string) {
-    return this.attributeListDataService.loadDataForTab$(tabId).pipe(
-      map(result => {
-        if (!result.success) {
-          return AttributeListActions.loadDataFailed({ tabId, data: result });
+  public notifyCheckedRowsChanged$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AttributeListActions.updateRowChecked, AttributeListActions.updateAllRowsChecked),
+      concatLatestFrom(action => [
+        this.store$.select(selectAttributeListDataForId(action.dataId)),
+        this.store$.select(selectAttributeListTabForDataId(action.dataId)),
+        this.store$.select(selectViewerId),
+      ]),
+      tap(([ _action, data, tab, applicationId ]) => {
+        if (!data || !tab || !tab.layerId || applicationId === null) {
+          return;
         }
-        return AttributeListActions.loadDataSuccess({ tabId, data: result });
+        this.managerService.notifyCheckedRowsChanged(tab.tabSourceId, {
+          applicationId,
+          layerId: tab.layerId,
+          checkedRows: data.checkedRows.filter(r => !!r.__fid).map(r => ({ __fid: r.__fid })),
+        });
       }),
     );
+  }, { dispatch: false });
+
+  private loadDataForTabId(tabId: string) {
+    this.loadDataForTabSubject.next(tabId);
   }
 
 }

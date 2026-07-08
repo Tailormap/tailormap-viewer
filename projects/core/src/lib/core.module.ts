@@ -1,4 +1,4 @@
-import { InjectionToken, ModuleWithProviders, NgModule, inject, provideAppInitializer } from '@angular/core';
+import {  ModuleWithProviders, NgModule, inject } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
@@ -22,7 +22,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplicationMapModule } from './map/application-map.module';
 import { FilterModule } from './filter/filter.module';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { LayoutModule } from './layout/layout.module';
@@ -39,17 +39,6 @@ import { CoreSharedModule } from './shared/core-shared.module';
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
 };
-
-const TRACE_SERVICE = new InjectionToken('SENTRY_TRACE_SERVICE');
-const SENTRY_DSN: string = (window as any).SENTRY_DSN;
-const sentryTraceServiceFactory = async (router: Router) => {
-  const sentry = await import('@sentry/angular');
-  return new sentry.TraceService(router);
-};
-const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
-  { provide: TRACE_SERVICE, useFactory: sentryTraceServiceFactory, deps: [Router] },
-  provideAppInitializer(() => { inject(TRACE_SERVICE); }),
-];
 
 @NgModule({
   declarations: [
@@ -97,7 +86,6 @@ const sentryProviders = SENTRY_DSN === '@SENTRY_DSN@' ? [] : [
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
-    ...sentryProviders,
   ],
 })
 export class CoreModule {

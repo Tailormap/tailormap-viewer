@@ -7,6 +7,7 @@ export interface AttributeListDataModel {
   featureType?: string;
   columns: AttributeListColumnModel[];
   rows: AttributeListRowModel[];
+  checkedRows: { id: string; __fid: string }[];
   selectedRowId?: string;
   pageSize: number;
   pageIndex: number;

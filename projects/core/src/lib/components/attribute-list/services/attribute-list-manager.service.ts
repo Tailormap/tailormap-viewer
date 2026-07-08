@@ -8,14 +8,16 @@ import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { nanoid } from 'nanoid';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import {
+  BoundsModel,
   FeaturesResponseModel, LayerExtractCapabilitiesModel, LayerExtractResponseModel, UniqueValuesResponseModel,
 } from '@tailormap-viewer/api';
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
+  CanCheckRowsParams,
+  CanExpandRowParams, CheckedRowsChangedParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
   FeatureDetailsModel, GetFeatureDetailsParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
-  GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams,
+  GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams, ZoomToExtentBoundsParams,
 } from '../models/attribute-list-api-service.model';
 import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
@@ -54,6 +56,7 @@ export class AttributeListManagerService implements OnDestroy {
   public static readonly EMPTY_ATTRIBUTE_LIST_TAB: AttributeListTabModel = {
     id: '',
     label: '',
+    layerId: '',
     selectedDataId: '',
     initialDataId: '',
     initialDataLoaded: false,
@@ -66,6 +69,7 @@ export class AttributeListManagerService implements OnDestroy {
     tabId: '',
     columns: [],
     rows: [],
+    checkedRows: [],
     pageIndex: 1,
     pageSize: 100,
     totalCount: null,
@@ -184,6 +188,32 @@ export class AttributeListManagerService implements OnDestroy {
       return of({ result: [], success: false });
     }
     return source.dataLoader.getStatisticValue$(params);
+  }
+
+  public retrieveZoomToExtentBounds$(tabSourceId: string, params: ZoomToExtentBoundsParams): Observable<BoundsModel | null> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source || typeof source?.dataLoader.retrieveZoomToExtentBounds$ !== 'function') {
+      return of(null);
+    }
+    return source.dataLoader.retrieveZoomToExtentBounds$(params);
+  }
+
+  public canZoomToBounds(tabSourceId: string): boolean {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    return typeof source?.dataLoader.retrieveZoomToExtentBounds$ === 'function';
+  }
+
+  public canCheckRows$(tabSourceId: string, params: CanCheckRowsParams): Observable<boolean> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(false);
+    }
+    return source.dataLoader.canCheckRows$ ? source.dataLoader.canCheckRows$(params) : of(false);
+  }
+
+  public notifyCheckedRowsChanged(tabSourceId: string, params: CheckedRowsChangedParams): void {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    source?.dataLoader.onCheckedRowsChanged?.(params);
   }
 
   public addAttributeListSource(source: AttributeListSourceModel): void {
