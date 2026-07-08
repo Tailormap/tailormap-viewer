@@ -1,12 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, OnDestroy, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
-} from '@tailormap-viewer/map';
+import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
-import {
-  BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
-} from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel } from '@tailormap-viewer/api';
 import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take, withLatestFrom } from 'rxjs/operators';
@@ -138,16 +134,50 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         if (!currentUrl || !currentUrl.url || !coordinates || coordinates.length < 2) {
           return;
         }
-        const replaced = currentUrl.url
+        const urlWithCoordinates = currentUrl.url
           .replace(/\[(x|lon)]/i, "" + coordinates[0])
           .replace(/\[(y|lat)]/i, "" + coordinates[1]);
-        window.open(replaced, '_blank', 'popup=1, noopener, noreferrer');
+        if (/\[GPS-(X|Y|lat|lon)]/i.test(urlWithCoordinates)) {
+          this.replaceGeoLocationPlaceholders(urlWithCoordinates, currentUrl.projection)
+            .then(finalUrl => window.open(finalUrl, '_blank', 'popup=1, noopener, noreferrer'));
+        } else {
+          window.open(urlWithCoordinates, '_blank', 'popup=1, noopener, noreferrer');
+        }
       },
     );
   }
 
   public ngOnDestroy() {
     this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.COORDINATE_LINK_WINDOW);
+  }
+
+  private replaceGeoLocationPlaceholders(url: string, projection: string): Promise<string> {
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const [x, y] = CoordinateHelper.projectCoordinates(
+            [ pos.coords.longitude, pos.coords.latitude ],
+            'EPSG:4326',
+            projection,
+          );
+          const result = url
+            .replace(/\[GPS-X]/i, `${x}`)
+            .replace(/\[GPS-Y]/i, `${y}`)
+            .replace(/\[GPS-lat]/i, `${pos.coords.latitude}`)
+            .replace(/\[GPS-lon]/i, `${pos.coords.longitude}`);
+          resolve(result);
+        },
+        () => {
+          const result = url
+            .replace(/\[GPS-X]/i, '')
+            .replace(/\[GPS-Y]/i, '')
+            .replace(/\[GPS-lat]/i, '')
+            .replace(/\[GPS-lon]/i, '');
+          resolve(result);
+        },
+        { enableHighAccuracy: true },
+      );
+    });
   }
 
 }
