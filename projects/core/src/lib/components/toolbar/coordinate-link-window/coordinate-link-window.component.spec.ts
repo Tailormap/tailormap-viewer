@@ -14,6 +14,7 @@ const setup = async (withConfig?: boolean) => {
     urls: [
       { id: '1', url: 'http://test.com/#@[X],[Y],18', projection: 'EPSG:28992', alias: 'Demo' },
       { id: '2', url: 'http://test2.com/#@[lat],[lon],18', projection: 'EPSG:4326', alias: 'Demo WGS84' },
+      { id: '3', url: 'http://test3.com/dir/[GPS-lat],[GPS-lon]/[lat],[lon]', projection: 'EPSG:4326', alias: 'Demo GPS' },
     ],
     enabled: true,
     title: 'CLW',
@@ -79,6 +80,37 @@ describe('CoordinateLinkWindowComponent', () => {
       'http://test2.com/#@52,52,18', '_blank', 'popup=1, noopener, noreferrer',
     );
     // restore window.open and projectCoordinates
+    window.open = windowOpen;
+    CoordinateHelper.projectCoordinates = projectCoordinates;
+  });
+
+  test('should open window with GPS and click coordinates on map click', async () => {
+    const projectCoordinates = CoordinateHelper.projectCoordinates;
+    CoordinateHelper.projectCoordinates = jest.fn((mapCoordinates, mapProjection, targetProjection) => {
+      if (targetProjection === 'EPSG:4326') {
+        return [ 52, 52 ];
+      }
+      return mapCoordinates;
+    });
+    const windowOpen = window.open;
+    window.open = jest.fn();
+    Object.defineProperty(navigator, 'geolocation', {
+      value: { getCurrentPosition: jest.fn((success: (pos: { coords: { latitude: number; longitude: number } }) => void) =>
+          success({ coords: { latitude: 51.9, longitude: 4.5 } })) },
+      configurable: true,
+    });
+
+    const { simulateMapClick } = await setup(true);
+    await userEvent.click(screen.getByRole('button'));
+    await userEvent.click(await screen.findByRole('combobox'));
+    await userEvent.click(await screen.findByRole('option', { name: 'Demo GPS' }));
+    simulateMapClick();
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(window.open).toHaveBeenCalledWith(
+      'http://test3.com/dir/51.9,4.5/52,52', '_blank', 'popup=1, noopener, noreferrer',
+    );
+
     window.open = windowOpen;
     CoordinateHelper.projectCoordinates = projectCoordinates;
   });

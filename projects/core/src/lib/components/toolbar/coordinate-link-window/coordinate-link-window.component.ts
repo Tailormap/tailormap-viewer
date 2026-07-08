@@ -145,7 +145,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
             .then(finalUrl => window.open(finalUrl, '_blank', 'popup=1, noopener, noreferrer'))
             .catch((err: string) => this.showSnackbarMessage(
               $localize `:@@core.coordinate-link-window.no-location:Failed to determine your location: ${err}.
-              Your location is needed for this link.`
+              Your location is needed for this link.`,
             ));
         } else {
           window.open(urlWithCoordinates, '_blank', 'popup=1, noopener, noreferrer');
@@ -162,7 +162,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          const [x, y] = CoordinateHelper.projectCoordinates(
+          const [ x, y ] = CoordinateHelper.projectCoordinates(
             [ pos.coords.longitude, pos.coords.latitude ],
             'EPSG:4326',
             projection,
