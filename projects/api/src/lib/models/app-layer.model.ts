@@ -31,6 +31,7 @@ export interface AppLayerModel {
   opacity: number;
   attribution?: string;
   description?: string;
+  keywords?: string[];
   autoRefreshInSeconds?: number | null;
   searchIndex: LayerSearchIndexModel | null;
   webMercatorAvailable?: boolean;
