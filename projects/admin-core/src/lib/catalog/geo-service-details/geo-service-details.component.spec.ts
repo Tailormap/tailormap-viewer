@@ -91,7 +91,9 @@ describe('GeoServiceDetailsComponent', () => {
       defaultLayerSettings: {
         attribution: undefined,
         description: undefined,
+        extraKeywords: [],
         hiDpiDisabled: false,
+        hiddenKeywords: [],
         legendImageId: undefined,
         tilingDisabled: true,
         tilingGutter: undefined,
