@@ -1,12 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, OnDestroy, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
-} from '@tailormap-viewer/map';
+import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
-import {
-  BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel,
-} from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel } from '@tailormap-viewer/api';
 import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take, withLatestFrom } from 'rxjs/operators';
@@ -15,6 +11,8 @@ import { ComponentRegistrationService } from '../../../services';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
 import { MenubarService } from '../../menubar';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tm-coordinate-link-window',
@@ -30,6 +28,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   private componentRegistrationService = inject(ComponentRegistrationService);
   private menubarService = inject(MenubarService);
   private mobileLayoutService = inject(MobileLayoutService);
+  private snackBar = inject(MatSnackBar);
 
 
   public noExpansionPanel = input<boolean>(false);
@@ -138,10 +137,19 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         if (!currentUrl || !currentUrl.url || !coordinates || coordinates.length < 2) {
           return;
         }
-        const replaced = currentUrl.url
+        const urlWithCoordinates = currentUrl.url
           .replace(/\[(x|lon)]/i, "" + coordinates[0])
           .replace(/\[(y|lat)]/i, "" + coordinates[1]);
-        window.open(replaced, '_blank', 'popup=1, noopener, noreferrer');
+        if (/\[GPS-(X|Y|lat|lon)]/i.test(urlWithCoordinates)) {
+          this.replaceGeoLocationPlaceholders(urlWithCoordinates, currentUrl.projection)
+            .then(finalUrl => window.open(finalUrl, '_blank', 'popup=1, noopener, noreferrer'))
+            .catch((err: string) => this.showSnackbarMessage(
+              $localize `:@@core.coordinate-link-window.no-location:Failed to determine your location: ${err}.
+              Your location is needed for this link.`,
+            ));
+        } else {
+          window.open(urlWithCoordinates, '_blank', 'popup=1, noopener, noreferrer');
+        }
       },
     );
   }
@@ -149,5 +157,40 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.componentRegistrationService.deregisterComponent('mobile-menu-home', BaseComponentTypeEnum.COORDINATE_LINK_WINDOW);
   }
+
+  private replaceGeoLocationPlaceholders(url: string, projection: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const [ x, y ] = CoordinateHelper.projectCoordinates(
+            [ pos.coords.longitude, pos.coords.latitude ],
+            'EPSG:4326',
+            projection,
+          );
+          const result = url
+            .replace(/\[GPS-X]/i, `${x}`)
+            .replace(/\[GPS-Y]/i, `${y}`)
+            .replace(/\[GPS-lat]/i, `${pos.coords.latitude}`)
+            .replace(/\[GPS-lon]/i, `${pos.coords.longitude}`);
+          resolve(result);
+        },
+        (err) => {
+          reject(err.message);
+        },
+        { enableHighAccuracy: true },
+      );
+    });
+  }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
+  }
+
 
 }
