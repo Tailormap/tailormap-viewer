@@ -7,7 +7,7 @@
   transition: left ease-in-out 0.15s;
 }
 
-::ng-deep .body--has-dialog-left .bottom-panel-container {
+::ng-deep .has-dialog-left .bottom-panel-container {
   left: var(--dialog-width-left);
   border-left: 1px solid #e1e1e1;
 }

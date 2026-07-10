@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoreModule } from '@ngrx/store';
-import { mapStateKey } from './state/map.state';
-import { mapReducer } from './state/map.reducer';
 import { ApplicationMapService } from './services/application-map.service';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MapSpinnerComponent } from './components/map-spinner/map-spinner.component';
@@ -13,7 +10,6 @@ import { MapSpinnerComponent } from './components/map-spinner/map-spinner.compon
   ],
   imports: [
     CommonModule,
-    StoreModule.forFeature(mapStateKey, mapReducer),
     SharedModule,
   ],
   exports: [

@@ -1,0 +1,22 @@
+@if (loadingFailed() || isLoading()) {
+  <div class="wrapper">
+    @if (loadingFailed()) {
+      <mat-icon class="logo" svgIcon="logo"></mat-icon>
+      <tm-error-message [message]="errorMessage$ | async"
+                        i18n-emptyText="@@core.common.error-while-loading-app"
+                        emptyText="Something went wrong while loading the application. Please check if the URL is correct"></tm-error-message>
+    }
+    @if (isLoading()) {
+      <mat-icon class="logo" svgIcon="logo"></mat-icon>
+      <mat-spinner mode="indeterminate" diameter="40"></mat-spinner>
+    }
+  </div>
+}
+
+@if (isLoaded()) {
+  @if (isMobileLayoutEnabled$ | async) {
+    <tm-mobile-layout class="mobile-layout" aria-label="Tailormap viewer page"></tm-mobile-layout>
+  } @else {
+    <tm-base-layout class="base-layout" aria-label="Tailormap viewer page"></tm-base-layout>
+  }
+}

@@ -9,6 +9,7 @@ import { UrlHelper } from '@tailormap-viewer/shared';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { LoadMapService } from '../map/services/load-map.service';
+import { VIEWER_ROUTE_SYNC_ENABLED } from '../viewer-instance/viewer-route-sync.token';
 
 interface LoadViewerResponse {
   success: boolean;
@@ -28,6 +29,7 @@ export class LoadViewerService {
   private location = inject(Location);
   private router = inject(Router);
   private loadMapService = inject(LoadMapService);
+  private routeSyncEnabled = inject(VIEWER_ROUTE_SYNC_ENABLED);
 
   private static LOAD_VIEWER_ERROR = $localize `:@@core.common.error-loading-viewer:Could not find or load the requested viewer`;
 
@@ -47,12 +49,13 @@ export class LoadViewerService {
           return;
         }
         const viewer = response.result.viewer;
+        const viewerId = `${viewer.kind}/${viewer.name}`;
         this.store$.dispatch(loadViewerSuccess({
-          viewer: { ...viewer, id: `${viewer.kind}/${viewer.name}` },
+          viewer: { ...viewer, id: viewerId },
         }));
         this.addFilterGroups(viewer.filterGroups);
-        this.updateRoute(viewer.id);
-        this.loadMapService.loadMap(viewer.id);
+        this.updateRoute(viewerId);
+        this.loadMapService.loadMap(viewerId);
       });
   }
 
@@ -76,7 +79,7 @@ export class LoadViewerService {
   }
 
   private updateRoute(id: string) {
-    if (!id) {
+    if (!id || !this.routeSyncEnabled) {
       return;
     }
     const paths = id.split('/').map(UrlHelper.getUrlSafeParam);

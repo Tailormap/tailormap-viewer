@@ -10,9 +10,6 @@ import { TocNodeDetailsComponent } from './toc-node-details/toc-node-details.com
 import { LegendModule } from '../legend';
 import { LayerTransparencyComponent } from './toc-node-details/layer-transparency/layer-transparency.component';
 import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-details.component';
-import { StoreModule } from '@ngrx/store';
-import { tocStateKey } from './state/toc.state';
-import { tocReducer } from './state/toc.reducer';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-node-details-mobile.component';
 
@@ -33,7 +30,6 @@ import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-nod
     SharedModule,
     MenubarModule,
     LegendModule,
-    StoreModule.forFeature(tocStateKey, tocReducer),
   ],
   exports: [
     TocComponent,

@@ -2,9 +2,7 @@ import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
-import { Store, StoreModule } from '@ngrx/store';
-import { featureInfoStateKey } from './state/feature-info.state';
-import { featureInfoReducer } from './state/feature-info.reducer';
+import { Store } from '@ngrx/store';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { CoreSharedModule } from '../../shared';
@@ -31,7 +29,6 @@ import { FeatureInfoContentComponent } from './feature-info-content/feature-info
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(featureInfoStateKey, featureInfoReducer),
     ApplicationMapModule,
     CoreSharedModule,
     CdkAccordion,

@@ -5,9 +5,6 @@ import { AttributeListMenuButtonComponent } from './attribute-list-menu-button/a
 import { AttributeListComponent } from './attribute-list/attribute-list.component';
 import { AttributeListTabComponent } from './attribute-list-tab/attribute-list-tab.component';
 import { MenubarModule } from '../menubar';
-import { StoreModule } from '@ngrx/store';
-import { attributeListStateKey } from './state/attribute-list.state';
-import { attributeListReducer } from './state/attribute-list.reducer';
 import { AttributeListContentComponent } from './attribute-list-content/attribute-list-content.component';
 import { AttributeListTableComponent } from './attribute-list-table/attribute-list-table.component';
 import { AttributeListTabToolbarComponent } from './attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
@@ -38,7 +35,6 @@ import { AttributeListColumnSelectionComponent } from './attribute-list-column-s
     CommonModule,
     SharedModule,
     MenubarModule,
-    StoreModule.forFeature(attributeListStateKey, attributeListReducer),
     FilterModule,
     CoreSharedModule,
   ],

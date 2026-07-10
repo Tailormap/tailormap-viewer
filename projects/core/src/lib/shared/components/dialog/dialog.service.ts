@@ -1,12 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { VIEWER_ROOT_ELEMENT } from '../../../viewer-instance/viewer-root-element.token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
   private layoutService = inject(ViewerLayoutService);
+  private rootElement = inject(VIEWER_ROOT_ELEMENT);
 
 
   private dialogCount = 0;
@@ -55,15 +57,15 @@ export class DialogService {
     const maxDialogRightWidth = this.dialogs.length === 0
       ? 0
       : Math.max(...this.dialogs.map(d => d.right));
-    CssHelper.setCssVariableValue('--dialog-width-left', `${maxDialogLeftWidth}px`);
-    CssHelper.setCssVariableValue('--dialog-width-right', `${maxDialogRightWidth}px`);
-    document.body.classList.toggle('body--has-dialog-left', maxDialogLeftWidth > 0);
-    document.body.classList.toggle('body--has-dialog-right', maxDialogRightWidth > 0);
+    CssHelper.setCssVariableValue('--dialog-width-left', `${maxDialogLeftWidth}px`, this.rootElement);
+    CssHelper.setCssVariableValue('--dialog-width-right', `${maxDialogRightWidth}px`, this.rootElement);
+    this.rootElement.classList.toggle('has-dialog-left', maxDialogLeftWidth > 0);
+    this.rootElement.classList.toggle('has-dialog-right', maxDialogRightWidth > 0);
     this.visibleStack.forEach((id, idx) => {
       if (!id) {
         return;
       }
-      CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, document.querySelector<HTMLDivElement>(`.${id}`));
+      CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, this.rootElement.querySelector<HTMLDivElement>(`.${id}`));
     });
     this.layoutService.setLeftPadding(maxDialogLeftWidth);
     this.layoutService.setRightPadding(maxDialogRightWidth);

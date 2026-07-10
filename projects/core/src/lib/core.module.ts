@@ -33,6 +33,7 @@ import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
+import { getViewerFeatureStateProviders } from './viewer-instance/provide-viewer-instance';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -74,6 +75,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     RouterModule,
   ],
   providers: [
+    ...getViewerFeatureStateProviders(),
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
     { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },

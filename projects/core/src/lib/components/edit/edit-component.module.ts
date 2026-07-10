@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { EditFormComponent } from './edit-form/edit-form.component';
 import { EditComponent } from './edit/edit.component';
-import { StoreModule } from '@ngrx/store';
-import { editStateKey } from './state/edit.state';
-import { editReducer } from './state/edit.reducer';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-feature.component';
@@ -31,7 +28,6 @@ import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(editStateKey, editReducer),
     ApplicationMapModule,
     CoreSharedModule,
     MatBadge,

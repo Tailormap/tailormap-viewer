@@ -21,7 +21,8 @@
     "extract-locale-shared": "tm-extract-i18n --library=shared",
     "extract-locale-core": "tm-extract-i18n --library=core",
     "extract-locale-admin-core": "tm-extract-i18n --library=admin-core",
-    "link-libraries": "tm-link-libraries"
+    "link-libraries": "tm-link-libraries",
+    "start-stories": "ng run app:serve-stories"
   },
   "private": true,
   "dependencies": {
