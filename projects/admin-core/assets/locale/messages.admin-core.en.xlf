@@ -1232,6 +1232,9 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.hide-empty-values" datatype="html">
+        <source>Hide attributes with empty values</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
       </trans-unit>
