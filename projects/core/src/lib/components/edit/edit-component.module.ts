@@ -6,8 +6,6 @@ import { EditComponent } from './edit/edit.component';
 import { StoreModule } from '@ngrx/store';
 import { editStateKey } from './state/edit.state';
 import { editReducer } from './state/edit.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { EditEffects } from './state/edit.effects';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-feature.component';
@@ -34,7 +32,6 @@ import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.
     CommonModule,
     SharedModule,
     StoreModule.forFeature(editStateKey, editReducer),
-    EffectsModule.forFeature([EditEffects]),
     ApplicationMapModule,
     CoreSharedModule,
     MatBadge,

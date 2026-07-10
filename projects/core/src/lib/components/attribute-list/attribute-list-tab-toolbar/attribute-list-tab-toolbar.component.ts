@@ -8,8 +8,8 @@ import {
   selectPagingDataSelectedTab, selectSelectedTab,
 } from '../state/attribute-list.selectors';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
-import { updatePage } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -37,6 +37,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
+  private attributeListDataService = inject(AttributeListDataService);
   private mapService = inject(MapService);
   private attributeListApiService = inject(AttributeListManagerService);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
@@ -106,7 +107,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 
   public onPageChange($event: PageEvent): void {
     this.attributeListStateService.executeActionForCurrentData(dataId => {
-      this.store$.dispatch(updatePage({ dataId, page: $event.pageIndex + 1 }));
+      this.attributeListDataService.updatePage(dataId, $event.pageIndex + 1);
     });
   }
 

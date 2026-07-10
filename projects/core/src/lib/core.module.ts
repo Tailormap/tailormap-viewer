@@ -2,10 +2,8 @@ import {  ModuleWithProviders, NgModule, inject } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 import { coreReducer } from './state/core.reducer';
 import { coreStateKey } from './state/core.state';
-import { CoreEffects } from './state/core.effects';
 import {
   ENVIRONMENT_CONFIG,
   EnvironmentConfigModel,
@@ -62,7 +60,6 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
         strictActionTypeUniqueness: true,
       },
     }),
-    EffectsModule.forRoot([CoreEffects]),
     ApplicationMapModule,
     MapModule,
     FilterModule,

@@ -5,8 +5,6 @@ import { catalogReducer } from './state/catalog.reducer';
 import { catalogStateKey } from './state/catalog.state';
 import { StoreModule } from '@ngrx/store';
 import { CatalogTreeComponent } from './catalog-tree/catalog-tree.component';
-import { EffectsModule } from '@ngrx/effects';
-import { CatalogEffects } from './state/catalog.effects';
 import { CatalogTreeNodeComponent } from './catalog-tree/catalog-tree-node/catalog-tree-node.component';
 import { GeoServiceDetailsComponent } from './geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo-service-layer-details.component';
@@ -83,7 +81,6 @@ import {
     CommonModule,
     SharedModule,
     StoreModule.forFeature(catalogStateKey, catalogReducer),
-    EffectsModule.forFeature([CatalogEffects]),
     SharedAdminComponentsModule,
     MarkdownEditorComponent,
     SharedDirectivesModule,

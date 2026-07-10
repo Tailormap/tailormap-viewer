@@ -8,8 +8,6 @@ import { MenubarModule } from '../menubar';
 import { StoreModule } from '@ngrx/store';
 import { attributeListStateKey } from './state/attribute-list.state';
 import { attributeListReducer } from './state/attribute-list.reducer';
-import { AttributeListEffects } from './state/attribute-list.effects';
-import { EffectsModule } from '@ngrx/effects';
 import { AttributeListContentComponent } from './attribute-list-content/attribute-list-content.component';
 import { AttributeListTableComponent } from './attribute-list-table/attribute-list-table.component';
 import { AttributeListTabToolbarComponent } from './attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
@@ -41,7 +39,6 @@ import { AttributeListColumnSelectionComponent } from './attribute-list-column-s
     SharedModule,
     MenubarModule,
     StoreModule.forFeature(attributeListStateKey, attributeListReducer),
-    EffectsModule.forFeature([AttributeListEffects]),
     FilterModule,
     CoreSharedModule,
   ],

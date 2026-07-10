@@ -4,7 +4,7 @@ import { selectPagingDataSelectedTab } from '../state/attribute-list.selectors';
 import { debounceTime, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { updatePage } from '../state/attribute-list.actions';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
 
 @Component({
   selector: 'tm-attribute-list-paging-dialog',
@@ -14,6 +14,7 @@ import { updatePage } from '../state/attribute-list.actions';
 })
 export class AttributeListPagingDialogComponent implements OnDestroy {
   private store$ = inject(Store);
+  private attributeListDataService = inject(AttributeListDataService);
 
 
   private destroyed = new Subject();
@@ -57,10 +58,7 @@ export class AttributeListPagingDialogComponent implements OnDestroy {
         if (page === pagingData.pageIndex) {
           return;
         }
-        this.store$.dispatch(updatePage({
-          dataId: pagingData.id,
-          page,
-        }));
+        this.attributeListDataService.updatePage(pagingData.id, page);
       });
   }
 

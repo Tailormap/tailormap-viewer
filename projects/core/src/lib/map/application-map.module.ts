@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 import { mapStateKey } from './state/map.state';
 import { mapReducer } from './state/map.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { MapEffects } from './state/map.effects';
 import { ApplicationMapService } from './services/application-map.service';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MapSpinnerComponent } from './components/map-spinner/map-spinner.component';
@@ -16,7 +14,6 @@ import { MapSpinnerComponent } from './components/map-spinner/map-spinner.compon
   imports: [
     CommonModule,
     StoreModule.forFeature(mapStateKey, mapReducer),
-    EffectsModule.forFeature([MapEffects]),
     SharedModule,
   ],
   exports: [

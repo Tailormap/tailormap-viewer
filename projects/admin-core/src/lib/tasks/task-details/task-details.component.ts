@@ -9,7 +9,7 @@ import {
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { reloadSearchIndexes } from '../../search-index/state/search-index.actions';
+import { SearchIndexService } from '../../search-index/services/search-index.service';
 
 @Component({
   selector: 'tm-admin-task-details',
@@ -25,6 +25,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   private confirmDelete = inject(ConfirmDialogService);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
+  private searchIndexService = inject(SearchIndexService);
 
 
   public task$: Observable<TaskModel | null> = of(null);
@@ -73,7 +74,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             .subscribe((response) => {
               if (response) {
                 if (task.type === 'index') {
-                  this.store$.dispatch(reloadSearchIndexes());
+                  this.searchIndexService.reloadSearchIndexes();
                 }
                 this.router.navigateByUrl('/admin/tasks');
               }

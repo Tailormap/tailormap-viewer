@@ -16,8 +16,6 @@ import { GroupCreateComponent } from './group-create/group-create.component';
 import { StoreModule } from '@ngrx/store';
 import { userStateKey } from './state/user.state';
 import { userReducer } from './state/user.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { UserEffects } from './state/user.effects';
 import { UserService } from './services/user.service';
 import { GroupService } from './services/group.service';
 
@@ -40,7 +38,6 @@ import { GroupService } from './services/group.service';
     RouterModule,
     SharedAdminComponentsModule,
     StoreModule.forFeature(userStateKey, userReducer),
-    EffectsModule.forFeature([UserEffects]),
   ],
   exports: [
     UserListComponent,

@@ -14,16 +14,20 @@ import {
 import { Store } from '@ngrx/store';
 import {
   selectEditStatus, selectEditError$, selectNewFeatureGeometryType, selectSelectedEditFeature, selectCopiedFeatures,
+  selectSelectedEditLayer, selectSelectedCopyLayer,
 } from '../state/edit.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, concatMap, debounceTime, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
-import { loadCopyFeatures, loadEditFeatures } from '../state/edit.actions';
+import {
+  loadCopyFeatures, loadCopyFeaturesFailed, loadCopyFeaturesSuccess, loadEditFeatures, loadEditFeaturesFailed, loadEditFeaturesSuccess,
+} from '../state/edit.actions';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { FeatureInfoService } from '../../feature-info';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +37,7 @@ export class EditMapToolService {
   private store$ = inject(Store);
   private snackBar = inject(MatSnackBar);
   private applicationLayerService = inject(ApplicationLayerService);
+  private featureInfoService = inject(FeatureInfoService);
   private destroyRef = inject(DestroyRef);
 
   private static DEFAULT_ERROR_MESSAGE = $localize `:@@core.edit.error-getting-features:Something went wrong while getting editable features, please try again`;
@@ -189,9 +194,9 @@ export class EditMapToolService {
     this.store$.select(selectEditStatus).pipe(take(1))
     .subscribe(status => {
       if (status === 'active') {
-        this.store$.dispatch(loadEditFeatures({ coordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates, pointerType: evt.pointerType }));
+        this.loadEditFeatures(evt.mapCoordinates, evt.mouseCoordinates, evt.pointerType);
       } else if (status === 'copy_features') {
-        this.store$.dispatch(loadCopyFeatures({ coordinates: evt.mapCoordinates, mouseCoordinates: evt.mouseCoordinates, pointerType: evt.pointerType }));
+        this.loadCopyFeatures(evt.mapCoordinates, evt.mouseCoordinates, evt.pointerType);
       }
     });
     this.store$.pipe(selectEditError$)
@@ -209,6 +214,32 @@ export class EditMapToolService {
         };
         SnackBarMessageComponent.open$(this.snackBar, config);
       });
+  }
+
+  private loadEditFeatures(coordinates: [number, number], mouseCoordinates: [number, number], pointerType?: string): void {
+    this.store$.dispatch(loadEditFeatures({ coordinates, mouseCoordinates, pointerType }));
+    this.store$.select(selectSelectedEditLayer).pipe(take(1)).subscribe(editLayer => {
+      this.featureInfoService.getEditableFeatures$(coordinates, editLayer, pointerType).pipe(take(1)).subscribe(result => {
+        if (!result) {
+          this.store$.dispatch(loadEditFeaturesFailed({}));
+          return;
+        }
+        this.store$.dispatch(loadEditFeaturesSuccess({ featureInfo: result }));
+      });
+    });
+  }
+
+  private loadCopyFeatures(coordinates: [number, number], mouseCoordinates: [number, number], pointerType?: string): void {
+    this.store$.dispatch(loadCopyFeatures({ coordinates, mouseCoordinates, pointerType }));
+    this.store$.select(selectSelectedCopyLayer).pipe(take(1)).subscribe(copyLayer => {
+      this.featureInfoService.getFeaturesForLayer$(coordinates, copyLayer, pointerType).pipe(take(1)).subscribe(result => {
+        if (!result) {
+          this.store$.dispatch(loadCopyFeaturesFailed({}));
+          return;
+        }
+        this.store$.dispatch(loadCopyFeaturesSuccess({ featureInfo: [result] }));
+      });
+    });
   }
 
   private handleCreateGeometryDrawEvent(drawEvent: DrawingToolEvent | null) {

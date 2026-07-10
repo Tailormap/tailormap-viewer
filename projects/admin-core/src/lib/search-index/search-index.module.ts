@@ -5,8 +5,6 @@ import { StoreModule } from '@ngrx/store';
 import { searchIndexStateKey } from './state/search-index.state';
 import { searchIndexReducer } from './state/search-index.reducer';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
-import { EffectsModule } from '@ngrx/effects';
-import { SearchIndexEffects } from './state/search-index.effects';
 import { SearchIndexHomeComponent } from './search-index-home/search-index-home.component';
 import { SearchIndexEditComponent } from './search-index-edit/search-index-edit.component';
 import { SearchIndexCreateComponent } from './search-index-create/search-index-create.component';
@@ -33,7 +31,6 @@ import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular
     CommonModule,
     SharedModule,
     StoreModule.forFeature(searchIndexStateKey, searchIndexReducer),
-    EffectsModule.forFeature([SearchIndexEffects]),
     SharedAdminComponentsModule,
     CatalogModule,
     FormModule,

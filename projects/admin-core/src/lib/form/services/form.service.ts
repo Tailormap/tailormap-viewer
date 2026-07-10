@@ -1,12 +1,17 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { catchError, concatMap, filter, map, of, switchMap, take, tap } from 'rxjs';
+import { catchError, combineLatest, concatMap, filter, map, of, switchMap, take, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { selectDraftForm, selectDraftFormLoadStatus } from '../state/form.selectors';
+import {
+  selectDraftForm, selectDraftFormId, selectDraftFormLoadStatus, selectFormsLoadStatus,
+} from '../state/form.selectors';
 import { Store } from '@ngrx/store';
-import { addForm, deleteForm, loadDraftForm, updateForm } from '../state/form.actions';
+import {
+  addForm, deleteForm, loadDraftForm, loadDraftFormFailed, loadDraftFormStart, loadDraftFormSuccess, loadFormsFailed,
+  loadFormsStart, loadFormsSuccess, updateForm,
+} from '../state/form.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 
 @Injectable({
@@ -42,13 +47,63 @@ export class FormService {
       .pipe(
         tap(draftGeoService => {
           if (draftGeoService?.id !== id) {
-            this.store$.dispatch(loadDraftForm({ id }));
+            this.loadDraftForm(id);
           }
         }),
         switchMap(() => this.store$.select(selectDraftFormLoadStatus)),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectDraftForm)),
       );
+  }
+
+  public loadForms(): void {
+    this.store$.select(selectFormsLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadFormsStart());
+        this.adminApiService.getForms$()
+          .pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.form.error-loading-forms:Error while loading list of forms` })),
+          )
+          .subscribe(response => {
+            if (ApiResponseHelper.isErrorResponse(response)) {
+              this.store$.dispatch(loadFormsFailed({ error: response.error }));
+              return;
+            }
+            this.store$.dispatch(loadFormsSuccess({ forms: response }));
+          });
+      });
+  }
+
+  public loadDraftForm(id: number): void {
+    combineLatest([
+      this.store$.select(selectDraftForm),
+      this.store$.select(selectDraftFormId),
+      this.store$.select(selectDraftFormLoadStatus),
+    ]).pipe(take(1)).subscribe(([ currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+      if (currentDraft?.id === id) {
+        return;
+      }
+      if (draftLoadingId === id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+        return;
+      }
+      this.store$.dispatch(loadDraftForm({ id }));
+      this.store$.dispatch(loadDraftFormStart());
+      this.adminApiService.getForm$(id)
+        .pipe(
+          catchError(() => of({ error: $localize `:@@admin-core.form.error-loading-form:Error while loading form` })),
+        )
+        .subscribe(formResponse => {
+          if (ApiResponseHelper.isErrorResponse(formResponse)) {
+            this.store$.dispatch(loadDraftFormFailed({ error: formResponse.error }));
+            return;
+          }
+          this.store$.dispatch(loadDraftFormSuccess({ form: formResponse }));
+        });
+    });
   }
 
   public getForm$(formId: number) {

@@ -1,11 +1,14 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { SearchIndexModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, SearchIndexModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DebounceHelper } from '@tailormap-viewer/shared';
-import { addSearchIndex, deleteSearchIndex, updateSearchIndex } from '../state/search-index.actions';
+import {
+  addSearchIndex, deleteSearchIndex, loadSearchIndexesFailed, loadSearchIndexesStart, loadSearchIndexesSuccess,
+  reloadSearchIndexes, updateSearchIndex,
+} from '../state/search-index.actions';
 import { catchError, concatMap, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectDraftSearchIndex } from '../state/search-index.selectors';
 import { selectTask } from '../../tasks/state/tasks.selectors';
@@ -36,6 +39,30 @@ export class SearchIndexService {
         if (event.eventType === EventType.ENTITY_DELETED) {
           this.updateSearchIndexState(event.details.id, 'remove');
         }
+      });
+  }
+
+  public loadSearchIndexes(): void {
+    this.fetchSearchIndexes();
+  }
+
+  public reloadSearchIndexes(): void {
+    this.store$.dispatch(reloadSearchIndexes());
+    this.fetchSearchIndexes();
+  }
+
+  private fetchSearchIndexes(): void {
+    this.store$.dispatch(loadSearchIndexesStart());
+    this.adminApiService.getSearchIndexes$()
+      .pipe(
+        catchError(() => of({ error: $localize `:@@admin-core.search-index.error-loading-search-indexes:Error while loading list of search indexes` })),
+      )
+      .subscribe(response => {
+        if (ApiResponseHelper.isErrorResponse(response)) {
+          this.store$.dispatch(loadSearchIndexesFailed({ error: response.error }));
+          return;
+        }
+        this.store$.dispatch(loadSearchIndexesSuccess({ searchIndexes: response }));
       });
   }
 

@@ -8,8 +8,6 @@ import { OIDCConfigurationCreateComponent } from './oidc-configuration-create/oi
 import { OIDCConfigurationListComponent } from './oidc-configuration-list/oidc-configuration-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RouterOutlet } from '@angular/router';
-import { EffectsModule } from '@ngrx/effects';
-import { OIDCConfigurationEffects } from './state/oidc-configuration.effects';
 import { OIDCConfigurationFormComponent } from './oidc-configuration-form/oidc-configuration-form.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
 import { OIDCConfigurationHomeComponent } from './oidc-configuration-home/oidc-configuration-home.component';
@@ -33,7 +31,6 @@ import { Routes as AdminRoutes } from '../routes';
     CommonModule,
     SharedModule,
     StoreModule.forFeature(oidcConfigurationStateKey, oidcConfigurationReducer),
-    EffectsModule.forFeature([OIDCConfigurationEffects]),
     SharedAdminComponentsModule,
     RouterOutlet,
  ],

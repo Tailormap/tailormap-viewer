@@ -6,8 +6,6 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { StoreModule } from '@ngrx/store';
 import { formStateKey } from './state/form.state';
 import { formReducer } from './state/form.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { FormEffects } from './state/form.effects';
 import { FormEditComponent } from './form-edit/form-edit.component';
 import { FormCreateComponent } from './form-create/form-create.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
@@ -35,7 +33,6 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
     CommonModule,
     SharedModule,
     StoreModule.forFeature(formStateKey, formReducer),
-    EffectsModule.forFeature([FormEffects]),
     SharedAdminComponentsModule,
     CatalogModule,
   ],

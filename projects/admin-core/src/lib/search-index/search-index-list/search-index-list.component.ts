@@ -4,13 +4,14 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
-import { loadCatalog } from '../../catalog/state/catalog.actions';
+import { CatalogService } from '../../catalog/services/catalog.service';
 import {
   SearchIndexList, selectFilteredSearchIndexesList, selectSearchIndexesListFilter, selectSearchIndexesLoadError,
   selectSearchIndexesLoadStatus,
 } from '../state/search-index.selectors';
-import { loadSearchIndexes, setSearchIndexListFilter } from '../state/search-index.actions';
+import { setSearchIndexListFilter } from '../state/search-index.actions';
 import { FormControl } from '@angular/forms';
+import { SearchIndexService } from '../services/search-index.service';
 
 @Component({
   selector: 'tm-admin-search-index-list',
@@ -22,6 +23,8 @@ import { FormControl } from '@angular/forms';
 export class SearchIndexListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private catalogService = inject(CatalogService);
+  private searchIndexService = inject(SearchIndexService);
 
 
   public filter = new FormControl('');
@@ -43,20 +46,20 @@ export class SearchIndexListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadSearchIndexes());
+          this.searchIndexService.loadSearchIndexes();
         }
       });
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadCatalog());
+          this.catalogService.loadCatalog();
         }
       });
   }
 
   public onRetryClick() {
-    this.store$.dispatch(loadSearchIndexes());
+    this.searchIndexService.loadSearchIndexes();
   }
 
 }

@@ -8,8 +8,6 @@ import { ApplicationCreateComponent } from './application-create/application-cre
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RouterOutlet } from '@angular/router';
-import { EffectsModule } from '@ngrx/effects';
-import { ApplicationEffects } from './state/application.effects';
 import { ApplicationFormComponent } from './application-form/application-form.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
 import { ApplicationHomeComponent } from './application-home/application-home.component';
@@ -88,7 +86,6 @@ import {
     CommonModule,
     SharedModule,
     StoreModule.forFeature(applicationStateKey, applicationReducer),
-    EffectsModule.forFeature([ApplicationEffects]),
     SharedAdminComponentsModule,
     RouterOutlet,
     CatalogModule,

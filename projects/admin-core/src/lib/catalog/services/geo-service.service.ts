@@ -5,7 +5,7 @@ import {
   GeoServiceSettingsModel, GeoServiceWithLayersModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap } from 'rxjs';
-import { addGeoService, deleteGeoService, loadCatalog, loadDraftGeoService, updateGeoService } from '../state/catalog.actions';
+import { addGeoService, deleteGeoService, updateGeoService } from '../state/catalog.actions';
 import { CatalogService } from './catalog.service';
 import { GeoServiceCreateModel, GeoServiceUpdateModel, GeoServiceWithIdUpdateModel } from '../models/geo-service-update.model';
 import {
@@ -59,7 +59,7 @@ export class GeoServiceService {
       .pipe(
         tap(draftGeoService => {
           if (draftGeoService?.id !== id) {
-            this.store$.dispatch(loadDraftGeoService({ id }));
+            this.catalogService.loadDraftGeoService(id);
           }
         }),
         switchMap(() => this.store$.select(selectDraftGeoServiceLoadStatus)),
@@ -211,7 +211,7 @@ export class GeoServiceService {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-            this.store$.dispatch(loadCatalog());
+            this.catalogService.loadCatalog();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
