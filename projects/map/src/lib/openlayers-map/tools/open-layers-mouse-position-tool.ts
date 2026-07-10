@@ -14,6 +14,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
     private _toolConfig: MousePositionToolConfigModel,
     private olMap: OlMap,
     private ngZone: NgZone,
+    private eventManager: OpenLayersEventManager,
   ) {}
 
   private mouseMoveSubject: Subject<MouseMoveEvent> = new Subject<MouseMoveEvent>();
@@ -43,7 +44,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
 
   public enable(): void {
     this.enabled = new Subject();
-    OpenLayersEventManager.onMouseMove$()
+    this.eventManager.onMouseMove$()
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
         this.lastCoordinates = { mapCoordinates: [ evt.coordinate[0], evt.coordinate[1] ], mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ] };

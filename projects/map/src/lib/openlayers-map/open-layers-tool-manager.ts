@@ -13,6 +13,8 @@ import { OpenLayersExtTransformTool } from './tools/open-layers-ext-transform-to
 import { debounceTime } from 'rxjs/operators';
 import { ToolsStatusModel } from '../models/tools-status.model';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
+import { OpenLayersEventManager } from './open-layers-event-manager';
+import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 
 const TOOL_STATUS_DEBOUNCE_TIME = 10;
 
@@ -45,6 +47,9 @@ export class OpenLayersToolManager implements ToolManagerModel {
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
+    private eventManager: OpenLayersEventManager,
+    private cesiumEventManager: CesiumEventManager,
+    private snappingManager: OpenLayersSnappingManager,
   ) {
     if (this.debugLogging) {
       this.getToolStatusChanged$().pipe(takeUntil(this.destroyed)).subscribe(() => {
@@ -77,13 +82,13 @@ export class OpenLayersToolManager implements ToolManagerModel {
   public addTool<T extends ToolModel, C extends ToolConfigModel>(tool: C): T {
     const toolId = `${tool.type.toLowerCase()}-${++OpenLayersToolManager.toolIdCount}`;
     if (ToolTypeHelper.isMapClickTool(tool)) {
-      this.tools.set(toolId, { tool: new OpenLayersMapClickTool(toolId, tool), owner: tool.owner });
+      this.tools.set(toolId, { tool: new OpenLayersMapClickTool(toolId, tool, this.eventManager, this.cesiumEventManager), owner: tool.owner });
     }
     if (ToolTypeHelper.isDrawingTool(tool)) {
       this.tools.set(toolId, { tool: new OpenLayersDrawingTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isMousePositionTool(tool)) {
-      this.tools.set(toolId, { tool: new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
+      this.tools.set(toolId, { tool: new OpenLayersMousePositionTool(toolId, tool, this.olMap, this.ngZone, this.eventManager), owner: tool.owner });
     }
     if (ToolTypeHelper.isScaleBarTool(tool)) {
       this.tools.set(toolId, { tool: new OpenLayersScaleBarTool(toolId, tool, this.olMap), owner: tool.owner });
@@ -95,7 +100,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
       this.tools.set(toolId, { tool: new OpenLayersModifyTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
     }
     if (ToolTypeHelper.isExtTransformTool(tool)) {
-      this.tools.set(toolId, { tool: new OpenLayersExtTransformTool(toolId, tool, this.olMap, this.ngZone), owner: tool.owner });
+      this.tools.set(toolId, { tool: new OpenLayersExtTransformTool(toolId, tool, this.olMap, this.ngZone, this.eventManager), owner: tool.owner });
     }
     if (tool.alwaysEnabled) {
       this.alwaysEnabledTools.add(toolId);
@@ -163,7 +168,7 @@ export class OpenLayersToolManager implements ToolManagerModel {
     if (tool && (!tool.tool.isActive || forceEnableIfActivated)) {
       tool.tool.enable(enableArgs);
       if (tool.tool.supportsSnapping) {
-        OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+        this.snappingManager.enableSnappingIfAllowed(true);
       }
       this.switchedTool = true;
       window.setTimeout(() => this.switchedTool = false, TOOL_STATUS_DEBOUNCE_TIME + 5);

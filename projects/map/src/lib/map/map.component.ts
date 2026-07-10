@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild } fr
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { combineLatest, take } from 'rxjs';
-import { CesiumEventManager } from '../openlayers-map/cesium-map/cesium-event-manager';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -33,12 +32,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.mapService.getCesiumManager$()
       .pipe(take(1))
       .subscribe((manager) => {
-        manager.executeScene3dAction(scene3d => {
-          const mapContainerElementRef = this.mapContainer();
-          if (mapContainerElementRef) {
-            CesiumEventManager.enableKeyboardControl(scene3d, mapContainerElementRef.nativeElement);
-          }
-        });
+        const mapContainerElementRef = this.mapContainer();
+        if (mapContainerElementRef) {
+          manager.enableKeyboardControl(mapContainerElementRef.nativeElement);
+        }
       });
   }
 
