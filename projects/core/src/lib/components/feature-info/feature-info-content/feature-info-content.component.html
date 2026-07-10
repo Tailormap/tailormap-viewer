@@ -13,10 +13,12 @@
         }
         <div class="content attributes-list">
           @for (att of feature.sortedAttributes; track att) {
-            <div class="row">
-              <strong>{{att.label}}</strong>
-              <div [innerHTML]="att.attributeValue | htmlify"></div>
-            </div>
+            @if (shouldShowAttribute(att)) {
+              <div class="row">
+                <strong>{{att.label}}</strong>
+                <div [innerHTML]="att.attributeValue | htmlify"></div>
+              </div>
+            }
           }
         </div>
         @if(feature.attachmentCount > 0) {
