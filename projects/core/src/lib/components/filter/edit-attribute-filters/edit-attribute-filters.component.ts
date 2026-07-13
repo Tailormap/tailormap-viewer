@@ -48,6 +48,10 @@ export class EditAttributeFiltersComponent {
     return filter.editConfiguration?.filterTool === FilterToolEnum.DROPDOWN_LIST;
   }
 
+  public isTextFilter(filter: AttributeFilterModel): boolean {
+    return filter.editConfiguration?.filterTool === FilterToolEnum.TEXT;
+  }
+
   public getSubstringFilters(filter: AttributeFilterModel): { id: string; disabled: boolean }[] {
     return this.editableFilters()
       .filter(f => f.id.startsWith(`${filter.id}-substring-`))
@@ -182,6 +186,19 @@ export class EditAttributeFiltersComponent {
     const newFilter: AttributeFilterModel = {
       ...filter,
       value: [ $event.lower.toISO() ?? '', $event.upper.toISO() ?? '' ],
+    };
+    if (this.filterGroupId()) {
+      this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
+    }
+  }
+
+  public updateTextFilterValue(value: string, filter: AttributeFilterModel) {
+    if (filter.editConfiguration?.filterTool !== FilterToolEnum.TEXT) {
+      return;
+    }
+    const newFilter: AttributeFilterModel = {
+      ...filter,
+      value: value ? [value] : [],
     };
     if (this.filterGroupId()) {
       this.store$.dispatch(updateFilter({ filterGroupId: this.filterGroupId() ?? '', filter: newFilter }));
