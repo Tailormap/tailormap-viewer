@@ -63,6 +63,18 @@
           </div>
         </div>
       }
+      @else if (isTextFilter(filter)) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-text-filter-title">
+            {{ filter.attributeAlias ?? filter.attribute }}
+          </div>
+          <div class="editable-text-filter-content">
+            <tm-text-filter
+              [textFilter]="filter"
+              (valueChange)="updateTextFilterValue($event, filter)"></tm-text-filter>
+          </div>
+        </div>
+      }
     </div>
   }
 </mat-expansion-panel>

@@ -27,6 +27,7 @@ import { DatePickerFilterComponent } from './edit-attribute-filters/date-picker-
 import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-list-filter/dropdown-list-filter.component';
 import { ResetFiltersButtonComponent } from './reset-filters-button/reset-filters-button.component';
 import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometries/map-drawing-buttons/map-drawing-buttons.component';
+import { TextFilterComponent } from './edit-attribute-filters/text-filter/text-filter.component';
 
 
 
@@ -50,6 +51,7 @@ import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometrie
     DropdownListFilterComponent,
     ResetFiltersButtonComponent,
     MapDrawingButtonsComponent,
+    TextFilterComponent,
   ],
   imports: [
     CommonModule,

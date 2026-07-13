@@ -6,4 +6,5 @@ export enum FilterToolEnum {
   DATE_PICKER = 'DATE_PICKER',
   DROPDOWN_LIST = 'DROPDOWN_LIST',
   DATE_INTERVAL = 'DATE_INTERVAL',
+  TEXT = 'TEXT',
 }

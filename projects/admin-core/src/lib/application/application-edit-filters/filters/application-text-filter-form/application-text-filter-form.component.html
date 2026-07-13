@@ -1,0 +1,24 @@
+<form [formGroup]="textFilterForm">
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@admin-core.application.filters.text.condition">Match type</mat-label>
+    <mat-select formControlName="condition"
+                aria-label="Select match type"
+                i18n-aria-label="@@admin-core.application.filters.text.select-condition">
+      @for (cond of stringConditions; track cond.condition) {
+        <mat-option [value]="cond.condition">{{ cond.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@admin-core.application.filters.text.initial-value">Initial value</mat-label>
+    <input matInput type="text" formControlName="initialValue" />
+  </mat-form-field>
+
+  <div>
+    <mat-checkbox formControlName="caseSensitive"
+                  i18n="@@admin-core.application.filters.text.case-sensitive">
+      Case sensitive
+    </mat-checkbox>
+  </div>
+</form>
