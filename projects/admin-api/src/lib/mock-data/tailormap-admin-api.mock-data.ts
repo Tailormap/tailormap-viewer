@@ -6,7 +6,7 @@ import {
   GeoServiceProtocolEnum, GeoServiceSummaryModel, GeoServiceWithLayersModel, GroupModel, ServiceCapsModel, TaskDetailsModel, TaskModel,
   UserModel,
 } from '../models';
-import { AttributeType, UniqueValuesResponseModel } from '@tailormap-viewer/api';
+import { AttributeStatisticsResponseModel, AttributeType, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel } from '../models/attribute-descriptor.model';
 
 export const getCatalogNode = (overrides?: Partial<CatalogNodeModel>): CatalogNodeModel => ({
@@ -234,4 +234,8 @@ export const getTaskDetails = (): TaskDetailsModel => ({
 export const getUniqueValues = (): UniqueValuesResponseModel => ({
   filterApplied: false,
   values: [ 'value1', 'value2', 'value3' ],
+});
+
+export const getAttributeStatistics = (): AttributeStatisticsResponseModel => ({
+  filterApplied: false, min: 1, max: 10, count: 10, sum: 55, avg: 5.5,
 });
