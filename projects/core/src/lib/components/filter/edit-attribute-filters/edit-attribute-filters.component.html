@@ -40,7 +40,7 @@
       @else if (isDatePickerFilter(filter)) {
         <div class="edit-filter-wrapper">
           <div class="editable-date-picker-filter-title">
-            {{ filter.attributeAlias ?? filter.attribute + ' ' + getConditionLabel(filter.condition) }}
+            {{ (filter.attributeAlias ?? filter.attribute) + ' ' + getConditionLabel(filter.condition) }}
           </div>
           <div class="editable-date-picker-filter-content">
             <tm-date-picker-filter
@@ -66,7 +66,7 @@
       @else if (isTextFilter(filter)) {
         <div class="edit-filter-wrapper">
           <div class="editable-text-filter-title">
-            {{ filter.attributeAlias ?? filter.attribute }}
+            {{ (filter.attributeAlias ?? filter.attribute) + ' ' + getConditionLabel(filter.condition) }}
           </div>
           <div class="editable-text-filter-content">
             <tm-text-filter

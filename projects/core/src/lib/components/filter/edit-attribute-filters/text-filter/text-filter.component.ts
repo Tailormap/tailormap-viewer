@@ -3,6 +3,7 @@ import { AttributeFilterModel, FilterToolEnum, TextFilterModel } from '@tailorma
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-text-filter',
@@ -15,7 +16,6 @@ export class TextFilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   public label: string = '';
-  public textFilterConfiguration?: TextFilterModel;
 
   public textControl = new FormControl<string>('');
 
@@ -24,10 +24,10 @@ export class TextFilterComponent implements OnInit {
     if (filter.editConfiguration?.filterTool !== FilterToolEnum.TEXT) {
       return;
     }
-    this.textFilterConfiguration = filter.editConfiguration;
-    this.label = filter.attributeAlias || filter.attribute;
-    const currentValue = filter.value[0] ?? '';
-    this.textControl.setValue(currentValue, { emitEvent: false });
+    const conditionLabel = AttributeFilterHelper.getConditionTypes(false)
+      .find(c => c.condition === filter.condition)?.label || '';
+    this.label = $localize `:@@core.filter.date-filter.label:Filter: ${filter.attribute} ${conditionLabel} - value`;
+    this.textControl.setValue(filter.value[0], { emitEvent: false });
   }
 
   @Output()
