@@ -2,8 +2,8 @@
   <mat-form-field appearance="outline">
     <mat-label i18n="@@admin-core.application.filters.condition">Condition</mat-label>
     <mat-select formControlName="condition"
-                aria-label="Select match type"
-                i18n-aria-label="@@admin-core.application.filters.text.select-condition">
+                aria-label="Condition"
+                i18n-aria-label="@@admin-core.application.filters.condition">
       @for (cond of stringConditions; track cond.condition) {
         <mat-option [value]="cond.condition">{{ cond.label }}</mat-option>
       }
