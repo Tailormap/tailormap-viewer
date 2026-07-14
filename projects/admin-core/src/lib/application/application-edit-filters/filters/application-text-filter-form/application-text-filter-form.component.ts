@@ -58,4 +58,5 @@ export class ApplicationTextFilterFormComponent implements OnInit {
     // Emit initial value
     this.textFilterForm.updateValueAndValidity({ emitEvent: true });
   }
+
 }
