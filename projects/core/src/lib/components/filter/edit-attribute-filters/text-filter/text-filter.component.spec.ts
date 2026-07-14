@@ -25,7 +25,7 @@ describe('TextFilterComponent', () => {
       imports: [ SharedImportsModule ],
       inputs: { textFilter: textFilter },
     });
-    expect(screen.getByText('name'));
+    expect(screen.getByRole('textbox'));
   });
 
 });
