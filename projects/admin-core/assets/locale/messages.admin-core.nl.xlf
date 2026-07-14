@@ -345,6 +345,10 @@
         <source>Choose filter tool</source>
         <target>Kies filter gereedschap</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.condition" datatype="html">
+        <source>Condition</source>
+        <target>Voorwaarde</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
         <target>Filter aanmaken</target>
@@ -484,6 +488,18 @@
       <trans-unit id="admin-core.application.filters.switch.value2" datatype="html">
         <source>Value 2</source>
         <target>Waarde 2</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text" datatype="html">
+        <source>Text</source>
+        <target>Tekst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text.case-sensitive" datatype="html">
+        <source> Case sensitive </source>
+        <target> Hoofdlettergevoelig </target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text.initial-value" datatype="html">
+        <source>Initial value</source>
+        <target>Initiële waarde</target>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>

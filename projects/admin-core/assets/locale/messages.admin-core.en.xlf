@@ -260,6 +260,9 @@
       <trans-unit id="admin-core.application.filters.choose-tool" datatype="html">
         <source>Choose filter tool</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.filters.condition" datatype="html">
+        <source>Condition</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.filters.create-filter" datatype="html">
         <source>Create filter</source>
       </trans-unit>
@@ -364,6 +367,15 @@
       </trans-unit>
       <trans-unit id="admin-core.application.filters.switch.value2" datatype="html">
         <source>Value 2</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text" datatype="html">
+        <source>Text</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text.case-sensitive" datatype="html">
+        <source> Case sensitive </source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.filters.text.initial-value" datatype="html">
+        <source>Initial value</source>
       </trans-unit>
       <trans-unit id="admin-core.application.filters.too-many-values" datatype="html">
         <source> Too many unique values, showing only the first <x id="PH" equiv-text="ApplicationEditFilterFormComponent.MAX_CHECKBOX_VALUES"/>.</source>
