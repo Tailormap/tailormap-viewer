@@ -1686,6 +1686,10 @@
         <source>Feature info</source>
         <target>Feature-Informationen</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.hide-empty-values" datatype="html">
+        <source>Hide attributes with empty values</source>
+        <target>Attribute mit leeren Werten ausblenden</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>
         <target>Schaltfläche zum Bearbeiten des Objekts anzeigen</target>
