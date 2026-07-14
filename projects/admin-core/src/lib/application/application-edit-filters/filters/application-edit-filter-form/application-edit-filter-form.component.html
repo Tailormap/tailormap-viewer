@@ -84,6 +84,7 @@
       <div class="text-filter-form">
         <tm-admin-application-text-filter-form
           [textFilterSettings]="initialEditConfiguration"
+          [newFilter]="newFilter"
           (updateTextFilter)="setEditFilterConfiguration($event)"></tm-admin-application-text-filter-form>
       </div>
     }

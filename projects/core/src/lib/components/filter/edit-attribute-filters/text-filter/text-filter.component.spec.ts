@@ -22,7 +22,7 @@ describe('TextFilterComponent', () => {
 
   test('should render', async () => {
     await render(TextFilterComponent, {
-      imports: [ SharedImportsModule ],
+      imports: [SharedImportsModule],
       inputs: { textFilter: textFilter },
     });
     expect(screen.getByRole('textbox'));

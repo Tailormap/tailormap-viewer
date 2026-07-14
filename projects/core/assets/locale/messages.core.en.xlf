@@ -830,6 +830,9 @@
       <trans-unit id="core.filter.switch-filter.true" datatype="html">
         <source>True</source>
       </trans-unit>
+      <trans-unit id="core.filter.text-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
+      </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
       </trans-unit>
