@@ -149,6 +149,9 @@ export class CqlFilterHelper {
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForNumber(filter));
     }
     if (filter.attributeType === AttributeType.STRING) {
+      if (filter.value.length === 0) {
+        return null;
+      }
       return CqlFilterHelper.wrapFilter(CqlFilterHelper.getQueryForString(filter));
     }
     if (CqlFilterHelper.isDate(filter.attributeType)) {
