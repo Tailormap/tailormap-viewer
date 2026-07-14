@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AttributeFilterModel, FilterToolEnum, TextFilterModel } from '@tailormap-viewer/api';
+import { AttributeFilterModel, FilterToolEnum } from '@tailormap-viewer/api';
 import { FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class TextFilterComponent implements OnInit {
     }
     const conditionLabel = AttributeFilterHelper.getConditionTypes(false)
       .find(c => c.condition === filter.condition)?.label || '';
-    this.label = $localize `:@@core.filter.date-filter.label:Filter: ${filter.attribute} ${conditionLabel} - value`;
+    this.label = $localize `:@@core.filter.text-filter.label:Filter: ${filter.attribute} ${conditionLabel} - value`;
     this.textControl.setValue(filter.value[0], { emitEvent: false });
   }
 

@@ -1122,6 +1122,10 @@
         <source>True</source>
         <target>Wahr</target>
       </trans-unit>
+      <trans-unit id="core.filter.text-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
+        <target>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - Wert</target>
+      </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
         <target>Bis</target>

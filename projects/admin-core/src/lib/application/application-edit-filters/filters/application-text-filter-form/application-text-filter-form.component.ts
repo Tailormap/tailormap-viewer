@@ -21,6 +21,12 @@ export class ApplicationTextFilterFormComponent implements OnInit {
     .filter(c => c.condition === FilterConditionEnum.STRING_EQUALS_KEY
       || c.condition === FilterConditionEnum.STRING_LIKE_KEY);
 
+  public textFilterForm = new FormGroup({
+    condition: new FormControl<FilterConditionEnum>(FilterConditionEnum.STRING_LIKE_KEY),
+    initialValue: new FormControl<string>(''),
+    caseSensitive: new FormControl<boolean>(false),
+  });
+
   @Input()
   public set textFilterSettings(configuration: EditFilterConfigurationModel | null) {
     if (configuration && configuration.filterTool === FilterToolEnum.TEXT) {
@@ -32,14 +38,21 @@ export class ApplicationTextFilterFormComponent implements OnInit {
     }
   }
 
+  @Input()
+  public set newFilter(newFilter: boolean) {
+    // Emit the default text filter when a new filter is created, so the 'create' button is enabled
+    if (newFilter) {
+      this.updateTextFilter.emit({
+        filterTool: FilterToolEnum.TEXT,
+        condition: FilterConditionEnum.STRING_LIKE_KEY,
+        initialText: undefined,
+        caseSensitive: false,
+      });
+    }
+  }
+
   @Output()
   public updateTextFilter = new EventEmitter<UpdateTextFilterModel>();
-
-  public textFilterForm = new FormGroup({
-    condition: new FormControl<FilterConditionEnum>(FilterConditionEnum.STRING_LIKE_KEY),
-    initialValue: new FormControl<string>(''),
-    caseSensitive: new FormControl<boolean>(false),
-  });
 
   public ngOnInit(): void {
     this.textFilterForm.valueChanges
@@ -55,8 +68,6 @@ export class ApplicationTextFilterFormComponent implements OnInit {
           caseSensitive: value.caseSensitive ?? false,
         });
       });
-    // Emit initial value
-    this.textFilterForm.updateValueAndValidity({ emitEvent: true });
   }
 
 }
