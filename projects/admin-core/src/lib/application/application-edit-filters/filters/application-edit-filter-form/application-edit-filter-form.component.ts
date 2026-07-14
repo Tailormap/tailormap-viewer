@@ -285,7 +285,7 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.initialText ? [$event.initialText] : [];
     }
     const condition = ($event.filterTool === FilterToolEnum.CHECKBOX
-      || $event.filterTool === FilterToolEnum.DROPDOWN_LIST || $event.filterTool === FilterToolEnum.TEXT)
+      || $event.filterTool === FilterToolEnum.DROPDOWN_LIST)
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
       : $event.condition;
     const caseSensitive = $event.filterTool === FilterToolEnum.TEXT ? $event.caseSensitive : undefined;
