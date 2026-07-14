@@ -26,7 +26,7 @@ export class TextFilterComponent implements OnInit {
     }
     this.textFilterConfiguration = filter.editConfiguration;
     this.label = filter.attributeAlias || filter.attribute;
-    const currentValue = filter.value[0] ?? filter.editConfiguration.initialText ?? '';
+    const currentValue = filter.value[0] ?? '';
     this.textControl.setValue(currentValue, { emitEvent: false });
   }
 

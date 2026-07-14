@@ -13,6 +13,7 @@ import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
   AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
+  UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -89,6 +90,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
         ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
         : { ...updateFilter.editConfiguration };
+      if (this.isTextFilterConfiguration(this.initialEditConfiguration)) {
+        this.initialEditConfiguration = { ...this.initialEditConfiguration, caseSensitive: updateFilter.caseSensitive };
+      }
     }
   }
   public get filter() {
@@ -308,6 +312,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: false,
       editFilterConfiguration: null,
     }, { emitEvent: false });
+  }
+
+  public isTextFilterConfiguration(config: EditFilterConfigurationModel): config is UpdateTextFilterModel {
+    return config.filterTool === FilterToolEnum.TEXT;
   }
 
 }
