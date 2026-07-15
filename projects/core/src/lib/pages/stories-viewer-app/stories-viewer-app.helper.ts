@@ -1,9 +1,29 @@
 import { ApplicationRef, ComponentRef, EnvironmentProviders, Provider, ProviderToken } from '@angular/core';
 import { createApplication } from '@angular/platform-browser';
 import { StoriesViewerAppComponent } from './stories-viewer-app.component';
-import { getViewerInstanceProviders } from '../../viewer-instance/provide-viewer-instance';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
+import { provideState, provideStore } from '@ngrx/store';
+import { coreStateKey } from '../../state';
+import { coreReducer } from '../../state/core.reducer';
+import { mapStateKey } from '../../map/state/map.state';
+import { mapReducer } from '../../map/state/map.reducer';
+
+const viewerStoreRuntimeChecks = {
+  strictActionImmutability: true,
+  strictActionSerializability: true,
+  strictActionWithinNgZone: true,
+  strictStateImmutability: true,
+  strictStateSerializability: true,
+  strictActionTypeUniqueness: true,
+};
+
+export function getViewerRootStoreProviders(): EnvironmentProviders[] {
+  return [
+    provideStore({ [coreStateKey]: coreReducer }, { runtimeChecks: viewerStoreRuntimeChecks }),
+    provideState(mapStateKey, mapReducer),
+  ];
+}
 
 /**
  * Providers that give a {@link StoriesViewerAppComponent} its own, isolated NgRx store + effects +
@@ -19,7 +39,7 @@ import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.t
  */
 export function getStoriesViewerStateProviders(hostElement: HTMLElement): Array<Provider | EnvironmentProviders> {
   return [
-    ...getViewerInstanceProviders(),
+    ...getViewerRootStoreProviders(),
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
   ];
@@ -57,13 +77,7 @@ export interface StoriesViewerRef {
 
 /**
  * Mounts a {@link StoriesViewerAppComponent} into `hostElement` as its **own Angular application**, so
- * multiple viewers can live on one page, each with a fully independent store/effects/map context.
- *
- * Why a whole application and not just a child `EnvironmentInjector`: NgRx's effects runner can only be
- * initialised in an application-root injector. Providing effects in a `createEnvironmentInjector` child
- * (or route `providers`) throws while wiring the runner (`NG0201 _Store` / `NG0200 _EffectsRunner`) —
- * see `provide-viewer-instance.spec.ts`. `createApplication` gives each viewer a real root where the
- * store and effects initialise correctly.
+ * multiple viewers can live on one page, each with a fully independent store/map context.
  *
  * The viewer's feature NgModules (imported by {@link StoriesViewerAppComponent} via `LayoutModule`) no
  * longer register their state slices themselves (`StoreModule.forFeature` requires a `StoreRootModule`
@@ -83,16 +97,13 @@ export interface StoriesViewerRef {
  */
 export async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
   const { hostElement, viewerId, providers } = options;
-
   const applicationRef = await createApplication({
     providers: [ ...providers, ...getStoriesViewerStateProviders(hostElement) ],
   });
-
   const componentRef = applicationRef.bootstrap(StoriesViewerAppComponent, hostElement);
   if (viewerId !== undefined) {
     componentRef.setInput('viewerId', viewerId);
   }
-
   return {
     applicationRef,
     componentRef,

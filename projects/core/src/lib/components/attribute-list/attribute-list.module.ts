@@ -16,6 +16,9 @@ import { CoreSharedModule } from '../../shared';
 import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details/attribute-list-feature-details.component';
 import { AttributeListApiService } from './services/attribute-list-api.service';
 import { AttributeListColumnSelectionComponent } from './attribute-list-column-selection/attribute-list-column-selection.component';
+import { provideState } from '@ngrx/store';
+import { attributeListStateKey } from './state/attribute-list.state';
+import { attributeListReducer } from './state/attribute-list.reducer';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { AttributeListColumnSelectionComponent } from './attribute-list-column-s
   ],
   exports: [
     AttributeListComponent,
+  ],
+  providers: [
+    provideState(attributeListStateKey, attributeListReducer),
   ],
 })
 export class AttributeListModule {

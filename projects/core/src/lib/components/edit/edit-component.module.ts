@@ -13,6 +13,9 @@ import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attac
 import { EditMenuButtonComponent } from './edit-menu-button/edit-menu-button.component';
 import { MenubarModule } from "../menubar";
 import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.component';
+import { provideState } from '@ngrx/store';
+import { editStateKey } from './state/edit.state';
+import { editReducer } from './state/edit.reducer';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.
     EditComponent,
     EditDialogComponent,
     EditMobilePanelComponent,
+  ],
+  providers: [
+    provideState(editStateKey, editReducer),
   ],
 })
 export class EditComponentModule {

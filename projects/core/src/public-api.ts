@@ -9,7 +9,6 @@ if (typeof window.$localize === 'undefined') {
 }
 
 export * from './lib/core.module';
-export * from './lib/viewer-instance/provide-viewer-instance';
 export * from './lib/pages';
 export * from './lib/components';
 export * from './lib/shared';

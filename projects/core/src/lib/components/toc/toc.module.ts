@@ -12,6 +12,9 @@ import { LayerTransparencyComponent } from './toc-node-details/layer-transparenc
 import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-details.component';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-node-details-mobile.component';
+import { provideState } from '@ngrx/store';
+import { tocReducer } from './state/toc.reducer';
+import { tocStateKey } from './state/toc.state';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,9 @@ import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile/toc-nod
   exports: [
     TocComponent,
     TocNodeDetailsMobileComponent,
+  ],
+  providers: [
+    provideState(tocStateKey, tocReducer),
   ],
 })
 export class TocModule { }

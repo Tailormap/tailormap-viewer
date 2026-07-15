@@ -18,7 +18,14 @@
             [disabled]="!viewerRefs[index]"
             (click)="zoomToDemoLocation(index)"
           >Zoom to {{ demoLocations[index].label }}</button>
+
+<!--          <button-->
+<!--            type="button"-->
+<!--            [disabled]="!viewerRefs[index]"-->
+<!--            (click)="zoomToDemoLocation(index)"-->
+<!--          >Zoom to {{ demoLocations[index].label }}</button>-->
         </div>
+
         <div #viewerHost class="viewer-host"></div>
       </section>
     }

@@ -24,6 +24,9 @@ import { DatePickerFilterComponent } from './edit-attribute-filters/date-picker-
 import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-list-filter/dropdown-list-filter.component';
 import { ResetFiltersButtonComponent } from './reset-filters-button/reset-filters-button.component';
 import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometries/map-drawing-buttons/map-drawing-buttons.component';
+import { filterComponentReducer } from './state/filter-component.reducer';
+import { provideState } from '@ngrx/store';
+import { filterComponentStateKey } from './state/filter-component.state';
 
 
 
@@ -57,6 +60,9 @@ import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometrie
   ],
   exports: [
     FilterComponent,
+  ],
+  providers: [
+    provideState(filterComponentStateKey, filterComponentReducer),
   ],
 })
 export class FilterComponentModule { }

@@ -2,7 +2,7 @@ import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
-import { Store } from '@ngrx/store';
+import { provideState, Store } from '@ngrx/store';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { CoreSharedModule } from '../../shared';
@@ -15,6 +15,8 @@ import { ComponentConfigHelper } from '../../shared/helpers/component-config.hel
 import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions';
 import { FeatureInfoTemplateRendererComponent } from './feature-info-template-renderer/feature-info-template-renderer.component';
 import { FeatureInfoContentComponent } from './feature-info-content/feature-info-content.component';
+import { featureInfoReducer } from './state/feature-info.reducer';
+import { featureInfoStateKey } from './state/feature-info.state';
 
 
 @NgModule({
@@ -38,6 +40,9 @@ import { FeatureInfoContentComponent } from './feature-info-content/feature-info
   exports: [
     FeatureInfoComponent,
     FeatureInfoDialogComponent,
+  ],
+  providers: [
+    provideState(featureInfoStateKey, featureInfoReducer),
   ],
 })
 export class FeatureInfoModule {

@@ -8,6 +8,9 @@ import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-fo
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
 import { DrawingStyleIconComponent } from '../../map';
+import { provideState } from '@ngrx/store';
+import { drawingReducer } from './state/drawing.reducer';
+import { drawingStateKey } from './state';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,9 @@ import { DrawingStyleIconComponent } from '../../map';
   ],
   exports: [
     DrawingComponent,
+  ],
+  providers: [
+    provideState(drawingStateKey, drawingReducer),
   ],
 })
 export class DrawingModule {
