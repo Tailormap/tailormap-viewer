@@ -2,16 +2,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.intro h1 {
-  margin: 0 0 8px;
-}
-
-.intro p {
-  max-width: 70ch;
-  color: #444;
 }
 
 .viewers {
@@ -37,4 +27,12 @@
   border-radius: 4px;
   overflow: hidden;
   position: relative;
+}
+
+button + button {
+  margin-left: 8px;
+}
+
+.footer {
+  padding-top: 24px;
 }

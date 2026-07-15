@@ -1,8 +1,9 @@
 import {
   AfterViewInit, ChangeDetectorRef, Component, ElementRef, EnvironmentInjector, inject, NgZone, OnDestroy, QueryList, ViewChildren,
 } from '@angular/core';
-import { renderViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
+import { mountStoriesViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
 import { MapService } from '@tailormap-viewer/map';
+import { MatButton } from '@angular/material/button';
 
 interface DemoLocation {
   label: string;
@@ -15,7 +16,10 @@ interface DemoLocation {
 @Component({
   selector: 'tm-stories-demo',
   templateUrl: './stories-demo.component.html',
-  styleUrls: ['./stories-demo.component.css'],
+  styleUrls: [ './stories-demo.component.css' ],
+  imports: [
+    MatButton,
+  ],
 })
 export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
 
@@ -28,6 +32,7 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
   // Each viewer is bootstrapped as its own Angular application with its own store, effects and map.
   // The viewer id follows the `app/<name>` convention used by loadViewer.
   public viewerNames = [ 'default', 'austria', 'test' ];
+  private selectedViewerIdx = 0;
 
   // A demo location per viewer, used by the "zoom to" button below each viewer to show how the host
   // page can drive one specific viewer instance from outside its component tree.
@@ -39,7 +44,7 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
 
   // Indexed to match viewerNames/viewerHosts; a slot stays undefined until that viewer has finished
   // mounting (mounting is async, so hosts can resolve out of order).
-  public viewerRefs: Array<StoriesViewerRef | undefined> = [];
+  public viewerRefs: Array<StoriesViewerRef & { loadedMap: string } | undefined> = [];
 
   public ngAfterViewInit(): void {
     // createApplication() constructs a new NgZone. Doing that from inside this (host) component's
@@ -49,12 +54,12 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
     // host zone so each viewer application gets its own, independent zone.
     this.ngZone.runOutsideAngular(() => {
       this.viewerHosts.forEach((hostRef, index) => {
-        renderViewer({
+        mountStoriesViewer({
           hostElement: hostRef.nativeElement,
           viewerId: `app/${this.viewerNames[index]}`,
           parentInjector: this.environmentInjector,
-        }, 'mount').then(ref => {
-          this.viewerRefs[index] = ref;
+        }).then(ref => {
+          this.viewerRefs[index] = { ...ref, loadedMap: this.viewerNames[index] };
           // The mount promise resolves outside the host's Angular zone, so the "zoom to" button's
           // disabled state needs an explicit check to update.
           this.changeDetectorRef.detectChanges();
@@ -78,14 +83,19 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
     ref.getService(MapService).zoomTo(location.wkt, location.projection || 'EPSG:4326', location.zoomLevel);
   }
 
-  public loadNextApp(index: number) {
+  public loadNextApp(index: number): void {
     const ref = this.viewerRefs[index];
-    const nextIdx = this.viewerNames.length < index + 1
+    if (!ref) {
+      return;
+    }
+    const curMapIdx = this.viewerNames.findIndex(name => name === ref?.loadedMap);
+    const nextIdx = this.viewerNames.length === curMapIdx + 1
       ? 0
-      : index + 1;
+      : curMapIdx + 1;
     const viewerName = this.viewerNames[nextIdx];
     if (ref && viewerName) {
       ref.componentRef.setInput('viewerId', `app/${viewerName}`);
+      ref.loadedMap = viewerName;
     }
   }
 

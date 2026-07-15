@@ -148,9 +148,9 @@ export class OpenLayersMap implements MapViewerModel {
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.eventManager, this.cesiumEventManager, this.snappingManager);
     this.eventManager.initEvents(olMap, this.ngZone, this.in3d);
     this.snappingManager.init(olMap, layerManager);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.eventManager, this.cesiumEventManager, this.snappingManager);
 
     // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
     merge(
@@ -420,6 +420,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   private _render(container: HTMLElement) {
+    this.map.next(null);
     this.executeMapAction(olMap => {
       olMap.setTarget(container);
       olMap.render();

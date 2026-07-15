@@ -1,32 +1,29 @@
 <div class="page">
-  <header class="intro">
-    <h1>Tailormap stories demo</h1>
-    <p>
-      This dummy page hosts three completely separate Tailormap viewers on a single page. Each block
-      below is mounted in its own <code>EnvironmentInjector</code> with its own NgRx store and
-      map instance, so they do not share any state.
-    </p>
-  </header>
-
   <div class="viewers">
     @for (name of viewerNames; track name; let index = $index) {
       <section class="viewer-block">
         <h2>Viewer: <code>app/{{ name }}</code></h2>
         <div class="viewer-controls">
           <button
+            mat-stroked-button
+            color="primary"
             type="button"
             [disabled]="!viewerRefs[index]"
             (click)="zoomToDemoLocation(index)"
           >Zoom to {{ demoLocations[index].label }}</button>
           <button
+            mat-stroked-button
+            color="primary"
             type="button"
             [disabled]="!viewerRefs[index]"
             (click)="loadNextApp(index)"
           >Load next app</button>
         </div>
-
         <div #viewerHost class="viewer-host"></div>
       </section>
     }
+  </div>
+  <div class="footer">
+    Footer content
   </div>
 </div>

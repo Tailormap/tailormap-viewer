@@ -1,5 +1,5 @@
 import {
-  ApplicationRef, ComponentRef, createComponent, createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, inject,
+  ApplicationRef, ComponentRef, EnvironmentInjector, EnvironmentProviders, inject,
   provideAppInitializer, Provider,
   ProviderToken,
 } from '@angular/core';
@@ -7,11 +7,6 @@ import { createApplication, DomSanitizer } from '@angular/platform-browser';
 import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
-import { provideState, provideStore } from '@ngrx/store';
-import { coreStateKey } from '../../state';
-import { coreReducer } from '../../state/core.reducer';
-import { mapStateKey } from '../../map/state/map.state';
-import { mapReducer } from '../../map/state/map.reducer';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import {
@@ -27,6 +22,8 @@ import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxo
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MatIconRegistry } from '@angular/material/icon';
+import { provideRouter } from '@angular/router';
+import { StoriesDemoComponent } from '../stories-demo/stories-demo.component';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -54,6 +51,7 @@ export function getRootProviders(hostElement: HTMLElement, environmentConfig?: a
         headerName: TailormapApiConstants.XSRF_HEADER_NAME,
       }),
     ),
+    // provideRouter([{ path: 'stories', component: StoriesDemoComponent }]),
     StoreInstanceProviderHelper.getStoreProvider(),
     { provide: ENVIRONMENT_CONFIG, useValue: environmentConfig },
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
@@ -97,13 +95,6 @@ export interface StoriesViewerRef {
   destroy: () => void;
 }
 
-export async function renderViewer(options: MountStoriesViewerOptions, renderOption: 'mount' | 'render'): Promise<StoriesViewerRef> {
-  if (renderOption === 'mount') {
-    return mountStoriesViewer(options);
-  }
-  return renderStoriesViewer(options);
-}
-
 /**
  * Mounts a {@link StoriesViewerAppComponent} into `hostElement` as its **own Angular application**, so
  * multiple viewers can live on one page, each with a fully independent store/map context.
@@ -123,7 +114,7 @@ export async function renderViewer(options: MountStoriesViewerOptions, renderOpt
  * // later:
  * ref.destroy();
  */
-async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
+export async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
   const { hostElement, viewerId, parentInjector } = options;
   const environmentConfig = parentInjector.get(ENVIRONMENT_CONFIG, { production: true, viewerBaseUrl: '/' });
   console.log('ENVIRONMENT_CONFIG', environmentConfig);
@@ -142,26 +133,3 @@ async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<S
   };
 }
 
-async function renderStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
-  const { hostElement, viewerId, parentInjector } = options;
-  const injector = createEnvironmentInjector(
-    getRootProviders(hostElement),
-    parentInjector,
-  );
-  // Then create the component in that injector context
-  const applicationRef = injector.get(ApplicationRef);
-  const componentRef = createComponent(StoriesViewerAppComponent, {
-    environmentInjector: injector,
-    hostElement,
-  });
-  if (viewerId !== undefined) {
-    componentRef.setInput('viewerId', viewerId);
-  }
-  applicationRef.attachView(componentRef.hostView);
-  return {
-    applicationRef,
-    componentRef,
-    getService: token => injector.get(token),
-    destroy: () => applicationRef.destroy(),
-  };
-}
