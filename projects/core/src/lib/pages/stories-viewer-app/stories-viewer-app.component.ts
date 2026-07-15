@@ -1,8 +1,8 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, Input, OnDestroy, OnInit, signal,
+  ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy, OnInit, signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, of, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';

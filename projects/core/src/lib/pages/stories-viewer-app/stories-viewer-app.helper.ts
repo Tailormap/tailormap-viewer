@@ -22,8 +22,6 @@ import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxo
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MatIconRegistry } from '@angular/material/icon';
-import { provideRouter } from '@angular/router';
-import { StoriesDemoComponent } from '../stories-demo/stories-demo.component';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();

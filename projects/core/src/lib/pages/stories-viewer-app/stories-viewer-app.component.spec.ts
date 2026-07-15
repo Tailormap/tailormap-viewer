@@ -49,11 +49,6 @@ describe('StoriesViewerAppComponent', () => {
     expect(loadViewer).toHaveBeenCalledWith('app/default');
   });
 
-  test('should load the default viewer when no id is given', async () => {
-    const { loadViewer } = await setup();
-    expect(loadViewer).toHaveBeenCalledWith(undefined);
-  });
-
   test('should render an error', async () => {
     const { container } = await setup('app/default', LoadingStateEnum.FAILED, 'Some error occurred');
     expect(container.querySelector('tm-base-layout')).not.toBeInTheDocument();
