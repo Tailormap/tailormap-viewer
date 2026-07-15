@@ -1,4 +1,7 @@
-import { ApplicationRef, ComponentRef, EnvironmentProviders, Provider, ProviderToken } from '@angular/core';
+import {
+  ApplicationRef, ComponentRef, createComponent, createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, Provider,
+  ProviderToken,
+} from '@angular/core';
 import { createApplication } from '@angular/platform-browser';
 import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
@@ -8,22 +11,10 @@ import { coreStateKey } from '../../state';
 import { coreReducer } from '../../state/core.reducer';
 import { mapStateKey } from '../../map/state/map.state';
 import { mapReducer } from '../../map/state/map.reducer';
-
-const viewerStoreRuntimeChecks = {
-  strictActionImmutability: true,
-  strictActionSerializability: true,
-  strictActionWithinNgZone: true,
-  strictStateImmutability: true,
-  strictStateSerializability: true,
-  strictActionTypeUniqueness: true,
-};
-
-export function getViewerRootStoreProviders(): EnvironmentProviders[] {
-  return [
-    provideStore({ [coreStateKey]: coreReducer }, { runtimeChecks: viewerStoreRuntimeChecks }),
-    provideState(mapStateKey, mapReducer),
-  ];
-}
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
+import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { StoreInstanceProviderHelper } from '../../viewer-instance/store-instance-provider.helper';
 
 /**
  * Providers that give a {@link StoriesViewerAppComponent} its own, isolated NgRx store + effects +
@@ -37,26 +28,26 @@ export function getViewerRootStoreProviders(): EnvironmentProviders[] {
  * `document.body`), so services like `DialogService` scope their DOM side effects to this viewer instance
  * rather than clobbering every other viewer mounted on the same page.
  */
-export function getStoriesViewerStateProviders(hostElement: HTMLElement): Array<Provider | EnvironmentProviders> {
+export function getRootProviders(hostElement: HTMLElement): Array<Provider | EnvironmentProviders> {
   return [
-    ...getViewerRootStoreProviders(),
+    provideAnimations(),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withXsrfConfiguration({
+        cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
+        headerName: TailormapApiConstants.XSRF_HEADER_NAME,
+      }),
+    ),
+    StoreInstanceProviderHelper.getStoreProvider(),
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
   ];
 }
 
 export interface MountStoriesViewerOptions {
-  /** Element the viewer is rendered into. */
   hostElement: HTMLElement;
-  /** Id of the viewer to load, e.g. `app/default`. When omitted the default viewer is loaded. */
   viewerId?: string;
-  /**
-   * Application-level providers for this viewer's **own** application root: HttpClient, the API service
-   * tokens, `ENVIRONMENT_CONFIG`, icon registration, date adapters, animations, ... Every viewer is a
-   * separate Angular application (see the note on {@link mountStoriesViewer}), so it needs a complete
-   * provider set — it does not inherit anything from the host page.
-   */
-  providers: Array<Provider | EnvironmentProviders>;
+  parentInjector: EnvironmentInjector;
 }
 
 export interface StoriesViewerRef {
@@ -79,12 +70,11 @@ export interface StoriesViewerRef {
  * Mounts a {@link StoriesViewerAppComponent} into `hostElement` as its **own Angular application**, so
  * multiple viewers can live on one page, each with a fully independent store/map context.
  *
- * The viewer's feature NgModules (imported by {@link StoriesViewerAppComponent} via `LayoutModule`) no
- * longer register their state slices themselves (`StoreModule.forFeature` requires a `StoreRootModule`
- * instance, which only `StoreModule.forRoot` provides — not the standalone `provideStore` used here).
- * Every feature slice is registered once, centrally, via `getViewerFeatureStateProviders` in
- * {@link getViewerInstanceProviders} — consumed by both this per-viewer application root and
- * `CoreModule` (the main, single-viewer app).
+ * The viewer's feature NgModules (imported by {@link StoriesViewerAppComponent} via `LayoutModule`) each
+ * register their own state slice via the standalone `provideState()` (in their own `providers` array),
+ * same as the main, single-viewer app (`CoreModule`, which provides its root store via `provideStore()`
+ * too). Both roots use the standalone `@ngrx/store` API rather than `StoreModule.forRoot()`/
+ * `forFeature()`, so `ROOT_STORE_PROVIDER` is available to every feature slice in either application.
  *
  * @example
  * const ref = await mountStoriesViewer({
@@ -96,9 +86,9 @@ export interface StoriesViewerRef {
  * ref.destroy();
  */
 export async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
-  const { hostElement, viewerId, providers } = options;
+  const { hostElement, viewerId } = options;
   const applicationRef = await createApplication({
-    providers: [ ...providers, ...getStoriesViewerStateProviders(hostElement) ],
+    providers: getRootProviders(hostElement),
   });
   const componentRef = applicationRef.bootstrap(StoriesViewerAppComponent, hostElement);
   if (viewerId !== undefined) {
@@ -108,6 +98,30 @@ export async function mountStoriesViewer(options: MountStoriesViewerOptions): Pr
     applicationRef,
     componentRef,
     getService: token => applicationRef.injector.get(token),
+    destroy: () => applicationRef.destroy(),
+  };
+}
+
+export async function renderStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
+  const { hostElement, viewerId, parentInjector } = options;
+  const injector = createEnvironmentInjector(
+    getRootProviders(hostElement),
+    parentInjector,
+  );
+  // Then create the component in that injector context
+  const applicationRef = injector.get(ApplicationRef);
+  const componentRef = createComponent(StoriesViewerAppComponent, {
+    environmentInjector: injector,
+    hostElement,
+  });
+  if (viewerId !== undefined) {
+    componentRef.setInput('viewerId', viewerId);
+  }
+  applicationRef.attachView(componentRef.hostView);
+  return {
+    applicationRef,
+    componentRef,
+    getService: token => injector.get(token),
     destroy: () => applicationRef.destroy(),
   };
 }

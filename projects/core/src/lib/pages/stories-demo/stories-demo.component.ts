@@ -1,9 +1,8 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, NgZone, OnDestroy, QueryList, ViewChildren,
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, EnvironmentInjector, inject, NgZone, OnDestroy, QueryList, ViewChildren,
 } from '@angular/core';
-import { mountStoriesViewer, StoriesViewerRef } from '@tailormap-viewer/core';
+import { renderStoriesViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
 import { MapService } from '@tailormap-viewer/map';
-import { storiesViewerAppProviders } from '../stories.config';
 
 interface DemoLocation {
   label: string;
@@ -14,7 +13,7 @@ interface DemoLocation {
 }
 
 @Component({
-  selector: 'app-root',
+  selector: 'tm-stories-demo',
   templateUrl: './stories-demo.component.html',
   styleUrls: ['./stories-demo.component.css'],
 })
@@ -24,6 +23,7 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
 
   private ngZone = inject(NgZone);
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private environmentInjector = inject(EnvironmentInjector);
 
   // Each viewer is bootstrapped as its own Angular application with its own store, effects and map.
   // The viewer id follows the `app/<name>` convention used by loadViewer.
@@ -49,10 +49,10 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
     // host zone so each viewer application gets its own, independent zone.
     this.ngZone.runOutsideAngular(() => {
       this.viewerHosts.forEach((hostRef, index) => {
-        mountStoriesViewer({
+        renderStoriesViewer({
           hostElement: hostRef.nativeElement,
           viewerId: `app/${this.viewerNames[index]}`,
-          providers: storiesViewerAppProviders,
+          parentInjector: this.environmentInjector,
         }).then(ref => {
           this.viewerRefs[index] = ref;
           // The mount promise resolves outside the host's Angular zone, so the "zoom to" button's
