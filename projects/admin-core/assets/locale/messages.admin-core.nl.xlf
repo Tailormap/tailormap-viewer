@@ -758,8 +758,8 @@
         <target>Map toevoegen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-keyword" datatype="html">
-        <source>Add keyword</source>
-        <target>Trefwoord toevoegen</target>
+        <source>Add keyword...</source>
+        <target>Trefwoord toevoegen...</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
@@ -930,8 +930,8 @@
         <target>Bewerken van instellingen voor laag <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
-        <source>Enter keyword</source>
-        <target state="new">Enter keyword</target>
+        <source>Enter extra keyword and press enter</source>
+        <target>Voer extra trefwoord in en druk op enter</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -1112,6 +1112,14 @@
       <trans-unit id="admin-core.catalog.keywords" datatype="html">
         <source>Keywords (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</source>
         <target>Trefwoorden (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.extra-keywords-subtitle" datatype="html">
+        <source>Extra keywords (click to remove)</source>
+        <target>Extra sleutelwoorden (klik om te verwijderen)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.layer-keywords-subtitle" datatype="html">
+        <source>Keywords from service capabilities (click to hide or show)</source>
+        <target>Trefwoorden van de service (klik om te verbergen of weer te geven)</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>
