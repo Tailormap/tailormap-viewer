@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideEnvironmentInitializer, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button/attribute-list-menu-button.component';
@@ -46,14 +46,10 @@ import { attributeListReducer } from './state/attribute-list.reducer';
   ],
   providers: [
     provideState(attributeListStateKey, attributeListReducer),
+    // Watches changes to visible layers to create tabs; must run after `provideState` above since it
+    // needs `attributeListStateKey` to already be registered.
+    provideEnvironmentInitializer(() => inject(AttributeListApiService).initDefaultAttributeListSource()),
   ],
 })
 export class AttributeListModule {
-  public constructor(
-    // Service is instantiated here, watches changes to visible layers to create tabs
-    //eslint-disable-next-line @angular-eslint/prefer-inject
-    public attributeListApiService: AttributeListApiService,
-  ) {
-    this.attributeListApiService.initDefaultAttributeListSource();
-  }
 }

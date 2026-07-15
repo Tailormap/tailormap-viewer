@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -23,26 +23,28 @@ import { SearchIndexModule } from './search-index/search-index.module';
     SearchIndexModule,
     OIDCConfigurationModule,
   ],
+  providers: [
+    provideEnvironmentInitializer(() => {
+      const matIconRegistry = inject(MatIconRegistry);
+      const domSanitizer = inject(DomSanitizer);
+      const iconService = inject(IconService);
+      const authenticatedUserService = inject(AuthenticatedUserService);
+
+      const adminIcons = [{
+        folder: 'admin',
+        icons: [
+          'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'wfs', 'jdbc', 'form',
+          'feature_type', 'application', 'more', 'link_new_window', 'default_application', 'search-index',
+          'logs', 'tasks', 'task_successful', 'task_failed', 'task_running', 'warning', 'terrain', 'unavailable', 'expanded', 'collapsed',
+        ],
+      }, {
+        folder: 'admin/filters',
+        icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle', 'dropdown' ],
+      }];
+      iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
+      authenticatedUserService.fetchUserDetails();
+    }),
+  ],
 })
 export class AdminCoreModule {
-  constructor() {
-    const matIconRegistry = inject(MatIconRegistry);
-    const domSanitizer = inject(DomSanitizer);
-    const iconService = inject(IconService);
-    const authenticatedUserService = inject(AuthenticatedUserService);
-
-    const adminIcons = [{
-      folder: 'admin',
-      icons: [
-        'home', 'catalog', 'service', 'user', 'groups', 'feature_source', 'wfs', 'jdbc', 'form',
-        'feature_type', 'application', 'more', 'link_new_window', 'default_application', 'search-index',
-        'logs', 'tasks', 'task_successful', 'task_failed', 'task_running', 'warning', 'terrain', 'unavailable', 'expanded', 'collapsed',
-      ],
-    }, {
-      folder: 'admin/filters',
-      icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle', 'dropdown' ],
-    }];
-    iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
-    authenticatedUserService.fetchUserDetails();
-  }
 }

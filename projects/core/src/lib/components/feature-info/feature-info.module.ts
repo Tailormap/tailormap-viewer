@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
@@ -43,20 +43,21 @@ import { featureInfoStateKey } from './state/feature-info.state';
   ],
   providers: [
     provideState(featureInfoStateKey, featureInfoReducer),
+    // Must run after `provideState` above since it selects/dispatches `featureInfoStateKey` state.
+    provideEnvironmentInitializer(() => {
+      const store$ = inject(Store);
+
+      ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
+        store$,
+        BaseComponentTypeEnum.FEATURE_INFO,
+        config => {
+          if (config.defaultShowDropdown) {
+            store$.dispatch(expandCollapseFeatureInfoLayerList());
+          }
+        },
+      );
+    }),
   ],
 })
 export class FeatureInfoModule {
-  constructor() {
-    const store$ = inject(Store);
-
-    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
-      store$,
-      BaseComponentTypeEnum.FEATURE_INFO,
-      config => {
-        if (config.defaultShowDropdown) {
-          store$.dispatch(expandCollapseFeatureInfoLayerList());
-        }
-      },
-    );
-  }
 }

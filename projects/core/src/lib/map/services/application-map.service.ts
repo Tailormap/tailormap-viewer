@@ -39,7 +39,7 @@ export class ApplicationMapService implements OnDestroy {
   private destroyed = new Subject();
   private capabilities: Map<string, string> = new Map();
 
-  constructor() {
+  public init() {
     const isValidLayer = (layer: LayerModel | null): layer is LayerModel => layer !== null;
     this.store$.select(selectMapOptions)
       .pipe(

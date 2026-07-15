@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { inject, NgModule, provideEnvironmentInitializer } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent,  ViewerAppComponent, PasswordResetComponent } from './pages';
 import { NavigationErrorRouterService } from './services/navigation-error-router.service';
@@ -21,8 +21,11 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [
+    provideEnvironmentInitializer(() => {
+      inject(NavigationErrorRouterService).init();
+    }),
+  ],
 })
 export class CoreRoutingModule {
-  //eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor(_navigationErrorRouter: NavigationErrorRouterService) {}
 }

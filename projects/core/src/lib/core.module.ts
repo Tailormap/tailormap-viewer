@@ -1,9 +1,6 @@
 import {  ModuleWithProviders, NgModule, inject } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
-import { provideState, StoreModule } from '@ngrx/store';
-import { coreReducer } from './state/core.reducer';
-import { coreStateKey } from './state/core.state';
 import {
   ENVIRONMENT_CONFIG,
   EnvironmentConfigModel,
@@ -33,8 +30,7 @@ import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
-import { mapReducer } from './map/state/map.reducer';
-import { mapStateKey } from './map/state/map.state';
+import { StoreInstanceProviderHelper } from './viewer-instance/store-instance-provider.helper';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -50,18 +46,6 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
   ],
   imports: [
     CoreRoutingModule,
-    StoreModule.forRoot({
-      [coreStateKey]: coreReducer,
-    }, {
-      runtimeChecks: {
-        strictActionImmutability: true,
-        strictActionSerializability: true,
-        strictActionWithinNgZone: true,
-        strictStateImmutability: true,
-        strictStateSerializability: true,
-        strictActionTypeUniqueness: true,
-      },
-    }),
     ApplicationMapModule,
     MapModule,
     FilterModule,
@@ -76,7 +60,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     RouterModule,
   ],
   providers: [
-    provideState(mapStateKey, mapReducer),
+    StoreInstanceProviderHelper.getStoreProvider(),
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
     { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },

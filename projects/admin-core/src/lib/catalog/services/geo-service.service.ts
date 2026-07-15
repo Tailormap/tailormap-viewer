@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, Injector } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ApiResponseHelper, ApplicationModel, CatalogItemKindEnum, CatalogModelHelper, GeoServiceModel, GeoServiceProtocolEnum,
@@ -34,7 +34,11 @@ export class GeoServiceService {
   private adminApiService = inject(TailormapAdminApiV1Service);
   private adminSnackbarService = inject(AdminSnackbarService);
   private catalogService = inject(CatalogService);
-  private applicationService = inject(ApplicationService);
+  // Injected lazily (via `Injector`, not eagerly like the services above): `ApplicationService`'s
+  // constructor immediately selects `applicationStateKey` state, which isn't registered yet if this
+  // service is constructed as part of `CatalogModule`'s own eager initialization — `CatalogModule` is
+  // processed before `ApplicationModule` registers that feature state (see `application.module.ts`).
+  private injector = inject(Injector);
   private sseService = inject(AdminSseService);
 
 
@@ -168,7 +172,7 @@ export class GeoServiceService {
   }
 
   public getApplicationsUsingService$(serviceId: string) {
-    return this.applicationService.getApplications$()
+    return this.injector.get(ApplicationService).getApplications$()
       .pipe(
         map(applications => {
           return applications.filter(app => {

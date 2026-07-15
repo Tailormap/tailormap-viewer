@@ -1,8 +1,8 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { applicationStateKey } from './state/application.state';
 import { applicationReducer } from './state/application.reducer';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { ApplicationEditSettingsComponent } from './application-edit-settings/application-edit-settings.component';
 import { ApplicationCreateComponent } from './application-create/application-create.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
@@ -85,7 +85,6 @@ import {
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(applicationStateKey, applicationReducer),
     SharedAdminComponentsModule,
     RouterOutlet,
     CatalogModule,
@@ -98,11 +97,12 @@ import {
     exports: [
         ApplicationListComponent,
     ],
+  providers: [
+    provideState(applicationStateKey, applicationReducer),
+    provideEnvironmentInitializer(() => {
+      inject(ApplicationService).listenForApplicationChanges();
+    }),
+  ],
 })
 export class ApplicationModule {
-  constructor() {
-    const applicationService = inject(ApplicationService);
-
-    applicationService.listenForApplicationChanges();
-  }
 }
