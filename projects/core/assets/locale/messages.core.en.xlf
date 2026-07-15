@@ -410,6 +410,9 @@
       <trans-unit id="core.edit.attachments" datatype="html">
         <source>Attachments</source>
       </trans-unit>
+      <trans-unit id="core.edit.copy-from-other-layer" datatype="html">
+        <source>Copy from other layer</source>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
       </trans-unit>
@@ -1074,8 +1077,8 @@
       <trans-unit id="core.toc.expand-all" datatype="html">
         <source>Expand all groups</source>
       </trans-unit>
-      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
-        <source>Filter by layer name...</source>
+      <trans-unit id="core.toc.filter" datatype="html">
+        <source>Filter by layer name or keywords...</source>
       </trans-unit>
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>

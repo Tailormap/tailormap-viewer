@@ -550,6 +550,10 @@
         <source>Attachments</source>
         <target>Bijlagen</target>
       </trans-unit>
+      <trans-unit id="core.edit.copy-from-other-layer" datatype="html">
+        <source>Copy from other layer</source>
+        <target>Kopiëren van andere laag</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Aanmaken van object mislukt</target>
@@ -1435,9 +1439,9 @@
         <source>Expand all groups</source>
         <target>Alle groepen uitklappen</target>
       </trans-unit>
-      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
-        <source>Filter by layer name...</source>
-        <target>Filter op laagnaam...</target>
+      <trans-unit id="core.toc.filter" datatype="html">
+        <source>Filter by layer name or keywords...</source>
+        <target>Filter op laagnaam of trefwoorden...</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>
