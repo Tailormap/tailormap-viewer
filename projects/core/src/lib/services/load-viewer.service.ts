@@ -26,8 +26,8 @@ export class LoadViewerService {
 
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
   private store$ = inject(Store);
-  private location = inject(Location);
-  private router = inject(Router);
+  private location = inject(Location, { optional: true });
+  private router = inject(Router, { optional: true });
   private loadMapService = inject(LoadMapService);
   private routeSyncEnabled = inject(VIEWER_ROUTE_SYNC_ENABLED);
 
@@ -83,8 +83,8 @@ export class LoadViewerService {
       return;
     }
     const paths = id.split('/').map(UrlHelper.getUrlSafeParam);
-    if(this.location.path() !== '/' + paths.join('/')) {
-      this.router.navigate(paths, { preserveFragment: true, skipLocationChange: true });
+    if(this.location?.path() !== '/' + paths.join('/')) {
+      this.router?.navigate(paths, { preserveFragment: true, skipLocationChange: true });
     }
   }
 

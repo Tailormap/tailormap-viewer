@@ -1,8 +1,9 @@
 import {
-  ApplicationRef, ComponentRef, createComponent, createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, Provider,
+  ApplicationRef, ComponentRef, createComponent, createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, inject,
+  provideAppInitializer, Provider,
   ProviderToken,
 } from '@angular/core';
-import { createApplication } from '@angular/platform-browser';
+import { createApplication, DomSanitizer } from '@angular/platform-browser';
 import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
@@ -12,9 +13,24 @@ import { coreReducer } from '../../state/core.reducer';
 import { mapStateKey } from '../../map/state/map.state';
 import { mapReducer } from '../../map/state/map.reducer';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
-import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
+import {
+  AuthenticatedUserService, ENVIRONMENT_CONFIG,
+  TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1Service, TailormapSecurityApiV1Service,
+} from '@tailormap-viewer/api';
 import { StoreInstanceProviderHelper } from '../../viewer-instance/store-instance-provider.helper';
+import { SecurityInterceptor } from '../../interceptors/security.interceptor';
+import { ExternalLibsLoaderHelper, ICON_SERVICE_ICON_LOCATION, IconService } from '@tailormap-viewer/shared';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { MatIconRegistry } from '@angular/material/icon';
+
+const getBaseHref = (platformLocation: PlatformLocation): string => {
+  return platformLocation.getBaseHrefFromDOM();
+};
 
 /**
  * Providers that give a {@link StoriesViewerAppComponent} its own, isolated NgRx store + effects +
@@ -28,7 +44,7 @@ import { StoreInstanceProviderHelper } from '../../viewer-instance/store-instanc
  * `document.body`), so services like `DialogService` scope their DOM side effects to this viewer instance
  * rather than clobbering every other viewer mounted on the same page.
  */
-export function getRootProviders(hostElement: HTMLElement): Array<Provider | EnvironmentProviders> {
+export function getRootProviders(hostElement: HTMLElement, environmentConfig?: any): Array<Provider | EnvironmentProviders> {
   return [
     provideAnimations(),
     provideHttpClient(
@@ -39,8 +55,23 @@ export function getRootProviders(hostElement: HTMLElement): Array<Provider | Env
       }),
     ),
     StoreInstanceProviderHelper.getStoreProvider(),
+    { provide: ENVIRONMENT_CONFIG, useValue: environmentConfig },
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
+    { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
+    { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
+    { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
+    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
+    { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
+    { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
+    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    provideAppInitializer(() => {
+      inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
+      ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
+      inject(AuthenticatedUserService).fetchUserDetails();
+    }),
   ];
 }
 
@@ -66,6 +97,13 @@ export interface StoriesViewerRef {
   destroy: () => void;
 }
 
+export async function renderViewer(options: MountStoriesViewerOptions, renderOption: 'mount' | 'render'): Promise<StoriesViewerRef> {
+  if (renderOption === 'mount') {
+    return mountStoriesViewer(options);
+  }
+  return renderStoriesViewer(options);
+}
+
 /**
  * Mounts a {@link StoriesViewerAppComponent} into `hostElement` as its **own Angular application**, so
  * multiple viewers can live on one page, each with a fully independent store/map context.
@@ -85,10 +123,12 @@ export interface StoriesViewerRef {
  * // later:
  * ref.destroy();
  */
-export async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
-  const { hostElement, viewerId } = options;
+async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
+  const { hostElement, viewerId, parentInjector } = options;
+  const environmentConfig = parentInjector.get(ENVIRONMENT_CONFIG, { production: true, viewerBaseUrl: '/' });
+  console.log('ENVIRONMENT_CONFIG', environmentConfig);
   const applicationRef = await createApplication({
-    providers: getRootProviders(hostElement),
+    providers: getRootProviders(hostElement, environmentConfig),
   });
   const componentRef = applicationRef.bootstrap(StoriesViewerAppComponent, hostElement);
   if (viewerId !== undefined) {
@@ -102,7 +142,7 @@ export async function mountStoriesViewer(options: MountStoriesViewerOptions): Pr
   };
 }
 
-export async function renderStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
+async function renderStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
   const { hostElement, viewerId, parentInjector } = options;
   const injector = createEnvironmentInjector(
     getRootProviders(hostElement),

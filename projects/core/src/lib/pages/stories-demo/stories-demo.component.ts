@@ -1,7 +1,7 @@
 import {
   AfterViewInit, ChangeDetectorRef, Component, ElementRef, EnvironmentInjector, inject, NgZone, OnDestroy, QueryList, ViewChildren,
 } from '@angular/core';
-import { renderStoriesViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
+import { renderViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
 import { MapService } from '@tailormap-viewer/map';
 
 interface DemoLocation {
@@ -49,11 +49,11 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
     // host zone so each viewer application gets its own, independent zone.
     this.ngZone.runOutsideAngular(() => {
       this.viewerHosts.forEach((hostRef, index) => {
-        renderStoriesViewer({
+        renderViewer({
           hostElement: hostRef.nativeElement,
           viewerId: `app/${this.viewerNames[index]}`,
           parentInjector: this.environmentInjector,
-        }).then(ref => {
+        }, 'mount').then(ref => {
           this.viewerRefs[index] = ref;
           // The mount promise resolves outside the host's Angular zone, so the "zoom to" button's
           // disabled state needs an explicit check to update.
@@ -76,6 +76,17 @@ export class StoriesDemoComponent implements AfterViewInit, OnDestroy {
       return;
     }
     ref.getService(MapService).zoomTo(location.wkt, location.projection || 'EPSG:4326', location.zoomLevel);
+  }
+
+  public loadNextApp(index: number) {
+    const ref = this.viewerRefs[index];
+    const nextIdx = this.viewerNames.length < index + 1
+      ? 0
+      : index + 1;
+    const viewerName = this.viewerNames[nextIdx];
+    if (ref && viewerName) {
+      ref.componentRef.setInput('viewerId', `app/${viewerName}`);
+    }
   }
 
 }

@@ -18,12 +18,11 @@
             [disabled]="!viewerRefs[index]"
             (click)="zoomToDemoLocation(index)"
           >Zoom to {{ demoLocations[index].label }}</button>
-
-<!--          <button-->
-<!--            type="button"-->
-<!--            [disabled]="!viewerRefs[index]"-->
-<!--            (click)="zoomToDemoLocation(index)"-->
-<!--          >Zoom to {{ demoLocations[index].label }}</button>-->
+          <button
+            type="button"
+            [disabled]="!viewerRefs[index]"
+            (click)="loadNextApp(index)"
+          >Load next app</button>
         </div>
 
         <div #viewerHost class="viewer-host"></div>
