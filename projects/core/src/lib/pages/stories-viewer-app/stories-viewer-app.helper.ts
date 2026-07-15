@@ -115,7 +115,6 @@ export interface StoriesViewerRef {
 export async function mountStoriesViewer(options: MountStoriesViewerOptions): Promise<StoriesViewerRef> {
   const { hostElement, viewerId, parentInjector } = options;
   const environmentConfig = parentInjector.get(ENVIRONMENT_CONFIG, { production: true, viewerBaseUrl: '/' });
-  console.log('ENVIRONMENT_CONFIG', environmentConfig);
   const applicationRef = await createApplication({
     providers: getRootProviders(hostElement, environmentConfig),
   });
