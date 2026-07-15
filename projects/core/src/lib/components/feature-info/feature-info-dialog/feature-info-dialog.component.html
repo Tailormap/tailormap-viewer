@@ -10,6 +10,7 @@
                                [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
                                [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
                                [isEditPossible]="isEditPossible() ?? false"
+                               [hideEmptyValues]="config()?.hideEmptyValues ?? false"
                                (showNextFeatureInfoFeature)="next()"
                                (showPreviousFeatureInfoFeature)="back()"
                                (editFeature)="editFeature()">
@@ -42,7 +43,11 @@
     }
     <div class="feature-list">
       @if (selectedSingleLayer$ | async; as layer) {
-        <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+        @if (layer.totalCount !== 0) {
+          <tm-feature-info-layer-item [layer]="getLayerListItem(layer)"></tm-feature-info-layer-item>
+        } @else if (!expandedList()) {
+          <div class="no-result-message" i18n="@@core.feature-info.no-features-found">No features found</div>
+        }
       } @else if(!expandedList()) {
         <div class="layer-list-dropdown-wrapper">
           @if (isWideScreen()) {
@@ -59,6 +64,7 @@
         [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
         [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
         [isEditPossible]="isEditPossible() ?? false"
+        [hideEmptyValues]="config()?.hideEmptyValues ?? false"
         (showNextFeatureInfoFeature)="next()"
         (showPreviousFeatureInfoFeature)="back()"
         (editFeature)="editFeature()">

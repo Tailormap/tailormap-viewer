@@ -14,7 +14,8 @@ import {
 import { DEFAULT_ATTRIBUTE_LIST_CONFIG } from '../models/attribute-list-config.model';
 import { AttributeListSourceModel, TabModel } from '../models/attribute-list-source.model';
 import {
-  CanExpandRowParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
+  CanCheckRowsParams,
+  CanExpandRowParams, CheckedRowsChangedParams, DownloadLayerExtractParams, DownloadLayerExtractResponse,
   FeatureDetailsModel, GetFeatureDetailsParams, GetLayerExtractCapabilitiesParams, GetLayerExtractParams,
   GetStatisticParams, GetStatisticResponse, GetUniqueValuesParams, ZoomToExtentBoundsParams,
 } from '../models/attribute-list-api-service.model';
@@ -68,6 +69,7 @@ export class AttributeListManagerService implements OnDestroy {
     tabId: '',
     columns: [],
     rows: [],
+    checkedRows: [],
     pageIndex: 1,
     pageSize: 100,
     totalCount: null,
@@ -199,6 +201,19 @@ export class AttributeListManagerService implements OnDestroy {
   public canZoomToBounds(tabSourceId: string): boolean {
     const source = this.sources$.getValue().find(s => s.id === tabSourceId);
     return typeof source?.dataLoader.retrieveZoomToExtentBounds$ === 'function';
+  }
+
+  public canCheckRows$(tabSourceId: string, params: CanCheckRowsParams): Observable<boolean> {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    if (!source) {
+      return of(false);
+    }
+    return source.dataLoader.canCheckRows$ ? source.dataLoader.canCheckRows$(params) : of(false);
+  }
+
+  public notifyCheckedRowsChanged(tabSourceId: string, params: CheckedRowsChangedParams): void {
+    const source = this.sources$.getValue().find(s => s.id === tabSourceId);
+    source?.dataLoader.onCheckedRowsChanged?.(params);
   }
 
   public addAttributeListSource(source: AttributeListSourceModel): void {

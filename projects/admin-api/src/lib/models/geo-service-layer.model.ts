@@ -10,6 +10,7 @@ export interface GeoServiceLayerModel {
   maxScale?: number;
   minScale?: number;
   abstractText: string;
+  keywords: string[];
   children: string[] | null;
   styles?: WmsStyleModel[] | null;
 }

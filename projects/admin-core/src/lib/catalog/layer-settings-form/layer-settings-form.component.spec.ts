@@ -35,24 +35,38 @@ describe('LayerSettingsFormComponent', () => {
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
+        attribution: undefined,
         authorizationRules: [],
-        title: 'Some title',
-        hiDpiMode: undefined,
+        description: undefined,
+        extraKeywords: [],
+        featureType: undefined,
         hiDpiDisabled: undefined,
+        hiDpiMode: undefined,
         tilingDisabled: undefined,
         tilingGutter: undefined,
+        hiDpiSubstituteLayer: undefined,
+        hiddenKeywords: [],
+        legendImageId: undefined,
+        title: 'Some title',
       });
     });
     await userEvent.click(await screen.findByText('Disabled'));
     await waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
       expect(changedFn).toHaveBeenNthCalledWith(2, {
+        attribution: undefined,
         authorizationRules: [],
-        title: 'Some title',
+        description: undefined,
+        extraKeywords: [],
+        featureType: undefined,
         hiDpiDisabled: true,
         hiDpiMode: undefined,
         tilingDisabled: undefined,
         tilingGutter: undefined,
+        hiDpiSubstituteLayer: undefined,
+        hiddenKeywords: [],
+        legendImageId: undefined,
+        title: 'Some title',
       });
     });
   });

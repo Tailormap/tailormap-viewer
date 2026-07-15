@@ -8,6 +8,14 @@
     <div i18n="@@admin-core.components.coordinate-link-window-help2">For each URL you can use <code>[X]</code> or <code>[lat]</code> and <code>[Y]</code> or <code>[lon]</code> placeholders in the URL.</div>
     <div i18n="@@admin-core.components.coordinate-link-window-help3">Those will be replaced by the location on which the user clicks.</div>
     <div i18n="@@admin-core.components.coordinate-link-window-help4">For example: <code>https://www.google.com/maps/&#64;[lat],[lon],18z</code> or <code>https://demo.tailormap.com/#&#64;[X],[Y],18</code></div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help5">You can also use <code>[GPS-X]</code>, <code>[GPS-Y]</code>, <code>[GPS-lat]</code> and <code>[GPS-lon]</code> placeholders in the URL.</div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help6">Those will be replaced by the current device location.</div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help7">
+      <code>[GPS-X]</code> and <code>[GPS-Y]</code> use the configured projection, <code>[GPS-lat]</code> and <code>[GPS-lon]</code> use WGS84.
+    </div>
+    <div i18n="@@admin-core.components.coordinate-link-window-help8">
+      For example, to open a route from your device location to the clicked location in Google Maps: <code>https://www.google.com/maps/dir/[GPS-lat],[GPS-lon]/[lat],[lon]</code>
+    </div>
   </tm-info-message>
   <div class="url-form" [formGroup]="formGroup">
     @for(urlForm of urlList.controls; track urlForm; let i = $index) {

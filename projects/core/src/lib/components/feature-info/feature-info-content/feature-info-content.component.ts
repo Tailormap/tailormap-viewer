@@ -25,6 +25,7 @@ export class FeatureInfoContentComponent {
   public isPrevButtonDisabled = input<boolean>(false);
   public isNextButtonDisabled = input<boolean>(false);
   public isEditPossible = input<boolean>(false);
+  public hideEmptyValues = input<boolean>(false);
 
   public showNextFeatureInfoFeature = output<void>();
   public showPreviousFeatureInfoFeature = output<void>();
@@ -83,4 +84,16 @@ export class FeatureInfoContentComponent {
     SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
+  public shouldShowAttribute(att: { label: string; attributeValue: any; key: string }) {
+    if (!this.hideEmptyValues()) {
+      return true;
+    }
+    if (att.attributeValue === null) {
+      return false;
+    }
+    if (typeof att.attributeValue === 'string' && (att.attributeValue as string).trim() === '') {
+      return false;
+    }
+    return true;
+  }
 }

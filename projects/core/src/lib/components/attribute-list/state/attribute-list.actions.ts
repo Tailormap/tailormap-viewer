@@ -85,3 +85,13 @@ export const setSelectedDataId = createAction(
   `${attributeListActionsPrefix} Set Selected Data Id`,
   props<{ tabId: string; dataId: string }>(),
 );
+
+export const updateRowChecked = createAction(
+  `${attributeListActionsPrefix} Update Row Checked`,
+  props<{ tabId: string; dataId: string; rowId: string; checked: boolean }>(),
+);
+
+export const updateAllRowsChecked = createAction(
+  `${attributeListActionsPrefix} Update All Rows Checked`,
+  props<{ tabId: string; dataId: string; checked: boolean }>(),
+);

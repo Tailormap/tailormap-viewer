@@ -758,6 +758,10 @@
         <source>Add folder</source>
         <target>Ordner hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.add-keyword" datatype="html">
+        <source>Add keyword</source>
+        <target>Schlüsselwort hinzufügen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
         <target>Kartendienst hinzufügen</target>
@@ -902,6 +906,10 @@
         <source>Are you sure you want to delete service <x id="PH" equiv-text="geoService.title"/>? This action cannot be undone.</source>
         <target>Möchten Sie den Service <x id="PH" equiv-text="geoService.title"/> wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
+        <source>Leave empty to use the description as provided by the service</source>
+        <target>Leer lassen, um die Beschreibung zu verwenden, wie sie vom Dienst bereitgestellt wird</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
         <target>Bearbeiten von <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/> </target>
@@ -921,6 +929,10 @@
       <trans-unit id="admin-core.catalog.edit-settings-for-layer" datatype="html">
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
         <target>Bearbeiten der Einstellungen für Ebene <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
+        <source>Enter keyword</source>
+        <target>Schlüsselwort eingeben</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -1097,6 +1109,10 @@
       <trans-unit id="admin-core.catalog.insert-feature-type-attribute" datatype="html">
         <source>Insert feature type attribute</source>
         <target>Attribut einfügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords" datatype="html">
+        <source>Keywords (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</source>
+        <target>Schlüsselwörter (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>
@@ -1305,10 +1321,6 @@
       <trans-unit id="admin-core.catalog.title-hint" datatype="html">
         <source>Leave empty to use the title as provided by the service</source>
         <target>Leer lassen, um den Titel zu verwenden, wie er vom Dienst bereitgestellt wird.</target>
-      </trans-unit>
-      <trans-unit id="admin-core.catalog.description-hint" datatype="html">
-        <source>Leave empty to use the description as provided by the service</source>
-        <target>Leer lassen, um die Beschreibung zu verwenden, wie sie vom Dienst bereitgestellt wird</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
@@ -1618,6 +1630,22 @@
         <source>For example: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> or <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
         <target>Zum Beispiel: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/@[lat],[lon],18z<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> oder <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://demo.tailormap.com/#@[X],[Y],18<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help5" datatype="html">
+        <source>You can also use <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> placeholders in the URL.</source>
+        <target>Sie können auch die Platzhalter <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> und <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> in der URL verwenden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help6" datatype="html">
+        <source>Those will be replaced by the current device location.</source>
+        <target>Diese werden durch den aktuellen Gerätestandort ersetzt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help7" datatype="html">
+        <source><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> use the configured projection, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> and <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> use WGS84. </source>
+        <target><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-X]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> und <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-Y]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> verwenden die konfigurierte Projektion, <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lat]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> und <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>[GPS-lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> verwenden WGS84. </target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.coordinate-link-window-help8" datatype="html">
+        <source> For example, to open a route from your device location to the clicked location in Google Maps: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/dir/[GPS-lat],[GPS-lon]/[lat],[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></source>
+        <target> Beispiel: Um eine Route von Ihrem Gerätestandort zum angeklickten Ort in Google Maps zu öffnen: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>https://www.google.com/maps/dir/[GPS-lat],[GPS-lon]/[lat],[lon]<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.components.coordinate-link-window-title" datatype="html">
         <source>Coordinate link window title</source>
         <target>Titel für Koordinaten-Link-Fenster</target>
@@ -1641,6 +1669,10 @@
       <trans-unit id="admin-core.components.feature-info-title" datatype="html">
         <source>Feature info</source>
         <target>Feature-Informationen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.feature-info.hide-empty-values" datatype="html">
+        <source>Hide attributes with empty values</source>
+        <target>Attribute mit leeren Werten ausblenden</target>
       </trans-unit>
       <trans-unit id="admin-core.components.feature-info.show-edit-button" datatype="html">
         <source>Show button to edit the feature</source>

@@ -11,4 +11,6 @@ export interface LayerSettingsModel {
   attribution?: string;
   legendImageId?: string | null;
   authorizationRules?: AuthorizationRuleGroup[];
+  hiddenKeywords?: string[];
+  extraKeywords?: string[];
 }

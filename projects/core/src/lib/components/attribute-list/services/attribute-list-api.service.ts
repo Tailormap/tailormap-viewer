@@ -99,4 +99,9 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
         }),
       );
   }
+
+  public canCheckRows$(): Observable<boolean> {
+    return of(false);
+  }
+
 }

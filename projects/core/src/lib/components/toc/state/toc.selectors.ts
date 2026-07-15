@@ -25,7 +25,8 @@ export const selectFilteredLayerTree = createSelector(
     const filterTerms = FilterHelper.createFilterTerms(filterTerm);
     return layerTreeNodes
       .map(layerNode => LayerTreeNodeHelper.getTreeModelForLayerTreeNode(layerNode, layers))
-      .filter(layerNode => FilterHelper.matchesFilterTerm(filterTerms, layerNode.label));
+      .filter(layerNode => FilterHelper.matchesFilterTerm(filterTerms, layerNode.label)
+          || FilterHelper.matchesFilterTerm(filterTerms, (layerNode.metadata?.keywords || []).join(' ')));
   },
 );
 

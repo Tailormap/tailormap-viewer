@@ -66,6 +66,14 @@
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
+        <source>Select all rows</source>
+        <target>Selecteer alle rijen</target>
+      </trans-unit>
+      <trans-unit id="core.attribute-list.select-row" datatype="html">
+        <source>Select row</source>
+        <target>Selecteer rij</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
         <target>Sorteer op <x id="PH" equiv-text="columnLabel"/></target>
@@ -261,6 +269,10 @@
       <trans-unit id="core.coordinate-link-window" datatype="html">
         <source>Coordinate Link Window</source>
         <target>Coördinatenlinkvenster</target>
+      </trans-unit>
+      <trans-unit id="core.coordinate-link-window.no-location" datatype="html">
+        <source>Failed to determine your location: <x id="PH" equiv-text="err"/>. Your location is needed for this link.</source>
+        <target>Niet gelukt om uw locatie te bepalen: <x id="PH" equiv-text="err"/>. Uw locatie is nodig voor deze link.</target>
       </trans-unit>
       <trans-unit id="core.coordinate-link-window.select-layer" datatype="html">
         <source>Select link to open</source>
@@ -537,6 +549,10 @@
       <trans-unit id="core.edit.attachments" datatype="html">
         <source>Attachments</source>
         <target>Bijlagen</target>
+      </trans-unit>
+      <trans-unit id="core.edit.copy-from-other-layer" datatype="html">
+        <source>Copy from other layer</source>
+        <target>Kopiëren van andere laag</target>
       </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
@@ -1423,9 +1439,9 @@
         <source>Expand all groups</source>
         <target>Alle groepen uitklappen</target>
       </trans-unit>
-      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
-        <source>Filter by layer name...</source>
-        <target>Filter op laagnaam...</target>
+      <trans-unit id="core.toc.filter" datatype="html">
+        <source>Filter by layer name or keywords...</source>
+        <target>Filter op laagnaam of trefwoorden...</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>

@@ -142,13 +142,16 @@ export const selectFeatureInfoLayerListItems = createSelector(
   selectFeatureInfoLayers,
   selectSelectedLayerId,
   (layers, selectedLayerId): FeatureInfoLayerListItemModel[] => {
-    return layers.map(l => ({
-      ...l,
-      selected: l.id === selectedLayerId,
-      disabled: FeatureInfoHelper.isLayerDisabled(l),
-    }));
-  },
-);
+  return layers
+    .filter(l => l.totalCount !== 0)
+    .map(l => {
+      return {
+        ...l,
+        selected: l.id === selectedLayerId,
+        disabled: FeatureInfoHelper.isLayerDisabled(l),
+      };
+    });
+});
 
 export const selectCurrentFeatureForEdit = createSelector(
   selectFeatureInfoFeatures,
