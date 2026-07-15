@@ -16,7 +16,7 @@ interface DemoLocation {
 @Component({
   selector: 'tm-stories-demo',
   templateUrl: './stories-demo.component.html',
-  styleUrls: [ './stories-demo.component.css' ],
+  styleUrls: ['./stories-demo.component.css'],
   imports: [
     MatButton,
   ],
