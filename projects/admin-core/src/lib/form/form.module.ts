@@ -1,13 +1,11 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormListComponent } from './form-list/form-list.component';
 import { FormHomeComponent } from './form-home/form-home.component';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { formStateKey } from './state/form.state';
 import { formReducer } from './state/form.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { FormEffects } from './state/form.effects';
 import { FormEditComponent } from './form-edit/form-edit.component';
 import { FormCreateComponent } from './form-create/form-create.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
@@ -34,8 +32,6 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(formStateKey, formReducer),
-    EffectsModule.forFeature([FormEffects]),
     SharedAdminComponentsModule,
     CatalogModule,
   ],
@@ -46,11 +42,10 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
     FormCreateComponent,
     FormWarningMessageComponent,
   ],
+  providers: [
+    provideState(formStateKey, formReducer),
+    provideEnvironmentInitializer(() => inject(FormService).listenForApplicationChanges()),
+  ],
 })
 export class FormModule {
-  constructor() {
-    const formService = inject(FormService);
-
-    formService.listenForApplicationChanges();
-  }
 }

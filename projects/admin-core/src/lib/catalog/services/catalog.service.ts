@@ -1,19 +1,25 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CatalogItemKindEnum, CatalogNodeModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { catchError, combineLatest, concatMap, map, of, Subject, switchMap, take, tap } from 'rxjs';
+import { ApiResponseHelper, CatalogItemKindEnum, CatalogNodeModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { catchError, combineLatest, concatMap, forkJoin, map, of, Subject, switchMap, take, tap } from 'rxjs';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import {
-  selectCatalog, selectCatalogNodeById, selectFeatureSources, selectGeoServices,
+  selectCatalog, selectCatalogLoadStatus, selectCatalogNodeById, selectDraftFeatureSource, selectDraftFeatureSourceId,
+  selectDraftFeatureSourceLoadStatus, selectDraftGeoService, selectDraftGeoServiceId, selectDraftGeoServiceLoadStatus,
+  selectFeatureSources, selectGeoServices,
 } from '../state/catalog.selectors';
-import { updateCatalog } from '../state/catalog.actions';
+import {
+  loadCatalogFailed, loadCatalogStart, loadCatalogSuccess, loadDraftFeatureSource, loadDraftFeatureSourceFailed,
+  loadDraftFeatureSourceStart, loadDraftFeatureSourceSuccess, loadDraftGeoService, loadDraftGeoServiceFailed,
+  loadDraftGeoServiceStart, loadDraftGeoServiceSuccess, updateCatalog,
+} from '../state/catalog.actions';
 import { nanoid } from 'nanoid';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
 import { CatalogTreeMoveHelper } from '../helpers/catalog-tree-move.helper';
-import { DebounceHelper } from '@tailormap-viewer/shared';
+import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +36,102 @@ export class CatalogService implements OnDestroy {
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public loadCatalog(): void {
+    this.store$.select(selectCatalogLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadCatalogStart());
+        forkJoin([
+          this.adminApiService.getCatalog$().pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.catalog.error-loading-catalog:Error while loading catalog` })),
+          ),
+          this.adminApiService.getGeoServiceSummaries$().pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.catalog.error-loading-geo-services:Error while loading geo services` })),
+          ),
+          this.adminApiService.getFeatureSourceSummaries$().pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature sources` })),
+          ),
+        ]).subscribe(([ catalogResponse, geoServiceResponse, featureSourceResponse ]) => {
+          if (
+            ApiResponseHelper.isErrorResponse(catalogResponse) ||
+            ApiResponseHelper.isErrorResponse(geoServiceResponse) ||
+            ApiResponseHelper.isErrorResponse(featureSourceResponse)
+          ) {
+            this.store$.dispatch(loadCatalogFailed({
+              catalogError: ApiResponseHelper.isErrorResponse(catalogResponse) ? catalogResponse.error : '',
+              geoServiceError: ApiResponseHelper.isErrorResponse(geoServiceResponse) ? geoServiceResponse.error : '',
+              featureSourceError: ApiResponseHelper.isErrorResponse(featureSourceResponse) ? featureSourceResponse.error : '',
+            }));
+            return;
+          }
+          this.store$.dispatch(loadCatalogSuccess({
+            nodes: catalogResponse,
+            geoServices: geoServiceResponse,
+            featureSources: featureSourceResponse,
+          }));
+        });
+      });
+  }
+
+  public loadDraftGeoService(id: string): void {
+    combineLatest([
+      this.store$.select(selectDraftGeoService),
+      this.store$.select(selectDraftGeoServiceId),
+      this.store$.select(selectDraftGeoServiceLoadStatus),
+    ]).pipe(take(1)).subscribe(([ currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+      if (currentDraft?.id === id) {
+        return;
+      }
+      if (draftLoadingId === id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+        return;
+      }
+      this.store$.dispatch(loadDraftGeoService({ id }));
+      this.store$.dispatch(loadDraftGeoServiceStart());
+      this.adminApiService.getGeoService$({ id })
+        .pipe(
+          catchError(() => of({ error: $localize `:@@admin-core.catalog.error-loading-geo-services:Error while loading geo services` })),
+        )
+        .subscribe(geoServiceResponse => {
+          if (ApiResponseHelper.isErrorResponse(geoServiceResponse)) {
+            this.store$.dispatch(loadDraftGeoServiceFailed({ error: geoServiceResponse.error }));
+            return;
+          }
+          this.store$.dispatch(loadDraftGeoServiceSuccess({ geoService: geoServiceResponse }));
+        });
+    });
+  }
+
+  public loadDraftFeatureSource(id: string): void {
+    combineLatest([
+      this.store$.select(selectDraftFeatureSource),
+      this.store$.select(selectDraftFeatureSourceId),
+      this.store$.select(selectDraftFeatureSourceLoadStatus),
+    ]).pipe(take(1)).subscribe(([ currentDraft, draftLoadingId, draftLoadingStatus ]) => {
+      if (`${currentDraft?.id}` === id) {
+        return;
+      }
+      if (draftLoadingId === id && draftLoadingStatus === LoadingStateEnum.LOADING) {
+        return;
+      }
+      this.store$.dispatch(loadDraftFeatureSource({ id }));
+      this.store$.dispatch(loadDraftFeatureSourceStart());
+      this.adminApiService.getFeatureSource$({ id })
+        .pipe(
+          catchError(() => of({ error: $localize `:@@admin-core.catalog.error-loading-feature-sources:Error while loading feature sources` })),
+        )
+        .subscribe(featureSourceResponse => {
+          if (ApiResponseHelper.isErrorResponse(featureSourceResponse)) {
+            this.store$.dispatch(loadDraftFeatureSourceFailed({ error: featureSourceResponse.error }));
+            return;
+          }
+          this.store$.dispatch(loadDraftFeatureSourceSuccess({ featureSource: featureSourceResponse }));
+        });
+    });
   }
 
   public listenForCatalogChanges() {

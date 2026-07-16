@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TailormapAdminApiV1Service,
+  ApiResponseHelper, ApplicationModel, AppTreeLevelNodeModel, AppTreeNodeModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, distinctUntilChanged, filter, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  addApplicationRootNodes, addApplication, deleteApplication, loadApplications,
+  addApplicationRootNodes, addApplication, deleteApplication, loadApplicationsFailed, loadApplicationsStart, loadApplicationsSuccess,
   updateApplication,
 } from '../state/application.actions';
 import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
@@ -71,12 +71,34 @@ export class ApplicationService implements OnDestroy {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL) {
-            this.store$.dispatch(loadApplications());
+            this.loadApplications();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectApplicationList)),
       );
+  }
+
+  public loadApplications(): void {
+    this.store$.select(selectApplicationsLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadApplicationsStart());
+        this.adminApiService.getApplications$()
+          .pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.application.error-loading-applications:Error while loading list of applications` })),
+          )
+          .subscribe(response => {
+            if (ApiResponseHelper.isErrorResponse(response)) {
+              this.store$.dispatch(loadApplicationsFailed({ error: response.error }));
+              return;
+            }
+            this.store$.dispatch(loadApplicationsSuccess({ applications: response }));
+          });
+      });
   }
 
   public createApplication$(application: ApplicationCreateModel) {

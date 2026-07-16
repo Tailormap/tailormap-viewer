@@ -1,15 +1,13 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { oidcConfigurationStateKey } from './state/oidc-configuration.state';
 import { oidcConfigurationReducer } from './state/oidc-configuration.reducer';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { OIDCConfigurationEditSettingsComponent } from './oidc-configuration-edit-settings/oidc-configuration-edit-settings.component';
 import { OIDCConfigurationCreateComponent } from './oidc-configuration-create/oidc-configuration-create.component';
 import { OIDCConfigurationListComponent } from './oidc-configuration-list/oidc-configuration-list.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { RouterOutlet } from '@angular/router';
-import { EffectsModule } from '@ngrx/effects';
-import { OIDCConfigurationEffects } from './state/oidc-configuration.effects';
 import { OIDCConfigurationFormComponent } from './oidc-configuration-form/oidc-configuration-form.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
 import { OIDCConfigurationHomeComponent } from './oidc-configuration-home/oidc-configuration-home.component';
@@ -32,8 +30,6 @@ import { Routes as AdminRoutes } from '../routes';
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(oidcConfigurationStateKey, oidcConfigurationReducer),
-    EffectsModule.forFeature([OIDCConfigurationEffects]),
     SharedAdminComponentsModule,
     RouterOutlet,
  ],
@@ -41,30 +37,30 @@ import { Routes as AdminRoutes } from '../routes';
     OIDCConfigurationPageComponent,
     OIDCConfigurationListComponent,
   ],
+  providers: [
+    provideState(oidcConfigurationStateKey, oidcConfigurationReducer),
+    provideEnvironmentInitializer(() => {
+      inject(OIDCConfigurationService).listenForOIDCConfigurationChanges();
+      inject(AdminSettingsRouterService).registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single sign-on`, {
+        path: AdminRoutes.OIDC_CONFIGURATION,
+        component: OIDCConfigurationPageComponent,
+        children: [
+          {
+            path: '',
+            component: OIDCConfigurationHomeComponent,
+          },
+          {
+            path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
+            component: OIDCConfigurationCreateComponent,
+          },
+          {
+            path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
+            component: OIDCConfigurationEditComponent,
+          },
+        ],
+      });
+    }),
+  ],
 })
 export class OIDCConfigurationModule {
-  constructor() {
-    const oidcConfigurationService = inject(OIDCConfigurationService);
-    const adminSettingsRouterService = inject(AdminSettingsRouterService);
-
-    oidcConfigurationService.listenForOIDCConfigurationChanges();
-    adminSettingsRouterService.registerSettingsRoutes($localize `:@@admin-core.navigation.single-sign-on:Single sign-on`, {
-      path: AdminRoutes.OIDC_CONFIGURATION,
-      component: OIDCConfigurationPageComponent,
-      children: [
-        {
-          path: '',
-          component: OIDCConfigurationHomeComponent,
-        },
-        {
-          path: AdminRoutes.OIDC_CONFIGURATION_CREATE,
-          component: OIDCConfigurationCreateComponent,
-        },
-        {
-          path: AdminRoutes.OIDC_CONFIGURATION_DETAILS,
-          component: OIDCConfigurationEditComponent,
-        },
-      ],
-    });
-  }
 }

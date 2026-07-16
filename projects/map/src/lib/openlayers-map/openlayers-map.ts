@@ -27,6 +27,7 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumManager } from './cesium-map/cesium-manager';
+import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 import { FeatureModelType } from '../models/feature-model.type';
@@ -47,6 +48,10 @@ export class OpenLayersMap implements MapViewerModel {
   private mapPadding: number[] | undefined;
 
   private hasUserInteractedSubject = new BehaviorSubject(false);
+
+  private eventManager = new OpenLayersEventManager();
+  private cesiumEventManager = new CesiumEventManager();
+  private snappingManager = new OpenLayersSnappingManager();
 
   constructor(
     private ngZone: NgZone,
@@ -138,20 +143,20 @@ export class OpenLayersMap implements MapViewerModel {
       this.map.value.dispose();
     }
 
-    OpenLayersEventManager.destroy();
-    OpenLayersSnappingManager.destroy();
+    this.eventManager.destroy();
+    this.snappingManager.destroy();
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
-    OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
-    OpenLayersSnappingManager.init(olMap, layerManager);
+    this.eventManager.initEvents(olMap, this.ngZone, this.in3d);
+    this.snappingManager.init(olMap, layerManager);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.eventManager, this.cesiumEventManager, this.snappingManager);
 
     // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
     merge(
       timer(5000),
-      OpenLayersEventManager.onMapClick$(),
-      OpenLayersEventManager.onMapMoveStart$(),
+      this.eventManager.onMapClick$(),
+      this.eventManager.onMapMoveStart$(),
     )
       .pipe(
         take(1),
@@ -160,7 +165,7 @@ export class OpenLayersMap implements MapViewerModel {
         attributionControl?.setCollapsed(true);
       });
 
-    race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
+    race([ this.eventManager.onMapClick$(), this.eventManager.onMapMoveStart$() ])
       .pipe(take(1))
       .subscribe(() => this.hasUserInteractedSubject.next(true));
 
@@ -324,7 +329,7 @@ export class OpenLayersMap implements MapViewerModel {
   public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number] | null> {
     return merge(
       this.getMap$(),
-      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+      this.eventManager.onMapMove$().pipe(map(evt => evt.map)))
         .pipe(
           map(olMap => {
             const px = olMap.getPixelFromCoordinate(coordinates);
@@ -339,7 +344,7 @@ export class OpenLayersMap implements MapViewerModel {
   public getMapViewDetails$(): Observable<MapViewDetailsModel> {
     return merge(
       this.getMap$(),
-      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+      this.eventManager.onMapMove$().pipe(map(evt => evt.map)))
       .pipe(
         map(olMap => {
           const view = olMap.getView();
@@ -415,6 +420,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   private _render(container: HTMLElement) {
+    this.map.next(null);
     this.executeMapAction(olMap => {
       olMap.setTarget(container);
       olMap.render();
@@ -450,7 +456,7 @@ export class OpenLayersMap implements MapViewerModel {
     if (!this.made3d) {
       this.made3d = true;
       this.executeMapAction(olMap => {
-        this.map3d.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
+        this.map3d.next(new CesiumManager(olMap, this.ngZone, this.cesiumEventManager, this.map.getValue()?.getView().getProjection()));
       });
       this.executeCesiumAction(cesiumManager => {
         cesiumManager.init();
@@ -486,23 +492,23 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public getPointerDrag$(): Observable<void> {
-    return OpenLayersEventManager.onPointerDrag$().pipe(map(() => undefined));
+    return this.eventManager.onPointerDrag$().pipe(map(() => undefined));
   }
 
   public allowSnapping(allow: boolean) {
-    OpenLayersSnappingManager.allowSnapping(allow);
+    this.snappingManager.allowSnapping(allow);
   }
 
   public setSnappingLayerStyle(style: OlMapStyleType) {
-    OpenLayersSnappingManager.setSnappingLayerStyle(style);
+    this.snappingManager.setSnappingLayerStyle(style);
   }
 
   public setSnappingTolerance(tolerance: number) {
-    OpenLayersSnappingManager.setSnappingTolerance(tolerance);
+    this.snappingManager.setSnappingTolerance(tolerance);
   }
 
   public renderSnappingFeatures(features: FeatureModelType[]) {
-    return OpenLayersSnappingManager.renderFeatures(features);
+    return this.snappingManager.renderFeatures(features);
   }
 
 }

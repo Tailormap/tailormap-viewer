@@ -3,11 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { EditFormComponent } from './edit-form/edit-form.component';
 import { EditComponent } from './edit/edit.component';
-import { StoreModule } from '@ngrx/store';
-import { editStateKey } from './state/edit.state';
-import { editReducer } from './state/edit.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { EditEffects } from './state/edit.effects';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { EditSelectFeatureComponent } from './edit-select-feature/edit-select-feature.component';
@@ -18,6 +13,9 @@ import { EditAttachmentsFormComponent } from './edit-attachments-form/edit-attac
 import { EditMenuButtonComponent } from './edit-menu-button/edit-menu-button.component';
 import { MenubarModule } from "../menubar";
 import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.component';
+import { provideState } from '@ngrx/store';
+import { editStateKey } from './state/edit.state';
+import { editReducer } from './state/edit.reducer';
 
 @NgModule({
   declarations: [
@@ -33,8 +31,6 @@ import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(editStateKey, editReducer),
-    EffectsModule.forFeature([EditEffects]),
     ApplicationMapModule,
     CoreSharedModule,
     MatBadge,
@@ -44,6 +40,9 @@ import { EditMobilePanelComponent } from './edit-mobile-panel/edit-mobile-panel.
     EditComponent,
     EditDialogComponent,
     EditMobilePanelComponent,
+  ],
+  providers: [
+    provideState(editStateKey, editReducer),
   ],
 })
 export class EditComponentModule {

@@ -11,6 +11,8 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
   constructor(
     public id: string,
     private _toolConfig: MapClickToolConfigModel,
+    private eventManager: OpenLayersEventManager,
+    private cesiumEventManager: CesiumEventManager,
   ) {}
 
   private mapClickSubject: Subject<MapClickEvent> = new Subject<MapClickEvent>();
@@ -19,6 +21,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public destroy(): void {
     this.disable();
+    this.mapClickSubject.complete();
   }
 
   public disable(): void {
@@ -29,7 +32,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public enable(): void {
     this.enabled = new Subject();
-    CesiumEventManager.onMap3dClick$()
+    this.cesiumEventManager.onMap3dClick$()
       .pipe(takeUntil(this.enabled))
       .subscribe(evt => {
         this.mapClickSubject.next({
@@ -38,7 +41,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
           cesiumFeatureInfo: evt.featureInfo,
         });
       });
-    OpenLayersEventManager.onMapClick$()
+    this.eventManager.onMapClick$()
       .pipe(takeUntil(this.enabled))
       .subscribe(click => {
         const { scale, resolution } = OlMapScaleHelper.getResolutionAndScale(click.map.getView());

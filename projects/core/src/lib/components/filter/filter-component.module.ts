@@ -10,9 +10,6 @@ import { FilterListItemComponent } from './filter-list-item/filter-list-item.com
 import { FilterModule } from '../../filter/filter.module';
 import { SpatialFilterFormComponent } from './spatial-filter-form/spatial-filter-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
-import { StoreModule } from '@ngrx/store';
-import { filterComponentStateKey } from './state/filter-component.state';
-import { filterComponentReducer } from './state/filter-component.reducer';
 import { SpatialFilterFormSelectLayersComponent } from './spatial-filter-form-select-layers/spatial-filter-form-select-layers.component';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries/spatial-filter-form-draw-geometries.component';
 import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer/spatial-filter-form-buffer.component';
@@ -27,6 +24,9 @@ import { DatePickerFilterComponent } from './edit-attribute-filters/date-picker-
 import { DropdownListFilterComponent } from './edit-attribute-filters/dropdown-list-filter/dropdown-list-filter.component';
 import { ResetFiltersButtonComponent } from './reset-filters-button/reset-filters-button.component';
 import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometries/map-drawing-buttons/map-drawing-buttons.component';
+import { filterComponentReducer } from './state/filter-component.reducer';
+import { provideState } from '@ngrx/store';
+import { filterComponentStateKey } from './state/filter-component.state';
 
 
 
@@ -53,7 +53,6 @@ import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometrie
   ],
   imports: [
     CommonModule,
-    StoreModule.forFeature(filterComponentStateKey, filterComponentReducer),
     MenubarModule,
     SharedModule,
     FilterModule,
@@ -61,6 +60,9 @@ import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometrie
   ],
   exports: [
     FilterComponent,
+  ],
+  providers: [
+    provideState(filterComponentStateKey, filterComponentReducer),
   ],
 })
 export class FilterComponentModule { }

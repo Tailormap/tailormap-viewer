@@ -37,8 +37,6 @@ import { AttributeListSourceModel } from '../models/attribute-list-source.model'
 import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { EffectsModule } from '@ngrx/effects';
-import { AttributeListEffects } from '../state/attribute-list.effects';
 import { AttributeListApiService } from '../services/attribute-list-api.service';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 import { selectIsLoadingTabs } from '../state/attribute-list.selectors';
@@ -181,7 +179,6 @@ const setupWithActualState = async (store?: StoreDef) => {
       NoopAnimationsModule,
       MatIconTestingModule,
       StoreModule.forRoot(reducers, { initialState }),
-      EffectsModule.forRoot([AttributeListEffects]),
     ],
     providers: [
       provideHttpClient(
@@ -192,6 +189,7 @@ const setupWithActualState = async (store?: StoreDef) => {
       ),
       { provide: TAILORMAP_API_V1_SERVICE, useValue: mockService },
       AttributeListManagerService,
+      getMapServiceMock().provider,
     ],
     declarations: [
       AttributeListComponent,

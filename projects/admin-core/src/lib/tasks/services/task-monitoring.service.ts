@@ -1,11 +1,15 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, first, interval, map, of } from 'rxjs';
-import { selectTask } from '../state/tasks.selectors';
-import { deleteTaskSuccess, loadTaskDetails } from '../state/tasks.actions';
-import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { BehaviorSubject, catchError, first, interval, map, of, take } from 'rxjs';
+import { selectTask, selectTaskDetailsLoadStatus, selectTasksLoadStatus } from '../state/tasks.selectors';
+import {
+  deleteTaskSuccess, loadTaskDetailsFailed, loadTaskDetailsStart, loadTaskDetailsSuccess, loadTasksFailed, loadTasksStart,
+  loadTasksSuccess,
+} from '../state/tasks.actions';
+import { ApiResponseHelper, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +30,8 @@ export class TaskMonitoringService {
 
     interval(1000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
       () => {
-        if (this.uuid$.value && this.type$.value && this.monitoring$) {
-          this.store$.dispatch(loadTaskDetails({ taskUuid: this.uuid$.value, taskType: this.type$.value }));
+        if (this.uuid$.value && this.type$.value && this.monitoring$.value) {
+          this.loadTaskDetails(this.uuid$.value, this.type$.value);
         }
       },
     );
@@ -42,7 +46,7 @@ export class TaskMonitoringService {
       task => {
         if (task) {
           this.type$.next(task.type);
-          this.store$.dispatch(loadTaskDetails({ taskUuid: uuid, taskType: task.type }));
+          this.loadTaskDetails(uuid, task.type);
         }
       },
     );
@@ -50,6 +54,44 @@ export class TaskMonitoringService {
 
   public stopMonitoring() {
     this.monitoring$.next(false);
+  }
+
+  public loadTasks(): void {
+    this.store$.select(selectTasksLoadStatus).pipe(take(1)).subscribe(loadStatus => {
+      if (loadStatus !== LoadingStateEnum.LOADED) {
+        this.store$.dispatch(loadTasksStart());
+      }
+    });
+    this.adminApiService.getTasks$()
+      .pipe(
+        catchError(() => of({ error: $localize `:@@admin-core.tasks.error-loading-tasks:Error while loading list of tasks` })),
+      )
+      .subscribe(response => {
+        if (ApiResponseHelper.isErrorResponse(response)) {
+          this.store$.dispatch(loadTasksFailed({ error: response.error }));
+          return;
+        }
+        this.store$.dispatch(loadTasksSuccess({ tasks: response }));
+      });
+  }
+
+  public loadTaskDetails(taskUuid: string, taskType: string): void {
+    this.store$.select(selectTaskDetailsLoadStatus).pipe(take(1)).subscribe(loadStatus => {
+      if (loadStatus !== LoadingStateEnum.LOADED) {
+        this.store$.dispatch(loadTaskDetailsStart());
+      }
+    });
+    this.adminApiService.getTaskDetails$(taskUuid, taskType)
+      .pipe(
+        catchError(() => of({ error: $localize `:@@admin-core.tasks.error-loading-task-details:Error while loading task details` })),
+      )
+      .subscribe(response => {
+        if (ApiResponseHelper.isErrorResponse(response)) {
+          this.store$.dispatch(loadTaskDetailsFailed({ error: response.error }));
+          return;
+        }
+        this.store$.dispatch(loadTaskDetailsSuccess({ taskDetails: response }));
+      });
   }
 
   public startTask() {

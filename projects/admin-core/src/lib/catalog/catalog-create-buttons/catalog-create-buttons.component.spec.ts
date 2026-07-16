@@ -60,7 +60,7 @@ const setup = async (hasNode = false) => {
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
       { provide: Router, useValue: { navigateByUrl: jest.fn() } },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

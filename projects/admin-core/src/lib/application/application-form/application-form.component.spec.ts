@@ -31,7 +31,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
       updateApplication: onUpdate,
     },
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       provideMockStore({ initialState: {
         [userStateKey]: initialUserState,

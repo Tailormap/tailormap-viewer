@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { UserListComponent } from './user-list/user-list.component';
@@ -13,11 +13,9 @@ import { SharedAdminComponentsModule } from '../shared/components/shared-admin-c
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { GroupCreateComponent } from './group-create/group-create.component';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { userStateKey } from './state/user.state';
 import { userReducer } from './state/user.reducer';
-import { EffectsModule } from '@ngrx/effects';
-import { UserEffects } from './state/user.effects';
 import { UserService } from './services/user.service';
 import { GroupService } from './services/group.service';
 
@@ -39,20 +37,18 @@ import { GroupService } from './services/group.service';
     SharedModule,
     RouterModule,
     SharedAdminComponentsModule,
-    StoreModule.forFeature(userStateKey, userReducer),
-    EffectsModule.forFeature([UserEffects]),
   ],
   exports: [
     UserListComponent,
     GroupListComponent,
   ],
+  providers: [
+    provideState(userStateKey, userReducer),
+    provideEnvironmentInitializer(() => {
+      inject(UserService).listenForUserChanges();
+      inject(GroupService).listenForGroupChanges();
+    }),
+  ],
 })
 export class UserModule {
-  constructor() {
-    const userService = inject(UserService);
-    const groupService = inject(GroupService);
-
-    userService.listenForUserChanges();
-    groupService.listenForGroupChanges();
-  }
 }

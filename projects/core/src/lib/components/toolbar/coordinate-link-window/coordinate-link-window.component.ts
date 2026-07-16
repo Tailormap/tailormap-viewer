@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel } from '@tailormap-viewer/api';
-import { combineLatest, concatMap, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { take, withLatestFrom } from 'rxjs/operators';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -121,7 +121,7 @@ export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
         tap(({ tool }) => {
           this.tool = tool.id;
         }),
-        concatMap(({ tool }) => tool.mapClick$),
+        switchMap(({ tool }) => tool.mapClick$),
         switchMap(({ mapCoordinates }) => {
           const currentUrl = this.urlControl.value;
           if (!currentUrl || !currentUrl.projection) {

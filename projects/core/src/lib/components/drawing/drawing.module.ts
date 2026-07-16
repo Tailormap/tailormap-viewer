@@ -4,13 +4,13 @@ import { DrawingComponent } from './drawing/drawing.component';
 import { DrawingMenuButtonComponent } from './drawing-menu-button/drawing-menu-button.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { MenubarModule } from '../menubar';
-import { StoreModule } from '@ngrx/store';
-import { drawingStateKey } from './state/drawing.state';
-import { drawingReducer } from './state/drawing.reducer';
 import { DrawingStyleFormComponent } from './drawing-style-form/drawing-style-form.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { DrawingObjectsListComponent } from './drawing-objects-list/drawing-objects-list.component';
 import { DrawingStyleIconComponent } from '../../map';
+import { provideState } from '@ngrx/store';
+import { drawingReducer } from './state/drawing.reducer';
+import { drawingStateKey } from './state';
 
 @NgModule({
   declarations: [
@@ -23,13 +23,15 @@ import { DrawingStyleIconComponent } from '../../map';
     CommonModule,
     SharedModule,
     MenubarModule,
-    StoreModule.forFeature(drawingStateKey, drawingReducer),
     ApplicationMapModule,
     NgOptimizedImage,
     DrawingStyleIconComponent,
   ],
   exports: [
     DrawingComponent,
+  ],
+  providers: [
+    provideState(drawingStateKey, drawingReducer),
   ],
 })
 export class DrawingModule {

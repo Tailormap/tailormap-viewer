@@ -19,10 +19,9 @@ import {
 import { ExtendedFeatureSourceModel } from '../../catalog/models/extended-feature-source.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { selectFormsForFeatureType, selectFormsLoadStatus } from '../../form/state/form.selectors';
-import { loadForms } from '../../form/state/form.actions';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
-import { loadSearchIndexes } from '../../search-index/state/search-index.actions';
+import { SearchIndexService } from '../../search-index/services/search-index.service';
 import {
   ApplicationFeature, ApplicationFeatureSwitchService, BaseComponentTypeEnum, HiddenLayerFunctionality, Tileset3dStyle, WmsStyleModel,
 } from '@tailormap-viewer/api';
@@ -47,6 +46,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private featureSourceService = inject(FeatureSourceService);
   private formService = inject(FormService);
+  private searchIndexService = inject(SearchIndexService);
   private applicationFeatureSwitchService = inject(ApplicationFeatureSwitchService);
   private _node: TreeModel<AppTreeLayerNodeModel> | null = null;
   private _serviceLayer: ExtendedGeoServiceAndLayerModel | null = null;
@@ -220,7 +220,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadForms());
+          this.formService.loadForms();
         }
       });
 
@@ -231,7 +231,7 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
       )
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadSearchIndexes());
+          this.searchIndexService.loadSearchIndexes();
         }
       });
 

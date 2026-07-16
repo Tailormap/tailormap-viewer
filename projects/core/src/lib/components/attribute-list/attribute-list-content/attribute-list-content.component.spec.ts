@@ -13,6 +13,7 @@ import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { getMockApiService } from '../../../services/load-viewer.service.spec';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 describe('AttributeListContent', () => {
 
@@ -22,6 +23,7 @@ describe('AttributeListContent', () => {
       imports: [ MatProgressSpinnerModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
       providers: [
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
         provideMockStore({
           initialState: store,
         }),
@@ -37,6 +39,7 @@ describe('AttributeListContent', () => {
       imports: [ MatDialogModule, MatSnackBarModule ],
       providers: [
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
         provideMockStore({
           initialState: store,
         }),
@@ -52,6 +55,7 @@ describe('AttributeListContent', () => {
       declarations: [ AttributeListContentComponent, AttributeListTableComponent, PanelResizerComponent, TooltipDirective ],
       providers: [
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
         provideMockStore({
           initialState: {
             ...store,

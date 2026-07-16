@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { inject, NgModule, provideEnvironmentInitializer } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent,  ViewerAppComponent, PasswordResetComponent } from './pages';
 import { NavigationErrorRouterService } from './services/navigation-error-router.service';
+import { StoriesDemoComponent } from './pages/stories-demo/stories-demo.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -9,6 +10,7 @@ const routes: Routes = [
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },
   { path: 'service/:name', component: ViewerAppComponent },
+  { path: 'stories', component: StoriesDemoComponent },
   {
     path: 'admin',
     loadChildren: () => import('@tailormap-admin/admin-core').then(m => m.AdminCoreModule),
@@ -19,8 +21,11 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [
+    provideEnvironmentInitializer(() => {
+      inject(NavigationErrorRouterService).init();
+    }),
+  ],
 })
 export class CoreRoutingModule {
-  //eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor(_navigationErrorRouter: NavigationErrorRouterService) {}
 }

@@ -7,9 +7,9 @@ import { CoordinateHelper } from '../../helpers/coordinate.helper';
 
 export class CesiumEventManager {
 
-  private static map3DClickEvent: Subject<Selection3dModel> = new Subject<Selection3dModel>();
+  private map3DClickEvent: Subject<Selection3dModel> = new Subject<Selection3dModel>();
 
-  public static initClickEvent(
+  public initClickEvent(
     scene3D: Scene,
     silhouette: PostProcessStage | null,
     getLayerId: (index: number) => string | null,
@@ -22,11 +22,11 @@ export class CesiumEventManager {
     scene3D.postProcessStages.add(Cesium.PostProcessStageLibrary.createSilhouetteStage([silhouette]));
 
     cesiumEventHandler.setInputAction((movement: any) => {
-      CesiumEventManager.handleClick(scene3D, silhouette, getLayerId, projection2D, movement.position);
+      this.handleClick(scene3D, silhouette, getLayerId, projection2D, movement.position);
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }
 
-  public static simulateCenterClick(
+  public simulateCenterClick(
     scene3D: Scene,
     silhouette: PostProcessStage | null,
     getLayerId: (index: number) => string | null,
@@ -37,10 +37,10 @@ export class CesiumEventManager {
     }
     const canvas = scene3D.canvas;
     const centerPosition = new Cesium.Cartesian2(canvas.clientWidth / 2, canvas.clientHeight / 2);
-    CesiumEventManager.handleClick(scene3D, silhouette, getLayerId, projection2D, centerPosition);
+    this.handleClick(scene3D, silhouette, getLayerId, projection2D, centerPosition);
   }
 
-  private static handleClick(
+  private handleClick(
     scene3D: Scene,
     silhouette: PostProcessStage,
     getLayerId: (index: number) => string | null,
@@ -63,9 +63,9 @@ export class CesiumEventManager {
       const projection = new Cesium.WebMercatorProjection;
       pos = projection.project(cartographicPosition);
     }
-    if (!CesiumEventManager.isCesium3DTileFeature(pickedFeature)) {
+    if (!this.isCesium3DTileFeature(pickedFeature)) {
       silhouette.selected = [];
-      CesiumEventManager.map3DClickEvent.next({ position: pos, mouseCoordinates: windowPosition });
+      this.map3DClickEvent.next({ position: pos, mouseCoordinates: windowPosition });
     } else {
       let primitiveIndex: number = -1;
       for (let index = 0; index < scene3D.primitives.length; index++) {
@@ -91,21 +91,21 @@ export class CesiumEventManager {
         selection3D.featureInfo?.properties.push({ id: propertyId, value: pickedFeature.getProperty(propertyId) });
         selection3D.featureInfo?.columnMetadata.push({ layerId: layerId, name: propertyId, type: AttributeType.STRING });
       }
-      CesiumEventManager.map3DClickEvent.next(selection3D);
+      this.map3DClickEvent.next(selection3D);
     }
     scene3D.requestRender();
     setTimeout(() => { scene3D.requestRender(); }, 300);
   }
 
-  private static isCesium3DTileFeature(feature: Cesium3DTileFeature | unknown): feature is Cesium3DTileFeature {
+  private isCesium3DTileFeature(feature: Cesium3DTileFeature | unknown): feature is Cesium3DTileFeature {
     return Cesium.defined(feature) && feature instanceof Cesium.Cesium3DTileFeature;
   }
 
-  public static onMap3dClick$(): Observable<Selection3dModel> {
-    return CesiumEventManager.map3DClickEvent.asObservable();
+  public onMap3dClick$(): Observable<Selection3dModel> {
+    return this.map3DClickEvent.asObservable();
   }
 
-  public static createSilhouette(color: string, length: number): PostProcessStage {
+  public createSilhouette(color: string, length: number): PostProcessStage {
     const rgbColor = ColorHelper.getRgbForColor(color);
     const silhouette: PostProcessStage = Cesium.PostProcessStageLibrary.createEdgeDetectionStage();
     silhouette.uniforms.color = new Cesium.Color(rgbColor.r / 255, rgbColor.g / 255, rgbColor.b / 255, 1);
@@ -114,7 +114,7 @@ export class CesiumEventManager {
     return silhouette;
   }
 
-  public static enableKeyboardControl(scene3D: Scene, element: HTMLElement): void {
+  public enableKeyboardControl(scene3D: Scene, element: HTMLElement): void {
     const MOVE_AMOUNT = 50.0;
     const LOOK_AMOUNT = 0.02;
 
@@ -126,14 +126,14 @@ export class CesiumEventManager {
           if (e.shiftKey) {
             camera.lookUp(LOOK_AMOUNT);
           } else {
-            CesiumEventManager.moveForwardHorizontally(camera, MOVE_AMOUNT);          }
+            this.moveForwardHorizontally(camera, MOVE_AMOUNT);          }
           break;
         case 'ArrowDown':
           e.preventDefault();
           if (e.shiftKey) {
             camera.lookDown(LOOK_AMOUNT);
           } else {
-            CesiumEventManager.moveForwardHorizontally(camera, -MOVE_AMOUNT);
+            this.moveForwardHorizontally(camera, -MOVE_AMOUNT);
           }
           break;
         case 'ArrowLeft':
@@ -171,7 +171,7 @@ export class CesiumEventManager {
     });
   }
 
-  private static moveForwardHorizontally(camera: Camera, amount: number): void {
+  private moveForwardHorizontally(camera: Camera, amount: number): void {
     // Get the horizontal component of the camera direction vector
     const surfaceNormal: Cartesian3 = Cesium.Ellipsoid.WGS84.geodeticSurfaceNormal(camera.position, new Cesium.Cartesian3());
     const directionDotSurfaceNormal: number = Cesium.Cartesian3.dot(camera.direction, surfaceNormal);

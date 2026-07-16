@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, DestroyRef, signal } from '@angular/core';
-import { concatMap, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, switchMap, takeUntil, tap } from 'rxjs';
 import {
   CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum,
 } from '@tailormap-viewer/map';
@@ -63,7 +63,7 @@ export class StreetviewComponent implements OnInit, OnDestroy {
         tap(({ tool }) => {
           this.tool = tool.id;
         }),
-        concatMap(({ tool }) => tool.mapClick$),
+        switchMap(({ tool }) => tool.mapClick$),
         map(mapClick => {
           this.streetviewLocation.next([
             { __fid: 'streetview-point', geometry: `POINT(${mapClick.mapCoordinates[0]} ${mapClick.mapCoordinates[1]})`, attributes: {} },
