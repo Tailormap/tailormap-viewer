@@ -7,7 +7,7 @@ import { MapBookmarkHelper } from '../../services/application-bookmark/map-bookm
 import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { Store } from '@ngrx/store';
-import { loadMapFailed, loadMapSuccess } from '../state/map.actions';
+import { loadMap, loadMapFailed, loadMapSuccess } from '../state/map.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,7 @@ export class LoadMapService {
   private static LOAD_MAP_ERROR = $localize `:@@core.common.error-loading-map:Could not load map settings`;
 
   public loadMap(id: string) {
+    this.store$.dispatch(loadMap({ id }));
     this.apiService.getMap$(id)
       .pipe(
         catchError(() => of(LoadMapService.LOAD_MAP_ERROR)),

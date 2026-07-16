@@ -1,6 +1,6 @@
 import {
   ApplicationRef, ComponentRef, EnvironmentInjector, EnvironmentProviders, inject,
-  provideAppInitializer, Provider,
+  provideEnvironmentInitializer, Provider,
   ProviderToken,
 } from '@angular/core';
 import { createApplication, DomSanitizer } from '@angular/platform-browser';
@@ -10,9 +10,10 @@ import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.t
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import {
-  AuthenticatedUserService, ENVIRONMENT_CONFIG,
+  AuthenticatedUserService, ENVIRONMENT_CONFIG, EnvironmentConfigModel,
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1Service, TailormapSecurityApiV1Service,
 } from '@tailormap-viewer/api';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { StoreInstanceProviderHelper } from '../../viewer-instance/store-instance-provider.helper';
 import { SecurityInterceptor } from '../../interceptors/security.interceptor';
 import { ExternalLibsLoaderHelper, ICON_SERVICE_ICON_LOCATION, IconService } from '@tailormap-viewer/shared';
@@ -22,6 +23,7 @@ import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxo
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MatIconRegistry } from '@angular/material/icon';
+import { nanoid } from 'nanoid';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -39,7 +41,11 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
  * `document.body`), so services like `DialogService` scope their DOM side effects to this viewer instance
  * rather than clobbering every other viewer mounted on the same page.
  */
-export function getRootProviders(hostElement: HTMLElement, environmentConfig?: any): Array<Provider | EnvironmentProviders> {
+export function getRootProviders(
+  hostElement: HTMLElement,
+  environmentConfig?: EnvironmentConfigModel,
+  viewerId?: string,
+): Array<Provider | EnvironmentProviders> {
   return [
     provideAnimations(),
     provideHttpClient(
@@ -51,6 +57,11 @@ export function getRootProviders(hostElement: HTMLElement, environmentConfig?: a
     ),
     // provideRouter([{ path: 'stories', component: StoriesDemoComponent }]),
     StoreInstanceProviderHelper.getStoreProvider(),
+    // Same as the main app: only wire up Redux DevTools in non-production builds, each viewer instance
+    // gets its own store, so it also gets its own devtools connection (named by viewerId, if provided).
+    ...(environmentConfig?.production === false
+      ? [provideStoreDevtools({ maxAge: 25, connectInZone: true, name: viewerId ?? nanoid() })]
+      : []),
     { provide: ENVIRONMENT_CONFIG, useValue: environmentConfig },
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
@@ -63,7 +74,7 @@ export function getRootProviders(hostElement: HTMLElement, environmentConfig?: a
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
-    provideAppInitializer(() => {
+    provideEnvironmentInitializer(() => {
       inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
       ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
       inject(AuthenticatedUserService).fetchUserDetails();
@@ -116,7 +127,7 @@ export async function mountStoriesViewer(options: MountStoriesViewerOptions): Pr
   const { hostElement, viewerId, parentInjector } = options;
   const environmentConfig = parentInjector.get(ENVIRONMENT_CONFIG, { production: true, viewerBaseUrl: '/' });
   const applicationRef = await createApplication({
-    providers: getRootProviders(hostElement, environmentConfig),
+    providers: getRootProviders(hostElement, environmentConfig, viewerId),
   });
   const componentRef = applicationRef.bootstrap(StoriesViewerAppComponent, hostElement);
   if (viewerId !== undefined) {

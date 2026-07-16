@@ -1,4 +1,4 @@
-import {  ModuleWithProviders, NgModule, inject } from '@angular/core';
+import { ModuleWithProviders, NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
 import {
@@ -70,25 +70,18 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    provideEnvironmentInitializer(() => {
+      console.log('CoreModule - provideEnvironmentInitializer');
+      inject(ApplicationStyleService).init();
+      inject(RouterHistoryService).init();
+      inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
+      ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
+      inject(AuthenticatedUserService).fetchUserDetails();
+      inject(UserLoginCheckService).pingUserLoggedIn();
+    }),
   ],
 })
 export class CoreModule {
-  //eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor( _appStyleService: ApplicationStyleService,
-               _routerHistoryService: RouterHistoryService) {
-    const matIconRegistry = inject(MatIconRegistry);
-    const domSanitizer = inject(DomSanitizer);
-    const iconService = inject(IconService);
-    const authenticatedUserService = inject(AuthenticatedUserService);
-    const adminAuthService = inject(UserLoginCheckService);
-    const baseHref = inject(APP_BASE_HREF);
-
-    iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
-    authenticatedUserService.fetchUserDetails();
-    adminAuthService.pingUserLoggedIn();
-    ExternalLibsLoaderHelper.setBaseHref(baseHref);
-  }
-
   public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
@@ -100,5 +93,4 @@ export class CoreModule {
       ],
     };
   }
-
 }
