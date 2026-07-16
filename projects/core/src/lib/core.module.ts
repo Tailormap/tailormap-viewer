@@ -71,7 +71,6 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     provideEnvironmentInitializer(() => {
-      console.log('CoreModule - provideEnvironmentInitializer');
       inject(ApplicationStyleService).init();
       inject(RouterHistoryService).init();
       inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
