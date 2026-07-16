@@ -932,7 +932,7 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
         <source>Enter extra keyword and press enter</source>
-        <target state="new">Schlüsselwort eingeben und Enter drücken</target>
+        <target>Schlüsselwort eingeben und Enter drücken</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
