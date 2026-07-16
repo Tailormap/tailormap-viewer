@@ -161,7 +161,7 @@ export class GeolocationComponent implements OnInit {
       this.activeWatch = navigator.geolocation.watchPosition(this.positionSuccess.bind(this), this.positionError.bind(this), { enableHighAccuracy: true });
       this.isWatching.set(true);
     } else {
-      if (this.hasFix() && !this.isFollowing()) {
+      if (!this.isFollowing()) {
         this.isFollowing.set(true);
         clearTimeout(this.activeWatchTimeout);
       } else {
