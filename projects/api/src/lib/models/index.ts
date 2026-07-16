@@ -65,3 +65,4 @@ export * from './wms-style.model';
 export * from './layer-extract-capabilities.model';
 export * from './layer-extract-response.model';
 export * from './attribute-statistics-response-model';
+export * from './text-filter.model';

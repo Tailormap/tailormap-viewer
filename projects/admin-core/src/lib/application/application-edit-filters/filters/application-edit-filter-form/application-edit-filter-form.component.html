@@ -81,6 +81,13 @@
           [loadingUniqueValues]="loadingUniqueValues$ | async"
           (updateDropdownListFilter)="setEditFilterConfiguration($event)"></tm-admin-application-dropdown-list-filter-form>
       </div>
+    } @else if (filterForm.get('tool')?.value === "TEXT") {
+      <div class="text-filter-form">
+        <tm-admin-application-text-filter-form
+          [textFilterSettings]="initialEditConfiguration"
+          [newFilter]="newFilter"
+          (updateTextFilter)="setEditFilterConfiguration($event)"></tm-admin-application-text-filter-form>
+      </div>
     }
   }
 </form>

@@ -44,7 +44,7 @@ import { ApplicationEditFilterComponent } from './application-edit-filters/filte
 import {
   ApplicationCheckboxFilterFormComponent, ApplicationEditFilterFormComponent, ApplicationFilterAttributeListComponent,
   ApplicationFiltersListComponent,
-  ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent,
+  ApplicationSliderFilterFormComponent, ApplicationSwitchFilterFormComponent, ApplicationTextFilterFormComponent,
 } from './application-edit-filters/filters';
 import {
   ApplicationDropdownListFilterFormComponent,
@@ -83,6 +83,7 @@ import {
     ApplicationEditFilterFormComponent,
     ApplicationDatePickerFilterFormComponent,
     ApplicationDropdownListFilterFormComponent,
+    ApplicationTextFilterFormComponent,
   ],
   imports: [
     CommonModule,

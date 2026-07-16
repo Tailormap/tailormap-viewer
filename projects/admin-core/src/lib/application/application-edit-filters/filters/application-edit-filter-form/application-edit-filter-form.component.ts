@@ -13,7 +13,7 @@ import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
   AttributeFilterModel, AttributeStatisticsResponseModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum,
-  FilterTypeEnum,
+  FilterTypeEnum, UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -53,6 +53,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
   }, {
+    label: $localize`:@@admin-core.application.filters.text:Text`,
+    value: FilterToolEnum.TEXT,
+  }, {
     label: $localize`:@@admin-core.application.filters.preset:Preset`,
     value: FilterToolEnum.PRESET_STATIC,
   }];
@@ -90,6 +93,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
         ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
         : { ...updateFilter.editConfiguration };
+      if (this.isTextFilterConfiguration(this.initialEditConfiguration)) {
+        this.initialEditConfiguration = { ...this.initialEditConfiguration, caseSensitive: updateFilter.caseSensitive };
+      }
     }
   }
   public get filter() {
@@ -300,13 +306,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.initialDate
         ? [$event.initialDate ?? '']
         : [ $event.initialLowerDate ?? '', $event.initialUpperDate ?? '' ];
+    } else if ($event.filterTool === FilterToolEnum.TEXT) {
+      value = $event.initialText ? [$event.initialText] : [];
     }
     const condition = ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST)
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
       : $event.condition;
+    const caseSensitive = $event.filterTool === FilterToolEnum.TEXT ? $event.caseSensitive : undefined;
     this.filterForm.patchValue({
       condition: condition,
       value: value,
+      caseSensitive: caseSensitive,
       editFilterConfiguration: $event,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
@@ -322,6 +332,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: false,
       editFilterConfiguration: null,
     }, { emitEvent: false });
+  }
+
+  public isTextFilterConfiguration(config: EditFilterConfigurationModel | null): config is UpdateTextFilterModel {
+    return !!config && config.filterTool === FilterToolEnum.TEXT;
   }
 
 }
