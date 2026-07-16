@@ -183,6 +183,8 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
     if ($event && ($event.ctrlKey || $event.metaKey)) {
       this.treeService.toggleMultiSelectedNodeId(node.id);
+    } else if ($event && $event.shiftKey) {
+      this.treeService.selectRangeOfNodes(node.id);
     } else {
       this.treeService.selectionStateChanged(node);
       this.treeService.clearMultiSelectedNodeIds();

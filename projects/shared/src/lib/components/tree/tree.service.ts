@@ -131,6 +131,25 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     this.multiSelectedNodeIds.next(Array.from(selectedNodeIds));
   }
 
+  public selectRangeOfNodes(nodeId: string) {
+    const visibleNodes = this.dataSource.value.nodes;
+    const selectedNodeId = this.selectedNode.value;
+    const selectedNodeIdx = selectedNodeId ? visibleNodes.findIndex(n => n.id === selectedNodeId) : -1;
+    const selectedNodeLevel = visibleNodes[selectedNodeIdx].level;
+    const targetIdx = visibleNodes.findIndex(n => n.id === nodeId);
+    if (selectedNodeIdx === -1 || targetIdx === -1) {
+      this.toggleMultiSelectedNodeId(nodeId);
+      return;
+    }
+    const start = Math.min(selectedNodeIdx, targetIdx);
+    const end = Math.max(selectedNodeIdx, targetIdx);
+    const rangeIds = visibleNodes.slice(start, end + 1)
+      .filter(n => n.level === selectedNodeLevel)
+      .map(n => n.id);
+    const mergedIds = new Set([ ...this.multiSelectedNodeIds.value, ...rangeIds ]);
+    this.multiSelectedNodeIds.next(Array.from(mergedIds));
+  }
+
   public clearMultiSelectedNodeIds() {
     if (this.selectedNode.value) {
       this.multiSelectedNodeIds.next([this.selectedNode.value]);
