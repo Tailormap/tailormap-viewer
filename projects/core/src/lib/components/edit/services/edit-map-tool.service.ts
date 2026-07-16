@@ -17,7 +17,7 @@ import {
   selectSelectedEditLayer, selectSelectedCopyLayer,
 } from '../state/edit.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, combineLatest, concatMap, debounceTime, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, Observable, of, switchMap, take, tap } from 'rxjs';
 import {
   loadCopyFeatures, loadCopyFeaturesFailed, loadCopyFeaturesSuccess, loadEditFeatures, loadEditFeaturesFailed, loadEditFeaturesSuccess,
 } from '../state/edit.actions';
@@ -61,7 +61,7 @@ export class EditMapToolService {
         tap(({ tool }) => {
           this.editMapClickToolId = tool.id;
         }),
-        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
+        switchMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
         this.handleMapClick(mapClick);

@@ -21,6 +21,7 @@ export class OpenLayersMapClickTool implements MapClickToolModel {
 
   public destroy(): void {
     this.disable();
+    this.mapClickSubject.complete();
   }
 
   public disable(): void {

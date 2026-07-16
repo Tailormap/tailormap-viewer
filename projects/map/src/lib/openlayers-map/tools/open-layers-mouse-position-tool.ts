@@ -33,6 +33,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
 
   public destroy(): void {
     this.disable();
+    this.mouseMoveSubject.complete();
   }
 
   public disable(): void {
