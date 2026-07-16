@@ -30,7 +30,7 @@ export class TaskMonitoringService {
 
     interval(1000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
       () => {
-        if (this.uuid$.value && this.type$.value && this.monitoring$) {
+        if (this.uuid$.value && this.type$.value && this.monitoring$.value) {
           this.loadTaskDetails(this.uuid$.value, this.type$.value);
         }
       },
