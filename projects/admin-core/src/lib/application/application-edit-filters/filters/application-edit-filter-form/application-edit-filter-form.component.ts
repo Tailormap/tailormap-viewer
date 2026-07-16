@@ -334,8 +334,8 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     }, { emitEvent: false });
   }
 
-  public isTextFilterConfiguration(config: EditFilterConfigurationModel): config is UpdateTextFilterModel {
-    return config.filterTool === FilterToolEnum.TEXT;
+  public isTextFilterConfiguration(config: EditFilterConfigurationModel | null): config is UpdateTextFilterModel {
+    return !!config && config.filterTool === FilterToolEnum.TEXT;
   }
 
 }
