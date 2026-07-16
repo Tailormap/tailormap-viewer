@@ -47,8 +47,8 @@
         }
       </div>
       <div class="buttons">
-        <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled()">Back</button>
-        <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled()">Next</button>
+        <button mat-flat-button i18n="@@core.feature-info.previous" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled()">Previous</button>
+        <button mat-flat-button i18n="@@core.feature-info.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled()">Next</button>
         @if (isEditPossible()) {
           <div class="edit-feature-button">
             <button mat-icon-button

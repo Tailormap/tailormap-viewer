@@ -55,6 +55,7 @@
     @if (layersToCreateNewFeaturesFrom().length > 0) {
       <button [matMenuTriggerFor]="layerToCreateNewFeaturesFromMenu"
               tmTooltip="Copy from other layer"
+              i18n-tmTooltip="@@core.edit.copy-from-other-layer"
               class="map-control-button"
               mat-flat-button
               [matBadge]="copiedFeaturesCount$ | async"

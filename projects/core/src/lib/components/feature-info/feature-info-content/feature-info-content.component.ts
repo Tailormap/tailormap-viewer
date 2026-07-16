@@ -5,6 +5,7 @@ import { FeatureSelectionBookmarkService } from '../../../services/application-b
 import { take } from 'rxjs';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'tm-feature-info-content',
@@ -17,6 +18,7 @@ export class FeatureInfoContentComponent {
   public attachmentHelper = inject(AttachmentService);
   public featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
   public snackBar = inject(MatSnackBar);
+  private clipboard = inject(Clipboard);
 
   public selectedLayer = input<FeatureInfoLayerModel | null>(null);
   public currentFeature = input<FeatureInfoModel | null>(null);
@@ -63,11 +65,11 @@ export class FeatureInfoContentComponent {
       .pipe(take(1))
       .subscribe((url) => {
         if (url) {
-          navigator.clipboard.writeText(url).then(() => {
-            this.showSnackbarMessage($localize `:@@core.feature-info.share-feature-copied:Link copied to clipboard`);
-          }).catch(() => {
-            this.showSnackbarMessage($localize `:@@core.feature-info.share-feature-not-copied:Failed to copy link to clipboard`);
-          });
+          const copied = this.clipboard.copy(url);
+          this.showSnackbarMessage(copied
+            ? $localize `:@@core.feature-info.share-feature-copied:Link copied to clipboard`
+            : $localize `:@@core.feature-info.share-feature-not-copied:Failed to copy link to clipboard`,
+          );
         }
       });
   }

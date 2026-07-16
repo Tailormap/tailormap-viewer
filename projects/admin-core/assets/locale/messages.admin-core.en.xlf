@@ -582,7 +582,7 @@
         <source>Add folder</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-keyword" datatype="html">
-        <source>Add keyword</source>
+        <source>Add keyword...</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
@@ -711,7 +711,7 @@
         <source>Edit settings for layer <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
-        <source>Enter keyword</source>
+        <source>Enter extra keyword and press enter</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -847,6 +847,12 @@
       </trans-unit>
       <trans-unit id="admin-core.catalog.keywords" datatype="html">
         <source>Keywords (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.extra-keywords-subtitle" datatype="html">
+        <source>Extra keywords (click to remove)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.layer-keywords-subtitle" datatype="html">
+        <source>Keywords from service capabilities (click to hide or show)</source>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>

@@ -550,6 +550,10 @@
         <source>Attachments</source>
         <target>Anhänge</target>
       </trans-unit>
+      <trans-unit id="core.edit.copy-from-other-layer" datatype="html">
+        <source>Copy from other layer</source>
+        <target>Von anderer Ebene kopieren</target>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
         <target>Feature-Erstellung fehlgeschlagen</target>
@@ -689,6 +693,14 @@
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
         <target>Layer auswählen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.previous" datatype="html">
+        <source>Previous</source>
+        <target>Vorherige</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+        <target>Nächste</target>
       </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
@@ -1439,9 +1451,9 @@
         <source>Expand all groups</source>
         <target>Alle Gruppen ausklappen</target>
       </trans-unit>
-      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
-        <source>Filter by layer name...</source>
-        <target>Nach Ebenennamen filtern...</target>
+      <trans-unit id="core.toc.filter" datatype="html">
+        <source>Filter by layer name or keywords...</source>
+        <target>Filter nach Ebenennamen oder Schlagwörtern...</target>
       </trans-unit>
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>

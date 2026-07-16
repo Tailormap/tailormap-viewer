@@ -775,8 +775,8 @@
         <target>Ordner hinzufügen</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-keyword" datatype="html">
-        <source>Add keyword</source>
-        <target>Schlüsselwort hinzufügen</target>
+        <source>Add keyword...</source>
+        <target>Schlüsselwort hinzufügen...</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.add-map-service" datatype="html">
         <source>Add map service</source>
@@ -947,8 +947,8 @@
         <target>Bearbeiten der Einstellungen für Ebene <x id="INTERPOLATION" equiv-text="{{ geoServiceSettings.layerTitle }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-keyword" datatype="html">
-        <source>Enter keyword</source>
-        <target>Schlüsselwort eingeben</target>
+        <source>Enter extra keyword and press enter</source>
+        <target>Schlüsselwort eingeben und Enter drücken</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.enter-url-template" datatype="html">
         <source>Enter an URL template such as</source>
@@ -1129,6 +1129,14 @@
       <trans-unit id="admin-core.catalog.keywords" datatype="html">
         <source>Keywords (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</source>
         <target>Schlüsselwörter (<x id="INTERPOLATION" equiv-text="{{ (getKeywords(layerKeywords$ | async)).length }}"/>)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.extra-keywords-subtitle" datatype="html">
+        <source>Extra keywords (click to remove)</source>
+        <target>Zusätzliche Schlüsselwörter (klicken, um zu entfernen)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.keywords.layer-keywords-subtitle" datatype="html">
+        <source>Keywords from service capabilities (click to hide or show)</source>
+        <target>Schlüsselwörter aus den Dienstfähigkeiten (klicken, um zu verstecken oder anzuzeigen)</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.layer" datatype="html">
         <source>Layer</source>
