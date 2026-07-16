@@ -4,15 +4,16 @@ import {
   selectFilterableLayersForApplication, selectLayerIdsForSelectedFilterGroup, selectSelectedApplicationId,
 } from '../state/application.selectors';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable, distinctUntilChanged } from 'rxjs';
-import { FeatureTypeModel, UniqueValuesAdminService } from '@tailormap-admin/admin-api';
+import { map, switchMap, combineLatest, forkJoin, take, BehaviorSubject, tap, Observable, distinctUntilChanged, of } from 'rxjs';
+import { FeatureTypeModel, AttributeValuesSummaryAdminService } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AttributeStatisticsResponseModel } from '@tailormap-viewer/api';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationEditFilterService {
   private store$ = inject(Store);
   private featureSourceService = inject(FeatureSourceService);
-  private uniqueValuesAdminService = inject(UniqueValuesAdminService);
+  private uniqueValuesAdminService = inject(AttributeValuesSummaryAdminService);
   private destroyRef = inject(DestroyRef);
 
 
@@ -82,4 +83,18 @@ export class ApplicationEditFilterService {
     );
   }
 
+  public getAttributeSummaryValues$(attribute: string): Observable<AttributeStatisticsResponseModel> {
+    return this.featureTypesForSelectedLayers$.pipe(
+      take(1),
+      switchMap(featureTypes => {
+        if (!featureTypes || featureTypes.length === 0) {
+          return of({ hasError: true, filterApplied: false, min: null, max: null, count: 0, sum: 0, avg: 0 });
+        }
+
+        return this.uniqueValuesAdminService.getAttributeStatistics$({
+          featureTypeId: featureTypes[0].id, attribute: attribute, filter: '',
+        }).pipe(take(1));
+      }),
+    );
+  }
 }

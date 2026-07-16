@@ -38,7 +38,8 @@
         <tm-admin-application-slider-filter-form
           [attributeType]="filterForm.get('attributeType')!.value!"
           [sliderFilter]="initialEditConfiguration"
-          [uniqueValues]="uniqueValues$ | async"
+          [minValue]="(attributeValuesSummary$ | async)?.min"
+          [maxValue]="(attributeValuesSummary$ | async)?.max"
           (updateSliderFilter)="setEditFilterConfiguration($event)"></tm-admin-application-slider-filter-form>
       </div>
     } @else if (filterForm.get('tool')?.value === "CHECKBOX") {

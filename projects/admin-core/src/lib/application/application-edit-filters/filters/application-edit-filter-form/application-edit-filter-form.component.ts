@@ -12,8 +12,8 @@ import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
-  AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
-  UpdateTextFilterModel,
+  AttributeFilterModel, AttributeStatisticsResponseModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum,
+  FilterTypeEnum, UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -66,9 +66,12 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public loadingFeatureType$ = this.applicationEditFilterService.isLoadingFeaturesTypes$;
 
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
+  public attributeValuesSummary$: Observable<AttributeStatisticsResponseModel> | null = null;
   public uniqueValuesStrings$: Observable<string[]> | null = null;
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
+  private loadingAttributeValuesSummarySubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
+  public loadingAttributeValuesSummary$ = this.loadingAttributeValuesSummarySubject$.asObservable();
   private _filter: AttributeFilterModel | null | undefined;
   private currentFilterId: string | null = null;
   public initialEditConfiguration: EditFilterConfigurationModel | null = null;
@@ -176,6 +179,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       if (attributeFilter.attributeType !== AttributeType.BOOLEAN) {
         this.setUniqueValues(attributeFilter.attribute);
       }
+      if (attributeFilter.attributeType === AttributeType.NUMBER ||
+          attributeFilter.attributeType === AttributeType.DOUBLE ||
+          attributeFilter.attributeType === AttributeType.INTEGER ||
+          attributeFilter.attributeType === AttributeType.DATE ||
+          attributeFilter.attributeType === AttributeType.TIMESTAMP) {
+        this.setAttributeValuesSummary(attributeFilter.attribute);
+      }
       this.filterForm.patchValue({
         id: attributeFilter.id,
         tool: attributeFilter.editConfiguration?.filterTool ?? FilterToolEnum.PRESET_STATIC,
@@ -227,6 +237,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     if ($event.type !== AttributeType.BOOLEAN) {
       this.setUniqueValues($event.name);
     }
+    if ($event.type === AttributeType.NUMBER ||
+        $event.type === AttributeType.DOUBLE ||
+        $event.type === AttributeType.INTEGER ||
+        $event.type === AttributeType.DATE ||
+        $event.type === AttributeType.TIMESTAMP) {
+          this.setAttributeValuesSummary($event.name);
+    }
   }
 
   public setFilterValues($event: OutputFilterData) {
@@ -237,6 +254,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: $event.invertCondition,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
+  }
+
+  public setAttributeValuesSummary(attributeName: string){
+    this.attributeValuesSummary$ = this.applicationEditFilterService.getAttributeSummaryValues$(attributeName);
   }
 
   public setUniqueValues(attributeName: string) {
