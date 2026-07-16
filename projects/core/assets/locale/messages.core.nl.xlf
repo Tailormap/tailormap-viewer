@@ -694,6 +694,14 @@
         <source>Select layer</source>
         <target>Selecteer laag</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.previous" datatype="html">
+        <source>Previous</source>
+        <target>Vorige</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+        <target>Volgende</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
         <target>Object delen</target>

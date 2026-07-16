@@ -96,7 +96,7 @@ describe('FeatureInfoDialogComponent', () => {
     store.dispatch = jest.fn();
     (await screen.findByText(/Next/)).click();
     expect(store.dispatch).toHaveBeenCalledWith({ type: showNextFeatureInfoFeature.type });
-    (await screen.findByText(/Back/)).click();
+    (await screen.findByText(/Previous/)).click();
     expect(store.dispatch).toHaveBeenCalledWith({ type: showPreviousFeatureInfoFeature.type });
   });
 

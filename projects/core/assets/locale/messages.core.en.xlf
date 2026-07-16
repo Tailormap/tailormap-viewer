@@ -518,6 +518,12 @@
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.previous" datatype="html">
+        <source>Previous</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
       </trans-unit>
