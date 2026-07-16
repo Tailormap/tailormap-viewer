@@ -37,13 +37,21 @@
       <mat-panel-title i18n="@@admin-core.catalog.keywords">Keywords ({{ (getKeywords(layerKeywords$ | async)).length }})</mat-panel-title>
     </mat-expansion-panel-header>
     <mat-selection-list>
-      @for (keyword of layerKeywords$ | async; track keyword) {
+      @let layerKeywordsList = (layerKeywords$ | async) || [];
+      @if (layerKeywordsList.length > 0) {
+        <b i18n="@@admin-core.catalog.keywords.layer-keywords-subtitle">Keywords from service capabilities (click to hide or show)</b>
+      }
+      @for (keyword of layerKeywordsList; track keyword) {
         <mat-list-item [class.hidden]="isKeywordHidden(keyword)" (click)="layerKeywordClick(keyword)" tabindex="0" role="button" (keydown.enter)="layerKeywordClick(keyword)" (keydown.space)="$event.preventDefault(); layerKeywordClick(keyword)">
           <span class="detail">{{ keyword }}</span>
           <mat-icon class="list-icon" [svgIcon]="isKeywordHidden(keyword) ? 'plus' : 'close'"></mat-icon>
         </mat-list-item>
       }
-      @for (keyword of layerSettingsForm.get('extraKeywords')?.value; track keyword) {
+      @let extraKeywords = layerSettingsForm.get('extraKeywords')?.value || [];
+      @if (extraKeywords.length > 0) {
+        <b i18n="@@admin-core.catalog.keywords.extra-keywords-subtitle">Extra keywords (click to remove)</b>
+      }
+      @for (keyword of extraKeywords; track keyword) {
         <mat-list-item (click)="removeExtraKeyword(keyword)" tabindex="0" role="button" (keydown.enter)="removeExtraKeyword(keyword)" (keydown.space)="$event.preventDefault(); removeExtraKeyword(keyword)">
           <span class="detail" style="font-style: italic">{{ keyword }}</span>
           <mat-icon class="list-icon" svgIcon="close"></mat-icon>
@@ -51,8 +59,8 @@
       }
     </mat-selection-list>
     <mat-form-field>
-      <mat-label i18n="@@admin-core.catalog.add-keyword">Add keyword</mat-label>
-      <input matInput #keywordInput placeholder="Enter keyword" i18n-placeholder="@@admin-core.catalog.enter-keyword"
+      <mat-label i18n="@@admin-core.catalog.add-keyword">Add keyword...</mat-label>
+      <input matInput #keywordInput placeholder="Enter extra keyword and press enter" i18n-placeholder="@@admin-core.catalog.enter-keyword"
              (keyup.enter)="addExtraKeyword(keywordInput.value); keywordInput.value = ''"/>
     </mat-form-field>
   </mat-expansion-panel>
