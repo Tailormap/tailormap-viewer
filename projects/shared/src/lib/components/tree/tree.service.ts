@@ -134,17 +134,23 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
   public selectRangeOfNodes(nodeId: string) {
     const visibleNodes = this.dataSource.value.nodes;
     const selectedNodeId = this.selectedNode.value;
-    const selectedNodeIdx = selectedNodeId ? visibleNodes.findIndex(n => n.id === selectedNodeId) : -1;
-    const selectedNodeLevel = visibleNodes[selectedNodeIdx].level;
+    const multiSelectedNodeIds = this.multiSelectedNodeIds.value;
+    let anchorIdx = -1;
+    if (selectedNodeId) {
+      anchorIdx = visibleNodes.findIndex(n => n.id === selectedNodeId);
+    } else if (multiSelectedNodeIds.length > 0) {
+      anchorIdx = visibleNodes.findIndex(n => n.id === multiSelectedNodeIds[multiSelectedNodeIds.length - 1]);
+    }
     const targetIdx = visibleNodes.findIndex(n => n.id === nodeId);
-    if (selectedNodeIdx === -1 || targetIdx === -1) {
+    if (anchorIdx === -1 || targetIdx === -1) {
       this.toggleMultiSelectedNodeId(nodeId);
       return;
     }
-    const start = Math.min(selectedNodeIdx, targetIdx);
-    const end = Math.max(selectedNodeIdx, targetIdx);
+    const anchorNodeLevel = visibleNodes[anchorIdx].level;
+    const start = Math.min(anchorIdx, targetIdx);
+    const end = Math.max(anchorIdx, targetIdx);
     const rangeIds = visibleNodes.slice(start, end + 1)
-      .filter(n => n.level === selectedNodeLevel)
+      .filter(n => n.level === anchorNodeLevel)
       .map(n => n.id);
     const mergedIds = new Set([ ...this.multiSelectedNodeIds.value, ...rangeIds ]);
     this.multiSelectedNodeIds.next(Array.from(mergedIds));
