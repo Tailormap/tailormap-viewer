@@ -30,7 +30,11 @@ export class SpatialFilterFormDrawGeometriesComponent {
   public selectedFeatureForModifyTool$ = this.store$.select(selectSelectedFilterFeature);
 
   public selectedStyle = (feature: FeatureModel) => FeatureStylingHelper.getDefaultHighlightStyle('filter-selected-style', {
-    pointType: undefined,
+    pointType: 'circle',
+    pointFillColor: 'transparent',
+    pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+    pointStrokeWidth: 2,
+    pointSize: 5,
     fillColor: ApplicationStyleService.getPrimaryColor(),
     fillOpacity: 30,
     strokeWidth: 2,

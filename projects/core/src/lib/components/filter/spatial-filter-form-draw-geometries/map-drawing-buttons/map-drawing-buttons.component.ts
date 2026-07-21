@@ -148,10 +148,12 @@ export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
       zIndex: 100,
       pointType: 'circle',
       pointStrokeColor: ApplicationStyleService.getPrimaryColor(),
+      pointFillColor: ApplicationStyleService.getPrimaryColor(),
+      pointStrokeWidth: 2,
+      pointSize: 5,
       strokeColor: ApplicationStyleService.getPrimaryColor(),
       strokeType: 'dash',
       strokeWidth: 2,
-      pointFillColor: 'transparent',
       fillColor: ApplicationStyleService.getPrimaryColor(), // Must specify color otherwise no hand cursor
       fillOpacity: 0,
     };
