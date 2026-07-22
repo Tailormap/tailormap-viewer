@@ -111,9 +111,11 @@ export class MapPdfService {
     });
     doc.setFontSize(this.defaultFontSize);
     doc.setFont('helvetica');
-    console.debug("locale: ", this.locale);
     if (this.isJsPdfLanguage(this.locale)) {
       doc.setLanguage(this.locale);
+    }
+    if (options.printOptions.title) {
+      doc.setProperties({ title: options.printOptions.title });
     }
 
     const x = this.defaultMargin;
@@ -132,9 +134,6 @@ export class MapPdfService {
     this.addDateTime(doc, options.size.width, options.size.height);
     if (options.printOptions.autoPrint) {
       doc.autoPrint();
-    }
-    if (options.printOptions.title) {
-      doc.setProperties({ title: options.printOptions.title });
     }
     return this.addMapImage$({
       doc,
@@ -319,7 +318,7 @@ export class MapPdfService {
   private isJsPdfLanguage(language: string): language is 'en' | 'nl' | 'de' {
     // jsPDF.setLanguage() input parameter is typed as a tuple of string options, but this.locale is just typed as a string,
     // so this method is needed to check if the locale is a valid jsPDF language option.
-    const languageOptions= ['en', 'nl', 'de'];
+    const languageOptions= [ 'en', 'nl', 'de' ];
     return languageOptions.includes(language);
   }
 
