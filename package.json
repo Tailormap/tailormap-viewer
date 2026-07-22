@@ -76,7 +76,7 @@
     "@angular/localize": "^20.3.26",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.18",
-    "@tailormap-viewer/tools": "^0.0.32",
+    "@tailormap-viewer/tools": "^0.0.33",
     "@testing-library/angular": "^17.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
