@@ -111,6 +111,12 @@ export class MapPdfService {
     });
     doc.setFontSize(this.defaultFontSize);
     doc.setFont('helvetica');
+    if (this.isJsPdfLanguage(this.locale)) {
+      doc.setLanguage(this.locale);
+    }
+    if (options.printOptions.title) {
+      doc.setProperties({ title: options.printOptions.title });
+    }
 
     const x = this.defaultMargin;
     let y = this.defaultMargin;
@@ -307,6 +313,13 @@ export class MapPdfService {
     const dateWidthInMM = (doc.getStringUnitWidth(date) * dateFontSize) / (72 / 25.6);
     doc.text(date, width - dateWidthInMM - 8, height - 5);
     doc.setFontSize(this.defaultFontSize);
+  }
+
+  private isJsPdfLanguage(language: string): language is 'en' | 'nl' | 'de' {
+    // jsPDF.setLanguage() input parameter is typed as a tuple of string options, but this.locale is just typed as a string,
+    // so this method is needed to check if the locale is a valid jsPDF language option.
+    const languageOptions= [ 'en', 'nl', 'de' ];
+    return languageOptions.includes(language);
   }
 
 }
