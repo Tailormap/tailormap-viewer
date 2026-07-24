@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { LayerDetailsModel, SpatialFilterGeometry, FilterTypeEnum, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { FilterGroupModel, FilterTypeEnum, LayerDetailsModel, SpatialFilterGeometry, SpatialFilterModel } from '@tailormap-viewer/api';
 import { nanoid } from 'nanoid';
-import { concatMap, forkJoin, map, Observable, take, combineLatest, filter, of, switchMap } from 'rxjs';
+import { combineLatest, concatMap, filter, forkJoin, map, Observable, of, switchMap, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../state/core.selectors';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
@@ -10,6 +10,7 @@ import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 import { selectLayer } from '../../../map';
+import { MapService } from '@tailormap-viewer/map';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class SpatialFilterCrudService {
 
   private filterManagerService = inject(FilterManagerService);
   private store$ = inject(Store);
+  private mapService = inject(MapService);
 
   public updateSelectedLayers(layers: string[]) {
     this.store$.dispatch(setSelectedLayers({ layers }));
@@ -83,7 +85,7 @@ export class SpatialFilterCrudService {
         }),
       }),
     );
-    return ;
+    return;
   }
 
   private updateLayers$(
@@ -155,20 +157,25 @@ export class SpatialFilterCrudService {
     layers: string[],
     referenceLayer?: string,
   ): void {
-    this.getLayerDetails$(layers)
-      .pipe(map(layerDetails => {
+    this.getLayerDetails$(layers).pipe(
+      switchMap(layerDetails => {
         if (layerDetails.length === 0) {
-          return null;
+          return of(null);
         }
-        return this.createFilterForLayers(layerDetails, geometries, referenceLayer);
-      }))
-      .subscribe(filterGroup => {
-        if (filterGroup === null) {
-          return;
-        }
-        this.store$.dispatch(addFilterGroup({ filterGroup }));
-        this.store$.dispatch(setSelectedFilterGroup({ filterGroup }));
-      });
+        return this.mapService.getProjectionCode$().pipe(
+          take(1),
+          map(projectionCode =>
+            this.createFilterForLayers(layerDetails, geometries, projectionCode, referenceLayer),
+          ),
+        );
+      }),
+    ).subscribe(filterGroup => {
+      if (filterGroup === null) {
+        return;
+      }
+      this.store$.dispatch(addFilterGroup({ filterGroup }));
+      this.store$.dispatch(setSelectedFilterGroup({ filterGroup }));
+    });
   }
 
   private getLayerDetails$(
@@ -199,6 +206,7 @@ export class SpatialFilterCrudService {
   private createFilterForLayers(
     layers: LayerDetailsModel[],
     geometries: SpatialFilterGeometry[],
+    projectionCode: string,
     referenceLayer?: string,
   ): FilterGroupModel<SpatialFilterModel> {
     const spatialFilter: SpatialFilterModel = {
@@ -206,6 +214,7 @@ export class SpatialFilterCrudService {
       type: FilterTypeEnum.SPATIAL,
       geometries,
       baseLayerId: referenceLayer,
+      projectionCode,
       buffer: undefined,
       geometryColumns: layers.map(layer => ({
         layerId: layer.id,

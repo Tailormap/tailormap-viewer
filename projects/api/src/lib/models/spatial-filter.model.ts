@@ -11,6 +11,7 @@ export interface SpatialFilterModel extends BaseFilterModel {
   type: FilterTypeEnum.SPATIAL;
   geometryColumns: Array<{ layerId: string; column: string[] }>;
   geometries: SpatialFilterGeometry[];
+  projectionCode: string;
   baseLayerId?: string;
   buffer?: number;
   exceededMaxFeatures?: boolean;
