@@ -1,10 +1,8 @@
-import { FilterDateIntervalEnum, FilterGroupModel, FilterConditionEnum } from '@tailormap-viewer/api';
-import { AttributeType } from '@tailormap-viewer/api';
+import {
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel, FilterTypeEnum, SpatialFilterModel,
+} from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
-import { AttributeFilterModel } from '@tailormap-viewer/api';
-import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
-import { SpatialFilterModel } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper } from './features-filter.helper';
 
 export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
@@ -14,6 +12,7 @@ export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId
     geometryColumns: columns || [{ layerId: '1', column: ['the_geom'] }],
     geometries: geoms.map((g, idx) => ({ id: `${idx + 1}`, geometry: g })),
     buffer,
+    projectionCode: 'EPSG:4326',
   }], FilterTypeEnum.SPATIAL);
   if (columns) {
     return { ...group, layerIds: columns.map(c => c.layerId) };
@@ -71,7 +70,7 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)']);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, POINT(1 2))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, SRID=4326;POINT(1 2))');
   });
 
   test('should create a spatial filter for circle', () => {
@@ -83,27 +82,32 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter for multiple geometries', () => {
     const filterGroup = getSpatialFilterGroup([ 'POINT(1 2)', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))' ]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toBe('INTERSECTS(the_geom, SRID=4326;GEOMETRYCOLLECTION(POINT(1 2),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))))');
   });
 
   test('should create a spatial filters for multiple layers', () => {
-    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: ['the_geom'] }, { layerId: '2', column: ['geom'] }]);
+    const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: ['the_geom'] }, {
+      layerId: '2',
+      column: ['geom'],
+    }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.size).toBe(2);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, POINT(1 2))');
-    expect(filters.get('2')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(geom, POINT(1 2))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, SRID=4326;POINT(1 2))');
+    expect(filters.get('2')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(geom, SRID=4326;POINT(1 2))');
   });
 
   test('should create a spatial filter for multiple geometry columns', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], [{ layerId: '1', column: [ 'the_geom', 'some_other_geom_column' ] }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('(INTERSECTS(the_geom, POINT(1 2)) OR INTERSECTS(some_other_geom_column, POINT(1 2)))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toBe('(INTERSECTS(the_geom, SRID=4326;POINT(1 2)) OR INTERSECTS(some_other_geom_column, SRID=4326;POINT(1 2)))');
   });
 
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 10))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(SRID=4326;POINT(1 2), 10))');
   });
 
   test('should create a spatial filter for a circle with buffer', () => {
@@ -219,42 +223,42 @@ describe('CQLFilterHelper', () => {
 
   test('combine multiple filters into a CQL filter', () => {
     const filterGroup = getFilterGroup([{
-        id: '1',
-        caseSensitive: false,
-        type: FilterTypeEnum.ATTRIBUTE,
-        invertCondition: false,
-        attribute: 'attribute',
-        attributeType: AttributeType.STRING,
-        condition: FilterConditionEnum.STRING_LIKE_KEY,
-        value: ['value'],
-      }, {
-        id: '2',
-        caseSensitive: false,
-        type: FilterTypeEnum.ATTRIBUTE,
-        invertCondition: false,
-        attribute: 'attribute2',
-        attributeType: AttributeType.BOOLEAN,
-        condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
-        value: [],
-      }, {
-        id: '3',
-        caseSensitive: false,
-        type: FilterTypeEnum.ATTRIBUTE,
-        invertCondition: false,
-        attribute: 'attribute3',
-        attributeType: AttributeType.DATE,
-        condition: FilterConditionEnum.DATE_ON_KEY,
-        value: ['2020-01-01'],
-      }, {
-        id: '4',
-        caseSensitive: false,
-        type: FilterTypeEnum.ATTRIBUTE,
-        invertCondition: true,
-        attribute: 'attribute4',
-        attributeType: AttributeType.DATE,
-        condition: FilterConditionEnum.NULL_KEY,
-        value: [],
-      }]);
+      id: '1',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute',
+      attributeType: AttributeType.STRING,
+      condition: FilterConditionEnum.STRING_LIKE_KEY,
+      value: ['value'],
+    }, {
+      id: '2',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute2',
+      attributeType: AttributeType.BOOLEAN,
+      condition: FilterConditionEnum.BOOLEAN_TRUE_KEY,
+      value: [],
+    }, {
+      id: '3',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: false,
+      attribute: 'attribute3',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.DATE_ON_KEY,
+      value: ['2020-01-01'],
+    }, {
+      id: '4',
+      caseSensitive: false,
+      type: FilterTypeEnum.ATTRIBUTE,
+      invertCondition: true,
+      attribute: 'attribute4',
+      attributeType: AttributeType.DATE,
+      condition: FilterConditionEnum.NULL_KEY,
+      value: [],
+    }]);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('((attribute ILIKE \'%value%\') ' +
       'AND (attribute2 = true) ' +
