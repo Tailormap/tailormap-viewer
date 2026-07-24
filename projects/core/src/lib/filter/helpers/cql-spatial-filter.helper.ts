@@ -15,6 +15,8 @@ export class CqlSpatialFilterHelper {
       const baseGeom = baseGeometries.length === 1 ?
         `${sridPrefix}${baseGeometries[0]}` :
         `${sridPrefix}GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
+
+      // TODO add sridPrefix when buffering
       filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : `${baseGeom}`);
     }
     if (circles.length > 0) {

@@ -165,7 +165,7 @@ export class SpatialFilterCrudService {
         return this.mapService.getProjectionCode$().pipe(
           take(1),
           map(projectionCode =>
-            this.createFilterForLayers(layerDetails, geometries, projectionCode ?? undefined, referenceLayer),
+            this.createFilterForLayers(layerDetails, geometries, projectionCode, referenceLayer),
           ),
         );
       }),
