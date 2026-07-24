@@ -35,6 +35,25 @@ tm-error-message {
   overflow-wrap: break-word;
 }
 
+.row-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.filter-button {
+  flex: 0 0 16px;
+  margin-left: 8px;
+  padding: 4px 0 0 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filter-button mat-icon,
+.filter-button mat-icon ::ng-deep svg {
+  width: 20px;
+  height: 20px;
+}
+
 .row:last-of-type {
   border-bottom: 0 none;
 }

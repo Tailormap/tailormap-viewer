@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signa
 import { Store } from '@ngrx/store';
 import {
   selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
-  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled, selectIsPrevButtonDisabled,
+  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
+  selectIsPrevButtonDisabled,
   selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { combineLatest, map, Observable, take } from 'rxjs';
@@ -18,13 +19,14 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
 import {
+  AttributeType,
   AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
 } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarService } from '../../menubar';
-import { selectComponentTitle } from '../../../state';
+import { addFilterGroup, selectComponentTitle } from '../../../state';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -194,5 +196,26 @@ export class FeatureInfoDialogComponent {
         }
       });
 
+  }
+
+  public toggleFilter(att: {attributeValue: any; key: string; label: string}) {
+    const currentFeature = this.currentFeature();
+    this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, att.attributeValue);
+  }
+
+  private createFilterFromFeatureInfo(
+    layerId: string,
+    attributeName: string,
+    attributeValue: string,
+  ) {
+    this.store$.select(selectFeatureInfoMetadata)
+      .pipe(take(1))
+      .subscribe(metadata => {
+        const columnMetadata = metadata.columnMetadata
+          .find(m => m.layerId === layerId && m.name === attributeName);
+        const attributeType = columnMetadata?.type || AttributeType.STRING;
+        const filterGroup = FeatureInfoHelper.createAttributeFilter(layerId, attributeName, attributeValue, attributeType);
+        this.store$.dispatch(addFilterGroup({ filterGroup }));
+      });
   }
 }

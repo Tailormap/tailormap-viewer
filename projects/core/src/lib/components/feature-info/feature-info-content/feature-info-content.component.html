@@ -16,7 +16,12 @@
             @if (shouldShowAttribute(att)) {
               <div class="row">
                 <strong>{{att.label}}</strong>
-                <div [innerHTML]="att.attributeValue | htmlify"></div>
+                <div class="row-content">
+                  <div [innerHTML]="att.attributeValue | htmlify"></div>
+                  <button class="filter-button" mat-icon-button (click)="toggleFilter.emit(att)">
+                    <mat-icon svgIcon="components_filter"></mat-icon>
+                  </button>
+                </div>
               </div>
             }
           }

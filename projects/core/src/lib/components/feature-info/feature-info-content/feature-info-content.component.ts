@@ -30,6 +30,7 @@ export class FeatureInfoContentComponent {
   public showNextFeatureInfoFeature = output<void>();
   public showPreviousFeatureInfoFeature = output<void>();
   public editFeature = output<void>();
+  public toggleFilter = output<{attributeValue: any; key: string; label: string}>();
 
   public attributesCollapsed = signal<boolean>(false);
   public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
@@ -96,4 +97,5 @@ export class FeatureInfoContentComponent {
     }
     return true;
   }
+
 }
