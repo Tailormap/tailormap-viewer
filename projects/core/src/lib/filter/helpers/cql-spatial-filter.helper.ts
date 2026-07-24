@@ -6,12 +6,15 @@ export class CqlSpatialFilterHelper {
     if (filter.geometries.length === 0 || filter.geometryColumns.length === 0) {
       return null;
     }
+    const sridPrefix = filter.projectionCode ? `SRID=${parseInt(filter.projectionCode.replace('EPSG:', ''), 10)};` : '';
 
     const { baseGeometries, circles } = this.categorizeGeometries(filter.geometries.map(g => g.geometry));
     const filterGeometries: string[] = [];
     if (baseGeometries.length > 0) {
-      const baseGeom = baseGeometries.length === 1 ? baseGeometries[0] : 'GEOMETRYCOLLECTION(' + baseGeometries.join(',') + ')';
-      filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : baseGeom);
+      const baseGeom = baseGeometries.length === 1 ?
+        `${sridPrefix}${baseGeometries[0]}` :
+        `${sridPrefix}GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
+      filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : `${baseGeom}`);
     }
     if (circles.length > 0) {
       filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle, filter.buffer)));

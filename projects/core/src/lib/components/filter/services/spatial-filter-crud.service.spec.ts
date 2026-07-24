@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SpatialFilterCrudService } from './spatial-filter-crud.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
-import { DescribeAppLayerService, getAppLayerModel, LayerDetailsModel } from '@tailormap-viewer/api';
+import { FilterGroupModel, getAppLayerModel, LayerDetailsModel, SpatialFilterModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
@@ -10,9 +10,9 @@ import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { waitFor } from '@testing-library/angular';
-import { SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { selectLayers } from '../../../map';
 import { FilterManagerService } from '../../../filter';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
 
 let idCount = 0;
 jest.mock('nanoid', () => ({
@@ -48,6 +48,7 @@ const setup = (
   TestBed.configureTestingModule({
     providers: [
       SpatialFilterCrudService,
+      getMapServiceMock().provider,
       mockStore,
       { provide: FilterManagerService, useValue: describeLayerMock },
     ],

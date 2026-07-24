@@ -1,8 +1,6 @@
 import { BookmarkJsonFragmentDescriptor, BookmarkStringFragmentDescriptor } from '../bookmark/bookmark.models';
 import { BookmarkService } from '../bookmark/bookmark.service';
-import {
-  AttributeType, FilterConditionEnum,
-} from '@tailormap-viewer/api';
+import { AttributeType, FilterConditionEnum } from '@tailormap-viewer/api';
 
 export class ApplicationBookmarkFragments {
 
@@ -92,10 +90,12 @@ export type BookmarkAttributeFilterModel = {
 export type BookmarkSpatialFilterModel = {
   id: string;
   d?: boolean; // disabled
-  gC /* geometryColums */ : Array<{ l /* layerId */: string; c /* column*/: string[] }>;
+  gC /* geometryColums */: Array<{ l /* layerId */: string; c /* column*/: string[] }>;
   g /* geometries */: Array<{ id: string; g /* geometry */: string; l? /* referenceLayerId*/: string }>;
   l?: string; // baseLayerId
   b?: number; // buffer
+  /** projectionCode */
+  p: string;
 };
 
 export type BookmarkPresetFilterModel = {
