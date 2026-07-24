@@ -33,8 +33,12 @@ export class FilterBookmarkHelper {
         l: fg.layerIds,
         f: [],
       };
-      if (fg.disabled) { bfg.d = fg.disabled; }
-      if (fg.parentGroup) { bfg.pG = fg.parentGroup; }
+      if (fg.disabled) {
+        bfg.d = fg.disabled;
+      }
+      if (fg.parentGroup) {
+        bfg.pG = fg.parentGroup;
+      }
       for (const f of fg.filters as AttributeFilterModel[]) {
         const bf: BookmarkAttributeFilterModel = {
           id: f.id, // changed to size 6 instead of default 21, could be regenerated?
@@ -44,14 +48,24 @@ export class FilterBookmarkHelper {
           v: f.value,
           aA: f.attributeAlias,
         };
-        if (f.disabled) { bf.d = f.disabled; }
-        if (f.invertCondition) { bf.iC = f.invertCondition; }
-        if (f.caseSensitive) { bf.cS = f.caseSensitive; }
-        if (f.featureType) { bf.fT = f.featureType; }
+        if (f.disabled) {
+          bf.d = f.disabled;
+        }
+        if (f.invertCondition) {
+          bf.iC = f.invertCondition;
+        }
+        if (f.caseSensitive) {
+          bf.cS = f.caseSensitive;
+        }
+        if (f.featureType) {
+          bf.fT = f.featureType;
+        }
         bfg.f.push(bf);
       }
 
-      if (!bookmarkData.a) { bookmarkData.a = []; }
+      if (!bookmarkData.a) {
+        bookmarkData.a = [];
+      }
       bookmarkData.a.push(bfg);
     }
   }
@@ -93,24 +107,37 @@ export class FilterBookmarkHelper {
         l: fg.layerIds,
         f: [],
       };
-      if (fg.disabled) { bfg.d = fg.disabled; }
-      if (fg.parentGroup) { bfg.pG = fg.parentGroup; }
+      if (fg.disabled) {
+        bfg.d = fg.disabled;
+      }
+      if (fg.parentGroup) {
+        bfg.pG = fg.parentGroup;
+      }
       for (const f of fg.filters as SpatialFilterModel[]) {
         const bf: BookmarkSpatialFilterModel = {
           id: f.id, // changed to size 6 instead of default 21, could be regenerated?
+          p: f.projectionCode,
           gC: f.geometryColumns.map(gc => ({ l: gc.layerId, c: gc.column })),
           g: f.geometries
             // only save user drawn geometries in the bookmark, reference layer geometries are loaded dynamically and can change
             .filter(g => typeof g.referenceLayerId === 'undefined')
             .map(g => ({ id: g.id, g: g.geometry, l: g.referenceLayerId })),
         };
-        if (f.disabled) { bf.d = f.disabled; }
-        if (f.baseLayerId) { bf.l = f.baseLayerId; }
-        if (f.buffer) { bf.b = f.buffer; }
+        if (f.disabled) {
+          bf.d = f.disabled;
+        }
+        if (f.baseLayerId) {
+          bf.l = f.baseLayerId;
+        }
+        if (f.buffer) {
+          bf.b = f.buffer;
+        }
         bfg.f.push(bf);
       }
 
-      if (!bookmarkData.s) { bookmarkData.s = []; }
+      if (!bookmarkData.s) {
+        bookmarkData.s = [];
+      }
       bookmarkData.s.push(bfg);
     }
   }
@@ -132,6 +159,7 @@ export class FilterBookmarkHelper {
         geometryColumns: f.gC.map(gc => ({ layerId: gc.l, column: gc.c })),
         baseLayerId: f.l,
         buffer: f.b,
+        projectionCode: f.p ? f.p : '',
       })),
     };
   }
@@ -141,7 +169,7 @@ export class FilterBookmarkHelper {
     const currentPresetFilters = filterState.currentFilterGroups
       .filter(filterGroup => filterGroup.source === 'PRESET');
     if (currentPresetFilters.length > 0) {
-      for(const currentPresetFilter of currentPresetFilters) {
+      for (const currentPresetFilter of currentPresetFilters) {
         const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === currentPresetFilter.id && fg.source === 'PRESET');
         if (!configuredPresetFilter || equal(currentPresetFilter, configuredPresetFilter)) {
           continue;
@@ -171,14 +199,16 @@ export class FilterBookmarkHelper {
         }
 
         if (bookmarkFilter.f.length > 0) {
-          if (!bookmarkData.p) { bookmarkData.p = []; }
+          if (!bookmarkData.p) {
+            bookmarkData.p = [];
+          }
           bookmarkData.p.push(bookmarkFilter);
         }
       }
     }
   }
 
-  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg:BookmarkFilterGroup<BookmarkPresetFilterModel>): FilterGroupModel<AttributeFilterModel> | undefined {
+  public static presetFilterGroupFromBookmark(filterState: FilterState, bfg: BookmarkFilterGroup<BookmarkPresetFilterModel>): FilterGroupModel<AttributeFilterModel> | undefined {
     const configuredPresetFilter = filterState.configuredFilterGroups.find(fg => fg.id === bfg.id && fg.source === 'PRESET');
     if (!configuredPresetFilter) {
       console.error(`Bookmark: Preset filter group with id ${bfg.id} not found in configured filter groups`);
