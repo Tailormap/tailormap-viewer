@@ -76,7 +76,8 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter for circle', () => {
     const filterGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)']);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 3))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toContain('INTERSECTS(the_geom, SRID=4326;POLYGON((4 2,3');
   });
 
   test('should create a spatial filter for multiple geometries', () => {
@@ -107,13 +108,16 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(SRID=4326;POINT(1 2), 10))');
+    // because we have a mocked=up JSTS BufferOp that returns the input
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toBe('INTERSECTS(the_geom, SRID=4326;POINT(1 2))');
   });
 
   test('should create a spatial filter for a circle with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME)).toBe('INTERSECTS(the_geom, BUFFER(POINT(1 2), 13))');
+    expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
+      .toContain('INTERSECTS(the_geom, SRID=4326;POLYGON((14 2,13.7');
   });
 
   test('after date without timestamp filter', () => {

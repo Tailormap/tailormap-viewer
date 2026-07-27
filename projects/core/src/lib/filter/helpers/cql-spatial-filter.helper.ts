@@ -1,4 +1,5 @@
 import { SpatialFilterModel } from '@tailormap-viewer/api';
+import { GeometryHelper } from '@tailormap-viewer/map';
 
 export class CqlSpatialFilterHelper {
 
@@ -13,14 +14,17 @@ export class CqlSpatialFilterHelper {
     const filterGeometries: string[] = [];
     if (baseGeometries.length > 0) {
       const baseGeom = baseGeometries.length === 1 ?
-        `${sridPrefix}${baseGeometries[0]}` :
-        `${sridPrefix}GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
-
-      // TODO add sridPrefix when buffering
-      filterGeometries.push(filter.buffer ? `BUFFER(${baseGeom}, ${filter.buffer})` : `${baseGeom}`);
+        `${baseGeometries[0]}` :
+        `GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
+      if (filter.buffer) {
+        const bufferedGeom = GeometryHelper.bufferWktGeometry(baseGeom, filter.buffer);
+        filterGeometries.push(`${sridPrefix}${bufferedGeom}`);
+      } else {
+        filterGeometries.push(`${sridPrefix}${baseGeom}`);
+      }
     }
     if (circles.length > 0) {
-      filterGeometries.push(...circles.map(circle => CqlSpatialFilterHelper.getCircleQuery(circle, filter.buffer)));
+      filterGeometries.push(...circles.map(circle => `${sridPrefix}${GeometryHelper.getCircleQueryWKT(circle, filter.buffer)}`));
     }
 
     const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
@@ -54,13 +58,6 @@ export class CqlSpatialFilterHelper {
     });
 
     return { baseGeometries, circles };
-  }
-
-  private static getCircleQuery(circle: string, buffer?: number): string {
-    const geom = circle.substring(7, circle.length - 1);
-    const [ x, y, radius ] = geom.split(/\s+/);
-    const bufferedRadius = parseFloat(radius) + (buffer || 0);
-    return `BUFFER(POINT(${x} ${y}), ${bufferedRadius})`;
   }
 
   private static isCircle(geom: string): boolean {
