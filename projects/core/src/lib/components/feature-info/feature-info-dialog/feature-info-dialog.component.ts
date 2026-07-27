@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signa
 import { Store } from '@ngrx/store';
 import {
   selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
-  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
+  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled,
   selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
@@ -18,18 +18,12 @@ import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
-import {
-  AttributeType,
-  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
-} from '@tailormap-viewer/api';
+import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarService } from '../../menubar';
-import {
-  addFilterGroup, removeFilterGroup, selectAllFilterGroupsForLayerId, selectComponentTitle, setSingleFilterDisabled,
-} from '../../../state';
-import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
+import { selectComponentTitle } from '../../../state';
 
 @Component({
   selector: 'tm-feature-info-dialog',
@@ -198,75 +192,6 @@ export class FeatureInfoDialogComponent {
           }
         }
       });
-
-  }
-
-  public toggleFilter(att: {attributeValue: any; key: string; label: string}) {
-    const currentFeature = this.currentFeature();
-    this.getExactFilters$(currentFeature?.layer?.id ?? '', att.key, att.attributeValue)
-      .pipe(take(1))
-      .subscribe(exactFilters => {
-        if (exactFilters) {
-          if (exactFilters.some(f => f.enabled)) {
-            for (const exactFilter of exactFilters) {
-              if (exactFilter.source === 'feature-info') {
-                this.store$.dispatch(removeFilterGroup({ filterGroupId: exactFilter.filterGroupId }));
-              } else {
-                this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: true }));
-              }
-            }
-          } else {
-            for (const exactFilter of exactFilters) {
-              this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: false }));
-            }
-          }
-        } else {
-          this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, att.attributeValue);
-        }
-      });
-  }
-
-  private createFilterFromFeatureInfo(
-    layerId: string,
-    attributeName: string,
-    attributeValue: string,
-  ) {
-    this.store$.select(selectFeatureInfoMetadata)
-      .pipe(take(1))
-      .subscribe(metadata => {
-        const columnMetadata = metadata.columnMetadata
-          .find(m => m.layerId === layerId && m.name === attributeName);
-        const attributeType = columnMetadata?.type || AttributeType.STRING;
-        const filterGroup = FeatureInfoHelper.createAttributeFilter(layerId, attributeName, attributeValue, attributeType);
-        this.store$.dispatch(addFilterGroup({ filterGroup }));
-      });
-  }
-
-  public getExactFilters$(layerId: string, attribute: string, value: string):
-    Observable<{filterGroupId: string; filterId: string; source: string; enabled: boolean}[] | null> {
-    return combineLatest([
-      this.store$.select(selectAllFilterGroupsForLayerId(layerId)),
-      this.store$.select(selectFeatureInfoMetadata),
-    ]).pipe(
-      map(([ groups, metadata ]) => {
-        const columnMetadata = metadata.columnMetadata
-          .find(m => m.layerId === layerId && m.name === attribute);
-        const attributeType = columnMetadata?.type || AttributeType.STRING;
-        const exactFilters: {filterGroupId: string; filterId: string; source: string; enabled: boolean}[] = [];
-        for (const group of groups) {
-          for (const filter of group.filters) {
-            if (FilterTypeHelper.isAttributeFilter(filter)
-              && filter.attributeType === attributeType
-              && filter.condition === FeaturesFilterHelper.getEqualsCondition(attributeType)
-              && filter.attribute === attribute
-              && filter.value[0] === value) {
-              exactFilters.push({ filterGroupId: group.id, filterId: filter.id, source: group.source, enabled: !filter.disabled });
-            }
-          }
-        }
-        return exactFilters.length > 0 ? exactFilters : null;
-      }),
-    );
 
   }
 

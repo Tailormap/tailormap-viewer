@@ -48,6 +48,14 @@ tm-error-message {
   justify-content: flex-start;
 }
 
+.filter-button-filter-exists {
+  color: var(--primary-color);
+}
+
+.filter-button:not(.filter-button-filter-exists) {
+  color: var(--disabled-text-color);
+}
+
 .filter-button mat-icon,
 .filter-button mat-icon ::ng-deep svg {
   width: 20px;

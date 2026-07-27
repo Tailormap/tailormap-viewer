@@ -86,3 +86,13 @@ export const selectAllFilterGroupsForLayerId = (layerId: string) => createSelect
     return groups.filter(group => group.layerIds.includes(layerId));
   },
 );
+
+export const selectALlFiltersForAttribute = (layerId: string, attribute: string)=> createSelector(
+  selectAllFilterGroupsForLayerId(layerId),
+  (groups): FilterGroupModel[] => {
+    return groups.map(group => ({
+      ...group,
+      filters: group.filters.filter(filter => FilterTypeHelper.isAttributeFilter(filter) && filter.attribute === attribute),
+    })).filter(group => group.filters.length > 0);
+  },
+);

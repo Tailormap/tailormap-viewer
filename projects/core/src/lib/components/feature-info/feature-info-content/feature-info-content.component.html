@@ -18,7 +18,12 @@
                 <strong>{{att.label}}</strong>
                 <div class="row-content">
                   <div [innerHTML]="att.attributeValue | htmlify"></div>
-                  <button class="filter-button" mat-icon-button (click)="toggleFilter.emit(att)">
+                  <button
+                    class="filter-button"
+                    mat-icon-button
+                    (click)="toggleFilter(att)"
+                    [class.filter-button-filter-exists]="(getExactFilters$(feature.layer.id, att.key, att.attributeValue) | async) !== null"
+                    [tmTooltip]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async">
                     <mat-icon svgIcon="components_filter"></mat-icon>
                   </button>
                 </div>

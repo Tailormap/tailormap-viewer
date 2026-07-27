@@ -8,6 +8,8 @@ import { getAppLayerModel } from '@tailormap-viewer/api';
 import { AttachmentService } from '../../../services';
 import { of } from 'rxjs';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
+import { provideMockStore } from '@ngrx/store/testing';
+import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -41,6 +43,11 @@ describe('FeatureInfoContentComponent', () => {
       providers: [
         { provide: AttachmentService, useValue: mockAttachmentService },
         { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },
+        provideMockStore({
+          selectors: [
+            { selector: selectFeatureInfoMetadata, value: {columnMetadata: [], attachmentMetadata: []}},
+          ],
+        }),
       ],
       inputs: {
         selectedLayer: { id: '1', title: 'Layer1', loading: LoadingStateEnum.LOADED },

@@ -2,10 +2,18 @@ import { Component, ChangeDetectionStrategy, input, signal, computed, inject, ou
 import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
-import { take } from 'rxjs';
+import { combineLatest, map, Observable, take } from 'rxjs';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
+import {
+  addFilterGroup, removeFilterGroup, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute, setSingleFilterDisabled,
+} from '../../../state';
+import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
+import { AttributeType } from '@tailormap-viewer/api';
+import { FeatureInfoHelper } from '../helpers/feature-info.helper';
+import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'tm-feature-info-content',
@@ -19,6 +27,7 @@ export class FeatureInfoContentComponent {
   public featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
   public snackBar = inject(MatSnackBar);
   private clipboard = inject(Clipboard);
+  private store$ = inject(Store);
 
   public selectedLayer = input<FeatureInfoLayerModel | null>(null);
   public currentFeature = input<FeatureInfoModel | null>(null);
@@ -30,7 +39,6 @@ export class FeatureInfoContentComponent {
   public showNextFeatureInfoFeature = output<void>();
   public showPreviousFeatureInfoFeature = output<void>();
   public editFeature = output<void>();
-  public toggleFilter = output<{attributeValue: any; key: string; label: string}>();
 
   public attributesCollapsed = signal<boolean>(false);
   public attributesToggleIcon = computed(() => this.attributesCollapsed() ? 'chevron_top' : 'chevron_bottom');
@@ -98,4 +106,112 @@ export class FeatureInfoContentComponent {
     return true;
   }
 
+  public toggleFilter(att: {attributeValue: any; key: string; label: string}) {
+    const currentFeature = this.currentFeature();
+    this.getExactFilters$(currentFeature?.layer?.id ?? '', att.key, att.attributeValue)
+      .pipe(take(1))
+      .subscribe(exactFilters => {
+        if (exactFilters) {
+          if (exactFilters.some(f => f.enabled)) {
+            for (const exactFilter of exactFilters) {
+              if (exactFilter.source === 'feature-info') {
+                this.store$.dispatch(removeFilterGroup({ filterGroupId: exactFilter.filterGroupId }));
+              } else {
+                this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: true }));
+              }
+            }
+          } else {
+            for (const exactFilter of exactFilters) {
+              this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: false }));
+            }
+          }
+        } else {
+          this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, att.attributeValue);
+        }
+      });
+  }
+
+  private createFilterFromFeatureInfo(
+    layerId: string,
+    attributeName: string,
+    attributeValue: string,
+  ) {
+    this.store$.select(selectFeatureInfoMetadata)
+      .pipe(take(1))
+      .subscribe(metadata => {
+        const columnMetadata = metadata.columnMetadata
+          .find(m => m.layerId === layerId && m.name === attributeName);
+        const attributeType = columnMetadata?.type || AttributeType.STRING;
+        const filterGroup = FeatureInfoHelper.createAttributeFilter(layerId, attributeName, attributeValue, attributeType);
+        this.store$.dispatch(addFilterGroup({ filterGroup }));
+      });
+  }
+
+  public getExactFilters$(layerId: string, attribute: string, value: string):
+    Observable<{filterGroupId: string; filterId: string; source: string; enabled: boolean}[] | null> {
+    return combineLatest([
+      this.store$.select(selectAllFilterGroupsForLayerId(layerId)),
+      this.store$.select(selectFeatureInfoMetadata),
+    ]).pipe(
+      map(([ groups, metadata ]) => {
+        const columnMetadata = metadata.columnMetadata
+          .find(m => m.layerId === layerId && m.name === attribute);
+        const attributeType = columnMetadata?.type || AttributeType.STRING;
+        const exactFilters: {filterGroupId: string; filterId: string; source: string; enabled: boolean}[] = [];
+        for (const group of groups) {
+          for (const filter of group.filters) {
+            if (FilterTypeHelper.isAttributeFilter(filter)
+              && filter.attributeType === attributeType
+              && filter.condition === FeaturesFilterHelper.getEqualsCondition(attributeType)
+              && filter.attribute === attribute
+              && filter.value[0] === value) {
+              exactFilters.push({ filterGroupId: group.id, filterId: filter.id, source: group.source, enabled: !filter.disabled });
+            }
+          }
+        }
+        return exactFilters.length > 0 ? exactFilters : null;
+      }),
+    );
+
+  }
+
+  private otherFilterExistsForAttribute$(layerId: string, attribute: string, value: string): Observable<boolean> {
+    return combineLatest([
+      this.store$.select(selectALlFiltersForAttribute(layerId, attribute)),
+      this.store$.select(selectFeatureInfoMetadata),
+    ]).pipe(
+      map(([ groups, metadata ]) => {
+        const columnMetadata = metadata.columnMetadata
+          .find(m => m.layerId === layerId && m.name === attribute);
+        const attributeType = columnMetadata?.type || AttributeType.STRING;
+        for (const group of groups) {
+          for (const filter of group.filters) {
+            if (FilterTypeHelper.isAttributeFilter(filter)
+              && (filter.condition !== FeaturesFilterHelper.getEqualsCondition(attributeType)
+              || filter.value[0] !== value)) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }),
+    );
+  }
+
+  public getFilterButtonTooltip$(layerId: string, attribute: string, value: string): Observable<string> {
+    return combineLatest([
+      this.getExactFilters$(layerId, attribute, value),
+      this.otherFilterExistsForAttribute$(layerId, attribute, value),
+    ]).pipe(
+      map(([ exactFilters, otherFilterExists ]) => {
+        if (exactFilters && exactFilters.some(f => f.enabled)) {
+          return $localize `:@@core.feature-info.filter-exists-tooltip:Turn off filter for this value`;
+        }
+        if (otherFilterExists) {
+          return $localize `:@@core.feature-info.other-filter-exists-tooltip:Filter on this value (warning: other filters exist for this attribute)`;
+        }
+        return $localize `:@@core.feature-info.filter-does-not-exist-tooltip:Filter on this value`;
+      }),
+    );
+  }
 }

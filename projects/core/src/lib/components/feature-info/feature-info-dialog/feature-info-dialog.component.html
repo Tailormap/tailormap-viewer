@@ -13,8 +13,7 @@
                                [hideEmptyValues]="config()?.hideEmptyValues ?? false"
                                (showNextFeatureInfoFeature)="next()"
                                (showPreviousFeatureInfoFeature)="back()"
-                               (editFeature)="editFeature()"
-                               (toggleFilter)="toggleFilter($event)">
+                               (editFeature)="editFeature()">
       </tm-feature-info-content>
     </div>
   }
@@ -68,8 +67,7 @@
         [hideEmptyValues]="config()?.hideEmptyValues ?? false"
         (showNextFeatureInfoFeature)="next()"
         (showPreviousFeatureInfoFeature)="back()"
-        (editFeature)="editFeature()"
-        (toggleFilter)="toggleFilter($event)">
+        (editFeature)="editFeature()">
       </tm-feature-info-content>
     </div>
   </tm-dialog>
