@@ -1,5 +1,5 @@
 import {
-  AttributeFilterModel, AttributeValueSettings, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
+  AttributeFilterModel, AttributeType, AttributeValueSettings, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
 
@@ -39,6 +39,7 @@ export class FeaturesFilterHelper {
       return group;
     });
   }
+
   private static getFilterForSubstringValue(filter: AttributeFilterModel, value: AttributeValueSettings): AttributeFilterModel {
     return {
       attribute: filter.attribute,
@@ -52,6 +53,20 @@ export class FeaturesFilterHelper {
       id: `${filter.id}-substring-${value.value}`,
       generatedByFilterId: filter.id,
     };
+  }
+
+  public static getEqualsCondition(type: AttributeType): FilterConditionEnum {
+    switch (type) {
+      case AttributeType.STRING:
+        return FilterConditionEnum.STRING_EQUALS_KEY;
+      case AttributeType.NUMBER:
+        return FilterConditionEnum.NUMBER_EQUALS_KEY;
+      case AttributeType.BOOLEAN:
+        // todo: use correct key (true or false)
+        return FilterConditionEnum.BOOLEAN_TRUE_KEY;
+      default:
+        return FilterConditionEnum.STRING_EQUALS_KEY;
+    }
   }
 
 }
