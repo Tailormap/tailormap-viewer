@@ -45,7 +45,7 @@ describe('FeatureInfoContentComponent', () => {
         { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },
         provideMockStore({
           selectors: [
-            { selector: selectFeatureInfoMetadata, value: {columnMetadata: [], attachmentMetadata: []}},
+            { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
           ],
         }),
       ],

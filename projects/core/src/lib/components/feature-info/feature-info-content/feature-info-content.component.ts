@@ -7,13 +7,14 @@ import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailorma
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
-  addFilterGroup, removeFilterGroup, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute, setSingleFilterDisabled,
+  addFilter, addFilterGroup, removeFilter, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute,
 } from '../../../state';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
+import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 
 @Component({
   selector: 'tm-feature-info-content',
@@ -28,6 +29,7 @@ export class FeatureInfoContentComponent {
   public snackBar = inject(MatSnackBar);
   private clipboard = inject(Clipboard);
   private store$ = inject(Store);
+  private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
 
   public selectedLayer = input<FeatureInfoLayerModel | null>(null);
   public currentFeature = input<FeatureInfoModel | null>(null);
@@ -109,20 +111,15 @@ export class FeatureInfoContentComponent {
   public toggleFilter(att: {attributeValue: any; key: string; label: string}) {
     const currentFeature = this.currentFeature();
     this.getExactFilters$(currentFeature?.layer?.id ?? '', att.key, att.attributeValue)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        map(exactFilters => exactFilters?.filter(exactFilter => exactFilter.source === 'ATTRIBUTE_LIST')),
+      )
       .subscribe(exactFilters => {
-        if (exactFilters) {
-          if (exactFilters.some(f => f.enabled)) {
-            for (const exactFilter of exactFilters) {
-              if (exactFilter.source === 'feature-info') {
-                this.store$.dispatch(removeFilterGroup({ filterGroupId: exactFilter.filterGroupId }));
-              } else {
-                this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: true }));
-              }
-            }
-          } else {
-            for (const exactFilter of exactFilters) {
-              this.store$.dispatch(setSingleFilterDisabled({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId, disabled: false }));
+        if (exactFilters && exactFilters.length > 0) {
+          for (const exactFilter of exactFilters) {
+            if (exactFilter.source === 'ATTRIBUTE_LIST') {
+              this.store$.dispatch(removeFilter({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId }));
             }
           }
         } else {
@@ -136,14 +133,23 @@ export class FeatureInfoContentComponent {
     attributeName: string,
     attributeValue: string,
   ) {
-    this.store$.select(selectFeatureInfoMetadata)
-      .pipe(take(1))
-      .subscribe(metadata => {
+    combineLatest([
+      this.store$.select(selectAllFilterGroupsForLayerId(layerId)),
+      this.store$.select(selectFeatureInfoMetadata),
+    ]).pipe(take(1))
+      .subscribe(([ groups, metadata ]) => {
+        const existingGroup = groups
+          .find(group => group.source === 'ATTRIBUTE_LIST' && group.layerIds.includes(layerId));
         const columnMetadata = metadata.columnMetadata
           .find(m => m.layerId === layerId && m.name === attributeName);
         const attributeType = columnMetadata?.type || AttributeType.STRING;
-        const filterGroup = FeatureInfoHelper.createAttributeFilter(layerId, attributeName, attributeValue, attributeType);
-        this.store$.dispatch(addFilterGroup({ filterGroup }));
+        if (existingGroup) {
+          const filter = FeatureInfoHelper.createAttributeFilter(attributeName, attributeValue, attributeType);
+          this.store$.dispatch(addFilter({ filterGroupId: existingGroup.id, filter }));
+        } else {
+          const filterGroup = FeatureInfoHelper.createAttributeFilterGroup(layerId, attributeName, attributeValue, attributeType);
+          this.store$.dispatch(addFilterGroup({ filterGroup }));
+        }
       });
   }
 
@@ -158,7 +164,8 @@ export class FeatureInfoContentComponent {
           .find(m => m.layerId === layerId && m.name === attribute);
         const attributeType = columnMetadata?.type || AttributeType.STRING;
         const exactFilters: {filterGroupId: string; filterId: string; source: string; enabled: boolean}[] = [];
-        for (const group of groups) {
+        const attributeListGroups = groups.filter(group => group.source === 'ATTRIBUTE_LIST');
+        for (const group of attributeListGroups) {
           for (const filter of group.filters) {
             if (FilterTypeHelper.isAttributeFilter(filter)
               && filter.attributeType === attributeType
@@ -175,7 +182,8 @@ export class FeatureInfoContentComponent {
 
   }
 
-  private otherFilterExistsForAttribute$(layerId: string, attribute: string, value: string): Observable<boolean> {
+  public otherFilterExistsForAttribute$(layerId: string, attribute: string, value: string): Observable<boolean> {
+    // Find if other filters exist for this attribute in groups with source 'ATTRIBUTE-LIST'.
     return combineLatest([
       this.store$.select(selectALlFiltersForAttribute(layerId, attribute)),
       this.store$.select(selectFeatureInfoMetadata),
@@ -184,7 +192,8 @@ export class FeatureInfoContentComponent {
         const columnMetadata = metadata.columnMetadata
           .find(m => m.layerId === layerId && m.name === attribute);
         const attributeType = columnMetadata?.type || AttributeType.STRING;
-        for (const group of groups) {
+        const attributeListGroups = groups.filter(group => group.source === 'ATTRIBUTE_LIST');
+        for (const group of attributeListGroups) {
           for (const filter of group.filters) {
             if (FilterTypeHelper.isAttributeFilter(filter)
               && (filter.condition !== FeaturesFilterHelper.getEqualsCondition(attributeType)
@@ -208,9 +217,27 @@ export class FeatureInfoContentComponent {
           return $localize `:@@core.feature-info.filter-exists-tooltip:Turn off filter for this value`;
         }
         if (otherFilterExists) {
-          return $localize `:@@core.feature-info.other-filter-exists-tooltip:Filter on this value (warning: other filters exist for this attribute)`;
+          return $localize `:@@core.feature-info.other-filter-exists-tooltip:There is another filter active for this attribute`;
         }
         return $localize `:@@core.feature-info.filter-does-not-exist-tooltip:Filter on this value`;
+      }),
+    );
+  }
+
+  public exactFilterEnabled$(layerId: string, attribute: string, value: string): Observable<boolean> {
+    return this.getExactFilters$(layerId, attribute, value).pipe(
+      map(exactFilters =>
+        !!exactFilters && exactFilters?.length > 0),
+    );
+  }
+
+  public getFilterButtonDisabled$(layerId: string, attribute: string, value: string): Observable<boolean> {
+    return combineLatest([
+      this.otherFilterExistsForAttribute$(layerId, attribute, value),
+      this.exactFilterEnabled$(layerId, attribute, value),
+    ]).pipe(
+      map(([ otherFilterExists, exactFilterEnabled ]) => {
+        return otherFilterExists && !exactFilterEnabled;
       }),
     );
   }

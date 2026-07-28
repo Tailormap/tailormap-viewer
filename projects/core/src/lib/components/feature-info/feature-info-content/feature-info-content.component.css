@@ -48,11 +48,11 @@ tm-error-message {
   justify-content: flex-start;
 }
 
-.filter-button-filter-exists {
+.filter-button {
   color: var(--primary-color);
 }
 
-.filter-button:not(.filter-button-filter-exists) {
+.filter-button-disabled {
   color: var(--disabled-text-color);
 }
 

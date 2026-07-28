@@ -34,29 +34,37 @@ export class FeatureInfoHelper {
     return FeatureHelper.getGeometryForFeature(feature, geomAttribute.name);
   }
 
-  public static createAttributeFilter(
+  public static createAttributeFilterGroup(
     layerId: string,
     attributeName: string,
     attributeValue: string,
     attributeType: AttributeType,
   ): FilterGroupModel<AttributeFilterModel> {
+    return {
+      id: nanoid(),
+      source: "ATTRIBUTE_LIST",
+      layerIds: [layerId],
+      type: FilterTypeEnum.ATTRIBUTE,
+      filters: [FeatureInfoHelper.createAttributeFilter(attributeName, attributeValue, attributeType)],
+      operator: "AND",
+    };
+  }
+
+  public static createAttributeFilter(
+    attributeName: string,
+    attributeValue: string,
+    attributeType: AttributeType,
+  ): AttributeFilterModel {
     const condition = FeaturesFilterHelper.getEqualsCondition(attributeType);
     return {
       id: nanoid(),
-      source: "feature-info",
-      layerIds: [layerId],
       type: FilterTypeEnum.ATTRIBUTE,
-      filters: [{
-        id: nanoid(),
-        type: FilterTypeEnum.ATTRIBUTE,
-        condition: condition,
-        value: [attributeValue],
-        attribute: attributeName,
-        attributeType: attributeType,
-        caseSensitive: false,
-        invertCondition: false,
-      }],
-      operator: "AND",
+      condition: condition,
+      value: [attributeValue],
+      attribute: attributeName,
+      attributeType: attributeType,
+      caseSensitive: false,
+      invertCondition: false,
     };
   }
 
