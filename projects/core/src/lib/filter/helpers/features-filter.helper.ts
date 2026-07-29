@@ -2,6 +2,7 @@ import {
   AttributeFilterModel, AttributeType, AttributeValueSettings, FilterConditionEnum, FilterGroupModel, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
+import { DateTime } from 'luxon';
 
 export class FeaturesFilterHelper {
 
@@ -60,31 +61,42 @@ export class FeaturesFilterHelper {
     attributeName: string,
     attributeValue: string,
     attributeType: AttributeType,
+    attributeAlias?: string,
   ): Omit<AttributeFilterModel, 'id'> {
-    const condition = FeaturesFilterHelper.getEqualsCondition(attributeType);
+    const condition = FeaturesFilterHelper.getEqualsCondition(attributeType, attributeValue);
+    const value = (attributeType === AttributeType.DATE || attributeType === AttributeType.TIMESTAMP)
+      ? FeaturesFilterHelper.dateToDay(attributeValue)
+      : attributeValue;
     return {
       type: FilterTypeEnum.ATTRIBUTE,
       condition: condition,
-      value: [attributeValue],
+      value: attributeType === AttributeType.BOOLEAN ? [""] : [value],
       attribute: attributeName,
       attributeType: attributeType,
-      caseSensitive: false,
+      caseSensitive: true,
       invertCondition: false,
+      attributeAlias: attributeAlias,
     };
   }
 
-  public static getEqualsCondition(type: AttributeType): FilterConditionEnum {
+  public static getEqualsCondition(type: AttributeType, value: string): FilterConditionEnum {
     switch (type) {
       case AttributeType.STRING:
         return FilterConditionEnum.STRING_EQUALS_KEY;
       case AttributeType.NUMBER:
         return FilterConditionEnum.NUMBER_EQUALS_KEY;
       case AttributeType.BOOLEAN:
-        // todo: use correct key (true or false)
-        return FilterConditionEnum.BOOLEAN_TRUE_KEY;
+        return value === 'true' ? FilterConditionEnum.BOOLEAN_TRUE_KEY : FilterConditionEnum.BOOLEAN_FALSE_KEY;
+      case AttributeType.DATE:
+      case AttributeType.TIMESTAMP:
+        return FilterConditionEnum.DATE_ON_KEY;
       default:
         return FilterConditionEnum.STRING_EQUALS_KEY;
     }
+  }
+
+  public static dateToDay(dateString: string): string {
+    return DateTime.fromISO(dateString).toISODate() ?? '';
   }
 
 }

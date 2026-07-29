@@ -107,7 +107,8 @@ export class FeatureInfoContentComponent {
 
   public toggleFilter(att: {attributeValue: any; key: string; label: string}) {
     const currentFeature = this.currentFeature();
-    this.getExactFilters$(currentFeature?.layer?.id ?? '', att.key, att.attributeValue)
+    const attributeValueString: string = String(att.attributeValue);
+    this.getExactFilters$(currentFeature?.layer?.id ?? '', att.key, attributeValueString)
       .pipe(
         take(1),
         map(exactFilters => exactFilters?.filter(exactFilter => exactFilter.source === 'ATTRIBUTE_LIST')),
@@ -118,7 +119,7 @@ export class FeatureInfoContentComponent {
             this.simpleAttributeFilterService.removeFilterById(exactFilter.source, currentFeature?.layer?.id ?? '', exactFilter.filterId);
           }
         } else {
-          this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, att.attributeValue);
+          this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, attributeValueString, att.label);
         }
       });
   }
@@ -127,13 +128,14 @@ export class FeatureInfoContentComponent {
     layerId: string,
     attributeName: string,
     attributeValue: string,
+    attributeAlias?: string,
   ) {
     this.store$.select(selectFeatureInfoMetadata).pipe(take(1))
       .subscribe( metadata => {
         const columnMetadata = metadata.columnMetadata
           .find(m => m.layerId === layerId && m.name === attributeName);
         const attributeType = columnMetadata?.type || AttributeType.STRING;
-        const filter = FeaturesFilterHelper.createAttributeFilter(attributeName, attributeValue, attributeType);
+        const filter = FeaturesFilterHelper.createAttributeFilter(attributeName, attributeValue, attributeType, attributeAlias);
         this.simpleAttributeFilterService.setFilter("ATTRIBUTE_LIST", layerId, filter);
       });
   }
@@ -154,9 +156,9 @@ export class FeatureInfoContentComponent {
           for (const filter of group.filters) {
             if (FilterTypeHelper.isAttributeFilter(filter)
               && filter.attributeType === attributeType
-              && filter.condition === FeaturesFilterHelper.getEqualsCondition(attributeType)
+              && filter.condition === FeaturesFilterHelper.getEqualsCondition(attributeType, value)
               && filter.attribute === attribute
-              && filter.value[0] === value) {
+              && (filter.value[0] === value || filter.value[0] === FeaturesFilterHelper.dateToDay(value))) {
               exactFilters.push({ filterGroupId: group.id, filterId: filter.id, source: group.source, enabled: !filter.disabled });
             }
           }
@@ -181,7 +183,7 @@ export class FeatureInfoContentComponent {
         for (const group of attributeListGroups) {
           for (const filter of group.filters) {
             if (FilterTypeHelper.isAttributeFilter(filter)
-              && (filter.condition !== FeaturesFilterHelper.getEqualsCondition(attributeType)
+              && (filter.condition !== FeaturesFilterHelper.getEqualsCondition(attributeType, value)
               || filter.value[0] !== value)) {
               return true;
             }
