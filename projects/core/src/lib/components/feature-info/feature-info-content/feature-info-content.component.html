@@ -20,6 +20,7 @@
                   <div class="attribute-value" [innerHTML]="att.attributeValue | htmlify"></div>
                   <div
                     class="filter-button-wrapper"
+                    [class.filter-active]="exactFilterEnabled$(feature.layer.id, att.key, att.attributeValue) | async"
                     [tmTooltip]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async">
                     <button
                       class="filter-button"

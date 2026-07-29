@@ -51,6 +51,19 @@ tm-error-message {
   flex: 0 0 24px;
   display: flex;
   align-items: center;
+  opacity: 0;
+}
+
+.row:hover .filter-button-wrapper {
+  opacity: 1;
+}
+
+.filter-button-wrapper.filter-active {
+  opacity: 1;
+}
+
+.feature-info-content--mobile .filter-button-wrapper {
+  opacity: 1;
 }
 
 .filter-button {
