@@ -678,6 +678,10 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
+        <source>There is another filter for this attribute</source>
+        <target>Er is een ander filter voor dit attribuut</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
         <source>Remove filter for this value</source>
         <target>Verwijder het filter voor deze waarde</target>
@@ -697,10 +701,6 @@
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
         <target>Objectinformatie</target>
-      </trans-unit>
-      <trans-unit id="core.feature-info.other-filter-exists-tooltip" datatype="html">
-        <source>There is another filter for this attribute</source>
-        <target>Er is een ander filter voor dit attribuut</target>
       </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>

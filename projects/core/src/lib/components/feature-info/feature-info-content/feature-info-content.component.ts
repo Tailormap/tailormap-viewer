@@ -199,7 +199,7 @@ export class FeatureInfoContentComponent {
           return $localize `:@@core.feature-info.filter-off-tooltip:Remove filter for this value`;
         }
         if (otherFilterExists) {
-          return $localize `:@@core.feature-info.other-filter-exists-tooltip:There is another filter for this attribute`;
+          return $localize `:@@core.feature-info.filter-exists-tooltip:There is another filter for this attribute`;
         }
         return $localize `:@@core.feature-info.filter-tooltip:Filter on this value`;
       }),

@@ -506,6 +506,9 @@
       <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
         <source>Feature info</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
+        <source>There is another filter for this attribute</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
         <source>Remove filter for this value</source>
       </trans-unit>
@@ -520,9 +523,6 @@
       </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
-      </trans-unit>
-      <trans-unit id="core.feature-info.other-filter-exists-tooltip" datatype="html">
-        <source>There is another filter active for this attribute</source>
       </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>
