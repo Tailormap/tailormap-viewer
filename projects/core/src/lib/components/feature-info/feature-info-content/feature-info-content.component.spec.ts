@@ -10,6 +10,10 @@ import { of } from 'rxjs';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
+import {
+  coreStateKey, initialCoreState, selectActiveFilterGroups, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute,
+} from '../../../state';
+import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
   return {
@@ -34,6 +38,7 @@ describe('FeatureInfoContentComponent', () => {
       getAttachmentTooltip: () => '',
     };
     const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
+    const mockSimpleAttributeFilterService = { setFilter: jest.fn(), removeFilterById: jest.fn() };
     await render(FeatureInfoContentComponent, {
       imports: [
         SharedModule,
@@ -43,9 +48,15 @@ describe('FeatureInfoContentComponent', () => {
       providers: [
         { provide: AttachmentService, useValue: mockAttachmentService },
         { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },
+        { provide: SimpleAttributeFilterService, useValue: mockSimpleAttributeFilterService },
         provideMockStore({
           selectors: [
             { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
+            { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
+            { selector: selectALlFiltersForAttribute('1', 'prop'), value: [] },
+            { selector: selectALlFiltersForAttribute('1', 'prop2'), value: [] },
+            { selector: selectALlFiltersForAttribute('1', 'fid'), value: [] },
+            { selector: selectActiveFilterGroups, value: [] },
           ],
         }),
       ],
