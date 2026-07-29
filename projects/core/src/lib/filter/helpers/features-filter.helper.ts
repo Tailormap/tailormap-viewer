@@ -3,6 +3,7 @@ import {
 } from '@tailormap-viewer/api';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
 import { DateTime } from 'luxon';
+import { FilterTypeHelper } from './filter-type.helper';
 
 export class FeaturesFilterHelper {
 
@@ -97,6 +98,28 @@ export class FeaturesFilterHelper {
 
   public static dateToDay(dateString: string): string {
     return DateTime.fromISO(dateString).toISODate() ?? '';
+  }
+
+  public static findExactFiltersInGroups(
+    groups: FilterGroupModel[],
+    attribute: string,
+    attributeType: AttributeType,
+    attributeValue: string,
+    condition: FilterConditionEnum): string[] {
+    return groups
+      .flatMap(group =>
+        group.filters
+          .filter(
+            filter =>
+              FilterTypeHelper.isAttributeFilter(filter) &&
+              filter.attributeType === attributeType &&
+              filter.condition === condition &&
+              filter.attribute === attribute &&
+              (filter.value[0] === attributeValue ||
+                filter.value[0] === FeaturesFilterHelper.dateToDay(attributeValue)),
+          )
+          .map(filter => filter.id),
+      );
   }
 
 }
