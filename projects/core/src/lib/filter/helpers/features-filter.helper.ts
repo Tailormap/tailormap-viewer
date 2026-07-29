@@ -55,6 +55,24 @@ export class FeaturesFilterHelper {
     };
   }
 
+
+  public static createAttributeFilter(
+    attributeName: string,
+    attributeValue: string,
+    attributeType: AttributeType,
+  ): Omit<AttributeFilterModel, 'id'> {
+    const condition = FeaturesFilterHelper.getEqualsCondition(attributeType);
+    return {
+      type: FilterTypeEnum.ATTRIBUTE,
+      condition: condition,
+      value: [attributeValue],
+      attribute: attributeName,
+      attributeType: attributeType,
+      caseSensitive: false,
+      invertCondition: false,
+    };
+  }
+
   public static getEqualsCondition(type: AttributeType): FilterConditionEnum {
     switch (type) {
       case AttributeType.STRING:

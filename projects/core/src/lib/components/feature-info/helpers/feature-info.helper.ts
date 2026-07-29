@@ -1,14 +1,10 @@
 import { FeatureInfoResponseModel } from '../models/feature-info-response.model';
-import {
-  AttributeFilterModel, AttributeType, AttributeTypeHelper, FilterGroupModel, FilterTypeEnum,
-} from '@tailormap-viewer/api';
+import { AttributeTypeHelper } from '@tailormap-viewer/api';
 import { FeatureHelper } from '../../../shared/helpers/feature.helper';
 import { FeatureInfoFeatureModel } from '../models/feature-info-feature.model';
 import { FeatureInfoColumnMetadataModel } from '../models/feature-info-column-metadata.model';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { nanoid } from 'nanoid';
-import { FeaturesFilterHelper } from '../../../filter';
 
 export class FeatureInfoHelper {
 
@@ -32,40 +28,6 @@ export class FeatureInfoHelper {
       return null;
     }
     return FeatureHelper.getGeometryForFeature(feature, geomAttribute.name);
-  }
-
-  public static createAttributeFilterGroup(
-    layerId: string,
-    attributeName: string,
-    attributeValue: string,
-    attributeType: AttributeType,
-  ): FilterGroupModel<AttributeFilterModel> {
-    return {
-      id: nanoid(),
-      source: "ATTRIBUTE_LIST",
-      layerIds: [layerId],
-      type: FilterTypeEnum.ATTRIBUTE,
-      filters: [FeatureInfoHelper.createAttributeFilter(attributeName, attributeValue, attributeType)],
-      operator: "AND",
-    };
-  }
-
-  public static createAttributeFilter(
-    attributeName: string,
-    attributeValue: string,
-    attributeType: AttributeType,
-  ): AttributeFilterModel {
-    const condition = FeaturesFilterHelper.getEqualsCondition(attributeType);
-    return {
-      id: nanoid(),
-      type: FilterTypeEnum.ATTRIBUTE,
-      condition: condition,
-      value: [attributeValue],
-      attribute: attributeName,
-      attributeType: attributeType,
-      caseSensitive: false,
-      invertCondition: false,
-    };
   }
 
 }

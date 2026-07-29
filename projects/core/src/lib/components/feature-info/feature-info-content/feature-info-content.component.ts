@@ -6,12 +6,9 @@ import { combineLatest, map, Observable, take } from 'rxjs';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
-import {
-  addFilter, addFilterGroup, removeFilter, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute,
-} from '../../../state';
+import { selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute } from '../../../state';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
 import { AttributeType } from '@tailormap-viewer/api';
-import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
@@ -118,9 +115,7 @@ export class FeatureInfoContentComponent {
       .subscribe(exactFilters => {
         if (exactFilters && exactFilters.length > 0) {
           for (const exactFilter of exactFilters) {
-            if (exactFilter.source === 'ATTRIBUTE_LIST') {
-              this.store$.dispatch(removeFilter({ filterGroupId: exactFilter.filterGroupId, filterId: exactFilter.filterId }));
-            }
+            this.simpleAttributeFilterService.removeFilterById(exactFilter.source, currentFeature?.layer?.id ?? '', exactFilter.filterId);
           }
         } else {
           this.createFilterFromFeatureInfo(currentFeature?.layer?.id ?? '', att.key, att.attributeValue);
@@ -133,23 +128,13 @@ export class FeatureInfoContentComponent {
     attributeName: string,
     attributeValue: string,
   ) {
-    combineLatest([
-      this.store$.select(selectAllFilterGroupsForLayerId(layerId)),
-      this.store$.select(selectFeatureInfoMetadata),
-    ]).pipe(take(1))
-      .subscribe(([ groups, metadata ]) => {
-        const existingGroup = groups
-          .find(group => group.source === 'ATTRIBUTE_LIST' && group.layerIds.includes(layerId));
+    this.store$.select(selectFeatureInfoMetadata).pipe(take(1))
+      .subscribe( metadata => {
         const columnMetadata = metadata.columnMetadata
           .find(m => m.layerId === layerId && m.name === attributeName);
         const attributeType = columnMetadata?.type || AttributeType.STRING;
-        if (existingGroup) {
-          const filter = FeatureInfoHelper.createAttributeFilter(attributeName, attributeValue, attributeType);
-          this.store$.dispatch(addFilter({ filterGroupId: existingGroup.id, filter }));
-        } else {
-          const filterGroup = FeatureInfoHelper.createAttributeFilterGroup(layerId, attributeName, attributeValue, attributeType);
-          this.store$.dispatch(addFilterGroup({ filterGroup }));
-        }
+        const filter = FeaturesFilterHelper.createAttributeFilter(attributeName, attributeValue, attributeType);
+        this.simpleAttributeFilterService.setFilter("ATTRIBUTE_LIST", layerId, filter);
       });
   }
 
@@ -183,7 +168,7 @@ export class FeatureInfoContentComponent {
   }
 
   public otherFilterExistsForAttribute$(layerId: string, attribute: string, value: string): Observable<boolean> {
-    // Find if other filters exist for this attribute in groups with source 'ATTRIBUTE-LIST'.
+    // Find if other filters exist for this attribute in groups with source 'ATTRIBUTE_LIST'.
     return combineLatest([
       this.store$.select(selectALlFiltersForAttribute(layerId, attribute)),
       this.store$.select(selectFeatureInfoMetadata),
