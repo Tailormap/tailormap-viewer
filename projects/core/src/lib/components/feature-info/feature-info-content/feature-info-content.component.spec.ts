@@ -10,9 +10,7 @@ import { of } from 'rxjs';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
-import {
-  coreStateKey, initialCoreState, selectActiveFilterGroups, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute,
-} from '../../../state';
+import { selectActiveFilterGroups, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute } from '../../../state';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
