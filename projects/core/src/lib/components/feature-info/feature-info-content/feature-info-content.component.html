@@ -17,7 +17,7 @@
               <div class="row">
                 <strong>{{att.label}}</strong>
                 <div class="row-content">
-                  <div [innerHTML]="att.attributeValue | htmlify"></div>
+                  <div class="attribute-value" [innerHTML]="att.attributeValue | htmlify"></div>
                   <div
                     class="filter-button-wrapper"
                     [tmTooltip]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async">
