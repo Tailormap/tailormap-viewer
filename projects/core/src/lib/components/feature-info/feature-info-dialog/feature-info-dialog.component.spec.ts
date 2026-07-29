@@ -19,7 +19,7 @@ import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/featur
 import { of } from 'rxjs';
 import {
   selectActiveFilterGroups,
-  selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute, selectComponentsConfig, selectViewerLoadingState,
+  selectAllFilterGroupsForLayerId, selectAllFiltersForAttribute, selectComponentsConfig, selectViewerLoadingState,
 } from '../../../state';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
@@ -67,9 +67,9 @@ const setup = async (withState = false) => {
           { selector: selectIn3dView, value: false },
           { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
           { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'prop'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'prop2'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'fid'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop2'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'fid'), value: [] },
           { selector: selectActiveFilterGroups, value: [] },
         ] : [
           { selector: selectSelectedFeatureInfoLayer, value: null },
@@ -82,9 +82,9 @@ const setup = async (withState = false) => {
           { selector: selectIn3dView, value: false },
           { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
           { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'prop'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'prop2'), value: [] },
-          { selector: selectALlFiltersForAttribute('1', 'fid'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop2'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'fid'), value: [] },
           { selector: selectActiveFilterGroups, value: [] },
         ],
       }),

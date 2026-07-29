@@ -87,7 +87,7 @@ export const selectAllFilterGroupsForLayerId = (layerId: string) => createSelect
   },
 );
 
-export const selectALlFiltersForAttribute = (layerId: string, attribute: string)=> createSelector(
+export const selectAllFiltersForAttribute = (layerId: string, attribute: string)=> createSelector(
   selectAllFilterGroupsForLayerId(layerId),
   (groups): FilterGroupModel[] => {
     return groups.map(group => ({

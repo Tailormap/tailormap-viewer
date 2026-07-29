@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
-import { selectActiveFilterGroups, selectAllFilterGroupsForLayerId, selectALlFiltersForAttribute } from '../../../state';
+import { selectActiveFilterGroups, selectAllFilterGroupsForLayerId, selectAllFiltersForAttribute } from '../../../state';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 
 const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
@@ -51,9 +51,9 @@ describe('FeatureInfoContentComponent', () => {
           selectors: [
             { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
             { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
-            { selector: selectALlFiltersForAttribute('1', 'prop'), value: [] },
-            { selector: selectALlFiltersForAttribute('1', 'prop2'), value: [] },
-            { selector: selectALlFiltersForAttribute('1', 'fid'), value: [] },
+            { selector: selectAllFiltersForAttribute('1', 'prop'), value: [] },
+            { selector: selectAllFiltersForAttribute('1', 'prop2'), value: [] },
+            { selector: selectAllFiltersForAttribute('1', 'fid'), value: [] },
             { selector: selectActiveFilterGroups, value: [] },
           ],
         }),

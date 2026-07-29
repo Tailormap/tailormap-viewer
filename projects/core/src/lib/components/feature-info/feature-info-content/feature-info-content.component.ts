@@ -6,7 +6,7 @@ import { combineLatest, map, Observable, take } from 'rxjs';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { selectALlFiltersForAttribute } from '../../../state';
+import { selectAllFiltersForAttribute } from '../../../state';
 import { selectFeatureInfoMetadata } from '../state/feature-info.selectors';
 import { AttributeType } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
@@ -140,7 +140,7 @@ export class FeatureInfoContentComponent {
   public getExactFilters$(layerId: string, attribute: string, value: string):
     Observable<string[] | null> {
     return combineLatest([
-      this.store$.select(selectALlFiltersForAttribute(layerId, attribute)),
+      this.store$.select(selectAllFiltersForAttribute(layerId, attribute)),
       this.store$.select(selectFeatureInfoMetadata),
     ]).pipe(
       map(([ groups, metadata ]) => {
@@ -167,7 +167,7 @@ export class FeatureInfoContentComponent {
   public otherFilterExistsForAttribute$(layerId: string, attribute: string, value: string): Observable<boolean> {
     // Find if other filters exist for this attribute in groups with source 'ATTRIBUTE_LIST'.
     return combineLatest([
-      this.store$.select(selectALlFiltersForAttribute(layerId, attribute)),
+      this.store$.select(selectAllFiltersForAttribute(layerId, attribute)),
       this.store$.select(selectFeatureInfoMetadata),
     ]).pipe(
       map(([ groups, metadata ]) => {
