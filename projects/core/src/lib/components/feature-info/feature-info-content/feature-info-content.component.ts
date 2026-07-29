@@ -206,20 +206,13 @@ export class FeatureInfoContentComponent {
     );
   }
 
-  public exactFilterEnabled$(layerId: string, attribute: string, value: string): Observable<boolean> {
-    return this.getExactFilters$(layerId, attribute, value).pipe(
-      map(exactFilters =>
-        !!exactFilters && exactFilters?.length > 0),
-    );
-  }
-
   public getFilterButtonDisabled$(layerId: string, attribute: string, value: string): Observable<boolean> {
     return combineLatest([
       this.otherFilterExistsForAttribute$(layerId, attribute, value),
-      this.exactFilterEnabled$(layerId, attribute, value),
+      this.getExactFilters$(layerId, attribute, value),
     ]).pipe(
-      map(([ otherFilterExists, exactFilterEnabled ]) => {
-        return otherFilterExists && !exactFilterEnabled;
+      map(([ otherFilterExists, exactFilters ]) => {
+        return otherFilterExists && !exactFilters;
       }),
     );
   }
