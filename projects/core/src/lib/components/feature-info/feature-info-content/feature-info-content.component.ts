@@ -201,12 +201,12 @@ export class FeatureInfoContentComponent {
     ]).pipe(
       map(([ exactFilters, otherFilterExists ]) => {
         if (exactFilters && exactFilters.some(f => f.enabled)) {
-          return $localize `:@@core.feature-info.filter-exists-tooltip:Turn off filter for this value`;
+          return $localize `:@@core.feature-info.filter-off-tooltip:Remove filter for this value`;
         }
         if (otherFilterExists) {
-          return $localize `:@@core.feature-info.other-filter-exists-tooltip:There is another filter active for this attribute`;
+          return $localize `:@@core.feature-info.other-filter-exists-tooltip:There is another filter for this attribute`;
         }
-        return $localize `:@@core.feature-info.filter-does-not-exist-tooltip:Filter on this value`;
+        return $localize `:@@core.feature-info.filter-tooltip:Filter on this value`;
       }),
     );
   }

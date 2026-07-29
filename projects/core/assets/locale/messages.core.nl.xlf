@@ -222,10 +222,6 @@
         <source>Line</source>
         <target>Lijn</target>
       </trans-unit>
-      <trans-unit id="core.common.next" datatype="html">
-        <source>Next</source>
-        <target>Volgende</target>
-      </trans-unit>
       <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
         <target>Geen</target>
@@ -682,6 +678,18 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
+        <source>Remove filter for this value</source>
+        <target>Verwijder het filter voor deze waarde</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
+        <source>Filter on this value</source>
+        <target>Filter op deze waarde</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+        <target>Volgende</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
         <target>Geen objecten gevonden</target>
@@ -690,17 +698,17 @@
         <source>Object Information</source>
         <target>Objectinformatie</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.select-layer" datatype="html">
-        <source>Select layer</source>
-        <target>Selecteer laag</target>
+      <trans-unit id="core.feature-info.other-filter-exists-tooltip" datatype="html">
+        <source>There is another filter for this attribute</source>
+        <target>Er is een ander filter voor dit attribuut</target>
       </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>
         <target>Vorige</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.next" datatype="html">
-        <source>Next</source>
-        <target>Volgende</target>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+        <target>Selecteer laag</target>
       </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>

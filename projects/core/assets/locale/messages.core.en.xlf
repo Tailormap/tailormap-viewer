@@ -164,9 +164,6 @@
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
       </trans-unit>
-      <trans-unit id="core.common.next" datatype="html">
-        <source>Next</source>
-      </trans-unit>
       <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
       </trans-unit>
@@ -509,20 +506,29 @@
       <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
         <source>Feature info</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
+        <source>Remove filter for this value</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
+        <source>Filter on this value</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
       </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
       </trans-unit>
-      <trans-unit id="core.feature-info.select-layer" datatype="html">
-        <source>Select layer</source>
+      <trans-unit id="core.feature-info.other-filter-exists-tooltip" datatype="html">
+        <source>There is another filter active for this attribute</source>
       </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>
       </trans-unit>
-      <trans-unit id="core.feature-info.next" datatype="html">
-        <source>Next</source>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
       </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
