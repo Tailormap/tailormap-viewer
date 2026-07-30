@@ -39,12 +39,12 @@ describe('FilterComponent', () => {
 
   test('should not render if not visible', async () => {
     await setup(false);
-    expect(screen.queryByText('Filter')).not.toBeInTheDocument();
+    expect(screen.queryByText('Spatial filter')).not.toBeInTheDocument();
   });
 
   test('should render if visible', async () => {
     await setup(true);
-    expect(screen.getByText('Filter')).toBeInTheDocument();
+    expect(screen.getByText('Spatial filter')).toBeInTheDocument();
   });
 
 });
