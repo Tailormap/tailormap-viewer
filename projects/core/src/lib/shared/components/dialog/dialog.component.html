@@ -37,5 +37,20 @@
     <div class="dialog-content">
       <ng-content></ng-content>
     </div>
+    @if (allowResize && !fullscreen) {
+      <div
+        (keydown)="onResizeHandleKeyDown($event)"
+        (pointerdown)="startResize($event)"
+        [attr.aria-label]="getResizeHandleLabel()"
+        [attr.aria-orientation]="openFromRight ? 'horizontal' : 'horizontal'"
+        [attr.aria-valuemax]="getMaxAllowedWidth()"
+        [attr.aria-valuemin]="minWidth"
+        [attr.aria-valuenow]="width"
+        [class.dialog-resize-handle--left]="openFromRight"
+        class="dialog-resize-handle"
+        role="slider"
+        tabindex="0">
+      </div>
+    }
   </div>
 }

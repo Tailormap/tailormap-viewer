@@ -294,6 +294,10 @@
         <source>Expand panel</source>
         <target>Panel ausklappen</target>
       </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+        <target>Panelgröße ändern</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Ausgewähltes Objekt löschen</target>

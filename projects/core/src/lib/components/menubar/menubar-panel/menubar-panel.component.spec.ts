@@ -14,6 +14,8 @@ const getMenuBarServiceMock = (initialValue: { componentId: string; dialogTitle:
     provide: MenubarService,
     useValue: {
       activeComponent$,
+      panelWidth: 300,
+      setPanelWidth: jest.fn(),
       getActiveComponent$: () => activeComponent$.asObservable(),
       closePanel: jest.fn().mockImplementation(() => activeComponent$.next(null)),
     },
@@ -51,4 +53,26 @@ describe('MenubarPanelComponent', () => {
     expect(closePanelFn).toHaveBeenCalled();
   });
 
+
+  test('onPanelWidthChanged updates panelWidth and calls MenubarService.setPanelWidth', async () => {
+    const menubarServiceMock = getMenuBarServiceMock({ componentId: 'TOC', dialogTitle: 'Available layers' });
+    const setPanelWidthFn = menubarServiceMock.useValue.setPanelWidth;
+    const { fixture } = await render(MenubarPanelComponent, {
+      imports: [ SharedModule, MatIconTestingModule, CoreSharedModule ],
+      providers: [
+        menubarServiceMock,
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+      ],
+    });
+    await fixture.whenStable();
+    const component = fixture.componentInstance;
+    const initialWidth = component.panelWidth;
+
+    const newWidth = 450;
+    component.onPanelWidthChanged(newWidth);
+
+    expect(component.panelWidth).toBe(newWidth);
+    expect(setPanelWidthFn).toHaveBeenCalledWith(newWidth);
+    expect(component.panelWidth).not.toBe(initialWidth);
+  });
 });

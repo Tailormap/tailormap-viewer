@@ -72,3 +72,29 @@
   flex: 1;
   overflow: hidden;
 }
+
+.dialog-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 2;
+  outline: none;
+  touch-action: none;
+}
+
+.dialog-resize-handle:hover {
+  background-color: var(--border-color);
+}
+
+.dialog-resize-handle:focus {
+  background-color: var(--primary-color);
+  box-shadow: inset 0 0 0 2px var(--primary-color-0_5);
+}
+
+.dialog-resize-handle--left {
+  left: -4px;
+  right: auto;
+}

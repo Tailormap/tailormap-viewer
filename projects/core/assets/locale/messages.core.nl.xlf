@@ -1382,6 +1382,10 @@
         <source>Minimize panel</source>
         <target>Paneel minimaliseren</target>
       </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+        <target>Paneel formaat wijzigen</target>
+      </trans-unit>
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
         <target>Paneelhoogte herstellen</target>

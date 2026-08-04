@@ -16,6 +16,11 @@ export class MenubarService {
   private activeComponent$ = new BehaviorSubject<{ componentId: string; dialogTitle: string } | null>(null);
 
   public panelWidth = 300;
+
+  public setPanelWidth(width: number) {
+    this.panelWidth = width;
+  }
+
   private mobilePanelHeight$ = new BehaviorSubject<number | null>(null);
 
   public toggleActiveComponent(componentId: string, dialogTitle: string) {
