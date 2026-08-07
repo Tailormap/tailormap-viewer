@@ -1,5 +1,6 @@
 .value-form-row {
   display: flex;
+  align-items: flex-start;
 }
 
 .value-form-row mat-form-field + mat-form-field {
@@ -11,6 +12,16 @@
   margin-top: 8px;
 }
 
+.value-form-row .drag-handle {
+  margin-top: 8px;
+  margin-right: 8px;
+  cursor: grab;
+}
+
+.value-form-row .drag-handle:active {
+  cursor: grabbing;
+}
+
 .form-wrapper {
   max-width: 500px;
 }
@@ -18,4 +29,8 @@
 .value-form-row + .value-form-row,
 .value-form-row + .add-btn {
   margin-top: 8px;
+}
+
+.cdk-drop-list-dragging .value-form-row:not(.cdk-drag-preview) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

@@ -18,6 +18,7 @@ import { FormAttributeListComponent } from './form-attribute-list/form-attribute
 import { FormFieldListComponent } from './form-field-list/form-field-list.component';
 import { FormService } from './services/form.service';
 import { FormWarningMessageComponent } from './form-warning-message/form-warning-message.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
     EffectsModule.forFeature([FormEffects]),
     SharedAdminComponentsModule,
     CatalogModule,
+    DragDropModule,
   ],
   exports: [
     FormListComponent,
