@@ -14,10 +14,10 @@ import { debounceTime } from 'rxjs/operators';
 export class MenubarPanelComponent implements OnDestroy {
   private menubarService = inject(MenubarService);
 
-
   public activeComponent$: Observable<{ componentId: string; dialogTitle: string } | null>;
 
   public panelWidth = 300;
+  public panelMaxWidth = 600;
   public panelWidthMargin = CssHelper.getCssVariableValueNumeric('--menubar-width');
 
   constructor() {
@@ -36,4 +36,8 @@ export class MenubarPanelComponent implements OnDestroy {
     this.menubarService.closePanel();
   }
 
+  public onPanelWidthChanged(width: number) {
+    this.panelWidth = width;
+    this.menubarService.setPanelWidth(width);
+  }
 }
