@@ -9,6 +9,7 @@ import { draftFormRemoveField, draftFormUpdateField } from '../state/form.action
 import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormControl<string> }>;
 
@@ -68,21 +69,7 @@ export class FormEditFieldComponent implements OnInit {
         if (!this.field) {
           return;
         }
-        const valueList = (value.valueList || [])
-          .map(v => ({ label: v.label || v.value || '', value: v.value || '' }));
-        const fieldModel: FormFieldModel = {
-          name: this.field.name,
-          label: value.label || this.field.name,
-          required: typeof value.required === 'undefined' ? false : value.required,
-          disabled: typeof value.disabled === 'undefined' ? false : value.disabled,
-          autoFillUser: typeof value.autoFillUser === 'undefined' ? false : value.autoFillUser,
-          autoFillDate: typeof value.autoFillDate === 'undefined' ? false : value.autoFillDate,
-          type: EditFormFieldHelper.getFormFieldType(value.type),
-          valueList,
-          uniqueValuesAsOptions: value.uniqueValuesAsOptions,
-          allowValueListOnly: !value.allowFreeInput,
-        };
-        this.store$.dispatch(draftFormUpdateField({ field: fieldModel }));
+        this.dispatchFieldModel(value, this.field);
       });
 
     this.store$.select(selectDraftFormSelectedField)
@@ -180,4 +167,45 @@ export class FormEditFieldComponent implements OnInit {
     }
   }
 
+  public onValueListDrop(event: CdkDragDrop<FormGroup[]>) {
+    if (event.previousIndex !== event.currentIndex) {
+      const formArray = this.getValueListFormArray();
+      moveItemInArray(formArray.controls, event.previousIndex, event.currentIndex);
+
+      if (!this.field) {
+        return;
+      }
+      this.dispatchFieldModel(this.fieldForm.getRawValue(), this.field);
+    }
+  }
+
+  private dispatchFieldModel(rawValue: Partial<{
+    label: string;
+    type: string;
+    required: boolean;
+    disabled: boolean;
+    autoFillUser: boolean;
+    autoFillDate: boolean;
+    uniqueValuesAsOptions: boolean;
+    valueList: Partial<{
+      value: string; label: string;
+    }>[];
+    allowFreeInput: boolean;
+  }>, field: FormFieldModel) {
+    const valueList = (rawValue.valueList || [])
+      .map(v => ({ label: v.label || v.value || '', value: v.value || '' }));
+    const fieldModel: FormFieldModel = {
+      name: field.name,
+      label: rawValue.label || field.name,
+      required: typeof rawValue.required === 'undefined' ? false : rawValue.required,
+      disabled: typeof rawValue.disabled === 'undefined' ? false : rawValue.disabled,
+      autoFillUser: typeof rawValue.autoFillUser === 'undefined' ? false : rawValue.autoFillUser,
+      autoFillDate: typeof rawValue.autoFillDate === 'undefined' ? false : rawValue.autoFillDate,
+      type: EditFormFieldHelper.getFormFieldType(rawValue.type),
+      valueList,
+      uniqueValuesAsOptions: rawValue.uniqueValuesAsOptions,
+      allowValueListOnly: !rawValue.allowFreeInput,
+    };
+    this.store$.dispatch(draftFormUpdateField({ field: fieldModel }));
+  }
 }
