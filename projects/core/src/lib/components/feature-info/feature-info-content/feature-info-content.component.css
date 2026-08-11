@@ -62,6 +62,10 @@ tm-error-message {
   opacity: 1;
 }
 
+.filter-button-wrapper:focus-within {
+  opacity: 1;
+}
+
 .feature-info-content--mobile .filter-button-wrapper {
   opacity: 1;
 }
