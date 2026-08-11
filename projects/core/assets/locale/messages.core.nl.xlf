@@ -290,6 +290,10 @@
         <source>Expand panel</source>
         <target>Paneel uitklappen</target>
       </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+        <target>Paneel formaat wijzigen</target>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
         <target>Verwijder geselecteerd object</target>
@@ -679,16 +683,16 @@
         <target>Objectinformatie</target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
-        <source>There is another filter for this attribute</source>
-        <target>Er is een ander filter voor dit attribuut</target>
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
+        <target>Er is een ander filter voor <x id="PH" equiv-text="attribute"/></target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
-        <source>Remove filter for this value</source>
-        <target>Verwijder het filter voor deze waarde</target>
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
+        <target>Verwijder het filter voor <x id="PH" equiv-text="value"/></target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
-        <source>Filter on this value</source>
-        <target>Filter op deze waarde</target>
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
+        <target>Filter op <x id="PH" equiv-text="value"/></target>
       </trans-unit>
       <trans-unit id="core.feature-info.next" datatype="html">
         <source>Next</source>
@@ -861,10 +865,6 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fout bij het laden van referentielaaggeometrieën</target>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
-        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -1389,10 +1389,6 @@
       <trans-unit id="core.shared.minimize-panel" datatype="html">
         <source>Minimize panel</source>
         <target>Paneel minimaliseren</target>
-      </trans-unit>
-      <trans-unit id="core.dialog.resize-panel" datatype="html">
-        <source>Resize panel</source>
-        <target>Paneel formaat wijzigen</target>
       </trans-unit>
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>

@@ -683,16 +683,16 @@
         <target>Objektinformationen</target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
-        <source>There is another filter for this attribute</source>
-        <target>Für dieses Attribut ist bereits ein weiterer Filter aktiv.</target>
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
+        <target>Für <x id="PH" equiv-text="attribute"/> ist bereits ein weiterer Filter aktiv.</target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
-        <source>Remove filter for this value</source>
-        <target>Filter für diesen Wert entfernen</target>
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
+        <target>Filter für <x id="PH" equiv-text="value"/> entfernen</target>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
-        <source>Filter on this value</source>
-        <target>Nach diesem Wert filtern</target>
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
+        <target>Nach <x id="PH" equiv-text="value"/> filtern</target>
       </trans-unit>
       <trans-unit id="core.feature-info.next" datatype="html">
         <source>Next</source>
@@ -865,10 +865,6 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fehler beim Laden der Geometrien der Referenzschicht</target>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
-        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>

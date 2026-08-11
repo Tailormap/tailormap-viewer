@@ -215,6 +215,9 @@
       <trans-unit id="core.dialog.expand-panel" datatype="html">
         <source>Expand panel</source>
       </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+      </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
       </trans-unit>
@@ -507,13 +510,13 @@
         <source>Feature info</source>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
-        <source>There is another filter for this attribute</source>
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
-        <source>Remove filter for this value</source>
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
       </trans-unit>
       <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
-        <source>Filter on this value</source>
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
       </trans-unit>
       <trans-unit id="core.feature-info.next" datatype="html">
         <source>Next</source>
@@ -643,9 +646,6 @@
       </trans-unit>
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -1036,9 +1036,6 @@
       </trans-unit>
       <trans-unit id="core.shared.maximize-panel" datatype="html">
         <source>Maximize panel</source>
-      </trans-unit>
-      <trans-unit id="core.dialog.resize-panel" datatype="html">
-        <source>Resize panel</source>
       </trans-unit>
       <trans-unit id="core.shared.minimize-panel" datatype="html">
         <source>Minimize panel</source>

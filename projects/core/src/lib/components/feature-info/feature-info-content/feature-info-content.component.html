@@ -25,6 +25,7 @@
                     <button
                       class="filter-button"
                       mat-icon-button
+                      [name]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async"
                       (click)="toggleFilter(att)"
                       [class.filter-button-disabled]="getFilterButtonDisabled$(feature.layer.id, att.key, att.attributeValue) | async"
                       [disabled]="getFilterButtonDisabled$(feature.layer.id, att.key, att.attributeValue) | async">

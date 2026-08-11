@@ -196,12 +196,12 @@ export class FeatureInfoContentComponent {
     ]).pipe(
       map(([ exactFilters, otherFilterExists ]) => {
         if (exactFilters) {
-          return $localize `:@@core.feature-info.filter-off-tooltip:Remove filter for this value`;
+          return $localize `:@@core.feature-info.filter-off-tooltip:Remove filter for ${value}`;
         }
         if (otherFilterExists) {
-          return $localize `:@@core.feature-info.filter-exists-tooltip:There is another filter for this attribute`;
+          return $localize `:@@core.feature-info.filter-exists-tooltip:There is another filter for ${attribute}`;
         }
-        return $localize `:@@core.feature-info.filter-tooltip:Filter on this value`;
+        return $localize `:@@core.feature-info.filter-tooltip:Filter on this ${value}`;
       }),
     );
   }
@@ -216,4 +216,5 @@ export class FeatureInfoContentComponent {
       }),
     );
   }
+
 }
