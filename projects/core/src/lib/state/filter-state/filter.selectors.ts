@@ -79,3 +79,20 @@ export const selectFilteredLayerIdsWithSource = createSelector(
   (groups): Array<{ id: string; source: string }> =>
     groups.flatMap(group => group.layerIds.map(id => ({ id, source: group.source }))),
 );
+
+export const selectAllFilterGroupsForLayerId = (layerId: string) => createSelector(
+  selectActiveFilterGroups,
+  (groups): FilterGroupModel[] => {
+    return groups.filter(group => group.layerIds.includes(layerId));
+  },
+);
+
+export const selectAllFiltersForAttribute = (layerId: string, attribute: string)=> createSelector(
+  selectAllFilterGroupsForLayerId(layerId),
+  (groups): FilterGroupModel[] => {
+    return groups.map(group => ({
+      ...group,
+      filters: group.filters.filter(filter => FilterTypeHelper.isAttributeFilter(filter) && filter.attribute === attribute),
+    })).filter(group => group.filters.length > 0);
+  },
+);

@@ -128,6 +128,27 @@ export class SimpleAttributeFilterService {
     });
   }
 
+  public removeFilterById(
+    source: string,
+    layerId: string,
+    filterId: string,
+  ) {
+    this.getGroup$(source, layerId).pipe(take(1)).subscribe(group => {
+      if (!group) {
+        return;
+      }
+      const existingFilter = group.filters.find(f => f.id === filterId);
+      if (!existingFilter) {
+        return;
+      }
+      if (group.filters.length === 1) {
+        this.store$.dispatch(FilterActions.removeFilterGroup({ filterGroupId: group.id }));
+        return;
+      }
+      this.store$.dispatch(FilterActions.removeFilter({ filterGroupId: group.id, filterId: existingFilter.id }));
+    });
+  }
+
   public removeFiltersForLayer(
     source: string,
     layerId: string,

@@ -222,10 +222,6 @@
         <source>Line</source>
         <target>Linie</target>
       </trans-unit>
-      <trans-unit id="core.common.next" datatype="html">
-        <source>Next</source>
-        <target>Weiter</target>
-      </trans-unit>
       <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
         <target>Keine</target>
@@ -686,6 +682,22 @@
         <source>Feature info</source>
         <target>Objektinformationen</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
+        <target>Für <x id="PH" equiv-text="attribute"/> ist bereits ein weiterer Filter aktiv.</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
+        <target>Filter für <x id="PH" equiv-text="value"/> entfernen</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
+        <target>Nach <x id="PH" equiv-text="value"/> filtern</target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+        <target>Nächste</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
         <target>Keine Objekte gefunden</target>
@@ -694,17 +706,13 @@
         <source>Object Information</source>
         <target>Objektinformationen</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.select-layer" datatype="html">
-        <source>Select layer</source>
-        <target>Layer auswählen</target>
-      </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>
         <target>Vorherige</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.next" datatype="html">
-        <source>Next</source>
-        <target>Nächste</target>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+        <target>Layer auswählen</target>
       </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
@@ -857,10 +865,6 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fehler beim Laden der Geometrien der Referenzschicht</target>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
-        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>

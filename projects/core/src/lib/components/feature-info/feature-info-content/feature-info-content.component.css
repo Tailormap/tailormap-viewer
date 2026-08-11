@@ -35,6 +35,66 @@ tm-error-message {
   overflow-wrap: break-word;
 }
 
+.row-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.attribute-value {
+  flex: 1;
+  word-break: normal;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.filter-button-wrapper {
+  flex: 0 0 24px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+}
+
+.row:hover .filter-button-wrapper {
+  opacity: 1;
+}
+
+.filter-button-wrapper.filter-active {
+  opacity: 1;
+}
+
+.filter-button-wrapper:focus-within {
+  opacity: 1;
+}
+
+.feature-info-content--mobile .filter-button-wrapper {
+  opacity: 1;
+}
+
+.filter-button {
+  flex: 0 0 16px;
+  margin-left: 8px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-button {
+  color: var(--primary-color);
+}
+
+.filter-button-disabled {
+  color: var(--disabled-text-color);
+}
+
+.filter-button mat-icon,
+.filter-button mat-icon ::ng-deep svg {
+  width: 20px;
+  height: 20px;
+}
+
 .row:last-of-type {
   border-bottom: 0 none;
 }

@@ -222,10 +222,6 @@
         <source>Line</source>
         <target>Lijn</target>
       </trans-unit>
-      <trans-unit id="core.common.next" datatype="html">
-        <source>Next</source>
-        <target>Volgende</target>
-      </trans-unit>
       <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
         <target>Geen</target>
@@ -293,6 +289,10 @@
       <trans-unit id="core.dialog.expand-panel" datatype="html">
         <source>Expand panel</source>
         <target>Paneel uitklappen</target>
+      </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+        <target>Paneel formaat wijzigen</target>
       </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
@@ -682,6 +682,22 @@
         <source>Feature info</source>
         <target>Objectinformatie</target>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
+        <target>Er is een ander filter voor <x id="PH" equiv-text="attribute"/></target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
+        <target>Verwijder het filter voor <x id="PH" equiv-text="value"/></target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
+        <target>Filter op <x id="PH" equiv-text="value"/></target>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+        <target>Volgende</target>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
         <target>Geen objecten gevonden</target>
@@ -690,17 +706,13 @@
         <source>Object Information</source>
         <target>Objectinformatie</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.select-layer" datatype="html">
-        <source>Select layer</source>
-        <target>Selecteer laag</target>
-      </trans-unit>
       <trans-unit id="core.feature-info.previous" datatype="html">
         <source>Previous</source>
         <target>Vorige</target>
       </trans-unit>
-      <trans-unit id="core.feature-info.next" datatype="html">
-        <source>Next</source>
-        <target>Volgende</target>
+      <trans-unit id="core.feature-info.select-layer" datatype="html">
+        <source>Select layer</source>
+        <target>Selecteer laag</target>
       </trans-unit>
       <trans-unit id="core.feature-info.share-feature" datatype="html">
         <source>Share feature</source>
@@ -853,10 +865,6 @@
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
         <target>Fout bij het laden van referentielaaggeometrieën</target>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
-        <target>Filter</target>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -1381,10 +1389,6 @@
       <trans-unit id="core.shared.minimize-panel" datatype="html">
         <source>Minimize panel</source>
         <target>Paneel minimaliseren</target>
-      </trans-unit>
-      <trans-unit id="core.dialog.resize-panel" datatype="html">
-        <source>Resize panel</source>
-        <target>Paneel formaat wijzigen</target>
       </trans-unit>
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>

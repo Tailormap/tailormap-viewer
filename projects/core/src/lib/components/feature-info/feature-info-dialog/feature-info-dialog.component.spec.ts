@@ -5,7 +5,7 @@ import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-i
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectIsNextButtonDisabled,
+  selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { AuthenticatedUserService, getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
@@ -17,7 +17,10 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { CoreSharedModule } from '../../../shared';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
-import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
+import {
+  selectActiveFilterGroups,
+  selectAllFilterGroupsForLayerId, selectAllFiltersForAttribute, selectComponentsConfig, selectViewerLoadingState,
+} from '../../../state';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
@@ -62,6 +65,12 @@ const setup = async (withState = false) => {
           { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
           { selector: selectComponentsConfig, value: [] },
           { selector: selectIn3dView, value: false },
+          { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
+          { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop2'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'fid'), value: [] },
+          { selector: selectActiveFilterGroups, value: [] },
         ] : [
           { selector: selectSelectedFeatureInfoLayer, value: null },
           { selector: selectCurrentlySelectedFeature, value: null },
@@ -71,6 +80,12 @@ const setup = async (withState = false) => {
           { selector: selectViewerLoadingState, value: LoadingStateEnum.LOADED },
           { selector: selectComponentsConfig, value: [] },
           { selector: selectIn3dView, value: false },
+          { selector: selectFeatureInfoMetadata, value: { columnMetadata: [], attachmentMetadata: [] } },
+          { selector: selectAllFilterGroupsForLayerId('1'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'prop2'), value: [] },
+          { selector: selectAllFiltersForAttribute('1', 'fid'), value: [] },
+          { selector: selectActiveFilterGroups, value: [] },
         ],
       }),
       { provide: AuthenticatedUserService, useValue: { getUserDetails$: () => of({ isAuthenticated: true }) } },
