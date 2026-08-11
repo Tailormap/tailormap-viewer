@@ -85,6 +85,8 @@ export class FeaturesFilterHelper {
       case AttributeType.STRING:
         return FilterConditionEnum.STRING_EQUALS_KEY;
       case AttributeType.NUMBER:
+      case AttributeType.INTEGER:
+      case AttributeType.DOUBLE:
         return FilterConditionEnum.NUMBER_EQUALS_KEY;
       case AttributeType.BOOLEAN:
         return value === 'true' ? FilterConditionEnum.BOOLEAN_TRUE_KEY : FilterConditionEnum.BOOLEAN_FALSE_KEY;
@@ -115,6 +117,7 @@ export class FeaturesFilterHelper {
               filter.attributeType === attributeType &&
               filter.condition === condition &&
               filter.attribute === attribute &&
+              !filter.invertCondition &&
               (filter.value[0] === attributeValue ||
                 filter.value[0] === FeaturesFilterHelper.dateToDay(attributeValue)),
           )
