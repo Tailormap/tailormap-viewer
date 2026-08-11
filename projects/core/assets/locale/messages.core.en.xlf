@@ -596,8 +596,8 @@
       <trans-unit id="core.filter.contains-upper" datatype="html">
         <source>Contains</source>
       </trans-unit>
-      <trans-unit id="core.filter.create-new-filter" datatype="html">
-        <source>Create new filter</source>
+      <trans-unit id="core.filter.create-new-spatial-filter" datatype="html">
+        <source>Create new spatial filter</source>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
@@ -824,9 +824,6 @@
       <trans-unit id="core.filter.smaller-than-or-equal-to" datatype="html">
         <source>Smaller than or equal to</source>
       </trans-unit>
-      <trans-unit id="core.filter.spatial" datatype="html">
-        <source>Spatial</source>
-      </trans-unit>
       <trans-unit id="core.filter.spatial-filter" datatype="html">
         <source>Spatial filter</source>
       </trans-unit>
@@ -1039,6 +1036,9 @@
       </trans-unit>
       <trans-unit id="core.shared.maximize-panel" datatype="html">
         <source>Maximize panel</source>
+      </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
       </trans-unit>
       <trans-unit id="core.shared.minimize-panel" datatype="html">
         <source>Minimize panel</source>

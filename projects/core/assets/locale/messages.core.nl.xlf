@@ -798,9 +798,9 @@
         <source>Contains</source>
         <target>Bevat</target>
       </trans-unit>
-      <trans-unit id="core.filter.create-new-filter" datatype="html">
-        <source>Create new filter</source>
-        <target>Nieuw filter maken</target>
+      <trans-unit id="core.filter.create-new-spatial-filter" datatype="html">
+        <source>Create new spatial filter</source>
+        <target>Nieuw ruimtelijk filter maken</target>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
@@ -1102,10 +1102,6 @@
         <source>Smaller than or equal to</source>
         <target>Kleiner dan of gelijk aan</target>
       </trans-unit>
-      <trans-unit id="core.filter.spatial" datatype="html">
-        <source>Spatial</source>
-        <target>Ruimtelijk</target>
-      </trans-unit>
       <trans-unit id="core.filter.spatial-filter" datatype="html">
         <source>Spatial filter</source>
         <target>Ruimtelijk filter</target>
@@ -1393,6 +1389,10 @@
       <trans-unit id="core.shared.minimize-panel" datatype="html">
         <source>Minimize panel</source>
         <target>Paneel minimaliseren</target>
+      </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
+        <target>Paneel formaat wijzigen</target>
       </trans-unit>
       <trans-unit id="core.shared.restore-panel-height" datatype="html">
         <source>Restore panel height</source>
