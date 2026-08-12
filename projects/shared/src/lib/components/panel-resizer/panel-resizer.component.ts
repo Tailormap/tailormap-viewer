@@ -109,4 +109,21 @@ export class PanelResizerComponent implements OnInit {
     CssHelper.setCssVariableValue('--translate-pos', position + 'px', this.resizer.nativeElement);
   }
 
+  public onKeydown(event: KeyboardEvent): void {
+    const decreaseKeys = this.orientation === 'vertical' ? ['ArrowLeft'] : ['ArrowUp'];
+    const increaseKeys = this.orientation === 'vertical' ? ['ArrowRight'] : ['ArrowDown'];
+
+    if (!decreaseKeys.includes(event.key) && !increaseKeys.includes(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const delta = increaseKeys.includes(event.key) ? 10 : -10;
+    this.position += delta;
+    this.updateResizeIndicatorPosition(this.position);
+    this.positionChanged.emit(this.position);
+  }
+
 }
