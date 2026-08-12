@@ -16,14 +16,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 /**
  * This bookmark handler reads the layers part of the bookmark when starting the application only. Does not respond to changes afterward.
  *
- * Format is layers:only=service_title/layername
+ * Format is layers:only=service_title/layername or service_id/layername (everywhere service_title is used below, service_id can also be used)
  * Support for multiple combinations, separated with semicolon: layers:only=service_title/layername;other_service=other_layer
  * Support for multiple layers per service with comma in layer list: layers:only=service_title/layername,layer2
  *
  * Future idea:
- * Replace the current json layer visibility changes url into something readable by combining these functions
+ * Replace the current json layer visibility changes (with opacity, etc.) url into something readable by combining these functions
  * For example
  * layers:only=service_title/layername;c=service_title/layername:0|1@50...
+ * Or also add layers:show or layers:hide.
  */
 
 @Injectable({
