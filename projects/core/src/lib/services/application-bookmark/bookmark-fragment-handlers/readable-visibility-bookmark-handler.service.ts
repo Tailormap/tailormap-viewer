@@ -101,7 +101,7 @@ export class ReadableVisibilityBookmarkHandlerService implements BookmarkFragmen
       const layerNames = new Set(layerNamesPart.split(ReadableVisibilityBookmarkHandlerService.LAYER_SEPARATOR));
       layers
         .filter(l => {
-          return l.service?.title === serviceName && layerNames.has(l.layerName);
+          return (l.service?.title === serviceName || l.service?.id === serviceName) && layerNames.has(l.layerName);
         })
         .forEach(foundLayer => {
           enabledLayers.add(foundLayer.id);
