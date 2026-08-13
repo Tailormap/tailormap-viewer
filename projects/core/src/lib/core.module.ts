@@ -35,6 +35,8 @@ import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
+import { CrossOriginPostMessageApiService } from './services/cross-origin-post-message-api.service';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from './services/cross-origin-api.service';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -86,6 +88,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    { provide: TAILORMAP_CROSS_ORIGIN_API_SERVICE, useClass: CrossOriginPostMessageApiService },
   ],
 })
 export class CoreModule {
@@ -97,11 +100,13 @@ export class CoreModule {
     const iconService = inject(IconService);
     const authenticatedUserService = inject(AuthenticatedUserService);
     const adminAuthService = inject(UserLoginCheckService);
+    const crossOriginApiService = inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE);
     const baseHref = inject(APP_BASE_HREF);
 
     iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer);
     authenticatedUserService.fetchUserDetails();
     adminAuthService.pingUserLoggedIn();
+    crossOriginApiService.init();
     ExternalLibsLoaderHelper.setBaseHref(baseHref);
   }
 

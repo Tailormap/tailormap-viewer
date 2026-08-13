@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     environment:
       - "TZ=Europe/Amsterdam"
-      - "EMBED_SRC=${EMBED_SRC:-https://snapshot.tailormap.nl/#!embed:1}"
+      - "SRC=${SRC:-https://snapshot.tailormap.nl}"
     networks:
       - reverse-proxy
     labels:
