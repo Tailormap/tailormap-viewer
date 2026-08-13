@@ -2,7 +2,7 @@ import { DestroyRef, inject, Injectable } from '@angular/core';
 import { filter, fromEvent, map, Observable, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CrossOriginApiService, TypedMessageEvent, RequestUserInfoMessage, FeatureSelectionMessage } from './cross-origin-api.service';
-import { AuthenticatedUserService } from '@tailormap-viewer/api';
+import { AuthenticatedUserService } from '../../index';
 
 // Generic helper to check a message type and act as a reusable type guard
 function isMessageOfType<T>(data: any, expectedType: string): data is T {

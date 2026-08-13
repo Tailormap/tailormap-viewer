@@ -35,8 +35,8 @@ import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
-import { CrossOriginPostMessageApiService } from './services/cross-origin-post-message-api.service';
-import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from './services/cross-origin-api.service';
+import { CrossOriginPostMessageApiService } from '@tailormap-viewer/api';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();

@@ -27,7 +27,7 @@ import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.se
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
 import { MobileLayoutBookmarkEnum, MobileLayoutService } from '../viewer-layout/mobile-layout.service';
-import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '../cross-origin-api.service';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
