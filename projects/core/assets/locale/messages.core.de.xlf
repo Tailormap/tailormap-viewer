@@ -282,6 +282,10 @@
         <source>Coordinate Picker</source>
         <target>Koordinatenauswahl</target>
       </trans-unit>
+      <trans-unit id="core.dialog.close-panel-label" datatype="html">
+        <source>Close <x id="PH" equiv-text="this.dialogTitle"/> panel</source>
+        <target>Panel <x id="PH" equiv-text="this.dialogTitle"/> schließen</target>
+      </trans-unit>
       <trans-unit id="core.dialog.collapse-panel" datatype="html">
         <source>Collapse panel</source>
         <target>Panel einklappen</target>
