@@ -66,6 +66,10 @@
         <source>No rows found</source>
         <target>Keine Zeilen gefunden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.resize-column" datatype="html">
+        <source>Resize <x id="PH" equiv-text="columnLabel"/> column</source>
+        <target>Größe der Spalte <x id="PH" equiv-text="columnLabel"/> ändern</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
         <source>Select all rows</source>
         <target>Alle Zeilen auswählen</target>

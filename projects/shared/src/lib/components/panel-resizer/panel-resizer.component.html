@@ -7,7 +7,7 @@
        role="separator"
        [attr.aria-orientation]="orientation"
        tabindex="0"
-       [attr.aria-label]="'todo'"
+       [aria-label]="ariaLabel()"
        (keydown)="onKeydown($event)">
     <mat-icon svgIcon="resize"></mat-icon>
   </div>

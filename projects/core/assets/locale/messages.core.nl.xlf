@@ -66,6 +66,10 @@
         <source>No rows found</source>
         <target>Geen rijen gevonden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.resize-column" datatype="html">
+        <source>Resize <x id="PH" equiv-text="columnLabel"/> column</source>
+        <target>Breedte kolom <x id="PH" equiv-text="columnLabel"/> aanpassen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
         <source>Select all rows</source>
         <target>Selecteer alle rijen</target>

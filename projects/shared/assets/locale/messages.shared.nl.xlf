@@ -205,6 +205,22 @@
         <source>0 of 0</source>
         <target>0 van de 0</target>
       </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-horizontal" datatype="html">
+        <source>Resize panel, use up and down arrow keys</source>
+        <target>Paneelgrootte aanpassen met de pijltoetsen omhoog en omlaag.</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-vertical" datatype="html">
+        <source>Resize panel, use left and right arrow keys</source>
+        <target>Paneelgrootte aanpassen met de pijltoetsen links en rechts.</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-horizontal" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use up and down arrow keys</source>
+        <target><x id="PH" equiv-text="this.label"/>, gebruik de pijltoetsen omhoog en omlaag</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-vertical" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use left and right arrow keys</source>
+        <target><x id="PH" equiv-text="this.label"/>, gebruik de pijltoetsen links en rechts</target>
+      </trans-unit>
       <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
         <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
         <target>Uw verzoek is geaccepteerd. Als het opgegeven e-mailadres geregistreerd is, ontvangt u een e-mail met instructies om uw wachtwoord opnieuw in te stellen.</target>

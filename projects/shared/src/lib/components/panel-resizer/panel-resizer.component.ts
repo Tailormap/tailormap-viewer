@@ -20,6 +20,9 @@ export class PanelResizerComponent implements OnInit {
   @Input()
   public visibleOnHover = false;
 
+  @Input()
+  public label: string | null = null;
+
   @Output()
   public positionChanged: EventEmitter<number> = new EventEmitter<number>();
 
@@ -100,6 +103,7 @@ export class PanelResizerComponent implements OnInit {
     this.resizer.nativeElement.classList.remove('resize-panel--resizing');
     this.positionChanged.emit(this.position);
     this.resizing = false;
+    this.updateResizeIndicatorPosition(0);
   }
 
   private updateResizeIndicatorPosition(position: number) {
@@ -121,9 +125,18 @@ export class PanelResizerComponent implements OnInit {
     event.stopPropagation();
 
     const delta = increaseKeys.includes(event.key) ? 10 : -10;
-    this.position += delta;
-    this.updateResizeIndicatorPosition(this.position);
-    this.positionChanged.emit(this.position);
+    this.positionChanged.emit(delta);
+  }
+
+  public ariaLabel(): string {
+    if (this.label) {
+      return this.orientation === 'vertical'
+        ? $localize`:@@shared.panel-resizer.aria-label-vertical:${this.label}, use left and right arrow keys`
+        : $localize`:@@shared.panel-resizer.aria-label-horizontal:${this.label}, use up and down arrow keys`;
+    }
+    return this.orientation === 'vertical'
+      ? $localize`:@@shared.panel-resizer.aria-label-default-vertical:Resize panel, use left and right arrow keys`
+      : $localize`:@@shared.panel-resizer.aria-label-default-horizontal:Resize panel, use up and down arrow keys`;
   }
 
 }

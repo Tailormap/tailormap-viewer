@@ -155,6 +155,18 @@
       <trans-unit id="shared.paginator.range-label-empty" datatype="html">
         <source>0 of 0</source>
       </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-horizontal" datatype="html">
+        <source>Resize panel, use up and down arrow keys</source>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-vertical" datatype="html">
+        <source>Resize panel, use left and right arrow keys</source>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-horizontal" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use up and down arrow keys</source>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-vertical" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use left and right arrow keys</source>
+      </trans-unit>
       <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
         <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
       </trans-unit>

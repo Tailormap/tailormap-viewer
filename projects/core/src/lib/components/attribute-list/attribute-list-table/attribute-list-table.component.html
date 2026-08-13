@@ -101,6 +101,7 @@
         <tm-panel-resize class="resizer"
           (mousedown)="stopEvent($event)"
           (positionChanged)="columnWidthChanged($event, col)"
+          [label]="getColumnResizeLabel(col.label)"
         orientation="vertical"></tm-panel-resize>
       </mat-header-cell>
       <mat-cell *matCellDef="let currRow"
