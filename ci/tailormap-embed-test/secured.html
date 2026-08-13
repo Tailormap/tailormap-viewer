@@ -23,7 +23,9 @@
         && event.data.type.startsWith('tailormap-')) {
         console.log('Received message from Tailormap', event.data);
         const messageLog = document.getElementById('message-log');
-        messageLog.innerHTML += '<p>' + JSON.stringify(event.data) + '</p>';
+        const logEntry = document.createElement('p');
+        logEntry.textContent = JSON.stringify(event.data);
+        messageLog.appendChild(logEntry);
         messageLog.scrollTop = messageLog.scrollHeight;
 
         if (event.data.type === 'tailormap-user-info') {
