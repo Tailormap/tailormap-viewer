@@ -8,7 +8,7 @@
        [attr.aria-orientation]="orientation"
        tabindex="0"
        [aria-label]="ariaLabel()"
-       (keydown)="onKeydown($event)">
+       (keydown)="onKeydownResize($event)">
     <mat-icon svgIcon="resize"></mat-icon>
   </div>
   <div class="resize-indicator"></div>
