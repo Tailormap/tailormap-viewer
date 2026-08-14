@@ -205,6 +205,22 @@
         <source>0 of 0</source>
         <target>0 von 0</target>
       </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-horizontal" datatype="html">
+        <source>Resize panel, use up and down arrow keys</source>
+        <target>Zum Vergrößern des Bedienfelds die Pfeiltasten nach oben und unten verwenden.</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-default-vertical" datatype="html">
+        <source>Resize panel, use left and right arrow keys</source>
+        <target>Zum Vergrößern des Bedienfelds die Pfeiltasten nach links und rechts verwenden.</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-horizontal" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use up and down arrow keys</source>
+        <target><x id="PH" equiv-text="this.label"/>, verwende Pfeiltasten nach oben und unten</target>
+      </trans-unit>
+      <trans-unit id="shared.panel-resizer.aria-label-vertical" datatype="html">
+        <source><x id="PH" equiv-text="this.label"/>, use left and right arrow keys</source>
+        <target><x id="PH" equiv-text="this.label"/>, verwende Pfeiltasten nach links und rechts</target>
+      </trans-unit>
       <trans-unit id="shared.password-reset-request-form.accepted-message" datatype="html">
         <source>Your request was accepted. If the email you provided is registered, you will receive an email with instructions to reset your password.</source>
         <target>Ihre Anfrage wurde akzeptiert. Wenn die von Ihnen angegebene E-Mail-Adresse registriert ist, erhalten Sie eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts.</target>

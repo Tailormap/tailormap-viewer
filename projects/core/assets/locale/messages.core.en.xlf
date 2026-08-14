@@ -50,6 +50,9 @@
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.resize-column" datatype="html">
+        <source>Resize <x id="PH" equiv-text="columnLabel"/> column</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
         <source>Select all rows</source>
       </trans-unit>

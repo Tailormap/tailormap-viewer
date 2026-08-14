@@ -26,6 +26,10 @@
   transform: rotate(90deg);
 }
 
+.resize-handle:focus-visible {
+  outline: none;
+}
+
 .resize-panel--horizontal .resize-handle {
   cursor: ns-resize;
   transform: none;
@@ -54,6 +58,10 @@ mat-icon {
 }
 
 .resize-panel--resizing .resize-indicator {
+  display: block;
+}
+
+.resize-panel:has(:focus-visible) .resize-indicator {
   display: block;
 }
 

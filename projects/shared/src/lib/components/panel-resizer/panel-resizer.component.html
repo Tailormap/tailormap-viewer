@@ -3,7 +3,12 @@
      [class.resize-panel--vertical]="orientation === 'vertical'"
      [class.resize-panel--visible-on-hover]="visibleOnHover"
      #resizer>
-  <div class="resize-handle">
+  <div class="resize-handle"
+       role="separator"
+       [attr.aria-orientation]="orientation === 'horizontal' ? 'vertical' : 'horizontal'"
+       tabindex="0"
+       [aria-label]="ariaLabel()"
+       (keydown)="onKeydownResize($event)">
     <mat-icon svgIcon="resize"></mat-icon>
   </div>
   <div class="resize-indicator"></div>
