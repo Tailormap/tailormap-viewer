@@ -1,7 +1,9 @@
-import { InjectionToken } from '@angular/core';
 import { Observable } from "rxjs";
 
-export const TAILORMAP_CROSS_ORIGIN_API_SERVICE = new InjectionToken<CrossOriginApiService>('TailormapCrossOriginApiService');
+export interface TypedMessageEvent<T> {
+  event: MessageEvent;
+  typedData: T;
+}
 
 export interface RequestUserInfoMessage {
   type: 'tailormap-user-info';
@@ -12,7 +14,7 @@ export interface FeatureSelectionMessage {
   value: string;
 }
 
-export interface CrossOriginApiService {
+export interface CrossOriginApiServiceModel {
   init(): void;
 
   getParentMessage$<T>(typeGuard: (data: any) => data is T): Observable<TypedMessageEvent<T>>;
@@ -22,7 +24,3 @@ export interface CrossOriginApiService {
   getFeatureSelectionMessage$(): Observable<TypedMessageEvent<FeatureSelectionMessage>>;
 }
 
-export interface TypedMessageEvent<T> {
-  event: MessageEvent;
-  typedData: T;
-}

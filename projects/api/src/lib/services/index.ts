@@ -12,5 +12,6 @@ export * from './tailormap-api.constants';
 export * from './authenticated-user.service';
 export * from './application-feature-switch.service';
 export * from './extract-progress-events.service';
-export * from './cross-origin-api.service';
+export * from './cross-origin-api.service.injection-token';
+export * from './cross-origin-api.service.model';
 export * from './cross-origin-post-message-api.service';

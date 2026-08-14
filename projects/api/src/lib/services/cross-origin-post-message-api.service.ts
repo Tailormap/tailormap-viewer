@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { filter, fromEvent, map, Observable, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CrossOriginApiService, TypedMessageEvent, RequestUserInfoMessage, FeatureSelectionMessage } from './cross-origin-api.service';
+import { CrossOriginApiServiceModel, TypedMessageEvent, RequestUserInfoMessage, FeatureSelectionMessage } from './cross-origin-api.service.model';
 import { AuthenticatedUserService } from './authenticated-user.service';
 
 // Generic helper to check a message type and act as a reusable type guard
@@ -23,13 +23,12 @@ const isFeatureSelectionMessage = (data: any): data is FeatureSelectionMessage =
 @Injectable({
   providedIn: 'root',
 })
-export class CrossOriginPostMessageApiService  implements CrossOriginApiService {
+export class CrossOriginPostMessageApiService  implements CrossOriginApiServiceModel {
   private destroyRef = inject(DestroyRef);
   private authenticatedUserService = inject(AuthenticatedUserService);
 
   public init() {
     this.getRequestUserInfoMessage$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(event => {
-      console.log('Received user info message from origin ' + event.event.origin, event);
       if (!event.event.source) {
         return;
       }
@@ -39,19 +38,19 @@ export class CrossOriginPostMessageApiService  implements CrossOriginApiService 
     });
   }
 
-  public getRequestUserInfoMessage$(): Observable<TypedMessageEvent<RequestUserInfoMessage>> {
-    return this.getParentMessage$<RequestUserInfoMessage>(isRequestUserInfoMessage);
-  }
-
-  public getFeatureSelectionMessage$(): Observable<TypedMessageEvent<FeatureSelectionMessage>> {
-    return this.getParentMessage$<FeatureSelectionMessage>(isFeatureSelectionMessage);
-  }
-
   public getParentMessage$<T>(typeGuard: (data: any) => data is T): Observable<TypedMessageEvent<T>> {
     return fromEvent<MessageEvent>(window, 'message').pipe(
       filter(event => window.self !== window.top && event.source === window.parent),
       filter(event => typeGuard(event.data)),
       map(event => ({ event, typedData: event.data })),
     );
+  }
+
+  public getRequestUserInfoMessage$(): Observable<TypedMessageEvent<RequestUserInfoMessage>> {
+    return this.getParentMessage$<RequestUserInfoMessage>(isRequestUserInfoMessage);
+  }
+
+  public getFeatureSelectionMessage$(): Observable<TypedMessageEvent<FeatureSelectionMessage>> {
+    return this.getParentMessage$<FeatureSelectionMessage>(isFeatureSelectionMessage);
   }
 }
