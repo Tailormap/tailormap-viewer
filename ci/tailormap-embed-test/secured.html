@@ -29,7 +29,6 @@
         messageLog.scrollTop = messageLog.scrollHeight;
 
         if (event.data.type === 'tailormap-user-info') {
-          debugger;
           if (event.data.data.isAuthenticated === true) {
             document.getElementById('start-auth-message').style.display = 'none';
             document.getElementById('tailormap-frame').style.visibility = 'visible';
