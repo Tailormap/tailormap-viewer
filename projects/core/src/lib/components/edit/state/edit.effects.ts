@@ -1,17 +1,20 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as EditActions from './edit.actions';
-import { map, switchMap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { FeatureInfoService } from '../../feature-info';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectSelectedCopyLayer, selectSelectedEditLayer } from './edit.selectors';
 import { Store } from '@ngrx/store';
+import { ApplicationLayerService } from '../../../map/services/application-layer.service';
+import { GeometryType } from '@tailormap-viewer/api';
 
 @Injectable()
 export class EditEffects {
   private actions$ = inject(Actions);
   private store$ = inject(Store);
   private featureInfoService = inject(FeatureInfoService);
+  private applicationLayerService = inject(ApplicationLayerService);
 
   public loadEditFeatures$ = createEffect(() => {
       return this.actions$.pipe(
@@ -33,14 +36,21 @@ export class EditEffects {
   public loadCopyFeatures$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EditActions.loadCopyFeatures),
-      withLatestFrom(this.store$.select(selectSelectedCopyLayer)),
-      switchMap(([ action, copyLayer ]) => {
+      withLatestFrom(
+        this.store$.select(selectSelectedCopyLayer),
+        this.store$.select(selectSelectedEditLayer),
+      ),
+      switchMap(([ action, copyLayer, editLayer ]) => {
         return this.featureInfoService.getFeaturesForLayer$(action.coordinates, copyLayer, action.pointerType).pipe(
-          map(result => {
-            if (!result) {
+          withLatestFrom(
+            editLayer ? this.applicationLayerService.getLayerDetails$(editLayer) : of(null),
+          ),
+          map(([ featureInfo, layerDetails ]) => {
+            if (!featureInfo) {
               return EditActions.loadCopyFeaturesFailed({});
             }
-            return EditActions.loadCopyFeaturesSuccess({ featureInfo: [result] });
+            const editGeometryType = layerDetails?.details.geometryType || GeometryType.GEOMETRY;
+            return EditActions.loadCopyFeaturesSuccess({ editGeometryType, featureInfo: [featureInfo] });
           }),
         );
       }),
