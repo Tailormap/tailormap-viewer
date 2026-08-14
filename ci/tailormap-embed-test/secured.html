@@ -8,7 +8,11 @@
 <body>
 <script>
   function requestTailormapUserInfo() {
-    document.getElementById('tailormap-frame').contentWindow.postMessage({ type: 'tailormap-request-user-info' }, '*');
+    /** @type {HTMLIFrameElement} */
+    const iframe = document.getElementById('tailormap-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage({ type: 'tailormap-request-user-info' }, '*');
+    }
   }
 
   function startOIDCAuthentication() {
@@ -29,7 +33,7 @@
         messageLog.scrollTop = messageLog.scrollHeight;
 
         if (event.data.type === 'tailormap-user-info') {
-          if (event.data.data.isAuthenticated === true) {
+          if (event.data.userDetails.isAuthenticated === true) {
             document.getElementById('start-auth-message').style.display = 'none';
             document.getElementById('tailormap-frame').style.visibility = 'visible';
           }
@@ -38,14 +42,6 @@
     });
   }
 
-  function setFeatureSelection(value) {
-    /** @type {HTMLIFrameElement} */
-    var iframe = document.getElementById('tailormap-frame');
-    iframe.contentWindow.postMessage(
-      { type: 'tailormap-feature-selection', value: value },
-      '*'
-    );
-  }
   subscribeToMessages();
 </script>
 <h1>Tailormap iframe embed secured application test</h1>
@@ -59,24 +55,6 @@
   Note: this example does not automatically redirect to OIDC login with redirect loop protection, but a user click might not be required
   when implementing this.
   <div id="message-log" style="margin-top: 10px; background-color: lightgray; font-family: monospace; height: 100px; overflow-y: auto"></div>
-</div>
-<h4 style="margin: 10px 30px 5px 30px">Feature selection buttons</h4>
-<div class="feature-selection-buttons" style="margin: 0 30px 15px 30px">
-  <button onclick="setFeatureSelection('layers=snapshot-geoserver-proxied/postgis:begroeidterreindeel;attribute=identificatie;value=G0344.4cc6248390684de0b36a07894946791f')">
-    identificatie = G0344…91f
-  </button>
-  <button onclick="setFeatureSelection('layers=snapshot-geoserver-proxied/postgis:begroeidterreindeel;attribute=identificatie;value=G0344.4cc6248390684de0b36a07894946791f;filter=true')">
-    identificatie = G0344…91f  (createFilter)
-  </button>
-  <button onclick="setFeatureSelection('layers=snapshot-geoserver-proxied/postgis:begroeidterreindeel;attribute=bronhouder;value=W0636')">
-    bronhouder = W0636
-  </button>
-  <button onclick="setFeatureSelection('layers=snapshot-geoserver-proxied/postgis:begroeidterreindeel;attribute=bronhouder;value=W0636;filter=true')">
-    bronhouder = W0636 (createFilter)
-  </button>
-  <button onclick="setFeatureSelection('')">
-    clear selection
-  </button>
 </div>
 <div style="margin: 15px 30px 0 30px; border: 1px solid black; width: auto; height: 400px">
   <div id="start-auth-message" onclick="startOIDCAuthentication()" style="cursor: pointer; font-family: Arial, sans-serif; font-size: xx-large; display: flex; align-items: center; justify-content: center; height: 100%">

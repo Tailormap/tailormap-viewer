@@ -55,7 +55,7 @@
 <script>
   function setFeatureSelection(value) {
     /** @type {HTMLIFrameElement} */
-    var iframe = document.getElementById('tailormap-frame');
+    const iframe = document.getElementById('tailormap-frame');
     iframe.contentWindow.postMessage(
       { type: 'tailormap-feature-selection', value: value },
       '*'

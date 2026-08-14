@@ -33,7 +33,7 @@ export class CrossOriginPostMessageApiService  implements CrossOriginApiServiceM
         return;
       }
       this.authenticatedUserService.getUserDetails$().pipe(take(1)).subscribe(userDetails => {
-        event.event.source!.postMessage({ type: 'tailormap-user-info', data: userDetails }, { targetOrigin: event.event.origin });
+        event.event.source!.postMessage({ type: 'tailormap-user-info', userDetails }, { targetOrigin: event.event.origin });
       });
     });
   }
