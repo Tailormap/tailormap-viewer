@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { FeatureInfoResponseModel } from '../../feature-info/models/feature-info-response.model';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel, GeometryType } from '@tailormap-viewer/api';
 import { FeatureInfoColumnMetadataModel } from "../../feature-info/models/feature-info-column-metadata.model";
 import { FeatureInfoFeatureModel } from '../../feature-info/models/feature-info-feature.model';
 import { DrawingType } from '@tailormap-viewer/map';
@@ -52,7 +52,7 @@ export const loadEditFeaturesFailed = createAction(
 
 export const loadCopyFeaturesSuccess = createAction(
   `${editActionsPrefix} Load Copy Features Success`,
-  props<{ featureInfo: FeatureInfoResponseModel[] }>(),
+  props<{ editGeometryType: GeometryType; featureInfo: FeatureInfoResponseModel[] }>(),
 );
 
 export const loadCopyFeaturesFailed = createAction(
