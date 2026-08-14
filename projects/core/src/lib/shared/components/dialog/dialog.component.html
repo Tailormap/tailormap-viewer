@@ -30,7 +30,7 @@
           }
         </button>
       }
-      <button mat-icon-button class="close-button" (click)="close()" tmTooltip="Close panel" i18n-tmTooltip="@@core.shared.close-panel">
+      <button mat-icon-button class="close-button" (click)="close()" [tmTooltip]="getClosePanelLabel()">
         <mat-icon svgIcon="close"></mat-icon>
       </button>
     </div>

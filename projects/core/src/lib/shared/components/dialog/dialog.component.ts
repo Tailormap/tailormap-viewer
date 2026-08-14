@@ -228,4 +228,8 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   public getResizeHandleLabel(): string {
     return $localize`:@@core.dialog.resize-panel:Resize panel`;
   }
+
+  public getClosePanelLabel(): string {
+    return $localize `:@@core.dialog.close-panel-label:Close ${this.dialogTitle} panel`;
+  }
 }
