@@ -111,7 +111,7 @@ export class EditComponent implements OnInit, OnDestroy {
       const layers = selectedEditLayerId === null ? [] : visibleLayers.filter(layer =>
         layer.id !== selectedEditLayerId
         && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale)
-        && this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id));
+        && (this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id)));
       this.layersToCreateNewFeaturesFrom.set(layers);
     });
 
