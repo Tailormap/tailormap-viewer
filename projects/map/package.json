@@ -1,17 +1,17 @@
 {
   "name": "@tailormap-viewer/map",
-  "version": "12.8.2",
+  "version": "12.8.3",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/common": "^20.3.26",
-    "@angular/core": "^20.3.26",
-    "cesium": "^1.138.0",
-    "ol": "^10.8.0",
+    "@angular/common": "^20.3.27",
+    "@angular/core": "^20.3.27",
+    "cesium": "^1.143.0",
+    "ol": "^10.10.0",
     "ol-ext": "^4.0.38",
-    "olcs": "^2.22.1",
-    "proj4": "^2.20.3",
+    "olcs": "^2.23.0",
+    "proj4": "^2.21.0",
     "html2canvas": "^1.4.1",
     "jsts": "^2.12.1",
     "rxjs": "^7.8.2",
