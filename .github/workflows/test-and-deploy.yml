@@ -148,6 +148,7 @@ jobs:
       MAIL_FROM: ${{ vars.MAIL_FROM }}
       PASSWORD_RESET_ENABLED: ${{ vars.PASSWORD_RESET_ENABLED }}
       ENVERS_ENABLED: ${{ vars.ENVERS_ENABLED }}
+      ALLOWED_REDIRECT_URL_PREFIXES: ${{ vars.ALLOWED_REDIRECT_URL_PREFIXES }}
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v7
