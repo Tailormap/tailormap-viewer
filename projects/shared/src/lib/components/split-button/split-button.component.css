@@ -1,36 +1,40 @@
-.mat-button-toggle,
-.mat-button-toggle.mat-button-toggle-checked {
+.split-button-group {
   background-color: #fff;
 }
 
-mat-button-toggle-group {
-  border-radius: 3px;
-}
-
-.cycle-button ::ng-deep .mat-button-toggle-label-content {
+.cycle-button ::ng-deep .mdc-button__label {
   max-width: calc(var(--100vw) - 580px);
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
+.cycle-button ::ng-deep .mdc-button__label,
+.drop-down-button {
   line-height: 38px;
 }
 
-.drop-down-button ::ng-deep .mat-button-toggle-label-content {
-  padding: 0 8px;
+.split-button-button {
+  border: none;
+  background: none;
 }
 
-.drop-down-button ::ng-deep .mat-button-toggle-label-content svg {
+.drop-down-button {
+  width: 40px;
+  min-width: 40px;
+  padding: 0;
+}
+
+.drop-down-button mat-icon {
+  padding: 0;
+  margin: 0;
   width: 20px;
   height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mat-button-toggle + .mat-button-toggle {
-  border-left: 0 none;
-}
-
-.map-control-button-container {
+.map-control-button-container:not(.split-button-group) {
   display: none;
   overflow: hidden;
 }
