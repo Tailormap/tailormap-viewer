@@ -1,21 +1,22 @@
-<mat-button-toggle-group [class.hide-on-small-screens]="!!small_screens_icon" [hideSingleSelectionIndicator]="true">
-  <mat-button-toggle (click)="cycleNextOption()"
-                     [aria-label]="getCycleAriaLabel()"
-                     [tmTooltip]="getNextLabel()"
-                     (keydown.enter)="cycleNextOption()"
-                     class="cycle-button">
+<div class="split-button-group map-control-button-container" [class.hide-on-small-screens]="!!small_screens_icon">
+  <button mat-flat-button
+          (click)="cycleNextOption()"
+          [tmTooltip]="getNextLabel()"
+          [tmExplicitAriaLabel]="getCycleAriaLabel()"
+          (keydown.enter)="cycleNextOption()"
+          class="split-button-button cycle-button">
     {{ getLabel() }}
-  </mat-button-toggle>
-  <mat-button-toggle [matMenuTriggerFor]="dropdownMenu" class="drop-down-button"
-                     #splitButtonDropdownTrigger="matMenuTrigger"
-                     i18n-tmTooltip="@@core.background-layer-toggle.expand-button"
-                     tmTooltip="Select basemap"
-                     aria-label="Select basemap"
-                     i18n-aria-label="@@core.background-layer-toggle.expand-button"
-                     (keydown.enter)="splitButtonDropdownTrigger.toggleMenu()">
+  </button>
+  <button mat-flat-button
+          [matMenuTriggerFor]="dropdownMenu"
+          class="split-button-button drop-down-button"
+          i18n-tmTooltip="@@core.background-layer-toggle.expand-button"
+          tmTooltip="Select basemap"
+          aria-label="Select basemap"
+          i18n-aria-label="@@core.background-layer-toggle.expand-button">
     <mat-icon svgIcon="drop_down"></mat-icon>
-  </mat-button-toggle>
-</mat-button-toggle-group>
+  </button>
+</div>
 
 @if (small_screens_icon) {
   <div class="map-control-button-container">
@@ -32,14 +33,16 @@
   @for (option of optionsList; track option.id) {
     <button mat-menu-item
       class="split-button-menu-item"
-      [tmTooltip]="option.label"
-      [matTooltipPosition]="'before'"
+      [aria-label]="option.label"
       [class.not-visible-in-3d]="isLayerHiddenOnMap(option)"
       (click)="selectOption(option.id)">
-      @if (option.id === selectedOptionId) {
-        <mat-icon svgIcon="check"></mat-icon>
-      }
-      {{ option.label }}
+      <span [tmTooltip]="option.label"
+            [matTooltipPosition]="'before'">
+        @if (option.id === selectedOptionId) {
+          <mat-icon svgIcon="check"></mat-icon>
+        }
+        {{ option.label }}
+      </span>
     </button>
   }
 </mat-menu>
