@@ -65,7 +65,7 @@ export class FeatureSelectionBookmarkHelper {
   ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } {
     if (!appLayerIds || appLayerIds.length === 0) {
       return {
-        errorMessage: $localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`,
+        errorMessage: $localize `:@@core.feature-bookmark.layers-not-found:Provided layers in Feature Selection Bookmark not found in visible layers`,
       };
     }
     if (!attributeName) {
