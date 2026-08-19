@@ -10,7 +10,7 @@ import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import {
-  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
+  BehaviorSubject, combineLatest, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
 } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -38,6 +38,11 @@ export class OpenLayersMap implements MapViewerModel {
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
 
+  // Holds the container passed to render(), which may happen before or after initMap() has created a
+  // map. Paired with `map` below so the map gets bound to its container whichever of the two arrives last.
+  private container: BehaviorSubject<HTMLElement | null> = new BehaviorSubject<HTMLElement | null>(null);
+  private observedContainer: HTMLElement | null = null;
+
   private map3d: BehaviorSubject<CesiumManager | null> = new BehaviorSubject<CesiumManager | null>(null);
   private made3d: boolean;
   private in3d: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -59,6 +64,10 @@ export class OpenLayersMap implements MapViewerModel {
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
     this.made3d = false;
+
+    const isNotNullContainer = (item: HTMLElement | null): item is HTMLElement => item !== null;
+    combineLatest([ this.getMap$(), this.container.asObservable().pipe(filter(isNotNullContainer)) ])
+      .subscribe(([ olMap, container ]) => this.ngZone.runOutsideAngular(() => this.bindMapToContainer(olMap, container)));
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
@@ -175,7 +184,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public render(container: HTMLElement) {
-    this.ngZone.runOutsideAngular(this._render.bind(this, container));
+    this.container.next(container);
   }
 
   public getLayerManager$(): Observable<LayerManagerModel> {
@@ -419,20 +428,22 @@ export class OpenLayersMap implements MapViewerModel {
     }));
   }
 
-  private _render(container: HTMLElement) {
-    this.map.next(null);
-    this.executeMapAction(olMap => {
-      olMap.setTarget(container);
-      olMap.render();
-      if (this.initialCenterZoom !== undefined) {
-          olMap.getView().setCenter(this.initialCenterZoom[0]);
-          olMap.getView().setZoom(this.initialCenterZoom[1]);
-      } else if (this.initialExtent && this.initialExtent.length > 0) {
-        olMap.getView().fit(this.initialExtent);
-      }
-      window.setTimeout(() => this.updateMapSize(), 0);
-      this.resizeObserver.observe(container);
-    });
+  private bindMapToContainer(olMap: OlMap, container: HTMLElement) {
+    if (this.observedContainer && this.observedContainer !== container) {
+      this.resizeObserver.unobserve(this.observedContainer);
+    }
+    this.observedContainer = container;
+
+    olMap.setTarget(container);
+    olMap.render();
+    if (this.initialCenterZoom !== undefined) {
+        olMap.getView().setCenter(this.initialCenterZoom[0]);
+        olMap.getView().setZoom(this.initialCenterZoom[1]);
+    } else if (this.initialExtent && this.initialExtent.length > 0) {
+      olMap.getView().fit(this.initialExtent);
+    }
+    window.setTimeout(() => this.updateMapSize(), 0);
+    this.resizeObserver.observe(container);
   }
 
   private updateMapSize() {
