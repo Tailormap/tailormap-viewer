@@ -84,20 +84,22 @@ export class FeatureSelectionBookmarkService {
       this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
       return;
     }
-    this.store$.select(selectVisibleAppLayerIds(fragment.layers))
-      .pipe(
-        take(1),
-      ).subscribe(layerIds => {
-      if (fragment.attributeName === '__fid') {
-        this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
-      } else {
-        const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
-        if (filterOrError && !('errorMessage' in filterOrError)) {
-          this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
-        } else if (filterOrError && 'errorMessage' in filterOrError) {
-          this.showSnackbarMessage(filterOrError.errorMessage);
+    setTimeout(() => {
+      this.store$.select(selectVisibleAppLayerIds(fragment.layers))
+        .pipe(
+          take(1),
+        ).subscribe(layerIds => {
+        if (fragment.attributeName === '__fid') {
+          this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
+        } else {
+          const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
+          if (filterOrError && !('errorMessage' in filterOrError)) {
+            this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
+          } else if (filterOrError && 'errorMessage' in filterOrError) {
+            this.showSnackbarMessage(filterOrError.errorMessage);
+          }
         }
-      }
+      });
     });
   }
 
