@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, takeUntil } from 'rxjs';
 import { ColorHelper } from '../../helpers/color.helper';
 import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
@@ -179,6 +179,17 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,
     });
+
+    const overlayKeydownSub = this.popoverRef.overlay.keydownEvents()
+      .pipe(takeUntil(this.popoverRef.afterClosed$))
+      .subscribe((ev: KeyboardEvent) => {
+        if (ev.key === 'Escape' || ev.key === 'Esc') {
+          ev.preventDefault();
+          ev.stopPropagation();
+          this.popoverRef?.close();
+        }
+      });
+    this.subscription.add(overlayKeydownSub);
   }
 
   public getClass() {
