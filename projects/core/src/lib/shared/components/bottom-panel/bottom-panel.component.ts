@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject } from '@angular/core';
-import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject, HostListener } from '@angular/core';
+import { BehaviorSubject, Observable, of, combineLatest, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
@@ -58,6 +58,25 @@ export class BottomPanelComponent implements OnInit {
 
   @Output()
   public closed = new EventEmitter();
+
+  @HostListener('document:keydown.escape', ['$event'])
+  public onDocumentEscape(event: KeyboardEvent): void {
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
+      return;
+    }
+    if (this.isMaximized) {
+      this.isMaximized = false;
+      return;
+    }
+    this.isVisible$.pipe(take(1)).subscribe(visible => {
+      if (visible) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.closed.emit();
+      }
+    });
+  }
 
   private heightSubject = new BehaviorSubject(350);
 
