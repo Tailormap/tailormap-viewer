@@ -485,6 +485,9 @@
       <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
       </trans-unit>
+      <trans-unit id="core.feature-bookmark.layers-not-found" datatype="html">
+        <source>Provided layers in Feature Selection Bookmark not found in visible layers</source>
+      </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
         <source>No attribute name specified in Feature Selection Bookmark</source>
       </trans-unit>

@@ -5,7 +5,7 @@ import {
 } from '@tailormap-viewer/api';
 import { MapService } from '@tailormap-viewer/map';
 import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filter.actions';
-import { selectAppLayerIds, selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
+import { selectVisibleAppLayerIds, selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, startWith, take } from 'rxjs';
@@ -80,20 +80,26 @@ export class FeatureSelectionBookmarkService {
     if (!fragment) {
       return;
     }
-    this.store$.select(selectAppLayerIds(fragment.layers))
-      .pipe(
-        take(1),
-      ).subscribe(layerIds => {
-      if (fragment.attributeName === '__fid') {
-        this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
-      } else {
-        const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
-        if (filterOrError && !('errorMessage' in filterOrError)) {
-          this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
-        } else if (filterOrError && 'errorMessage' in filterOrError) {
-          this.showSnackbarMessage(filterOrError.errorMessage);
+    if (fragment.layers.length === 0) {
+      this.showSnackbarMessage($localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`);
+      return;
+    }
+    setTimeout(() => {
+      this.store$.select(selectVisibleAppLayerIds(fragment.layers))
+        .pipe(
+          take(1),
+        ).subscribe(layerIds => {
+        if (fragment.attributeName === '__fid') {
+          this.applyFidSelection(layerIds, fragment.attributeValue, isEmbedded);
+        } else {
+          const filterOrError = FeatureSelectionBookmarkHelper.createFilterGroup(layerIds, fragment.attributeName, fragment.attributeValue);
+          if (filterOrError && !('errorMessage' in filterOrError)) {
+            this.applyFilter(filterOrError, fragment.createFilter || false, isEmbedded);
+          } else if (filterOrError && 'errorMessage' in filterOrError) {
+            this.showSnackbarMessage(filterOrError.errorMessage);
+          }
         }
-      }
+      });
     });
   }
 

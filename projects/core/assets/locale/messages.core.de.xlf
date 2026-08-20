@@ -650,6 +650,10 @@
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
         <target>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </target>
       </trans-unit>
+      <trans-unit id="core.feature-bookmark.layers-not-found" datatype="html">
+        <source>Provided layers in Feature Selection Bookmark not found in visible layers</source>
+        <target>Die im Feature Selection Bookmark angegebenen Layer wurden in den sichtbaren Layern nicht gefunden</target>
+      </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
         <source>No attribute name specified in Feature Selection Bookmark</source>
         <target>Kein Attributname im Feature Selection Bookmark angegeben</target>

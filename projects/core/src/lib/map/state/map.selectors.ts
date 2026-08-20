@@ -336,11 +336,11 @@ export const selectLayersWithoutWebMercatorTitles = createSelector(
   layers => layers.map(layer => layer.title),
 );
 
-export const selectAppLayerIds = (
+export const selectVisibleAppLayerIds = (
   layers: Array<{ serviceId: string; layerName: string }>,
 ) => createSelector(
-  selectLayers,
-  (appLayers: AppLayerStateModel[]): string[] => {
+  selectVisibleLayersWithServices,
+  (appLayers: ExtendedAppLayerModel[]): string[] => {
     return layers
       .map(({ serviceId, layerName }) => {
         const layer = appLayers.find(l => l.serviceId === serviceId && l.layerName === layerName);
