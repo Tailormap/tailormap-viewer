@@ -30,13 +30,13 @@
     <div class="color-picker__colors">
 
       @for (pickerColor of getPickerColors(); track pickerColor) {
-        <div
+        <button
           class="color-picker__color"
           (click)="selectColor(pickerColor)"
           (touchend)="selectColor(pickerColor)"
           [style.backgroundColor]="pickerColor"
           [class.color-picker__color-transparent]="!pickerColor"
-        [class.mat-elevation-z4]="pickerColor === color"></div>
+        [class.mat-elevation-z4]="pickerColor === color"></button>
       }
     </div>
 
