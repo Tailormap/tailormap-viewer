@@ -1,4 +1,4 @@
-  import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
@@ -40,6 +40,16 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public supportsSnapping = true;
 
+  /**
+   * Keyboard control element that receives focus when the tool is active
+   */
+  private keyboardControl: HTMLElement | null = null;
+
+  /**
+   * Bound keyboard handler to allow proper attach/detach
+   */
+  private keyboardControlHandler = (ev: KeyboardEvent) => this.onKeyboardControlKeyDown(ev);
+
   constructor(
     public id: string,
     private toolConfig: ExtTransformToolConfigModel,
@@ -51,6 +61,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public destroy(): void {
     this.disable();
+    this.removeKeyboardControl();
     if (this.editLayer) {
       this.olMap.removeLayer(this.editLayer);
       this.editLayer.dispose();
@@ -80,6 +91,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
+    this.createKeyboardControl();
     OpenLayersEventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -221,6 +233,151 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
         }, 50);
       }
     });
+  }
+
+  /**
+   * Create a hidden keyboard control element that receives focus.
+   * This element allows keyboard interaction with the transform tool.
+   */
+  private createKeyboardControl() {
+    if (this.keyboardControl) {
+      return;
+    }
+
+    this.keyboardControl = document.createElement('div');
+    this.keyboardControl.className = 'tm-transform-keyboard-control';
+    this.keyboardControl.tabIndex = 0;
+    this.keyboardControl.setAttribute('aria-label', $localize `:@@map.transform-keyboard-control:Transform tool - use arrow keys to move, R to rotate, +/- to scale`);
+    this.keyboardControl.style.position = 'absolute';
+    this.keyboardControl.style.width = '0';
+    this.keyboardControl.style.height = '0';
+    this.keyboardControl.style.overflow = 'hidden';
+    this.keyboardControl.style.pointerEvents = 'none';
+
+    this.keyboardControl.addEventListener('keydown', this.keyboardControlHandler);
+    this.keyboardControl.addEventListener('blur', () => this.onKeyboardControlBlur());
+
+    const mapTarget = this.olMap.getTargetElement();
+    mapTarget.appendChild(this.keyboardControl);
+    this.keyboardControl.focus();
+  }
+
+  /**
+   * Remove the keyboard control element.
+   */
+  private removeKeyboardControl() {
+    if (!this.keyboardControl) {
+      return;
+    }
+    this.keyboardControl.removeEventListener('keydown', this.keyboardControlHandler);
+    this.keyboardControl.removeEventListener('blur', () => this.onKeyboardControlBlur());
+    if (this.keyboardControl.parentNode) {
+      this.keyboardControl.parentNode.removeChild(this.keyboardControl);
+    }
+    this.keyboardControl = null;
+  }
+
+  /**
+   * Handle blur event on keyboard control - disable the tool.
+   */
+  private onKeyboardControlBlur() {
+    // Only disable if focus moved outside the tool (not within the tool itself)
+    // This allows re-focusing the control without triggering disable
+    if (this.isActive) {
+      this.disable();
+    }
+  }
+
+  /**
+   * Handle keyboard input for transforming the selected feature.
+   * Only processes input when the keyboard control has focus.
+   * Arrow keys: translate
+   * R: rotate
+   * +/-: scale
+   * Escape: disable tool and remove focus
+   * Hold Shift for larger steps.
+   */
+  private onKeyboardControlKeyDown(ev: KeyboardEvent) {
+    // Handle Escape key to disable the tool
+    if (ev.key === 'Escape') {
+      this.disable();
+      ev.preventDefault();
+      ev.stopPropagation();
+      return;
+    }
+
+    const features = this.source?.getFeatures();
+    if (!features || features.length === 0) {
+      return;
+    }
+    const feature = features[0];
+    const geom = feature.getGeometry();
+    if (!geom) {
+      return;
+    }
+
+    const view = this.olMap.getView();
+    const resolution = view.getResolution() || 1;
+    const pixelStep = ev.shiftKey ? 20 : 5;              // pixels
+    const mapStep = pixelStep * resolution;             // map units
+    const rotationDeg = ev.shiftKey ? 15 : 5;           // degrees
+    const scaleStep = ev.shiftKey ? 0.1 : 0.05;         // scale factor step
+
+    let handled = false;
+
+    switch (ev.key) {
+      case 'ArrowUp':
+        geom.translate(0, -mapStep);
+        handled = true;
+        break;
+      case 'ArrowDown':
+        geom.translate(0, mapStep);
+        handled = true;
+        break;
+      case 'ArrowLeft':
+        geom.translate(-mapStep, 0);
+        handled = true;
+        break;
+      case 'ArrowRight':
+        geom.translate(mapStep, 0);
+        handled = true;
+        break;
+      case 'r':
+      case 'R': {
+        const rotationRad = rotationDeg * Math.PI / 180 * (ev.key === 'R' ? -1 : 1);
+        const extent = geom.getExtent();
+        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
+        geom.rotate(rotationRad, anchor);
+        handled = true;
+        break;
+      }
+      case '+':
+      case '=': {
+        const extent = geom.getExtent();
+        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
+        const scaleFactor = 1 + scaleStep;
+        geom.scale(scaleFactor, scaleFactor, anchor);
+        handled = true;
+        break;
+      }
+      case '-': {
+        const extent = geom.getExtent();
+        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
+        const scaleFactor = 1 - scaleStep;
+        geom.scale(scaleFactor, scaleFactor, anchor);
+        handled = true;
+        break;
+      }
+      default:
+        break;
+    }
+
+    if (handled) {
+      feature.setGeometry(geom);
+      this.eventHandler(feature);
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
   }
 
 }
