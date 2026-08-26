@@ -26,6 +26,13 @@ const rotateIcon = 'data:image/svg+xml;base64,' + btoa(
   '<path d="M7.1 8.5 5.7 7.1A8 8 0 0 0 4.1 11h2a6 6 0 0 1 1-2.5zm-1 4.5H4a8 8 0 0 0 1.6 3.9L7 15.5a6 6 0 0 1-1-2.5zm1 5.3A8 8 0 0 0 11 20v-2a6 6 0 0 1-2.5-1l-1.4 1.4zM13 4.1V1L8.4 5.5 13 10V6a6 6 0 0 1 0 12v2a8 8 0 0 0 0-16z" fill="rgb(255, 0, 0)" />' +
   '</svg>');
 
+interface KeyboardControlEntry {
+  element: HTMLElement;
+  enableArgs: ExtTransformEnableToolArguments;
+  keydownHandler: (ev: KeyboardEvent) => void;
+  focusHandler: () => void;
+}
+
 export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private listeners: EventsKey[] = [];
@@ -41,14 +48,14 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public supportsSnapping = true;
 
   /**
-   * Keyboard control element that receives focus when the tool is active
+   * Map of keyboard control elements indexed by feature id
    */
-  private keyboardControl: HTMLElement | null = null;
+  private keyboardControls: Map<string, KeyboardControlEntry> = new Map();
 
   /**
-   * Bound keyboard handler to allow proper attach/detach
+   * Currently active feature id
    */
-  private keyboardControlHandler = (ev: KeyboardEvent) => this.onKeyboardControlKeyDown(ev);
+  private activeFeatureId: string | null = null;
 
   constructor(
     public id: string,
@@ -61,7 +68,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public destroy(): void {
     this.disable();
-    this.removeKeyboardControl();
+    this.destroyAllKeyboardControls();
     if (this.editLayer) {
       this.olMap.removeLayer(this.editLayer);
       this.editLayer.dispose();
@@ -72,11 +79,13 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   public disable(): void {
+    console.debug(`[OpenLayersExtTransformTool] Disabling tool ${this.id}`);
     this.isActive = false;
     this.stopModify();
   }
 
   public enable(args: ExtTransformEnableToolArguments): void {
+    console.debug(`[OpenLayersExtTransformTool] Enabling tool ${this.id} with feature`, args.feature);
     this.stopModify();
     this.destroyed = new Subject();
     if (!args || !args.feature) {
@@ -91,7 +100,8 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
-    this.createKeyboardControl();
+    this.ensureKeyboardControlForFeature(args);
+    this.activeFeatureId = args.feature.__fid;
     OpenLayersEventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -236,68 +246,85 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   /**
-   * Create a hidden keyboard control element that receives focus.
-   * This element allows keyboard interaction with the transform tool.
+   * Ensure a keyboard control element exists for the given feature.
+   * Creates one if it doesn't exist yet.
    */
-  private createKeyboardControl() {
-    if (this.keyboardControl) {
+  private ensureKeyboardControlForFeature(args: ExtTransformEnableToolArguments) {
+    const featureId = args.feature.__fid;
+    if (this.keyboardControls.has(featureId)) {
+      this.keyboardControls.get(featureId)?.element.focus();
       return;
     }
 
-    this.keyboardControl = document.createElement('div');
-    this.keyboardControl.className = 'tm-transform-keyboard-control';
-    this.keyboardControl.tabIndex = 0;
-    this.keyboardControl.setAttribute('aria-label', $localize `:@@map.transform-keyboard-control:Transform tool - use arrow keys to move, R to rotate, +/- to scale`);
-    this.keyboardControl.style.position = 'absolute';
-    this.keyboardControl.style.width = '0';
-    this.keyboardControl.style.height = '0';
-    this.keyboardControl.style.overflow = 'hidden';
-    this.keyboardControl.style.pointerEvents = 'none';
+    // Create new keyboard control for this feature
+    const element = document.createElement('div');
+    element.className = 'tm-transform-keyboard-control';
+    element.tabIndex = 0;
+    element.setAttribute('aria-label', $localize `:@@core.map.transform-keyboard-control:Transform tool - use arrow keys to move, R to rotate, +/- to scale`);
+    element.style.position = 'absolute';
+    element.style.width = '0';
+    element.style.height = '0';
+    element.style.overflow = 'hidden';
+    element.style.pointerEvents = 'none';
 
-    this.keyboardControl.addEventListener('keydown', this.keyboardControlHandler);
-    this.keyboardControl.addEventListener('blur', () => this.onKeyboardControlBlur());
+    // Create bound handlers for this specific feature
+    const keydownHandler = (ev: KeyboardEvent) => this.onKeyboardControlKeyDown(ev, featureId);
+    const focusHandler = () => this.onKeyboardControlFocus(featureId);
+
+    element.addEventListener('keydown', keydownHandler);
+    element.addEventListener('focus', focusHandler);
 
     const mapTarget = this.olMap.getTargetElement();
-    mapTarget.appendChild(this.keyboardControl);
-    this.keyboardControl.focus();
+    mapTarget.appendChild(element);
+
+    // Store the control entry
+    this.keyboardControls.set(featureId, {
+      element,
+      enableArgs: args,
+      keydownHandler,
+      focusHandler,
+    });
+
+    // Focus the newly created control
+    element.focus();
   }
 
   /**
-   * Remove the keyboard control element.
+   * Destroy all keyboard control elements.
+   * Called when the tool is destroyed.
    */
-  private removeKeyboardControl() {
-    if (!this.keyboardControl) {
-      return;
-    }
-    this.keyboardControl.removeEventListener('keydown', this.keyboardControlHandler);
-    this.keyboardControl.removeEventListener('blur', () => this.onKeyboardControlBlur());
-    if (this.keyboardControl.parentNode) {
-      this.keyboardControl.parentNode.removeChild(this.keyboardControl);
-    }
-    this.keyboardControl = null;
+  private destroyAllKeyboardControls() {
+    this.keyboardControls.forEach((entry) => {
+      entry.element.removeEventListener('keydown', entry.keydownHandler);
+      entry.element.removeEventListener('focus', entry.focusHandler);
+      if (entry.element.parentNode) {
+        entry.element.parentNode.removeChild(entry.element);
+      }
+    });
+    this.keyboardControls.clear();
+    this.activeFeatureId = null;
   }
 
   /**
-   * Handle blur event on keyboard control - disable the tool.
+   * Handle focus event on a keyboard control - re-enable with the associated feature.
    */
-  private onKeyboardControlBlur() {
-    // Only disable if focus moved outside the tool (not within the tool itself)
-    // This allows re-focusing the control without triggering disable
-    if (this.isActive) {
-      this.disable();
+  private onKeyboardControlFocus(featureId: string) {
+    const entry = this.keyboardControls.get(featureId);
+    if (entry && !this.isActive) {
+      this.enable(entry.enableArgs);
     }
   }
 
   /**
    * Handle keyboard input for transforming the selected feature.
-   * Only processes input when the keyboard control has focus.
+   * Only processes input when a keyboard control has focus.
    * Arrow keys: translate
    * R: rotate
    * +/-: scale
    * Escape: disable tool and remove focus
    * Hold Shift for larger steps.
    */
-  private onKeyboardControlKeyDown(ev: KeyboardEvent) {
+  private onKeyboardControlKeyDown(ev: KeyboardEvent, featureId: string) {
     // Handle Escape key to disable the tool
     if (ev.key === 'Escape') {
       this.disable();
@@ -327,11 +354,11 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
     switch (ev.key) {
       case 'ArrowUp':
-        geom.translate(0, -mapStep);
+        geom.translate(0, mapStep);
         handled = true;
         break;
       case 'ArrowDown':
-        geom.translate(0, mapStep);
+        geom.translate(0, -mapStep);
         handled = true;
         break;
       case 'ArrowLeft':
