@@ -71,24 +71,10 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
-    if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
-      // Do not re-create the map if the projection is the same as previous
-      this.map.value.getView().getProjection().setExtent(options.maxExtent);
-      if (this.initialCenterZoom !== undefined) {
-          this.map.value.getView().setCenter(this.initialCenterZoom[0]);
-          this.map.value.getView().setZoom(this.initialCenterZoom[1]);
-      } else if (options.initialExtent && options.initialExtent.length > 0) {
-        this.map.value.getView().fit(options.initialExtent);
-      }
-      return;
-    }
-
+    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
     if (typeof initialOptions?.initialCenter !== 'undefined' && typeof initialOptions?.initialZoom !== 'undefined') {
       this.initialCenterZoom = [ initialOptions.initialCenter, initialOptions.initialZoom ];
     }
-
-    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
-
     const view = new View({
       projection: options.projection,
       extent: options.maxExtent,
@@ -96,7 +82,16 @@ export class OpenLayersMap implements MapViewerModel {
       zoom: initialOptions?.initialZoom,
       showFullExtent: true,
     });
-
+    if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
+      this.map.value.setView(view);
+      if (this.initialCenterZoom !== undefined) {
+        this.map.value.getView().setCenter(this.initialCenterZoom[0]);
+        this.map.value.getView().setZoom(this.initialCenterZoom[1]);
+      } else if (options.initialExtent && options.initialExtent.length > 0) {
+        this.map.value.getView().fit(options.initialExtent);
+      }
+      return;
+    }
     const isInIframe = window.self !== window.top;
     const olMap = new OlMap({
       controls: [],
