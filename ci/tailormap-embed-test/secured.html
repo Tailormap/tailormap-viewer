@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tailormap embed secured application test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script>
+  function requestTailormapUserInfo() {
+    /** @type {HTMLIFrameElement} */
+    const iframe = document.getElementById('tailormap-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage({ type: 'tailormap-request-user-info' }, '*');
+    }
+  }
+
+  function startOIDCAuthentication() {
+    window.location.href = `{SRC}/api/oauth2/authorization/static?redirectUrl=${encodeURIComponent(window.location.href)}`;
+  }
+
+  function subscribeToMessages() {
+    window.addEventListener('message', (event) => {
+      if (event.data && typeof event.data === 'object'
+        && 'type' in event.data
+        && typeof event.data.type === 'string'
+        && event.data.type.startsWith('tailormap-')) {
+        console.log('Received message from Tailormap', event.data);
+        const messageLog = document.getElementById('message-log');
+        const logEntry = document.createElement('p');
+        logEntry.textContent = JSON.stringify(event.data);
+        messageLog.appendChild(logEntry);
+        messageLog.scrollTop = messageLog.scrollHeight;
+
+        if (event.data.type === 'tailormap-user-info') {
+          if (event.data.userDetails.isAuthenticated === true) {
+            document.getElementById('start-auth-message').style.display = 'none';
+            document.getElementById('tailormap-frame').style.visibility = 'visible';
+          }
+        }
+      }
+    });
+  }
+
+  subscribeToMessages();
+</script>
+<h1>Tailormap iframe embed secured application test</h1>
+<p style="margin-left: 30px; font-size: large;">
+  <a href="index.html">Public application</a> | Secured application | <a href="feature-selection.html">Feature selection</a>
+</p>
+<div style="margin: 10px 30px 0 30px; padding: 10px; background-color: pink; height: 60vh; font-family: Arial, sans-serif; font-size: xx-large; display: flex; align-items: center; justify-content: center">scroll me</div>
+<div style="margin: 10px 30px 15px 30px">
+  <button onclick="requestTailormapUserInfo()">Request Tailormap user info</button>
+  <button onclick="startOIDCAuthentication()">OIDC login</button>
+  Note: this example does not automatically redirect to OIDC login with redirect loop protection, but a user click might not be required
+  when implementing this.
+  <div id="message-log" style="margin-top: 10px; background-color: lightgray; font-family: monospace; height: 100px; overflow-y: auto"></div>
+</div>
+<div style="margin: 15px 30px 0 30px; border: 1px solid black; width: auto; height: 400px">
+  <div id="start-auth-message" onclick="startOIDCAuthentication()" style="cursor: pointer; font-family: Arial, sans-serif; font-size: xx-large; display: flex; align-items: center; justify-content: center; height: 100%">
+    Click to show map
+  </div>
+  <iframe allow="geolocation" src="{SRC}/app/secured#!embed:1"
+          style="visibility: hidden; border: none; width: 100%; height: 100%" name="tailormap" id="tailormap-frame" loading="lazy"
+          onload="requestTailormapUserInfo();"></iframe>
+</div>
+<div style="margin: 15px 30px 30px 30px; padding: 10px; background-color: paleturquoise; font-family: Arial, sans-serif; font-size: xx-large; height: 80vh; display: flex; align-items: center; justify-content: center">scroll me</div>
+</body>
+</html>

@@ -40,7 +40,7 @@
       @else if (isDatePickerFilter(filter)) {
         <div class="edit-filter-wrapper">
           <div class="editable-date-picker-filter-title">
-            {{ filter.attributeAlias ?? filter.attribute + ' ' + getConditionLabel(filter.condition) }}
+            {{ (filter.attributeAlias ?? filter.attribute) + ' ' + getConditionLabel(filter.condition) }}
           </div>
           <div class="editable-date-picker-filter-content">
             <tm-date-picker-filter
@@ -60,6 +60,18 @@
               [dropdownListFilter]="filter"
               [uniqueValues]="getUniqueValues$(filter.attribute) | async"
               (valueSelected)="updateCheckboxFilterValue($event.value, $event.selected, false, filter)"></tm-dropdown-list-filter>
+          </div>
+        </div>
+      }
+      @else if (isTextFilter(filter)) {
+        <div class="edit-filter-wrapper">
+          <div class="editable-text-filter-title">
+            {{ (filter.attributeAlias ?? filter.attribute) + ' ' + getConditionLabel(filter.condition) }}
+          </div>
+          <div class="editable-text-filter-content">
+            <tm-text-filter
+              [textFilter]="filter"
+              (valueChange)="updateTextFilterValue($event, filter)"></tm-text-filter>
           </div>
         </div>
       }

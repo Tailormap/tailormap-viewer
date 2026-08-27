@@ -5,11 +5,6 @@ import { FeatureSelectionBookmarkFragment } from './application-bookmark-fragmen
 import { v4 as uuidv4 } from 'uuid';
 import { FeatureInfoResponseModel } from "../../components/feature-info/models/feature-info-response.model";
 
-export interface FeatureSelectionMessage {
-  type: 'tailormap-feature-selection';
-  value: string;
-}
-
 export class FeatureSelectionBookmarkHelper {
   private static PART_SEPARATOR = ';';
   private static SERVICE_LAYER_SEPARATOR = '/';
@@ -70,7 +65,7 @@ export class FeatureSelectionBookmarkHelper {
   ): FilterGroupModel<AttributeFilterModel> | { errorMessage: string } {
     if (!appLayerIds || appLayerIds.length === 0) {
       return {
-        errorMessage: $localize `:@@core.feature-bookmark.no-layers:No layers specified in Feature Selection Bookmark`,
+        errorMessage: $localize `:@@core.feature-bookmark.layers-not-found:Provided layers in Feature Selection Bookmark not found in visible layers`,
       };
     }
     if (!attributeName) {
@@ -116,15 +111,6 @@ export class FeatureSelectionBookmarkHelper {
       template: response.template || null,
       layerId,
     };
-  }
-
-  public static isFeatureSelectionMessage(data: unknown): data is FeatureSelectionMessage {
-    return !!data
-      && typeof data === 'object'
-      && 'type' in data
-      && data.type === 'tailormap-feature-selection'
-      && 'value' in data
-      && typeof data.value === 'string';
   }
 
   public static createFidSelectionFragment(serviceId: string, layerName: string, fid: string): string {

@@ -50,6 +50,9 @@
       <trans-unit id="core.attribute-list.no-rows-found" datatype="html">
         <source>No rows found</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.resize-column" datatype="html">
+        <source>Resize <x id="PH" equiv-text="columnLabel"/> column</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.select-all-rows" datatype="html">
         <source>Select all rows</source>
       </trans-unit>
@@ -164,9 +167,6 @@
       <trans-unit id="core.common.line" datatype="html">
         <source>Line</source>
       </trans-unit>
-      <trans-unit id="core.common.next" datatype="html">
-        <source>Next</source>
-      </trans-unit>
       <trans-unit id="core.common.none" datatype="html">
         <source>None</source>
       </trans-unit>
@@ -212,11 +212,17 @@
       <trans-unit id="core.coordinate-picker" datatype="html">
         <source>Coordinate Picker</source>
       </trans-unit>
+      <trans-unit id="core.dialog.close-panel-label" datatype="html">
+        <source>Close <x id="PH" equiv-text="this.dialogTitle"/> panel</source>
+      </trans-unit>
       <trans-unit id="core.dialog.collapse-panel" datatype="html">
         <source>Collapse panel</source>
       </trans-unit>
       <trans-unit id="core.dialog.expand-panel" datatype="html">
         <source>Expand panel</source>
+      </trans-unit>
+      <trans-unit id="core.dialog.resize-panel" datatype="html">
+        <source>Resize panel</source>
       </trans-unit>
       <trans-unit id="core.draw.delete-selected-feature" datatype="html">
         <source>Delete selected feature</source>
@@ -410,6 +416,9 @@
       <trans-unit id="core.edit.attachments" datatype="html">
         <source>Attachments</source>
       </trans-unit>
+      <trans-unit id="core.edit.copy-from-other-layer" datatype="html">
+        <source>Copy from other layer</source>
+      </trans-unit>
       <trans-unit id="core.edit.create-feature-failed" datatype="html">
         <source>Create feature failed</source>
       </trans-unit>
@@ -476,6 +485,9 @@
       <trans-unit id="core.edit.upload-attachment-failed" datatype="html">
         <source>Uploading attachment &quot;<x id="PH" equiv-text="file.name"/>&quot; failed: </source>
       </trans-unit>
+      <trans-unit id="core.feature-bookmark.layers-not-found" datatype="html">
+        <source>Provided layers in Feature Selection Bookmark not found in visible layers</source>
+      </trans-unit>
       <trans-unit id="core.feature-bookmark.no-attribute-name" datatype="html">
         <source>No attribute name specified in Feature Selection Bookmark</source>
       </trans-unit>
@@ -506,11 +518,26 @@
       <trans-unit id="core.feature-info.feature-info-menu-item" datatype="html">
         <source>Feature info</source>
       </trans-unit>
+      <trans-unit id="core.feature-info.filter-exists-tooltip" datatype="html">
+        <source>There is another filter for <x id="PH" equiv-text="attribute"/></source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-off-tooltip" datatype="html">
+        <source>Remove filter for <x id="PH" equiv-text="value"/></source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.filter-tooltip" datatype="html">
+        <source>Filter on this <x id="PH" equiv-text="value"/></source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.next" datatype="html">
+        <source>Next</source>
+      </trans-unit>
       <trans-unit id="core.feature-info.no-features-found" datatype="html">
         <source>No features found</source>
       </trans-unit>
       <trans-unit id="core.feature-info.object-information" datatype="html">
         <source>Object Information</source>
+      </trans-unit>
+      <trans-unit id="core.feature-info.previous" datatype="html">
+        <source>Previous</source>
       </trans-unit>
       <trans-unit id="core.feature-info.select-layer" datatype="html">
         <source>Select layer</source>
@@ -581,8 +608,8 @@
       <trans-unit id="core.filter.contains-upper" datatype="html">
         <source>Contains</source>
       </trans-unit>
-      <trans-unit id="core.filter.create-new-filter" datatype="html">
-        <source>Create new filter</source>
+      <trans-unit id="core.filter.create-new-spatial-filter" datatype="html">
+        <source>Create new spatial filter</source>
       </trans-unit>
       <trans-unit id="core.filter.date-filter.label" datatype="html">
         <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
@@ -628,9 +655,6 @@
       </trans-unit>
       <trans-unit id="core.filter.error-loading-reference-layer-geometries" datatype="html">
         <source>Error loading reference layer geometries</source>
-      </trans-unit>
-      <trans-unit id="core.filter.filter" datatype="html">
-        <source>Filter</source>
       </trans-unit>
       <trans-unit id="core.filter.filtering" datatype="html">
         <source>Filtering</source>
@@ -809,9 +833,6 @@
       <trans-unit id="core.filter.smaller-than-or-equal-to" datatype="html">
         <source>Smaller than or equal to</source>
       </trans-unit>
-      <trans-unit id="core.filter.spatial" datatype="html">
-        <source>Spatial</source>
-      </trans-unit>
       <trans-unit id="core.filter.spatial-filter" datatype="html">
         <source>Spatial filter</source>
       </trans-unit>
@@ -829,6 +850,9 @@
       </trans-unit>
       <trans-unit id="core.filter.switch-filter.true" datatype="html">
         <source>True</source>
+      </trans-unit>
+      <trans-unit id="core.filter.text-filter.label" datatype="html">
+        <source>Filter: <x id="PH" equiv-text="filter.attribute"/> <x id="PH_1" equiv-text="conditionLabel"/> - value</source>
       </trans-unit>
       <trans-unit id="core.filter.until" datatype="html">
         <source>Until</source>
@@ -1074,8 +1098,8 @@
       <trans-unit id="core.toc.expand-all" datatype="html">
         <source>Expand all groups</source>
       </trans-unit>
-      <trans-unit id="core.toc.filter-by-layer-name" datatype="html">
-        <source>Filter by layer name...</source>
+      <trans-unit id="core.toc.filter" datatype="html">
+        <source>Filter by layer name or keywords...</source>
       </trans-unit>
       <trans-unit id="core.toc.filter-layers" datatype="html">
         <source>Filter layers</source>

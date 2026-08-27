@@ -31,6 +31,8 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
 import { StoreInstanceProviderHelper } from './viewer-instance/store-instance-provider.helper';
+import { CrossOriginPostMessageApiService } from '@tailormap-viewer/api';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 
 const getBaseHref = (platformLocation: PlatformLocation): string => {
   return platformLocation.getBaseHrefFromDOM();
@@ -70,6 +72,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
     { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    { provide: TAILORMAP_CROSS_ORIGIN_API_SERVICE, useClass: CrossOriginPostMessageApiService },
     provideEnvironmentInitializer(() => {
       inject(ApplicationStyleService).init();
       inject(RouterHistoryService).init();
@@ -77,6 +80,7 @@ const getBaseHref = (platformLocation: PlatformLocation): string => {
       ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
       inject(AuthenticatedUserService).fetchUserDetails();
       inject(UserLoginCheckService).pingUserLoggedIn();
+      inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE).init();
     }),
   ],
 })

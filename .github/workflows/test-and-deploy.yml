@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -86,7 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -148,6 +148,7 @@ jobs:
       MAIL_FROM: ${{ vars.MAIL_FROM }}
       PASSWORD_RESET_ENABLED: ${{ vars.PASSWORD_RESET_ENABLED }}
       ENVERS_ENABLED: ${{ vars.ENVERS_ENABLED }}
+      ALLOWED_REDIRECT_URL_PREFIXES: ${{ vars.ALLOWED_REDIRECT_URL_PREFIXES }}
     needs: [ lint, test, build_libraries ]
     steps:
       - uses: actions/checkout@v7

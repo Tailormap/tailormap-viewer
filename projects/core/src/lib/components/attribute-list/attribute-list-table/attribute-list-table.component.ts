@@ -274,4 +274,8 @@ export class AttributeListTableComponent {
     this.setAllRowsChecked.emit({ checked: !allChecked });
   }
 
+  public getColumnResizeLabel(columnLabel: string): string {
+    return $localize `:@@core.attribute-list.resize-column:Resize ${columnLabel} column`;
+  }
+
 }

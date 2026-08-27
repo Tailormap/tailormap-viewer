@@ -41,6 +41,7 @@ services:
       - "TAILORMAPAPI_PASSWORDRESET_ENABLED=${PASSWORD_RESET_ENABLED:-false}"
       - "TAILORMAPAPI_PROXY_PASSTHROUGH_LAYERPATTERNS=${PROXY_PASSTHROUGH_LAYERPATTERNS:-}"
       - "TAILORMAPAPI_PROXY_PASSTHROUGH_HOSTNAMES=${PROXY_PASSTHROUGH_HOSTNAMES:-}"
+      - "TAILORMAPAPI_SECURITY_ALLOWEDREDIRECTURLPREFIXES=${ALLOWED_REDIRECT_URL_PREFIXES:-}"
       - "ADMIN_HASHED_PASSWORD=${ADMIN_HASHED_PASSWORD:-}"
       - "MANAGEMENT_HASHED_PASSWORD=${MANAGEMENT_HASHED_PASSWORD:-}"
       # The container binds to localhost for running the tailormap container by itself in host network mode
@@ -114,7 +115,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.13.0
+    image: prom/prometheus:v3.14.0
     profiles:
       - prometheus
     environment:

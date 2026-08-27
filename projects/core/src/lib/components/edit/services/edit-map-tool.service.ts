@@ -26,7 +26,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { withLatestFrom } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, GeometryType } from '@tailormap-viewer/api';
 import { FeatureInfoService } from '../../feature-info';
 
 @Injectable({
@@ -231,13 +231,22 @@ export class EditMapToolService {
 
   private loadCopyFeatures(coordinates: [number, number], mouseCoordinates: [number, number], pointerType?: string): void {
     this.store$.dispatch(loadCopyFeatures({ coordinates, mouseCoordinates, pointerType }));
-    this.store$.select(selectSelectedCopyLayer).pipe(take(1)).subscribe(copyLayer => {
-      this.featureInfoService.getFeaturesForLayer$(coordinates, copyLayer, pointerType).pipe(take(1)).subscribe(result => {
-        if (!result) {
+    combineLatest([
+      this.store$.select(selectSelectedCopyLayer),
+      this.store$.select(selectSelectedEditLayer),
+    ]).pipe(take(1)).subscribe(([ copyLayer, editLayer ]) => {
+      this.featureInfoService.getFeaturesForLayer$(coordinates, copyLayer, pointerType).pipe(
+        withLatestFrom(
+          editLayer ? this.applicationLayerService.getLayerDetails$(editLayer) : of(null),
+        ),
+        take(1),
+      ).subscribe(([ featureInfo, layerDetails ]) => {
+        if (!featureInfo) {
           this.store$.dispatch(loadCopyFeaturesFailed({}));
           return;
         }
-        this.store$.dispatch(loadCopyFeaturesSuccess({ featureInfo: [result] }));
+        const editGeometryType = layerDetails?.details.geometryType || GeometryType.GEOMETRY;
+        this.store$.dispatch(loadCopyFeaturesSuccess({ editGeometryType, featureInfo: [featureInfo] }));
       });
     });
   }

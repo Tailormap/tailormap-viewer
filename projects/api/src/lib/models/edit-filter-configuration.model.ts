@@ -4,6 +4,7 @@ import { UpdateSwitchFilterModel } from './switch-filter.model';
 import { UpdateDatePickerFilterModel } from './date-picker-filter.model';
 import { DropdownListFilterModel } from './dropdown-list-filter.model';
 import { DateIntervalFilterModel } from './date-interval-filter.model';
+import { UpdateTextFilterModel } from './text-filter.model';
 
 
 export type EditFilterConfigurationModel = UpdateSliderFilterModel
@@ -11,4 +12,5 @@ export type EditFilterConfigurationModel = UpdateSliderFilterModel
   | UpdateSwitchFilterModel
   | UpdateDatePickerFilterModel
   | DropdownListFilterModel
-  | DateIntervalFilterModel;
+  | DateIntervalFilterModel
+  | UpdateTextFilterModel;

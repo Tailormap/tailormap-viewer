@@ -17,6 +17,7 @@ tm-admin-application-filter-attribute-list {
 
 .attribute-filter-values,
 .slider-filter-form,
-.date-picker-filter-form {
+.date-picker-filter-form,
+.text-filter-form {
   margin-top: 16px;
 }

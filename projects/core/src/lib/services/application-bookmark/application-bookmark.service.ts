@@ -1,8 +1,8 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Injectable, inject, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
 import {
-  combineLatest, debounceTime, filter, fromEvent, map, skip, skipWhile, Subject, switchMap, takeUntil, withLatestFrom,
+  combineLatest, debounceTime, filter, map, skip, skipWhile, switchMap, withLatestFrom,
 } from 'rxjs';
 import { selectLoadStatus, selectLayers, selectLayerTreeNodes } from '../../map/state/map.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -27,11 +27,14 @@ import { FeatureSelectionBookmarkService } from './feature-selection-bookmark.se
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { selectFeatureInfoShowingBookmarkFeatures } from '../../components/feature-info/state/feature-info.selectors';
 import { MobileLayoutBookmarkEnum, MobileLayoutService } from '../viewer-layout/mobile-layout.service';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApplicationBookmarkService implements OnDestroy {
+export class ApplicationBookmarkService {
+  private destroyRef = inject(DestroyRef);
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private route = inject(ActivatedRoute);
@@ -40,9 +43,8 @@ export class ApplicationBookmarkService implements OnDestroy {
   private readableVisibilityBookmarkHandler = inject(ReadableVisibilityBookmarkHandlerService);
   private featureSelectionBookmarkService = inject(FeatureSelectionBookmarkService);
   private mobileLayoutService = inject(MobileLayoutService);
+  private crossOriginApiService = inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE);
 
-
-  private destroyed = new Subject();
   private lastLocationBookmark: string | undefined;
   private lastLayerSettingsBookmark: LayerSettingsBookmarkFragment | undefined;
   private lastOrderingBookmark: LayerTreeOrderBookmarkFragment | undefined;
@@ -53,7 +55,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   constructor() {
     let initialRun = true;
     this.route.fragment
-      .pipe(takeUntil(this.destroyed))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(fragment => {
         this.bookmarkService.setBookmark(fragment === null ? undefined : fragment);
         if (initialRun) {
@@ -65,24 +67,12 @@ export class ApplicationBookmarkService implements OnDestroy {
         initialRun = false;
       });
 
-    fromEvent<MessageEvent>(window, 'message')
-      .pipe(
-        takeUntil(this.destroyed),
-        filter(event => window.self !== window.top && event.source === window.parent),
-      )
-      .subscribe(event => {
-        if (FeatureSelectionBookmarkHelper.isFeatureSelectionMessage(event.data)) {
-          this.bookmarkService.updateFragment(
-            ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR,
-            event.data.value,
-          );
-        }
-      });
-  }
+    this.crossOriginApiService.getFeatureSelectionMessage$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
+      event => {
+        this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR, event.typedData.value);
+      },
+    );
 
-  public ngOnDestroy() {
-    this.destroyed.next(null);
-    this.destroyed.complete();
   }
 
   public isEmbeddedApplication$() {
@@ -92,39 +82,39 @@ export class ApplicationBookmarkService implements OnDestroy {
 
   private updateBookmarkOnChanges() {
     this.getLayerSettingsBookmarkData$()
-      .pipe(skip(1), takeUntil(this.destroyed))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.lastLayerSettingsBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR, bookmark);
       });
     this.getOrderBookmarkData$()
-      .pipe(skip(1), takeUntil(this.destroyed))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.lastOrderingBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR, bookmark);
       });
     this.getLocationBookmarkData$()
-      .pipe(skip(1), takeUntil(this.destroyed))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.lastLocationBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR, bookmark);
       });
     this.getFilterBookmarkData$()
-      .pipe(skip(1), takeUntil(this.destroyed))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.lastFilterBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     this.getSortBookmarkData$()
-      .pipe(skip(1), takeUntil(this.destroyed))
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.lastSortBookmark = bookmark;
         this.bookmarkService.updateFragment(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR, bookmark);
       });
 
     this.getFeaturesRemovedFromFeatureInfo$()
-      .pipe(takeUntil(this.destroyed))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((featuresRemoved) => {
         if (featuresRemoved) {
           this.bookmarkService.updateFragment(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR, '');
@@ -132,7 +122,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       });
 
     this.bookmarkService.getBookmarkValue$()
-      .pipe(takeUntil(this.destroyed))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(bookmark => {
         this.router.navigate([], { relativeTo: this.route, fragment: bookmark, replaceUrl: true });
       });
@@ -143,7 +133,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.LOCATION_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         filter(locationBookmark => locationBookmark !== this.lastLocationBookmark),
       )
       .subscribe(locationBookmark => {
@@ -156,7 +146,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.bookmarkService.registerFragment$<LayerSettingsBookmarkFragment>(ApplicationBookmarkFragments.LAYER_SETTINGS_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         filter(layerBookmark => !deepEqual(this.lastLayerSettingsBookmark, layerBookmark)),
         withLatestFrom(this.store$.select(selectLayers)),
       )
@@ -179,7 +169,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.bookmarkService.registerFragment$<LayerTreeOrderBookmarkFragment>(ApplicationBookmarkFragments.ORDERING_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         filter(orderBookmark => !deepEqual(this.lastOrderingBookmark, orderBookmark)),
         withLatestFrom(this.store$.select(selectLayerTreeNodes)),
       )
@@ -201,7 +191,7 @@ export class ApplicationBookmarkService implements OnDestroy {
     this.bookmarkService.registerFragment$<LayerSortBookmarkFragment>(ApplicationBookmarkFragments.SORT_BOOKMARK_DESCRIPTOR)
       .pipe(
         skip(1),
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         filter(sortBookmark => !deepEqual(this.lastSortBookmark, sortBookmark)),
     ).subscribe(sortBookmark => {
       this.store$.dispatch(setInitialDataSort({ initialDataSort: SortBookmarkHelper.initialSortDataFromFragment(sortBookmark ?? []) }));
@@ -209,7 +199,7 @@ export class ApplicationBookmarkService implements OnDestroy {
 
     this.store$.select(selectLoadStatus).pipe(
       skip(1),
-      takeUntil(this.destroyed),
+      takeUntilDestroyed(this.destroyRef),
       filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
       switchMap(() => this.bookmarkService.registerFragment$<CompactFilterBookmarkFragment>(ApplicationBookmarkFragments.FILTER_BOOKMARK_DESCRIPTOR)),
       filter(filterBookmark => !deepEqual(this.lastFilterBookmark, filterBookmark)),
@@ -242,7 +232,7 @@ export class ApplicationBookmarkService implements OnDestroy {
 
     this.store$.select(selectLoadStatus).pipe(
       skip(1),
-      takeUntil(this.destroyed),
+      takeUntilDestroyed(this.destroyRef),
       filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
       switchMap(() => this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.FEATURE_SELECTION_BOOKMARK_DESCRIPTOR)),
       filter(featureSelectionFragment => featureSelectionFragment !== this.lastFeatureSelectionBookmark),
@@ -256,7 +246,7 @@ export class ApplicationBookmarkService implements OnDestroy {
 
     this.bookmarkService.registerFragment$<string>(ApplicationBookmarkFragments.MOBILE_LAYOUT_BOOKMARK_DESCRIPTOR)
       .pipe(
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
       ).subscribe(mobile => {
         if (mobile === '1') {
           this.mobileLayoutService.setMobileLayoutBookmark(MobileLayoutBookmarkEnum.ENABLED);
@@ -307,7 +297,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       this.store$.select(selectLoadStatus),
     ]).pipe(
       filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-      takeUntil(this.destroyed),
+      takeUntilDestroyed(this.destroyRef),
       debounceTime(250),
       map(([filterState]) => FilterBookmarkHelper.fragmentFromFilterState(filterState)),
     );
@@ -319,7 +309,7 @@ export class ApplicationBookmarkService implements OnDestroy {
       this.store$.select(selectLoadStatus),
     ]).pipe(
       filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-      takeUntil(this.destroyed),
+      takeUntilDestroyed(this.destroyRef),
       debounceTime(250),
       map(([sortState]) => SortBookmarkHelper.fragmentFromSortState(sortState)),
     );
@@ -331,7 +321,7 @@ export class ApplicationBookmarkService implements OnDestroy {
   private getFeaturesRemovedFromFeatureInfo$() {
     return this.store$.select(selectFeatureInfoShowingBookmarkFeatures)
       .pipe(
-        takeUntil(this.destroyed),
+        takeUntilDestroyed(this.destroyRef),
         skipWhile(showingBookmarkFeatures => !showingBookmarkFeatures),
         map(showingBookmarkFeatures => !showingBookmarkFeatures),
       );

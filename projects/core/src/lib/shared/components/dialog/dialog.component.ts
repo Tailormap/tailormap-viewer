@@ -3,7 +3,7 @@ import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper } from '@tailormap-viewer/shared';
 
-const DEFAULT_WIDTH = 300;
+const DIALOG_DEFAULT_WIDTH = 300;
 
 @Component({
   selector: 'tm-dialog',
@@ -49,13 +49,22 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   public collapsed: boolean | null = false;
 
   @Input()
-  public width = DEFAULT_WIDTH;
+  public width = DIALOG_DEFAULT_WIDTH;
 
   @Input()
   public widthMargin = 0;
 
   @Input()
   public allowFullscreen = false;
+
+  @Input()
+  public allowResize = false;
+
+  @Input()
+  public minWidth = DIALOG_DEFAULT_WIDTH;
+
+  @Input()
+  public maxWidth: number | null = null;
 
   @Output()
   public closeDialog = new EventEmitter();
@@ -65,6 +74,9 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output()
   public toggleFullscreenDialog = new EventEmitter<boolean>();
+
+  @Output()
+  public widthChanged = new EventEmitter<number>();
 
   public fullscreen = false;
 
@@ -79,15 +91,39 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
   }
 
-  public actualWidth = DEFAULT_WIDTH;
+  public actualWidth = DIALOG_DEFAULT_WIDTH;
   public dialogId = '';
+  private resizeActive = false;
+  private resizeStartX = 0;
+  private resizeStartWidth = DIALOG_DEFAULT_WIDTH;
+  private readonly RESIZE_KEYBOARD_STEP = 10;
 
   public ngOnInit(): void {
     this.dialogId = this.dialogService.registerDialog(this.getLeft(), this.getRight());
   }
 
   public ngOnDestroy(): void {
+    this.stopResize();
     this.dialogService.unregisterDialog(this.dialogId);
+  }
+
+  @HostListener('document:pointermove', ['$event']) public onDocumentPointerMove(event: PointerEvent) {
+    if (!this.resizeActive) {
+      return;
+    }
+    const delta = this.openFromRight ? this.resizeStartX - event.clientX : event.clientX - this.resizeStartX;
+    const maxWidth = this.getMaxAllowedWidth();
+    const nextWidth = Math.max(this.minWidth, Math.min(this.resizeStartWidth + delta, maxWidth));
+    if (nextWidth !== this.width) {
+      this.width = nextWidth;
+      this.updateActualWidth();
+      this.widthChanged.emit(nextWidth);
+      this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
+    }
+  }
+
+  @HostListener('document:pointerup') public onDocumentPointerUp() {
+    this.stopResize();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -97,14 +133,65 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
       changes['open']?.currentValue !== changes['open']?.previousValue ||
       changes['openFromRight']?.currentValue !== changes['openFromRight']?.previousValue ||
       changes['width']?.currentValue !== changes['width']?.previousValue ||
-      changes['maxWidth']?.currentValue !== changes['maxWidth']?.previousValue
+      changes['maxWidth']?.currentValue !== changes['maxWidth']?.previousValue ||
+      changes['minWidth']?.currentValue !== changes['minWidth']?.previousValue
     ) {
       this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
     }
   }
 
   public updateActualWidth() {
-    this.actualWidth = Math.min(this.width, BrowserHelper.getScreenWith() - this.widthMargin);
+    this.actualWidth = Math.max(this.minWidth, Math.min(this.width, this.getMaxAllowedWidth()));
+  }
+
+  protected getMaxAllowedWidth(): number {
+    const viewportMaxWidth = BrowserHelper.getScreenWith() - this.widthMargin;
+    return this.maxWidth !== null ? Math.min(this.maxWidth, viewportMaxWidth) : viewportMaxWidth;
+  }
+
+  public startResize(event: PointerEvent) {
+    if (!this.allowResize || this.fullscreen) {
+      return;
+    }
+    event.preventDefault();
+    this.resizeActive = true;
+    this.resizeStartX = event.clientX;
+    this.resizeStartWidth = this.width;
+    document.body.classList.add('resize-active');
+  }
+
+  public onResizeHandleKeyDown(event: KeyboardEvent) {
+    if (!this.allowResize || this.fullscreen) {
+      return;
+    }
+    let newWidth: number | null = null;
+    const maxWidth = this.getMaxAllowedWidth();
+
+    if (this.openFromRight && event.key === 'ArrowLeft') {
+      newWidth = Math.min(this.width + this.RESIZE_KEYBOARD_STEP, maxWidth);
+    } else if (this.openFromRight && event.key === 'ArrowRight') {
+      newWidth = Math.max(this.width - this.RESIZE_KEYBOARD_STEP, this.minWidth);
+    } else if (!this.openFromRight && event.key === 'ArrowRight') {
+      newWidth = Math.min(this.width + this.RESIZE_KEYBOARD_STEP, maxWidth);
+    } else if (!this.openFromRight && event.key === 'ArrowLeft') {
+      newWidth = Math.max(this.width - this.RESIZE_KEYBOARD_STEP, this.minWidth);
+    }
+
+    if (newWidth !== null && newWidth !== this.width) {
+      event.preventDefault();
+      this.width = newWidth;
+      this.updateActualWidth();
+      this.widthChanged.emit(newWidth);
+      this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
+    }
+  }
+
+  private stopResize() {
+    if (!this.resizeActive) {
+      return;
+    }
+    this.resizeActive = false;
+    document.body.classList.remove('resize-active');
   }
 
   private getHidden() {
@@ -138,4 +225,11 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
       : $localize`:@@core.dialog.collapse-panel:Collapse panel`;
   }
 
+  public getResizeHandleLabel(): string {
+    return $localize`:@@core.dialog.resize-panel:Resize panel`;
+  }
+
+  public getClosePanelLabel(): string {
+    return $localize `:@@core.dialog.close-panel-label:Close ${this.dialogTitle} panel`;
+  }
 }

@@ -13,10 +13,33 @@
         }
         <div class="content attributes-list">
           @for (att of feature.sortedAttributes; track att) {
-            <div class="row">
-              <strong>{{att.label}}</strong>
-              <div [innerHTML]="att.attributeValue | htmlify"></div>
-            </div>
+            @if (shouldShowAttribute(att)) {
+              <div class="row">
+                <strong>{{att.label}}</strong>
+                <div class="row-content">
+                  <div class="attribute-value" [innerHTML]="att.attributeValue | htmlify"></div>
+                  <div
+                    class="filter-button-wrapper"
+                    [class.filter-active]="getExactFilters$(feature.layer.id, att.key, att.attributeValue) | async"
+                    [tmTooltip]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async">
+                    <button
+                      class="filter-button"
+                      mat-icon-button
+                      tabIndex="0"
+                      [name]="getFilterButtonTooltip$(feature.layer.id, att.key, att.attributeValue) | async"
+                      (click)="toggleFilter(att)"
+                      [class.filter-button-disabled]="getFilterButtonDisabled$(feature.layer.id, att.key, att.attributeValue) | async"
+                      [disabled]="getFilterButtonDisabled$(feature.layer.id, att.key, att.attributeValue) | async">
+                      @if (getExactFilters$(feature.layer.id, att.key, att.attributeValue) | async) {
+                        <mat-icon svgIcon="filter_filled"></mat-icon>
+                      } @else {
+                        <mat-icon svgIcon="components_filter"></mat-icon>
+                      }
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
           }
         </div>
         @if(feature.attachmentCount > 0) {
@@ -45,8 +68,8 @@
         }
       </div>
       <div class="buttons">
-        <button mat-flat-button i18n="@@core.common.back" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled()">Back</button>
-        <button mat-flat-button i18n="@@core.common.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled()">Next</button>
+        <button mat-flat-button i18n="@@core.feature-info.previous" (click)="back()" color="primary" [disabled]="isPrevButtonDisabled()">Previous</button>
+        <button mat-flat-button i18n="@@core.feature-info.next" (click)="next()" color="primary" [disabled]="isNextButtonDisabled()">Next</button>
         @if (isEditPossible()) {
           <div class="edit-feature-button">
             <button mat-icon-button

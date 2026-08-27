@@ -10,6 +10,7 @@
                                [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
                                [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
                                [isEditPossible]="isEditPossible() ?? false"
+                               [hideEmptyValues]="config()?.hideEmptyValues ?? false"
                                (showNextFeatureInfoFeature)="next()"
                                (showPreviousFeatureInfoFeature)="back()"
                                (editFeature)="editFeature()">
@@ -63,6 +64,7 @@
         [isPrevButtonDisabled]="(isPrevButtonDisabled$ | async) ?? false"
         [isNextButtonDisabled]="(isNextButtonDisabled$ | async) ?? false"
         [isEditPossible]="isEditPossible() ?? false"
+        [hideEmptyValues]="config()?.hideEmptyValues ?? false"
         (showNextFeatureInfoFeature)="next()"
         (showPreviousFeatureInfoFeature)="back()"
         (editFeature)="editFeature()">

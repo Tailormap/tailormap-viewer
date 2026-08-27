@@ -42,6 +42,16 @@ Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
 jest.mock('jsts/org/locationtech/jts/io', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
+  WKTReader: class MockedWKTReader {
+    public read(input: string) {
+      return input;
+    }
+  },
+  WKTWriter: class MockedWKTWriter {
+    public write(input: string) {
+      return input;
+    }
+  },
   OL3Parser: class MockedParser {
     public inject() {/*empty*/}
     public read(input: any) { return input; }

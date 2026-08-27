@@ -98,7 +98,7 @@ describe('TocComponent', () => {
     mockStore.overrideSelector(selectFilterEnabled, true);
     mockStore.overrideSelector(selectFilterTerm, 'dis');
     mockStore.refreshState();
-    expect(await screen.findByPlaceholderText('Filter by layer name...')).toBeInTheDocument();
+    expect(await screen.findByPlaceholderText('Filter by layer name or keywords...')).toBeInTheDocument();
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
     expect(await screen.queryByText('Some other map')).not.toBeInTheDocument();
   });

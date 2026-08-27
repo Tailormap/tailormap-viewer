@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, inject, viewChild, ElementRef } from '@angular/core';
 import {
   BehaviorSubject, concatMap, distinctUntilChanged, map, Observable, of, Subject, take, withLatestFrom, takeUntil, combineLatest, finalize,
 } from 'rxjs';
@@ -34,6 +34,7 @@ export class AttributeListExportButtonComponent implements OnDestroy {
 
   public extractProgress$ = this.exportService.extractProgress$;
   public useProgressSpinner$ = this.extractProgress$.pipe(map(progress => progress > 0));
+  public exportButton = viewChild('exportButton', { read: ElementRef });
 
   constructor() {
     combineLatest([
@@ -80,7 +81,14 @@ export class AttributeListExportButtonComponent implements OnDestroy {
           const attributes = columns.filter(c => c.visible).map(c => c.id);
           return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
         }),
-        finalize(() => this.isExportingSubject.next(false)),
+        finalize(() => {
+          this.isExportingSubject.next(false);
+          setTimeout(() => {
+            if (this.exportButton()) {
+              this.exportButton()?.nativeElement.focus();
+            }
+          });
+        }),
       )
       .subscribe(response => {
         if (response === null || AttributeListExportService.isDownloadLayerExtractResponse(response)) {

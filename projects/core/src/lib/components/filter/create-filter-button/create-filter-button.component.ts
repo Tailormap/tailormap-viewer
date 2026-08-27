@@ -11,12 +11,10 @@ import { createFilter } from '../state/filter-component.actions';
   standalone: false,
 })
 export class CreateFilterButtonComponent {
-
-  private store$ = inject(Store);
   public filterTypes = FilterTypeEnum;
+  private store$ = inject(Store);
 
   public createFilter(filterType: FilterTypeEnum) {
     this.store$.dispatch(createFilter({ filterType }));
   }
-
 }

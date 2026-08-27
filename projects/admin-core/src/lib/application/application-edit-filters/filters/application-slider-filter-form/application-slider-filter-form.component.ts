@@ -25,8 +25,10 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
     return AttributeFilterHelper.getConditionTypes().filter(c => c.attributeType.length === 0 || c.attributeType.includes(attributeType));
   });
 
-  private minimumUniqueValue: number | null = null;
-  private maximumUniqueValue: number | null = null;
+  @Input()
+  public minValue: number | null = null;
+  @Input()
+  public maxValue: number | null = null;
 
   public inputModeOptions = [{
     value: SliderFilterInputModeEnum.SLIDER,
@@ -54,15 +56,6 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
         inputMode: configuration.inputMode ?? SliderFilterInputModeEnum.SLIDER,
         stepSize: configuration.stepSize,
       }, { emitEvent: false });
-    }
-  }
-
-  @Input()
-  public set uniqueValues(uniqueValues: (string | number | boolean)[] | null) {
-    const uniqueValuesNumbers = uniqueValues?.filter(v => typeof v === 'number');
-    if (uniqueValuesNumbers && uniqueValuesNumbers.length > 0) {
-      this.minimumUniqueValue = Math.min(...uniqueValuesNumbers);
-      this.maximumUniqueValue = Math.max(...uniqueValuesNumbers);
     }
   }
 
@@ -117,19 +110,19 @@ export class ApplicationSliderFilterFormComponent implements OnInit {
   }
 
   public setRangeToAttributeRange(): void {
-    if (this.minimumUniqueValue !== null && this.maximumUniqueValue !== null) {
+    if (this.minValue !== null && this.maxValue !== null) {
       this.sliderFilterForm.patchValue({
-        minimumValue: this.minimumUniqueValue,
-        maximumValue: this.maximumUniqueValue,
+        minimumValue: this.minValue,
+        maximumValue: this.maxValue,
       }, { emitEvent: true });
     }
   }
 
   public setBetweenRangeToAttributeRange(): void {
-    if (this.minimumUniqueValue !== null && this.maximumUniqueValue !== null) {
+    if (this.minValue !== null && this.maxValue !== null) {
       this.sliderFilterForm.patchValue({
-        initialLowerValue: this.minimumUniqueValue,
-        initialUpperValue: this.maximumUniqueValue,
+        initialLowerValue: this.minValue,
+        initialUpperValue: this.maxValue,
       }, { emitEvent: true });
       this.sliderFilterForm.markAsDirty();
     }

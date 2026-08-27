@@ -19,9 +19,8 @@ describe('CreateFilterButtonComponent', () => {
         { provide: Store, useValue: { dispatch } },
       ],
     });
-    expect(screen.getByText('Filter'));
-    await userEvent.click(screen.getByText('Filter'));
-    await userEvent.click(screen.getByText('Spatial'));
+    expect(screen.getByText('Spatial filter')).toBeInTheDocument();
+    await userEvent.click(screen.getByText('Spatial filter'));
     expect(dispatch).toHaveBeenCalledWith(createFilter({ filterType: FilterTypeEnum.SPATIAL }));
   });
 

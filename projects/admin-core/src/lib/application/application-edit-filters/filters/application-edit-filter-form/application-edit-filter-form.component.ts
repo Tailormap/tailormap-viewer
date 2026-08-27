@@ -12,7 +12,8 @@ import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import {
-  AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
+  AttributeFilterModel, AttributeStatisticsResponseModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum,
+  FilterTypeEnum, UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
 
 @Component({
@@ -52,6 +53,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     label: $localize`:@@admin-core.application.filters.dropdown-list:Drop-down list`,
     value: FilterToolEnum.DROPDOWN_LIST,
   }, {
+    label: $localize`:@@admin-core.application.filters.text:Text`,
+    value: FilterToolEnum.TEXT,
+  }, {
     label: $localize`:@@admin-core.application.filters.preset:Preset`,
     value: FilterToolEnum.PRESET_STATIC,
   }];
@@ -62,9 +66,12 @@ export class ApplicationEditFilterFormComponent implements OnInit {
   public loadingFeatureType$ = this.applicationEditFilterService.isLoadingFeaturesTypes$;
 
   public uniqueValues$: Observable<(string | number | boolean)[]> | null = null;
+  public attributeValuesSummary$: Observable<AttributeStatisticsResponseModel> | null = null;
   public uniqueValuesStrings$: Observable<string[]> | null = null;
   private loadingUniqueValuesSubject$ = new BehaviorSubject(false);
+  private loadingAttributeValuesSummarySubject$ = new BehaviorSubject(false);
   public loadingUniqueValues$ = this.loadingUniqueValuesSubject$.asObservable();
+  public loadingAttributeValuesSummary$ = this.loadingAttributeValuesSummarySubject$.asObservable();
   private _filter: AttributeFilterModel | null | undefined;
   private currentFilterId: string | null = null;
   public initialEditConfiguration: EditFilterConfigurationModel | null = null;
@@ -86,6 +93,9 @@ export class ApplicationEditFilterFormComponent implements OnInit {
         && updateFilter?.editConfiguration?.filterTool !== FilterToolEnum.DROPDOWN_LIST
         ? { ...updateFilter.editConfiguration, condition: updateFilter.condition }
         : { ...updateFilter.editConfiguration };
+      if (this.isTextFilterConfiguration(this.initialEditConfiguration)) {
+        this.initialEditConfiguration = { ...this.initialEditConfiguration, caseSensitive: updateFilter.caseSensitive };
+      }
     }
   }
   public get filter() {
@@ -169,6 +179,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       if (attributeFilter.attributeType !== AttributeType.BOOLEAN) {
         this.setUniqueValues(attributeFilter.attribute);
       }
+      if (attributeFilter.attributeType === AttributeType.NUMBER ||
+          attributeFilter.attributeType === AttributeType.DOUBLE ||
+          attributeFilter.attributeType === AttributeType.INTEGER ||
+          attributeFilter.attributeType === AttributeType.DATE ||
+          attributeFilter.attributeType === AttributeType.TIMESTAMP) {
+        this.setAttributeValuesSummary(attributeFilter.attribute);
+      }
       this.filterForm.patchValue({
         id: attributeFilter.id,
         tool: attributeFilter.editConfiguration?.filterTool ?? FilterToolEnum.PRESET_STATIC,
@@ -220,6 +237,13 @@ export class ApplicationEditFilterFormComponent implements OnInit {
     if ($event.type !== AttributeType.BOOLEAN) {
       this.setUniqueValues($event.name);
     }
+    if ($event.type === AttributeType.NUMBER ||
+        $event.type === AttributeType.DOUBLE ||
+        $event.type === AttributeType.INTEGER ||
+        $event.type === AttributeType.DATE ||
+        $event.type === AttributeType.TIMESTAMP) {
+          this.setAttributeValuesSummary($event.name);
+    }
   }
 
   public setFilterValues($event: OutputFilterData) {
@@ -230,6 +254,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: $event.invertCondition,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
+  }
+
+  public setAttributeValuesSummary(attributeName: string){
+    this.attributeValuesSummary$ = this.applicationEditFilterService.getAttributeSummaryValues$(attributeName);
   }
 
   public setUniqueValues(attributeName: string) {
@@ -278,13 +306,17 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       value = $event.initialDate
         ? [$event.initialDate ?? '']
         : [ $event.initialLowerDate ?? '', $event.initialUpperDate ?? '' ];
+    } else if ($event.filterTool === FilterToolEnum.TEXT) {
+      value = $event.initialText ? [$event.initialText] : [];
     }
     const condition = ($event.filterTool === FilterToolEnum.CHECKBOX || $event.filterTool === FilterToolEnum.DROPDOWN_LIST)
       ? FilterConditionEnum.UNIQUE_VALUES_KEY
       : $event.condition;
+    const caseSensitive = $event.filterTool === FilterToolEnum.TEXT ? $event.caseSensitive : undefined;
     this.filterForm.patchValue({
       condition: condition,
       value: value,
+      caseSensitive: caseSensitive,
       editFilterConfiguration: $event,
     }, { emitEvent: true });
     this.filterForm.markAsDirty();
@@ -300,6 +332,10 @@ export class ApplicationEditFilterFormComponent implements OnInit {
       invertCondition: false,
       editFilterConfiguration: null,
     }, { emitEvent: false });
+  }
+
+  public isTextFilterConfiguration(config: EditFilterConfigurationModel | null): config is UpdateTextFilterModel {
+    return !!config && config.filterTool === FilterToolEnum.TEXT;
   }
 
 }

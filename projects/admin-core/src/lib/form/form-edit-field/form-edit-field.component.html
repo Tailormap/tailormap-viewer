@@ -42,32 +42,37 @@
       @if(fieldForm.get('type')?.value === 'select') {
         <div class="form-control">
           <ng-container formArrayName="valueList">
-            @for(valueForm of getValueListFormArray().controls; track valueForm; let i = $index) {
-              <div class="value-form-row" [formGroup]="valueForm">
-                <mat-form-field>
-                  <mat-label i18n="@@admin-core.form.value-list-value">Value</mat-label>
-                  <input matInput
-                    tmAutoFocus
-                    placeholder="Value"
-                    (keydown.enter)="stopEnter($event)"
-                    i18n-placeholder="@@admin-core.form.value-list-value"
-                    formControlName="value"
-                    />
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
-                  <input matInput
-                    placeholder="Label"
-                    (keydown.enter)="stopEnter($event, true, i)"
-                    i18n-placeholder="@@admin-core.form.label-list-label"
-                    formControlName="label"
-                    />
-                </mat-form-field>
-                <button mat-icon-button class="delete-btn" (click)="removeValue(i)">
-                  <mat-icon svgIcon="trash_filled"></mat-icon>
-                </button>
-              </div>
-            }
+            <div cdkDropList #valueList="cdkDropList"
+                 [cdkDropListData]="getValueListFormArray().controls"
+                 (cdkDropListDropped)="onValueListDrop($event)">
+              @for(valueForm of getValueListFormArray().controls; track valueForm; let i = $index) {
+                <div class="value-form-row" [formGroup]="valueForm" cdkDrag [cdkDragData]="i">
+                  <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
+                  <mat-form-field>
+                    <mat-label i18n="@@admin-core.form.value-list-value">Value</mat-label>
+                    <input matInput
+                      tmAutoFocus
+                      placeholder="Value"
+                      (keydown.enter)="stopEnter($event)"
+                      i18n-placeholder="@@admin-core.form.value-list-value"
+                      formControlName="value"
+                      />
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
+                    <input matInput
+                      placeholder="Label"
+                      (keydown.enter)="stopEnter($event, true, i)"
+                      i18n-placeholder="@@admin-core.form.label-list-label"
+                      formControlName="label"
+                      />
+                  </mat-form-field>
+                  <button mat-icon-button class="delete-btn" (click)="removeValue(i)">
+                    <mat-icon svgIcon="trash_filled"></mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
           </ng-container>
           <button mat-flat-button color="primary" class="add-btn" (click)="addValue()">
             <mat-icon svgIcon="plus"></mat-icon>

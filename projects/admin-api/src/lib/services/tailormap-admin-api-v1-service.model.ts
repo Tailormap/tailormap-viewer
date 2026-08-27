@@ -4,7 +4,7 @@ import {
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
-import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
+import { AttributeStatisticsResponseModel, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 export interface TailormapAdminApiV1ServiceModel {
   getCatalog$(): Observable<CatalogNodeModel[]>;
@@ -77,6 +77,10 @@ export interface TailormapAdminApiV1ServiceModel {
     attribute: string;
     filter?: string;
   }): Observable<UniqueValuesResponseModel>;
+
+  getAttributeStatistics$(params: {
+    featureTypeId: string; attribute: string; filter?: string;
+  }): Observable<AttributeStatisticsResponseModel>;
 
   getServerConfig$(): Observable<AdminServerConfigModel>;
 }

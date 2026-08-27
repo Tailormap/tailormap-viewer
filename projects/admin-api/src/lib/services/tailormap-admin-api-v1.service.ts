@@ -9,7 +9,7 @@ import {
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
 import { CatalogModelHelper } from '../helpers/catalog-model.helper';
-import { ApiHelper, TailormapApiConstants, UniqueValuesResponseModel } from '@tailormap-viewer/api';
+import { ApiHelper, AttributeStatisticsResponseModel, TailormapApiConstants, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 type GeoServiceListResponse = { _embedded: { ['geo-services']: GeoServiceSummaryWithLayersModel[] }};
 type FeatureSourceListResponse = { _embedded: { ['feature-sources']: FeatureSourceSummaryWithFeatureTypesModel[] }};
@@ -416,6 +416,20 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   }): Observable<UniqueValuesResponseModel> {
     return this.httpClient.get<UniqueValuesResponseModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/unique-values/${params.featureTypeId}/${params.attribute}`,
+      {
+        headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
+        params: params.filter
+          ? this.getQueryParams({ filter: params.filter })
+          : undefined,
+      },
+    );
+  }
+
+  getAttributeStatistics$(params: {
+    attribute: string; featureTypeId: string; filter?: string | undefined
+  }): Observable<AttributeStatisticsResponseModel> {
+    return this.httpClient.get<AttributeStatisticsResponseModel>(
+      `${TailormapAdminApiV1Service.BASE_URL}/statistics/${params.featureTypeId}/${params.attribute}`,
       {
         headers: new HttpHeaders('Content-Type: application/x-www-form-urlencoded'),
         params: params.filter

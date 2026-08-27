@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signa
 import { Store } from '@ngrx/store';
 import {
   selectCurrentFeatureForEdit, selectCurrentlySelectedFeature, selectFeatureInfoDialogCollapsed, selectFeatureInfoDialogVisible,
-  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled, selectIsPrevButtonDisabled,
+  selectFeatureInfoLayerListCollapsed, selectFeatureInfoLayers, selectIsNextButtonDisabled,
+  selectIsPrevButtonDisabled,
   selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { combineLatest, map, Observable, take } from 'rxjs';
@@ -17,9 +18,7 @@ import { FeatureInfoHelper } from '../helpers/feature-info.helper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { setLoadedEditFeature } from '../../edit/state/edit.actions';
-import {
-  AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel,
-} from '@tailormap-viewer/api';
+import { AuthenticatedUserService, BaseComponentTypeEnum, FeatureInfoConfigModel } from '@tailormap-viewer/api';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
@@ -195,4 +194,5 @@ export class FeatureInfoDialogComponent {
       });
 
   }
+
 }

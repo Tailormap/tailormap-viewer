@@ -27,6 +27,7 @@ import { MapDrawingButtonsComponent } from './spatial-filter-form-draw-geometrie
 import { filterComponentReducer } from './state/filter-component.reducer';
 import { provideState } from '@ngrx/store';
 import { filterComponentStateKey } from './state/filter-component.state';
+import { TextFilterComponent } from './edit-attribute-filters/text-filter/text-filter.component';
 
 
 
@@ -50,6 +51,7 @@ import { filterComponentStateKey } from './state/filter-component.state';
     DropdownListFilterComponent,
     ResetFiltersButtonComponent,
     MapDrawingButtonsComponent,
+    TextFilterComponent,
   ],
   imports: [
     CommonModule,

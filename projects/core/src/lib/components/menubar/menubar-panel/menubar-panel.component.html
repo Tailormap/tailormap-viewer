@@ -1,7 +1,10 @@
-<tm-dialog [open]="(activeComponent$ | async) !== null"
-           [width]="panelWidth"
+<tm-dialog (closeDialog)="closeDialog()"
+           (widthChanged)="onPanelWidthChanged($event)"
+           [allowResize]="true"
+           [dialogTitle]="(activeComponent$ | async)?.dialogTitle || ''"
+           [maxWidth]="panelMaxWidth"
+           [open]="(activeComponent$ | async) !== null"
            [widthMargin]="panelWidthMargin"
-           (closeDialog)="closeDialog()"
-           [dialogTitle]="(activeComponent$ | async)?.dialogTitle || ''">
+           [width]="panelWidth">
   <ng-content></ng-content>
 </tm-dialog>

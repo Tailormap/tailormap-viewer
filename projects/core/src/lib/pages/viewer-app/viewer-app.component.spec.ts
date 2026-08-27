@@ -8,7 +8,11 @@ import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/share
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
-import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
+import {
+  TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1MockService, TailormapSecurityApiV1MockService,
+} from '@tailormap-viewer/api';
+import { CrossOriginPostMessageApiService } from '@tailormap-viewer/api';
+import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { LoadViewerService } from '../../services/load-viewer.service';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
@@ -39,6 +43,8 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
           { selector: selectViewerTitle, value: 'my fancy title' },
         ],
       }),
+      { provide: TAILORMAP_CROSS_ORIGIN_API_SERVICE, useClass: CrossOriginPostMessageApiService },
+      { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       { provide: LoadViewerService, useValue: { loadViewer } },
     ],

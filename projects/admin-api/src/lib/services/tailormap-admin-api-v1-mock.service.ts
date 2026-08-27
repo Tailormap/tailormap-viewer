@@ -7,7 +7,7 @@ import {
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
 } from '../models';
-import { UniqueValuesResponseModel } from '@tailormap-viewer/api';
+import { AttributeStatisticsResponseModel, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
 @Injectable()
 export class TailormapAdminApiV1MockService implements TailormapAdminApiV1ServiceModel {
@@ -246,6 +246,10 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
 
   public getUniqueValues$(): Observable<UniqueValuesResponseModel> {
     return of(mockData.getUniqueValues());
+  }
+
+  getAttributeStatistics$(): Observable<AttributeStatisticsResponseModel> {
+    return of(mockData.getAttributeStatistics());
   }
 
   public getServerConfig$(): Observable<AdminServerConfigModel> {

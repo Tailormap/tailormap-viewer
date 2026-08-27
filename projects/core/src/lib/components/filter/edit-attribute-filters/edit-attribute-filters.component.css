@@ -16,7 +16,8 @@
 .editable-slider-filter-title,
 .editable-switch-filter-title,
 .editable-date-picker-filter-title,
-.editable-dropdown-list-filter-title {
+.editable-dropdown-list-filter-title,
+.editable-text-filter-title {
   padding-top: 8px;
   margin-left: 24px;
   margin-right: 24px;
@@ -25,7 +26,8 @@
 .editable-slider-filter-content,
 .editable-switch-filter-content,
 .editable-date-picker-filter-content,
-.editable-dropdown-list-filter-content {
+.editable-dropdown-list-filter-content,
+.editable-text-filter-content {
   margin-left: 24px;
   margin-right: 24px;
 }

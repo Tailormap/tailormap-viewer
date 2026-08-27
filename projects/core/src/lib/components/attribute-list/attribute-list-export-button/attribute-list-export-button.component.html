@@ -10,6 +10,7 @@
   </button>
 } @else if (showExportButton$ | async) {
   <button mat-stroked-button
+          #exportButton
           [matMenuTriggerFor]="exportMenu">
     <span i18n="@@core.attribute-list.export">Export</span>
     <mat-icon iconPositionEnd svgIcon="drop_down"></mat-icon>
