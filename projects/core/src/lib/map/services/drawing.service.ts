@@ -12,6 +12,8 @@ import { DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../mode
 import { DrawingHelper } from '../helpers/drawing.helper';
 import { withLatestFrom } from 'rxjs/operators';
 
+// Add DOM elements for all drawn features that are focusable with keyboard.
+
 @Injectable()
 export class DrawingService {
   private mapService = inject(MapService);

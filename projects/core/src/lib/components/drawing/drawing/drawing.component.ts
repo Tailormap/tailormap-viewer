@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
-import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap, withLatestFrom } from 'rxjs';
 import {
   selectDrawingFeatures, selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature,
   selectSelectedDrawingType,
@@ -26,6 +26,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { DrawingAccessibleFeaturesService } from '../services/drawing-accessible-features.service';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmDialogService);
   private drawingService = inject(DrawingService);
   private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
+  private drawingAccessibleFeaturesService = inject(DrawingAccessibleFeaturesService);
   private cdr = inject(ChangeDetectorRef);
 
   private belowDrawingButtonsContainer = viewChild('belowDrawingButtonsContainer', { read: ViewContainerRef });
@@ -103,11 +105,13 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
           this.drawingService.disableDrawingTools();
+          this.drawingAccessibleFeaturesService.destroy();
         } else {
           this.drawingService.createDrawingTools({
             drawingLayerId: this.drawingLayerId,
             selectionStyle: this.selectionStyle,
           });
+          this.drawingAccessibleFeaturesService.initAccessibilityContainer();
           this.enableSelectAndModify();
         }
       }),

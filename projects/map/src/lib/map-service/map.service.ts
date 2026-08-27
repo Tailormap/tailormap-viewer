@@ -361,4 +361,11 @@ export class MapService {
     this.map.renderSnappingFeatures(features);
   }
 
+  public getMapTargetElement$(): Observable<HTMLElement | null> {
+    return this.map.getMap$().pipe(
+      tap(olMap => console.debug('Getting map target element for map:', olMap)),
+      map(olMap => olMap.getTargetElement()),
+    );
+  }
+
 }
