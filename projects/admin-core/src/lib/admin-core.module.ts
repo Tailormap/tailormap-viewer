@@ -39,7 +39,7 @@ import { SearchIndexModule } from './search-index/search-index.module';
         ],
       }, {
         folder: 'admin/filters',
-        icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle', 'dropdown', 'text ],
+        icons: [ 'filter', 'checkbox', 'date_picker', 'slider', 'toggle', 'dropdown', 'text' ],
       }];
       iconService.loadIconsToIconRegistry(matIconRegistry, domSanitizer, adminIcons);
       authenticatedUserService.fetchUserDetails();
