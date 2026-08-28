@@ -7,7 +7,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
 import { MapStyleModel } from '../../models';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { ExtTransformEnableToolArguments, ExtTransformToolModel } from '../../models/tools/ext-transform-tool.model';
 import { ExtTransformToolConfigModel } from '../../models/tools/ext-transform-tool-config.model';
 import OlExtTransform from 'ol-ext/interaction/Transform';
@@ -37,6 +37,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public featureModified$ = this.geometryChangedSubject.asObservable();
   private editLayer: VectorLayer | null = null;
   private source: VectorSource | null = null;
+  private keyboardControlElement: HTMLElement | null = null;
 
   public supportsSnapping = true;
 
@@ -60,7 +61,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public isActive = false;
 
   public destroy(): void {
-    console.debug(`[OpenLayersExtTransformTool] Destroying tool ${this.id}`);
     this.disable();
     this.removeKeyboardControl();
     if (this.editLayer) {
@@ -73,14 +73,12 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   public disable(): void {
-    console.debug(`[OpenLayersExtTransformTool] Disabling tool ${this.id}`);
     this.isActive = false;
     this.removeKeyboardControl();
     this.stopModify();
   }
 
   public enable(args: ExtTransformEnableToolArguments): void {
-    console.debug(`[OpenLayersExtTransformTool] Enabling tool ${this.id} with feature`, args.feature);
     this.stopModify();
     this.destroyed = new Subject();
     if (!args || !args.feature) {
@@ -95,7 +93,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
-    this.createKeyboardControl();
+    this.createKeyboardControl(args.feature);
     OpenLayersEventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -169,7 +167,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       return;
     }
     this.ngZone.run(() => {
-      console.debug(`[OpenLayersExtTransformTool] Feature modified, new geometry:`, geom);
       this.geometryChangedSubject.next(FeatureHelper.getWKT(geom, this.olMap.getView().getProjection()));
     });
   }
@@ -240,40 +237,24 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     });
   }
 
-  /**
-   * Create a hidden keyboard control element that receives focus.
-   * This element allows keyboard interaction with the transform tool.
-   */
-  private createKeyboardControl() {
-    this.keyboardControl = document.createElement('div');
-    this.keyboardControl.className = 'tm-transform-keyboard-control';
-    this.keyboardControl.tabIndex = 0;
-    this.keyboardControl.setAttribute('aria-label', $localize `:@@map.transform-keyboard-control:Transform tool - use arrow keys to move, R to rotate, +/- to scale`);
-    this.keyboardControl.style.position = 'absolute';
-    this.keyboardControl.style.width = '0';
-    this.keyboardControl.style.height = '0';
-    this.keyboardControl.style.overflow = 'hidden';
-    this.keyboardControl.style.pointerEvents = 'none';
-
-    this.keyboardControl.addEventListener('keydown', this.keyboardControlHandler);
-
-    const mapTarget = this.olMap.getTargetElement();
-    mapTarget.appendChild(this.keyboardControl);
-    this.keyboardControl.focus();
+  private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
+    setTimeout(() => {
+      const targetElement: HTMLElement | null = document.querySelector('.feature-' + feature.__fid);
+      if (!targetElement) {
+        return;
+      }
+      this.keyboardControlElement = targetElement;
+      this.keyboardControlElement.focus();
+      this.keyboardControlElement.addEventListener('keydown', this.keyboardControlHandler);
+    });
   }
 
-  /**
-   * Remove the keyboard control element.
-   */
   private removeKeyboardControl() {
-    if (!this.keyboardControl) {
+    if (!this.keyboardControlElement) {
       return;
     }
-    this.keyboardControl.removeEventListener('keydown', this.keyboardControlHandler);
-    if (this.keyboardControl.parentNode) {
-      this.keyboardControl.parentNode.removeChild(this.keyboardControl);
-    }
-    this.keyboardControl = null;
+    this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
+    this.keyboardControlElement = null;
   }
 
   /**

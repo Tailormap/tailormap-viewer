@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
-import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeatures, selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature,
   selectSelectedDrawingType,

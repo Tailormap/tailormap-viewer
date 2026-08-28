@@ -44,7 +44,7 @@ export class DrawingAccessibleFeaturesService {
   private updateProxies(features: DrawingFeatureModel[]) {
     console.debug(`Updating proxies for ${features.length} features`);
     // Remove proxies for deleted features
-    for (const [fid, element] of this.proxyElements) {
+    for (const [ fid, element ] of this.proxyElements) {
       if (!features.find(f => f.__fid === fid)) {
         element.remove();
         this.proxyElements.delete(fid);
@@ -62,11 +62,10 @@ export class DrawingAccessibleFeaturesService {
   }
 
   private createProxyElement(feature: DrawingFeatureModel, index: number): HTMLElement {
-    console.debug(`Creating proxy for feature: ${feature.__fid}`);
     const proxy = document.createElement('button');
     proxy.type = 'button';
     proxy.setAttribute('data-feature-fid', feature.__fid);
-    proxy.className = 'drawing-feature-proxy';
+    proxy.className = 'drawing-feature-proxy feature-' + feature.__fid;
 
     // Accessible label based on feature type and description
     const label = feature.attributes?.style.description || `${feature.attributes?.type} ${index + 1}`;
@@ -78,6 +77,10 @@ export class DrawingAccessibleFeaturesService {
       if (proxy.matches(':focus-visible')) {
         this.store$.dispatch(setSelectedFeature({ fid: feature.__fid }));
       }
+    });
+
+    proxy.addEventListener('blur', () => {
+      this.store$.dispatch(setSelectedFeature({ fid: null }));
     });
 
     return proxy;
