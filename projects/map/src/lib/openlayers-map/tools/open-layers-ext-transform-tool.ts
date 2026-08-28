@@ -60,6 +60,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public isActive = false;
 
   public destroy(): void {
+    console.debug(`[OpenLayersExtTransformTool] Destroying tool ${this.id}`);
     this.disable();
     this.removeKeyboardControl();
     if (this.editLayer) {
@@ -74,6 +75,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public disable(): void {
     console.debug(`[OpenLayersExtTransformTool] Disabling tool ${this.id}`);
     this.isActive = false;
+    this.removeKeyboardControl();
     this.stopModify();
   }
 
@@ -149,7 +151,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private stopModify() {
     unByKey(this.listeners);
-    this.removeKeyboardControl();
     this.source?.getFeatures().forEach(feature => {
       this.source?.removeFeature(feature);
     });
@@ -168,6 +169,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       return;
     }
     this.ngZone.run(() => {
+      console.debug(`[OpenLayersExtTransformTool] Feature modified, new geometry:`, geom);
       this.geometryChangedSubject.next(FeatureHelper.getWKT(geom, this.olMap.getView().getProjection()));
     });
   }
@@ -243,10 +245,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
    * This element allows keyboard interaction with the transform tool.
    */
   private createKeyboardControl() {
-    if (this.keyboardControl) {
-      return;
-    }
-
     this.keyboardControl = document.createElement('div');
     this.keyboardControl.className = 'tm-transform-keyboard-control';
     this.keyboardControl.tabIndex = 0;
@@ -258,7 +256,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.keyboardControl.style.pointerEvents = 'none';
 
     this.keyboardControl.addEventListener('keydown', this.keyboardControlHandler);
-    this.keyboardControl.addEventListener('blur', () => this.onKeyboardControlBlur());
 
     const mapTarget = this.olMap.getTargetElement();
     mapTarget.appendChild(this.keyboardControl);
@@ -273,22 +270,10 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       return;
     }
     this.keyboardControl.removeEventListener('keydown', this.keyboardControlHandler);
-    this.keyboardControl.removeEventListener('blur', () => this.onKeyboardControlBlur());
     if (this.keyboardControl.parentNode) {
       this.keyboardControl.parentNode.removeChild(this.keyboardControl);
     }
     this.keyboardControl = null;
-  }
-
-  /**
-   * Handle blur event on keyboard control - disable the tool.
-   */
-  private onKeyboardControlBlur() {
-    // Only disable if focus moved outside the tool (not within the tool itself)
-    // This allows re-focusing the control without triggering disable
-    if (this.isActive) {
-      this.disable();
-    }
   }
 
   /**
