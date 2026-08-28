@@ -162,8 +162,8 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
     }
   }
 
-  public writeValue(value: AuthorizationRuleGroup[] | null) {
-    this.updateValue(value ?? [], false);
+  public writeValue(value: AuthorizationRuleGroup[]) {
+    this.updateValue(value, false);
   }
 
   public registerOnChange(fn: (_: any) => void): void {
