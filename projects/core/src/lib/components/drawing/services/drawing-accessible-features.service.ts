@@ -42,7 +42,6 @@ export class DrawingAccessibleFeaturesService {
   }
 
   private updateProxies(features: DrawingFeatureModel[]) {
-    console.debug(`Updating proxies for ${features.length} features`);
     // Remove proxies for deleted features
     for (const [ fid, element ] of this.proxyElements) {
       if (!features.find(f => f.__fid === fid)) {
