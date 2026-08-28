@@ -41,14 +41,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public supportsSnapping = true;
 
-  /**
-   * Keyboard control element that receives focus when the tool is active
-   */
-  private keyboardControl: HTMLElement | null = null;
-
-  /**
-   * Bound keyboard handler to allow proper attach/detach
-   */
   private keyboardControlHandler = (ev: KeyboardEvent) => this.onKeyboardControlKeyDown(ev);
 
   constructor(
@@ -254,26 +246,17 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       return;
     }
     this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
+    this.keyboardControlElement.blur();
     this.keyboardControlElement = null;
   }
 
-  /**
-   * Handle keyboard input for transforming the selected feature.
-   * Only processes input when the keyboard control has focus.
-   * Arrow keys: translate
-   * R: rotate
-   * +/-: scale
-   * Escape: disable tool and remove focus
-   * Hold Shift for larger steps.
-   */
   private onKeyboardControlKeyDown(ev: KeyboardEvent) {
-    // Handle Escape key to disable the tool
-    // if (ev.key === 'Escape') {
-    //   this.disable();
-    //   ev.preventDefault();
-    //   ev.stopPropagation();
-    //   return;
-    // }
+    if (ev.key === 'Escape') {
+      this.disable();
+      ev.preventDefault();
+      ev.stopPropagation();
+      return;
+    }
 
     const features = this.source?.getFeatures();
     if (!features || features.length === 0) {
