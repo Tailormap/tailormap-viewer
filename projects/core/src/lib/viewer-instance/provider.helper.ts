@@ -1,4 +1,3 @@
-import { StoreInstanceProviderHelper } from './store-instance-provider.helper';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SecurityInterceptor } from '../interceptors/security.interceptor';
 import {
@@ -12,6 +11,11 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { provideStore } from '@ngrx/store';
+import { coreStateKey } from '../state';
+import { coreReducer } from '../state/core.reducer';
+import { mapStateKey } from '../map/state/map.state';
+import { mapReducer } from '../map/state/map.reducer';
 
 export class ProviderHelper {
 
@@ -19,8 +23,24 @@ export class ProviderHelper {
     return platformLocation.getBaseHrefFromDOM();
   };
 
+  public static getStoreProvider() {
+    return provideStore({
+      [coreStateKey]: coreReducer,
+      [mapStateKey]: mapReducer,
+    }, {
+      runtimeChecks: {
+        strictActionImmutability: true,
+        strictActionSerializability: true,
+        strictActionWithinNgZone: true,
+        strictStateImmutability: true,
+        strictStateSerializability: true,
+        strictActionTypeUniqueness: true,
+      },
+    });
+  }
+
   public static getBaseProviders = () => [
-    StoreInstanceProviderHelper.getStoreProvider(),
+    ProviderHelper.getStoreProvider(),
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
     { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
     { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },

@@ -1,14 +1,8 @@
 import { ModuleWithProviders, NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
 import { MapModule } from '@tailormap-viewer/map';
-import {
-  ENVIRONMENT_CONFIG,
-  EnvironmentConfigModel,
-  TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1Service, TailormapSecurityApiV1Service,
-} from '@tailormap-viewer/api';
-import {
-  ExternalLibsLoaderHelper, ICON_SERVICE_ICON_LOCATION, IconService, RouterHistoryService, SharedModule,
-} from '@tailormap-viewer/shared';
+import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
+import { ExternalLibsLoaderHelper, IconService, RouterHistoryService, SharedModule } from '@tailormap-viewer/shared';
 import { ComponentsModule } from './components/components.module';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -26,7 +20,6 @@ import { UserLoginCheckService } from './services/user-login-check.service';
 import { CoreSharedModule } from './shared/core-shared.module';
 import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { ProviderHelper } from './viewer-instance/provider.helper';
-import { StoreInstanceProviderHelper } from './viewer-instance/store-instance-provider.helper';
 
 @NgModule({
   declarations: [
@@ -52,7 +45,6 @@ import { StoreInstanceProviderHelper } from './viewer-instance/store-instance-pr
     RouterModule,
   ],
   providers: [
-    StoreInstanceProviderHelper.getStoreProvider(),
     ...ProviderHelper.getBaseProviders(),
     provideEnvironmentInitializer(() => {
       inject(ApplicationStyleService).init();

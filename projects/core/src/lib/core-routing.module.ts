@@ -2,7 +2,6 @@ import { inject, NgModule, provideEnvironmentInitializer } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent,  ViewerAppComponent, PasswordResetComponent } from './pages';
 import { NavigationErrorRouterService } from './services/navigation-error-router.service';
-import { StoriesDemoComponent } from './pages/stories-demo/stories-demo.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -10,7 +9,6 @@ const routes: Routes = [
   { path: 'app/:name', component: ViewerAppComponent },
   { path: 'app', component: ViewerAppComponent },
   { path: 'service/:name', component: ViewerAppComponent },
-  { path: 'stories', component: StoriesDemoComponent },
   {
     path: 'admin',
     loadChildren: () => import('@tailormap-admin/admin-core').then(m => m.AdminCoreModule),
