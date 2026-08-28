@@ -19,7 +19,7 @@ import { AttributeListTableComponent } from '../attribute-list-table/attribute-l
 import { AttributeListTabToolbarComponent } from '../attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
 import { AttributeListTabComponent } from '../attribute-list-tab/attribute-list-tab.component';
 import userEvent from '@testing-library/user-event';
-import { Store, StoreModule } from '@ngrx/store';
+import { provideStore, Store } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -178,7 +178,6 @@ const setupWithActualState = async (store?: StoreDef) => {
       SharedImportsModule,
       NoopAnimationsModule,
       MatIconTestingModule,
-      StoreModule.forRoot(reducers, { initialState }),
     ],
     providers: [
       provideHttpClient(
@@ -189,6 +188,7 @@ const setupWithActualState = async (store?: StoreDef) => {
       ),
       { provide: TAILORMAP_API_V1_SERVICE, useValue: mockService },
       AttributeListManagerService,
+      provideStore(reducers, { initialState }),
       getMapServiceMock().provider,
     ],
     declarations: [

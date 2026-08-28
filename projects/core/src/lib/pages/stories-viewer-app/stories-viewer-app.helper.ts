@@ -8,26 +8,17 @@ import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import {
   AuthenticatedUserService, ENVIRONMENT_CONFIG, EnvironmentConfigModel,
-  TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiConstants, TailormapApiV1Service, TailormapSecurityApiV1Service,
+  TAILORMAP_CROSS_ORIGIN_API_SERVICE, TailormapApiConstants,
 } from '@tailormap-viewer/api';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { StoreInstanceProviderHelper } from '../../viewer-instance/store-instance-provider.helper';
-import { SecurityInterceptor } from '../../interceptors/security.interceptor';
-import { ExternalLibsLoaderHelper, ICON_SERVICE_ICON_LOCATION, IconService } from '@tailormap-viewer/shared';
-import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from '@angular/material-luxon-adapter';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { nanoid } from 'nanoid';
-
-const getBaseHref = (platformLocation: PlatformLocation): string => {
-  return platformLocation.getBaseHrefFromDOM();
-};
+import { UserLoginCheckService } from '../../services/user-login-check.service';
+import { ProviderHelper } from '../../viewer-instance/provider.helper';
 
 /**
  * Providers that give a {@link StoriesViewerAppComponent} its own, isolated NgRx store + effects +
@@ -55,8 +46,6 @@ export function getRootProviders(
         headerName: TailormapApiConstants.XSRF_HEADER_NAME,
       }),
     ),
-    // provideRouter([{ path: 'stories', component: StoriesDemoComponent }]),
-    StoreInstanceProviderHelper.getStoreProvider(),
     // Same as the main app: only wire up Redux DevTools in non-production builds, each viewer instance
     // gets its own store, so it also gets its own devtools connection (named by viewerId, if provided).
     ...(environmentConfig?.production === false
@@ -65,19 +54,12 @@ export function getRootProviders(
     { provide: ENVIRONMENT_CONFIG, useValue: environmentConfig },
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
-    { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptor, multi: true },
-    { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1Service },
-    { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1Service },
-    { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
-    { provide: APP_BASE_HREF, useFactory: getBaseHref, deps: [PlatformLocation] },
-    { provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } },
-    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    ...ProviderHelper.getBaseProviders(),
     provideEnvironmentInitializer(() => {
       inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
-      ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
       inject(AuthenticatedUserService).fetchUserDetails();
+      inject(UserLoginCheckService).pingUserLoggedIn();
+      inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE).init();
     }),
   ];
 }
