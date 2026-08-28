@@ -91,6 +91,23 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
   }
 
+  @HostListener('document:keydown.escape', ['$event'])
+  public onDocumentEscape(event: KeyboardEvent): void {
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
+      return;
+    }
+    if (this.fullscreen) {
+      this.toggleFullscreen(false);
+      return;
+    }
+    if (this.open && !this.hidden) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close();
+    }
+  }
+
   public actualWidth = DIALOG_DEFAULT_WIDTH;
   public dialogId = '';
   private resizeActive = false;
@@ -232,4 +249,5 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   public getClosePanelLabel(): string {
     return $localize `:@@core.dialog.close-panel-label:Close ${this.dialogTitle} panel`;
   }
+
 }
