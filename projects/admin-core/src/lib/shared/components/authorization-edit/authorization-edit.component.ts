@@ -33,7 +33,9 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
 
   private _groups: GroupModel[] = [];
 
-  public groupList: { name: string; used: boolean }[] = [];
+  public groupList: { name: string; label: string; used: boolean }[] = [];
+  public groupLabels: Map<string, string> = new Map();
+
   public canAddRule = true;
 
   @Input()
@@ -60,8 +62,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
     const allAuthorizations = [ ...this.value, ...(this._parentAuthorizations ?? []) ];
     this.groupList = this._groups.filter(a => !a.systemGroup).map(a => ({
       name: a.name,
+      label: a.label ? a.label : a.name,
       used: allAuthorizations.find(b => b.groupName === a.name) !== undefined,
     }));
+    this.groupLabels = new Map(this.groupList.map(a => [ a.name, a.label ]));
     this.canAddRule = this.groupList.find(a => !a.used) !== undefined && this.parentChip !== 'specificGroups';
   }
 
@@ -158,8 +162,8 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
     }
   }
 
-  public writeValue(value: AuthorizationRuleGroup[]) {
-    this.updateValue(value, false);
+  public writeValue(value: AuthorizationRuleGroup[] | null) {
+    this.updateValue(value ?? [], false);
   }
 
   public registerOnChange(fn: (_: any) => void): void {

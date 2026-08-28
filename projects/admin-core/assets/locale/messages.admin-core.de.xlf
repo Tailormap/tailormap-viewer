@@ -1978,6 +1978,10 @@
         <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
         <target>Beim Anmelden werden Gruppenmitglieder automatisch der in &apos;Alias für Gruppe&apos; angegebenen Gruppe hinzugefügt. Dies ist nützlich, um eine Single-Sign-On-Gruppe einer anderen Gruppe zuzuordnen, z.B. &apos;admin&apos;. Verschachtelte Aliase werden nicht unterstützt.</target>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for-label" datatype="html">
+        <source>Set a display label if the group name is not descriptive enough, for example an object-id/guid.</source>
+        <target>Legen Sie ein Anzeigelabel fest, wenn der Gruppenname nicht aussagekräftig genug ist, z. B. eine Objekt-ID/GUID.</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
         <target>Gruppe <x id="PH" equiv-text="group.name"/> löschen </target>

@@ -62,6 +62,7 @@ describe('GroupEditComponent', () => {
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');
     expect(groupService.addOrUpdateGroup$).toHaveBeenCalledWith(false, {
       name: 'secret-group',
+      label: null,
       description: 'some secret group',
       notes: 'some extra notes',
       systemGroup: true,

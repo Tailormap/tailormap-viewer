@@ -14,4 +14,5 @@ export interface GroupModel {
   version?: number | null;
   additionalProperties?: AdditionalPropertyModel[];
   oidcInfo?: GroupOidcInfoModel | null;
+  label?: string | null;
 }
