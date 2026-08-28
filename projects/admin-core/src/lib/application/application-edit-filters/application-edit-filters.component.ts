@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { loadCatalog } from '../../catalog/state/catalog.actions';
+import { CatalogService } from '../../catalog/services/catalog.service';
 import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
 
 @Component({
@@ -15,6 +15,7 @@ import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicati
 })
 export class ApplicationEditFiltersComponent {
   private store$ = inject(Store);
+  private catalogService = inject(CatalogService);
 
   public applicationId: Signal<string | null | undefined> = this.store$.selectSignal(selectSelectedApplicationId);
   public noFilterableLayers: Signal<boolean> = this.store$.selectSignal(selectNoFilterableLayersForSelectedApplication);
@@ -30,7 +31,7 @@ export class ApplicationEditFiltersComponent {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadCatalog());
+          this.catalogService.loadCatalog();
         }
       });
   }

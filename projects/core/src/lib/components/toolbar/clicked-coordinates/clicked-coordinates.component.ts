@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal, input, DestroyRef } from '@angular/core';
-import { combineLatest, concatMap, filter, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
@@ -106,7 +106,7 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
         tap(({ tool }) => {
           this.tool = tool.id;
         }),
-        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
+        switchMap(({ tool }) => tool?.mapClick$ || of(null)),
       ).subscribe(mapClick => this.handleMapClick(mapClick));
 
     this.mapService.renderFeatures$('tm-clicked-coordinates-layer', this.clickLocationSubject$, f => {

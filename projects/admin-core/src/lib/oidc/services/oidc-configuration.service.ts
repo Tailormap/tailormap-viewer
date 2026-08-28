@@ -4,12 +4,17 @@ import {
   OIDCClientSecretExpirationInfo,
   OIDCConfigurationModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
-import { catchError, concatMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, concatMap, filter, map, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
-  addOIDCConfiguration, deleteOIDCConfiguration, loadOIDCConfigurations,
-  updateOIDCConfiguration,
+  addOIDCConfiguration, deleteOIDCConfiguration, loadOIDCConfigurationsFailed, loadOIDCConfigurationsStart,
+  loadOIDCConfigurationsSuccess, updateOIDCConfiguration,
 } from '../state/oidc-configuration.actions';
+
+type OIDCConfigurationErrorResponse = { error: string };
+const isOIDCConfigurationErrorResponse = (
+  res: OIDCConfigurationModel[] | OIDCConfigurationErrorResponse,
+): res is OIDCConfigurationErrorResponse => typeof (res as OIDCConfigurationErrorResponse).error !== 'undefined';
 import {
   selectOIDCConfigurationList, selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration,
   selectExpiringClientSecretConfigurations,
@@ -60,12 +65,34 @@ export class OIDCConfigurationService implements OnDestroy {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL) {
-            this.store$.dispatch(loadOIDCConfigurations());
+            this.loadOIDCConfigurations();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectOIDCConfigurationList)),
       );
+  }
+
+  public loadOIDCConfigurations(): void {
+    this.store$.select(selectOIDCConfigurationsLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadOIDCConfigurationsStart());
+        this.adminApiService.getOIDCConfigurations$()
+          .pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.oidc.error-loading-configurations:Error while loading list of OIDC configurations` })),
+          )
+          .subscribe(response => {
+            if (isOIDCConfigurationErrorResponse(response)) {
+              this.store$.dispatch(loadOIDCConfigurationsFailed({ error: response.error }));
+              return;
+            }
+            this.store$.dispatch(loadOIDCConfigurationsSuccess({ oidcConfigurations: response }));
+          });
+      });
   }
 
   public static getDaysUntilExpirationForConfig(oidcConfiguration: OIDCConfigurationModel): number | null {

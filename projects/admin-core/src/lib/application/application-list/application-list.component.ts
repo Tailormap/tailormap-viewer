@@ -3,7 +3,7 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { clearSelectedApplication, loadApplications, setApplicationListFilter } from '../state/application.actions';
+import { clearSelectedApplication, setApplicationListFilter } from '../state/application.actions';
 import {
   selectApplicationList, selectApplicationListFilter, selectApplicationsLoadError, selectApplicationsLoadStatus,
   selectSelectedApplicationId,
@@ -12,6 +12,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
+import { ApplicationService } from '../services/application.service';
 
 @Component({
   selector: 'tm-admin-application-list',
@@ -23,6 +24,7 @@ import { APP_BASE_HREF } from '@angular/common';
 export class ApplicationListComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private configService = inject(ConfigService);
+  private applicationService = inject(ApplicationService);
 
 
   public filter = new FormControl('');
@@ -82,7 +84,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadApplications());
+          this.applicationService.loadApplications();
         }
       });
   }
@@ -94,7 +96,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   public onRetryClick() {
-    this.store$.dispatch(loadApplications());
+    this.applicationService.loadApplications();
   }
 
   public stopPropagation(event: Event) {

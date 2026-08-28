@@ -3,12 +3,13 @@ import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { clearSelectedOIDCConfiguration, loadOIDCConfigurations, setOIDCConfigurationListFilter } from '../state/oidc-configuration.actions';
+import { clearSelectedOIDCConfiguration, setOIDCConfigurationListFilter } from '../state/oidc-configuration.actions';
 import {
   selectOIDCConfigurationList, selectOIDCConfigurationListFilter, selectOIDCConfigurationsLoadError, selectOIDCConfigurationsLoadStatus,
   selectSelectedOIDCConfigurationId,
 } from '../state/oidc-configuration.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 
 @Component({
   selector: 'tm-admin-oidc-configuration-list',
@@ -19,6 +20,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 })
 export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
+  private oidcConfigurationService = inject(OIDCConfigurationService);
 
 
   public filter = new FormControl('');
@@ -57,7 +59,7 @@ export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadOIDCConfigurations());
+          this.oidcConfigurationService.loadOIDCConfigurations();
         }
       });
   }
@@ -69,7 +71,7 @@ export class OIDCConfigurationListComponent implements OnInit, OnDestroy {
   }
 
   public onRetryClick() {
-    this.store$.dispatch(loadOIDCConfigurations());
+    this.oidcConfigurationService.loadOIDCConfigurations();
   }
 
 }

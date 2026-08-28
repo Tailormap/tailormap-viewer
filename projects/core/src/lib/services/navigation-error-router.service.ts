@@ -10,7 +10,7 @@ import { filter } from 'rxjs';
 export class NavigationErrorRouterService {
   private urlNavigatedToAfterError: string | null = null;
 
-  constructor() {
+  public init() {
     const router = inject(Router);
     const baseHref = inject(APP_BASE_HREF);
     const localeId = inject(LOCALE_ID);

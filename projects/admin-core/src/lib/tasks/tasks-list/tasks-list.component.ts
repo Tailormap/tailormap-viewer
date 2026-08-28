@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '
 import { interval, Observable, of } from 'rxjs';
 import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { loadTasks } from '../state/tasks.actions';
 import { selectTasks, selectTasksLoadError, selectTasksLoadStatus } from '../state/tasks.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { TaskMonitoringService } from '../services/task-monitoring.service';
 
 
 @Component({
@@ -18,6 +18,7 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 export class TasksListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private taskMonitoringService = inject(TaskMonitoringService);
 
 
   public tasks$: Observable<TaskModel[]> = of([]);
@@ -29,20 +30,20 @@ export class TasksListComponent implements OnInit {
 
     interval(5000).pipe(takeUntilDestroyed(destroyRef)).subscribe(
       () => {
-        this.store$.dispatch(loadTasks());
+        this.taskMonitoringService.loadTasks();
       },
     );
   }
 
   public ngOnInit(): void {
-    this.store$.dispatch(loadTasks());
+    this.taskMonitoringService.loadTasks();
     this.tasksLoadStatus$ = this.store$.select(selectTasksLoadStatus);
     this.tasks$ = this.store$.select(selectTasks);
     this.errorMessage$ = this.store$.select(selectTasksLoadError);
   }
 
   public onRetryClick(): void {
-    this.store$.dispatch(loadTasks());
+    this.taskMonitoringService.loadTasks();
   }
 
   protected readonly loadingStateEnum = LoadingStateEnum;

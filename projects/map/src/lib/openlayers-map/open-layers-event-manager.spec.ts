@@ -11,7 +11,8 @@ describe('OpenLayersEventManager', () => {
     const olMap = {
       on: onFn,
     };
-    OpenLayersEventManager.initEvents(olMap as any, mockNgZone, of(false));
+    const eventManager = new OpenLayersEventManager();
+    eventManager.initEvents(olMap as any, mockNgZone, of(false));
     expect(onFn).toHaveBeenCalled();
   });
 
@@ -21,9 +22,10 @@ describe('OpenLayersEventManager', () => {
     const olMap = {
       on: onFn,
     };
-    OpenLayersEventManager.initEvents(olMap as any, mockNgZone, of(false));
+    const eventManager = new OpenLayersEventManager();
+    eventManager.initEvents(olMap as any, mockNgZone, of(false));
     expect(onFn).toHaveBeenCalled();
-    OpenLayersEventManager.onMapMove$().subscribe(e => {
+    eventManager.onMapMove$().subscribe(e => {
       expect(e).toEqual('test');
       done();
     });
@@ -38,9 +40,10 @@ describe('OpenLayersEventManager', () => {
     const olMap = {
       on: onFn,
     };
-    OpenLayersEventManager.initEvents(olMap as any, mockNgZone, of(false));
+    const eventManager = new OpenLayersEventManager();
+    eventManager.initEvents(olMap as any, mockNgZone, of(false));
     expect(onFn).toHaveBeenCalled();
-    OpenLayersEventManager.onMapClick$().subscribe(e => {
+    eventManager.onMapClick$().subscribe(e => {
       expect(e).toEqual('test_click');
       done();
     });
@@ -56,10 +59,11 @@ describe('OpenLayersEventManager', () => {
     const olMap = {
       on: onFn,
     };
-    OpenLayersEventManager.initEvents(olMap as any, mockNgZone, of(true));
+    const eventManager = new OpenLayersEventManager();
+    eventManager.initEvents(olMap as any, mockNgZone, of(true));
     expect(onFn).toHaveBeenCalled();
     let emitted = false;
-    OpenLayersEventManager.onMapClick$().subscribe(() => emitted = true);
+    eventManager.onMapClick$().subscribe(() => emitted = true);
     const moveEndReg = onFn.mock.calls.find(c => c[0] === 'singleclick');
     moveEndReg[1]('test_click');
     expect(ngZoneRunFn).toHaveBeenCalled();
@@ -67,6 +71,29 @@ describe('OpenLayersEventManager', () => {
     jest.advanceTimersByTime(1000);
     expect(emitted).toEqual(false);
     jest.useRealTimers();
+  });
+
+  test('events are not shared between instances', () => {
+    const onFnA = jest.fn();
+    const olMapA = { on: onFnA };
+    const eventManagerA = new OpenLayersEventManager();
+    eventManagerA.initEvents(olMapA as any, mockNgZone, of(false));
+
+    const onFnB = jest.fn();
+    const olMapB = { on: onFnB };
+    const eventManagerB = new OpenLayersEventManager();
+    eventManagerB.initEvents(olMapB as any, mockNgZone, of(false));
+
+    let emittedOnA = false;
+    eventManagerA.onMapMove$().subscribe(() => emittedOnA = true);
+    let emittedOnB = false;
+    eventManagerB.onMapMove$().subscribe(() => emittedOnB = true);
+
+    const moveEndRegB = onFnB.mock.calls.find(c => c[0] === 'moveend');
+    moveEndRegB[1]('test');
+
+    expect(emittedOnB).toEqual(true);
+    expect(emittedOnA).toEqual(false);
   });
 
 });

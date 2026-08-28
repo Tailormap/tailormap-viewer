@@ -10,7 +10,7 @@ import { FeatureSourceService } from '../../catalog/services/feature-source.serv
 import { SearchIndexService } from '../services/search-index.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
-import { loadTasks } from '../../tasks/state/tasks.actions';
+import { TaskMonitoringService } from '../../tasks/services/task-monitoring.service';
 
 @Component({
   selector: 'tm-admin-search-index-edit',
@@ -27,6 +27,7 @@ export class SearchIndexEditComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private confirmDelete = inject(ConfirmDialogService);
+  private taskMonitoringService = inject(TaskMonitoringService);
 
 
   public searchIndex$: Observable<SearchIndexModel | undefined> = of(undefined);
@@ -48,7 +49,7 @@ export class SearchIndexEditComponent implements OnInit {
   public indexing$ = this.indexingSubject.asObservable();
 
   public ngOnInit() {
-    this.store$.dispatch(loadTasks());
+    this.taskMonitoringService.loadTasks();
 
     this.route.paramMap.pipe(
       takeUntilDestroyed(this.destroyRef),

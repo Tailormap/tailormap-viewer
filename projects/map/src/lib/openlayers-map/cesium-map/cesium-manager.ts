@@ -25,10 +25,10 @@ export class CesiumManager {
 
   private terrainOpacity$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
 
-
   constructor(
     private olMap: OlMap,
     private ngZone: NgZone,
+    private eventManager: CesiumEventManager,
     private projection2D?: Projection,
   ) {
   }
@@ -43,7 +43,7 @@ export class CesiumManager {
 
   private setupOlCesium() {
     this.ngZone.runOutsideAngular(() => {
-      this.silhouette = CesiumEventManager.createSilhouette(CssHelper.getCssVariableValue('--primary-color').trim(), 0.01);
+      this.silhouette = this.eventManager.createSilhouette(CssHelper.getCssVariableValue('--primary-color').trim(), 0.01);
       from(from(import('olcs')))
         .pipe(take(1))
         .subscribe(olCsModule => {
@@ -63,7 +63,7 @@ export class CesiumManager {
         });
       this.executeScene3dAction(scene3d => {
         scene3d.globe.depthTestAgainstTerrain = true;
-        CesiumEventManager.initClickEvent(
+        this.eventManager.initClickEvent(
           scene3d,
           this.silhouette,
           index => this.getLayerId(index),
@@ -249,12 +249,18 @@ export class CesiumManager {
 
   public simulateCenterClick(): void {
     this.executeScene3dAction(scene3d => {
-      CesiumEventManager.simulateCenterClick(
+      this.eventManager.simulateCenterClick(
         scene3d,
         this.silhouette,
         index => this.getLayerId(index),
         this.projection2D?.getCode(),
       );
+    });
+  }
+
+  public enableKeyboardControl(element: HTMLElement) {
+    this.executeScene3dAction(scene3d => {
+      this.eventManager.enableKeyboardControl(scene3d, element);
     });
   }
 

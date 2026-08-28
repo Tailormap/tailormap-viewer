@@ -1,10 +1,8 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
-import { Store, StoreModule } from '@ngrx/store';
-import { featureInfoStateKey } from './state/feature-info.state';
-import { featureInfoReducer } from './state/feature-info.reducer';
+import { provideState, Store } from '@ngrx/store';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
 import { CoreSharedModule } from '../../shared';
@@ -17,6 +15,8 @@ import { ComponentConfigHelper } from '../../shared/helpers/component-config.hel
 import { expandCollapseFeatureInfoLayerList } from './state/feature-info.actions';
 import { FeatureInfoTemplateRendererComponent } from './feature-info-template-renderer/feature-info-template-renderer.component';
 import { FeatureInfoContentComponent } from './feature-info-content/feature-info-content.component';
+import { featureInfoReducer } from './state/feature-info.reducer';
+import { featureInfoStateKey } from './state/feature-info.state';
 
 
 @NgModule({
@@ -31,7 +31,6 @@ import { FeatureInfoContentComponent } from './feature-info-content/feature-info
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(featureInfoStateKey, featureInfoReducer),
     ApplicationMapModule,
     CoreSharedModule,
     CdkAccordion,
@@ -42,19 +41,23 @@ import { FeatureInfoContentComponent } from './feature-info-content/feature-info
     FeatureInfoComponent,
     FeatureInfoDialogComponent,
   ],
+  providers: [
+    provideState(featureInfoStateKey, featureInfoReducer),
+    // Must run after `provideState` above since it selects/dispatches `featureInfoStateKey` state.
+    provideEnvironmentInitializer(() => {
+      const store$ = inject(Store);
+
+      ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
+        store$,
+        BaseComponentTypeEnum.FEATURE_INFO,
+        config => {
+          if (config.defaultShowDropdown) {
+            store$.dispatch(expandCollapseFeatureInfoLayerList());
+          }
+        },
+      );
+    }),
+  ],
 })
 export class FeatureInfoModule {
-  constructor() {
-    const store$ = inject(Store);
-
-    ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
-      store$,
-      BaseComponentTypeEnum.FEATURE_INFO,
-      config => {
-        if (config.defaultShowDropdown) {
-          store$.dispatch(expandCollapseFeatureInfoLayerList());
-        }
-      },
-    );
-  }
 }

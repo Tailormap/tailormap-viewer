@@ -15,80 +15,80 @@ export class OpenLayersSnappingManager {
   private static SNAPPING_LAYER_ID = 'snapping-layer';
   private static SNAPPING_CURSOR_LAYER_ID = 'snapping-layer-cursor';
 
-  private static olMap: OlMap | undefined;
-  private static layerManager: OpenLayersLayerManager | undefined;
+  private olMap: OlMap | undefined;
+  private layerManager: OpenLayersLayerManager | undefined;
 
-  private static snappingInteraction = new BehaviorSubject<Snap | null>(null);
-  private static snappingLayer = new BehaviorSubject<Vector | null>(null);
-  private static snappingCursorLayer = new BehaviorSubject<Vector | null>(null);
-  private static snappingAllowed = false;
+  private snappingInteraction = new BehaviorSubject<Snap | null>(null);
+  private snappingLayer = new BehaviorSubject<Vector | null>(null);
+  private snappingCursorLayer = new BehaviorSubject<Vector | null>(null);
+  private snappingAllowed = false;
 
-  private static initialized = new BehaviorSubject(false);
+  private initialized = new BehaviorSubject(false);
 
-  private static layerInitialized = false;
-  private static layerInitializing = false;
+  private layerInitialized = false;
+  private layerInitializing = false;
 
-  private static snapInitialized = false;
-  private static snapInitializing = false;
+  private snapInitialized = false;
+  private snapInitializing = false;
 
-  public static init(
+  public init(
     olMap: OlMap,
     layerManager: OpenLayersLayerManager,
   ) {
-    OpenLayersSnappingManager.olMap = olMap;
-    OpenLayersSnappingManager.layerManager = layerManager;
-    OpenLayersSnappingManager.initialized.next(true);
+    this.olMap = olMap;
+    this.layerManager = layerManager;
+    this.initialized.next(true);
   }
 
-  public static destroy() {
-    if (OpenLayersSnappingManager.snappingInteraction.value) {
-      OpenLayersSnappingManager.olMap?.removeInteraction(OpenLayersSnappingManager.snappingInteraction.value);
-      OpenLayersSnappingManager.snappingInteraction.next(null);
-      OpenLayersSnappingManager.snapInitialized = false;
-      OpenLayersSnappingManager.snapInitializing = false;
+  public destroy() {
+    if (this.snappingInteraction.value) {
+      this.olMap?.removeInteraction(this.snappingInteraction.value);
+      this.snappingInteraction.next(null);
+      this.snapInitialized = false;
+      this.snapInitializing = false;
     }
-    if (OpenLayersSnappingManager.snappingLayer.value) {
-      OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_LAYER_ID);
-      OpenLayersSnappingManager.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_CURSOR_LAYER_ID);
-      OpenLayersSnappingManager.snappingLayer.next(null);
-      OpenLayersSnappingManager.snappingCursorLayer.next(null);
-      OpenLayersSnappingManager.layerInitialized = false;
-      OpenLayersSnappingManager.layerInitializing = false;
+    if (this.snappingLayer.value) {
+      this.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_LAYER_ID);
+      this.layerManager?.removeLayer(OpenLayersSnappingManager.SNAPPING_CURSOR_LAYER_ID);
+      this.snappingLayer.next(null);
+      this.snappingCursorLayer.next(null);
+      this.layerInitialized = false;
+      this.layerInitializing = false;
     }
-    OpenLayersSnappingManager.initialized.next(false);
+    this.initialized.next(false);
   }
 
-  public static allowSnapping(allow: boolean) {
-    OpenLayersSnappingManager.snappingAllowed = allow;
-    OpenLayersSnappingManager.enableSnappingIfAllowed(allow);
+  public allowSnapping(allow: boolean) {
+    this.snappingAllowed = allow;
+    this.enableSnappingIfAllowed(allow);
   }
 
-  public static setSnappingLayerStyle(style: OlMapStyleType) {
-    OpenLayersSnappingManager.executeLayerAction(snappingLayer => {
+  public setSnappingLayerStyle(style: OlMapStyleType) {
+    this.executeLayerAction(snappingLayer => {
       snappingLayer.setStyle(style);
     });
   }
 
-  public static setSnappingTolerance(tolerance: number) {
-    OpenLayersSnappingManager.initSnap({ pixelTolerance: tolerance });
+  public setSnappingTolerance(tolerance: number) {
+    this.initSnap({ pixelTolerance: tolerance });
   }
 
-  public static enableSnappingIfAllowed(enable: boolean) {
-    if (!OpenLayersSnappingManager.snappingAllowed) {
+  public enableSnappingIfAllowed(enable: boolean) {
+    if (!this.snappingAllowed) {
       return;
     }
-    OpenLayersSnappingManager.executeSnapAction(snap => {
+    this.executeSnapAction(snap => {
       // Always remove - if we need to enable we also remove first,
       // Then add because Snap needs to be loaded last
-      OpenLayersSnappingManager.olMap?.removeInteraction(snap);
+      this.olMap?.removeInteraction(snap);
       if (enable) {
-        OpenLayersSnappingManager.olMap?.addInteraction(snap);
+        this.olMap?.addInteraction(snap);
       }
     });
   }
 
-  public static renderFeatures(features: FeatureModelType[]) {
-    OpenLayersSnappingManager.executeLayerAction(snappingLayer => {
+  public renderFeatures(features: FeatureModelType[]) {
+    this.executeLayerAction(snappingLayer => {
       snappingLayer.getSource()?.getFeatures().forEach(feature => {
         snappingLayer.getSource()?.removeFeature(feature);
       });
@@ -99,11 +99,11 @@ export class OpenLayersSnappingManager {
     });
   }
 
-  private static executeSnapAction(cb: (snap: Snap) => void) {
-    if (!OpenLayersSnappingManager.snapInitialized) {
-      OpenLayersSnappingManager.initSnap();
+  private executeSnapAction(cb: (snap: Snap) => void) {
+    if (!this.snapInitialized) {
+      this.initSnap();
     }
-    OpenLayersSnappingManager.snappingInteraction.asObservable()
+    this.snappingInteraction.asObservable()
       .pipe(filter(snap => !!snap), take(1))
       .subscribe(snap => {
         if (snap) {
@@ -112,11 +112,11 @@ export class OpenLayersSnappingManager {
       });
   }
 
-  private static executeLayerAction(cb: (layer: Vector<VectorSource>) => void) {
-    if (!OpenLayersSnappingManager.layerInitialized) {
-      OpenLayersSnappingManager.initLayer();
+  private executeLayerAction(cb: (layer: Vector<VectorSource>) => void) {
+    if (!this.layerInitialized) {
+      this.initLayer();
     }
-    OpenLayersSnappingManager.snappingLayer.asObservable()
+    this.snappingLayer.asObservable()
       .pipe(filter(layer => !!layer), take(1))
       .subscribe(layer => {
         if (layer) {
@@ -125,43 +125,43 @@ export class OpenLayersSnappingManager {
       });
   }
 
-  private static initLayer() {
-    if (OpenLayersSnappingManager.layerInitializing) {
+  private initLayer() {
+    if (this.layerInitializing) {
       return;
     }
-    OpenLayersSnappingManager.layerInitializing = true;
-    OpenLayersSnappingManager.initialized.asObservable()
+    this.layerInitializing = true;
+    this.initialized.asObservable()
       .pipe(filter(initialized => initialized), take(1))
       .subscribe(() => {
-        const vectorLayer = OpenLayersSnappingManager.layerManager?.addLayer<VectorLayer>({
+        const vectorLayer = this.layerManager?.addLayer<VectorLayer>({
           id: OpenLayersSnappingManager.SNAPPING_LAYER_ID,
           name: `Snapping layer`,
           layerType: LayerTypesEnum.Vector,
           visible: true,
         });
-        const vectorCursorLayer = OpenLayersSnappingManager.layerManager?.addLayer<VectorLayer>({
+        const vectorCursorLayer = this.layerManager?.addLayer<VectorLayer>({
           id: OpenLayersSnappingManager.SNAPPING_CURSOR_LAYER_ID,
           name: `Snapping layer pointer`,
           layerType: LayerTypesEnum.Vector,
           visible: true,
         });
         if (vectorLayer && vectorCursorLayer) {
-          OpenLayersSnappingManager.snappingLayer.next(vectorLayer);
-          OpenLayersSnappingManager.snappingCursorLayer.next(vectorCursorLayer);
-          OpenLayersSnappingManager.layerInitialized = true;
+          this.snappingLayer.next(vectorLayer);
+          this.snappingCursorLayer.next(vectorCursorLayer);
+          this.layerInitialized = true;
         }
-        OpenLayersSnappingManager.layerInitializing = false;
+        this.layerInitializing = false;
       });
   }
 
-  private static initSnap(snapOptions?: { pixelTolerance: number }) {
-    if (OpenLayersSnappingManager.snapInitializing) {
+  private initSnap(snapOptions?: { pixelTolerance: number }) {
+    if (this.snapInitializing) {
       return;
     }
-    OpenLayersSnappingManager.snapInitializing = true;
+    this.snapInitializing = true;
     combineLatest([
-      OpenLayersSnappingManager.initialized.asObservable(),
-      OpenLayersSnappingManager.snappingLayer.asObservable(),
+      this.initialized.asObservable(),
+      this.snappingLayer.asObservable(),
     ])
       .pipe(
         filter(([ initialized, snappingLayer ]) => initialized && !!snappingLayer),
@@ -172,11 +172,11 @@ export class OpenLayersSnappingManager {
         if (!source) {
           return;
         }
-        OpenLayersSnappingManager.snappingInteraction.next(new Snap({
+        this.snappingInteraction.next(new Snap({
           source,
           pixelTolerance: snapOptions?.pixelTolerance ?? 10,
         }));
-        OpenLayersSnappingManager.snappingInteraction.value?.on('snap', e => {
+        this.snappingInteraction.value?.on('snap', e => {
           const snapFeature = new Feature(new Point(e.vertex));
           snapFeature.setStyle(new Style({
             image: new RegularShape({
@@ -188,14 +188,14 @@ export class OpenLayersSnappingManager {
               angle: 0,
             }),
           }));
-          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.clear(true);
-          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.addFeature(snapFeature);
+          this.snappingCursorLayer.value?.getSource()?.clear(true);
+          this.snappingCursorLayer.value?.getSource()?.addFeature(snapFeature);
         });
-        OpenLayersSnappingManager.snappingInteraction.value?.on('unsnap', () => {
-          OpenLayersSnappingManager.snappingCursorLayer.value?.getSource()?.clear(true);
+        this.snappingInteraction.value?.on('unsnap', () => {
+          this.snappingCursorLayer.value?.getSource()?.clear(true);
         });
-        OpenLayersSnappingManager.snapInitializing = false;
-        OpenLayersSnappingManager.snapInitialized = true;
+        this.snapInitializing = false;
+        this.snapInitialized = true;
       });
   }
 
