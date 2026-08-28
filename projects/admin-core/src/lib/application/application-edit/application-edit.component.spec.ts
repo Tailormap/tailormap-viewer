@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
-    imports: [ SharedModule, MatIconTestingModule, RouterTestingModule.withRoutes(
+    imports: [ SharedModule, MatIconTestingModule, RouterModule.forRoot(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
     ) ],
     declarations: [ SaveButtonComponent, SpinnerButtonComponent ],

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RedirectCommand, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 import { AdminAuthGuard } from './admin-auth.guard';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
@@ -16,7 +16,7 @@ describe('AdminAuthGuard', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       providers: [
         AdminAuthGuard,
         { provide: AuthenticatedUserService, useValue: authServiceMock },
