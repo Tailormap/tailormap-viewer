@@ -1592,6 +1592,9 @@
       <trans-unit id="admin-core.oidc.default-authorities-hint" datatype="html">
         <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-hint" datatype="html">
+        <source>If checked, groups will not be automatically created for roles received from the identity provider. This is useful if you want to manage groups manually or many unnecessary groups are received unfiltered from the identity provider.</source>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
       </trans-unit>
