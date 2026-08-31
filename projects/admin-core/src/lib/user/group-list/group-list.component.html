@@ -11,7 +11,13 @@
       <mat-list-item
         [class.selected]="group.selected"
         [routerLink]="['/admin/groups/group', group.name]">
-        <span class="detail">{{group.name}}</span>
+        <span class="detail">
+          @if(group.label !== null) {
+            {{group.label}} ({{group.name}})
+          } @else {
+            {{group.name}}
+          }
+        </span>
       </mat-list-item>
     }
   </mat-selection-list>

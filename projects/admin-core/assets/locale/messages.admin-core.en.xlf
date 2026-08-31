@@ -1463,6 +1463,9 @@
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
         <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for-label" datatype="html">
+        <source>Set a display label if the group name is not descriptive enough, for example an object-id/guid.</source>
+      </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
       </trans-unit>
