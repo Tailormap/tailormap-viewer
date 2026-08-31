@@ -5,7 +5,8 @@ import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 import { ImageHelper } from '../helpers/image.helper';
 import { UploadHelper } from '../helpers/upload.helper';
 import { Injectable, inject } from '@angular/core';
-import { UploadCategoryEnum } from '../models';
+
+import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 export interface ImageUploadResult {
   url?: string;

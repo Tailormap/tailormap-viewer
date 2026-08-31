@@ -1,12 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { OIDCConfigurationModel, UploadCategoryEnum } from '@tailormap-admin/admin-api';
+import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { DateTime } from 'luxon';
 import { FormHelper } from '../../helpers/form.helper';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
+import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 @Component({
   selector: 'tm-admin-oidc-configuration-form',
