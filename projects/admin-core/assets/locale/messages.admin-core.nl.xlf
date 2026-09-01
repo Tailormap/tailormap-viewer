@@ -2149,6 +2149,10 @@
         <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
         <target>Komma-gescheiden lijst van groepen die aan elke ingelogde gebruiker worden toegekend (inclusief aliases voor die groepen)</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-hint" datatype="html">
+        <source>If checked, groups will not be automatically created for roles received from the identity provider. This is useful if you want to manage groups manually or many unnecessary groups are received unfiltered from the identity provider.</source>
+        <target>Als dit is aangevinkt, worden groepen niet automatisch aangemaakt voor rollen die van de identiteitsprovider worden ontvangen. Dit is handig als u groepen handmatig wilt beheren of als er veel onnodige groepen ongefilterd van de identiteitsprovider worden ontvangen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>
         <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></target>

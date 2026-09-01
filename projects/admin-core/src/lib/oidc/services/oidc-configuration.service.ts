@@ -155,6 +155,7 @@ export class OIDCConfigurationService implements OnDestroy {
               userNameAttribute: oidcConfiguration.userNameAttribute,
               defaultAuthorities: oidcConfiguration.defaultAuthorities,
               rolesClaimFilterRegex: oidcConfiguration.rolesClaimFilterRegex,
+              disableAutomaticGroupCreation: oidcConfiguration.disableAutomaticGroupCreation,
               image: oidcConfiguration.image,
            };
             return this.updateOIDCConfiguration$(draftOIDCConfiguration.id, draftOIDCConfiguration);

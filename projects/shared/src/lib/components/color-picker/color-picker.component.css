@@ -85,6 +85,14 @@
   cursor: pointer;
 }
 
+.color-picker__color:focus-visible {
+  outline: 2px solid var(--primary-color);
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
 .color-picker__color:hover {
   box-shadow:
     0 2px 4px -1px rgba(0, 0, 0, 0.2),

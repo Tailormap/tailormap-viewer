@@ -67,6 +67,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     defaultAuthorities: new FormControl<string | null>(null),
     rolesClaimFilterRegex: new FormControl<string | null>(null),
+    disableAutomaticGroupCreation: new FormControl<boolean>(false, { nonNullable: true }),
     image: new FormControl<string | null>(null),
   });
 
@@ -90,6 +91,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           userNameAttribute: value.userNameAttribute || 'name',
           defaultAuthorities: value.defaultAuthorities ? value.defaultAuthorities.split(',') : null,
           rolesClaimFilterRegex: value.rolesClaimFilterRegex || null,
+          disableAutomaticGroupCreation: value.disableAutomaticGroupCreation,
           image: value.image,
         });
       });
@@ -110,6 +112,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
       defaultAuthorities: oidcConfiguration?.defaultAuthorities?.join(',') ?? null,
       rolesClaimFilterRegex: oidcConfiguration?.rolesClaimFilterRegex ?? null,
+      disableAutomaticGroupCreation: oidcConfiguration?.disableAutomaticGroupCreation ?? false,
       image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
   }
