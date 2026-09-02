@@ -1,18 +1,39 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, Input, inject, LOCALE_ID } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SearchIndexModel, TaskSchedule } from '@tailormap-admin/admin-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { DateAdapter } from '@angular/material/core';
 import { CronExpressionHelper } from '../../tasks/helpers/cron-expression.helper';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatTimepickerInput, MatTimepickerToggle, MatTimepicker } from '@angular/material/timepicker';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 
 @Component({
-  selector: 'tm-admin-search-index-scheduling',
-  templateUrl: './search-index-scheduling.component.html',
-  styleUrls: ['./search-index-scheduling.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-scheduling',
+    templateUrl: './search-index-scheduling.component.html',
+    styleUrls: ['./search-index-scheduling.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatTimepickerInput,
+        MatTimepickerToggle,
+        MatSuffix,
+        MatTimepicker,
+        AutoFocusDirective,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+    ],
 })
 export class SearchIndexSchedulingComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

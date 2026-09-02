@@ -7,19 +7,17 @@ import { MenubarModule } from '../menubar';
 import { LegendLayerComponent } from './legend-layer/legend-layer.component';
 
 @NgModule({
-  declarations: [
-    LegendComponent,
-    LegendMenuButtonComponent,
-    LegendLayerComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-  ],
-  exports: [
-    LegendComponent,
-    LegendLayerComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        LegendComponent,
+        LegendMenuButtonComponent,
+        LegendLayerComponent,
+    ],
+    exports: [
+        LegendComponent,
+        LegendLayerComponent,
+    ],
 })
 export class LegendModule { }

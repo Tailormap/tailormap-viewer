@@ -7,13 +7,25 @@ import {
 } from '../../../../map/state/map.selectors';
 import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
 import { MobileLayoutService } from '../../../../services/viewer-layout/mobile-layout.service';
+import { MatSelectionList, MatListOption, MatListItemIcon, MatListItemTitle } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { SplitButtonComponent } from '../../../../../../../shared/src/lib/components/split-button/split-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-terrain-layer-toggle',
-  templateUrl: './terrain-layer-toggle.component.html',
-  styleUrls: ['./terrain-layer-toggle.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-terrain-layer-toggle',
+    templateUrl: './terrain-layer-toggle.component.html',
+    styleUrls: ['./terrain-layer-toggle.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatSelectionList,
+        MatListOption,
+        MatListItemIcon,
+        MatIcon,
+        MatListItemTitle,
+        SplitButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class TerrainLayerToggleComponent {
   private store$ = inject(Store);

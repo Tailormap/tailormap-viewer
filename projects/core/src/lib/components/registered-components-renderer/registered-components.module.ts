@@ -3,14 +3,12 @@ import { RegisteredComponentsRendererComponent } from './registered-components-r
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [
-    RegisteredComponentsRendererComponent,
-  ],
-  imports: [
-    CommonModule,
-  ],
-  exports: [
-    RegisteredComponentsRendererComponent,
-  ],
+    imports: [
+        CommonModule,
+        RegisteredComponentsRendererComponent,
+    ],
+    exports: [
+        RegisteredComponentsRendererComponent,
+    ],
 })
 export class RegisteredComponentsModule {}

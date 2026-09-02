@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminServerType,
   AUTHORIZATION_RULE_ANONYMOUS, AuthorizationRuleGroup, GeoServiceModel, GeoServiceProtocolEnum, GroupModel,
@@ -10,13 +10,39 @@ import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { StringHelper } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-geo-service-form',
-  templateUrl: './geo-service-form.component.html',
-  styleUrls: ['./geo-service-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-geo-service-form',
+    templateUrl: './geo-service-form.component.html',
+    styleUrls: ['./geo-service-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatHint,
+        MatSelect,
+        MatOption,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatExpansionPanelDescription,
+        MatCheckbox,
+        PasswordFieldComponent,
+        AuthorizationEditComponent,
+        AsyncPipe,
+    ],
 })
 export class GeoServiceFormComponent implements OnInit {
 

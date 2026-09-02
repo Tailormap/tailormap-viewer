@@ -2,18 +2,24 @@ import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@
 import {
   BaseComponentTypeEnum, TocConfigModel,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { debounceTime } from 'rxjs';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-edit-component-config',
-  templateUrl: './toc-component-config.component.html',
-  styleUrls: ['./toc-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-edit-component-config',
+    templateUrl: './toc-component-config.component.html',
+    styleUrls: ['./toc-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        ReactiveFormsModule,
+        MatCheckbox,
+    ],
 })
 export class TocComponentConfigComponent implements ConfigurationComponentModel<TocConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

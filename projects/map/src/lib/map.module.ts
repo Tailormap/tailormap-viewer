@@ -4,13 +4,11 @@ import { MapComponent } from './map/map.component';
 
 
 @NgModule({
-  declarations: [
-    MapComponent,
-  ],
-  imports: [
-  ],
-  exports: [
-    MapComponent,
-  ],
+    imports: [
+        MapComponent
+    ],
+    exports: [
+        MapComponent,
+    ],
 })
 export class MapModule { }

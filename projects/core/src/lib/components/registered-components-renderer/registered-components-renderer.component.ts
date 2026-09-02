@@ -7,10 +7,9 @@ import { DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { ComponentConfigHelper } from '../../shared/helpers/component-config.helper';
 
 @Component({
-  selector: 'tm-registered-components-renderer',
-  templateUrl: './registered-components-renderer.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-registered-components-renderer',
+    templateUrl: './registered-components-renderer.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisteredComponentsRendererComponent implements OnInit {
   private componentRegistrationService = inject(ComponentRegistrationService);

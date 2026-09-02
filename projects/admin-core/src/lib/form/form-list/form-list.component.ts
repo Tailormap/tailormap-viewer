@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, take } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
@@ -12,13 +12,30 @@ import {
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { FormService } from '../services/form.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-form-list',
-  templateUrl: './form-list.component.html',
-  styleUrls: ['./form-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-list',
+    templateUrl: './form-list.component.html',
+    styleUrls: ['./form-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        MatButton,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class FormListComponent implements OnInit {
   private store$ = inject(Store);

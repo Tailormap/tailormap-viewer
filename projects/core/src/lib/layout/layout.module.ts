@@ -12,23 +12,21 @@ import { SnappingModule } from "../components/toolbar/snapping/snapping.module";
 
 
 @NgModule({
-  declarations: [
-    BaseLayoutComponent,
-    EmbeddedLayoutComponent,
-    MobileLayoutComponent,
-  ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    MapModule,
-    ShareViewerModule,
-    Switch3dModule,
-    SnappingModule,
-  ],
-  exports: [
-    BaseLayoutComponent,
-    EmbeddedLayoutComponent,
-    MobileLayoutComponent,
-  ],
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        MapModule,
+        ShareViewerModule,
+        Switch3dModule,
+        SnappingModule,
+        BaseLayoutComponent,
+        EmbeddedLayoutComponent,
+        MobileLayoutComponent,
+    ],
+    exports: [
+        BaseLayoutComponent,
+        EmbeddedLayoutComponent,
+        MobileLayoutComponent,
+    ],
 })
 export class LayoutModule { }

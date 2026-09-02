@@ -4,15 +4,13 @@ import { MeasureComponent } from './measure.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
-  declarations: [
-    MeasureComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    MeasureComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MeasureComponent,
+    ],
+    exports: [
+        MeasureComponent,
+    ],
 })
 export class MeasureModule { }

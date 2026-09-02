@@ -4,14 +4,12 @@ import { AutoFocusDirective } from './auto-focus.directive';
 
 
 @NgModule({
-  declarations: [
-    AutoFocusDirective,
-    TooltipDirective,
-  ],
-  exports: [
-    AutoFocusDirective,
-    TooltipDirective,
-  ],
+    imports: [AutoFocusDirective,
+        TooltipDirective],
+    exports: [
+        AutoFocusDirective,
+        TooltipDirective,
+    ],
 })
 export class SharedDirectivesModule {
 }

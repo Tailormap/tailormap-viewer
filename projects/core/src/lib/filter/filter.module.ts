@@ -8,22 +8,20 @@ import { FilterApiService } from './services/filter-api.service';
 
 
 @NgModule({
-  declarations: [
-    FilterDescriptionComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    FilterDescriptionComponent,
-  ],
-  providers: [
-    provideEnvironmentInitializer(() => {
-      inject(SpatialFilterReferenceLayerService); // instantiated here to watch for changes
-      inject(FilterApiService).initDefaultFilterSource();
-    }),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FilterDescriptionComponent,
+    ],
+    exports: [
+        FilterDescriptionComponent,
+    ],
+    providers: [
+        provideEnvironmentInitializer(() => {
+            inject(SpatialFilterReferenceLayerService); // instantiated here to watch for changes
+            inject(FilterApiService).initDefaultFilterSource();
+        }),
+    ],
 })
 export class FilterModule {
 }

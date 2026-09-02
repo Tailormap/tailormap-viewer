@@ -1,18 +1,46 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { debounceTime, map } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDragHandle, CdkDrag } from '@angular/cdk/drag-drop';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
 
 @Component({
-  selector: 'tm-admin-feature-type-attachment-attributes',
-  templateUrl: './feature-type-attachment-attributes.component.html',
-  styleUrls: ['./feature-type-attachment-attributes.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-attachment-attributes',
+    templateUrl: './feature-type-attachment-attributes.component.html',
+    styleUrls: ['./feature-type-attachment-attributes.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatButton,
+        MatIcon,
+        MatTable,
+        CdkDropList,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatFormField,
+        MatInput,
+        MatError,
+        MatSelect,
+        MatOption,
+        MatIconButton,
+        CdkDragHandle,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        CdkDrag,
+    ],
 })
 export class FeatureTypeAttachmentAttributesComponent {
   private adminApiService = inject(TailormapAdminApiV1Service);

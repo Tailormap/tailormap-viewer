@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TailormapSecurityApiV1Service, ValidatorsHelper } from '@tailormap-viewer/api';
+import { MatIcon } from '@angular/material/icon';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { InfoMessageComponent } from '../../../../../shared/src/lib/components/info-message/info-message.component';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { MatError } from '@angular/material/form-field';
+import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 interface Token {
   uuid: string;
@@ -9,11 +17,22 @@ interface Token {
 }
 
 @Component({
-  selector: 'tm-password-reset',
-  templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-password-reset',
+    templateUrl: './password-reset.component.html',
+    styleUrls: ['./password-reset.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatIcon,
+        ErrorMessageComponent,
+        InfoMessageComponent,
+        AutoFocusDirective,
+        MatError,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class PasswordResetComponent implements OnInit {
   private static minPasswordLength = 8;

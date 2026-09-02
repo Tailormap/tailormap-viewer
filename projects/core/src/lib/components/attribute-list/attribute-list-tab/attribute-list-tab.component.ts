@@ -3,13 +3,15 @@ import { Store } from '@ngrx/store';
 import { selectAttributeListTab } from '../state/attribute-list.selectors';
 import { take } from 'rxjs';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
+import { AttributeListTabToolbarComponent } from '../attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
+import { AttributeListContentComponent } from '../attribute-list-content/attribute-list-content.component';
 
 @Component({
-  selector: 'tm-attribute-list-tab',
-  templateUrl: './attribute-list-tab.component.html',
-  styleUrls: ['./attribute-list-tab.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-attribute-list-tab',
+    templateUrl: './attribute-list-tab.component.html',
+    styleUrls: ['./attribute-list-tab.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AttributeListTabToolbarComponent, AttributeListContentComponent],
 })
 export class AttributeListTabComponent {
   private store$ = inject(Store);

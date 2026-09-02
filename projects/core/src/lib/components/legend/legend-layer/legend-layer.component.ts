@@ -4,13 +4,14 @@ import {
 import { LegendInfoModel } from '../models/legend-info.model';
 import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
 import { ServerType } from '@tailormap-viewer/api';
+import { LegendImageComponent } from '../../../../../../shared/src/lib/components/legend-image/legend-image.component';
 
 @Component({
-  selector: 'tm-legend-layer',
-  templateUrl: './legend-layer.component.html',
-  styleUrls: ['./legend-layer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-legend-layer',
+    templateUrl: './legend-layer.component.html',
+    styleUrls: ['./legend-layer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [LegendImageComponent],
 })
 export class LegendLayerComponent implements OnDestroy {
   private container = viewChild('container', { read: ElementRef });

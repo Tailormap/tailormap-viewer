@@ -1,9 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 export interface FeatureSourceFormDialogData {
   featureSource: FeatureSourceModel | null;
@@ -11,11 +15,19 @@ export interface FeatureSourceFormDialogData {
 }
 
 @Component({
-  selector: 'tm-admin-feature-source-form-dialog',
-  templateUrl: './feature-source-form-dialog.component.html',
-  styleUrls: ['./feature-source-form-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-source-form-dialog',
+    templateUrl: './feature-source-form-dialog.component.html',
+    styleUrls: ['./feature-source-form-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        FeatureSourceFormComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+    ],
 })
 export class FeatureSourceFormDialogComponent {
   public data = inject<FeatureSourceFormDialogData>(MAT_DIALOG_DATA);

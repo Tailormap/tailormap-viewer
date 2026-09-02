@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { combineLatest, distinctUntilChanged, map, Observable, Subject } from 'rxjs';
 import { BaseComponentTypeEnum, SecurityModel } from '@tailormap-viewer/api';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AboutDialogComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
@@ -12,13 +12,24 @@ import { ComponentRegistrationService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MenubarService } from '../menubar.service';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
+import { MatMenu, MatMenuItem } from '@angular/material/menu';
+import { LanguageToggleComponent } from '../../../../../../shared/src/lib/components/language-toggle/language-toggle.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MenubarButtonComponent,
+        MatMenu,
+        MatMenuItem,
+        LanguageToggleComponent,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

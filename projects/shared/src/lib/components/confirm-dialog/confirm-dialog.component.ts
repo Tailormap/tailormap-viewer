@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
+import { MatButton } from '@angular/material/button';
 
 export interface ConfirmDialogData {
   title: string;
@@ -11,10 +12,14 @@ export interface ConfirmDialogData {
 }
 
 @Component({
-  selector: 'tm-confirm-dialog',
-  templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.css'],
-  standalone: false,
+    selector: 'tm-confirm-dialog',
+    templateUrl: './confirm-dialog.component.html',
+    styleUrls: ['./confirm-dialog.component.css'],
+    imports: [
+        MatDialogTitle,
+        MatDialogActions,
+        MatButton,
+    ],
 })
 export class ConfirmDialogComponent {
   public dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);

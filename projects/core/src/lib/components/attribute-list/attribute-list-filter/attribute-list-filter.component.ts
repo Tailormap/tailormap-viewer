@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
 import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
+import { AttributeFilterComponent } from '../../../../../../shared/src/lib/components/attribute-filter/attribute-filter.component';
+import { MatButton } from '@angular/material/button';
 
 export interface FilterDialogData {
   tabSourceId: string;
@@ -27,10 +29,15 @@ interface FilterType {
 }
 
 @Component({
-  selector: 'tm-attribute-list-filter',
-  templateUrl: './attribute-list-filter.component.html',
-  styleUrls: ['./attribute-list-filter.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-list-filter',
+    templateUrl: './attribute-list-filter.component.html',
+    styleUrls: ['./attribute-list-filter.component.css'],
+    imports: [
+        MatDialogTitle,
+        AttributeFilterComponent,
+        MatDialogActions,
+        MatButton,
+    ],
 })
 export class AttributeListFilterComponent implements OnInit {
 

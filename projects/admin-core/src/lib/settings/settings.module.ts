@@ -6,14 +6,12 @@ import { CatalogModule } from '../catalog/catalog.module';
 import { RouterOutlet } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    SettingsHomePageComponent,
-  ],
-  imports: [
-    CommonModule,
-    TemplatesModule,
-    CatalogModule,
-    RouterOutlet,
-  ],
+    imports: [
+        CommonModule,
+        TemplatesModule,
+        CatalogModule,
+        RouterOutlet,
+        SettingsHomePageComponent,
+    ],
 })
 export class SettingsModule {}

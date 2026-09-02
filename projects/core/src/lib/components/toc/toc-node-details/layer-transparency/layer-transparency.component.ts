@@ -3,13 +3,24 @@ import { Store } from '@ngrx/store';
 import { of, take } from 'rxjs';
 import { selectLayerOpacity, selectLayer } from '../../../../map/state/map.selectors';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
+import { SliderComponent } from '../../../../../../../shared/src/lib/components/slider/slider.component';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-layer-transparency',
-  templateUrl: './layer-transparency.component.html',
-  styleUrls: ['./layer-transparency.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-layer-transparency',
+    templateUrl: './layer-transparency.component.html',
+    styleUrls: ['./layer-transparency.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        SliderComponent,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class LayerTransparencyComponent {
 

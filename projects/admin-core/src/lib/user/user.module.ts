@@ -20,35 +20,33 @@ import { UserService } from './services/user.service';
 import { GroupService } from './services/group.service';
 
 @NgModule({
-  declarations: [
-    UserListComponent,
-    GroupListComponent,
-    UserFormComponent,
-    GroupFormComponent,
-    UserHomeComponent,
-    UserCreateComponent,
-    UserEditComponent,
-    GroupHomeComponent,
-    GroupEditComponent,
-    GroupCreateComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    SharedAdminComponentsModule,
-  ],
-  exports: [
-    UserListComponent,
-    GroupListComponent,
-  ],
-  providers: [
-    provideState(userStateKey, userReducer),
-    provideEnvironmentInitializer(() => {
-      inject(UserService).listenForUserChanges();
-      inject(GroupService).listenForGroupChanges();
-    }),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterModule,
+        SharedAdminComponentsModule,
+        UserListComponent,
+        GroupListComponent,
+        UserFormComponent,
+        GroupFormComponent,
+        UserHomeComponent,
+        UserCreateComponent,
+        UserEditComponent,
+        GroupHomeComponent,
+        GroupEditComponent,
+        GroupCreateComponent,
+    ],
+    exports: [
+        UserListComponent,
+        GroupListComponent,
+    ],
+    providers: [
+        provideState(userStateKey, userReducer),
+        provideEnvironmentInitializer(() => {
+            inject(UserService).listenForUserChanges();
+            inject(GroupService).listenForGroupChanges();
+        }),
+    ],
 })
 export class UserModule {
 }

@@ -1,17 +1,25 @@
 import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { FormModel } from '@tailormap-admin/admin-api';
 import { FormService } from '../services/form.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormFormComponent } from '../form-form/form-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-form-create',
-  templateUrl: './form-create.component.html',
-  styleUrls: ['./form-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-create',
+    templateUrl: './form-create.component.html',
+    styleUrls: ['./form-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FormFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class FormCreateComponent {
   private formService = inject(FormService);

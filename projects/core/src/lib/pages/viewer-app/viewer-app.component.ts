@@ -8,13 +8,28 @@ import { ApplicationStyleService } from '../../services/application-style.servic
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 import { LoadViewerService } from '../../services/load-viewer.service';
+import { MatIcon } from '@angular/material/icon';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { EmbeddedLayoutComponent } from '../../layout/embedded-layout/embedded-layout.component';
+import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';
+import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-viewer-app',
-  templateUrl: './viewer-app.component.html',
-  styleUrls: ['./viewer-app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-viewer-app',
+    templateUrl: './viewer-app.component.html',
+    styleUrls: ['./viewer-app.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIcon,
+        ErrorMessageComponent,
+        MatProgressSpinner,
+        EmbeddedLayoutComponent,
+        MobileLayoutComponent,
+        BaseLayoutComponent,
+        AsyncPipe,
+    ],
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

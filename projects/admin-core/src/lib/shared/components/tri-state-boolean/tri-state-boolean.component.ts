@@ -1,20 +1,20 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, forwardRef, ChangeDetectorRef, inject } from '@angular/core';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'tm-admin-tri-state-boolean',
-  templateUrl: './tri-state-boolean.component.html',
-  styleUrls: ['./tri-state-boolean.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TriStateBooleanComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-admin-tri-state-boolean',
+    templateUrl: './tri-state-boolean.component.html',
+    styleUrls: ['./tri-state-boolean.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => TriStateBooleanComponent),
+            multi: true,
+        },
+    ],
+    imports: [MatButtonToggleGroup, MatButtonToggle],
 })
 export class TriStateBooleanComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);

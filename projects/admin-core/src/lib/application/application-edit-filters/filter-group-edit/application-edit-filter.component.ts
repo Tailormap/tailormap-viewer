@@ -8,13 +8,25 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   setApplicationSelectedFilterGroupId, setApplicationSelectedFilterId, updateApplicationFilterConfigForSelectedGroup,
 } from '../../state/application.actions';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { ApplicationFiltersListComponent } from '../filters/application-filters-list/application-filters-list.component';
+import { ApplicationEditFilterFormComponent } from '../filters/application-edit-filter-form/application-edit-filter-form.component';
 
 @Component({
-  selector: 'tm-admin-application-edit-filter',
-  templateUrl: './application-edit-filter.component.html',
-  styleUrls: ['./application-edit-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit-filter',
+    templateUrl: './application-edit-filter.component.html',
+    styleUrls: ['./application-edit-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        ApplicationFiltersListComponent,
+        ApplicationEditFilterFormComponent,
+        MatButton,
+    ],
 })
 export class ApplicationEditFilterComponent implements OnDestroy {
   private route = inject(ActivatedRoute);

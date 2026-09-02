@@ -5,17 +5,15 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { Switch3dComponent } from './switch3d.component';
 
 @NgModule({
-  declarations: [
-    Switch3dComponent,
-  ],
-  imports: [
-    CommonModule,
-    ClipboardModule,
-    SharedModule,
-  ],
-  exports: [
-    Switch3dComponent,
-  ],
+    imports: [
+        CommonModule,
+        ClipboardModule,
+        SharedModule,
+        Switch3dComponent,
+    ],
+    exports: [
+        Switch3dComponent,
+    ],
 })
 export class Switch3dModule {
 }

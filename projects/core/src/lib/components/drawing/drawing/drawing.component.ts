@@ -22,21 +22,47 @@ import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type
 import { ConfirmDialogService, DynamicComponentsHelper } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, DrawingComponentConfigModel, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DrawingObjectsListComponent } from '../drawing-objects-list/drawing-objects-list.component';
+import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
+import { DrawingModule } from '../drawing.module';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-drawing',
-  templateUrl: './drawing.component.html',
-  styleUrls: ['./drawing.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
-  providers: [
-    DrawingService,
-  ],
+    selector: 'tm-drawing',
+    templateUrl: './drawing.component.html',
+    styleUrls: ['./drawing.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        DrawingService,
+    ],
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        FormsModule,
+        MatIconButton,
+        MatSuffix,
+        DrawingObjectsListComponent,
+        DrawingStyleFormComponent,
+        DrawingModule,
+        AsyncPipe,
+    ],
 })
 export class DrawingComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

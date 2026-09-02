@@ -1,18 +1,29 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { FormOptionsModel } from '@tailormap-viewer/api';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selector/feature-type-selector.component';
 
 @Component({
-  selector: 'tm-admin-form-form',
-  templateUrl: './form-form.component.html',
-  styleUrls: ['./form-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-form',
+    templateUrl: './form-form.component.html',
+    styleUrls: ['./form-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        FeatureTypeSelectorComponent,
+    ],
 })
 export class FormFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, debounceTime, map, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AuthorizationGroups, AuthorizationRuleGroup, GeoServiceProtocolEnum, GroupModel, LayerSettingsModel, LayerSettingsWmsModel,
   LayerSettingsXyzModel,
@@ -13,13 +13,53 @@ import { selectGeoServiceById, selectGeoServiceLayersByGeoServiceId } from '../s
 import { BoundsModel, TileLayerHiDpiModeEnum } from '@tailormap-viewer/api';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FeatureTypeSelectorComponent } from '../feature-type-selector/feature-type-selector.component';
+import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
+import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { ProjectionAvailabilityComponent } from '../projection-availability/projection-availability.component';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-layer-settings-form',
-  templateUrl: './layer-settings-form.component.html',
-  styleUrls: ['./layer-settings-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-layer-settings-form',
+    templateUrl: './layer-settings-form.component.html',
+    styleUrls: ['./layer-settings-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatHint,
+        CdkTextareaAutosize,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatSelectionList,
+        MatListItem,
+        MatIcon,
+        MatSlideToggle,
+        FeatureTypeSelectorComponent,
+        BoundsFieldComponent,
+        TriStateBooleanComponent,
+        MatSelect,
+        MatOption,
+        TooltipDirective,
+        ProjectionAvailabilityComponent,
+        AuthorizationEditComponent,
+        AsyncPipe,
+    ],
 })
 export class LayerSettingsFormComponent implements OnInit {
   private store$ = inject(Store);

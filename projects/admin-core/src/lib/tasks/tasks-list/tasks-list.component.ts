@@ -6,14 +6,33 @@ import { selectTasks, selectTasksLoadError, selectTasksLoadStatus } from '../sta
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { MatSelectionList, MatListItem, MatListItemMeta } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-admin-tasks-list',
-  templateUrl: './tasks-list.component.html',
-  styleUrls: ['./tasks-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-tasks-list',
+    templateUrl: './tasks-list.component.html',
+    styleUrls: ['./tasks-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        MatButton,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        MatIcon,
+        TooltipDirective,
+        MatListItemMeta,
+        AsyncPipe,
+    ],
 })
 export class TasksListComponent implements OnInit {
   private store$ = inject(Store);

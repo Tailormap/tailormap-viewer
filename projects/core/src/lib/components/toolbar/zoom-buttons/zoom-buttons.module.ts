@@ -4,15 +4,13 @@ import { ZoomButtonsComponent } from './zoom-buttons.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
-  declarations: [
-    ZoomButtonsComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    ZoomButtonsComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ZoomButtonsComponent,
+    ],
+    exports: [
+        ZoomButtonsComponent,
+    ],
 })
 export class ZoomButtonsModule { }

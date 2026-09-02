@@ -3,13 +3,23 @@ import {
 } from '@angular/core';
 import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-viewer/api';
 import { AttachmentService } from '../../../services/attachment.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-edit-attachments-form',
-  templateUrl: './edit-attachments-form.component.html',
-  styleUrls: ['./edit-attachments-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-attachments-form',
+    templateUrl: './edit-attachments-form.component.html',
+    styleUrls: ['./edit-attachments-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatTooltip,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        MatButton,
+    ],
 })
 export class EditAttachmentsFormComponent {
   public attachmentHelper = inject(AttachmentService);

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, DestroyRef, signal, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { setDraftSearchIndexId, updateDraftSearchIndex } from '../state/search-index.actions';
@@ -11,13 +11,31 @@ import { SearchIndexService } from '../services/search-index.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 import { TaskMonitoringService } from '../../tasks/services/task-monitoring.service';
+import { SearchIndexFormComponent } from '../search-index-form/search-index-form.component';
+import { CatalogShortcutButtonsComponent } from '../../catalog/catalog-shortcut-buttons/catalog-shortcut-buttons.component';
+import { SearchIndexAttributeListComponent } from '../search-index-attribute-list/search-index-attribute-list.component';
+import { SearchIndexSchedulingComponent } from '../search-index-scheduling/search-index-scheduling.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { SpinnerButtonComponent } from '../../../../../shared/src/lib/components/spinner-button/spinner-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-search-index-edit',
-  templateUrl: './search-index-edit.component.html',
-  styleUrls: ['./search-index-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-edit',
+    templateUrl: './search-index-edit.component.html',
+    styleUrls: ['./search-index-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        SearchIndexFormComponent,
+        CatalogShortcutButtonsComponent,
+        SearchIndexAttributeListComponent,
+        SearchIndexSchedulingComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+        SpinnerButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class SearchIndexEditComponent implements OnInit {
   private route = inject(ActivatedRoute);

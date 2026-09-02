@@ -4,15 +4,20 @@ import { map, Observable } from 'rxjs';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { debounceTime } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-menubar-panel',
-  templateUrl: './menubar-panel.component.html',
-  styleUrls: ['./menubar-panel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  host: { '[attr.aria-expanded]': 'isExpanded()' },
+    selector: 'tm-menubar-panel',
+    templateUrl: './menubar-panel.component.html',
+    styleUrls: ['./menubar-panel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    host: { '[attr.aria-expanded]': 'isExpanded()' },
+    imports: [
+        DialogComponent,
+        AsyncPipe,
+    ],
 })
 export class MenubarPanelComponent implements OnDestroy {
   private menubarService = inject(MenubarService);

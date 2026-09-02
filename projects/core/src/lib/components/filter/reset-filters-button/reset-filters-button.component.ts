@@ -6,13 +6,22 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-reset-filters-button',
-  templateUrl: './reset-filters-button.component.html',
-  styleUrls: ['./reset-filters-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-reset-filters-button',
+    templateUrl: './reset-filters-button.component.html',
+    styleUrls: ['./reset-filters-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class ResetFiltersButtonComponent implements OnInit {
   private store$ = inject(Store);

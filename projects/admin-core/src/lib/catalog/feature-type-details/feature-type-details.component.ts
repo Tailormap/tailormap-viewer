@@ -6,13 +6,15 @@ import { FeatureSourceService } from '../services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../helpers/extended-catalog-model.helper';
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceByFeatureTypeId } from '../state/catalog.selectors';
+import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-feature-type-details',
-  templateUrl: './feature-type-details.component.html',
-  styleUrls: ['./feature-type-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-details',
+    templateUrl: './feature-type-details.component.html',
+    styleUrls: ['./feature-type-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FeatureTypeFormComponent, AsyncPipe],
 })
 export class FeatureTypeDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);

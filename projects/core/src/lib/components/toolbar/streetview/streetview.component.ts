@@ -7,13 +7,20 @@ import { map, take } from 'rxjs/operators';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-streetview',
-  templateUrl: './streetview.component.html',
-  styleUrls: ['./streetview.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-streetview',
+    templateUrl: './streetview.component.html',
+    styleUrls: ['./streetview.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+    ],
 })
 export class StreetviewComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);

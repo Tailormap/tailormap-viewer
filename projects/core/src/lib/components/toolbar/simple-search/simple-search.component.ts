@@ -1,5 +1,5 @@
 import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal, inject, computed } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom, switchMap } from 'rxjs/operators';
@@ -12,15 +12,42 @@ import { SearchResultModel, SearchResultItemModel } from './models';
 import { selectComponentsConfigForType } from '../../../state/core.selectors';
 import { Store } from '@ngrx/store';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption, MatOptgroup } from '@angular/material/select';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AsyncPipe } from '@angular/common';
+import { HtmlifyPipe } from '../../../../../../shared/src/lib/pipes/htmlify.pipe';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
 @Component({
-  selector: 'tm-simple-search',
-  templateUrl: './simple-search.component.html',
-  styleUrls: ['./simple-search.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-simple-search',
+    templateUrl: './simple-search.component.html',
+    styleUrls: ['./simple-search.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AutoFocusDirective,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        MatProgressSpinner,
+        MatOptgroup,
+        AsyncPipe,
+        HtmlifyPipe,
+    ],
 })
 export class SimpleSearchComponent implements OnInit {
   private store$ = inject(Store);

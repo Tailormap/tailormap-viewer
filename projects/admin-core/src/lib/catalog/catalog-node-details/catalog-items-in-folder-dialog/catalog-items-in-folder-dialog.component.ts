@@ -1,17 +1,27 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
 import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
 import { ExtendedCatalogNodeModel } from '../../models/extended-catalog-node.model';
 import { CatalogRouteHelper } from '../../helpers/catalog-route.helper';
 import { ExtendedCatalogModelHelper } from '../../helpers/extended-catalog-model.helper';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { RouterLink } from '@angular/router';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-catalog-items-in-folder-dialog',
-  templateUrl: './catalog-items-in-folder-dialog.component.html',
-  styleUrls: ['./catalog-items-in-folder-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-items-in-folder-dialog',
+    templateUrl: './catalog-items-in-folder-dialog.component.html',
+    styleUrls: ['./catalog-items-in-folder-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        RouterLink,
+        MatDialogActions,
+        MatButton,
+    ],
 })
 export class CatalogItemsInFolderDialogComponent {
   public data = inject<{

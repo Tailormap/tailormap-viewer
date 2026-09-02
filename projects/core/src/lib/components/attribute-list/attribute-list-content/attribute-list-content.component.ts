@@ -26,13 +26,22 @@ import { StatisticsHelper } from '../helpers/statistics-helper';
 import { StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticsService } from '../services/attribute-list-statistics.service';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
+import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-attribute-list-content',
-  templateUrl: './attribute-list-content.component.html',
-  styleUrls: ['./attribute-list-content.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-attribute-list-content',
+    templateUrl: './attribute-list-content.component.html',
+    styleUrls: ['./attribute-list-content.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ErrorMessageComponent,
+        MatButton,
+        AttributeListTableComponent,
+        AsyncPipe,
+    ],
 })
 export class AttributeListContentComponent implements OnInit {
   private store$ = inject(Store);

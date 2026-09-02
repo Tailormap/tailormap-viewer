@@ -18,32 +18,30 @@ import { editStateKey } from './state/edit.state';
 import { editReducer } from './state/edit.reducer';
 
 @NgModule({
-  declarations: [
-    EditFormComponent,
-    EditComponent,
-    EditDialogComponent,
-    EditAttachmentsFormComponent,
-    EditSelectFeatureComponent,
-    SelectFieldComponent,
-    EditMenuButtonComponent,
-    EditMobilePanelComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ApplicationMapModule,
-    CoreSharedModule,
-    MatBadge,
-    MenubarModule,
-  ],
-  exports: [
-    EditComponent,
-    EditDialogComponent,
-    EditMobilePanelComponent,
-  ],
-  providers: [
-    provideState(editStateKey, editReducer),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ApplicationMapModule,
+        CoreSharedModule,
+        MatBadge,
+        MenubarModule,
+        EditFormComponent,
+        EditComponent,
+        EditDialogComponent,
+        EditAttachmentsFormComponent,
+        EditSelectFeatureComponent,
+        SelectFieldComponent,
+        EditMenuButtonComponent,
+        EditMobilePanelComponent,
+    ],
+    exports: [
+        EditComponent,
+        EditDialogComponent,
+        EditMobilePanelComponent,
+    ],
+    providers: [
+        provideState(editStateKey, editReducer),
+    ],
 })
 export class EditComponentModule {
 }

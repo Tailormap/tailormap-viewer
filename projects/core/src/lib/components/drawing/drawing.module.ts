@@ -13,26 +13,24 @@ import { drawingReducer } from './state/drawing.reducer';
 import { drawingStateKey } from './state';
 
 @NgModule({
-  declarations: [
-    DrawingComponent,
-    DrawingMenuButtonComponent,
-    DrawingObjectsListComponent,
-    DrawingStyleFormComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-    ApplicationMapModule,
-    NgOptimizedImage,
-    DrawingStyleIconComponent,
-  ],
-  exports: [
-    DrawingComponent,
-  ],
-  providers: [
-    provideState(drawingStateKey, drawingReducer),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        ApplicationMapModule,
+        NgOptimizedImage,
+        DrawingStyleIconComponent,
+        DrawingComponent,
+        DrawingMenuButtonComponent,
+        DrawingObjectsListComponent,
+        DrawingStyleFormComponent,
+    ],
+    exports: [
+        DrawingComponent,
+    ],
+    providers: [
+        provideState(drawingStateKey, drawingReducer),
+    ],
 })
 export class DrawingModule {
 }

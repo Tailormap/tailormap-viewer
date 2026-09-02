@@ -4,16 +4,14 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { StreetviewComponent } from './streetview.component';
 
 @NgModule({
-  declarations: [
-    StreetviewComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    StreetviewComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        StreetviewComponent,
+    ],
+    exports: [
+        StreetviewComponent,
+    ],
 })
 export class StreetviewModule {
 }

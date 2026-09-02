@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { distinctUntilChanged, map, Observable, of, Subject, take, takeUntil, combineLatest } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { clearSelectedApplication, setApplicationListFilter } from '../state/application.actions';
 import {
@@ -11,15 +11,36 @@ import {
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, AsyncPipe } from '@angular/common';
 import { ApplicationService } from '../services/application.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem, MatListItemMeta } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 
 @Component({
-  selector: 'tm-admin-application-list',
-  templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-list',
+    templateUrl: './application-list.component.html',
+    styleUrls: ['./application-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        MatButton,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        MatIcon,
+        MatListItemMeta,
+        TooltipDirective,
+        AsyncPipe,
+    ],
 })
 export class ApplicationListComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

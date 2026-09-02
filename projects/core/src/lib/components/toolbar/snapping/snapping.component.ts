@@ -10,13 +10,29 @@ import { selectComponentsConfigForType } from '../../../state';
 import {
   BaseComponentTypeEnum, DEFAULT_SNAPPING_TOLERANCE, SnappingComponentConfigModel,
 } from '@tailormap-viewer/api';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-snapping',
-  templateUrl: './snapping.component.html',
-  styleUrls: ['./snapping.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-snapping',
+    templateUrl: './snapping.component.html',
+    styleUrls: ['./snapping.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButtonToggleGroup,
+        TooltipDirective,
+        MatButtonToggle,
+        MatIcon,
+        MatMenuTrigger,
+        MatMenu,
+        ErrorMessageComponent,
+        MatMenuItem,
+        AsyncPipe,
+    ],
 })
 export class SnappingComponent implements OnInit {
   private store$ = inject(Store);

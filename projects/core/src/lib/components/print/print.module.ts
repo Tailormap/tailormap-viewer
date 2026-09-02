@@ -6,17 +6,15 @@ import { MenubarModule } from '../menubar';
 import { PrintComponent } from './print/print.component';
 
 @NgModule({
-  declarations: [
-    PrintMenuButtonComponent,
-    PrintComponent,
-  ],
-  exports: [
-    PrintComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-  ],
+    exports: [
+        PrintComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        PrintMenuButtonComponent,
+        PrintComponent,
+    ],
 })
 export class PrintModule { }

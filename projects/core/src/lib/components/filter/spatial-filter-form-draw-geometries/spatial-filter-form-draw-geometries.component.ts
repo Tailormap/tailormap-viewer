@@ -10,13 +10,15 @@ import { selectSelectedFilterFeature } from '../state/filter-component.selectors
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { setSelectedSpatialFilterFeatureId } from '../state/filter-component.actions';
+import { MapDrawingButtonsComponent } from './map-drawing-buttons/map-drawing-buttons.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-spatial-filter-form-draw-geometries',
-  templateUrl: './spatial-filter-form-draw-geometries.component.html',
-  styleUrls: ['./spatial-filter-form-draw-geometries.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-spatial-filter-form-draw-geometries',
+    templateUrl: './spatial-filter-form-draw-geometries.component.html',
+    styleUrls: ['./spatial-filter-form-draw-geometries.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MapDrawingButtonsComponent, AsyncPipe],
 })
 export class SpatialFilterFormDrawGeometriesComponent {
   private store$ = inject(Store);

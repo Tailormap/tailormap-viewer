@@ -3,13 +3,20 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AdminPageTemplateComponent } from '../../templates/admin-page-template/admin-page-template.component';
+import { FormListComponent } from '../../form/form-list/form-list.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-form-page',
-  templateUrl: './form-page.component.html',
-  styleUrls: ['./form-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-page',
+    templateUrl: './form-page.component.html',
+    styleUrls: ['./form-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AdminPageTemplateComponent,
+        FormListComponent,
+        AsyncPipe,
+    ],
 })
 export class FormPageComponent {
 

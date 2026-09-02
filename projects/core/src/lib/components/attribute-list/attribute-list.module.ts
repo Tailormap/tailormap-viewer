@@ -21,35 +21,33 @@ import { attributeListStateKey } from './state/attribute-list.state';
 import { attributeListReducer } from './state/attribute-list.reducer';
 
 @NgModule({
-  declarations: [
-    AttributeListComponent,
-    AttributeListMenuButtonComponent,
-    AttributeListTabComponent,
-    AttributeListTabToolbarComponent,
-    AttributeListContentComponent,
-    AttributeListTableComponent,
-    AttributeListPagingDialogComponent,
-    AttributeListFilterComponent,
-    AttributeListExportButtonComponent,
-    AttributeListFeatureDetailsComponent,
-    AttributeListColumnSelectionComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-    FilterModule,
-    CoreSharedModule,
-  ],
-  exports: [
-    AttributeListComponent,
-  ],
-  providers: [
-    provideState(attributeListStateKey, attributeListReducer),
-    // Watches changes to visible layers to create tabs; must run after `provideState` above since it
-    // needs `attributeListStateKey` to already be registered.
-    provideEnvironmentInitializer(() => inject(AttributeListApiService).initDefaultAttributeListSource()),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        FilterModule,
+        CoreSharedModule,
+        AttributeListComponent,
+        AttributeListMenuButtonComponent,
+        AttributeListTabComponent,
+        AttributeListTabToolbarComponent,
+        AttributeListContentComponent,
+        AttributeListTableComponent,
+        AttributeListPagingDialogComponent,
+        AttributeListFilterComponent,
+        AttributeListExportButtonComponent,
+        AttributeListFeatureDetailsComponent,
+        AttributeListColumnSelectionComponent,
+    ],
+    exports: [
+        AttributeListComponent,
+    ],
+    providers: [
+        provideState(attributeListStateKey, attributeListReducer),
+        // Watches changes to visible layers to create tabs; must run after `provideState` above since it
+        // needs `attributeListStateKey` to already be registered.
+        provideEnvironmentInitializer(() => inject(AttributeListApiService).initDefaultAttributeListSource()),
+    ],
 })
 export class AttributeListModule {
 }

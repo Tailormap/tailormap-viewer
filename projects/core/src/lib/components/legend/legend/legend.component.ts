@@ -9,13 +9,15 @@ import { MapService } from '@tailormap-viewer/map';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-legend',
-  templateUrl: './legend.component.html',
-  styleUrls: ['./legend.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-legend',
+    templateUrl: './legend.component.html',
+    styleUrls: ['./legend.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [LegendLayerComponent, AsyncPipe],
 })
 export class LegendComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

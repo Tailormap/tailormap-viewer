@@ -2,37 +2,40 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper } from '@tailormap-viewer/shared';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 
 const DIALOG_DEFAULT_WIDTH = 300;
 
 @Component({
-  selector: 'tm-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css'],
-  animations: [
-    trigger(
-      'inOutAnimation',
-      [
-        transition(':enter', [
-          style({ transform: 'translate({{translate}})', opacity: 0 }),
-          animate('0.25s ease-out', style({ transform: 'translate(0)', opacity: 1 })),
+    selector: 'tm-dialog',
+    templateUrl: './dialog.component.html',
+    styleUrls: ['./dialog.component.css'],
+    animations: [
+        trigger('inOutAnimation', [
+            transition(':enter', [
+                style({ transform: 'translate({{translate}})', opacity: 0 }),
+                animate('0.25s ease-out', style({ transform: 'translate(0)', opacity: 1 })),
+            ]),
+            transition(':leave', [
+                style({ transform: 'translate(0)', opacity: 1 }),
+                animate('0.25s ease-out', style({ transform: 'translate({{translate}})', opacity: 0 })),
+            ]),
         ]),
-        transition(':leave', [
-          style({ transform: 'translate(0)', opacity: 1 }),
-          animate('0.25s ease-out', style({ transform: 'translate({{translate}})', opacity: 0 })),
-        ]),
-      ],
-    ),
-  ],
-  standalone: false,
-  /* eslint-disable @typescript-eslint/naming-convention */
-  host: {
-    '[class]': 'dialogAsClass',
-    '(window:resize)': 'onResize()',
-    '(document:pointermove)': 'onDocumentPointerMove($event)',
-    '(document:pointerup)': 'onDocumentPointerUp()',
-  },
-  /* eslint-enable @typescript-eslint/naming-convention */
+    ],
+    /* eslint-disable @typescript-eslint/naming-convention */
+    host: {
+        '[class]': 'dialogAsClass',
+        '(window:resize)': 'onResize()',
+        '(document:pointermove)': 'onDocumentPointerMove($event)',
+        '(document:pointerup)': 'onDocumentPointerUp()',
+    },
+    imports: [
+        MatIconButton,
+        MatIcon,
+        TooltipDirective,
+    ],
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   private dialogService = inject(DialogService);

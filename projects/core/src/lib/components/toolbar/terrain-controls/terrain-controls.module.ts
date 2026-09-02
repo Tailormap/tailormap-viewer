@@ -9,22 +9,20 @@ import { MenubarModule } from '../../menubar';
 
 
 @NgModule({
-  declarations: [
-    TerrainControlsComponent,
-    TerrainOpacityComponent,
-    TerrainLayerToggleComponent,
-    TerrainControlsMenuButtonComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-  ],
-  exports: [
-    TerrainControlsComponent,
-    TerrainLayerToggleComponent,
-    TerrainOpacityComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        TerrainControlsComponent,
+        TerrainOpacityComponent,
+        TerrainLayerToggleComponent,
+        TerrainControlsMenuButtonComponent,
+    ],
+    exports: [
+        TerrainControlsComponent,
+        TerrainLayerToggleComponent,
+        TerrainOpacityComponent,
+    ],
 })
 export class TerrainControlsModule {
 }

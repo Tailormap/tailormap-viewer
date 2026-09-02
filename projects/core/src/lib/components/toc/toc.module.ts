@@ -17,29 +17,27 @@ import { tocReducer } from './state/toc.reducer';
 import { tocStateKey } from './state/toc.state';
 
 @NgModule({
-  declarations: [
-    TocComponent,
-    TocMenuButtonComponent,
-    TocNodeLayerComponent,
-    ToggleAllLayersButtonComponent,
-    TocNodeDetailsComponent,
-    LayerTransparencyComponent,
-    LayerDetailsComponent,
-    TocFilterInputComponent,
-    TocNodeDetailsMobileComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-    LegendModule,
-  ],
-  exports: [
-    TocComponent,
-    TocNodeDetailsMobileComponent,
-  ],
-  providers: [
-    provideState(tocStateKey, tocReducer),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        LegendModule,
+        TocComponent,
+        TocMenuButtonComponent,
+        TocNodeLayerComponent,
+        ToggleAllLayersButtonComponent,
+        TocNodeDetailsComponent,
+        LayerTransparencyComponent,
+        LayerDetailsComponent,
+        TocFilterInputComponent,
+        TocNodeDetailsMobileComponent,
+    ],
+    exports: [
+        TocComponent,
+        TocNodeDetailsMobileComponent,
+    ],
+    providers: [
+        provideState(tocStateKey, tocReducer),
+    ],
 })
 export class TocModule { }

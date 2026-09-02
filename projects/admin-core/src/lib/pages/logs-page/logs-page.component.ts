@@ -4,11 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 
 @Component({
-  selector: 'tm-admin-logs-page',
-  templateUrl: './logs-page.component.html',
-  styleUrls: ['./logs-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-logs-page',
+    templateUrl: './logs-page.component.html',
+    styleUrls: ['./logs-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogsPageComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

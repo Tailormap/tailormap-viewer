@@ -8,16 +8,23 @@ import { updateApplicationStylingConfig } from '../state/application.actions';
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { ApplicationImageRemoveService } from '../services/application-image-remove.service';
+import { ColorPickerComponent } from '../../../../../shared/src/lib/components/color-picker/color-picker.component';
+import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit-styling',
-  templateUrl: './application-edit-styling.component.html',
-  styleUrls: ['./application-edit-styling.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: ApplicationImageRemoveService },
-  ],
-  standalone: false,
+    selector: 'tm-admin-application-edit-styling',
+    templateUrl: './application-edit-styling.component.html',
+    styleUrls: ['./application-edit-styling.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: UPLOAD_REMOVE_SERVICE, useClass: ApplicationImageRemoveService },
+    ],
+    imports: [
+        ColorPickerComponent,
+        SelectUploadComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationEditStylingComponent {
   private store$ = inject(Store);

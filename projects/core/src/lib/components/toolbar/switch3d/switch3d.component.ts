@@ -13,14 +13,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-switch3-d',
-  templateUrl: './switch3d.component.html',
-  styleUrls: ['./switch3d.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-switch3-d',
+    templateUrl: './switch3d.component.html',
+    styleUrls: ['./switch3d.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class Switch3dComponent {
   private store$ = inject(Store);

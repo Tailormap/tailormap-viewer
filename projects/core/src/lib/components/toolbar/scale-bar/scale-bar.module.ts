@@ -5,14 +5,12 @@ import { ScaleBarComponent } from './scale-bar.component';
 
 
 @NgModule({
-  declarations: [
-    ScaleBarComponent,
-  ],
-  imports: [
-    CommonModule,
-  ],
-  exports: [
-    ScaleBarComponent,
-  ],
+    imports: [
+        CommonModule,
+        ScaleBarComponent,
+    ],
+    exports: [
+        ScaleBarComponent,
+    ],
 })
 export class ScaleBarModule { }

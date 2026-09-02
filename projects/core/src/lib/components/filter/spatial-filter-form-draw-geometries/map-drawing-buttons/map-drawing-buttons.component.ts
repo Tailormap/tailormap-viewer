@@ -10,13 +10,20 @@ import {
 import { DrawingFeatureTypeEnum } from '../../../../map';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../../services';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-map-drawing-buttons',
-  templateUrl: './map-drawing-buttons.component.html',
-  styleUrls: ['./map-drawing-buttons.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-map-drawing-buttons',
+    templateUrl: './map-drawing-buttons.component.html',
+    styleUrls: ['./map-drawing-buttons.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+    ],
 })
 export class MapDrawingButtonsComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);

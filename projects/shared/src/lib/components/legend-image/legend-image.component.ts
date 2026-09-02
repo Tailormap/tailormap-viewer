@@ -18,11 +18,10 @@ interface LegendImageSettingsModel {
 const FAILED_TO_LOAD_MESSAGE = $localize `:@@shared.legend-image.failed-loading-legend:Failed to load legend for`;
 
 @Component({
-  selector: 'tm-legend-image',
-  templateUrl: './legend-image.component.html',
-  styleUrls: ['./legend-image.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-legend-image',
+    templateUrl: './legend-image.component.html',
+    styleUrls: ['./legend-image.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LegendImageComponent {
 

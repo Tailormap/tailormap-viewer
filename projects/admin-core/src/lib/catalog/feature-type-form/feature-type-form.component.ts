@@ -9,13 +9,35 @@ import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.mo
 import { Store } from '@ngrx/store';
 import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
+import { MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { InfoMessageComponent } from '../../../../../shared/src/lib/components/info-message/info-message.component';
+import { FeatureTypeTemplateComponent } from '../feature-type-template/feature-type-template.component';
+import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-feature-type-form',
-  templateUrl: './feature-type-form.component.html',
-  styleUrls: ['./feature-type-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-form',
+    templateUrl: './feature-type-form.component.html',
+    styleUrls: ['./feature-type-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        NgTemplateOutlet,
+        ErrorMessageComponent,
+        InfoMessageComponent,
+        FeatureTypeTemplateComponent,
+        FeatureTypeAttributesComponent,
+        CdkScrollable,
+        MatDialogContent,
+        SaveButtonComponent,
+        MatDialogActions,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class FeatureTypeFormComponent {
   private featureSourceService = inject(FeatureSourceService);

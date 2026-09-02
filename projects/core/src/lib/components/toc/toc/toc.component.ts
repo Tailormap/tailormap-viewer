@@ -25,6 +25,16 @@ import { setEditActive, setSelectedEditLayer } from '../../edit/state/edit.actio
 import { ComponentConfigHelper } from '../../../shared';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
+import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
+import { TocNodeDetailsMobileComponent } from '../toc-node-details-mobile/toc-node-details-mobile.component';
+import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
+import { TreeComponent } from '../../../../../../shared/src/lib/components/tree/tree.component';
+import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
+import { AsyncPipe } from '@angular/common';
 
 interface AppLayerTreeModel extends BaseTreeModel {
   metadata: AppLayerModel;
@@ -32,11 +42,22 @@ interface AppLayerTreeModel extends BaseTreeModel {
 const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => !!node.metadata && node.metadata.layerName;
 
 @Component({
-  selector: 'tm-toc',
-  templateUrl: './toc.component.html',
-  styleUrls: [ './toc.component.css', '../../../../../assets/layer-tree-style.css' ],
-  providers: [ TreeService, TreeDragDropService ],
-  standalone: false,
+    selector: 'tm-toc',
+    templateUrl: './toc.component.html',
+    styleUrls: ['./toc.component.css', '../../../../../assets/layer-tree-style.css'],
+    providers: [TreeService, TreeDragDropService],
+    imports: [
+        TocNodeLayerComponent,
+        TocNodeDetailsMobileComponent,
+        ToggleAllLayersButtonComponent,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        TocFilterInputComponent,
+        TreeComponent,
+        TocNodeDetailsComponent,
+        AsyncPipe,
+    ],
 })
 export class TocComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

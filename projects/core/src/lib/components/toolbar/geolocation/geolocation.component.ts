@@ -8,13 +8,20 @@ import { Store } from '@ngrx/store';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-geolocation',
-  templateUrl: './geolocation.component.html',
-  styleUrls: ['./geolocation.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-geolocation',
+    templateUrl: './geolocation.component.html',
+    styleUrls: ['./geolocation.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+    ],
 })
 export class GeolocationComponent implements OnInit {
   private store$ = inject(Store);

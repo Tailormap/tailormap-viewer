@@ -1,16 +1,24 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
+import { ApplicationFormComponent } from '../application-form/application-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-application-create',
-  templateUrl: './application-create.component.html',
-  styleUrls: ['./application-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-create',
+    templateUrl: './application-create.component.html',
+    styleUrls: ['./application-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ApplicationFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class ApplicationCreateComponent implements OnDestroy {
   private applicationService = inject(ApplicationService);

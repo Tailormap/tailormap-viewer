@@ -19,13 +19,33 @@ import { TypesHelper } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 import { ReferenceLayerService } from '../services/reference-layer.service';
+import { SpatialFilterFormSelectLayersComponent } from '../spatial-filter-form-select-layers/spatial-filter-form-select-layers.component';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { SpatialFilterFormDrawGeometriesComponent } from '../spatial-filter-form-draw-geometries/spatial-filter-form-draw-geometries.component';
+import { SpatialFilterFormSelectReferenceLayerComponent } from '../spatial-filter-form-select-reference-layer/spatial-filter-form-select-reference-layer.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
+import { SpatialFilterFormBufferComponent } from '../spatial-filter-form-buffer/spatial-filter-form-buffer.component';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 
 @Component({
-  selector: 'tm-spatial-filter-form',
-  templateUrl: './spatial-filter-form.component.html',
-  styleUrls: ['./spatial-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-spatial-filter-form',
+    templateUrl: './spatial-filter-form.component.html',
+    styleUrls: ['./spatial-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        SpatialFilterFormSelectLayersComponent,
+        NgTemplateOutlet,
+        SpatialFilterFormDrawGeometriesComponent,
+        SpatialFilterFormSelectReferenceLayerComponent,
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        SpatialFilterFormBufferComponent,
+        MatButton,
+        TooltipDirective,
+        AsyncPipe,
+    ],
 })
 export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

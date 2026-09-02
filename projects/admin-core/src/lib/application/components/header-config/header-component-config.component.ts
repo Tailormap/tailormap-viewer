@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@
 import {
   BaseComponentTypeEnum, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel, HeaderMenuItemModel,
 } from '@tailormap-viewer/api';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
@@ -11,6 +11,13 @@ import { UPLOAD_REMOVE_SERVICE } from '../../../shared/components/select-upload/
 import { HeaderComponentLogoRemoveService } from './header-component-logo-remove.service';
 import { debounceTime } from 'rxjs/operators';
 import { nanoid } from 'nanoid';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { SelectUploadComponent } from '../../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { ColorPickerComponent } from '../../../../../../shared/src/lib/components/color-picker/color-picker.component';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 type MenuItemType = FormGroup<{
   id: FormControl<string>;
@@ -19,14 +26,25 @@ type MenuItemType = FormGroup<{
 }>;
 
 @Component({
-  selector: 'tm-admin-header-component-config',
-  templateUrl: './header-component-config.component.html',
-  styleUrls: ['./header-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: HeaderComponentLogoRemoveService },
-  ],
+    selector: 'tm-admin-header-component-config',
+    templateUrl: './header-component-config.component.html',
+    styleUrls: ['./header-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: UPLOAD_REMOVE_SERVICE, useClass: HeaderComponentLogoRemoveService },
+    ],
+    imports: [
+        BaseComponentConfigComponent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        SelectUploadComponent,
+        ColorPickerComponent,
+        MatIconButton,
+        MatIcon,
+        MatButton,
+    ],
 })
 export class HeaderComponentConfigComponent implements ConfigurationComponentModel<HeaderComponentConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

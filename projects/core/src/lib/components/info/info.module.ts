@@ -6,17 +6,15 @@ import { InfoComponent } from './info/info.component';
 import { InfoMenuButtonComponent } from './info-menu-button/info-menu-button.component';
 
 @NgModule({
-  declarations: [
-    InfoComponent,
-    InfoMenuButtonComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-  ],
-  exports: [
-    InfoComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        InfoComponent,
+        InfoMenuButtonComponent,
+    ],
+    exports: [
+        InfoComponent,
+    ],
 })
 export class InfoModule { }

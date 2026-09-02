@@ -1,6 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { Routes } from '../../routes';
 import { AdminSettingsRouterService } from '../../settings/services/admin-settings-router.service';
+import { RouterOutlet, RouterLinkActive, RouterLink } from '@angular/router';
+import { MatMenuItem } from '@angular/material/menu';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 
 interface SubmenuLink {
   label: string;
@@ -9,11 +12,17 @@ interface SubmenuLink {
 }
 
 @Component({
-  selector: 'tm-admin-settings-page',
-  templateUrl: './settings-page.component.html',
-  styleUrls: ['./settings-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-settings-page',
+    templateUrl: './settings-page.component.html',
+    styleUrls: ['./settings-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterOutlet,
+        MatMenuItem,
+        RouterLinkActive,
+        RouterLink,
+        TooltipDirective,
+    ],
 })
 export class SettingsPageComponent implements OnInit {
   private adminSettingsRouterService = inject(AdminSettingsRouterService);

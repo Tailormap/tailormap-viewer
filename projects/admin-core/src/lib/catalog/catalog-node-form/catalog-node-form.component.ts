@@ -1,16 +1,25 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 
 @Component({
-  selector: 'tm-admin-catalog-node-form',
-  templateUrl: './catalog-node-form.component.html',
-  styleUrls: ['./catalog-node-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-node-form',
+    templateUrl: './catalog-node-form.component.html',
+    styleUrls: ['./catalog-node-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+    ],
 })
 export class CatalogNodeFormComponent implements OnInit, OnDestroy {
 

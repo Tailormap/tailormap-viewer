@@ -5,7 +5,9 @@ import {
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
-import { Location } from '@angular/common';
+import { Location, AsyncPipe } from '@angular/common';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { PasswordResetRequestFormComponent } from './password-reset-request-form/password-reset-request-form.component';
 
 export interface RouterNavigationState {
   hasInsufficientRights?: boolean;
@@ -14,11 +16,15 @@ export interface RouterNavigationState {
 }
 
 @Component({
-  selector: 'tm-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        LoginFormComponent,
+        PasswordResetRequestFormComponent,
+        AsyncPipe,
+    ],
 })
 export class LoginComponent implements OnInit {
   private api = inject(TAILORMAP_SECURITY_API_V1_SERVICE);

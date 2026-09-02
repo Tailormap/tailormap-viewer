@@ -7,13 +7,15 @@ import {
 } from '../../map/state/map.selectors';
 import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
 import { setSelectedBackgroundNodeId } from '../../map/state/map.actions';
+import { SplitButtonComponent } from '../../../../../shared/src/lib/components/split-button/split-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-background-layer-toggle',
-  templateUrl: './background-layer-toggle.component.html',
-  styleUrls: ['./background-layer-toggle.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-background-layer-toggle',
+    templateUrl: './background-layer-toggle.component.html',
+    styleUrls: ['./background-layer-toggle.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SplitButtonComponent, AsyncPipe],
 })
 export class BackgroundLayerToggleComponent {
   private store$ = inject(Store);

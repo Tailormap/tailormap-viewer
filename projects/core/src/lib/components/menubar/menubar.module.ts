@@ -12,26 +12,24 @@ import { ProfileMenuButtonComponent } from './profile/profile-menu-button/profil
 
 
 @NgModule({
-  declarations: [
-    MenubarComponent,
-    MenubarButtonComponent,
-    ProfileComponent,
-    MenubarPanelComponent,
-    MenubarLogoComponent,
-    ProfileMenuButtonComponent,
-  ],
-  imports: [
-    SharedModule,
-    RegisteredComponentsModule,
-    CoreSharedModule,
-    MatBadge,
-  ],
-  exports: [
-    MenubarComponent,
-    MenubarButtonComponent,
-    MenubarPanelComponent,
-    ProfileComponent,
-    MenubarLogoComponent,
-  ],
+    imports: [
+        SharedModule,
+        RegisteredComponentsModule,
+        CoreSharedModule,
+        MatBadge,
+        MenubarComponent,
+        MenubarButtonComponent,
+        ProfileComponent,
+        MenubarPanelComponent,
+        MenubarLogoComponent,
+        ProfileMenuButtonComponent,
+    ],
+    exports: [
+        MenubarComponent,
+        MenubarButtonComponent,
+        MenubarPanelComponent,
+        ProfileComponent,
+        MenubarLogoComponent,
+    ],
 })
 export class MenubarModule { }

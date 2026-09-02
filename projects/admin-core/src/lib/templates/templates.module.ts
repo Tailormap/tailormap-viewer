@@ -8,19 +8,17 @@ import { AdminPageTemplateComponent } from './admin-page-template/admin-page-tem
 
 
 @NgModule({
-  declarations: [
-    AdminTemplateComponent,
-    NavigationComponent,
-    AdminPageTemplateComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterOutlet,
-  ],
-  exports: [
-    AdminTemplateComponent,
-    AdminPageTemplateComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterOutlet,
+        AdminTemplateComponent,
+        NavigationComponent,
+        AdminPageTemplateComponent,
+    ],
+    exports: [
+        AdminTemplateComponent,
+        AdminPageTemplateComponent,
+    ],
 })
 export class TemplatesModule { }

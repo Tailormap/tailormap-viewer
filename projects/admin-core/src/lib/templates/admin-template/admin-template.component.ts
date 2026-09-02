@@ -2,18 +2,27 @@ import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular
 import { RoutePropertyHelper } from '../../pages/helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { NavigationComponent } from './navigation/navigation.component';
+import { NgClass, AsyncPipe } from '@angular/common';
 
 // Little hack to prevent child components being initialized twice. Angular for some reason creates the component twice, first on loading,
 // then after the first route change again. See https://github.com/angular/angular/issues/18374
 let firstRun = true;
 
 @Component({
-  selector: 'tm-admin-template',
-  templateUrl: './admin-template.component.html',
-  styleUrls: ['./admin-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-template',
+    templateUrl: './admin-template.component.html',
+    styleUrls: ['./admin-template.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIcon,
+        NavigationComponent,
+        NgClass,
+        RouterOutlet,
+        AsyncPipe,
+    ],
 })
 export class AdminTemplateComponent {
   private route = inject(ActivatedRoute);

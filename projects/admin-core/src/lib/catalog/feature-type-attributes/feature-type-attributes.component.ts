@@ -1,10 +1,18 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
-import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, CdkDropList, CdkDragHandle, CdkDrag } from '@angular/cdk/drag-drop';
 import { ArrayHelper } from '@tailormap-viewer/shared';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AttachmentAttributeModel, AttributeTypeHelper } from "@tailormap-viewer/api";
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FeatureTypeAttachmentAttributesComponent } from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 
 type CheckableAttribute = 'hidden' | 'editable';
 
@@ -17,11 +25,35 @@ const attributeExtraColumnLabels = ['label-sort'];
 const attributeExtraColumns = ['sort'];
 
 @Component({
-  selector: 'tm-admin-feature-type-attributes',
-  templateUrl: './feature-type-attributes.component.html',
-  styleUrls: ['./feature-type-attributes.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-attributes',
+    templateUrl: './feature-type-attributes.component.html',
+    styleUrls: ['./feature-type-attributes.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardTitle,
+        MatCardContent,
+        ReactiveFormsModule,
+        MatTable,
+        CdkDropList,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCheckbox,
+        MatCellDef,
+        MatCell,
+        TooltipDirective,
+        MatIcon,
+        MatFormField,
+        MatInput,
+        CdkDragHandle,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        CdkDrag,
+        FeatureTypeAttachmentAttributesComponent,
+    ],
 })
 export class FeatureTypeAttributesComponent implements OnChanges {
   private destroyRef = inject(DestroyRef);

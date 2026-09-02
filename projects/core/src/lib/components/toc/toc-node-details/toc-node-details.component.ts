@@ -6,13 +6,28 @@ import { BrowserHelper, DynamicComponentsHelper } from '@tailormap-viewer/shared
 import { BehaviorSubject, map } from 'rxjs';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
+import { PanelResizerComponent } from '../../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { LayerDetailsComponent } from './layer-details/layer-details.component';
+import { AsyncPipe } from '@angular/common';
+import { HtmlifyPipe } from '../../../../../../shared/src/lib/pipes/htmlify.pipe';
 
 @Component({
-  selector: 'tm-toc-node-details',
-  templateUrl: './toc-node-details.component.html',
-  styleUrls: ['./toc-node-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-toc-node-details',
+    templateUrl: './toc-node-details.component.html',
+    styleUrls: ['./toc-node-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PanelResizerComponent,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        LayerDetailsComponent,
+        AsyncPipe,
+        HtmlifyPipe,
+    ],
 })
 export class TocNodeDetailsComponent implements OnInit {
 

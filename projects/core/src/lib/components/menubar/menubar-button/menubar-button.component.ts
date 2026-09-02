@@ -1,13 +1,25 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { MatMenuPanel } from '@angular/material/menu';
+import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 import { MenubarService } from '../menubar.service';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatBadge } from '@angular/material/badge';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-menubar-button',
-  templateUrl: './menubar-button.component.html',
-  styleUrls: ['./menubar-button.component.css'],
-  standalone: false,
+    selector: 'tm-menubar-button',
+    templateUrl: './menubar-button.component.html',
+    styleUrls: ['./menubar-button.component.css'],
+    imports: [
+        MatIconButton,
+        TooltipDirective,
+        MatBadge,
+        MatIcon,
+        MatMenuTrigger,
+        AsyncPipe,
+    ],
 })
 export class MenubarButtonComponent implements OnInit {
 

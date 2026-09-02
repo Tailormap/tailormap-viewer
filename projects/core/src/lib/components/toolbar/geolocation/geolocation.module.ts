@@ -4,15 +4,13 @@ import { GeolocationComponent } from './geolocation.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
-  declarations: [
-    GeolocationComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    GeolocationComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        GeolocationComponent,
+    ],
+    exports: [
+        GeolocationComponent,
+    ],
 })
 export class GeolocationModule { }

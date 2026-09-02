@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   selectApplicationsLoadStatus, selectDraftApplication, selectDraftApplicationUpdated, selectDraftApplicationValid,
@@ -15,13 +15,26 @@ import { ApplicationService } from '../services/application.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { ApplicationCopyDialogComponent } from '../application-copy-dialog/application-copy-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { SpinnerButtonComponent } from '../../../../../shared/src/lib/components/spinner-button/spinner-button.component';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit',
-  templateUrl: './application-edit.component.html',
-  styleUrls: ['./application-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit',
+    templateUrl: './application-edit.component.html',
+    styleUrls: ['./application-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        SaveButtonComponent,
+        MatButton,
+        SpinnerButtonComponent,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class ApplicationEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

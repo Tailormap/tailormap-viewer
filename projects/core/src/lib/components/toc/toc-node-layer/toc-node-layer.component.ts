@@ -3,12 +3,22 @@ import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
 import { FilterSourceHelper } from '../../../filter';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatListItemMeta } from '@angular/material/list';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
-  selector: 'tm-toc-node-layer',
-  templateUrl: './toc-node-layer.component.html',
-  styleUrls: ['./toc-node-layer.component.css'],
-  standalone: false,
+    selector: 'tm-toc-node-layer',
+    templateUrl: './toc-node-layer.component.html',
+    styleUrls: ['./toc-node-layer.component.css'],
+    imports: [
+        MatIcon,
+        TooltipDirective,
+        MatListItemMeta,
+        MatRadioGroup,
+        MatRadioButton,
+    ],
 })
 export class TocNodeLayerComponent {
 

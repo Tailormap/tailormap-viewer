@@ -7,19 +7,17 @@ import { ShareViewerDialogComponent } from './share-viewer-dialog/share-viewer-d
 import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  declarations: [
-    ShareViewerComponent,
-    ShareViewerDialogComponent,
-  ],
-  imports: [
-    CommonModule,
-    ClipboardModule,
-    SharedModule,
-    A11yModule,
-  ],
-  exports: [
-    ShareViewerComponent,
-  ],
+    imports: [
+        CommonModule,
+        ClipboardModule,
+        SharedModule,
+        A11yModule,
+        ShareViewerComponent,
+        ShareViewerDialogComponent,
+    ],
+    exports: [
+        ShareViewerComponent,
+    ],
 })
 export class ShareViewerModule {
 }

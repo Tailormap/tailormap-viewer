@@ -2,17 +2,23 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit
 import {
   AttributeFilterModel, FilterConditionEnum, FilterToolEnum, SliderFilterInputModeEnum,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { MatInput } from '@angular/material/input';
+import { SliderComponent } from '../../../../../../../shared/src/lib/components/slider/slider.component';
 
 @Component({
-  selector: 'tm-slider-filter',
-  templateUrl: './slider-filter.component.html',
-  styleUrls: ['./slider-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-slider-filter',
+    templateUrl: './slider-filter.component.html',
+    styleUrls: ['./slider-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatInput,
+        SliderComponent,
+    ],
 })
 export class SliderFilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

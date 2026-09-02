@@ -19,35 +19,33 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
-  declarations: [
-    FormListComponent,
-    FormHomeComponent,
-    FormEditComponent,
-    FormCreateComponent,
-    FormFormComponent,
-    FormEditFieldComponent,
-    FormAttributeListComponent,
-    FormFieldListComponent,
-    FormWarningMessageComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedAdminComponentsModule,
-    CatalogModule,
-    DragDropModule,
-  ],
-  exports: [
-    FormListComponent,
-    FormHomeComponent,
-    FormEditComponent,
-    FormCreateComponent,
-    FormWarningMessageComponent,
-  ],
-  providers: [
-    provideState(formStateKey, formReducer),
-    provideEnvironmentInitializer(() => inject(FormService).listenForApplicationChanges()),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        SharedAdminComponentsModule,
+        CatalogModule,
+        DragDropModule,
+        FormListComponent,
+        FormHomeComponent,
+        FormEditComponent,
+        FormCreateComponent,
+        FormFormComponent,
+        FormEditFieldComponent,
+        FormAttributeListComponent,
+        FormFieldListComponent,
+        FormWarningMessageComponent,
+    ],
+    exports: [
+        FormListComponent,
+        FormHomeComponent,
+        FormEditComponent,
+        FormCreateComponent,
+        FormWarningMessageComponent,
+    ],
+    providers: [
+        provideState(formStateKey, formReducer),
+        provideEnvironmentInitializer(() => inject(FormService).listenForApplicationChanges()),
+    ],
 })
 export class FormModule {
 }

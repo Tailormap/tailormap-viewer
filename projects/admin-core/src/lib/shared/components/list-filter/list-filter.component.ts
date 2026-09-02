@@ -1,21 +1,35 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, DestroyRef, inject } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-admin-list-filter',
-  templateUrl: './list-filter.component.html',
-  styleUrls: ['./list-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ListFilterComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-admin-list-filter',
+    templateUrl: './list-filter.component.html',
+    styleUrls: ['./list-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ListFilterComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        AutoFocusDirective,
+        MatIconButton,
+        MatSuffix,
+        MatIcon,
+    ],
 })
 export class ListFilterComponent implements OnInit, ControlValueAccessor {
   private destroyRef = inject(DestroyRef);

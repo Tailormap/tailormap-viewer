@@ -1,15 +1,35 @@
-import { LocationStrategy } from '@angular/common';
+import { LocationStrategy, NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
+import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 
 @Component({
-  selector: 'tm-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-login-form',
+    templateUrl: './login-form.component.html',
+    styleUrls: ['./login-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ReactiveFormsModule,
+        MatIcon,
+        ErrorMessageComponent,
+        MatButton,
+        AutoFocusDirective,
+        ImageWithDescriptionComponent,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class LoginFormComponent {
   private formBuilder = inject(FormBuilder);

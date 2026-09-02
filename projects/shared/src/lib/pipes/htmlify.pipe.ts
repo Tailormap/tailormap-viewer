@@ -2,10 +2,7 @@ import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HtmlifyHelper } from '../helpers/htmlify.helper';
 
-@Pipe({
-  name: 'htmlify',
-  standalone: false,
-})
+@Pipe({ name: 'htmlify', })
 export class HtmlifyPipe implements PipeTransform {
   private sanitizer = inject(DomSanitizer);
 

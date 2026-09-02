@@ -7,20 +7,18 @@ import { UploadInUseDialogComponent } from './upload-in-use-dialog/upload-in-use
 import { ImageUploadFieldComponent } from '../image-upload-field/image-upload-field.component';
 
 @NgModule({
-  declarations: [
-    SelectUploadDialogComponent,
-    SelectUploadComponent,
-    UploadInUseDialogComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ImageUploadFieldComponent,
-  ],
-  exports: [
-    SelectUploadDialogComponent,
-    SelectUploadComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ImageUploadFieldComponent,
+        SelectUploadDialogComponent,
+        SelectUploadComponent,
+        UploadInUseDialogComponent,
+    ],
+    exports: [
+        SelectUploadDialogComponent,
+        SelectUploadComponent,
+    ],
 })
 export class SelectUploadModule {
 }

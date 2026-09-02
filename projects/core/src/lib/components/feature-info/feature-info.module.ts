@@ -20,44 +20,37 @@ import { featureInfoStateKey } from './state/feature-info.state';
 
 
 @NgModule({
-  declarations: [
-    FeatureInfoComponent,
-    FeatureInfoDialogComponent,
-    FeatureInfoLayerListComponent,
-    FeatureInfoLayerItemComponent,
-    FeatureInfoLayerDropdownComponent,
-    FeatureInfoContentComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    ApplicationMapModule,
-    CoreSharedModule,
-    CdkAccordion,
-    CdkAccordionItem,
-    FeatureInfoTemplateRendererComponent,
-  ],
-  exports: [
-    FeatureInfoComponent,
-    FeatureInfoDialogComponent,
-  ],
-  providers: [
-    provideState(featureInfoStateKey, featureInfoReducer),
-    // Must run after `provideState` above since it selects/dispatches `featureInfoStateKey` state.
-    provideEnvironmentInitializer(() => {
-      const store$ = inject(Store);
-
-      ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(
-        store$,
-        BaseComponentTypeEnum.FEATURE_INFO,
-        config => {
-          if (config.defaultShowDropdown) {
-            store$.dispatch(expandCollapseFeatureInfoLayerList());
-          }
-        },
-      );
-    }),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        ApplicationMapModule,
+        CoreSharedModule,
+        CdkAccordion,
+        CdkAccordionItem,
+        FeatureInfoTemplateRendererComponent,
+        FeatureInfoComponent,
+        FeatureInfoDialogComponent,
+        FeatureInfoLayerListComponent,
+        FeatureInfoLayerItemComponent,
+        FeatureInfoLayerDropdownComponent,
+        FeatureInfoContentComponent,
+    ],
+    exports: [
+        FeatureInfoComponent,
+        FeatureInfoDialogComponent,
+    ],
+    providers: [
+        provideState(featureInfoStateKey, featureInfoReducer),
+        // Must run after `provideState` above since it selects/dispatches `featureInfoStateKey` state.
+        provideEnvironmentInitializer(() => {
+            const store$ = inject(Store);
+            ComponentConfigHelper.useInitialConfigForComponent<FeatureInfoConfigModel>(store$, BaseComponentTypeEnum.FEATURE_INFO, config => {
+                if (config.defaultShowDropdown) {
+                    store$.dispatch(expandCollapseFeatureInfoLayerList());
+                }
+            });
+        }),
+    ],
 })
 export class FeatureInfoModule {
 }

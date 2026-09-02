@@ -11,13 +11,28 @@ import { MenubarService } from '../../menubar';
 import { selectIn3dView } from '../../../map';
 import { withLatestFrom } from 'rxjs/operators';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.component';
+import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-terrain-controls',
-  templateUrl: './terrain-controls.component.html',
-  styleUrls: ['./terrain-controls.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-terrain-controls',
+    templateUrl: './terrain-controls.component.html',
+    styleUrls: ['./terrain-controls.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        TerrainOpacityComponent,
+        TerrainLayerToggleComponent,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        TooltipDirective,
+        MatIcon,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class TerrainControlsComponent implements OnInit, OnDestroy {
   public layoutService = inject(LayoutService);

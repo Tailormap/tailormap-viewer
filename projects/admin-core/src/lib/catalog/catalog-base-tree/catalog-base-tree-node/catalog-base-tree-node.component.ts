@@ -4,13 +4,20 @@ import { CatalogTreeModelTypeEnum } from '../../models/catalog-tree-model-type.e
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
 import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
+import { RouterLink } from '@angular/router';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-admin-catalog-base-tree-node',
-  templateUrl: './catalog-base-tree-node.component.html',
-  styleUrls: ['./catalog-base-tree-node.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-base-tree-node',
+    templateUrl: './catalog-base-tree-node.component.html',
+    styleUrls: ['./catalog-base-tree-node.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        TooltipDirective,
+        MatIcon,
+    ],
 })
 export class CatalogBaseTreeNodeComponent {
 

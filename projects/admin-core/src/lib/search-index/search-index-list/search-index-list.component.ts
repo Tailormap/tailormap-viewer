@@ -10,15 +10,34 @@ import {
   selectSearchIndexesLoadStatus,
 } from '../state/search-index.selectors';
 import { setSearchIndexListFilter } from '../state/search-index.actions';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SearchIndexService } from '../services/search-index.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { MatButton } from '@angular/material/button';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-search-index-list',
-  templateUrl: './search-index-list.component.html',
-  styleUrls: ['./search-index-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-list',
+    templateUrl: './search-index-list.component.html',
+    styleUrls: ['./search-index-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        MatButton,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        MatTooltip,
+        AsyncPipe,
+    ],
 })
 export class SearchIndexListComponent implements OnInit {
   private store$ = inject(Store);

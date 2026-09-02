@@ -11,13 +11,26 @@ import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 import { FileHelper } from '@tailormap-viewer/shared';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-attribute-list-export-button',
-  templateUrl: './attribute-list-export-button.component.html',
-  styleUrls: ['./attribute-list-export-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-attribute-list-export-button',
+    templateUrl: './attribute-list-export-button.component.html',
+    styleUrls: ['./attribute-list-export-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        MatProgressSpinner,
+        MatMenuTrigger,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        AsyncPipe,
+    ],
 })
 export class AttributeListExportButtonComponent implements OnDestroy {
   private store$ = inject(Store);

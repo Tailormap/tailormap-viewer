@@ -4,13 +4,15 @@ import { distinctUntilChanged, Observable, of } from 'rxjs';
 import { selectDraftOIDCConfiguration } from '../state/oidc-configuration.selectors';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { updateDraftOIDCConfiguration } from '../state/oidc-configuration.actions';
+import { OIDCConfigurationFormComponent } from '../oidc-configuration-form/oidc-configuration-form.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-oidc-configuration-edit-settings',
-  templateUrl: './oidc-configuration-edit-settings.component.html',
-  styleUrls: ['./oidc-configuration-edit-settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-oidc-configuration-edit-settings',
+    templateUrl: './oidc-configuration-edit-settings.component.html',
+    styleUrls: ['./oidc-configuration-edit-settings.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [OIDCConfigurationFormComponent, AsyncPipe],
 })
 export class OIDCConfigurationEditSettingsComponent implements OnInit {
   private store$ = inject(Store);

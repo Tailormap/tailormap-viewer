@@ -1,16 +1,22 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
 import { setFilterTerm } from '../state/toc.actions';
 import { Store } from '@ngrx/store';
 import { selectFilterTerm } from '../state/toc.selectors';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
 
 @Component({
-  selector: 'tm-toc-filter-input',
-  templateUrl: './toc-filter-input.component.html',
-  styleUrls: ['./toc-filter-input.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-toc-filter-input',
+    templateUrl: './toc-filter-input.component.html',
+    styleUrls: ['./toc-filter-input.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatInput,
+        ReactiveFormsModule,
+        AutoFocusDirective,
+    ],
 })
 export class TocFilterInputComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

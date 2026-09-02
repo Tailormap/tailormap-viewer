@@ -4,15 +4,13 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { SnappingComponent } from './snapping.component';
 
 @NgModule({
-  declarations: [
-    SnappingComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    SnappingComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        SnappingComponent,
+    ],
+    exports: [
+        SnappingComponent,
+    ],
 })
 export class SnappingModule { }

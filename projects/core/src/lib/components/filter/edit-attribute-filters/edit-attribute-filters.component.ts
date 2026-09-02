@@ -8,14 +8,32 @@ import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { forkJoin, map, Observable, switchMap, take } from 'rxjs';
 import { selectViewerId } from '../../../state';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { SliderFilterComponent } from './slider-filter/slider-filter.component';
+import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
+import { SwitchFilterComponent } from './switch-filter/switch-filter.component';
+import { DatePickerFilterComponent } from './date-picker-filter/date-picker-filter.component';
+import { DropdownListFilterComponent } from './dropdown-list-filter/dropdown-list-filter.component';
+import { TextFilterComponent } from './text-filter/text-filter.component';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-edit-attribute-filter',
-  templateUrl: './edit-attribute-filters.component.html',
-  styleUrls: ['./edit-attribute-filters.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-attribute-filter',
+    templateUrl: './edit-attribute-filters.component.html',
+    styleUrls: ['./edit-attribute-filters.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        SliderFilterComponent,
+        CheckboxFilterComponent,
+        SwitchFilterComponent,
+        DatePickerFilterComponent,
+        DropdownListFilterComponent,
+        TextFilterComponent,
+        AsyncPipe,
+    ],
 })
 export class EditAttributeFiltersComponent {
   private store$ = inject(Store);

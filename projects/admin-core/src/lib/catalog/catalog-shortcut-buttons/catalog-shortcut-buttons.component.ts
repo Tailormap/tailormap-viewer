@@ -13,16 +13,25 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { GeoServiceLayerFormDialogComponent } from '../geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
 import { FeatureTypeFormDialogComponent } from '../feature-type-form-dialog/feature-type-form-dialog.component';
 import { FeatureSourceService } from '../services/feature-source.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { AsyncPipe } from '@angular/common';
 
 type ServiceAndLayer = { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel };
 type ServiceAndLayerFullName = ServiceAndLayer & { fullLayerName: string };
 
 @Component({
-  selector: 'tm-admin-catalog-shortcut-buttons',
-  templateUrl: './catalog-shortcut-buttons.component.html',
-  styleUrls: ['./catalog-shortcut-buttons.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-shortcut-buttons',
+    templateUrl: './catalog-shortcut-buttons.component.html',
+    styleUrls: ['./catalog-shortcut-buttons.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIcon,
+        MatButton,
+        TooltipDirective,
+        AsyncPipe,
+    ],
 })
 export class CatalogShortcutButtonsComponent {
   private store$ = inject(Store);

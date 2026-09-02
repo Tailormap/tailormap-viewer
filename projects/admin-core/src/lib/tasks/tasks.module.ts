@@ -12,25 +12,23 @@ import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TaskDetailsRowComponent } from './task-details-row/task-details-row.component';
 
 @NgModule({
-  declarations: [
-    TasksHomeComponent,
-    TasksListComponent,
-    TaskDetailsComponent,
-    TaskDetailsRowComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedAdminComponentsModule,
-    MatListItem,
-    MatSelectionList,
-  ],
-  exports: [
-    TasksHomeComponent,
-    TasksListComponent,
-  ],
-  providers: [
-    provideState(tasksStateKey, tasksReducer),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        SharedAdminComponentsModule,
+        MatListItem,
+        MatSelectionList,
+        TasksHomeComponent,
+        TasksListComponent,
+        TaskDetailsComponent,
+        TaskDetailsRowComponent,
+    ],
+    exports: [
+        TasksHomeComponent,
+        TasksListComponent,
+    ],
+    providers: [
+        provideState(tasksStateKey, tasksReducer),
+    ],
 })
 export class TasksModule { }

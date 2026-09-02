@@ -14,8 +14,12 @@ import {
 } from '../state/application.selectors';
 import { map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { setApplicationCatalogFilterTerm } from '../state/application.actions';
+import { CatalogBaseTreeNodeComponent } from '../../catalog/catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { CatalogBaseTreeComponent } from '../../catalog/catalog-base-tree/catalog-base-tree.component';
+import { AsyncPipe } from '@angular/common';
 
 export interface AddLayerEvent {
   layer: ExtendedGeoServiceLayerModel;
@@ -25,12 +29,18 @@ export interface AddLayerEvent {
 }
 
 @Component({
-  selector: 'tm-admin-application-catalog-tree',
-  templateUrl: './application-catalog-tree.component.html',
-  styleUrls: ['./application-catalog-tree.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ TreeService, TreeDragDropService ],
-  standalone: false,
+    selector: 'tm-admin-application-catalog-tree',
+    templateUrl: './application-catalog-tree.component.html',
+    styleUrls: ['./application-catalog-tree.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [TreeService, TreeDragDropService],
+    imports: [
+        CatalogBaseTreeNodeComponent,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        CatalogBaseTreeComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationCatalogTreeComponent implements OnInit {
   private store$ = inject(Store);

@@ -6,19 +6,17 @@ import { DialogComponent } from './components/dialog';
 import { ImageWithDescriptionComponent } from './components/image-with-description/image-with-description.component';
 
 @NgModule({
-  declarations: [
-    BottomPanelComponent,
-    DialogComponent,
-    ImageWithDescriptionComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    BottomPanelComponent,
-    DialogComponent,
-    ImageWithDescriptionComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        BottomPanelComponent,
+        DialogComponent,
+        ImageWithDescriptionComponent,
+    ],
+    exports: [
+        BottomPanelComponent,
+        DialogComponent,
+        ImageWithDescriptionComponent,
+    ],
 })
 export class CoreSharedModule { }

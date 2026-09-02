@@ -5,21 +5,19 @@ import { SharedModule } from '@tailormap-viewer/shared';
 import { MapSpinnerComponent } from './components/map-spinner/map-spinner.component';
 
 @NgModule({
-  declarations: [
-    MapSpinnerComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    MapSpinnerComponent,
-  ],
-  providers: [
-    provideEnvironmentInitializer(() => {
-      inject(ApplicationMapService).init();
-    }),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MapSpinnerComponent,
+    ],
+    exports: [
+        MapSpinnerComponent,
+    ],
+    providers: [
+        provideEnvironmentInitializer(() => {
+            inject(ApplicationMapService).init();
+        }),
+    ],
 })
 export class ApplicationMapModule {
 }

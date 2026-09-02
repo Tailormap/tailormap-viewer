@@ -6,18 +6,16 @@ import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-windo
 import { MenubarModule } from "../../menubar";
 
 @NgModule({
-  declarations: [
-    CoordinateLinkWindowComponent,
-    CoordinateLinkWindowMenuButtonComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MenubarModule,
-  ],
-  exports: [
-    CoordinateLinkWindowComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MenubarModule,
+        CoordinateLinkWindowComponent,
+        CoordinateLinkWindowMenuButtonComponent,
+    ],
+    exports: [
+        CoordinateLinkWindowComponent,
+    ],
 })
 export class CoordinateLinkWindowModule {
 }

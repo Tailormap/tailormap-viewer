@@ -6,13 +6,22 @@ import { ApplicationStyleService } from '../../../services';
 import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-measure',
-  templateUrl: './measure.component.html',
-  styleUrls: ['./measure.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-measure',
+    templateUrl: './measure.component.html',
+    styleUrls: ['./measure.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class MeasureComponent implements OnInit {
   private store$ = inject(Store);

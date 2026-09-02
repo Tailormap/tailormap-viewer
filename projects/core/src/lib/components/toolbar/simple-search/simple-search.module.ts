@@ -4,15 +4,13 @@ import { SimpleSearchComponent } from './simple-search.component';
 import { SharedModule } from '@tailormap-viewer/shared';
 
 @NgModule({
-  declarations: [
-    SimpleSearchComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    SimpleSearchComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        SimpleSearchComponent,
+    ],
+    exports: [
+        SimpleSearchComponent,
+    ],
 })
 export class SimpleSearchModule { }

@@ -13,13 +13,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeoServiceUsedDialogComponent } from './geo-service-used-dialog/geo-service-used-dialog.component';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { FormHelper } from '../../helpers/form.helper';
+import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
+import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-geo-service-details',
-  templateUrl: './geo-service-details.component.html',
-  styleUrls: ['./geo-service-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-geo-service-details',
+    templateUrl: './geo-service-details.component.html',
+    styleUrls: ['./geo-service-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        GeoServiceFormComponent,
+        LayerSettingsFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class GeoServiceDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

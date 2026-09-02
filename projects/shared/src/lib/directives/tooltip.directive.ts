@@ -1,10 +1,7 @@
 import { Directive, HostBinding, Input } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 
-@Directive({
-  selector: '[tmTooltip]',
-  standalone: false,
-})
+@Directive({ selector: '[tmTooltip]', })
 export class TooltipDirective extends MatTooltip {
 
   private _explicitAriaLabel: string | null = null;

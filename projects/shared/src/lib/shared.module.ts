@@ -10,21 +10,19 @@ import { HtmlifyPipe } from './pipes/htmlify.pipe';
 import { CssHelper } from './helpers';
 
 @NgModule({
-  imports: [
-    SharedImportsModule,
-    SharedComponentsModule,
-    SharedDirectivesModule,
-  ],
-  declarations: [
-    HtmlifyPipe,
-    OverlayComponent,
-  ],
-  exports: [
-    SharedImportsModule,
-    SharedComponentsModule,
-    SharedDirectivesModule,
-    HtmlifyPipe,
-    OverlayComponent,
-  ],
+    imports: [
+        SharedImportsModule,
+        SharedComponentsModule,
+        SharedDirectivesModule,
+        HtmlifyPipe,
+        OverlayComponent,
+    ],
+    exports: [
+        SharedImportsModule,
+        SharedComponentsModule,
+        SharedDirectivesModule,
+        HtmlifyPipe,
+        OverlayComponent,
+    ],
 })
 export class SharedModule { }

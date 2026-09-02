@@ -1,12 +1,18 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, SwitchFilterModel } from '@tailormap-viewer/api';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 
 @Component({
-  selector: 'tm-switch-filter',
-  templateUrl: './switch-filter.component.html',
-  styleUrls: ['./switch-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-switch-filter',
+    templateUrl: './switch-filter.component.html',
+    styleUrls: ['./switch-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButtonToggleGroup,
+        MatButtonToggle,
+        TooltipDirective,
+    ],
 })
 export class SwitchFilterComponent {
 

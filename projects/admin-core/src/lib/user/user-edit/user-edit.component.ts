@@ -1,18 +1,28 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
+import { UserFormComponent } from '../user-form/user-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-user-edit',
+    templateUrl: './user-edit.component.html',
+    styleUrls: ['./user-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        UserFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

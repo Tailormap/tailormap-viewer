@@ -7,15 +7,52 @@ import { FeatureDetailsModel, StatisticType } from '../models/attribute-list-api
 import { StatisticsHelper } from '../helpers/statistics-helper';
 import { AttributeListStatisticColumnModel, StatisticValueModel } from '../models/attribute-list-statistic-column.model';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow } from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { PanelResizerComponent } from '../../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AttributeListFeatureDetailsComponent } from '../attribute-list-feature-details/attribute-list-feature-details.component';
+import { NgClass } from '@angular/common';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 
 @Component({
-  selector: 'tm-attribute-list-table',
-  templateUrl: './attribute-list-table.component.html',
-  styleUrls: ['./attribute-list-table.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-attribute-list-table',
+    templateUrl: './attribute-list-table.component.html',
+    styleUrls: ['./attribute-list-table.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatMenu,
+        MatMenuContent,
+        MatMenuItem,
+        MatIcon,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCheckbox,
+        MatCellDef,
+        MatCell,
+        MatFooterCellDef,
+        MatFooterCell,
+        MatIconButton,
+        TooltipDirective,
+        PanelResizerComponent,
+        MatMenuTrigger,
+        MatProgressSpinner,
+        AttributeListFeatureDetailsComponent,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        NgClass,
+        MatFooterRowDef,
+        MatFooterRow,
+    ],
 })
 export class AttributeListTableComponent {
 

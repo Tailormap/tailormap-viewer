@@ -7,7 +7,7 @@ import { selectDisabledComponentsForSelectedApplication, selectSelectedApplicati
 import {
   BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoadingStateEnum, Tileset3dStyleHelper, TreeModel } from '@tailormap-viewer/shared';
 import { ExtendedGeoServiceAndLayerModel } from '../../catalog/models/extended-geo-service-and-layer.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +27,22 @@ import {
 } from '@tailormap-viewer/api';
 import { GeoServiceHelper } from '../../catalog/helpers/geo-service.helper';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../helpers/admin-projections-helper';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { CatalogShortcutButtonsComponent } from '../../catalog/catalog-shortcut-buttons/catalog-shortcut-buttons.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { SliderComponent } from '../../../../../shared/src/lib/components/slider/slider.component';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatSelectionList, MatListOption, MatListItemTitle, MatListItemLine } from '@angular/material/list';
+import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatButton } from '@angular/material/button';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { FormWarningMessageComponent } from '../../form/form-warning-message/form-warning-message.component';
+import { ProjectionAvailabilityComponent } from '../../catalog/projection-availability/projection-availability.component';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { AsyncPipe } from '@angular/common';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -35,11 +50,36 @@ type FeatureSourceAndType = {
 };
 
 @Component({
-  selector: 'tm-admin-application-layer-settings',
-  templateUrl: './application-layer-settings.component.html',
-  styleUrls: ['./application-layer-settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-layer-settings',
+    templateUrl: './application-layer-settings.component.html',
+    styleUrls: ['./application-layer-settings.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        CatalogShortcutButtonsComponent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        SliderComponent,
+        CdkTextareaAutosize,
+        MatSelectionList,
+        CdkDropList,
+        MatListOption,
+        CdkDrag,
+        TooltipDirective,
+        MatListItemTitle,
+        MatListItemLine,
+        MatIcon,
+        CdkDragHandle,
+        MatCheckbox,
+        MatButton,
+        MatSelect,
+        MatOption,
+        FormWarningMessageComponent,
+        ProjectionAvailabilityComponent,
+        ErrorMessageComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

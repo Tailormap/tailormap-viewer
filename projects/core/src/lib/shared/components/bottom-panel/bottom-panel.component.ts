@@ -2,13 +2,28 @@ import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input
 import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { PanelResizerComponent } from '../../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
+import { NgStyle, NgClass, AsyncPipe } from '@angular/common';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-bottom-panel',
-  templateUrl: './bottom-panel.component.html',
-  styleUrls: ['./bottom-panel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-bottom-panel',
+    templateUrl: './bottom-panel.component.html',
+    styleUrls: ['./bottom-panel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PanelResizerComponent,
+        NgStyle,
+        MatToolbar,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        NgClass,
+        AsyncPipe,
+    ],
 })
 export class BottomPanelComponent implements OnInit {
   private layoutService = inject(ViewerLayoutService);

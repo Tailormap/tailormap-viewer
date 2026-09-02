@@ -18,32 +18,30 @@ import { SearchIndexSchedulingComponent } from './search-index-scheduling/search
 import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular/material/timepicker';
 
 @NgModule({
-  declarations: [
-    SearchIndexListComponent,
-    SearchIndexHomeComponent,
-    SearchIndexEditComponent,
-    SearchIndexCreateComponent,
-    SearchIndexFormComponent,
-    SearchIndexAttributeListComponent,
-    SearchIndexSchedulingComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedAdminComponentsModule,
-    CatalogModule,
-    FormModule,
-    MatTimepickerToggle,
-    MatTimepicker,
-    MatTimepickerInput,
-  ],
-  exports: [
-    SearchIndexListComponent,
-  ],
-  providers: [
-    provideState(searchIndexStateKey, searchIndexReducer),
-    provideEnvironmentInitializer(() => inject(SearchIndexService).listenForSearchIndexChanges()),
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        SharedAdminComponentsModule,
+        CatalogModule,
+        FormModule,
+        MatTimepickerToggle,
+        MatTimepicker,
+        MatTimepickerInput,
+        SearchIndexListComponent,
+        SearchIndexHomeComponent,
+        SearchIndexEditComponent,
+        SearchIndexCreateComponent,
+        SearchIndexFormComponent,
+        SearchIndexAttributeListComponent,
+        SearchIndexSchedulingComponent,
+    ],
+    exports: [
+        SearchIndexListComponent,
+    ],
+    providers: [
+        provideState(searchIndexStateKey, searchIndexReducer),
+        provideEnvironmentInitializer(() => inject(SearchIndexService).listenForSearchIndexChanges()),
+    ],
 })
 export class SearchIndexModule {
 }

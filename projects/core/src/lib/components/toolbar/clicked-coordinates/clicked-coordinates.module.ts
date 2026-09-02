@@ -7,19 +7,17 @@ import { ClickedCoordinatesMenuButtonComponent } from './clicked-coordinates-men
 import { MenubarModule } from "../../menubar";
 
 @NgModule({
-  declarations: [
-    ClickedCoordinatesComponent,
-    ClickedCoordinatesMenuButtonComponent,
-  ],
-  imports: [
-    CommonModule,
-    ClipboardModule,
-    SharedModule,
-    MenubarModule,
-  ],
-  exports: [
-    ClickedCoordinatesComponent,
-  ],
+    imports: [
+        CommonModule,
+        ClipboardModule,
+        SharedModule,
+        MenubarModule,
+        ClickedCoordinatesComponent,
+        ClickedCoordinatesMenuButtonComponent,
+    ],
+    exports: [
+        ClickedCoordinatesComponent,
+    ],
 })
 export class ClickedCoordinatesModule {
 }

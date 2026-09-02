@@ -1,17 +1,25 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef, signal, inject } from '@angular/core';
 import { BaseComponentTypeEnum, InfoComponentConfigModel } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Observable } from 'rxjs';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ImageUploadResult, TailormapAdminUploadService } from '@tailormap-admin/admin-api';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MarkdownEditorComponent } from '../../../../../../shared/src/lib/components/markdown-editor/markdown-editor.component';
 
 @Component({
-  selector: 'tm-admin-info-config',
-  templateUrl: './info-config.component.html',
-  styleUrls: ['./info-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-info-config',
+    templateUrl: './info-config.component.html',
+    styleUrls: ['./info-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        ReactiveFormsModule,
+        MatCheckbox,
+        MarkdownEditorComponent,
+    ],
 })
 export class InfoConfigComponent {
 

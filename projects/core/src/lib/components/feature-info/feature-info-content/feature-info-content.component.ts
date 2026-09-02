@@ -12,13 +12,31 @@ import { AttributeType } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
+import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
+import { FeatureInfoTemplateRendererComponent } from '../feature-info-template-renderer/feature-info-template-renderer.component';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
+import { HtmlifyPipe } from '../../../../../../shared/src/lib/pipes/htmlify.pipe';
 
 @Component({
-  selector: 'tm-feature-info-content',
-  templateUrl: './feature-info-content.component.html',
-  styleUrls: ['./feature-info-content.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-feature-info-content',
+    templateUrl: './feature-info-content.component.html',
+    styleUrls: ['./feature-info-content.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ErrorMessageComponent,
+        FeatureInfoTemplateRendererComponent,
+        MatIcon,
+        TooltipDirective,
+        MatIconButton,
+        MatTooltip,
+        MatButton,
+        AsyncPipe,
+        HtmlifyPipe,
+    ],
 })
 export class FeatureInfoContentComponent {
   public attachmentHelper = inject(AttachmentService);

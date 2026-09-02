@@ -12,31 +12,29 @@ import { ListFilterComponent } from './list-filter/list-filter.component';
 import { LayerSelectionConfigComponent } from './layer-selection/layer-selection-config.component';
 
 @NgModule({
-  declarations: [
-    TriStateBooleanComponent,
-    PasswordFieldComponent,
-    SaveButtonComponent,
-    BoundsFieldComponent,
-    AuthorizationEditComponent,
-    AdminFieldsRendererComponent,
-    ListFilterComponent,
-    LayerSelectionConfigComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-  ],
-  exports: [
-    TriStateBooleanComponent,
-    PasswordFieldComponent,
-    SaveButtonComponent,
-    BoundsFieldComponent,
-    AuthorizationEditComponent,
-    AdminFieldsRendererComponent,
-    SelectUploadModule,
-    ListFilterComponent,
-    LayerSelectionConfigComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        TriStateBooleanComponent,
+        PasswordFieldComponent,
+        SaveButtonComponent,
+        BoundsFieldComponent,
+        AuthorizationEditComponent,
+        AdminFieldsRendererComponent,
+        ListFilterComponent,
+        LayerSelectionConfigComponent,
+    ],
+    exports: [
+        TriStateBooleanComponent,
+        PasswordFieldComponent,
+        SaveButtonComponent,
+        BoundsFieldComponent,
+        AuthorizationEditComponent,
+        AdminFieldsRendererComponent,
+        SelectUploadModule,
+        ListFilterComponent,
+        LayerSelectionConfigComponent,
+    ],
 })
 export class SharedAdminComponentsModule {
 }

@@ -1,7 +1,14 @@
 import { Component, OnDestroy, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups, GroupModel } from '@tailormap-admin/admin-api';
 import { Subject } from 'rxjs';
+import { MatLabel, MatFormField } from '@angular/material/form-field';
+import { MatChipListbox, MatChipOption } from '@angular/material/chips';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow } from '@angular/material/table';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 interface ExtendedAuthorizationRuleGroupInner extends AuthorizationRuleGroup {
   inherited: boolean;
@@ -13,15 +20,41 @@ interface ExtendedAuthorizationRuleGroupInner extends AuthorizationRuleGroup {
 type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { headerText: string };
 
 @Component({
-  selector: 'tm-admin-authorization-edit',
-  templateUrl: './authorization-edit.component.html',
-  styleUrls: ['./authorization-edit.component.css'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    multi: true,
-    useExisting: AuthorizationEditComponent,
-  }],
-  standalone: false,
+    selector: 'tm-admin-authorization-edit',
+    templateUrl: './authorization-edit.component.html',
+    styleUrls: ['./authorization-edit.component.css'],
+    providers: [{
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: AuthorizationEditComponent,
+        }],
+    imports: [
+        MatLabel,
+        MatChipListbox,
+        MatChipOption,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatFooterCellDef,
+        MatFooterCell,
+        MatFormField,
+        MatSelect,
+        MatOption,
+        MatCheckbox,
+        ReactiveFormsModule,
+        FormsModule,
+        MatIconButton,
+        MatIcon,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        MatFooterRowDef,
+        MatFooterRow,
+    ],
 })
 export class AuthorizationEditComponent implements OnDestroy, ControlValueAccessor {
   private destroyed = new Subject();

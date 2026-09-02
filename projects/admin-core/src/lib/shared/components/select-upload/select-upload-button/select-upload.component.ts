@@ -5,13 +5,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UploadHelper } from '@tailormap-admin/admin-api';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-select-upload',
-  templateUrl: './select-upload.component.html',
-  styleUrls: ['./select-upload.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-select-upload',
+    templateUrl: './select-upload.component.html',
+    styleUrls: ['./select-upload.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatButton],
 })
 export class SelectUploadComponent {
   private dialog = inject(MatDialog);

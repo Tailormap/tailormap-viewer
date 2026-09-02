@@ -25,13 +25,31 @@ import { ComponentConfigHelper } from '../../../shared/helpers/component-config.
 import { withLatestFrom } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
 import { MapService } from '@tailormap-viewer/map';
+import { EditFormComponent } from '../edit-form/edit-form.component';
+import { EditAttachmentsFormComponent } from '../edit-attachments-form/edit-attachments-form.component';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { EditSelectFeatureComponent } from '../edit-select-feature/edit-select-feature.component';
+import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { MapSpinnerComponent } from '../../../map/components/map-spinner/map-spinner.component';
 
 @Component({
-  selector: 'tm-edit-dialog',
-  templateUrl: './edit-dialog.component.html',
-  styleUrls: ['./edit-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-dialog',
+    templateUrl: './edit-dialog.component.html',
+    styleUrls: ['./edit-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        EditFormComponent,
+        EditAttachmentsFormComponent,
+        MatButton,
+        MatProgressSpinner,
+        EditSelectFeatureComponent,
+        DialogComponent,
+        NgTemplateOutlet,
+        MapSpinnerComponent,
+        AsyncPipe,
+    ],
 })
 export class EditDialogComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

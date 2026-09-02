@@ -4,13 +4,15 @@ import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter
 import { map, Observable, of } from 'rxjs';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
+import { FilterListItemComponent } from '../filter-list-item/filter-list-item.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-filter-list',
-  templateUrl: './filter-list.component.html',
-  styleUrls: ['./filter-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-filter-list',
+    templateUrl: './filter-list.component.html',
+    styleUrls: ['./filter-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [FilterListItemComponent, AsyncPipe],
 })
 export class FilterListComponent implements OnInit {
   private store$ = inject(Store);

@@ -3,12 +3,14 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectAttributeListPanelTitle, selectAttributeListVisible } from '../state/attribute-list.selectors';
 import { setAttributeListVisibility } from '../state/attribute-list.actions';
+import { MenubarButtonComponent } from '../../menubar/menubar-button/menubar-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-attribute-list-button',
-  templateUrl: './attribute-list-menu-button.component.html',
-  styleUrls: ['./attribute-list-menu-button.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-list-button',
+    templateUrl: './attribute-list-menu-button.component.html',
+    styleUrls: ['./attribute-list-menu-button.component.css'],
+    imports: [MenubarButtonComponent, AsyncPipe],
 })
 export class AttributeListMenuButtonComponent implements OnInit {
   private store$ = inject(Store);

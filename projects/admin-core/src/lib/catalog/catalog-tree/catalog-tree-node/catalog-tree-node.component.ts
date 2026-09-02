@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
+import { CatalogBaseTreeNodeComponent } from '../../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 
 @Component({
-  selector: 'tm-admin-catalog-tree-node',
-  templateUrl: './catalog-tree-node.component.html',
-  styleUrls: ['./catalog-tree-node.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-tree-node',
+    templateUrl: './catalog-tree-node.component.html',
+    styleUrls: ['./catalog-tree-node.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CatalogBaseTreeNodeComponent],
 })
 export class CatalogTreeNodeComponent {
 

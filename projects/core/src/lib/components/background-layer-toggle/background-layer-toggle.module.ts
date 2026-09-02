@@ -6,16 +6,14 @@ import { BackgroundLayerToggleComponent } from './background-layer-toggle.compon
 
 
 @NgModule({
-  declarations: [
-    BackgroundLayerToggleComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedImportsModule,
-    SharedComponentsModule,
-  ],
-  exports: [
-    BackgroundLayerToggleComponent,
-  ],
+    imports: [
+        CommonModule,
+        SharedImportsModule,
+        SharedComponentsModule,
+        BackgroundLayerToggleComponent,
+    ],
+    exports: [
+        BackgroundLayerToggleComponent,
+    ],
 })
 export class BackgroundLayerToggleModule { }

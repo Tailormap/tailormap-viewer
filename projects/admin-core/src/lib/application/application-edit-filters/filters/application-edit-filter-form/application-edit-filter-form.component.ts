@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output,
 } from '@angular/core';
 import { AttributeDescriptorModel } from '@tailormap-admin/admin-api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { nanoid } from 'nanoid';
@@ -15,13 +15,39 @@ import {
   AttributeFilterModel, AttributeStatisticsResponseModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum,
   FilterTypeEnum, UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { ApplicationFilterAttributeListComponent } from '../application-filter-attribute-list/application-filter-attribute-list.component';
+import { AttributeFilterComponent } from '../../../../../../../shared/src/lib/components/attribute-filter/attribute-filter.component';
+import { ApplicationSliderFilterFormComponent } from '../application-slider-filter-form/application-slider-filter-form.component';
+import { ApplicationCheckboxFilterFormComponent } from '../application-checkbox-filter-form/application-checkbox-filter-form.component';
+import { ApplicationSwitchFilterFormComponent } from '../application-switch-filter-form/application-switch-filter-form.component';
+import { ApplicationDatePickerFilterFormComponent } from '../application-date-picker-filter-form/application-date-picker-filter-form.component';
+import { ApplicationDropdownListFilterFormComponent } from '../application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';
+import { ApplicationTextFilterFormComponent } from '../application-text-filter-form/application-text-filter-form.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit-filter-form',
-  templateUrl: './application-edit-filter-form.component.html',
-  styleUrls: ['./application-edit-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit-filter-form',
+    templateUrl: './application-edit-filter-form.component.html',
+    styleUrls: ['./application-edit-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        ApplicationFilterAttributeListComponent,
+        AttributeFilterComponent,
+        ApplicationSliderFilterFormComponent,
+        ApplicationCheckboxFilterFormComponent,
+        ApplicationSwitchFilterFormComponent,
+        ApplicationDatePickerFilterFormComponent,
+        ApplicationDropdownListFilterFormComponent,
+        ApplicationTextFilterFormComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationEditFilterFormComponent implements OnInit {
   private applicationEditFilterService = inject(ApplicationEditFilterService);

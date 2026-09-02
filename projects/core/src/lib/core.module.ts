@@ -22,40 +22,38 @@ import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { ProviderHelper } from './viewer-instance/provider.helper';
 
 @NgModule({
-  declarations: [
-    ViewerAppComponent,
-    LoginComponent,
-    LoginFormComponent,
-    PasswordResetRequestFormComponent,
-    PasswordResetComponent,
-  ],
-  imports: [
-    CoreRoutingModule,
-    ApplicationMapModule,
-    MapModule,
-    FilterModule,
-    SharedModule,
-    ComponentsModule,
-    LayoutModule,
-    RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
-    CoreSharedModule,
-  ],
-  exports: [
-    ViewerAppComponent,
-    RouterModule,
-  ],
-  providers: [
-    ...ProviderHelper.getBaseProviders(),
-    provideEnvironmentInitializer(() => {
-      inject(ApplicationStyleService).init();
-      inject(RouterHistoryService).init();
-      inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
-      ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
-      inject(AuthenticatedUserService).fetchUserDetails();
-      inject(UserLoginCheckService).pingUserLoggedIn();
-      inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE).init();
-    }),
-  ],
+    imports: [
+        CoreRoutingModule,
+        ApplicationMapModule,
+        MapModule,
+        FilterModule,
+        SharedModule,
+        ComponentsModule,
+        LayoutModule,
+        RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
+        CoreSharedModule,
+        ViewerAppComponent,
+        LoginComponent,
+        LoginFormComponent,
+        PasswordResetRequestFormComponent,
+        PasswordResetComponent,
+    ],
+    exports: [
+        ViewerAppComponent,
+        RouterModule,
+    ],
+    providers: [
+        ...ProviderHelper.getBaseProviders(),
+        provideEnvironmentInitializer(() => {
+            inject(ApplicationStyleService).init();
+            inject(RouterHistoryService).init();
+            inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
+            ExternalLibsLoaderHelper.setBaseHref(inject(APP_BASE_HREF));
+            inject(AuthenticatedUserService).fetchUserDetails();
+            inject(UserLoginCheckService).pingUserLoggedIn();
+            inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE).init();
+        }),
+    ],
 })
 export class CoreModule {
   public static forRoot(config: EnvironmentConfigModel): ModuleWithProviders<CoreModule> {

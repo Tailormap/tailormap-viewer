@@ -6,17 +6,31 @@ import {
   deleteApplicationAttributeFilter,
   setApplicationSelectedFilterId, updateApplicationFiltersConfigForSelectedGroup,
 } from '../../../state/application.actions';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import { ApplicationEditFilterService } from '../../application-edit-filter.service';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'tm-admin-application-filters-list',
-  templateUrl: './application-filters-list.component.html',
-  styleUrls: ['./application-filters-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-filters-list',
+    templateUrl: './application-filters-list.component.html',
+    styleUrls: ['./application-filters-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatSelectionList,
+        CdkDropList,
+        MatListItem,
+        CdkDrag,
+        MatIcon,
+        TooltipDirective,
+        MatIconButton,
+        MatTooltip,
+    ],
 })
 export class ApplicationFiltersListComponent implements OnDestroy {
   private store$ = inject(Store);
