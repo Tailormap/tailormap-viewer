@@ -6,7 +6,7 @@ export * from './helpers/cql-filter.helper';
 export * from './helpers/cql-spatial-filter.helper';
 export * from './helpers/features-filter.helper';
 export * from './helpers/filter-type.helper';
-export * from './filter.module';
+export * from './filter.providers';
 export * from './models/feature-filter.model';
 export * from './models/filter-source.model';
 export * from './helpers/filter-source.helper';

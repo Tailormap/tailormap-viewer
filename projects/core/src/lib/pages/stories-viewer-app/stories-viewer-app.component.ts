@@ -13,6 +13,7 @@ import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.
 import { LoadViewerService } from '../../services/load-viewer.service';
 import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
 import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 
 /**
  * Entry-point component to run a viewer in isolation, e.g. multiple viewers on a single page (stories).
@@ -38,7 +39,8 @@ import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.
     MatIconModule,
     MatProgressSpinnerModule,
     BaseLayoutComponent,
-    MobileLayoutComponent
+    MobileLayoutComponent,
+    ErrorMessageComponent,
 ],
 })
 export class StoriesViewerAppComponent implements OnInit, OnDestroy {

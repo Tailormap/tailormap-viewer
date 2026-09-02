@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { Routes as AdminRoutes } from './routes';
+import { provideAdminCore } from './admin-core.providers';
 import { CatalogPageComponent } from './pages/catalog-page/catalog-page.component';
 import { CatalogHomeComponent } from './catalog/catalog-home/catalog-home.component';
 import { GeoServiceLayerDetailsComponent } from './catalog/geo-service-layer-details/geo-service-layer-details.component';
@@ -58,6 +58,7 @@ export const adminRoutes: Routes = [
     path: '',
     component: AdminTemplateComponent,
     canActivate: [AdminAuthGuard],
+    providers: [...provideAdminCore()],
     children: [
       {
         path: AdminRoutes.CATALOG,
@@ -269,9 +270,3 @@ export const adminRoutes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(adminRoutes)],
-  exports: [RouterModule],
-})
-export class AdminCoreRoutingModule { }

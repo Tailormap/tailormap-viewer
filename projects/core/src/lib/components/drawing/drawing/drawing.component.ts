@@ -34,7 +34,6 @@ import { MatInput } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DrawingObjectsListComponent } from '../drawing-objects-list/drawing-objects-list.component';
 import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
-import { DrawingModule } from '../drawing.module';
 import { AsyncPipe } from '@angular/common';
 
 
@@ -60,7 +59,6 @@ import { AsyncPipe } from '@angular/common';
         MatSuffix,
         DrawingObjectsListComponent,
         DrawingStyleFormComponent,
-        DrawingModule,
         AsyncPipe,
     ],
 })
