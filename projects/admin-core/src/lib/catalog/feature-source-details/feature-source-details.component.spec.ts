@@ -4,17 +4,12 @@ import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
@@ -46,8 +41,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureSourceDetailsComponent, {
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureServiceMock },

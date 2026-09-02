@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { DropdownListFilterComponent } from './dropdown-list-filter.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AttributeFilterModel, AttributeType, FilterConditionEnum, FilterToolEnum, FilterTypeEnum } from '@tailormap-viewer/api';
 
@@ -35,7 +34,7 @@ describe('DropdownListFilterComponent', () => {
       },
     };
     await render(DropdownListFilterComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: { dropdownListFilter },
     });
     expect(screen.getByText('Alias1')).toBeInTheDocument();

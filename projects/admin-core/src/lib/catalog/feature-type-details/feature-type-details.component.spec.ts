@@ -4,20 +4,12 @@ import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureType, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
-import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { FeatureTypeFormComponent } from '../feature-type-form/feature-type-form.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
-import {
-  FeatureTypeAttachmentAttributesComponent,
-} from '../feature-type-attachment-attributes/feature-type-attachment-attributes.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -66,14 +58,7 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    declarations: [
-      FeatureTypeFormComponent,
-      FeatureTypeAttributesComponent,
-      FeatureTypeAttachmentAttributesComponent,
-      SaveButtonComponent,
-      SpinnerButtonComponent,
-    ],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureSourceService },

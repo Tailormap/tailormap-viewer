@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { GeolocationComponent } from './geolocation.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -41,7 +41,7 @@ describe('GeolocationComponent', () => {
           ],
         }),
       ],
-      imports: [ MatIconTestingModule, SharedModule ],
+      imports: [MatIconTestingModule],
     });
     const zoomToLocationBtn = screen.getByLabelText('Zoom to location');
     expect(zoomToLocationBtn).toBeInTheDocument();

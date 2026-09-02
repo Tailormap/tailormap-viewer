@@ -1,8 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { ProfileMenuButtonComponent } from './profile-menu-button.component';
 import { of } from 'rxjs';
-import { MenubarButtonComponent } from '../../menubar-button/menubar-button.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatBadge } from '@angular/material/badge';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -23,8 +21,7 @@ describe('ProfileMenuButtonComponent', () => {
       getUserDetails$: () => of({ isAuthenticated: false }),
     };
     await render(ProfileMenuButtonComponent, {
-      declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
+      imports: [ MatIconTestingModule, MatBadge ],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },

@@ -3,7 +3,6 @@ import { userEvent } from '@testing-library/user-event';
 import { SnappingComponent } from './snapping.component';
 import { BehaviorSubject, of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
@@ -49,7 +48,7 @@ const setup = async (snappingActive = false) => {
   });
 
   await render(SnappingComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: MapService, useValue: mapServiceMock },
       { provide: SnappingService, useValue: snappingServiceMock },

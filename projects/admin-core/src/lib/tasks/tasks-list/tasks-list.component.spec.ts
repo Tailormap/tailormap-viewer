@@ -4,7 +4,7 @@ import { createMockStore } from '@ngrx/store/testing';
 import { initialTasksState, TasksState, tasksStateKey } from '../state/tasks.state';
 import { getTasks } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 
 const setup = async () => {
@@ -18,7 +18,6 @@ const setup = async () => {
     initialState: { [tasksStateKey]: testTasksState },
   });
   await render(TasksListComponent, {
-    imports: [SharedModule],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: { loadTasks: vi.fn() } },

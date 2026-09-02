@@ -4,10 +4,7 @@ import { of } from 'rxjs';
 import { LayoutService } from '../../../layout/layout.service';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { CommonModule } from '@angular/common';
-import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.component';
-import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
@@ -27,8 +24,7 @@ describe('TerrainControlsComponent', () => {
       isComponentEnabled: vi.fn(() => true),
     };
     await render(TerrainControlsComponent, {
-      declarations: [ TerrainOpacityComponent, TerrainLayerToggleComponent ],
-      imports: [ MatIconModule, MatIconTestingModule, SharedModule, CommonModule ],
+      imports: [ MatIconModule, MatIconTestingModule, CommonModule ],
       providers: [
         { provide: LayoutService, useValue: mockLayoutService },
         getMapServiceMock().provider,

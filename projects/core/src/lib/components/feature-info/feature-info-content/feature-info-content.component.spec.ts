@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { FeatureInfoContentComponent } from './feature-info-content.component';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
-import { CoreSharedModule } from '../../../shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FeatureInfoModel } from '../models';
 import { getAppLayerModel } from '@tailormap-viewer/api';
@@ -39,8 +38,6 @@ describe('FeatureInfoContentComponent', () => {
     const mockSimpleAttributeFilterService = { setFilter: vi.fn(), removeFilterById: vi.fn() };
     await render(FeatureInfoContentComponent, {
       imports: [
-        SharedModule,
-        CoreSharedModule,
         MatIconTestingModule,
       ],
       providers: [

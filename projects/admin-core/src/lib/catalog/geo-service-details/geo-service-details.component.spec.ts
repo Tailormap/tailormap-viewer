@@ -7,20 +7,13 @@ import { TailormapAdminApiV1Service, getGeoService, AdminServerType } from '@tai
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
-import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {
   const activeRoute = {
@@ -36,8 +29,7 @@ const setup = async () => {
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [ GeoServiceFormComponent, PasswordFieldComponent, LayerSettingsFormComponent, SaveButtonComponent, SpinnerButtonComponent, AuthorizationEditComponent ],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },

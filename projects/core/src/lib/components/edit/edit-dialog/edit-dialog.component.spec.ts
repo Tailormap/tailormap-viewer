@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeType, getAppLayerModel, getFeatureModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
@@ -12,7 +11,6 @@ import { selectEditDialogVisible, selectSelectedEditFeature } from '../state/edi
 import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model';
 import { of } from 'rxjs';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-import { CoreSharedModule } from '../../../shared';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
@@ -31,9 +29,7 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
 const setup = async (getLayerDetails = false, selectors: any[] = []) => {
   const { container, fixture } = await render(EditDialogComponent, {
     imports: [
-      SharedModule,
       MatIconTestingModule,
-      CoreSharedModule,
     ],
     providers: [
       {

@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
@@ -14,15 +14,12 @@ import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-import { CoreSharedModule } from '../../../shared';
-import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
 import {
   selectActiveFilterGroups,
   selectAllFilterGroupsForLayerId, selectAllFiltersForAttribute, selectComponentsConfig, selectViewerLoadingState,
 } from '../../../state';
 import { selectIn3dView } from '../../../map/state/map.selectors';
-import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 
@@ -46,12 +43,9 @@ const setup = async (withState = false) => {
   const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
-      SharedModule,
-      CoreSharedModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
-    declarations: [ FeatureInfoLayerListComponent, FeatureInfoContentComponent ],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       provideMockStore({

@@ -13,11 +13,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { LoadingStateEnum, PanelResizerComponent, SharedImportsModule, TooltipDirective } from '@tailormap-viewer/shared';
-import { AttributeListContentComponent } from '../attribute-list-content/attribute-list-content.component';
-import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
-import { AttributeListTabToolbarComponent } from '../attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
-import { AttributeListTabComponent } from '../attribute-list-tab/attribute-list-tab.component';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { provideStore, Store } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
@@ -25,11 +21,9 @@ import { mapReducer } from '../../../map/state/map.reducer';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialFilterState } from '../../../state/filter-state/filter.state';
-import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { CoreState, coreStateKey } from '../../../state/core.state';
 import { coreReducer } from '../../../state/core.reducer';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { CoreSharedModule } from '../../../shared';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
@@ -75,8 +69,7 @@ const getStore = (
 
 const setup = async (store: StoreDef) => {
   await render(AttributeListComponent, {
-    imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule, CoreSharedModule ],
-    declarations: [ AttributeListComponent, PanelResizerComponent, TooltipDirective ],
+    imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       getMapServiceMock().provider,
@@ -174,8 +167,6 @@ const setupWithActualState = async (store?: StoreDef) => {
   });
   const renderResult = await render(AttributeListComponent, {
     imports: [
-      CoreSharedModule,
-      SharedImportsModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
@@ -190,16 +181,6 @@ const setupWithActualState = async (store?: StoreDef) => {
       AttributeListManagerService,
       provideStore(reducers, { initialState }),
       getMapServiceMock().provider,
-    ],
-    declarations: [
-      AttributeListComponent,
-      PanelResizerComponent,
-      AttributeListContentComponent,
-      AttributeListTableComponent,
-      AttributeListTabComponent,
-      AttributeListTabToolbarComponent,
-      AttributeListExportButtonComponent,
-      TooltipDirective,
     ],
   });
   const apiService = TestBed.inject(AttributeListApiService);

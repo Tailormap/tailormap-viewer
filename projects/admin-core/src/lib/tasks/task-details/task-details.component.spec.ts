@@ -3,12 +3,10 @@ import { TaskDetailsComponent } from './task-details.component';
 import { getTaskDetails, getTasks } from '@tailormap-admin/admin-api';
 import { initialTasksState, TasksState, tasksStateKey } from '../state/tasks.state';
 import { createMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { TaskDetailsRowComponent } from '../task-details-row/task-details-row.component';
 import { SearchIndexService } from '../../search-index/services/search-index.service';
 
 const setup = async () => {
@@ -29,8 +27,6 @@ const setup = async () => {
     stopTask: vi.fn(),
   };
   await render(TaskDetailsComponent, {
-    imports: [SharedModule],
-    declarations: [TaskDetailsRowComponent],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: taskService },

@@ -4,17 +4,14 @@ import { MenubarComponent } from './menubar.component';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from './menubar-button/menubar-button.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../map/state/map.selectors';
-import { MenubarModule } from './menubar.module';
 
 @Component({
   selector: 'tm-menu-button-test',
-  imports: [MenubarModule],
+  imports: [MenubarButtonComponent],
   template: '<tm-menubar-button icon="test" [tooltip]="tooltip">Click me</tm-menubar-button>',
 })
 class TmTestingComponent {
@@ -31,14 +28,8 @@ describe('MenubarComponent', () => {
 
   test('should render', async () => {
     await render(MenubarComponent, {
-      declarations: [
-        MenubarComponent,
-        MenubarButtonComponent,
-        RegisteredComponentsRendererComponent,
-      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        SharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
       ],

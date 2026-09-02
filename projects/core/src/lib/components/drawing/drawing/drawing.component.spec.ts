@@ -10,8 +10,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../../../map/helpers/drawing.helper';
-import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
-import { ConfirmDialogService, LoadingStateEnum, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -31,9 +30,8 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     confirm$: vi.fn(() => of(true)),
   };
   const { container } = await render(DrawingComponent, {
-    imports: [ SharedImportsModule, SharedDirectivesModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [DrawingStyleFormComponent],
     providers: [
       provideMockStore({
         initialState: { [drawingStateKey]: initialDrawingState },

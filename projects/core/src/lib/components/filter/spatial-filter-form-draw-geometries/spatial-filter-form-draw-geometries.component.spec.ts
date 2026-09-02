@@ -1,7 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries.component';
-import { MapDrawingButtonsComponent } from './map-drawing-buttons/map-drawing-buttons.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
@@ -22,8 +20,7 @@ const setup = async () => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
   const mockSpatialCrudService = { addGeometry: vi.fn(), removeGeometry: vi.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
-    declarations: [MapDrawingButtonsComponent],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: Store, useValue: store },
       mapServiceMock.provider,

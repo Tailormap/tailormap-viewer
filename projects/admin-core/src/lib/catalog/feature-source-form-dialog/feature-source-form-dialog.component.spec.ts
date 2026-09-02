@@ -2,23 +2,17 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { FeatureSourceService } from '../services/feature-source.service';
-import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: vi.fn() };
   const featureServiceMock = { createFeatureSource$: vi.fn(() => of({})), updateFeatureSource$: vi.fn(() => of({})) };
   await render(FeatureSourceFormDialogComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: FeatureSourceService, useValue: featureServiceMock },

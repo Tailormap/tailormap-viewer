@@ -1,8 +1,7 @@
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button.component';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
-import { MenubarButtonComponent, MenubarService } from '../../menubar';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { MenubarService } from '../../menubar';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -19,8 +18,7 @@ describe('AttributeListMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(AttributeListMenuButtonComponent, {
-      declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
+      imports: [ MatIconTestingModule, MatBadge ],
       providers: [
         { provide: MenubarService, useValue: menubarService },
         provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { FeatureTypeSelectorComponent } from './feature-type-selector.component';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { createMockStore } from '@ngrx/store/testing';
-import { LoadingStateEnum, SharedImportsModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
@@ -35,7 +35,6 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
   store.dispatch = dispatch;
   const featureTypeSelected = vi.fn();
   await render(FeatureTypeSelectorComponent, {
-    imports: [SharedImportsModule],
     providers: [
       { provide: Store, useValue: store },
     ],

@@ -2,7 +2,6 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer.component';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
@@ -10,7 +9,6 @@ const setup = async (initialValue: number | undefined) => {
   const store = { select: vi.fn(() => of(initialValue)), dispatch: vi.fn() };
   const mockSpatialCrudService = { updateBuffer: vi.fn() };
   await render(SpatialFilterFormBufferComponent, {
-    imports: [SharedImportsModule],
     providers: [
       { provide: Store, useValue: store },
       { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },

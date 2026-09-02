@@ -1,8 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
@@ -13,7 +11,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog.component';
 import { catalogStateKey } from '../state/catalog.state';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
@@ -34,8 +31,7 @@ const setup = async () => {
   };
   const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   await render(GeoServiceLayerFormDialogComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ SaveButtonComponent, SpinnerButtonComponent ],
+    imports: [MatIconTestingModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },

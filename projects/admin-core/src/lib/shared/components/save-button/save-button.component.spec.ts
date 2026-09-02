@@ -3,13 +3,11 @@ import { SaveButtonComponent } from './save-button.component';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
-import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (isSaving: boolean, disabled: boolean) => {
   const saveFn = vi.fn();
   await render(SaveButtonComponent, {
-    imports: [ MatProgressSpinnerModule, SharedImportsModule ],
-    declarations: [SpinnerButtonComponent],
+    imports: [MatProgressSpinnerModule],
     inputs: {
       saving$: of(isSaving),
       disabled,

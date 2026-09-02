@@ -7,7 +7,7 @@ import {
 import { BehaviorSubject, of } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
-import { FileHelper, SharedImportsModule } from '@tailormap-viewer/shared';
+import { FileHelper } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
@@ -37,7 +37,7 @@ const setup = async (
     extractProgress$: of(progress),
   };
   await render(AttributeListExportButtonComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [ store, { provide: AttributeListExportService, useValue: exportService }],
   });
   return { exportService };

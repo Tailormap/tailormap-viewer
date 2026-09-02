@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { TerrainControlsMenuButtonComponent } from './terrain-controls-menu-button.component';
 import { of } from 'rxjs';
-import { MenubarButtonComponent, MenubarService } from '../../../menubar';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { MenubarService } from '../../../menubar';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatBadge } from '@angular/material/badge';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -18,8 +17,7 @@ describe('TerrainControlsMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(TerrainControlsMenuButtonComponent, {
-      declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
+      imports: [ MatIconTestingModule, MatBadge ],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

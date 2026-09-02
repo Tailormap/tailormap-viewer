@@ -1,20 +1,16 @@
 import { render, screen } from '@testing-library/angular';
 import { FilterListComponent } from './filter-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.mock';
 import { getAppLayerModel } from '@tailormap-viewer/api';
-import { FilterListItemComponent } from '../filter-list-item/filter-list-item.component';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
 
 describe('FilterListComponent', () => {
 
   test('should render empty list', async () => {
     await render(FilterListComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
-      declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
+      imports: [MatIconTestingModule],
       providers: [
         provideMockStore({
           initialState: {
@@ -49,8 +45,7 @@ describe('FilterListComponent', () => {
     });
     await render(FilterListComponent, {
       providers: [store],
-      declarations: [ FilterListItemComponent, FilterDescriptionComponent ],
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
     });
     expect(await screen.findByText('Applies to The layer')).toBeInTheDocument();
   });

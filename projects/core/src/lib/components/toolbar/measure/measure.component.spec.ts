@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/angular';
 import { MeasureComponent } from './measure.component';
 import { Subject } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
@@ -25,7 +24,6 @@ const setup = async () => {
   mockStore.dispatch = mockDispatch;
   await render(MeasureComponent, {
     imports: [
-      SharedModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],

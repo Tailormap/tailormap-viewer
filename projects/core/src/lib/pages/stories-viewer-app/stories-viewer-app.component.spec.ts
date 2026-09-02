@@ -3,11 +3,13 @@ import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { provideMockStore } from '@ngrx/store/testing';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
-import { LayoutModule } from '../../layout/layout.module';
+import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
+import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';
+import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { LoadViewerService } from '../../services/load-viewer.service';
 
 const setup = async (viewerId?: string, loadingState?: LoadingStateEnum, errorMessage?: string) => {
@@ -34,7 +36,7 @@ const setup = async (viewerId?: string, loadingState?: LoadingStateEnum, errorMe
     configureTestBed: testBed => {
       testBed.overrideComponent(StoriesViewerAppComponent, {
         add: { schemas: [CUSTOM_ELEMENTS_SCHEMA] },
-        remove: { imports: [ SharedModule, LayoutModule, MatIconModule ] },
+        remove: { imports: [ MatIconModule, BaseLayoutComponent, MobileLayoutComponent, ErrorMessageComponent ] },
       });
     },
   });

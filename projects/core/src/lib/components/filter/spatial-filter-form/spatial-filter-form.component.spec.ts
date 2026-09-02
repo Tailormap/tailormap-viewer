@@ -7,7 +7,6 @@ import {
   selectSelectedLayers,
   selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { FilterTypeEnum, SpatialFilterModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
@@ -45,7 +44,6 @@ const setup = async (conf: {
   const removeFilterServiceMock = { removeFilter$: vi.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [SharedModule],
     providers: [
       store,
       mapServiceMock.provider,

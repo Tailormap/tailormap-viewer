@@ -1,8 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { FeatureSourceFormComponent } from './feature-source-form.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('FeatureSourceFormComponent', () => {
@@ -20,8 +18,7 @@ describe('FeatureSourceFormComponent', () => {
     const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const changedFn = vi.fn();
     await render(FeatureSourceFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [PasswordFieldComponent],
+      imports: [MatIconTestingModule],
       on: { changed: changedFn },
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
@@ -41,8 +38,7 @@ describe('FeatureSourceFormComponent', () => {
   test('should show JDBC fields in case of JDBC protocol', async () => {
     const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [PasswordFieldComponent],
+      imports: [MatIconTestingModule],
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();

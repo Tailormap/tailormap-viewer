@@ -4,11 +4,7 @@ import { of } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CatalogService } from '../services/catalog.service';
 import { getCatalogNode } from '@tailormap-admin/admin-api';
-import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
 import userEvent from '@testing-library/user-event';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: vi.fn() };
@@ -17,8 +13,6 @@ const setup = async (editMode = false) => {
     updateCatalogNode$: vi.fn(() => of(true)),
   };
   await render(CatalogNodeFormDialogComponent, {
-    imports: [SharedModule],
-    declarations: [ CatalogNodeFormComponent, SaveButtonComponent, SpinnerButtonComponent ],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: CatalogService, useValue: catalogServiceMock },

@@ -2,13 +2,10 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
@@ -22,8 +19,7 @@ const setup = async (isValidPassword: boolean) => {
   };
   const userUpdated = vi.fn();
   await render(UserFormComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
-    declarations: [PasswordFieldComponent],
+    imports: [MatIconTestingModule],
     on: { userUpdated },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },

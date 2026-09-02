@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { SimpleSearchComponent } from './simple-search.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { of } from 'rxjs';
 import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
@@ -29,7 +28,7 @@ const setup = async () => {
   const mockedMapService = getMapServiceMock(null, 'EPSG:28992');
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(SimpleSearchComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: SimpleSearchService, useValue: mockedSearchService },
       mockedMapService.provider,

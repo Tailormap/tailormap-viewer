@@ -1,8 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { GroupFormComponent } from './group-form.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { of } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
@@ -16,7 +14,6 @@ const setup = async () => {
     getOIDCConfigurations$: vi.fn(() => of([])),
   };
   await render(GroupFormComponent, {
-    imports: [ SharedImportsModule, SharedAdminComponentsModule ],
     on: { groupUpdated: groupUpdated },
     providers: [
       { provide: GroupService, useValue: groupService },

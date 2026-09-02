@@ -1,13 +1,12 @@
 import { render, screen } from '@testing-library/angular';
 import { ProjectionAvailabilityComponent } from './projection-availability.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('ProjectionAvailabilityComponent', () => {
 
   test('should render with projections', async () => {
     await render(ProjectionAvailabilityComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: {
         projectionAvailability: [
           { label: 'EPSG:28992 (Amersfoort / RD New)', available: false },

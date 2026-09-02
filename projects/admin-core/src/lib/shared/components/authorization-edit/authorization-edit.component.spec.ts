@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { AuthorizationEditComponent } from './authorization-edit.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { AUTHORIZATION_RULE_ANONYMOUS, AuthorizationGroups, AuthorizationRuleDecision, AuthorizationRuleGroup, getGroup } from '@tailormap-admin/admin-api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
@@ -19,7 +18,7 @@ const renderComponent = async (parentType?: string, parentAuthorizations?: Autho
             parentType: parentType,
           } : { }),
       },
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
     });
 
     return component;

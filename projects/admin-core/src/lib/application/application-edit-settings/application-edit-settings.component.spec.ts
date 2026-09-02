@@ -5,13 +5,9 @@ import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
 import { TailormapAdminApiV1Service, getApplication } from '@tailormap-admin/admin-api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { ApplicationFormComponent } from '../application-form/application-form.component';
-import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
@@ -34,8 +30,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
   };
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ SharedImportsModule, MatIconTestingModule ],
-    declarations: [ ApplicationFormComponent, BoundsFieldComponent, AuthorizationEditComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       provideHttpClient(
         withXsrfConfiguration({

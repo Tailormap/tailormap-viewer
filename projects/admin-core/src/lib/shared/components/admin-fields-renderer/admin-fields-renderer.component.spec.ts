@@ -1,13 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import { AdminFieldsRendererComponent } from './admin-fields-renderer.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
 
 const setup = async (data?: AdditionalPropertyModel[]) => {
   const changedFn = vi.fn();
   await render(AdminFieldsRendererComponent, {
-    imports: [SharedImportsModule],
     inputs: {
       fields: [
         { key: 'test', dataType: 'string', label: 'Test value', type: 'text', isPublic: false },

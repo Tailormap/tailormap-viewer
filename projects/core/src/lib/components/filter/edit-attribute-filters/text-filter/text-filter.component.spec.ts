@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { TextFilterComponent } from './text-filter.component';
 import { AttributeFilterModel, FilterConditionEnum, FilterTypeEnum, AttributeType, FilterToolEnum } from '@tailormap-viewer/api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 
 const textFilter: AttributeFilterModel = {
   id: 'filter1',
@@ -22,7 +21,6 @@ describe('TextFilterComponent', () => {
 
   test('should render', async () => {
     await render(TextFilterComponent, {
-      imports: [SharedImportsModule],
       inputs: { textFilter: textFilter },
     });
     expect(screen.getByRole('textbox'));

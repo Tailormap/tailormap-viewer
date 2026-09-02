@@ -1,9 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
-import { SliderFilterComponent } from './slider-filter/slider-filter.component';
 import { FilterToolEnum, UniqueValuesService, UpdateSliderFilterModel } from '@tailormap-viewer/api';
 import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.mock';
-import { SharedImportsModule, SliderComponent } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
@@ -28,8 +26,6 @@ const setup = async () => {
   };
 
   await render(EditAttributeFiltersComponent, {
-    imports: [SharedImportsModule],
-    declarations: [ SliderFilterComponent, SliderComponent ],
     providers: [
       provideMockStore(),
       { provide: UniqueValuesService, useValue: uniqueValuesService },

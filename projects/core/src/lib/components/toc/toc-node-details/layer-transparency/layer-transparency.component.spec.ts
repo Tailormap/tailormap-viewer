@@ -5,13 +5,12 @@ import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 
 describe('LayerTransparencyComponent', () => {
 
   test('should render', async () => {
     await render(LayerTransparencyComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: {
         layer: '1',
       },

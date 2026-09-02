@@ -3,7 +3,6 @@ import { EditFormComponent } from './edit-form.component';
 import {
   AttributeType, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
@@ -13,7 +12,6 @@ describe('EditFormComponent', () => {
   test('should render', async () => {
     const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
-      imports: [SharedModule],
       providers: [
         {
           provide: TAILORMAP_SECURITY_API_V1_SERVICE,
@@ -50,7 +48,6 @@ describe('EditFormComponent', () => {
   test('should render form', async () => {
     const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
-      imports: [SharedModule],
       providers: [
         AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
       ],

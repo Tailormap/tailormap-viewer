@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { GeoServiceService } from '../services/geo-service.service';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -48,7 +47,7 @@ const setup = async (geoServiceId?: string, geoServiceLayerId?: string, featureT
   const geoServices = [geoService];
   const geoServiceLayers = [geoServiceLayer];
   await render(CatalogShortcutButtonsComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     inputs: {
       featureTypeId: featureTypeId || null,
       geoServiceId: geoServiceId || null,

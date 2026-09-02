@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { CheckboxFilterComponent } from './checkbox-filter.component';
 import { FilterConditionEnum, FilterToolEnum, AttributeType, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
-import { SharedImportsModule, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('CheckboxFilterComponent', () => {
@@ -38,9 +37,8 @@ describe('CheckboxFilterComponent', () => {
       substringFilters: [],
     };
     await render(CheckboxFilterComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: { checkboxFilter },
-      declarations: [TooltipDirective],
     });
     expect(screen.getByText('attribute1')).toBeInTheDocument();
     expect(screen.getByText('Alias1')).toBeInTheDocument();

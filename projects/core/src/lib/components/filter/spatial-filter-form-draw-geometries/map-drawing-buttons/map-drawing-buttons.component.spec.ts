@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { MapDrawingButtonsComponent } from './map-drawing-buttons.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { DrawingFeatureTypeEnum } from '../../../../map/models/drawing-feature-type.enum';
@@ -11,7 +10,7 @@ const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
   const toolChanged = vi.fn();
   const drawingAdded = vi.fn();
   await render(MapDrawingButtonsComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       mapServiceMock.provider,
     ],

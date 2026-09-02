@@ -3,12 +3,11 @@ import { SpinnerButtonComponent } from './spinner-button.component';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
-import { SharedImportsModule } from '../../shared-imports.module';
 
 const setup = async (isSpinning: boolean, disabled: boolean) => {
   const btnClick = vi.fn();
   await render(SpinnerButtonComponent, {
-    imports: [ MatProgressSpinnerModule, SharedImportsModule ],
+    imports: [MatProgressSpinnerModule],
     inputs: {
       showSpinner$: of(isSpinning),
       label: 'My Button',

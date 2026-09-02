@@ -1,8 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { ProfileComponent } from './profile.component';
-import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
@@ -24,9 +22,6 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
   const userService = AuthenticatedUserTestHelper.getAuthenticatedUserService(loggedIn, [], loggedIn ? 'testusername' : undefined);
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(ProfileComponent, {
-    declarations: [
-      MenubarButtonComponent,
-    ],
     providers: [
       { provide: APP_BASE_HREF, useValue: '' },
       store,
@@ -36,7 +31,6 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
     ],
     imports: [
       MatIconTestingModule,
-      SharedModule,
       NoopAnimationsModule,
     ],
   });

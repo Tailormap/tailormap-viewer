@@ -3,11 +3,9 @@ import { UserListComponent } from './user-list.component';
 import { getUsers, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { MatListModule } from '@angular/material/list';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async () => {
@@ -17,7 +15,7 @@ const setup = async () => {
   const mockApiService = {};
 
   await render(UserListComponent, {
-    imports: [ SharedModule, MatListModule, SharedAdminComponentsModule ],
+    imports: [MatListModule],
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },
       { provide: TailormapSecurityApiV1Service, useValue: mockApiService },

@@ -2,15 +2,11 @@ import { render, screen } from '@testing-library/angular';
 import { GroupEditComponent } from './group-edit.component';
 import { of } from 'rxjs';
 import { getGroup } from '@tailormap-admin/admin-api';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async (hasGroup?: boolean) => {
@@ -31,8 +27,7 @@ const setup = async (hasGroup?: boolean) => {
     navigateByUrl: vi.fn(),
   };
   await render(GroupEditComponent, {
-    declarations: [ GroupFormComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },

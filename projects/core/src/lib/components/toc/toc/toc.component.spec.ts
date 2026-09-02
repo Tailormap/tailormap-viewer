@@ -4,7 +4,7 @@ import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import type { Mock } from 'vitest';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
@@ -12,14 +12,10 @@ import {
   selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { setLayerVisibility, toggleSelectedLayerId } from '../../../map/state/map.actions';
-import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
-import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { AuthenticatedUserService, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
-import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
-import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
@@ -67,8 +63,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
   const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent, TocNodeDetailsComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },

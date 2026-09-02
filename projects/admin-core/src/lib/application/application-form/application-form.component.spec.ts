@@ -1,11 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ApplicationFormComponent } from './application-form.component';
 import { TailormapAdminApiV1Service, getApplication, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getBoundsModel } from '@tailormap-viewer/api';
-import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
@@ -22,8 +19,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
     maxExtent: getBoundsModel(),
   });
   await render(ApplicationFormComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ BoundsFieldComponent, AuthorizationEditComponent ],
+    imports: [MatIconTestingModule],
     inputs: {
       application: hasApp ? application : undefined,
     },

@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogNodeFormComponent } from './catalog-node-form.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 
 describe('CatalogNodeFormComponent', () => {
@@ -8,7 +7,6 @@ describe('CatalogNodeFormComponent', () => {
   test('should render', async () => {
     const changedFn = vi.fn();
     await render(CatalogNodeFormComponent, {
-      imports: [SharedModule],
       inputs: { parentNode: '1' },
       on: { changed: changedFn },
     });

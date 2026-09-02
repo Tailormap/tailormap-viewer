@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/angular';
 import { ZoomButtonsComponent } from './zoom-buttons.component';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
@@ -10,7 +9,7 @@ const setup = async (zoomDetails: { zoomLevel: number; minZoomLevel: number; max
   const mapService = getMapServiceMock(null, '',  {
     getMapViewDetails$: () => of(zoomDetails),
   });
-  await render(ZoomButtonsComponent, { providers: [mapService.provider], imports: [ MatIconTestingModule, SharedModule ] });
+  await render(ZoomButtonsComponent, { providers: [mapService.provider], imports: [MatIconTestingModule] });
   return {
     zoomIn: mapService.mapService.zoomIn,
     zoomOut: mapService.mapService.zoomOut,

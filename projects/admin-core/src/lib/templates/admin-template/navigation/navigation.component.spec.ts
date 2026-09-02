@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { NavigationComponent } from './navigation.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ApplicationFeatureSwitchService, TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
@@ -10,7 +9,7 @@ import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated
 const setup = async (isAuthenticated: boolean, nonAdminUser?: boolean, searchEnabled?: boolean) => {
   const api = { getUser$: vi.fn(() => of({})) };
   await render(NavigationComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: api },
       { provide: APP_BASE_HREF, useValue: '' },

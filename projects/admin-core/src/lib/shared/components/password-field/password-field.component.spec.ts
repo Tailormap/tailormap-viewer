@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { PasswordFieldComponent } from './password-field.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 
@@ -10,7 +8,7 @@ describe('PasswordFieldComponent', () => {
   test('should render', async () => {
     const changed = vi.fn();
     await render(PasswordFieldComponent, {
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: {
         value: 'secret',
         label: 'Password',

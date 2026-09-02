@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { BaseTreeModel, TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 import { getTreeModelMock } from './mock-data/tree-model.mock-data';
-import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
@@ -43,7 +42,6 @@ describe('TreeComponent', () => {
         { provide: TreeDragDropService, useValue: undefined },
       ],
       imports: [
-        SharedImportsModule,
         MatIconTestingModule,
         CdkVirtualScrollViewport,
         CdkFixedSizeVirtualScroll,

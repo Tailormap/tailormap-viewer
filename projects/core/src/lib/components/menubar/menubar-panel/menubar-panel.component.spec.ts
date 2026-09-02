@@ -1,12 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { MenubarPanelComponent } from './menubar-panel.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MenubarService } from '../menubar.service';
 import { BehaviorSubject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-import { CoreSharedModule } from '../../../shared';
 
 const getMenuBarServiceMock = (initialValue: { componentId: string; dialogTitle: string } | null = null) => {
   const activeComponent$ = new BehaviorSubject(initialValue);
@@ -26,7 +24,7 @@ describe('MenubarPanelComponent', () => {
 
   test('does not render panel contents if active component is false', async () => {
     await render(MenubarPanelComponent, {
-      imports: [ SharedModule, CoreSharedModule ],
+      imports: [],
       providers: [
         getMenuBarServiceMock(),
         { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
@@ -39,7 +37,7 @@ describe('MenubarPanelComponent', () => {
     const menubarServiceMock = getMenuBarServiceMock({ componentId: 'TOC', dialogTitle: 'Available layers' });
     const closePanelFn = menubarServiceMock.useValue.closePanel;
     const { fixture } = await render(MenubarPanelComponent, {
-      imports: [ SharedModule, MatIconTestingModule, CoreSharedModule ],
+      imports: [MatIconTestingModule],
       providers: [
         menubarServiceMock,
         { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
@@ -58,7 +56,7 @@ describe('MenubarPanelComponent', () => {
     const menubarServiceMock = getMenuBarServiceMock({ componentId: 'TOC', dialogTitle: 'Available layers' });
     const setPanelWidthFn = menubarServiceMock.useValue.setPanelWidth;
     const { fixture } = await render(MenubarPanelComponent, {
-      imports: [ SharedModule, MatIconTestingModule, CoreSharedModule ],
+      imports: [MatIconTestingModule],
       providers: [
         menubarServiceMock,
         { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },

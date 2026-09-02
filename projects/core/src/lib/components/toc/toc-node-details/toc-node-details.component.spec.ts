@@ -2,14 +2,10 @@ import { render, screen } from '@testing-library/angular';
 import { TocNodeDetailsComponent } from './toc-node-details.component';
 import { getAppLayerModel, getLayerTreeNode, getServiceModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import { LegendService } from '../../legend/services/legend.service';
-import { LegendLayerComponent } from '../../legend/legend-layer/legend-layer.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { LayerDetailsComponent } from './layer-details/layer-details.component';
-import { LayerTransparencyComponent } from './layer-transparency/layer-transparency.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const setup = async (withLayer: boolean) => {
@@ -26,8 +22,7 @@ const setup = async (withLayer: boolean) => {
     ])),
   };
   await render(TocNodeDetailsComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ LegendLayerComponent, LayerDetailsComponent, LayerTransparencyComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },

@@ -5,8 +5,6 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import {
   AttributeType, UniqueValuesService, FilterTypeEnum, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { AttributeFilterComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
@@ -43,8 +41,6 @@ describe('AttributeListFilterComponent', () => {
         }),
         { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
-      imports: [SharedModule],
-      declarations: [AttributeFilterComponent],
     });
 
     expect(await screen.findByText('Filter on col')).toBeInTheDocument();

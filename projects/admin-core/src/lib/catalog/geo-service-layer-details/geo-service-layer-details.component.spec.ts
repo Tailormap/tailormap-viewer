@@ -4,15 +4,11 @@ import { of } from 'rxjs';
 import { getGeoService, getGeoServiceLayer, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
-import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
@@ -42,8 +38,7 @@ const setup = async () => {
   });
   await render(GeoServiceLayerDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [ LayerSettingsFormComponent, TriStateBooleanComponent, AuthorizationEditComponent ],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },

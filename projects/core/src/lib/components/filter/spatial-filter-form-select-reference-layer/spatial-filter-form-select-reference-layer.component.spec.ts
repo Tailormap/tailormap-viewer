@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormSelectReferenceLayerComponent } from './spatial-filter-form-select-reference-layer.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectReferenceLayer, selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
@@ -29,7 +28,6 @@ const setup = async (
   const filterManagerService = { referencableLayers$: of(layers) };
   const mockSpatialCrudService = { updateReferenceLayer: vi.fn() };
   await render(SpatialFilterFormSelectReferenceLayerComponent, {
-    imports: [SharedImportsModule],
     providers: [
       store,
       { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },

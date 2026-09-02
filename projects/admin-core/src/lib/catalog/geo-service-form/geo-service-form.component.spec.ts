@@ -1,10 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { GeoServiceFormComponent } from './geo-service-form.component';
 import { of } from 'rxjs';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AdminServerType, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -16,8 +13,7 @@ describe('GeoServiceFormComponent', () => {
   test('should render', async () => {
     const changedFn = vi.fn();
     await render(GeoServiceFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [ PasswordFieldComponent, AuthorizationEditComponent ],
+      imports: [MatIconTestingModule],
       on: { changed: changedFn },
       providers: [
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },

@@ -3,7 +3,6 @@ import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button.compo
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectFilterEnabled, selectFilterTerm, selectSomeLayersVisibleInToc } from '../state/toc.selectors';
 
@@ -11,7 +10,7 @@ describe('ToggleAllLayersButtonComponent', () => {
 
   test('renders', async () => {
     await render(ToggleAllLayersButtonComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       providers: provideMockStore({ selectors: [
           { selector: selectSomeLayersVisibleInToc, value: true },
           { selector: selectFilterEnabled, value: false },
@@ -30,7 +29,7 @@ describe('ToggleAllLayersButtonComponent', () => {
 
   test('renders with filter', async () => {
     await render(ToggleAllLayersButtonComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       providers: provideMockStore({ selectors: [
           { selector: selectSomeLayersVisibleInToc, value: false },
           { selector: selectFilterEnabled, value: true },
