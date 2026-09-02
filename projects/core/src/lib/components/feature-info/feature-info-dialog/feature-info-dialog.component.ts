@@ -11,7 +11,7 @@ import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { CssHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
@@ -28,7 +28,6 @@ import { FeatureInfoLayerDropdownComponent } from '../feature-info-layer-dropdow
 import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { FeatureInfoLayerItemComponent } from '../feature-info-layer-item/feature-info-layer-item.component';

@@ -4,15 +4,13 @@ import { TaskModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectTasks, selectTasksLoadError, selectTasksLoadStatus } from '../state/tasks.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
 import { MatSelectionList, MatListItem, MatListItemMeta } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 import { AsyncPipe } from '@angular/common';
 
 

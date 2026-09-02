@@ -4,14 +4,13 @@ import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/ad
 import { concatMap, debounceTime, distinctUntilChanged, filter, forkJoin, map, of, take } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TypesHelper } from '@tailormap-viewer/shared';
+import { TypesHelper, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { selectFeatureTypeBySourceIdAndName } from '../../catalog/state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { AdminSseService } from '../../shared/services/admin-sse.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selector/feature-type-selector.component';
 import { DecimalPipe, DatePipe } from '@angular/common';

@@ -6,7 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, map, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { nanoid } from 'nanoid';
-import { InputFilterData, OutputFilterData } from '@tailormap-viewer/shared';
+import { InputFilterData, OutputFilterData, AttributeFilterComponent } from '@tailormap-viewer/shared';
 import { FormHelper } from '../../../../helpers/form.helper';
 import { tap } from 'rxjs/operators';
 import { AdminSnackbarService } from '../../../../shared/services/admin-snackbar.service';
@@ -18,7 +18,6 @@ import {
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { ApplicationFilterAttributeListComponent } from '../application-filter-attribute-list/application-filter-attribute-list.component';
-import { AttributeFilterComponent } from '../../../../../../../shared/src/lib/components/attribute-filter/attribute-filter.component';
 import { ApplicationSliderFilterFormComponent } from '../application-slider-filter-form/application-slider-filter-form.component';
 import { ApplicationCheckboxFilterFormComponent } from '../application-checkbox-filter-form/application-checkbox-filter-form.component';
 import { ApplicationSwitchFilterFormComponent } from '../application-switch-filter-form/application-switch-filter-form.component';

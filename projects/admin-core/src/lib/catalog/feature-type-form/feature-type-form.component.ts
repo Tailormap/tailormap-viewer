@@ -11,13 +11,12 @@ import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.sel
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
-import { InfoMessageComponent } from '../../../../../shared/src/lib/components/info-message/info-message.component';
 import { FeatureTypeTemplateComponent } from '../feature-type-template/feature-type-template.component';
 import { FeatureTypeAttributesComponent } from '../feature-type-attributes/feature-type-attributes.component';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { MatButton } from '@angular/material/button';
+import { ErrorMessageComponent, InfoMessageComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-feature-type-form',

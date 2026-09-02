@@ -8,10 +8,9 @@ import {
   selectOIDCConfigurationList, selectOIDCConfigurationListFilter, selectOIDCConfigurationsLoadError, selectOIDCConfigurationsLoadStatus,
   selectSelectedOIDCConfigurationId,
 } from '../state/oidc-configuration.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatSelectionList, MatListItem } from '@angular/material/list';

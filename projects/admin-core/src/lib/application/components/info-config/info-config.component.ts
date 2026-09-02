@@ -7,7 +7,7 @@ import { ComponentConfigurationService } from '../../services/component-configur
 import { ImageUploadResult, TailormapAdminUploadService } from '@tailormap-admin/admin-api';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MarkdownEditorComponent } from '../../../../../../shared/src/lib/components/markdown-editor/markdown-editor.component';
+import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-info-config',

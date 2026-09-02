@@ -3,14 +3,13 @@ import { AttributeFilterModel, AttributeValueSettings, FilterToolEnum } from '@t
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FilterHelper } from '@tailormap-viewer/shared';
+import { FilterHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatChipSet, MatChip, MatChipRemove } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/select';
-import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

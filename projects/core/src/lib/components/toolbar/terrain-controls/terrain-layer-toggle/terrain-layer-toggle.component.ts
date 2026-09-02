@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
-import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
+import { SplitButtonOptionModel, SplitButtonComponent } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import {
   selectInitiallySelectedTerrainNodes, selectSelectedTerrainNodeId, selectTerrainNodesList,
@@ -9,7 +9,6 @@ import { setSelectedTerrainNodeId } from '../../../../map/state/map.actions';
 import { MobileLayoutService } from '../../../../services/viewer-layout/mobile-layout.service';
 import { MatSelectionList, MatListOption, MatListItemIcon, MatListItemTitle } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
-import { SplitButtonComponent } from '../../../../../../../shared/src/lib/components/split-button/split-button.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

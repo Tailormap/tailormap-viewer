@@ -3,7 +3,7 @@ import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { combineLatest, map, Observable, take } from 'rxjs';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, ErrorMessageComponent, TooltipDirective, HtmlifyPipe } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { selectAllFiltersForAttribute } from '../../../state';
@@ -12,14 +12,11 @@ import { AttributeType } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
 import { FeatureInfoTemplateRendererComponent } from '../feature-info-template-renderer/feature-info-template-renderer.component';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AsyncPipe } from '@angular/common';
-import { HtmlifyPipe } from '../../../../../../shared/src/lib/pipes/htmlify.pipe';
 
 @Component({
     selector: 'tm-feature-info-content',

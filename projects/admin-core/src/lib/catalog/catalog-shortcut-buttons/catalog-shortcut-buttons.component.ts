@@ -15,8 +15,8 @@ import { FeatureTypeFormDialogComponent } from '../feature-type-form-dialog/feat
 import { FeatureSourceService } from '../services/feature-source.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 type ServiceAndLayer = { service: ExtendedGeoServiceModel; layer: ExtendedGeoServiceLayerModel };
 type ServiceAndLayerFullName = ServiceAndLayer & { fullLayerName: string };

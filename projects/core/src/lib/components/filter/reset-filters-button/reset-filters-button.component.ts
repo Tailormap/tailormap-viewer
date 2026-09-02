@@ -2,12 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { filter, map, Observable, of, take } from 'rxjs';
 import { resetAttributeFilters } from '../../../state/filter-state/filter.actions';
 import { Store } from '@ngrx/store';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, TooltipDirective } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 

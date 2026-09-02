@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PopoverPositionEnum } from '@tailormap-viewer/shared';
+import { PopoverPositionEnum, ColorPickerComponent } from '@tailormap-viewer/shared';
 import { ViewerStylingModel } from '@tailormap-viewer/api';
 import { selectStylingConfig } from '../state/application.selectors';
 import { updateApplicationStylingConfig } from '../state/application.actions';
 import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { ApplicationImageRemoveService } from '../services/application-image-remove.service';
-import { ColorPickerComponent } from '../../../../../shared/src/lib/components/color-picker/color-picker.component';
 import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
 import { AsyncPipe } from '@angular/common';
 

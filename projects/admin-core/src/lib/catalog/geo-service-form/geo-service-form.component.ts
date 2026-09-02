@@ -7,12 +7,11 @@ import {
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
-import { StringHelper } from '@tailormap-viewer/shared';
+import { StringHelper, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { GroupService } from '../../user/services/group.service';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
 import { MatCheckbox } from '@angular/material/checkbox';

@@ -1,5 +1,5 @@
 import { FilterTypeEnum, SpatialFilterModel } from '@tailormap-viewer/api';
-import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.mock';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
   const group = getFilterGroup<SpatialFilterModel>([{

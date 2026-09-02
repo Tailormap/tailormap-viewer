@@ -7,8 +7,8 @@ import { ConfigurationComponentModel } from '../configuration-component.model';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { ColorPickerComponent } from '../../../../../../shared/src/lib/components/color-picker/color-picker.component';
 import { LayerSelectionConfigComponent } from '../../../shared/components/layer-selection/layer-selection-config.component';
+import { ColorPickerComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-snapping-component-config',

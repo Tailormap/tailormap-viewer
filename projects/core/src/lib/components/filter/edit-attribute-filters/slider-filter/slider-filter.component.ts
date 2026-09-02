@@ -5,9 +5,8 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
-import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { AttributeFilterHelper, SliderComponent } from '@tailormap-viewer/shared';
 import { MatInput } from '@angular/material/input';
-import { SliderComponent } from '../../../../../../../shared/src/lib/components/slider/slider.component';
 
 @Component({
     selector: 'tm-slider-filter',

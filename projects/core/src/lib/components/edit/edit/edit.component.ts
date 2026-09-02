@@ -25,13 +25,12 @@ import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatBadge } from '@angular/material/badge';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { AutoFocusDirective, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-edit',

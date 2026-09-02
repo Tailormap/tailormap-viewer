@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { AttributeFilterModel, AttributeValueSettings, FilterToolEnum } from '@tailormap-viewer/api';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-checkbox-filter',

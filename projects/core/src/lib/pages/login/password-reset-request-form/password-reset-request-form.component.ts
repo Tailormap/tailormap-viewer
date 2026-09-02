@@ -2,13 +2,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
-import { InfoMessageComponent } from '../../../../../../shared/src/lib/components/info-message/info-message.component';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { ErrorMessageComponent, InfoMessageComponent, AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-password-reset-request-form',

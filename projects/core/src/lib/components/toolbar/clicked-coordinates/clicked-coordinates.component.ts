@@ -17,10 +17,9 @@ import { selectComponentTitle } from '../../../state';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { TooltipDirective, ErrorMessageComponent } from '@tailormap-viewer/shared';
 
 
 @Component({

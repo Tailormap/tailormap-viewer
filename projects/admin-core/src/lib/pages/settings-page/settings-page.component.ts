@@ -3,7 +3,7 @@ import { Routes } from '../../routes';
 import { AdminSettingsRouterService } from '../../settings/services/admin-settings-router.service';
 import { RouterOutlet, RouterLinkActive, RouterLink } from '@angular/router';
 import { MatMenuItem } from '@angular/material/menu';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 interface SubmenuLink {
   label: string;

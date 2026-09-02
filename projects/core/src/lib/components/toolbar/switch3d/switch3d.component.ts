@@ -11,10 +11,9 @@ import {
 } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, TooltipDirective } from '@tailormap-viewer/shared';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 

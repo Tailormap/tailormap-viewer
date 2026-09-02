@@ -9,11 +9,11 @@ import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 import { MatFormField, MatLabel, MatHint, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { NgClass } from '@angular/common';
 import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-oidc-configuration-form',

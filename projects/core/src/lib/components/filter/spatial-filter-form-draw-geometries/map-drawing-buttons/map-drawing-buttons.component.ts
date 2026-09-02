@@ -11,8 +11,8 @@ import { DrawingFeatureTypeEnum } from '../../../../map';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../../services';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-map-drawing-buttons',

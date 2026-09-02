@@ -2,9 +2,9 @@ import {
   AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
-import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.mock';
 import { FeaturesFilterHelper } from './features-filter.helper';
 import { getSpatialFilterGroup } from './spatial-filter-group.mock';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 const simpleNumberFilter = (condition?: FilterConditionEnum, value?: string[], invertCondition = false) => {
   const filterGroup = getFilterGroup();

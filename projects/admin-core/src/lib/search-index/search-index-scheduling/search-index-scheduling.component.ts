@@ -10,8 +10,8 @@ import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field'
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { MatTimepickerInput, MatTimepickerToggle, MatTimepicker } from '@angular/material/timepicker';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-search-index-scheduling',

@@ -3,16 +3,14 @@ import { Routes } from '../../../routes';
 import { Observable, of, take } from 'rxjs';
 import { ApplicationFeature, ApplicationFeatureSwitchService, AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
 import { Router, RouterLinkActive, RouterLink } from '@angular/router';
-import { AboutDialogComponent } from '@tailormap-viewer/shared';
+import { AboutDialogComponent, TooltipDirective, LanguageToggleComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationButtonPropsModel } from '../../models/navigation-button-props.model';
 import { AdminNavigationService, NavigationButtonWithPositionModel } from '../../admin-navigation.service';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { LanguageToggleComponent } from '../../../../../../shared/src/lib/components/language-toggle/language-toggle.component';
 
 @Component({
     selector: 'tm-admin-navigation',

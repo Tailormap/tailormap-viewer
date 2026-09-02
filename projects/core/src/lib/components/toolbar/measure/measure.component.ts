@@ -7,9 +7,9 @@ import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-measure',

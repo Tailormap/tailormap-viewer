@@ -5,9 +5,9 @@ import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
 import { selectFilterEnabled, selectFilterTerm, selectSomeLayersVisibleInToc } from '../state/toc.selectors';
 import { take } from 'rxjs/operators';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-toggle-all-layers-button',

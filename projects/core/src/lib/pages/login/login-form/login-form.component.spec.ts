@@ -4,8 +4,8 @@ import { LoginFormComponent } from './login-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives';
 import { UserResponseModel } from '@tailormap-viewer/api';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 describe('LoginFormComponent', () => {
 

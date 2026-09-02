@@ -3,13 +3,12 @@ import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'r
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 import { LoadViewerService } from '../../services/load-viewer.service';
 import { MatIcon } from '@angular/material/icon';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { EmbeddedLayoutComponent } from '../../layout/embedded-layout/embedded-layout.component';
 import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';

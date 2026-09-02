@@ -2,9 +2,9 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MapViewDetailsModel, MapService } from '@tailormap-viewer/map';
 import { Observable, of } from 'rxjs';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-zoom-buttons',

@@ -7,15 +7,13 @@ import {
   selectTask, selectTaskDetails, selectTaskDetailsLoadError, selectTaskDetailsLoadStatus,
 } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
-import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum, ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchIndexService } from '../../search-index/services/search-index.service';
 import { TaskDetailsRowComponent } from '../task-details-row/task-details-row.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 import { AsyncPipe, DatePipe, KeyValuePipe } from '@angular/common';
 
 @Component({

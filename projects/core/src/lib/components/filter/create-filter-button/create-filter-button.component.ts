@@ -3,8 +3,8 @@ import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { createFilter } from '../state/filter-component.actions';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-create-filter-button',

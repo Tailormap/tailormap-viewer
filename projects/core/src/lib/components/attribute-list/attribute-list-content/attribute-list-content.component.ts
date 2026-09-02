@@ -19,14 +19,13 @@ import { AttributeListFilterComponent, FilterDialogData } from '../attribute-lis
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
 import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
-import { CssHelper, SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { CssHelper, SnackBarMessageComponent, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatisticsHelper } from '../helpers/statistics-helper';
 import { StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticsService } from '../services/attribute-list-statistics.service';
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { AsyncPipe } from '@angular/common';

@@ -4,9 +4,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-list-filter',

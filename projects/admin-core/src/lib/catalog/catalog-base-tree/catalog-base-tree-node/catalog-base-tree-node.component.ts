@@ -5,8 +5,8 @@ import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
 import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
 import { GeoServiceProtocolEnum } from '@tailormap-admin/admin-api';
 import { RouterLink } from '@angular/router';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-catalog-base-tree-node',

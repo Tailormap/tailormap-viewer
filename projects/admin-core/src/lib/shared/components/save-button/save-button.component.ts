@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { SpinnerButtonComponent } from '../../../../../../shared/src/lib/components/spinner-button/spinner-button.component';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-save-button',

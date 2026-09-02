@@ -8,19 +8,17 @@ import {
   selectApplicationList, selectApplicationListFilter, selectApplicationsLoadError, selectApplicationsLoadStatus,
   selectSelectedApplicationId,
 } from '../state/application.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { ConfigService } from '../../config/services/config.service';
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
 import { APP_BASE_HREF, AsyncPipe } from '@angular/common';
 import { ApplicationService } from '../services/application.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatSelectionList, MatListItem, MatListItemMeta } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 
 @Component({
     selector: 'tm-admin-application-list',

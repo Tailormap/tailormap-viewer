@@ -4,7 +4,7 @@ import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../stat
 import { combineLatest, distinctUntilChanged, map, Observable, Subject } from 'rxjs';
 import { BaseComponentTypeEnum, SecurityModel } from '@tailormap-viewer/api';
 import { Router, RouterLink } from '@angular/router';
-import { AboutDialogComponent } from '@tailormap-viewer/shared';
+import { AboutDialogComponent, LanguageToggleComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { ProfileMenuButtonComponent } from './profile-menu-button/profile-menu-button.component';
@@ -14,7 +14,6 @@ import { MenubarService } from '../menubar.service';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
 import { MatMenu, MatMenuItem } from '@angular/material/menu';
-import { LanguageToggleComponent } from '../../../../../../shared/src/lib/components/language-toggle/language-toggle.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

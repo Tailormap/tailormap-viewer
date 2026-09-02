@@ -6,7 +6,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-catalog-node-form',

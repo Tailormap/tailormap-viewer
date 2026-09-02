@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { Observable, of, take } from 'rxjs';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
@@ -13,7 +13,6 @@ import { setSearchIndexListFilter } from '../state/search-index.actions';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SearchIndexService } from '../services/search-index.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatSelectionList, MatListItem } from '@angular/material/list';

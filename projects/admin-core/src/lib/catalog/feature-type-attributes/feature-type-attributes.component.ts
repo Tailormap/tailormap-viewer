@@ -1,14 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, Output, EventEmitter, SimpleChanges, DestroyRef, signal, computed, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
 import { CdkDragDrop, CdkDragStart, CdkDropList, CdkDragHandle, CdkDrag } from '@angular/cdk/drag-drop';
-import { ArrayHelper } from '@tailormap-viewer/shared';
+import { ArrayHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AttachmentAttributeModel, AttributeTypeHelper } from "@tailormap-viewer/api";
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
 import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';

@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
 import { FilterToolEnum, UniqueValuesService, UpdateSliderFilterModel } from '@tailormap-viewer/api';
-import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.mock';
 import { provideMockStore } from '@ngrx/store/testing';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 
 const setup = async () => {

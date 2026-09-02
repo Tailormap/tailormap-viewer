@@ -9,10 +9,10 @@ import {
   setApplicationSelectedFilterGroupId, setApplicationSelectedFilterId, updateApplicationFilterConfigForSelectedGroup,
 } from '../../state/application.actions';
 import { MatIconButton, MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { ApplicationFiltersListComponent } from '../filters/application-filters-list/application-filters-list.component';
 import { ApplicationEditFilterFormComponent } from '../filters/application-edit-filter-form/application-edit-filter-form.component';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-application-edit-filter',

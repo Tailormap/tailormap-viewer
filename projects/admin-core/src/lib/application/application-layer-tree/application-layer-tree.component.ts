@@ -1,7 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, NgZone, inject } from '@angular/core';
-import {
-  DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
-} from '@tailormap-viewer/shared';
+import { DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService, TreeComponent } from '@tailormap-viewer/shared';
 import { Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,7 +9,6 @@ import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
 import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node/application-layer-tree-node.component';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatButton } from '@angular/material/button';
-import { TreeComponent } from '../../../../../shared/src/lib/components/tree/tree.component';
 
 @Component({
     selector: 'tm-admin-application-layer-tree',

@@ -8,7 +8,7 @@ import { selectDraftSearchIndex } from '../state/search-index.selectors';
 import { AttributeDescriptorModel, FeatureTypeModel, SearchIndexModel } from '@tailormap-admin/admin-api';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { SearchIndexService } from '../services/search-index.service';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { ExtendedFeatureTypeModel } from '../../catalog/models/extended-feature-type.model';
 import { TaskMonitoringService } from '../../tasks/services/task-monitoring.service';
 import { SearchIndexFormComponent } from '../search-index-form/search-index-form.component';
@@ -17,7 +17,6 @@ import { SearchIndexAttributeListComponent } from '../search-index-attribute-lis
 import { SearchIndexSchedulingComponent } from '../search-index-scheduling/search-index-scheduling.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { MatButton } from '@angular/material/button';
-import { SpinnerButtonComponent } from '../../../../../shared/src/lib/components/spinner-button/spinner-button.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

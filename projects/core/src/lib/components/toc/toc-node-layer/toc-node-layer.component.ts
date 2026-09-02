@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel, TooltipDirective } from '@tailormap-viewer/shared';
 import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
 import { FilterSourceHelper } from '../../../filter';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatListItemMeta } from '@angular/material/list';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 

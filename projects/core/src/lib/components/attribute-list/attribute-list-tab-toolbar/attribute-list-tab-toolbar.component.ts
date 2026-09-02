@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl } from '@tailormap-viewer/shared';
+import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
 import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
 import {
   selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
@@ -23,7 +23,6 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatButton } from '@angular/material/button';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { AsyncPipe } from '@angular/common';
 
 

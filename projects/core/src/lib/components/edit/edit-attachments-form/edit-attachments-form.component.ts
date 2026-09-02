@@ -5,8 +5,8 @@ import { AttachmentAttributeModel, AttachmentMetadataModel } from '@tailormap-vi
 import { AttachmentService } from '../../../services/attachment.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIconButton, MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-edit-attachments-form',

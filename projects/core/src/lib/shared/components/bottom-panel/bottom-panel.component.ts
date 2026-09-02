@@ -2,12 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input
 import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-import { PanelResizerComponent } from '../../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
 import { NgStyle, NgClass, AsyncPipe } from '@angular/common';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
+import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-bottom-panel',

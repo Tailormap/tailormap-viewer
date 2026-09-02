@@ -5,7 +5,7 @@ import { setFilterTerm } from '../state/toc.actions';
 import { Store } from '@ngrx/store';
 import { selectFilterTerm } from '../state/toc.selectors';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-toc-filter-input',

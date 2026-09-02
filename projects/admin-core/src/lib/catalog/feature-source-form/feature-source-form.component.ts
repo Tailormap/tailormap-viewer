@@ -9,9 +9,9 @@ import { FormHelper } from '../../helpers/form.helper';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-feature-source-form',

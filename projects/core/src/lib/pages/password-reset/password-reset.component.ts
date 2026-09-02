@@ -3,13 +3,11 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TailormapSecurityApiV1Service, ValidatorsHelper } from '@tailormap-viewer/api';
 import { MatIcon } from '@angular/material/icon';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
-import { InfoMessageComponent } from '../../../../../shared/src/lib/components/info-message/info-message.component';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatError } from '@angular/material/form-field';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { ErrorMessageComponent, InfoMessageComponent, AutoFocusDirective } from '@tailormap-viewer/shared';
 
 interface Token {
   uuid: string;

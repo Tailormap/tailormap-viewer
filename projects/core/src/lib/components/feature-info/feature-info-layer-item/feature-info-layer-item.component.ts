@@ -5,7 +5,7 @@ import { setSelectedFeatureInfoLayer } from '../state/feature-info.actions';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-feature-info-layer-item',

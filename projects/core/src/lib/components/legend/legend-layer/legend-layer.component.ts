@@ -2,9 +2,8 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, viewChild, effect, signal,
 } from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
-import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
+import { LegendHelper, LegendImageModel, LegendImageComponent } from '@tailormap-viewer/shared';
 import { ServerType } from '@tailormap-viewer/api';
-import { LegendImageComponent } from '../../../../../../shared/src/lib/components/legend-image/legend-image.component';
 
 @Component({
     selector: 'tm-legend-layer',

@@ -7,7 +7,7 @@ import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angu
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-attribute-list-paging-dialog',

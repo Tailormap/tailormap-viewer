@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, Signal, computed, inject } from '@angular/core';
 import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../../state/application.selectors';
 import { Store } from '@ngrx/store';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-application-edit-filters-home',

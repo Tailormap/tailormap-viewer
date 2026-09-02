@@ -6,7 +6,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
-import { PopoverPositionEnum } from '@tailormap-viewer/shared';
+import { PopoverPositionEnum, ColorPickerComponent } from '@tailormap-viewer/shared';
 import { UPLOAD_REMOVE_SERVICE } from '../../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { HeaderComponentLogoRemoveService } from './header-component-logo-remove.service';
 import { debounceTime } from 'rxjs/operators';
@@ -15,7 +15,6 @@ import { BaseComponentConfigComponent } from '../base-component-config/base-comp
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { SelectUploadComponent } from '../../../shared/components/select-upload/select-upload-button/select-upload.component';
-import { ColorPickerComponent } from '../../../../../../shared/src/lib/components/color-picker/color-picker.component';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 

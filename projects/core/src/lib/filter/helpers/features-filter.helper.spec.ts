@@ -1,7 +1,7 @@
 import { FilterConditionEnum, FilterToolEnum, FilterTypeEnum, AttributeType, CheckboxFilterModel } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper } from './features-filter.helper';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
-import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.mock';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 describe('FeaturesFilterHelper', () => {
 

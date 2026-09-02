@@ -14,9 +14,9 @@ import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layo
 import { TerrainOpacityComponent } from './terrain-opacity/terrain-opacity.component';
 import { TerrainLayerToggleComponent } from './terrain-layer-toggle/terrain-layer-toggle.component';
 import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-terrain-controls',

@@ -9,11 +9,11 @@ import { RemoveFilterService } from '../services/remove-filter.service';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { MatCard, MatCardContent, MatCardActions } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
 import { EditAttributeFiltersComponent } from '../edit-attribute-filters/edit-attribute-filters.component';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-filter-list-item',

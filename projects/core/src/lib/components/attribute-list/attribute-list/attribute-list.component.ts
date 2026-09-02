@@ -17,12 +17,11 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { MapService } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { OverlayRef, PopoverPositionEnum, PopoverService } from '@tailormap-viewer/shared';
+import { OverlayRef, PopoverPositionEnum, PopoverService, TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListColumnSelectionComponent } from '../attribute-list-column-selection/attribute-list-column-selection.component';
 import { BottomPanelComponent } from '../../../shared/components/bottom-panel/bottom-panel.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AttributeListTabComponent } from '../attribute-list-tab/attribute-list-tab.component';
 import { AsyncPipe } from '@angular/common';

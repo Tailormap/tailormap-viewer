@@ -12,11 +12,11 @@ import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../../../shared/src/lib/directives/auto-focus.directive';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton, MatButton } from '@angular/material/button';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormControl<string> }>;
 

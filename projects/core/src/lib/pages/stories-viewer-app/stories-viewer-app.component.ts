@@ -6,14 +6,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState } from '../../state/core.selectors';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 
 import { LoadViewerService } from '../../services/load-viewer.service';
 import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
 import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 
 /**
  * Entry-point component to run a viewer in isolation, e.g. multiple viewers on a single page (stories).

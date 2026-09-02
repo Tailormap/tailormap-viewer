@@ -3,10 +3,10 @@ import { Observable, of } from 'rxjs';
 import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 import { MenubarService } from '../menubar.service';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatBadge } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-menubar-button',

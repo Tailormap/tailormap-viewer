@@ -12,11 +12,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow } from '@angular/material/table';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
-import { PanelResizerComponent } from '../../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AttributeListFeatureDetailsComponent } from '../attribute-list-feature-details/attribute-list-feature-details.component';
 import { NgClass } from '@angular/common';
+import { TooltipDirective, PanelResizerComponent } from '@tailormap-viewer/shared';
 
 const DEFAULT_COLUMN_WIDTH = 170;
 

@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, signal, output } from '@angular/core';
 import { ImageHelper } from '@tailormap-admin/admin-api';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
+import { ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 
 
 @Component({

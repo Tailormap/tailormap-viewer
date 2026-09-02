@@ -12,9 +12,9 @@ import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSelectionList, MatListItem } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-application-filters-list',

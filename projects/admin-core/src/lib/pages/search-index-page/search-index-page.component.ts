@@ -6,8 +6,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchIndexPingResponseModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminPageTemplateComponent } from '../../templates/admin-page-template/admin-page-template.component';
 import { SearchIndexListComponent } from '../../search-index/search-index-list/search-index-list.component';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { AsyncPipe } from '@angular/common';
+import { ErrorMessageComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-search-index-page',

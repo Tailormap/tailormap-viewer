@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject } from '@angular/core';
-import { DropZoneOptions, FlatTreeModel, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
+import { DropZoneOptions, FlatTreeModel, LoadingStateEnum, TreeService, ErrorMessageComponent, TreeComponent } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { Store } from '@ngrx/store';
@@ -9,9 +9,7 @@ import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogService } from '../services/catalog.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
-import { TreeComponent } from '../../../../../shared/src/lib/components/tree/tree.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

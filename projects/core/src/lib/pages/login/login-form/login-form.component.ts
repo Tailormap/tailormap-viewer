@@ -5,11 +5,10 @@ import { BehaviorSubject, Observable, take } from 'rxjs';
 import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/api';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
-import { ErrorMessageComponent } from '../../../../../../shared/src/lib/components/error-message/error-message.component';
 import { MatButton } from '@angular/material/button';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives/auto-focus.directive';
 import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { ErrorMessageComponent, AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-login-form',

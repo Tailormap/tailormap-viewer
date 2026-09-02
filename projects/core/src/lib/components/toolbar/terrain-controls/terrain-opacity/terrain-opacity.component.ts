@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, input } from '@angular/core';
 import { MapService } from '@tailormap-viewer/map';
 import { Observable, of } from 'rxjs';
-import { SliderComponent } from '../../../../../../../shared/src/lib/components/slider/slider.component';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
+import { SliderComponent, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-terrain-opacity',

@@ -10,14 +10,13 @@ import {
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { Routes } from '../../routes';
 import { clearSelectedApplication, setSelectedApplication } from '../state/application.actions';
-import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { ApplicationService } from '../services/application.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { ApplicationCopyDialogComponent } from '../application-copy-dialog/application-copy-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { MatButton } from '@angular/material/button';
-import { SpinnerButtonComponent } from '../../../../../shared/src/lib/components/spinner-button/spinner-button.component';
 import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({

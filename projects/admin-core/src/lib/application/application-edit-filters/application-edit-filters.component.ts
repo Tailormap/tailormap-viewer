@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, Signal, inject } from '@a
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TooltipDirective } from '@tailormap-viewer/shared';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
-import { TooltipDirective } from '../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIconButton } from '@angular/material/button';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';

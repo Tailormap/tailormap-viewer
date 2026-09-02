@@ -8,12 +8,12 @@ import { debounceTime } from 'rxjs';
 import { AdminProjectionsHelper } from '../../helpers/admin-projections-helper';
 import { nanoid } from 'nanoid';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
-import { InfoMessageComponent } from '../../../../../../shared/src/lib/components/info-message/info-message.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { InfoMessageComponent } from '@tailormap-viewer/shared';
 
 
 type UrlFormType = FormGroup<{

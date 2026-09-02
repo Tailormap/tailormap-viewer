@@ -4,9 +4,8 @@ import { map, Observable } from 'rxjs';
 import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
-import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { AttributeFilterHelper, AttributeFilterComponent } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { AttributeFilterComponent } from '../../../../../../shared/src/lib/components/attribute-filter/attribute-filter.component';
 import { MatButton } from '@angular/material/button';
 
 export interface FilterDialogData {

@@ -2,11 +2,10 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit
 import {
   AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
 } from '@tailormap-admin/admin-api';
-import { ArrayHelper, TemplatePicklistConfig } from '@tailormap-viewer/shared';
+import { ArrayHelper, TemplatePicklistConfig, MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { MarkdownEditorComponent } from '../../../../../shared/src/lib/components/markdown-editor/markdown-editor.component';
 
 @Component({
     selector: 'tm-admin-feature-type-template',

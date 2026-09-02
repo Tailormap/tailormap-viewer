@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core';
 import { AppLayerSettingsModel, FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
-import { ErrorMessageComponent } from '../../../../../shared/src/lib/components/error-message/error-message.component';
+import { ErrorMessageComponent } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-admin-form-warning-message',

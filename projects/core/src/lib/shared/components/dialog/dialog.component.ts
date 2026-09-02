@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
-import { BrowserHelper } from '@tailormap-viewer/shared';
+import { BrowserHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 
 const DIALOG_DEFAULT_WIDTH = 300;
 

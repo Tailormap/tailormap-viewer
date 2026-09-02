@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel, HtmlifyPipe } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectLayer } from '../../../map';
 import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
-import { HtmlifyPipe } from '../../../../../../shared/src/lib/pipes/htmlify.pipe';
 
 @Component({
     selector: 'tm-toc-node-details-mobile',

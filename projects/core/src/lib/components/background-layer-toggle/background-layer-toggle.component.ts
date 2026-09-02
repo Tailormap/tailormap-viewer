@@ -5,9 +5,8 @@ import {
   selectBackgroundNodesList, selectIn3dView, selectInitiallySelectedBackgroundNodes, selectLayersWithoutWebMercatorIds,
   selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
-import { SplitButtonOptionModel } from '@tailormap-viewer/shared';
+import { SplitButtonOptionModel, SplitButtonComponent } from '@tailormap-viewer/shared';
 import { setSelectedBackgroundNodeId } from '../../map/state/map.actions';
-import { SplitButtonComponent } from '../../../../../shared/src/lib/components/split-button/split-button.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

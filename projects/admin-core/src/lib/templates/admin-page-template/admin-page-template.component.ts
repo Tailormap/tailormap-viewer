@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, signal, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { PanelResizerComponent } from '../../../../../shared/src/lib/components/panel-resizer/panel-resizer.component';
 import { RouterOutlet } from '@angular/router';
+import { PanelResizerComponent } from '@tailormap-viewer/shared';
 
 const LOCALSTORAGE_LIST_WIDTH_KEY = 'tm-admin-page-template-list-width';
 

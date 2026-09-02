@@ -19,7 +19,7 @@ import {
   updateSelectedDrawingFeatureGeometry,
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { ConfirmDialogService, DynamicComponentsHelper } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, DynamicComponentsHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, DrawingComponentConfigModel, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
 import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
@@ -27,7 +27,6 @@ import { DrawingFeatureRegistrationService } from '../services/drawing-feature-r
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';

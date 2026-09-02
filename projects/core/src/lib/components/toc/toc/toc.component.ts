@@ -4,7 +4,7 @@ import {
 import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
   BaseTreeModel, BrowserHelper, DropZoneHelper, DynamicComponentsHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel,
-  TreeService,
+  TreeService, TooltipDirective, TreeComponent,
 } from '@tailormap-viewer/shared';
 import { map, tap } from 'rxjs/operators';
 import { MenubarService } from '../../menubar';
@@ -29,10 +29,8 @@ import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.componen
 import { TocNodeDetailsMobileComponent } from '../toc-node-details-mobile/toc-node-details-mobile.component';
 import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { MatIconButton } from '@angular/material/button';
-import { TooltipDirective } from '../../../../../../shared/src/lib/directives/tooltip.directive';
 import { MatIcon } from '@angular/material/icon';
 import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
-import { TreeComponent } from '../../../../../../shared/src/lib/components/tree/tree.component';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
 import { AsyncPipe } from '@angular/common';
 

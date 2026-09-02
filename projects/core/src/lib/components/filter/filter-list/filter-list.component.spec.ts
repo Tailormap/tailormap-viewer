@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { FilterListComponent } from './filter-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.mock';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 describe('FilterListComponent', () => {
 
