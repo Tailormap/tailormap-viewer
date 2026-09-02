@@ -2150,6 +2150,10 @@
         <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
         <target>Komma-getrennte Liste von Gruppen, die allen angemeldeten Benutzern zugewiesen sind (einschließlich Aliase für diese Gruppen).</target>
       </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-checkbox" datatype="html">
+        <source>Disable automatic group creation</source>
+        <target>Automatische Gruppenerstellung deaktivieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.oidc.disable-automatic-group-creation-hint" datatype="html">
         <source>If checked, groups will not be automatically created for roles received from the identity provider. This is useful if you want to manage groups manually or many unnecessary groups are received unfiltered from the identity provider.</source>
         <target>Wenn aktiviert, werden Gruppen für Rollen, die vom Identitätsanbieter empfangen werden, nicht automatisch erstellt. Dies ist nützlich, wenn Sie Gruppen manuell verwalten möchten oder viele unnötige Gruppen ungefiltert vom Identitätsanbieter empfangen werden.</target>
