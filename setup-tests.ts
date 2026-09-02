@@ -17,23 +17,23 @@ global.TextDecoder = TextDecoder;
 
 window.ResizeObserver =
   window.ResizeObserver ||
-  vi.fn().mockImplementation(() => ({
-    disconnect: vi.fn(),
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-  }));
+  vi.fn(class {
+    public disconnect = vi.fn();
+    public observe = vi.fn();
+    public unobserve = vi.fn();
+  });
 
 window.IntersectionObserver =
   window.IntersectionObserver ||
-  vi.fn().mockImplementation(() => ({
-    disconnect: vi.fn(),
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-  }));
+  vi.fn(class {
+    public disconnect = vi.fn();
+    public observe = vi.fn();
+    public unobserve = vi.fn();
+  });
 
-window.EventSource = window.EventSource || vi.fn().mockImplementation(() => ({
-  close: vi.fn(),
-}));
+window.EventSource = window.EventSource || vi.fn(class {
+  public close = vi.fn();
+});
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
