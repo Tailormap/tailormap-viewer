@@ -7,10 +7,10 @@ import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 import { of } from 'rxjs';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 
 let idCount = 0;
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => {
     idCount++;
     return `id-${idCount}`;
@@ -18,9 +18,9 @@ jest.mock('nanoid', () => ({
 }));
 
 const setup = async () => {
-  const store = { dispatch: jest.fn(), select: jest.fn(() => of(null)) };
+  const store = { dispatch: vi.fn(), select: vi.fn(() => of(null)) };
   const mapServiceMock = createMapServiceMockWithDrawingTools();
-  const mockSpatialCrudService = { addGeometry: jest.fn(), removeGeometry: jest.fn() };
+  const mockSpatialCrudService = { addGeometry: vi.fn(), removeGeometry: vi.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
     declarations: [MapDrawingButtonsComponent],
     imports: [ SharedModule, MatIconTestingModule ],

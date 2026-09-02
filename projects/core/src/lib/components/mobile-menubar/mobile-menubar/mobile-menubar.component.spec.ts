@@ -8,14 +8,15 @@ import { ComponentRegistrationService } from '../../../services/component-regist
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileMenubarComponent } from './mobile-menubar.component';
+import { MenubarModule } from '../../menubar/menubar.module';
 
 @Component({
   selector: 'tm-menu-button-test',
-  standalone: false,
-  template: '<tm-menubar-button icon="test" [tooltip$]="tooltip$">Click me</tm-menubar-button>',
+  imports: [MenubarModule],
+  template: '<tm-menubar-button icon="test" [tooltip]="tooltip">Click me</tm-menubar-button>',
 })
 class TmTestingComponent {
-  public tooltip$ = of('MenuButton');
+  public tooltip = 'MenuButton';
 }
 
 const mockedControlsService = {

@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
+import type { Mock } from 'vitest';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -19,7 +20,7 @@ import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
 import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
@@ -51,19 +52,19 @@ const buildMockStore = (selectedLayer = '') => {
   });
 };
 
-const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
+const getMenubarService = (visible: boolean, registerComponentFn: Mock) => {
   return { provide: MenubarService, useValue: {
       isComponentVisible$: () => of(visible),
       registerComponent: registerComponentFn,
-      deregisterComponent: jest.fn(),
+      deregisterComponent: vi.fn(),
     },
   };
 };
 
 const setup = async (visible: boolean, selectedLayer = '') => {
-  const registerComponentFn = jest.fn();
+  const registerComponentFn = vi.fn();
   const mockStore = buildMockStore(selectedLayer);
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
@@ -72,7 +73,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
-      { provide: AuthenticatedUserService, useValue: { getUserDetails$: jest.fn(() => of({ isAuthenticated: false })) } },
+      { provide: AuthenticatedUserService, useValue: { getUserDetails$: vi.fn(() => of({ isAuthenticated: false })) } },
     ],
   });
   return { registerComponentFn, mockStore, mockDispatch };

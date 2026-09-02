@@ -58,11 +58,11 @@ const setup = async () => {
   };
   const featureType = getFeatureType({ name: 'ft_1', title: 'some table' });
   const featureSourceService = {
-    updateFeatureSource$: jest.fn(() => of({})),
-    getDraftFeatureSource$: jest.fn(() => of({
+    updateFeatureSource$: vi.fn(() => of({})),
+    getDraftFeatureSource$: vi.fn(() => of({
       ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC, featureTypes: [featureType] }),
     })),
-    getDraftFeatureType$: jest.fn(() => of({ ...featureType })),
+    getDraftFeatureType$: vi.fn(() => of({ ...featureType })),
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {

@@ -15,15 +15,15 @@ import { ComponentRegistrationService } from '../../../services/component-regist
 describe('InfoComponent', () => {
   test('should render template content', async () => {
     const mockMenubarService = {
-      isComponentVisible$: jest.fn(() => of(true)),
-      registerComponent: jest.fn(),
-      toggleActiveComponent: jest.fn(),
-      deregisterComponent: jest.fn(),
+      isComponentVisible$: vi.fn(() => of(true)),
+      registerComponent: vi.fn(),
+      toggleActiveComponent: vi.fn(),
+      deregisterComponent: vi.fn(),
     };
 
     const mockComponentRegistrationService = {
-      registerComponent: jest.fn(),
-      deregisterComponent: jest.fn(),
+      registerComponent: vi.fn(),
+      deregisterComponent: vi.fn(),
     };
 
     const mockConfig: ComponentModel<InfoComponentConfigModel> = {

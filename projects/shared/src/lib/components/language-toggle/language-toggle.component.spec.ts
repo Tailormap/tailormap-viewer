@@ -7,8 +7,8 @@ import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-const hrefGetMock = jest.fn();
-const hrefSetMock = jest.fn();
+const hrefGetMock = vi.fn();
+const hrefSetMock = vi.fn();
 
 const setup = async (baseHref: string, locale: string, currentHref?: string) => {
   if (currentHref) {

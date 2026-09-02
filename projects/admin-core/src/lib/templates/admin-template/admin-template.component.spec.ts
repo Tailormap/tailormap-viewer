@@ -16,7 +16,7 @@ describe('AdminTemplateComponent', () => {
       declarations: [NavigationComponent],
       providers: [
         { provide: APP_BASE_HREF, useValue: '' },
-        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: jest.fn(() => of({})) } },
+        { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: vi.fn(() => of({})) } },
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
     });

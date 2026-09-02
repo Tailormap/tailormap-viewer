@@ -11,24 +11,24 @@ import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated
 describe('EditFormComponent', () => {
 
   test('should render', async () => {
-    const featureAttributeChanged = jest.fn();
+    const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
       imports: [SharedModule],
       providers: [
         {
           provide: TAILORMAP_SECURITY_API_V1_SERVICE,
           useValue: {
-            getUserDetails$: jest.fn(() => of({})),
+            getUserDetails$: vi.fn(() => of({})),
           },
         },
       ],
       inputs: { input: {
         feature: {
-          feature: getFeatureModel(),
+          feature: { ...getFeatureModel(), layerId: 'layer-1' },
           columnMetadata: [
-            { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-            { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+            { name: 'prop', alias: 'Property', type: AttributeType.STRING, layerId: 'layer-1' },
+            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING, layerId: 'layer-1' },
+            { name: 'fid', alias: 'fid', type: AttributeType.STRING, layerId: 'layer-1' },
           ],
         },
         details: getLayerDetailsModel({
@@ -48,7 +48,7 @@ describe('EditFormComponent', () => {
   });
 
   test('should render form', async () => {
-    const featureAttributeChanged = jest.fn();
+    const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
       imports: [SharedModule],
       providers: [
@@ -56,18 +56,13 @@ describe('EditFormComponent', () => {
       ],
       inputs: { input: {
           feature: {
-            feature: getFeatureModel(),
+            feature: { ...getFeatureModel(), layerId: 'layer-1' },
             columnMetadata: [
-              { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-              { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-              { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+              { name: 'prop', alias: 'Property', type: AttributeType.STRING, layerId: 'layer-1' },
+              { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING, layerId: 'layer-1' },
+              { name: 'fid', alias: 'fid', type: AttributeType.STRING, layerId: 'layer-1' },
             ],
           },
-          columnMetadata: [
-            { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-            { name: 'fid', alias: 'fid', type: AttributeType.STRING },
-          ],
           details: getLayerDetailsModel({
             editable: true,
             attributes: [

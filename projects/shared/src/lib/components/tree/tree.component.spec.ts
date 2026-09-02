@@ -34,8 +34,8 @@ const getTree = () => [
 describe('TreeComponent', () => {
 
   test('renders tree', async () => {
-    const ngZoneRunMock = jest.fn((cb: () => void) => cb());
-    const ngZoneOutsideMock = jest.fn();
+    const ngZoneRunMock = vi.fn((cb: () => void) => cb());
+    const ngZoneOutsideMock = vi.fn();
     const treeService = new TreeService();
     const { fixture } = await render(TreeComponent, {
       providers: [

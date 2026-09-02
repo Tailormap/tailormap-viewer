@@ -22,14 +22,14 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       [catalogStateKey]: { ...initialCatalogState, ...state },
     },
   });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   const mockApiService = {
-    getGeoServices$: jest.fn(() => {
+    getGeoServices$: vi.fn(() => {
       return of([getGeoService()]);
     }),
   };
-  const loadCatalog = jest.fn();
+  const loadCatalog = vi.fn();
   await render(CatalogBaseTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [CatalogBaseTreeNodeComponent],

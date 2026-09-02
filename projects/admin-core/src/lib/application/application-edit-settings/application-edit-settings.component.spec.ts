@@ -29,8 +29,8 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     initialState: { [applicationStateKey]: appState, [userStateKey]: initialUserState },
   });
   const configService = {
-    getConfigValue$: jest.fn(() => of(isDefaultApplication ? 'app1' : '')),
-    saveConfig$: jest.fn(() => of(null)),
+    getConfigValue$: vi.fn(() => of(isDefaultApplication ? 'app1' : '')),
+    saveConfig$: vi.fn(() => of(null)),
   };
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -46,7 +46,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
       provideHttpClientTesting(),
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

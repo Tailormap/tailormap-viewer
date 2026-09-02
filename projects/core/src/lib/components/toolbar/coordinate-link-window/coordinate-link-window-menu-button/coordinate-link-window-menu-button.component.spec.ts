@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 describe('CoordinateLinkWindowMenuButtonComponent', () => {
 
   test('renders', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarServiceMock = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

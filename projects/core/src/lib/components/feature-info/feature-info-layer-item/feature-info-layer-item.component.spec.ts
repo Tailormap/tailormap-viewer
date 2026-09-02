@@ -10,7 +10,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 describe('FeatureInfoLayerItemComponent', () => {
 
   test('should render', async () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     await render(FeatureInfoLayerItemComponent, {
       imports: [ MatIconModule, MatIconTestingModule, SharedDirectivesModule ],
       providers: [{ provide: Store, useValue: { dispatch } }],

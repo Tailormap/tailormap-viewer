@@ -18,14 +18,14 @@ describe('LayerSettingsFormComponent', () => {
       initialState: { [userStateKey]: initialUserState },
     });
 
-    const changedFn = jest.fn();
+    const changedFn = vi.fn();
     await render(LayerSettingsFormComponent, {
       imports: [SharedModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [ TriStateBooleanComponent, AuthorizationEditComponent ],
       providers: [
         store,
-        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of(null)) } },
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
       inputs: { isLayerSpecific: true, protocol: GeoServiceProtocolEnum.WMTS },

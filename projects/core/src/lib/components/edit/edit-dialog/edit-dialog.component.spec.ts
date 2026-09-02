@@ -13,7 +13,7 @@ import { FeatureWithMetadataModel } from '../models/feature-with-metadata.model'
 import { of } from 'rxjs';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 import { CoreSharedModule } from '../../../shared';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
 
@@ -46,8 +46,8 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
         [editStateKey]: { ...initialEditState },
         [coreStateKey]: { ...initialCoreState, viewer: { components: [] } as ViewerState },
       }, selectors }),
-      { provide: UniqueValuesService, useValue: { clearCaches: jest.fn() } },
-      { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+      { provide: UniqueValuesService, useValue: { clearCaches: vi.fn() } },
+      { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       { provide: EditMapToolService, useValue: { allEditGeometry$: of() } },
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

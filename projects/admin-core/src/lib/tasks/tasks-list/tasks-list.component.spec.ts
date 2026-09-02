@@ -21,7 +21,7 @@ const setup = async () => {
     imports: [SharedModule],
     providers: [
       { provide: Store, useValue: mockStore },
-      { provide: TaskMonitoringService, useValue: { loadTasks: jest.fn() } },
+      { provide: TaskMonitoringService, useValue: { loadTasks: vi.fn() } },
     ],
   });
   return mockStore;

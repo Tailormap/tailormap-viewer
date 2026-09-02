@@ -58,7 +58,7 @@ describe('FeatureTypesHelper', () => {
       expect(geoJSON.geometry.coordinates.length).toBe(2);
       expect(geoJSON.geometry.coordinates[0]).toBe(2);
     } else {
-      fail('Expected coordinates to be defined');
+      throw new Error('Expected coordinates to be defined');
     }
     expect(geoJSON.properties).toBeDefined();
     expect(geoJSON.properties?.['radius']).toBeDefined();

@@ -18,17 +18,17 @@ const setup = async (hasGroup?: boolean) => {
     paramMap: of({ get: () => 'secret-group' }),
   };
   const groupService = {
-    selectGroup: jest.fn(),
+    selectGroup: vi.fn(),
     getGroups$: () => of([]),
     getGroupByName$: () => hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
-    deleteGroup$: jest.fn(() => of(true)),
-    addOrUpdateGroup$: jest.fn(() => of(true)),
+    deleteGroup$: vi.fn(() => of(true)),
+    addOrUpdateGroup$: vi.fn(() => of(true)),
   };
   const oidcConfigurationService = {
-    getOIDCConfigurations$: jest.fn(() => of([])),
+    getOIDCConfigurations$: vi.fn(() => of([])),
   };
   const router = {
-    navigateByUrl: jest.fn(),
+    navigateByUrl: vi.fn(),
   };
   await render(GroupEditComponent, {
     declarations: [ GroupFormComponent, SaveButtonComponent, SpinnerButtonComponent ],

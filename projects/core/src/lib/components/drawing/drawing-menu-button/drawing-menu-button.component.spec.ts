@@ -12,7 +12,7 @@ import { MatBadge } from '@angular/material/badge';
 describe('DrawingMenuButtonComponent', () => {
 
   test('should render', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarService = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

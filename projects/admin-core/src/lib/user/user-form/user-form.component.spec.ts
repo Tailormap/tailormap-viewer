@@ -14,13 +14,13 @@ import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async (isValidPassword: boolean) => {
   const mockAdminApiService = {
-    getGroups$: jest.fn(() => of([])),
-    getUsers$: jest.fn(() => of([])),
+    getGroups$: vi.fn(() => of([])),
+    getUsers$: vi.fn(() => of([])),
   };
   const mockApiService = {
-    validatePasswordStrength$: jest.fn(() => of(isValidPassword)),
+    validatePasswordStrength$: vi.fn(() => of(isValidPassword)),
   };
-  const userUpdated = jest.fn();
+  const userUpdated = vi.fn();
   await render(UserFormComponent, {
     imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [PasswordFieldComponent],

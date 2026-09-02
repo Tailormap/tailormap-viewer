@@ -14,8 +14,8 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
-  const dialogRefMock = { close: jest.fn() };
-  const featureServiceMock = { createFeatureSource$: jest.fn(() => of({})), updateFeatureSource$: jest.fn(() => of({})) };
+  const dialogRefMock = { close: vi.fn() };
+  const featureServiceMock = { createFeatureSource$: vi.fn(() => of({})), updateFeatureSource$: vi.fn(() => of({})) };
   await render(FeatureSourceFormDialogComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
@@ -37,16 +37,16 @@ const setup = async (editMode = false) => {
 describe('FeatureSourceFormDialogComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render and handle cancel', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
     await ue.click(screen.getByText('Cancel'));
@@ -54,8 +54,8 @@ describe('FeatureSourceFormDialogComponent', () => {
   });
 
   test('should save new node', async () => {
-    jest.useFakeTimers();
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    vi.useFakeTimers();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
 
     const { featureServiceMock, dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('FeatureSourceFormDialogComponent', () => {
   });
 
   test('should edit node', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureServiceMock, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit wfs source')).toBeInTheDocument();
     await ue.type(await screen.findByPlaceholderText('URL'), '/path');

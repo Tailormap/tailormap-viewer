@@ -2,10 +2,10 @@ import { OpenLayersMapTooltip } from './open-layers-map-tooltip';
 import { screen } from '@testing-library/angular';
 
 const getMapMock = () => ({
-  addOverlay: jest.fn(overlay => {
+  addOverlay: vi.fn(overlay => {
     document.body.appendChild(overlay.getElement());
   }),
-  removeOverlay: jest.fn(overlay => {
+  removeOverlay: vi.fn(overlay => {
     try {
       document.body.removeChild(overlay.getElement());
     } catch (e) {

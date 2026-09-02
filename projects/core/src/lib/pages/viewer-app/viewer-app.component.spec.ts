@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { getMapServiceMock } from '../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../test-helpers/map-service.mock';
 import {
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1MockService, TailormapSecurityApiV1MockService,
 } from '@tailormap-viewer/api';
@@ -23,11 +23,11 @@ export const getActivatedRouteProvider = (segments: string[], fragment = '') => 
 };
 
 export const getMockedRouterProvider = () => {
-  return { provide: Router, useValue: { navigate: jest.fn() } };
+  return { provide: Router, useValue: { navigate: vi.fn() } };
 };
 
 const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => {
-  const loadViewer = jest.fn();
+  const loadViewer = vi.fn();
   const { container } = await render(ViewerAppComponent, {
     declarations: [ ViewerAppComponent, ErrorMessageComponent ],
     imports: [MatProgressSpinnerModule],

@@ -8,12 +8,12 @@ import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async () => {
-  const groupUpdated = jest.fn();
+  const groupUpdated = vi.fn();
   const groupService = {
     getGroups$: () => of([]),
   };
   const oidcConfigurationService = {
-    getOIDCConfigurations$: jest.fn(() => of([])),
+    getOIDCConfigurations$: vi.fn(() => of([])),
   };
   await render(GroupFormComponent, {
     imports: [ SharedImportsModule, SharedAdminComponentsModule ],

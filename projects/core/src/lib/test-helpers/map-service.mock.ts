@@ -7,39 +7,39 @@ export const getMapServiceMock = (
   overrides?: Partial<Record<keyof MapService, any>>,
 ) => {
   const toolManagerMock = {
-    enableTool: jest.fn(),
-    disableTool: jest.fn(),
-    getToolStatusChanged$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
-    getTool: jest.fn(() => null),
+    enableTool: vi.fn(),
+    disableTool: vi.fn(),
+    getToolStatusChanged$: vi.fn(() => of({ disabledTools: [], enabledTools: [] })),
+    getTool: vi.fn(() => null),
   };
   const mapServiceMock = {
-    render: jest.fn(),
-    refreshLayer: jest.fn(),
-    getRoundedCoordinates$: jest.fn(coords => of(coords)),
-    getPixelForCoordinates$: jest.fn((coords: [number, number]) => of(coords)),
-    createTool$: jest.fn(({ type }) => {
+    render: vi.fn(),
+    refreshLayer: vi.fn(),
+    getRoundedCoordinates$: vi.fn(coords => of(coords)),
+    getPixelForCoordinates$: vi.fn((coords: [number, number]) => of(coords)),
+    createTool$: vi.fn(({ type }) => {
       // Returns a default tool with common observables if no custom tool is provided
       const defaultTool = {
         id: type,
         drawing$: new Subject().asObservable(),
         selectedFeatures$: new Subject().asObservable(),
         featureModified$: new Subject().asObservable(),
-        disableTranslate: jest.fn(),
-        enableTranslate: jest.fn(),
+        disableTranslate: vi.fn(),
+        enableTranslate: vi.fn(),
         mapClick$: new Subject().asObservable(),
       };
       const tool = createdTool ? createdTool(type) : defaultTool;
       return of({ tool, manager: toolManagerMock });
     }),
-    getToolStatusChanged$: jest.fn(() => of({ disabledTools: [], enabledTools: [] })),
-    getToolManager$: jest.fn(() => of(toolManagerMock)),
-    someToolsEnabled$: jest.fn(() => of(true)),
-    enableTool: jest.fn(),
-    disableTool: jest.fn(),
-    executeToolManagerAction: jest.fn(cb => cb(toolManagerMock)),
-    renderFeatures$: jest.fn(() => of(true)),
-    setPadding: jest.fn(() => {}),
-    getMapViewDetails$: jest.fn((): Observable<MapViewDetailsModel> => of({
+    getToolStatusChanged$: vi.fn(() => of({ disabledTools: [], enabledTools: [] })),
+    getToolManager$: vi.fn(() => of(toolManagerMock)),
+    someToolsEnabled$: vi.fn(() => of(true)),
+    enableTool: vi.fn(),
+    disableTool: vi.fn(),
+    executeToolManagerAction: vi.fn(cb => cb(toolManagerMock)),
+    renderFeatures$: vi.fn(() => of(true)),
+    setPadding: vi.fn(() => {}),
+    getMapViewDetails$: vi.fn((): Observable<MapViewDetailsModel> => of({
       zoomLevel: 0,
       resolution: 1,
       maxResolution: 100,
@@ -51,16 +51,16 @@ export const getMapServiceMock = (
       extent: null,
       center: undefined,
     })),
-    getUnitsOfMeasure$: jest.fn(() => of('degrees')),
-    zoomTo: jest.fn(),
-    zoomIn: jest.fn(),
-    zoomOut: jest.fn(),
-    zoomToInitialExtent: jest.fn(),
-    getProjectionCode$: jest.fn(() => of(projectionCode || 'EPSG:4326')),
-    getLayerManager$: jest.fn(() => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` })),
-    getPointerDrag$: jest.fn(() => new Subject().asObservable()),
-    switch3D: jest.fn(),
-    get3dTerrainOpacity$: jest.fn(() => of(1)),
+    getUnitsOfMeasure$: vi.fn(() => of('degrees')),
+    zoomTo: vi.fn(),
+    zoomIn: vi.fn(),
+    zoomOut: vi.fn(),
+    zoomToInitialExtent: vi.fn(),
+    getProjectionCode$: vi.fn(() => of(projectionCode || 'EPSG:4326')),
+    getLayerManager$: vi.fn(() => of({ getLegendUrl: (layerId: string) => `layer-${layerId}-url-from-service` })),
+    getPointerDrag$: vi.fn(() => new Subject().asObservable()),
+    switch3D: vi.fn(),
+    get3dTerrainOpacity$: vi.fn(() => of(1)),
     ...overrides,
   };
   return {
@@ -83,7 +83,7 @@ export const createMapServiceMockWithDrawingTools = () => {
       case ToolTypeEnum.Modify:
         return { id: 'modify-1', featureModified$: new Subject().asObservable() };
       case ToolTypeEnum.ExtTransform:
-        return { id: 'ext-transform-1', featureModified$: new Subject().asObservable(), disableTranslate: jest.fn(), enableTranslate: jest.fn() };
+        return { id: 'ext-transform-1', featureModified$: new Subject().asObservable(), disableTranslate: vi.fn(), enableTranslate: vi.fn() };
       case ToolTypeEnum.MapClick:
         return { id: 'mapclick-1', mapClick$: new Subject().asObservable() };
       default:
@@ -98,10 +98,3 @@ export const createMapServiceMockWithDrawingTools = () => {
     createTool$: mapServiceMock.createTool$,
   };
 };
-
-// Dummy test to prevent "Your test suite must contain at least one test." error
-describe('AuthenticatedUserTestHelper', () => {
-  test('provideAuthenticatedUserServiceWithUser', () => {
-    expect(1).toEqual(1);
-  });
-});

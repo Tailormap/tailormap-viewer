@@ -12,7 +12,7 @@ describe('ApplicationCreateComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [MatSnackBarModule],
       providers: [
-        { provide: ApplicationService, useValue: { createApplication$: jest.fn(() => of({})) } },
+        { provide: ApplicationService, useValue: { createApplication$: vi.fn(() => of({})) } },
       ],
     });
     expect(screen.getByText('Create application'));

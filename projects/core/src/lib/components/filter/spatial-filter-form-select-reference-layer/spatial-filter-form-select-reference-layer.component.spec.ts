@@ -27,7 +27,7 @@ const setup = async (
     ],
   });
   const filterManagerService = { referencableLayers$: of(layers) };
-  const mockSpatialCrudService = { updateReferenceLayer: jest.fn() };
+  const mockSpatialCrudService = { updateReferenceLayer: vi.fn() };
   await render(SpatialFilterFormSelectReferenceLayerComponent, {
     imports: [SharedImportsModule],
     providers: [

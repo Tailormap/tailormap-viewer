@@ -1,5 +1,5 @@
 import {
-  ViewerResponseModel, getViewerResponseData, getComponentModel, TailormapApiV1ServiceModel, TAILORMAP_API_V1_SERVICE,
+  ViewerResponseModel, getViewerResponseData, TailormapApiV1ServiceModel, TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import { Observable, of } from 'rxjs';
 import { LoadViewerService } from './load-viewer.service';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { LoadMapService } from '../map/services/load-map.service';
 import { loadViewer, loadViewerFailed, loadViewerSuccess } from '../state/core.actions';
 import { addAllFilterGroupsInConfig } from '../state/filter-state/filter.actions';
+import { getMockApiService } from './load-viewer.service.mock';
 
 const getErrorObservable = <T>() => {
   return new Observable<T>(observer => {
@@ -19,19 +20,11 @@ const getErrorObservable = <T>() => {
   });
 };
 
-export const getMockApiService = (overrides?: Partial<TailormapApiV1ServiceModel>) => {
-  return {
-    getViewer$: (id?: string) => of(getViewerResponseData(id ? { id } : {})),
-    getComponents$: () => of([getComponentModel()]),
-    ...overrides,
-  } as TailormapApiV1ServiceModel;
-};
-
 describe('LoadViewerService', () => {
 
   const setup = (apiOverrides?: Partial<TailormapApiV1ServiceModel>, currentPath = '/') => {
-    const navigate = jest.fn();
-    const loadMap = jest.fn();
+    const navigate = vi.fn();
+    const loadMap = vi.fn();
     TestBed.configureTestingModule({
       providers: [
         LoadViewerService,
@@ -45,7 +38,8 @@ describe('LoadViewerService', () => {
     const service = TestBed.inject(LoadViewerService);
     const store = TestBed.inject(Store);
     const dispatched: Action[] = [];
-    jest.spyOn(store, 'dispatch').mockImplementation(action => { dispatched.push(action); });
+    // `dispatch` is overloaded; spy on it through a single-signature view so the mock implementation type-checks.
+    vi.spyOn(store as unknown as { dispatch: (action: Action) => void }, 'dispatch').mockImplementation(action => { dispatched.push(action); });
     return { service, dispatched, navigate, loadMap };
   };
 

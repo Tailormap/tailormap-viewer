@@ -32,7 +32,7 @@ import { ExtendedAppLayerModel } from '../../../map/models';
 import { CoreSharedModule } from '../../../shared';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { AttributeListSourceModel } from '../models/attribute-list-source.model';
 import { Observable, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
@@ -128,7 +128,7 @@ const setupWithActualState = async (store?: StoreDef) => {
     [featureInfoStateKey]: featureInfoReducer,
   };
   const mockService = new TailormapApiV1MockService();
-  mockService.getFeatures$ = jest.fn(({ layerId }) => {
+  mockService.getFeatures$ = vi.fn(({ layerId }) => {
     if (layerId === '1') {
       return of({
         features: createDummyFeatures(10),
@@ -280,7 +280,7 @@ describe('AttributeList', () => {
         label: 'Third tab',
       }]),
       dataLoader: {
-        getFeatures$: jest.fn((): Observable<FeaturesResponseModel> => {
+        getFeatures$: vi.fn((): Observable<FeaturesResponseModel> => {
           return of({
             features: [
               { __fid: '1', attributes: { name: 'Pro', title: 'Tailormap Pro' } },

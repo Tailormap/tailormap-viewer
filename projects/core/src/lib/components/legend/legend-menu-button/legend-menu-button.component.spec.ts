@@ -12,7 +12,7 @@ import { MatBadge } from '@angular/material/badge';
 describe('LegendMenuButtonComponent', () => {
 
   test('renders', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarServiceMock = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

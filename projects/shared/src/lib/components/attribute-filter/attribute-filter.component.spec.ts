@@ -14,7 +14,7 @@ import { of } from 'rxjs';
 describe('AttributeFilterComponent', () => {
 
   test('should create a filter', async () => {
-    const filterChangedFn = jest.fn(() => {});
+    const filterChangedFn = vi.fn(() => {});
     await render(AttributeFilterComponent, {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
       inputs: {
@@ -37,7 +37,7 @@ describe('AttributeFilterComponent', () => {
   });
 
   test('should not render case sensitive for unique values', async () => {
-    const filterChangedFn = jest.fn(() => {});
+    const filterChangedFn = vi.fn(() => {});
     const uniqueValuesLoader$ = of([ 'value1', 'value2' ]);
     await render(AttributeFilterComponent, {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],

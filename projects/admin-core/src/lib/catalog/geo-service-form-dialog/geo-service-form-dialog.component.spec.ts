@@ -21,7 +21,7 @@ import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (editMode = false) => {
-  const dialogRefMock = { close: jest.fn() };
+  const dialogRefMock = { close: vi.fn() };
   const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
@@ -32,7 +32,7 @@ const setup = async (editMode = false) => {
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],

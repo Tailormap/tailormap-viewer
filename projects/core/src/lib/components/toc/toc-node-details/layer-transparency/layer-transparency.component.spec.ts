@@ -25,7 +25,7 @@ describe('LayerTransparencyComponent', () => {
         }),
       ],
     });
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const store = TestBed.inject(MockStore);
     store.dispatch = dispatch;
 

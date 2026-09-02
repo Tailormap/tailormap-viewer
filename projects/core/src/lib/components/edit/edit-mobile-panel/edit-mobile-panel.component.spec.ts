@@ -12,18 +12,18 @@ import { selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
 
 const setup = async (visible: boolean) => {
   const menubarServiceMock = {
-    isComponentVisible$: jest.fn(() => of(visible)),
-    setMobilePanelHeight: jest.fn(),
-    toggleActiveComponent: jest.fn(),
+    isComponentVisible$: vi.fn(() => of(visible)),
+    setMobilePanelHeight: vi.fn(),
+    toggleActiveComponent: vi.fn(),
   };
 
   const authenticatedUserServiceMock = {
-    getUserDetails$: jest.fn(() => of({ isAuthenticated: true })),
+    getUserDetails$: vi.fn(() => of({ isAuthenticated: true })),
   };
 
   const componentRegistrationServiceMock = {
-    registerComponent: jest.fn(),
-    deregisterComponent: jest.fn(),
+    registerComponent: vi.fn(),
+    deregisterComponent: vi.fn(),
   };
 
   const mobileLayoutServiceMock = {
@@ -31,7 +31,7 @@ const setup = async (visible: boolean) => {
   };
 
   const mapServiceMock = {
-    someToolsEnabled$: jest.fn(() => of(false)),
+    someToolsEnabled$: vi.fn(() => of(false)),
   };
 
   const { container } = await render(EditMobilePanelComponent, {

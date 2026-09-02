@@ -17,7 +17,7 @@ describe('PasswordResetRequestFormComponent', () => {
   });
 
   test('triggers requestReset method', async () => {
-    const requestResetFn = jest.fn(() => of<boolean>(true));
+    const requestResetFn = vi.fn(() => of<boolean>(true));
     await render(PasswordResetRequestFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [ReactiveFormsModule], declarations: [AutoFocusDirective], inputs: {
         requestReset$: requestResetFn,

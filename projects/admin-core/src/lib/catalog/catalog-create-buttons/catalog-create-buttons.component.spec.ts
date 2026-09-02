@@ -25,8 +25,8 @@ import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-us
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (hasNode = false) => {
-  const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
-  const updateCatalogNodeMock = jest.fn(() => of(true));
+  const createCatalogNodeMock = vi.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
+  const updateCatalogNodeMock = vi.fn(() => of(true));
   const catalogService = {
     createCatalogNode$: createCatalogNodeMock,
     updateCatalogNode$: updateCatalogNodeMock,
@@ -59,8 +59,8 @@ const setup = async (hasNode = false) => {
       { provide: CatalogService, useValue: catalogService },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
-      { provide: Router, useValue: { navigateByUrl: jest.fn() } },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: Router, useValue: { navigateByUrl: vi.fn() } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

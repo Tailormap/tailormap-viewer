@@ -7,7 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfig } from '../../../state/core.selectors';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const setup = async () => {
   const drawingSubject = new Subject<any>();
@@ -21,7 +21,7 @@ const setup = async () => {
       { selector: selectComponentsConfig, value: [] },
     ],
   });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(MeasureComponent, {
     imports: [

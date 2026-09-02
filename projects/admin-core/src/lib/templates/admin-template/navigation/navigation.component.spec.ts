@@ -8,7 +8,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (isAuthenticated: boolean, nonAdminUser?: boolean, searchEnabled?: boolean) => {
-  const api = { getUser$: jest.fn(() => of({})) };
+  const api = { getUser$: vi.fn(() => of({})) };
   await render(NavigationComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     providers: [

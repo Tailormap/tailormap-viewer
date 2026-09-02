@@ -42,8 +42,8 @@ const geoServiceLayer: ExtendedGeoServiceLayerModel = {
 };
 
 const setup = async (geoServiceId?: string, geoServiceLayerId?: string, featureTypeId?: string) => {
-  const getDraftGeoService$Mock = jest.fn();
-  const getDraftFeatureType$Mock = jest.fn();
+  const getDraftGeoService$Mock = vi.fn();
+  const getDraftFeatureType$Mock = vi.fn();
   const featureTypes = [featureType];
   const geoServices = [geoService];
   const geoServiceLayers = [geoServiceLayer];

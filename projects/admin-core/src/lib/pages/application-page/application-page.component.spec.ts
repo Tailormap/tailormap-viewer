@@ -27,7 +27,7 @@ describe('ApplicationPageComponent', () => {
         provideHttpClient(),
         { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: '' } },
         { provide: APP_BASE_HREF, useValue: '' },
-        { provide: ApplicationService, useValue: { loadApplications: jest.fn() } },
+        { provide: ApplicationService, useValue: { loadApplications: vi.fn() } },
       ],
     });
     expect(await screen.findByText('Applications')).toBeInTheDocument();

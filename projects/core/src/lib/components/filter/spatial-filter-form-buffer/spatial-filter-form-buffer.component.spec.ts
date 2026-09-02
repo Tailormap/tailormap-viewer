@@ -7,8 +7,8 @@ import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 
 const setup = async (initialValue: number | undefined) => {
-  const store = { select: jest.fn(() => of(initialValue)), dispatch: jest.fn() };
-  const mockSpatialCrudService = { updateBuffer: jest.fn() };
+  const store = { select: vi.fn(() => of(initialValue)), dispatch: vi.fn() };
+  const mockSpatialCrudService = { updateBuffer: vi.fn() };
   await render(SpatialFilterFormBufferComponent, {
     imports: [SharedImportsModule],
     providers: [

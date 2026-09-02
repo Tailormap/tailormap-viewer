@@ -5,12 +5,11 @@
     "outDir": "../../out-tsc/spec",
     "types": [
       "node",
-      "jest",
-      "@testing-library/jest-dom"
+      "vitest/globals",
+      "@testing-library/jest-dom/vitest"
     ]
   },
   "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.ts"
   ]
 }

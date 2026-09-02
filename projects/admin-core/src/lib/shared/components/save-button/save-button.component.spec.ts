@@ -6,7 +6,7 @@ import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event'
 import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (isSaving: boolean, disabled: boolean) => {
-  const saveFn = jest.fn();
+  const saveFn = vi.fn();
   await render(SaveButtonComponent, {
     imports: [ MatProgressSpinnerModule, SharedImportsModule ],
     declarations: [SpinnerButtonComponent],

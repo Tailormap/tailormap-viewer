@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { of, Subject } from 'rxjs';
+import { firstValueFrom, of, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AttributeListStatisticsService } from './attribute-list-statistics.service';
 import { AttributeListManagerService } from './attribute-list-manager.service';
@@ -34,6 +34,7 @@ const createMockData = (): AttributeListDataModel => ({
   pageSize: 10,
   totalCount: null,
   sortDirection: '',
+  checkedRows: [],
 });
 
 const setup = (options: {
@@ -56,8 +57,8 @@ const setup = (options: {
   const changedFilters$ = new Subject<Map<string, LayerFeaturesFilters | null>>();
 
   const managerService = {
-    canLoadStatistics: jest.fn().mockReturnValue(canLoadStatistics),
-    getStatistic$: jest.fn().mockImplementation((_tabSourceId: string, params: GetStatisticParams) => {
+    canLoadStatistics: vi.fn().mockReturnValue(canLoadStatistics),
+    getStatistic$: vi.fn().mockImplementation((_tabSourceId: string, params: GetStatisticParams) => {
       return of({
         success: statisticSuccess,
         result: params.statistics.map(s => ({
@@ -70,8 +71,8 @@ const setup = (options: {
   };
 
   const filterService = {
-    getFilterForLayer: jest.fn().mockReturnValue(undefined),
-    getChangedFilters$: jest.fn().mockReturnValue(changedFilters$),
+    getFilterForLayer: vi.fn().mockReturnValue(undefined),
+    getChangedFilters$: vi.fn().mockReturnValue(changedFilters$),
   };
 
   TestBed.configureTestingModule({
@@ -108,48 +109,38 @@ describe('AttributeListStatisticsService', () => {
 
   describe('canLoadStatistics$', () => {
 
-    it('should return false when no viewerId', done => {
+    it('should return false when no viewerId', async () => {
       const { service } = setup({ viewerId: null });
-      service.canLoadStatistics$.pipe(take(1)).subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+      const result = await firstValueFrom(service.canLoadStatistics$.pipe(take(1)));
+      expect(result).toBe(false);
     });
 
-    it('should return false when no selected tab', done => {
+    it('should return false when no selected tab', async () => {
       const { service } = setup({ tab: null });
-      service.canLoadStatistics$.pipe(take(1)).subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+      const result = await firstValueFrom(service.canLoadStatistics$.pipe(take(1)));
+      expect(result).toBe(false);
     });
 
-    it('should return false when manager service cannot load statistics', done => {
+    it('should return false when manager service cannot load statistics', async () => {
       const { service } = setup({ canLoadStatistics: false });
-      service.canLoadStatistics$.pipe(take(1)).subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+      const result = await firstValueFrom(service.canLoadStatistics$.pipe(take(1)));
+      expect(result).toBe(false);
     });
 
-    it('should return true when all conditions are met', done => {
+    it('should return true when all conditions are met', async () => {
       const { service } = setup({ canLoadStatistics: true });
-      service.canLoadStatistics$.pipe(take(1)).subscribe(result => {
-        expect(result).toBe(true);
-        done();
-      });
+      const result = await firstValueFrom(service.canLoadStatistics$.pipe(take(1)));
+      expect(result).toBe(true);
     });
 
   });
 
   describe('statistics$', () => {
 
-    it('should return empty array when no statistics have been loaded', done => {
+    it('should return empty array when no statistics have been loaded', async () => {
       const { service } = setup();
-      service.statistics$.pipe(take(1)).subscribe(result => {
-        expect(result).toEqual([]);
-        done();
-      });
+      const result = await firstValueFrom(service.statistics$.pipe(take(1)));
+      expect(result).toEqual([]);
     });
 
   });

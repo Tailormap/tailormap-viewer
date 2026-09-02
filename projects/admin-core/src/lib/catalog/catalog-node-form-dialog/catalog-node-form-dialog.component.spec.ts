@@ -11,10 +11,10 @@ import { SaveButtonComponent } from '../../shared/components/save-button/save-bu
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
-  const dialogRefMock = { close: jest.fn() };
+  const dialogRefMock = { close: vi.fn() };
   const catalogServiceMock = {
-    createCatalogNode$: jest.fn(() => of(true)),
-    updateCatalogNode$: jest.fn(() => of(true)),
+    createCatalogNode$: vi.fn(() => of(true)),
+    updateCatalogNode$: vi.fn(() => of(true)),
   };
   await render(CatalogNodeFormDialogComponent, {
     imports: [SharedModule],

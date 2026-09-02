@@ -14,13 +14,13 @@ import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-us
 describe('GeoServiceFormComponent', () => {
 
   test('should render', async () => {
-    const changedFn = jest.fn();
+    const changedFn = vi.fn();
     await render(GeoServiceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [ PasswordFieldComponent, AuthorizationEditComponent ],
       on: { changed: changedFn },
       providers: [
-        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
         provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],

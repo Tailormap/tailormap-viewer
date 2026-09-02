@@ -9,7 +9,7 @@ describe('UploadInUseDialogComponent', () => {
     const items = [
       { id: '1', name: 'Some place', url: 'somewhere' },
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(UploadInUseDialogComponent, {
       imports: [MatDialogModule],
       providers: [

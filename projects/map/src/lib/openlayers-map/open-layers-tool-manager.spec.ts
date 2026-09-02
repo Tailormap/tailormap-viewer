@@ -3,12 +3,12 @@ import { MapClickToolModel, ToolTypeEnum } from '../models';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 
 const mockNgZone = { run: (cb: () => void) => cb() } as any;
 
 export const getMapClickMock = () => {
-  return jest.fn(() => of({
+  return vi.fn(() => of({
     coordinate: [ 1, 2 ],
     pixel: [ 2, 3 ],
     map: {
@@ -26,14 +26,14 @@ export const getMapClickMock = () => {
 describe('OpenLayersToolManager', () => {
 
   test('creates a tool', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const tool = { type: ToolTypeEnum.MapClick, owner: 'owner', onClick };
     const manager = new OpenLayersToolManager({} as any, mockNgZone, new OpenLayersEventManager(), new CesiumEventManager(), new OpenLayersSnappingManager());
     const mapTool = manager.addTool(tool);
     expect(mapTool?.id).toMatch(/mapclick-\d+/);
   });
 
-  test('enables and disables a tool', done => {
+  test('enables and disables a tool', async () => {
     const eventManager = new OpenLayersEventManager();
     // @ts-expect-error overwriting this prop in test is allowed
     eventManager.onMapClick$ = getMapClickMock();
@@ -41,18 +41,17 @@ describe('OpenLayersToolManager', () => {
     const manager = new OpenLayersToolManager({} as any, mockNgZone, eventManager, new CesiumEventManager(), new OpenLayersSnappingManager());
     const mapTool = manager.addTool(tool);
     expect(eventManager.onMapClick$).not.toHaveBeenCalled();
-    manager.getTool<MapClickToolModel>(mapTool?.id || '')?.mapClick$.subscribe(clickEvt => {
-      expect(clickEvt).toEqual({
-        mapCoordinates: [ 1, 2 ],
-        mouseCoordinates: [ 2, 3 ],
-        resolution: 0.1,
-        scale: 714.2857142857143,
-        pointerType: 'mouse',
-      });
-      done();
-    });
+    const clickEventPromise = firstValueFrom(manager.getTool<MapClickToolModel>(mapTool?.id || '')!.mapClick$);
     manager.enableTool(mapTool?.id || '');
     expect(eventManager.onMapClick$).toHaveBeenCalled();
+    const clickEvt = await clickEventPromise;
+    expect(clickEvt).toEqual({
+      mapCoordinates: [ 1, 2 ],
+      mouseCoordinates: [ 2, 3 ],
+      resolution: 0.1,
+      scale: 714.2857142857143,
+      pointerType: 'mouse',
+    });
     manager.disableTool(mapTool?.id || '');
   });
 

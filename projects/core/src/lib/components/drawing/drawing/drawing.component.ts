@@ -174,7 +174,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:keydown.delete', ['$event'])
-  public onDeleteKey(event: KeyboardEvent) {
+  public onDeleteKey(event: Event) {
     const target = event.target as HTMLElement;
     const isInput = target && (
       target.tagName === 'INPUT' ||

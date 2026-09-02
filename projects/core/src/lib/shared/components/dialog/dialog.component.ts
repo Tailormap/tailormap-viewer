@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper } from '@tailormap-viewer/shared';
@@ -25,6 +25,14 @@ const DIALOG_DEFAULT_WIDTH = 300;
     ),
   ],
   standalone: false,
+  /* eslint-disable @typescript-eslint/naming-convention */
+  host: {
+    '[class]': 'dialogAsClass',
+    '(window:resize)': 'onResize()',
+    '(document:pointermove)': 'onDocumentPointerMove($event)',
+    '(document:pointerup)': 'onDocumentPointerUp()',
+  },
+  /* eslint-enable @typescript-eslint/naming-convention */
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   private dialogService = inject(DialogService);
@@ -80,12 +88,10 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public fullscreen = false;
 
-  @HostBinding('class')
   public get dialogAsClass() {
     return this.dialogId;
   }
 
-  @HostListener('window:resize', ['$event'])
   public onResize() {
     this.updateActualWidth();
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
@@ -107,7 +113,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.unregisterDialog(this.dialogId);
   }
 
-  @HostListener('document:pointermove', ['$event']) public onDocumentPointerMove(event: PointerEvent) {
+  public onDocumentPointerMove(event: PointerEvent) {
     if (!this.resizeActive) {
       return;
     }
@@ -122,7 +128,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  @HostListener('document:pointerup') public onDocumentPointerUp() {
+  public onDocumentPointerUp() {
     this.stopResize();
   }
 

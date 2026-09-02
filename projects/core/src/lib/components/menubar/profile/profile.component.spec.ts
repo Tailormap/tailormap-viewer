@@ -14,7 +14,7 @@ import { of } from 'rxjs';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const setup = async (loggedIn: boolean, showLoginButton = true) => {
-  const navigateFn = jest.fn();
+  const navigateFn = vi.fn();
   const store = provideMockStore({
     selectors: [
       { selector: selectShowLoginButton, value: showLoginButton },
@@ -51,10 +51,11 @@ describe('ProfileComponent', () => {
     // @ts-expect-error deleting location is allowed in testing env, restored after tests
     delete window.location;
     // @ts-expect-error overwriting location is allowed in testing env, restored after tests
-    window.location = { reload: jest.fn() };
+    window.location = { reload: vi.fn() };
   });
 
   afterAll(() => {
+    // @ts-expect-error restoring the original location, allowed in testing env
     window.location = location;
   });
 
@@ -70,7 +71,7 @@ describe('ProfileComponent', () => {
 
   test('should render when logged in', async () => {
     const { userService } = await setup(true);
-    jest.spyOn(window.location, 'reload');
+    vi.spyOn(window.location, 'reload');
     const button = await screen.getByRole('button');
     expect(button).toBeInTheDocument();
     fireEvent.click(button);

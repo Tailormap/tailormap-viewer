@@ -19,17 +19,17 @@ const setup = async (hasUser?: boolean) => {
     paramMap: of({ get: () => 'user1' }),
   };
   const userService = {
-    selectUser: jest.fn(),
+    selectUser: vi.fn(),
     getUserByName$: () => hasUser ? of(getUser({ username: 'user1', name: 'user 1', groupNames: [] })) : of(null),
-    deleteUser$: jest.fn(() => of(true)),
-    addOrUpdateUser$: jest.fn(() => of(true)),
-    getUsers$: jest.fn(() => of([])),
+    deleteUser$: vi.fn(() => of(true)),
+    addOrUpdateUser$: vi.fn(() => of(true)),
+    getUsers$: vi.fn(() => of([])),
   };
   const groupService = {
-    getGroups$: jest.fn(() => of([])),
+    getGroups$: vi.fn(() => of([])),
   };
   const router = {
-    navigateByUrl: jest.fn(),
+    navigateByUrl: vi.fn(),
   };
   await render(UserEditComponent, {
     declarations: [ UserFormComponent, SaveButtonComponent, SpinnerButtonComponent, PasswordFieldComponent ],

@@ -9,7 +9,7 @@ import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.s
 import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { TestBed } from '@angular/core/testing';
 import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -30,7 +30,7 @@ const createMockStore = () => {
 describe('LegendComponent', () => {
 
   test('renders Legend with visible false', async () => {
-    const registerComponentFn = jest.fn();
+    const registerComponentFn = vi.fn();
     await render(LegendComponent, {
       declarations: [ LegendComponent, LegendLayerComponent ],
       imports: [ SharedModule, MatIconTestingModule ],
@@ -40,7 +40,7 @@ describe('LegendComponent', () => {
         { provide: MenubarService, useValue: {
             registerComponent: registerComponentFn,
             isComponentVisible$: () => of(false),
-            deregisterComponent: jest.fn(),
+            deregisterComponent: vi.fn(),
           },
         },
       ],

@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 describe('CatalogNodeFormComponent', () => {
 
   test('should render', async () => {
-    const changedFn = jest.fn();
+    const changedFn = vi.fn();
     await render(CatalogNodeFormComponent, {
       imports: [SharedModule],
       inputs: { parentNode: '1' },

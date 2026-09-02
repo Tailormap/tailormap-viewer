@@ -12,7 +12,7 @@ describe('CatalogItemsInFolderDialogComponent', () => {
       getFeatureSource({ title: 'Feature Source 1' }),
       getGeoService({ title: 'Geo Service 1' }),
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(CatalogItemsInFolderDialogComponent, {
       imports: [MatDialogModule],
       providers: [

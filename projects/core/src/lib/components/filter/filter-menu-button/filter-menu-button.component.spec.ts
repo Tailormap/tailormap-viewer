@@ -13,7 +13,7 @@ import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../
 describe('FilterMenuButtonComponent', () => {
 
   test('should render', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarService = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

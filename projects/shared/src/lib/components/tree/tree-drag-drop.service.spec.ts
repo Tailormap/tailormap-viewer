@@ -48,7 +48,7 @@ describe('Tree Drag Drop Service', () => {
   ];
 
   it ('handles drag drop', fakeAsync(() => {
-    const positionChangedFn = jest.fn();
+    const positionChangedFn = vi.fn();
     const dragStartEvent = new Event('dragstart') as DragEvent;
     service.handleDragStart(dragStartEvent, dataNodes[0], [{
       getTargetElement: (): HTMLDivElement => {

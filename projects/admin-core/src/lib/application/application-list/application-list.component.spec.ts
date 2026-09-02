@@ -36,9 +36,9 @@ const setup = async (
   const mockStore = createMockStore({
     initialState: { [applicationStateKey]: applicationState },
   });
-  mockStore.dispatch = jest.fn();
-  const configService = { getConfigValue$: jest.fn(() => of('app2')) };
-  const loadApplications = jest.fn();
+  mockStore.dispatch = vi.fn();
+  const configService = { getConfigValue$: vi.fn(() => of('app2')) };
+  const loadApplications = vi.fn();
   await render(ApplicationListComponent, {
     imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [

@@ -31,9 +31,9 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     featureSources: [featureSourceModel],
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
-  const dispatch = jest.fn();
+  const dispatch = vi.fn();
   store.dispatch = dispatch;
-  const featureTypeSelected = jest.fn();
+  const featureTypeSelected = vi.fn();
   await render(FeatureTypeSelectorComponent, {
     imports: [SharedImportsModule],
     providers: [

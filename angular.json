@@ -235,6 +235,12 @@
               "projects/core/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
+          }
         }
       }
     },
@@ -267,6 +273,12 @@
               "projects/api/**/*.ts",
               "projects/api/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
           }
         }
       }
@@ -301,6 +313,12 @@
               "projects/shared/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
+          }
         }
       }
     },
@@ -334,6 +352,12 @@
               "projects/map/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
+          }
         }
       }
     },
@@ -366,6 +390,12 @@
               "projects/admin-core/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
+          }
         }
       }
     },
@@ -397,6 +427,12 @@
               "projects/admin-core/**/*.ts",
               "projects/admin-core/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["setup-tests.ts"]
           }
         }
       }

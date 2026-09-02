@@ -18,17 +18,17 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
   const menubarServiceMock = {
-    isComponentVisible$: jest.fn(() => of(isComponentVisible)),
-    registerComponent: jest.fn(),
-    deregisterComponent: jest.fn(),
+    isComponentVisible$: vi.fn(() => of(isComponentVisible)),
+    registerComponent: vi.fn(),
+    deregisterComponent: vi.fn(),
   };
   const confirmServiceMock = {
-    confirm$: jest.fn(() => of(true)),
+    confirm$: vi.fn(() => of(true)),
   };
   const { container } = await render(DrawingComponent, {
     imports: [ SharedImportsModule, SharedDirectivesModule, MatIconTestingModule ],
@@ -78,7 +78,7 @@ describe('DrawingComponent', () => {
       { selector: selectHasDrawingFeatures, value: true },
     ]);
     const store = TestBed.inject(MockStore);
-    const mockDispatch = jest.fn();
+    const mockDispatch = vi.fn();
     store.dispatch = mockDispatch;
 
     expect(await screen.getByText(/Fill color/)).toBeInTheDocument();

@@ -6,9 +6,9 @@ import { of } from 'rxjs';
 describe('MapComponent', () => {
 
   test('should create the app', async () => {
-    const mockRender = jest.fn();
+    const mockRender = vi.fn();
     const mockCesiumManager = {
-      executeScene3dAction: jest.fn(),
+      executeScene3dAction: vi.fn(),
     };
 
     await render(MapComponent, {

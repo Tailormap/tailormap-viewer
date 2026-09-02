@@ -10,7 +10,7 @@ import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 describe('AboutDialogComponent', () => {
 
   test('should render', async () => {
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(AboutDialogComponent, {
       imports: [MatProgressSpinnerModule],
       providers: [

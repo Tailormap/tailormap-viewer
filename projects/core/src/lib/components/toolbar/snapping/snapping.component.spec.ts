@@ -24,22 +24,22 @@ const mockLayer = {
 
 const setup = async (snappingActive = false) => {
   const mapServiceMock = {
-    setSnappingTolerance: jest.fn(),
-    setSnappingLayerStyle: jest.fn(),
-    setSnappingFeatures: jest.fn(),
-    allowSnapping: jest.fn(),
+    setSnappingTolerance: vi.fn(),
+    setSnappingLayerStyle: vi.fn(),
+    setSnappingFeatures: vi.fn(),
+    allowSnapping: vi.fn(),
   };
 
   const snappingServiceMock = {
     snappingLayers$: new BehaviorSubject([]),
     snappingGeometries$: new BehaviorSubject([]),
     snappingActive$: of(snappingActive),
-    isSnappingActive: jest.fn(() => snappingActive),
+    isSnappingActive: vi.fn(() => snappingActive),
     hasSelectableLayers$: of(true),
     selectableLayers$: of([mockLayer]),
-    toggleLayer: jest.fn(),
-    enableSnapping: jest.fn(),
-    disableSnapping: jest.fn(),
+    toggleLayer: vi.fn(),
+    enableSnapping: vi.fn(),
+    disableSnapping: vi.fn(),
   };
 
   const mockStore = createMockStore({

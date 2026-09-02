@@ -17,7 +17,7 @@ import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async () => {
-  const dialogRefMock = { close: jest.fn() };
+  const dialogRefMock = { close: vi.fn() };
   const geoServiceModelMock: ExtendedGeoServiceModel = {
     ...getGeoService({ id: 'test', title: 'my service', url: 'http://test.service' }),
     layerIds: ['my-layer'],

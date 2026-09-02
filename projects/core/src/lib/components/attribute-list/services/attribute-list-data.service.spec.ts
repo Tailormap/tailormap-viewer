@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
+import type { Mock } from 'vitest';
 import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible, selectInitialDataSort,
@@ -20,7 +21,7 @@ import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-
 import { AttributeListApiService } from './attribute-list-api.service';
 import * as AttributeListActions from '../state/attribute-list.actions';
 import { AttributeListManagerService } from './attribute-list-manager.service';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { createDummyAttributeListData, createDummyRows, getLoadedStoreWithMultipleTabs } from '../state/mocks/attribute-list-state-test-data';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 
@@ -30,7 +31,7 @@ const setup = (
   filters?: Map<string, string | null>,
 ) => {
   const api = {
-    getFeatures$: jest.fn(() => of(features)),
+    getFeatures$: vi.fn(() => of(features)),
   } as unknown as TailormapApiV1ServiceModel;
 
   const tabs: AttributeListTabModel[] = [
@@ -38,8 +39,8 @@ const setup = (
     { tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE, id: '2', layerId: '2', label: 'TEST 2', selectedDataId: '2', initialDataId: '2', loadingData: false, initialDataLoaded: false },
   ];
   const data: AttributeListDataModel[] = [
-    { id: '1', columns: [], tabId: '1', pageIndex: 0, pageSize: 10, rows: [], totalCount: null, sortDirection: '' },
-    { id: '2', columns: [], tabId: '2', pageIndex: 0, pageSize: 20, rows: [], totalCount: null, sortDirection: '' },
+    { id: '1', columns: [], tabId: '1', pageIndex: 0, pageSize: 10, rows: [], totalCount: null, sortDirection: '', checkedRows: [] },
+    { id: '2', columns: [], tabId: '2', pageIndex: 0, pageSize: 20, rows: [], totalCount: null, sortDirection: '', checkedRows: [] },
   ];
   const store = createMockStore({
     selectors: [
@@ -54,11 +55,11 @@ const setup = (
   }) as Store;
 
   const filterService = {
-    getChangedFilters$: jest.fn(() => of(filters || new Map())),
-    getFilterForLayer: jest.fn(() => undefined),
+    getChangedFilters$: vi.fn(() => of(filters || new Map())),
+    getFilterForLayer: vi.fn(() => undefined),
   };
 
-  const mapServiceMock = { refreshLayer: jest.fn() };
+  const mapServiceMock = { refreshLayer: vi.fn() };
 
   TestBed.configureTestingModule({
     providers: [
@@ -94,16 +95,14 @@ describe('AttributeListDataService', () => {
     expect(filterService.getChangedFilters$).toHaveBeenCalled();
   });
 
-  it('gets error when requesting for non-existing tab', done => {
+  it('gets error when requesting for non-existing tab', async () => {
     const { service } = setup();
-    service.loadDataForTab$('1').subscribe(result => {
-      expect(result.success).toBe(false);
-      expect(result.errorMessage).toEqual('Failed to load attribute list data');
-      done();
-    });
+    const result = await firstValueFrom(service.loadDataForTab$('1'));
+    expect(result.success).toBe(false);
+    expect(result.errorMessage).toEqual('Failed to load attribute list data');
   });
 
-  it('returns data for tab', done => {
+  it('returns data for tab', async () => {
     const response: FeaturesResponseModel = {
       features: [
         getFeatureModel({ __fid: '1', attributes: { prop1: 'test', prop2: 'another test', geom: '' } }),
@@ -122,20 +121,18 @@ describe('AttributeListDataService', () => {
     const { service, api } = setup(response, true);
     const apiService = TestBed.inject(AttributeListApiService);
     apiService.initDefaultAttributeListSource();
-    service.loadDataForTab$('1').subscribe(result => {
-      expect(api.getFeatures$).toHaveBeenCalledWith({
-        layerId: '1',
-        layerName: 'layer1',
-        applicationId: '1',
-        page: 0,
-        filter: undefined,
-        sortBy: undefined,
-        sortOrder: undefined,
-      });
-      expect(result.success).toBe(true);
-      expect(result.totalCount).toBe(2);
-      done();
+    const result = await firstValueFrom(service.loadDataForTab$('1'));
+    expect(api.getFeatures$).toHaveBeenCalledWith({
+      layerId: '1',
+      layerName: 'layer1',
+      applicationId: '1',
+      page: 0,
+      filter: undefined,
+      sortBy: undefined,
+      sortOrder: undefined,
     });
+    expect(result.success).toBe(true);
+    expect(result.totalCount).toBe(2);
   });
 
 });
@@ -151,10 +148,10 @@ const createResult = (id: string, success = true): LoadAttributeListDataResultMo
 
 describe('AttributeListDataService - reload triggers', () => {
 
-  const setupReloadTest = (loadDataForTabMock?: jest.Mock, initialState = getLoadedStoreWithMultipleTabs()) => {
-    const loadDataForTab$ = loadDataForTabMock ?? jest.fn((tabId: string) => of(createResult(tabId)));
-    const notifyCheckedRowsChanged = jest.fn();
-    const getFeatures$ = jest.fn(() => of({ features: [] }));
+  const setupReloadTest = (loadDataForTabMock?: Mock, initialState = getLoadedStoreWithMultipleTabs()) => {
+    const loadDataForTab$ = loadDataForTabMock ?? vi.fn((tabId: string) => of(createResult(tabId)));
+    const notifyCheckedRowsChanged = vi.fn();
+    const getFeatures$ = vi.fn(() => of({ features: [] }));
     TestBed.configureTestingModule({
       providers: [
         AttributeListDataService,
@@ -169,28 +166,29 @@ describe('AttributeListDataService - reload triggers', () => {
       ],
     });
     const service = TestBed.inject(AttributeListDataService);
-    jest.spyOn(service, 'loadDataForTab$').mockImplementation(loadDataForTab$);
+    vi.spyOn(service, 'loadDataForTab$').mockImplementation(loadDataForTab$);
     const store = TestBed.inject(Store);
     const dispatched: unknown[] = [];
-    jest.spyOn(store, 'dispatch').mockImplementation(action => { dispatched.push(action); });
+    // `dispatch` is overloaded; spy on it through a single-signature view so the mock implementation type-checks.
+    vi.spyOn(store as unknown as { dispatch: (action: unknown) => void }, 'dispatch').mockImplementation(action => { dispatched.push(action); });
     return { service, loadDataForTab$, dispatched, notifyCheckedRowsChanged };
   };
 
   describe('debounced reload', () => {
 
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it('loads data after the debounce period', () => {
       const { service, loadDataForTab$, dispatched } = setupReloadTest();
       service.loadData('1');
       expect(loadDataForTab$).not.toHaveBeenCalled();
-      jest.advanceTimersByTime(50);
+      vi.advanceTimersByTime(50);
       expect(loadDataForTab$).toHaveBeenCalledTimes(1);
       expect(loadDataForTab$).toHaveBeenCalledWith('1');
       expect(dispatched).toEqual(expect.arrayContaining([
@@ -202,7 +200,7 @@ describe('AttributeListDataService - reload triggers', () => {
       const { service, loadDataForTab$, dispatched } = setupReloadTest();
       service.loadData('1');
       service.updatePage('1', 2);
-      jest.advanceTimersByTime(50);
+      vi.advanceTimersByTime(50);
       expect(loadDataForTab$).toHaveBeenCalledTimes(1);
       expect(dispatched).toEqual(expect.arrayContaining([
         AttributeListActions.loadDataSuccess({ tabId: '1', data: createResult('1') }),
@@ -212,11 +210,11 @@ describe('AttributeListDataService - reload triggers', () => {
     it('postpones loading while triggers for the same tab keep arriving within the debounce period', () => {
       const { service, loadDataForTab$ } = setupReloadTest();
       service.loadData('1');
-      jest.advanceTimersByTime(30);
+      vi.advanceTimersByTime(30);
       service.loadData('1');
-      jest.advanceTimersByTime(30);
+      vi.advanceTimersByTime(30);
       expect(loadDataForTab$).not.toHaveBeenCalled();
-      jest.advanceTimersByTime(20);
+      vi.advanceTimersByTime(20);
       expect(loadDataForTab$).toHaveBeenCalledTimes(1);
     });
 
@@ -224,7 +222,7 @@ describe('AttributeListDataService - reload triggers', () => {
       const { service, loadDataForTab$, dispatched } = setupReloadTest();
       service.loadData('1');
       service.loadData('2');
-      jest.advanceTimersByTime(50);
+      vi.advanceTimersByTime(50);
       expect(loadDataForTab$).toHaveBeenCalledTimes(2);
       expect(loadDataForTab$).toHaveBeenCalledWith('1');
       expect(loadDataForTab$).toHaveBeenCalledWith('2');
@@ -235,10 +233,10 @@ describe('AttributeListDataService - reload triggers', () => {
     });
 
     it('dispatches loadDataFailed when loading fails', () => {
-      const loadDataForTab$ = jest.fn((tabId: string) => of(createResult(tabId, false)));
+      const loadDataForTab$ = vi.fn((tabId: string) => of(createResult(tabId, false)));
       const { service, dispatched } = setupReloadTest(loadDataForTab$);
       service.loadData('1');
-      jest.advanceTimersByTime(50);
+      vi.advanceTimersByTime(50);
       expect(dispatched).toEqual(expect.arrayContaining([
         AttributeListActions.loadDataFailed({ tabId: '1', data: createResult('1', false) }),
       ]));

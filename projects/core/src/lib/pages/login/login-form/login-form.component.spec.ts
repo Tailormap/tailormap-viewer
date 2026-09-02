@@ -11,7 +11,8 @@ describe('LoginFormComponent', () => {
 
   test('should render', async () => {
     const mockLoginConfiguration = {
-      allowPasswordLogin: true,
+      hideLoginForm: false,
+      enablePasswordReset: true,
       ssoLinks: [],
     };
     await render(LoginFormComponent, {
@@ -33,17 +34,18 @@ describe('LoginFormComponent', () => {
 
   test('triggers login method', async () => {
     const mockLoginConfiguration = {
-      allowPasswordLogin: true,
+      hideLoginForm: false,
+      enablePasswordReset: true,
       ssoLinks: [],
     };
-    const loginFn = jest.fn(() => of<UserResponseModel>({
+    const loginFn = vi.fn(() => of<UserResponseModel>({
       isAuthenticated: true,
       username: 'user',
       roles: [],
       groupProperties: [],
       properties: [],
     }));
-    const loggedIn = jest.fn();
+    const loggedIn = vi.fn();
     await render(LoginFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       on: { loggedIn },

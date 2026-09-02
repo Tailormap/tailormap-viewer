@@ -14,7 +14,7 @@ import { AuthenticatedUserService } from '@tailormap-viewer/api';
 describe('ProfileMenuButtonComponent', () => {
 
   test('renders', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarServiceMock = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

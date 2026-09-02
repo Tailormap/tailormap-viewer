@@ -6,7 +6,7 @@ import { ToolTypeEnum } from "@tailormap-viewer/map";
 import { of } from "rxjs";
 import { ApplicationLayerService } from "../../../map/services/application-layer.service";
 import { SharedImportsModule } from "@tailormap-viewer/shared";
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { FeatureInfoService } from '../../feature-info';
 
 describe('EditMapToolService', () => {
@@ -16,8 +16,8 @@ describe('EditMapToolService', () => {
       getLayerDetails$: () => of( { details: { geometryAttribute: 'geom' } }),
     };
     const mockFeatureInfoService = {
-      getEditableFeatures$: jest.fn(() => of(null)),
-      getFeaturesForLayer$: jest.fn(() => of(null)),
+      getEditableFeatures$: vi.fn(() => of(null)),
+      getFeaturesForLayer$: vi.fn(() => of(null)),
     };
     const mapServiceMock = getMapServiceMock();
     TestBed.configureTestingModule({

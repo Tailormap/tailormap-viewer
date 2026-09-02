@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { MouseCoordinatesComponent } from './mouse-coordinates.component';
 import { of } from 'rxjs';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 describe('MouseCoordinatesComponent', () => {
 

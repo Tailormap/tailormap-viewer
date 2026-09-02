@@ -10,14 +10,14 @@ import { LegendLayerComponent } from '../../legend/legend-layer/legend-layer.com
 import { provideMockStore } from '@ngrx/store/testing';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { LayerTransparencyComponent } from './layer-transparency/layer-transparency.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const setup = async (withLayer: boolean) => {
-  const closeMock = jest.fn();
-  const node = getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false });
+  const closeMock = vi.fn();
+  const node = { ...getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false }), is3dLayer: false };
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   const legendServiceMock = {
-    getLegendInfo$: jest.fn(() => of([
+    getLegendInfo$: vi.fn(() => of([
       {
         layer: { ...appLayer, service: getServiceModel() },
         url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',

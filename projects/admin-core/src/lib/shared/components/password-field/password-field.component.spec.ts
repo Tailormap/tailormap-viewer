@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 describe('PasswordFieldComponent', () => {
 
   test('should render', async () => {
-    const changed = jest.fn();
+    const changed = vi.fn();
     await render(PasswordFieldComponent, {
       imports: [ SharedImportsModule, MatIconTestingModule ],
       inputs: {

@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, HostListener, ElementRef, viewChild, effect,
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, ElementRef, viewChild, effect,
   AfterViewChecked,
 } from '@angular/core';
 import { TreeService } from './tree.service';
@@ -15,6 +15,10 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.css'],
   standalone: false,
+  host: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    '(window:resize)': 'onResize()',
+  },
 })
 export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private treeService = inject(TreeService);
@@ -22,7 +26,6 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private cdr = inject(ChangeDetectorRef);
   private treeDragDropService = inject(TreeDragDropService, { optional: true });
 
-  @HostListener('window:resize', ['$event'])
   public onResize() {
     this.updateDropzoneHeight();
   }

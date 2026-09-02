@@ -53,7 +53,7 @@ const setup = async (withState = false) => {
     ],
     declarations: [ FeatureInfoLayerListComponent, FeatureInfoContentComponent ],
     providers: [
-      { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+      { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       provideMockStore({
         initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
         selectors: withState ? [
@@ -108,7 +108,7 @@ describe('FeatureInfoDialogComponent', () => {
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     expect((await screen.findByText(/Property 2/)).nextSibling?.textContent?.trim()).toEqual('another test');
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
     (await screen.findByText(/Next/)).click();
     expect(store.dispatch).toHaveBeenCalledWith({ type: showNextFeatureInfoFeature.type });
     (await screen.findByText(/Previous/)).click();
@@ -121,7 +121,7 @@ describe('FeatureInfoDialogComponent', () => {
     //   This is an expensive operation requiring destruction and subsequent creation of DOM nodes, directives, components etc.
     //   Please review the "track expression" and make sure that it uniquely identifies items in a collection.
     //   Find more at https://angular.dev/errors/NG0956
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     const store = TestBed.inject(MockStore);

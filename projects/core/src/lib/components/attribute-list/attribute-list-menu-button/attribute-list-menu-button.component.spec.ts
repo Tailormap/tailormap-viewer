@@ -27,7 +27,7 @@ describe('AttributeListMenuButtonComponent', () => {
       ],
     });
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
 
     expect(await screen.findByRole('button')).toBeInTheDocument();
     await userEvent.click(await screen.findByRole('button'));

@@ -19,7 +19,7 @@ describe('ToggleAllLayersButtonComponent', () => {
       ] }),
     });
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
     expect(screen.findByLabelText('Toggle all layers off'));
     await userEvent.click(await screen.findByRole('button'));
     expect(store.dispatch).toHaveBeenCalledWith({ type: '[Map] Toggle All Layers Visibility' });
@@ -38,7 +38,7 @@ describe('ToggleAllLayersButtonComponent', () => {
         ] }),
     });
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
     expect(screen.findByLabelText('Toggle all layers on'));
     await userEvent.click(await screen.findByRole('button'));
     expect(store.dispatch).toHaveBeenCalledWith({ type: '[Map] Toggle All Layers Visibility', filterTerm: 'test' });

@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
 
 const setup = async (data?: AdditionalPropertyModel[]) => {
-  const changedFn = jest.fn();
+  const changedFn = vi.fn();
   await render(AdminFieldsRendererComponent, {
     imports: [SharedImportsModule],
     inputs: {

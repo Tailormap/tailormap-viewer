@@ -17,7 +17,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
 import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 
@@ -42,7 +42,7 @@ const setup = async (conf: {
     ],
   });
   const mapServiceMock = createMapServiceMockWithDrawingTools();
-  const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
+  const removeFilterServiceMock = { removeFilter$: vi.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [SharedModule],
@@ -58,7 +58,7 @@ const setup = async (conf: {
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
-  injectedStore.dispatch = jest.fn();
+  injectedStore.dispatch = vi.fn();
   return {
     dispatch: injectedStore.dispatch,
     removeFilter$: removeFilterServiceMock.removeFilter$,
@@ -86,6 +86,7 @@ const getSpatialFilterGroup = (
     geometryColumns: [{ layerId: '1', column: ['geom'] }],
     geometries: [{ id: '1', geometry: 'POINT(0 0)' }],
     baseLayerId: '1',
+    projectionCode: 'EPSG:4326',
     ...filterOverrides,
   }],
   ...groupOverrides,

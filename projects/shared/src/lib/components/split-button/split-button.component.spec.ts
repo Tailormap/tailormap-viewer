@@ -6,7 +6,7 @@ import { SharedModule } from '../../shared.module';
 import userEvent from '@testing-library/user-event';
 
 const setup = async () => {
-  const optionSelectedMock = jest.fn();
+  const optionSelectedMock = vi.fn();
   await render(SplitButtonComponent, {
     imports: [ SharedImportsModule, MatIconTestingModule, SharedModule ],
     inputs: {

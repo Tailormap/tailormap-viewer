@@ -58,7 +58,7 @@ describe('PrintComponent', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render', () => {

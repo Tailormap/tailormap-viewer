@@ -14,9 +14,9 @@ import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter
 
 const setup = async (isVisible: boolean) => {
   const menubarServiceMock = {
-    isComponentVisible$: jest.fn(() => of(isVisible)),
-    registerComponent: jest.fn(),
-    deregisterComponent: jest.fn(),
+    isComponentVisible$: vi.fn(() => of(isVisible)),
+    registerComponent: vi.fn(),
+    deregisterComponent: vi.fn(),
   };
   await render(FilterComponent, {
     imports: [ SharedImportsModule, MatIconModule, MatIconTestingModule ],

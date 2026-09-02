@@ -3,16 +3,17 @@ import { RedirectCommand, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { AdminAuthGuard } from './admin-auth.guard';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
+import type { Mock } from 'vitest';
 
 describe('AdminAuthGuard', () => {
   let guard: AdminAuthGuard;
-  let authService: { isAdminUser$: jest.Mock };
+  let authService: { isAdminUser$: Mock };
   let router: Router;
 
   beforeEach(() => {
     const authServiceMock = {
-      isAdminUser$: jest.fn(),
+      isAdminUser$: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -32,50 +33,44 @@ describe('AdminAuthGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should allow authenticated users', (done) => {
+  it('should allow authenticated users', async () => {
     authService.isAdminUser$.mockReturnValue(of(true));
 
     const mockRoute = {} as any;
     const mockState = { url: '/admin/dashboard' } as any;
 
-    guard.canActivate(mockRoute, mockState).subscribe(result => {
-      expect(result).toBe(true);
-      done();
-    });
+    const result = await firstValueFrom(guard.canActivate(mockRoute, mockState));
+    expect(result).toBe(true);
   });
 
-  it('should block unauthenticated users and redirect to login', (done) => {
+  it('should block unauthenticated users and redirect to login', async () => {
     authService.isAdminUser$.mockReturnValue(of(false));
 
     const mockRoute = {} as any;
     const mockState = { url: '/admin/settings' } as any;
 
-    guard.canActivate(mockRoute, mockState).subscribe(result => {
-      expect(result).not.toBe(true);
-      expect(result).toBeInstanceOf(RedirectCommand);
-      if (result instanceof RedirectCommand) {
-        expect(result.redirectTo.toString()).toBe('/login');
-        done();
-      }
-    });
+    const result = await firstValueFrom(guard.canActivate(mockRoute, mockState));
+    expect(result).not.toBe(true);
+    expect(result).toBeInstanceOf(RedirectCommand);
+    if (result instanceof RedirectCommand) {
+      expect(result.redirectTo.toString()).toBe('/login');
+    }
   });
 
-  it('should preserve the original route in the redirect state', (done) => {
+  it('should preserve the original route in the redirect state', async () => {
     authService.isAdminUser$.mockReturnValue(of(false));
 
     const mockRoute = {} as any;
     const originalUrl = '/admin/users';
     const mockState = { url: originalUrl } as any;
 
-    guard.canActivate(mockRoute, mockState).subscribe(result => {
-      expect(result).not.toBe(true);
-      expect(result).toBeInstanceOf(RedirectCommand);
-      if (result instanceof RedirectCommand) {
-        expect(result.navigationBehaviorOptions).toBeDefined();
-        expect(result.navigationBehaviorOptions?.state).toBeDefined();
-        expect(result.navigationBehaviorOptions?.state?.routeBeforeLogin).toBe(originalUrl);
-        done();
-      }
-    });
+    const result = await firstValueFrom(guard.canActivate(mockRoute, mockState));
+    expect(result).not.toBe(true);
+    expect(result).toBeInstanceOf(RedirectCommand);
+    if (result instanceof RedirectCommand) {
+      expect(result.navigationBehaviorOptions).toBeDefined();
+      expect(result.navigationBehaviorOptions?.state).toBeDefined();
+      expect(result.navigationBehaviorOptions?.state?.routeBeforeLogin).toBe(originalUrl);
+    }
   });
 });

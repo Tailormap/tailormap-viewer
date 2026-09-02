@@ -4,10 +4,10 @@ describe('ClipboardHelper', () => {
 
   test('should parse clipboard event', () => {
     const evt = {
-      stopPropagation: jest.fn(),
-      preventDefault: jest.fn(),
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn(),
       clipboardData: {
-        getData: jest.fn(() => {
+        getData: vi.fn(() => {
           return '<abc a="1" b="2" c="3" />';
         }),
       },

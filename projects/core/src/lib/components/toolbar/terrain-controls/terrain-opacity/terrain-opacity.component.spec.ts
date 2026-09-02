@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { CommonModule } from '@angular/common';
-import { getMapServiceMock } from '../../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../../test-helpers/map-service.mock';
 
 describe('TerrainOpacityComponent', () => {
 

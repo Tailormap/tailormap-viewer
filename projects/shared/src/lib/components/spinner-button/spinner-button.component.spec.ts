@@ -6,7 +6,7 @@ import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event'
 import { SharedImportsModule } from '../../shared-imports.module';
 
 const setup = async (isSpinning: boolean, disabled: boolean) => {
-  const btnClick = jest.fn();
+  const btnClick = vi.fn();
   await render(SpinnerButtonComponent, {
     imports: [ MatProgressSpinnerModule, SharedImportsModule ],
     inputs: {

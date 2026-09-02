@@ -8,17 +8,17 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 describe('FeatureSourceFormComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
-    const changedFn = jest.fn();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const changedFn = vi.fn();
     await render(FeatureSourceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [PasswordFieldComponent],
@@ -39,7 +39,7 @@ describe('FeatureSourceFormComponent', () => {
   });
 
   test('should show JDBC fields in case of JDBC protocol', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {
       imports: [ SharedModule, MatIconTestingModule ],
       declarations: [PasswordFieldComponent],

@@ -6,16 +6,16 @@ import { FilterGroupModel, getAppLayerModel, LayerDetailsModel, SpatialFilterMod
 import { Store } from '@ngrx/store';
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
-import { getSpatialFilterGroup } from '../../../filter/helpers/cql-filter.helper.spec';
+import { getSpatialFilterGroup } from '../../../filter/helpers/spatial-filter-group.mock';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { waitFor } from '@testing-library/angular';
 import { selectLayers } from '../../../map';
 import { FilterManagerService } from '../../../filter';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 let idCount = 0;
-jest.mock('nanoid', () => ({
+vi.mock('nanoid', () => ({
   nanoid: () => {
     idCount++;
     return `id-${idCount}`;
@@ -40,7 +40,7 @@ const setup = (
     ],
   });
   const describeLayerMock = {
-    getDescribeLayer$: jest.fn((params): Observable<Partial<LayerDetailsModel>> => of({
+    getDescribeLayer$: vi.fn((params): Observable<Partial<LayerDetailsModel>> => of({
       id: params.layerId,
       geometryAttribute: 'geom',
     })),
@@ -55,7 +55,7 @@ const setup = (
   });
   const service = TestBed.inject(SpatialFilterCrudService);
   const store = TestBed.inject(MockStore) as Store;
-  store.dispatch = jest.fn();
+  store.dispatch = vi.fn();
   return { service, dispatch: store.dispatch };
 };
 

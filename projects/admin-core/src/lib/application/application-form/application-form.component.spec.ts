@@ -14,7 +14,7 @@ import { applicationStateKey, initialApplicationState } from '../state/applicati
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
-  const onUpdate = jest.fn();
+  const onUpdate = vi.fn();
   const application = getApplication({
     id: '1',
     title: 'Test application',
@@ -31,7 +31,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
       updateApplication: onUpdate,
     },
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       provideMockStore({ initialState: {
         [userStateKey]: initialUserState,

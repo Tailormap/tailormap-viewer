@@ -2,19 +2,19 @@ import { MapService } from './map.service';
 import { TestBed } from '@angular/core/testing';
 import { NgZone } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 
-const initMapFn = jest.fn();
-const renderFn = jest.fn();
+const initMapFn = vi.fn();
+const renderFn = vi.fn();
 
-jest.mock('../openlayers-map/openlayers-map', () => {
+vi.mock('../openlayers-map/openlayers-map', () => {
   return {
     //eslint-disable-next-line @typescript-eslint/naming-convention
-    OpenLayersMap: jest.fn().mockImplementation(() => {
+    OpenLayersMap: vi.fn().mockImplementation(() => {
       return {
         initMap: initMapFn,
         render: renderFn,
-        getLayerManager$: () => of({ refreshLayer: jest.fn() }),
+        getLayerManager$: () => of({ refreshLayer: vi.fn() }),
       };
     }),
   };
@@ -39,18 +39,16 @@ describe('MapService', () => {
     expect(service).toBeTruthy();
   });
 
-  test('calls methods on map', done => {
+  test('calls methods on map', async () => {
     const service = TestBed.inject(MapService);
     service.initMap({ maxExtent: [], projectionDefinition: 'DEF', projection: 'PROJ' });
     expect(initMapFn).toHaveBeenCalledWith({ maxExtent: [], projectionDefinition: 'DEF', projection: 'PROJ' }, undefined);
     const el = document.createElement('div');
     service.render(el);
     expect(renderFn).toHaveBeenCalledWith(el);
-    service.getLayerManager$().subscribe(manager => {
-      expect(manager).toBeDefined();
-      expect(typeof manager.refreshLayer).toBe('function');
-      done();
-    });
+    const manager = await firstValueFrom(service.getLayerManager$());
+    expect(manager).toBeDefined();
+    expect(typeof manager.refreshLayer).toBe('function');
   });
 
 });

@@ -20,7 +20,7 @@ const setup = async (layers: FilterableLayerModel[], selectedLayers: string[]) =
       { selector: selectSelectedLayers, value: selectedLayers },
     ],
   });
-  const mockSpatialCrudService = { updateSelectedLayers: jest.fn() };
+  const mockSpatialCrudService = { updateSelectedLayers: vi.fn() };
   const mockFilterManagerService = { filterableLayers$: of(layers) };
   await render(SpatialFilterFormSelectLayersComponent, {
     imports: [SharedImportsModule],

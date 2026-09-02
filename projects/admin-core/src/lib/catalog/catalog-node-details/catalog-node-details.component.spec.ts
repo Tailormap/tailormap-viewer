@@ -17,7 +17,7 @@ import { CatalogCreateButtonsComponent } from '../catalog-create-buttons/catalog
 import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {
-  const updateCatalogNodeMock = jest.fn(() => of(true));
+  const updateCatalogNodeMock = vi.fn(() => of(true));
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
   };

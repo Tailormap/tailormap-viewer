@@ -32,8 +32,8 @@ const setup = async (
     ],
   });
   const exportService = {
-    getExportFormats$: jest.fn().mockReturnValue(of(supportedFormats)),
-    export$: jest.fn().mockReturnValue(exportResult.asObservable()),
+    getExportFormats$: vi.fn().mockReturnValue(of(supportedFormats)),
+    export$: vi.fn().mockReturnValue(exportResult.asObservable()),
     extractProgress$: of(progress),
   };
   await render(AttributeListExportButtonComponent, {
@@ -51,7 +51,7 @@ describe('AttributeListExportButtonComponent', () => {
     // Keep original method in a var to restore after testing
     saveAsFile = FileHelper.saveAsFile;
     // Replace by mock fn to prevent URL.createObjectURL on empty blobs
-    FileHelper.saveAsFile = jest.fn();
+    FileHelper.saveAsFile = vi.fn();
   });
 
   afterEach(() => {

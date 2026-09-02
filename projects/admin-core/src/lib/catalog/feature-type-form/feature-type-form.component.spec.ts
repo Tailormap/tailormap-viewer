@@ -17,7 +17,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
-  const featureSourceService = { updateFeatureSource$: jest.fn(() => of({})) };
+  const featureSourceService = { updateFeatureSource$: vi.fn(() => of({})) };
   const featureTypeModel: FeatureTypeModel = {
     attributes: [],
     defaultGeometryAttribute: null,

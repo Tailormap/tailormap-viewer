@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 describe('CreateFilterButtonComponent', () => {
 
   test('should render', async () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     await render(CreateFilterButtonComponent, {
       imports: [ MatMenuModule, MatButtonModule, MatIconModule, MatIconTestingModule ],
       providers: [

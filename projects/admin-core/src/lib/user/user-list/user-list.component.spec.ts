@@ -12,7 +12,7 @@ import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async () => {
   const mockAdminApiService = {
-    getUsers$: jest.fn(() => of(getUsers)),
+    getUsers$: vi.fn(() => of(getUsers)),
   };
   const mockApiService = {};
 

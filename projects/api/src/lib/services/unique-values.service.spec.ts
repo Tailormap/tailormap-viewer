@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { UniqueValuesService } from './unique-values.service';
 import { TAILORMAP_API_V1_SERVICE } from './tailormap-api-v1.service.injection-token';
-import { concatMap, of } from 'rxjs';
+import { concatMap, firstValueFrom, of } from 'rxjs';
 
 describe('UniqueValuesService', () => {
 
   let service: UniqueValuesService;
   const tailormapServiceMock = {
-    getUniqueValues$: jest.fn(() => of({ filterApplied: false, values: [ 'a', 'b', 'c' ] })),
+    getUniqueValues$: vi.fn(() => of({ filterApplied: false, values: [ 'a', 'b', 'c' ] })),
   };
 
   beforeEach(() => {
@@ -20,8 +20,8 @@ describe('UniqueValuesService', () => {
     service = TestBed.inject(UniqueValuesService);
   });
 
-  test('get and cache unique values from api', done => {
-    service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' })
+  test('get and cache unique values from api', async () => {
+    const response4 = await firstValueFrom(service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' })
       .pipe(
         concatMap(response => {
           expect(response).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
@@ -41,13 +41,10 @@ describe('UniqueValuesService', () => {
           // old application id again
           return service.getUniqueValues$({ applicationId: '1', layerId: '1', attribute: 'test' });
         }),
-      )
-      .subscribe(response4 => {
-        expect(response4).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
-        // expect 3 since changing the application should have emptied the cache
-        expect(tailormapServiceMock.getUniqueValues$).toHaveBeenCalledTimes(3);
-        done();
-      });
+      ));
+    expect(response4).toEqual({ filterApplied: false, values: [ 'a', 'b', 'c' ] });
+    // expect 3 since changing the application should have emptied the cache
+    expect(tailormapServiceMock.getUniqueValues$).toHaveBeenCalledTimes(3);
   });
 
 });

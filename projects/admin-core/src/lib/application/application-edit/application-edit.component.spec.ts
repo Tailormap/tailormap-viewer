@@ -27,11 +27,11 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
     ],
   };
   const appService = {
-    saveDraftApplication$: jest.fn(() => of(true)),
-    deleteApplication$: jest.fn(() => of(true)),
+    saveDraftApplication$: vi.fn(() => of(true)),
+    deleteApplication$: vi.fn(() => of(true)),
   };
   const mockStore = createMockStore({ initialState: { [applicationStateKey]: mockState } });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
     imports: [ SharedModule, MatIconTestingModule, RouterModule.forRoot(

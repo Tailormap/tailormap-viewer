@@ -11,7 +11,7 @@ import { SharedAdminComponentsModule } from '../../shared/components/shared-admi
 
 const setup = async () => {
   const mockApiService = {
-    getGroups$: jest.fn(() => of(null)),
+    getGroups$: vi.fn(() => of(null)),
   };
 
   await render(GroupListComponent, {

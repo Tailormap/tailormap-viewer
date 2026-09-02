@@ -20,7 +20,7 @@ describe('TriStateBooleanComponent', () => {
   });
 
   test('should handle change', async () => {
-    const changed = jest.fn();
+    const changed = vi.fn();
     await render(TriStateBooleanComponent, {
       imports: [MatButtonToggleModule],
       inputs: { value: true },

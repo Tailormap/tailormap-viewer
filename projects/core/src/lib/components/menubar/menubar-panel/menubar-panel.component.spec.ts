@@ -15,9 +15,9 @@ const getMenuBarServiceMock = (initialValue: { componentId: string; dialogTitle:
     useValue: {
       activeComponent$,
       panelWidth: 300,
-      setPanelWidth: jest.fn(),
+      setPanelWidth: vi.fn(),
       getActiveComponent$: () => activeComponent$.asObservable(),
-      closePanel: jest.fn().mockImplementation(() => activeComponent$.next(null)),
+      closePanel: vi.fn().mockImplementation(() => activeComponent$.next(null)),
     },
   };
 };
@@ -29,7 +29,7 @@ describe('MenubarPanelComponent', () => {
       imports: [ SharedModule, CoreSharedModule ],
       providers: [
         getMenuBarServiceMock(),
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       ],
     });
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('MenubarPanelComponent', () => {
       imports: [ SharedModule, MatIconTestingModule, CoreSharedModule ],
       providers: [
         menubarServiceMock,
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       ],
     });
     await fixture.whenStable();
@@ -61,7 +61,7 @@ describe('MenubarPanelComponent', () => {
       imports: [ SharedModule, MatIconTestingModule, CoreSharedModule ],
       providers: [
         menubarServiceMock,
-        { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+        { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       ],
     });
     await fixture.whenStable();

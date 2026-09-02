@@ -1,5 +1,5 @@
 import { TAILORMAP_API_V1_SERVICE } from './tailormap-api-v1.service.injection-token';
-import { concatMap, of } from 'rxjs';
+import { concatMap, firstValueFrom, of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { DescribeAppLayerService } from './describe-app-layer.service';
 
@@ -7,7 +7,7 @@ describe('DescribeAppLayerService', () => {
 
   let service: DescribeAppLayerService;
   const tailormapServiceMock = {
-    getDescribeLayer$: jest.fn((args) => of('describe layer ' + args.layerId + ' for application ' + args.applicationId)),
+    getDescribeLayer$: vi.fn((args) => of('describe layer ' + args.layerId + ' for application ' + args.applicationId)),
   };
 
   beforeEach(() => {
@@ -20,8 +20,8 @@ describe('DescribeAppLayerService', () => {
     service = TestBed.inject(DescribeAppLayerService);
   });
 
-  test('get and cache app layer descriptions', done => {
-    service.getDescribeAppLayer$('1', '1')
+  test('get and cache app layer descriptions', async () => {
+    const response4 = await firstValueFrom(service.getDescribeAppLayer$('1', '1')
       .pipe(
         concatMap(response => {
           expect(response).toEqual('describe layer 1 for application 1');
@@ -41,12 +41,9 @@ describe('DescribeAppLayerService', () => {
           // old application id again, other layer
           return service.getDescribeAppLayer$('1', '2');
         }),
-      )
-      .subscribe(response4 => {
-        expect(response4).toEqual('describe layer 2 for application 1');
-        expect(tailormapServiceMock.getDescribeLayer$).toHaveBeenCalledTimes(3);
-        done();
-      });
+      ));
+    expect(response4).toEqual('describe layer 2 for application 1');
+    expect(tailormapServiceMock.getDescribeLayer$).toHaveBeenCalledTimes(3);
   });
 
 });

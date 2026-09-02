@@ -7,7 +7,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 describe('CheckboxFilterComponent', () => {
 
   test('should render', async () => {
-    const checkboxFilter: AttributeFilterModel = {
+    const checkboxFilter: { filter: AttributeFilterModel; substringFilters: { id: string; disabled: boolean }[] } = {
       filter: {
         id: 'filter1',
         attributeType: AttributeType.STRING,

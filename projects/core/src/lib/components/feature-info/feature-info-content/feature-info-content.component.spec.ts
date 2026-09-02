@@ -36,7 +36,7 @@ describe('FeatureInfoContentComponent', () => {
       getAttachmentTooltip: () => '',
     };
     const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
-    const mockSimpleAttributeFilterService = { setFilter: jest.fn(), removeFilterById: jest.fn() };
+    const mockSimpleAttributeFilterService = { setFilter: vi.fn(), removeFilterById: vi.fn() };
     await render(FeatureInfoContentComponent, {
       imports: [
         SharedModule,

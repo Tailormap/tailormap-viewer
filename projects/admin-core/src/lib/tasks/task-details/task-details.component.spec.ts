@@ -23,10 +23,10 @@ const setup = async () => {
     initialState: { [tasksStateKey]: testTasksState },
   });
   const taskService = {
-    startMonitoring: jest.fn(),
-    stopMonitoring: jest.fn(),
-    startTask: jest.fn(),
-    stopTask: jest.fn(),
+    startMonitoring: vi.fn(),
+    stopMonitoring: vi.fn(),
+    startTask: vi.fn(),
+    stopTask: vi.fn(),
   };
   await render(TaskDetailsComponent, {
     imports: [SharedModule],
@@ -34,7 +34,7 @@ const setup = async () => {
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: taskService },
-      { provide: SearchIndexService, useValue: { reloadSearchIndexes: jest.fn() } },
+      { provide: SearchIndexService, useValue: { reloadSearchIndexes: vi.fn() } },
       provideHttpClient(),
       provideHttpClientTesting(),
     ],

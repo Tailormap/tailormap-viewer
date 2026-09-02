@@ -11,7 +11,7 @@ describe('GeoServiceUsedDialogComponent', () => {
     const applications = [
       getApplication({ title: 'Application 1' }),
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(GeoServiceUsedDialogComponent, {
       imports: [MatDialogModule],
       providers: [

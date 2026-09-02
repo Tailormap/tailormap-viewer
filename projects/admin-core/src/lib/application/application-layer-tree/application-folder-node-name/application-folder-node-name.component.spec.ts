@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 describe('ApplicationFolderNodeNameComponent', () => {
 
   test('should render', async () => {
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(ApplicationFolderNodeNameComponent, {
       imports: [SharedImportsModule],
       providers: [

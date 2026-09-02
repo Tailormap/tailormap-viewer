@@ -22,9 +22,9 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       [catalogStateKey]: { ...initialCatalogState, ...state },
     },
   });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
-  const loadCatalog = jest.fn();
+  const loadCatalog = vi.fn();
   await render(CatalogTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],

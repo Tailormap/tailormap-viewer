@@ -33,12 +33,12 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     } : undefined,
   });
   const featureServiceMock = {
-    getDraftFeatureSource$: jest.fn(() => of(featureSourceModel)),
-    updateFeatureSource$: jest.fn((_id, updatedSource) => of({
+    getDraftFeatureSource$: vi.fn(() => of(featureSourceModel)),
+    updateFeatureSource$: vi.fn((_id, updatedSource) => of({
       ...featureSourceModel,
       ...updatedSource,
     })),
-    refreshFeatureSource$: jest.fn(() => of({
+    refreshFeatureSource$: vi.fn(() => of({
       ...featureSourceModel,
     })),
   };
@@ -60,16 +60,16 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 describe('FeatureSourceDetailsComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render and handle editing JDBC source', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -104,7 +104,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should not ask to refresh when just updating title', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     await ue.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
@@ -121,7 +121,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should render and handle editing WFS source', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     expect(await screen.findByText('Edit Some WFS source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -151,7 +151,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should refresh', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source', undefined, ue);
     expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();

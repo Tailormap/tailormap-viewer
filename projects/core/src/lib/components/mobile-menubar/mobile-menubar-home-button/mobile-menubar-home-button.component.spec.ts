@@ -13,7 +13,7 @@ import { MenubarService } from '../../menubar/menubar.service';
 describe('MobileMenubarHomeButtonComponent', () => {
 
   test('renders', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarServiceMock = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),

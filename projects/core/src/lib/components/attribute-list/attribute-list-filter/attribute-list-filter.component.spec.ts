@@ -16,7 +16,7 @@ import { selectAttributeListTabs, selectAttributeListVisible } from '../state/at
 describe('AttributeListFilterComponent', () => {
 
   it('should create', async () => {
-    const dialogRef = { close: jest.fn() };
+    const dialogRef = { close: vi.fn() };
     const dialogData: FilterDialogData = {
       columnName: 'col',
       filter: null,
@@ -25,9 +25,9 @@ describe('AttributeListFilterComponent', () => {
       applicationId: '1',
       tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE,
     };
-    const attributeFilterService = { setFilter: jest.fn(), removeFilter: jest.fn() };
+    const attributeFilterService = { setFilter: vi.fn(), removeFilter: vi.fn() };
     const uniqueValuesService = {
-      getUniqueValues$: jest.fn(() => of({ values: [] })),
+      getUniqueValues$: vi.fn(() => of({ values: [] })),
     };
     await render(AttributeListFilterComponent, {
       providers: [

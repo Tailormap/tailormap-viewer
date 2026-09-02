@@ -13,7 +13,7 @@ describe('ShareViewerDialogComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [ SharedModule, MatIconTestingModule ],
       providers: [
-        { provide: MatDialogRef, useValue: { close: jest.fn() } },
+        { provide: MatDialogRef, useValue: { close: vi.fn() } },
       ],
     });
     expect(screen.getByText('Share viewer'));
