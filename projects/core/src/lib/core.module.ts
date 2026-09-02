@@ -1,43 +1,38 @@
 import { ModuleWithProviders, NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { PasswordResetComponent, LoginComponent, ViewerAppComponent } from './pages';
-import { MapModule } from '@tailormap-viewer/map';
+
 import { ENVIRONMENT_CONFIG, EnvironmentConfigModel } from '@tailormap-viewer/api';
-import { ExternalLibsLoaderHelper, IconService, RouterHistoryService, SharedModule } from '@tailormap-viewer/shared';
-import { ComponentsModule } from './components/components.module';
+import { ExternalLibsLoaderHelper, IconService, RouterHistoryService } from '@tailormap-viewer/shared';
+
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { APP_BASE_HREF } from '@angular/common';
 import { ApplicationMapModule } from './map/application-map.module';
 import { FilterModule } from './filter/filter.module';
 import { RouterModule } from '@angular/router';
-import { LayoutModule } from './layout/layout.module';
+
 import { ApplicationStyleService } from './services/application-style.service';
 import { LoginFormComponent } from './pages/login/login-form/login-form.component';
 import { PasswordResetRequestFormComponent } from './pages/login/password-reset-request-form/password-reset-request-form.component';
 import { CoreRoutingModule } from './core-routing.module';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { UserLoginCheckService } from './services/user-login-check.service';
-import { CoreSharedModule } from './shared/core-shared.module';
+
 import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { ProviderHelper } from './viewer-instance/provider.helper';
 
 @NgModule({
     imports: [
-        CoreRoutingModule,
-        ApplicationMapModule,
-        MapModule,
-        FilterModule,
-        SharedModule,
-        ComponentsModule,
-        LayoutModule,
-        RouterModule.forRoot([{ path: '', children: [] }]), // Allow all modules to add child routes
-        CoreSharedModule,
-        ViewerAppComponent,
-        LoginComponent,
-        LoginFormComponent,
-        PasswordResetRequestFormComponent,
-        PasswordResetComponent,
-    ],
+    CoreRoutingModule,
+    ApplicationMapModule,
+    FilterModule,
+    RouterModule.forRoot([{ path: '', children: [] }]),
+    ViewerAppComponent,
+    LoginComponent,
+    LoginFormComponent,
+    PasswordResetRequestFormComponent,
+    PasswordResetComponent,
+],
     exports: [
         ViewerAppComponent,
         RouterModule,

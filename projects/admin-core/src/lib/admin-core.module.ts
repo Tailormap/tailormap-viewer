@@ -3,7 +3,7 @@ import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PagesModule } from './pages/pages.module';
-import { TemplatesModule } from './templates/templates.module';
+
 import { CatalogModule } from './catalog/catalog.module';
 import { ApplicationModule } from './application/application.module';
 import { OIDCConfigurationModule } from './oidc/oidc-configuration.module';
@@ -16,13 +16,12 @@ import { SearchIndexModule } from './search-index/search-index.module';
   imports: [
     AdminCoreRoutingModule,
     PagesModule,
-    TemplatesModule,
     CatalogModule,
     ApplicationModule,
     SettingsModule,
     SearchIndexModule,
     OIDCConfigurationModule,
-  ],
+],
   providers: [
     provideEnvironmentInitializer(() => {
       const matIconRegistry = inject(MatIconRegistry);

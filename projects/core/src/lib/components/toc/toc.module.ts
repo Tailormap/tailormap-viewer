@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TocComponent } from './toc/toc.component';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { TocMenuButtonComponent } from './toc-menu-button/toc-menu-button.component';
-import { MenubarModule } from '../menubar';
+
 import { TocNodeLayerComponent } from './toc-node-layer/toc-node-layer.component';
 import { ToggleAllLayersButtonComponent } from './toggle-all-layers-button/toggle-all-layers-button.component';
 import { TocNodeDetailsComponent } from './toc-node-details/toc-node-details.component';
-import { LegendModule } from '../legend';
+
 import { LayerTransparencyComponent } from './toc-node-details/layer-transparency/layer-transparency.component';
 import { LayerDetailsComponent } from './toc-node-details/layer-details/layer-details.component';
 import { TocFilterInputComponent } from './toc-filter-input/toc-filter-input.component';
@@ -18,20 +18,17 @@ import { tocStateKey } from './state/toc.state';
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        MenubarModule,
-        LegendModule,
-        TocComponent,
-        TocMenuButtonComponent,
-        TocNodeLayerComponent,
-        ToggleAllLayersButtonComponent,
-        TocNodeDetailsComponent,
-        LayerTransparencyComponent,
-        LayerDetailsComponent,
-        TocFilterInputComponent,
-        TocNodeDetailsMobileComponent,
-    ],
+    CommonModule,
+    TocComponent,
+    TocMenuButtonComponent,
+    TocNodeLayerComponent,
+    ToggleAllLayersButtonComponent,
+    TocNodeDetailsComponent,
+    LayerTransparencyComponent,
+    LayerDetailsComponent,
+    TocFilterInputComponent,
+    TocNodeDetailsMobileComponent,
+],
     exports: [
         TocComponent,
         TocNodeDetailsMobileComponent,

@@ -1,10 +1,10 @@
 import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { provideState } from '@ngrx/store';
 import { searchIndexStateKey } from './state/search-index.state';
 import { searchIndexReducer } from './state/search-index.reducer';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { SearchIndexHomeComponent } from './search-index-home/search-index-home.component';
 import { SearchIndexEditComponent } from './search-index-edit/search-index-edit.component';
 import { SearchIndexCreateComponent } from './search-index-create/search-index-create.component';
@@ -19,22 +19,20 @@ import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        SharedAdminComponentsModule,
-        CatalogModule,
-        FormModule,
-        MatTimepickerToggle,
-        MatTimepicker,
-        MatTimepickerInput,
-        SearchIndexListComponent,
-        SearchIndexHomeComponent,
-        SearchIndexEditComponent,
-        SearchIndexCreateComponent,
-        SearchIndexFormComponent,
-        SearchIndexAttributeListComponent,
-        SearchIndexSchedulingComponent,
-    ],
+    CommonModule,
+    CatalogModule,
+    FormModule,
+    MatTimepickerToggle,
+    MatTimepicker,
+    MatTimepickerInput,
+    SearchIndexListComponent,
+    SearchIndexHomeComponent,
+    SearchIndexEditComponent,
+    SearchIndexCreateComponent,
+    SearchIndexFormComponent,
+    SearchIndexAttributeListComponent,
+    SearchIndexSchedulingComponent,
+],
     exports: [
         SearchIndexListComponent,
     ],

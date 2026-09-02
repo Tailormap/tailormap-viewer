@@ -5,43 +5,40 @@ import { ComponentConfigRendererComponent } from './component-config-renderer/co
 import { ComponentsListComponent } from './components-list/components-list.component';
 import { ConfigurationComponentRegistryService } from '../services/configuration-component-registry.service';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { MarkdownEditorComponent, SharedModule } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { MeasureComponentConfigComponent } from './measure-config/measure-component-config.component';
 import { CoordinateLinkWindowComponentConfigComponent } from './coordinate-link-window-config/coordinate-link-window-component-config.component';
 import { FeatureInfoComponentConfigComponent } from './feature-info-config/feature-info-component-config.component';
 import { SimpleSearchComponentConfigComponent } from './simple-search-config/simple-search-component-config.component';
 import { HeaderComponentConfigComponent } from './header-config/header-component-config.component';
-import { SelectUploadModule } from '../../shared/components/select-upload/select-upload.module';
+
 import { EditComponentConfigComponent } from './edit-config/edit-component-config.component';
 import { GeolocationConfigComponent } from './geolocation-config/geolocation-config.component';
 import { InfoConfigComponent } from './info-config/info-config.component';
 import { DrawingConfigComponent } from './drawing-config/drawing-config.component';
 import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
-import { SharedAdminComponentsModule } from '../../shared/components';
+
 import { SnappingComponentConfigComponent } from './snapping-config/snapping-component-config.component';
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        BaseComponentConfigComponent,
-        SelectUploadModule,
-        MarkdownEditorComponent,
-        SharedAdminComponentsModule,
-        ComponentConfigRendererComponent,
-        ComponentsListComponent,
-        MeasureComponentConfigComponent,
-        CoordinateLinkWindowComponentConfigComponent,
-        FeatureInfoComponentConfigComponent,
-        SimpleSearchComponentConfigComponent,
-        HeaderComponentConfigComponent,
-        EditComponentConfigComponent,
-        GeolocationConfigComponent,
-        InfoConfigComponent,
-        DrawingConfigComponent,
-        TocComponentConfigComponent,
-        SnappingComponentConfigComponent,
-    ],
+    CommonModule,
+    BaseComponentConfigComponent,
+    MarkdownEditorComponent,
+    ComponentConfigRendererComponent,
+    ComponentsListComponent,
+    MeasureComponentConfigComponent,
+    CoordinateLinkWindowComponentConfigComponent,
+    FeatureInfoComponentConfigComponent,
+    SimpleSearchComponentConfigComponent,
+    HeaderComponentConfigComponent,
+    EditComponentConfigComponent,
+    GeolocationConfigComponent,
+    InfoConfigComponent,
+    DrawingConfigComponent,
+    TocComponentConfigComponent,
+    SnappingComponentConfigComponent,
+],
     exports: [
         ComponentsListComponent,
         ComponentConfigRendererComponent,

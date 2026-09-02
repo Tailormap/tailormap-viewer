@@ -1,11 +1,11 @@
 import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { FeatureInfoComponent } from './feature-info/feature-info.component';
 import { provideState, Store } from '@ngrx/store';
 import { FeatureInfoDialogComponent } from './feature-info-dialog/feature-info-dialog.component';
 import { ApplicationMapModule } from '../../map/application-map.module';
-import { CoreSharedModule } from '../../shared';
+
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 import { FeatureInfoLayerListComponent } from './feature-info-layer-list/feature-info-layer-list.component';
 import { FeatureInfoLayerItemComponent } from './feature-info-layer-item/feature-info-layer-item.component';
@@ -21,20 +21,18 @@ import { featureInfoStateKey } from './state/feature-info.state';
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        ApplicationMapModule,
-        CoreSharedModule,
-        CdkAccordion,
-        CdkAccordionItem,
-        FeatureInfoTemplateRendererComponent,
-        FeatureInfoComponent,
-        FeatureInfoDialogComponent,
-        FeatureInfoLayerListComponent,
-        FeatureInfoLayerItemComponent,
-        FeatureInfoLayerDropdownComponent,
-        FeatureInfoContentComponent,
-    ],
+    CommonModule,
+    ApplicationMapModule,
+    CdkAccordion,
+    CdkAccordionItem,
+    FeatureInfoTemplateRendererComponent,
+    FeatureInfoComponent,
+    FeatureInfoDialogComponent,
+    FeatureInfoLayerListComponent,
+    FeatureInfoLayerItemComponent,
+    FeatureInfoLayerDropdownComponent,
+    FeatureInfoContentComponent,
+],
     exports: [
         FeatureInfoComponent,
         FeatureInfoDialogComponent,

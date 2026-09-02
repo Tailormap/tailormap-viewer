@@ -1,6 +1,6 @@
 import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MarkdownEditorComponent, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
 import { catalogStateKey } from './state/catalog.state';
 import { provideState } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog/catal
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog/geo-service-form-dialog.component';
 import { GeoServiceFormComponent } from './geo-service-form/geo-service-form.component';
 import { LayerSettingsFormComponent } from './layer-settings-form/layer-settings-form.component';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { FeatureSourceDetailsComponent } from './feature-source-details/feature-source-details.component';
 import { FeatureSourceFormComponent } from './feature-source-form/feature-source-form.component';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog/feature-source-form-dialog.component';
@@ -46,42 +46,39 @@ import {
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        SharedAdminComponentsModule,
-        MarkdownEditorComponent,
-        SharedDirectivesModule,
-        CatalogTreeComponent,
-        CatalogTreeNodeComponent,
-        GeoServiceDetailsComponent,
-        GeoServiceLayerDetailsComponent,
-        CatalogNodeDetailsComponent,
-        CatalogNodeFormComponent,
-        CatalogNodeFormDialogComponent,
-        GeoServiceFormDialogComponent,
-        GeoServiceFormComponent,
-        LayerSettingsFormComponent,
-        FeatureSourceDetailsComponent,
-        FeatureSourceFormComponent,
-        FeatureSourceFormDialogComponent,
-        FeatureTypeDetailsComponent,
-        FeatureTypeSelectorComponent,
-        FeatureTypeFormComponent,
-        FeatureTypeFormDialogComponent,
-        CatalogBaseTreeComponent,
-        CatalogBaseTreeNodeComponent,
-        CatalogHomeComponent,
-        CatalogCreateButtonsComponent,
-        GeoServiceUsedDialogComponent,
-        GeoServiceLayerFormDialogComponent,
-        FeatureSourceUsedDialogComponent,
-        CatalogItemsInFolderDialogComponent,
-        FeatureTypeAttributesComponent,
-        FeatureTypeAttachmentAttributesComponent,
-        CatalogShortcutButtonsComponent,
-        FeatureTypeTemplateComponent,
-        ProjectionAvailabilityComponent,
-    ],
+    CommonModule,
+    MarkdownEditorComponent,
+    CatalogTreeComponent,
+    CatalogTreeNodeComponent,
+    GeoServiceDetailsComponent,
+    GeoServiceLayerDetailsComponent,
+    CatalogNodeDetailsComponent,
+    CatalogNodeFormComponent,
+    CatalogNodeFormDialogComponent,
+    GeoServiceFormDialogComponent,
+    GeoServiceFormComponent,
+    LayerSettingsFormComponent,
+    FeatureSourceDetailsComponent,
+    FeatureSourceFormComponent,
+    FeatureSourceFormDialogComponent,
+    FeatureTypeDetailsComponent,
+    FeatureTypeSelectorComponent,
+    FeatureTypeFormComponent,
+    FeatureTypeFormDialogComponent,
+    CatalogBaseTreeComponent,
+    CatalogBaseTreeNodeComponent,
+    CatalogHomeComponent,
+    CatalogCreateButtonsComponent,
+    GeoServiceUsedDialogComponent,
+    GeoServiceLayerFormDialogComponent,
+    FeatureSourceUsedDialogComponent,
+    CatalogItemsInFolderDialogComponent,
+    FeatureTypeAttributesComponent,
+    FeatureTypeAttachmentAttributesComponent,
+    CatalogShortcutButtonsComponent,
+    FeatureTypeTemplateComponent,
+    ProjectionAvailabilityComponent,
+],
     exports: [
         CatalogTreeComponent,
         CatalogBaseTreeComponent,

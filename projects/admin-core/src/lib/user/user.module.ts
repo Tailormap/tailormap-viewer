@@ -1,6 +1,6 @@
 import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { UserListComponent } from './user-list/user-list.component';
 import { GroupListComponent } from './group-list/group-list.component';
 import { UserFormComponent } from './user-form/user-form.component';
@@ -9,7 +9,7 @@ import { UserHomeComponent } from './user-home/user-home.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { RouterModule } from '@angular/router';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { GroupCreateComponent } from './group-create/group-create.component';
@@ -21,21 +21,19 @@ import { GroupService } from './services/group.service';
 
 @NgModule({
     imports: [
-        CommonModule,
-        SharedModule,
-        RouterModule,
-        SharedAdminComponentsModule,
-        UserListComponent,
-        GroupListComponent,
-        UserFormComponent,
-        GroupFormComponent,
-        UserHomeComponent,
-        UserCreateComponent,
-        UserEditComponent,
-        GroupHomeComponent,
-        GroupEditComponent,
-        GroupCreateComponent,
-    ],
+    CommonModule,
+    RouterModule,
+    UserListComponent,
+    GroupListComponent,
+    UserFormComponent,
+    GroupFormComponent,
+    UserHomeComponent,
+    UserCreateComponent,
+    UserEditComponent,
+    GroupHomeComponent,
+    GroupEditComponent,
+    GroupCreateComponent,
+],
     exports: [
         UserListComponent,
         GroupListComponent,
