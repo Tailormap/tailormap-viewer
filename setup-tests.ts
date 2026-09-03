@@ -3,7 +3,9 @@ import './projects/app/src/polyfills';
 import 'zone.js/testing';
 import '@testing-library/jest-dom/vitest';
 import { TextEncoder, TextDecoder } from 'util';
-import { vi } from "vitest";
+import { vi, beforeEach } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 // Error is thrown because the JSDOM version Jest uses does not support @layer css construct, ignore for now
 // const allowedErrors = ['Could not parse CSS stylesheet'];
 // failOnConsole({
@@ -36,6 +38,18 @@ window.EventSource = window.EventSource || vi.fn(class {
 });
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
+
+// Registers a fake MatIconRegistry for every test so `<mat-icon svgIcon="...">` never tries to
+// fetch a real SVG over HttpClient (which logs a "Error retrieving icon" console error for any
+// icon name that isn't registered in the test). Runs before each test's own `TestBed.configureTestingModule`
+// call (e.g. via `render(...)` from @testing-library/angular), which merges its `imports` into this
+// one - so specs no longer need to import `MatIconTestingModule` themselves, though doing so is
+// still harmless.
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    imports: [MatIconTestingModule],
+  });
+});
 
 vi.mock('jsts/org/locationtech/jts/io', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
