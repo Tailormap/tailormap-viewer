@@ -1,12 +1,11 @@
 import { render, screen } from '@testing-library/angular';
+import { Component } from '@angular/core';
 import { ViewerAppComponent } from './viewer-app.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { of } from 'rxjs';
-import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ICON_SERVICE_ICON_LOCATION, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock';
 import {
   TAILORMAP_API_V1_SERVICE, TAILORMAP_SECURITY_API_V1_SERVICE, TailormapApiV1MockService, TailormapSecurityApiV1MockService,
@@ -14,6 +13,10 @@ import {
 import { CrossOriginPostMessageApiService } from '@tailormap-viewer/api';
 import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
 import { LoadViewerService } from '../../services/load-viewer.service';
+import { getFullInitialAppState } from '../../test-helpers/full-app-state.mock';
+import { APP_BASE_HREF } from '@angular/common';
+import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
+import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
   return { provide: ActivatedRoute, useValue: {
@@ -26,17 +29,25 @@ export const getMockedRouterProvider = () => {
   return { provide: Router, useValue: { navigate: vi.fn() } };
 };
 
+@Component({
+  selector: 'tm-base-layout',
+  template: '<div>Base Layout</div>',
+})
+class MockBaseLayoutComponent {}
+
 const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => {
   const loadViewer = vi.fn();
   const { container } = await render(ViewerAppComponent, {
-    declarations: [ ViewerAppComponent, ErrorMessageComponent ],
-    imports: [MatProgressSpinnerModule],
+    importOverrides: [
+      { replace: BaseLayoutComponent, with: MockBaseLayoutComponent },
+    ],
     providers: [
       getActivatedRouteProvider([ 'app', 'default' ]),
       getMockedRouterProvider(),
       getMapServiceMock().provider,
+      { provide: MobileLayoutService, useValue: { isMobileLayoutEnabled$: of(false), setMobileLayoutBookmark: vi.fn() } },
       provideMockStore({
-        initialState: {},
+        initialState: getFullInitialAppState(),
         selectors: [
           { selector: selectViewerErrorMessage, value: errorMessage || undefined },
           { selector: selectViewerLoadingState, value: loadingState || LoadingStateEnum.LOADED },
@@ -46,9 +57,10 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
       { provide: TAILORMAP_CROSS_ORIGIN_API_SERVICE, useClass: CrossOriginPostMessageApiService },
       { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+      { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
+      { provide: APP_BASE_HREF, useValue: '/' },
       { provide: LoadViewerService, useValue: { loadViewer } },
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });
   return { container, loadViewer };
 };

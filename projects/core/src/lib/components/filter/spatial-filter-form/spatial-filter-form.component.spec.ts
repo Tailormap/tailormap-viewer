@@ -5,7 +5,7 @@ import { selectIn3dView } from '../../../map/state/map.selectors';
 import {
   hasSelectedLayersAndGeometry, selectSelectedFilterGroup, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayers,
-  selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { FilterTypeEnum, SpatialFilterModel } from '@tailormap-viewer/api';
@@ -36,6 +36,7 @@ const setup = async (conf: {
       { selector: selectSelectedFilterGroup, value: conf.selectedFilterGroup || null },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
+      { selector: selectSelectedSpatialFilterFeatureId, value: null },
       { selector: selectSpatialFilterHasExceededMaxFeatures, value: conf.exceededMax ?? false },
       { selector: selectIn3dView, value: false },
     ],

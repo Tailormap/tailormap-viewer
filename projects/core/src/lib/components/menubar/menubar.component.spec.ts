@@ -9,6 +9,8 @@ import { ComponentRegistrationService } from '../../services/component-registrat
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../map/state/map.selectors';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { getFullInitialAppState } from '../../test-helpers/full-app-state.mock';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
   selector: 'tm-menu-button-test',
@@ -38,7 +40,8 @@ describe('MenubarComponent', () => {
       ],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
-        provideMockStore({ selectors: [{ selector: selectIn3dView, value: false }] }),
+        { provide: APP_BASE_HREF, useValue: '/' },
+        provideMockStore({ initialState: getFullInitialAppState(), selectors: [{ selector: selectIn3dView, value: false }] }),
         AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
       ],
     });

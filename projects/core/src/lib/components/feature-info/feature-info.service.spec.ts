@@ -10,6 +10,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpClient, provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock';
+import { initialFilterState } from '../../state';
 
 describe('FeatureInfoService', () => {
 
@@ -39,7 +40,7 @@ describe('FeatureInfoService', () => {
         FeatureInfoService,
         mapServiceMock.provider,
         provideMockStore({
-          initialState: { map: { layers: [appLayer] } },
+          initialState: { core: { filters: initialFilterState }, map: { services: [], layers: [appLayer] } },
         }),
         { provide: TAILORMAP_API_V1_SERVICE, useValue: { getFeatures$ } },
       ],

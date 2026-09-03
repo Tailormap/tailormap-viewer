@@ -3,12 +3,11 @@ import { BaseLayoutComponent } from './base-layout.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectComponentsConfig } from '../../state/core.selectors';
 import { BaseComponentTypeEnum, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { selectIn3dView } from '../../map/state/map.selectors';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
-import { getFullInitialAppState } from '../../test-helpers/full-app-state.mock';
 import { ICON_SERVICE_ICON_LOCATION } from '@tailormap-viewer/shared';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, AsyncPipe } from '@angular/common';
 import { getMapServiceMock } from '../../test-helpers/map-service.mock';
 import { MenubarService } from '../../components/menubar/menubar.service';
 import { TestBed } from '@angular/core/testing';
@@ -17,7 +16,6 @@ describe('BaseLayoutComponent', () => {
 
   const setup = async (disabledComponents?: BaseComponentTypeEnum[]) => {
     const store = provideMockStore({
-      initialState: getFullInitialAppState(),
       selectors: [
         {
           selector: selectComponentsConfig,
@@ -35,7 +33,14 @@ describe('BaseLayoutComponent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
         getMapServiceMock().provider,
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      configureTestBed: testBed => {
+        testBed.overrideComponent(BaseLayoutComponent, {
+          set: {
+            imports: [AsyncPipe],
+            schemas: [NO_ERRORS_SCHEMA],
+          },
+        });
+      },
     });
     return { container, detectChanges };
   };

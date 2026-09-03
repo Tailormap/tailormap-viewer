@@ -8,6 +8,7 @@ import { selectEditActive, selectSelectedEditLayer } from "../state/edit.selecto
 import { MatIconTestingModule } from "@angular/material/icon/testing";
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
+import { getFullInitialAppState } from '../../../test-helpers/full-app-state.mock';
 
 const setup = async (hasLayers: boolean, authenticated: boolean) => {
   await render(EditComponent, {
@@ -18,7 +19,7 @@ const setup = async (hasLayers: boolean, authenticated: boolean) => {
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       AuthenticatedUserTestHelper.provideAuthenticatedUserService(authenticated, []),
       provideMockStore({
-        initialState: {},
+        initialState: getFullInitialAppState(),
         selectors: [
           { selector: selectEditableLayers, value: hasLayers ? [getAppLayerModel()] : [] },
           { selector: selectSelectedEditLayer, value: null },

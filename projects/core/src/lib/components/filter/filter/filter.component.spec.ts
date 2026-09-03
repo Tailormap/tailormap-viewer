@@ -14,6 +14,7 @@ const setup = async (isVisible: boolean) => {
     isComponentVisible$: vi.fn(() => of(isVisible)),
     registerComponent: vi.fn(),
     deregisterComponent: vi.fn(),
+    setMobilePanelHeight: vi.fn(),
   };
   await render(FilterComponent, {
     imports: [ MatIconModule, MatIconTestingModule ],

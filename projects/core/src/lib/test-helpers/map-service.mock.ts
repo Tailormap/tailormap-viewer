@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { MapService, MapViewDetailsModel, ToolTypeEnum } from '@tailormap-viewer/map';
+import { vi } from 'vitest';
 
 export const getMapServiceMock = (
   createdTool: ((type: ToolTypeEnum) => any) | null = null,
@@ -27,6 +28,7 @@ export const getMapServiceMock = (
         disableTranslate: vi.fn(),
         enableTranslate: vi.fn(),
         mapClick$: new Subject().asObservable(),
+        setTarget: vi.fn(),
       };
       const tool = createdTool ? createdTool(type) : defaultTool;
       return of({ tool, manager: toolManagerMock });
@@ -67,6 +69,9 @@ export const getMapServiceMock = (
     disableAllTools: vi.fn(),
     setSwitchedTool: vi.fn(),
     enableAutoEnabledTools: vi.fn(),
+    setSnappingTolerance: vi.fn(),
+    setSnappingFeatures: vi.fn(),
+    setSnappingLayerStyle: vi.fn(),
     ...overrides,
   };
   return {

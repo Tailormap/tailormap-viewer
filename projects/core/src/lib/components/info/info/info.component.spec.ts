@@ -18,6 +18,7 @@ describe('InfoComponent', () => {
       registerComponent: vi.fn(),
       toggleActiveComponent: vi.fn(),
       deregisterComponent: vi.fn(),
+      setMobilePanelHeight: vi.fn(),
     };
 
     const mockComponentRegistrationService = {

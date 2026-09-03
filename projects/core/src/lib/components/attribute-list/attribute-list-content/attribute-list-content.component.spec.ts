@@ -25,7 +25,14 @@ describe('AttributeListContent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         getMapServiceMock().provider,
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });
@@ -41,7 +48,14 @@ describe('AttributeListContent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         getMapServiceMock().provider,
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });
