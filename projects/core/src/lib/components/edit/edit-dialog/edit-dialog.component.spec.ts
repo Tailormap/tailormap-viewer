@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
-import { AttributeType, getAppLayerModel, getFeatureModel, UniqueValuesService } from '@tailormap-viewer/api';
+import {
+  AttributeType, getAppLayerModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService, UniqueValuesService,
+} from '@tailormap-viewer/api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
@@ -14,6 +16,8 @@ import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layo
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
+import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
@@ -45,6 +49,9 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
       { provide: UniqueValuesService, useValue: { clearCaches: vi.fn() } },
       { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       { provide: EditMapToolService, useValue: { allEditGeometry$: of() } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+      provideNoopAnimations(),
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });

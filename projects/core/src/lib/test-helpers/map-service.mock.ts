@@ -61,6 +61,12 @@ export const getMapServiceMock = (
     getPointerDrag$: vi.fn(() => new Subject().asObservable()),
     switch3D: vi.fn(),
     get3dTerrainOpacity$: vi.fn(() => of(1)),
+    getIn3d$: vi.fn(() => of(false)),
+    getCesiumManager$: vi.fn(() => of({ executeScene3dAction: vi.fn(), enableKeyboardControl: vi.fn() })),
+    hasUserInteractedWithMap$: vi.fn(() => of(false)),
+    disableAllTools: vi.fn(),
+    setSwitchedTool: vi.fn(),
+    enableAutoEnabledTools: vi.fn(),
     ...overrides,
   };
   return {

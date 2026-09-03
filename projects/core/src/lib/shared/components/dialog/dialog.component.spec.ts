@@ -9,7 +9,7 @@ describe('OverlayPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DialogComponent],
+      imports: [DialogComponent],
       providers: [{ provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } }],
     })
     .compileComponents();

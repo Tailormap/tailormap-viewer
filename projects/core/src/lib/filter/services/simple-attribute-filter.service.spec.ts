@@ -11,16 +11,16 @@ import { mapReducer } from '../../map/state/map.reducer';
 import { coreStateKey } from '../../state';
 import { coreReducer } from '../../state/core.reducer';
 
-let idCount = 0;
+// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
+// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
+// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
+const idState = vi.hoisted(() => ({ count: 0 }));
 vi.mock('nanoid', () => ({
-  nanoid: () => {
-    idCount++;
-    return `id-${idCount}`;
-  },
+  nanoid: () => `id-${++idState.count}`,
 }));
 
 const createService = () => {
-  idCount = 0;
+  idState.count = 0;
   TestBed.configureTestingModule({
     providers: [ SimpleAttributeFilterService, provideStore({ [coreStateKey]: coreReducer, [mapStateKey]: mapReducer }) ],
   });

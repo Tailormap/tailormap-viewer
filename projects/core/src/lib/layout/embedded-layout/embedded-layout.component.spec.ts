@@ -2,16 +2,21 @@ import { render } from '@testing-library/angular';
 import { EmbeddedLayoutComponent } from './embedded-layout.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectComponentsConfig } from '../../state/core.selectors';
-import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { selectIn3dView } from '../../map/state/map.selectors';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { getFullInitialAppState } from '../../test-helpers/full-app-state.mock';
+import { ICON_SERVICE_ICON_LOCATION } from '@tailormap-viewer/shared';
+import { APP_BASE_HREF } from '@angular/common';
+import { getMapServiceMock } from '../../test-helpers/map-service.mock';
 
 describe('EmbeddedLayoutComponent', () => {
 
   const setup = async (disabledComponents?: BaseComponentTypeEnum[]) => {
     const store = provideMockStore({
-      initialState: {},
+      initialState: getFullInitialAppState(),
       selectors: [
         {
           selector: selectComponentsConfig,
@@ -21,7 +26,15 @@ describe('EmbeddedLayoutComponent', () => {
       ],
     });
     const { container } = await render(EmbeddedLayoutComponent, {
-      providers: [ store, { provide: HttpXsrfTokenExtractor, useValue: {} as HttpXsrfTokenExtractor }],
+      providers: [
+        store,
+        { provide: HttpXsrfTokenExtractor, useValue: {} as HttpXsrfTokenExtractor },
+        AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
+        { provide: ICON_SERVICE_ICON_LOCATION, useValue: 'icons/' },
+        { provide: APP_BASE_HREF, useValue: '/' },
+        { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+        getMapServiceMock().provider,
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     });
     return container;

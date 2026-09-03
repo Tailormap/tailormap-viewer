@@ -14,12 +14,12 @@ import { selectLayers } from '../../../map';
 import { FilterManagerService } from '../../../filter';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
-let idCount = 0;
+// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
+// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
+// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
+const idState = vi.hoisted(() => ({ count: 0 }));
 vi.mock('nanoid', () => ({
-  nanoid: () => {
-    idCount++;
-    return `id-${idCount}`;
-  },
+  nanoid: () => `id-${++idState.count}`,
 }));
 
 const selectedGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: '1', column: ['geom'] }]);
@@ -29,7 +29,7 @@ const setup = (
   hasSelectedLayers?: boolean,
   overrideGroup?: FilterGroupModel<SpatialFilterModel>,
 ) => {
-  idCount = 0;
+  idState.count = 0;
   const mockStore = provideMockStore({
     initialState: {},
     selectors: [

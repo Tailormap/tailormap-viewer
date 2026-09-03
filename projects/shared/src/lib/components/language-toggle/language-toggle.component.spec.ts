@@ -35,6 +35,7 @@ describe('LanguageToggleComponent', () => {
   });
 
   afterAll(() => {
+    // @ts-expect-error restoring the original location object after overwriting it above
     window.location = location;
   });
 

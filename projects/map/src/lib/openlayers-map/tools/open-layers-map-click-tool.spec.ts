@@ -29,7 +29,12 @@ describe('OpenLayersMapClickTool', () => {
   test('handles 3D map click', async () => {
     const eventManager = new OpenLayersEventManager();
     // @ts-expect-error overwriting this prop in test is allowed
-    eventManager.onMapClick$ = vi.fn(() => of({ coordinate: [ 1, 2 ], pixel: [ 2, 3 ] }));
+    eventManager.onMapClick$ = vi.fn(() => of({
+      coordinate: [ 1, 2 ],
+      pixel: [ 2, 3 ],
+      map: { getView: () => ({ getResolution: () => 0.1, getProjection: () => ({ getMetersPerUnit: () => 2 }) }) },
+      originalEvent: { pointerType: 'mouse' },
+    }));
     const cesiumEventManager = new CesiumEventManager();
     cesiumEventManager.onMap3dClick$ = vi.fn(() => of({ position: { x: 3, y: 4, z: 5 }, mouseCoordinates: { x: 2, y: 3 } }));
     const tool = new OpenLayersMapClickTool('tool-123', { type: ToolTypeEnum.MapClick, owner: 'owner' }, eventManager, cesiumEventManager);

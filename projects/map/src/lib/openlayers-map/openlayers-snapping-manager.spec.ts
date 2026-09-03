@@ -25,7 +25,7 @@ describe('OpenLayersSnappingManager', () => {
   };
   let mockVectorLayer: { getSource: Mock; setStyle: Mock };
   let mockLayerManager: { addLayer: Mock; removeLayer: Mock };
-  let mockSnapInstance: { setProperties: Mock };
+  let mockSnapInstance: { setProperties: Mock; on: Mock };
   beforeEach(() => {
     vi.resetAllMocks();
     manager = new OpenLayersSnappingManager();
@@ -47,8 +47,11 @@ describe('OpenLayersSnappingManager', () => {
       addInteraction: vi.fn(),
       removeInteraction: vi.fn(),
     };
-    mockSnapInstance = { setProperties: vi.fn() };
-    mockSnap.mockImplementation(() => mockSnapInstance as unknown as Snap);
+    mockSnapInstance = { setProperties: vi.fn(), on: vi.fn() };
+    // Note: the mocked Snap is invoked with `new` by the code under test. Vitest constructs mock
+    // implementations via `Reflect.construct`, which throws for arrow functions (they have no
+    // [[Construct]]); use a regular function so `new Snap(...)` can return `mockSnapInstance`.
+    mockSnap.mockImplementation(function () { return mockSnapInstance as unknown as Snap; });
     (FeatureHelper as any).getFeatures = vi.fn((features: unknown[]) => features);
   });
 

@@ -39,7 +39,7 @@ describe('PrintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PrintComponent],
+      imports: [PrintComponent],
       providers: [
         provideMockStore({ initialState }),
         { provide: MenubarService, useValue: { isComponentVisible$: () => of(false), registerComponent: () => {}, deregisterComponent: () => {} } },

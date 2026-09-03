@@ -9,6 +9,7 @@ describe('MapComponent', () => {
     const mockRender = vi.fn();
     const mockCesiumManager = {
       executeScene3dAction: vi.fn(),
+      enableKeyboardControl: vi.fn(),
     };
 
     await render(MapComponent, {
