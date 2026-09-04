@@ -70,6 +70,8 @@
     "@angular/cli": "^21.2.22",
     "@angular/compiler-cli": "^21.2.22",
     "@angular/localize": "^21.2.22",
+    "@emnapi/core": "1.11.3",
+    "@emnapi/runtime": "1.11.3",
     "@stylistic/eslint-plugin": "^5.2.2",
     "@tailormap-viewer/schematics": "^0.0.18",
     "@tailormap-viewer/tools": "^0.0.33",
