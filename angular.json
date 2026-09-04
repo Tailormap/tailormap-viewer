@@ -239,7 +239,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }
@@ -279,7 +279,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }
@@ -319,7 +319,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }
@@ -359,7 +359,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }
@@ -398,7 +398,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }
@@ -437,7 +437,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["setup-tests.ts"],
+            "setupFiles": ["test-setup.ts"],
             "runnerConfig": true
           }
         }

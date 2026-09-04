@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { DateTime } from 'luxon';
@@ -15,6 +15,7 @@ import { NgClass } from '@angular/common';
 import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
     selector: 'tm-admin-oidc-configuration-form',
@@ -24,21 +25,22 @@ import { UploadCategoryEnum } from "@tailormap-viewer/api";
     providers: [
         { provide: UPLOAD_REMOVE_SERVICE, useClass: OidcImageRemoveService },
     ],
-    imports: [
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        AutoFocusDirective,
-        MatHint,
-        PasswordFieldComponent,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        NgClass,
-        SelectUploadComponent,
-    ],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    AutoFocusDirective,
+    MatHint,
+    PasswordFieldComponent,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    NgClass,
+    SelectUploadComponent,
+    MatCheckbox,
+    ReactiveFormsModule,
+  ],
 })
 export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 

@@ -16,7 +16,6 @@ import { ImageUploadFieldComponent } from '../../image-upload-field/image-upload
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AsyncPipe } from '@angular/common';
-import { FormControl } from '@angular/forms';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 export interface SelectUploadData {
