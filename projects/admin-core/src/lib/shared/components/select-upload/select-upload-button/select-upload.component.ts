@@ -52,7 +52,7 @@ export class SelectUploadComponent {
   }
 
   public getUrl(selectedFile: string) {
-    return UploadHelper.getUrlForFile(selectedFile, this.category);
+    return UploadHelper.getAdminUrlForLegend(selectedFile, this.category);
   }
 
 }
