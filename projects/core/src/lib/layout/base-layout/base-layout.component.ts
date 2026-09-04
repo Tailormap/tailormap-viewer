@@ -13,7 +13,7 @@ import { FilterComponent } from '../../components/filter/filter/filter.component
 import { RegisteredComponentsRendererComponent } from '../../components/registered-components-renderer/registered-components-renderer.component';
 import { FeatureInfoComponent } from '../../components/feature-info/feature-info/feature-info.component';
 import { EditDialogComponent } from '../../components/edit/edit-dialog/edit-dialog.component';
-import { MapComponent } from '../../../../../map/src/lib/map/map.component';
+import { MapComponent } from '@tailormap-viewer/map';
 import { AttributeListComponent } from '../../components/attribute-list/attribute-list/attribute-list.component';
 import { MeasureComponent } from '../../components/toolbar/measure/measure.component';
 import { ClickedCoordinatesComponent } from '../../components/toolbar/clicked-coordinates/clicked-coordinates.component';

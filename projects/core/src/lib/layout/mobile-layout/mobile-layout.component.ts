@@ -3,7 +3,7 @@ import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { LayoutService } from '../layout.service';
 import { HeaderComponent } from '../../components/header/header/header.component';
 import { FeatureInfoComponent } from '../../components/feature-info/feature-info/feature-info.component';
-import { MapComponent } from '../../../../../map/src/lib/map/map.component';
+import { MapComponent } from '@tailormap-viewer/map';
 import { SimpleSearchComponent } from '../../components/toolbar/simple-search/simple-search.component';
 import { GeolocationComponent } from '../../components/toolbar/geolocation/geolocation.component';
 import { BackgroundLayerToggleComponent } from '../../components/background-layer-toggle/background-layer-toggle.component';

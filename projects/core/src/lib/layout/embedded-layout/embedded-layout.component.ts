@@ -6,7 +6,7 @@ import { Subject, takeUntil, take } from 'rxjs';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
 import { FeatureInfoComponent } from '../../components/feature-info/feature-info/feature-info.component';
-import { MapComponent } from '../../../../../map/src/lib/map/map.component';
+import { MapComponent } from '@tailormap-viewer/map';
 import { MeasureComponent } from '../../components/toolbar/measure/measure.component';
 import { ClickedCoordinatesComponent } from '../../components/toolbar/clicked-coordinates/clicked-coordinates.component';
 import { StreetviewComponent } from '../../components/toolbar/streetview/streetview.component';
