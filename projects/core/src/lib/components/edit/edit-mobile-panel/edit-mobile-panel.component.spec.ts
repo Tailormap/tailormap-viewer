@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { EditMobilePanelComponent } from './edit-mobile-panel.component';
 import { render } from '@testing-library/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

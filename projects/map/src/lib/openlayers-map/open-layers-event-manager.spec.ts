@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { firstValueFrom, of } from 'rxjs';
 

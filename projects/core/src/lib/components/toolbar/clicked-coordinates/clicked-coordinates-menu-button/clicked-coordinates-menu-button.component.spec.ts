@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ClickedCoordinatesMenuButtonComponent } from './clicked-coordinates-menu-button.component';
 import { of } from 'rxjs';

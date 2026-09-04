@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import { render } from '@testing-library/angular';
 import { FeatureInfoComponent } from './feature-info.component';
 import { Store } from '@ngrx/store';

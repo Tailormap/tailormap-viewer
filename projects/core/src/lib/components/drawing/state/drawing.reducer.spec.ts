@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import * as DrawingActions from './drawing.actions';
 import { DrawingState, initialDrawingState } from './drawing.state';
 import { drawingReducer } from './drawing.reducer';

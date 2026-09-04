@@ -1,3 +1,4 @@
+import { expect, describe, test } from 'vitest';
 import { getFullCatalogTreeData } from './mocks/catalog-tree.mock';
 import { CatalogFilterHelper } from './catalog-filter.helper';
 import { CatalogTreeModel } from '../models/catalog-tree.model';

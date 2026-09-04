@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ImageHelper } from './image.helper';
 
 function makeFile(name: string, type: string): File {

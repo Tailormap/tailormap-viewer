@@ -1,3 +1,4 @@
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 import { Snap } from 'ol/interaction';
 import { LayerTypesEnum } from '../models';

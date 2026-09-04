@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -24,6 +25,7 @@ const setup = async () => {
   const geoServiceLayerMock: ExtendedGeoServiceLayerModel = {
     ...getGeoServiceLayer({ name: 'my-layer', title: 'nice layer' }),
     id: 'my-layer',
+    layerTitle: 'nice layer',
     serviceId: 'test',
     catalogNodeId: '1',
     originalId: 'my-layer',

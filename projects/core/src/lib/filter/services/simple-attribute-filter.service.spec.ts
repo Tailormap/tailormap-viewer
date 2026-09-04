@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
 import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';

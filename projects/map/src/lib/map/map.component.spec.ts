@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { MapComponent } from './map.component';
 import { render } from '@testing-library/angular';
 import { MapService } from '../map-service/map.service';

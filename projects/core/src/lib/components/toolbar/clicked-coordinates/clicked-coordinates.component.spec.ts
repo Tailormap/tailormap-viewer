@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, test, expect } from "vitest";
 import { render, screen } from '@testing-library/angular';
 import { ClickedCoordinatesComponent } from './clicked-coordinates.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

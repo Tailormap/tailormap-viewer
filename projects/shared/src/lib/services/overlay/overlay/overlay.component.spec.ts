@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { OverlayComponent } from './overlay.component';
 import { OverlayContent } from '../overlay-content';
 import { OverlayRef } from '../overlay-ref';

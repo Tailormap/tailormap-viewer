@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ZoomButtonsComponent } from './zoom-buttons.component';
 import { of } from 'rxjs';

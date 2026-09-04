@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { TerrainOpacityComponent } from './terrain-opacity.component';
 import { MatIconModule } from '@angular/material/icon';

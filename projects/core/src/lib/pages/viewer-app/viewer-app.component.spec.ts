@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { Component } from '@angular/core';
 import { ViewerAppComponent } from './viewer-app.component';

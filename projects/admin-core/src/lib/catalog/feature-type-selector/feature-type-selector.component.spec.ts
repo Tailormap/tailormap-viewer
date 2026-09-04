@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeSelectorComponent } from './feature-type-selector.component';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
@@ -18,12 +19,14 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     featureSourceId: '1',
     catalogNodeId: '',
     type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
+    featureSourceProtocol: FeatureSourceProtocolEnum.JDBC,
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     featureTypesIds: ['ft_1'],
     catalogNodeId: '',
     type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
+    featureTypeOriginalIds: [],
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,

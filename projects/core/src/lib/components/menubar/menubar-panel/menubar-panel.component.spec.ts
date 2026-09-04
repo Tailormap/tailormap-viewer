@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { MenubarPanelComponent } from './menubar-panel.component';
 import { MenubarService } from '../menubar.service';
@@ -38,7 +39,7 @@ describe('MenubarPanelComponent', () => {
     const menubarServiceMock = getMenuBarServiceMock({ componentId: 'TOC', dialogTitle: 'Available layers' });
     const closePanelFn = menubarServiceMock.useValue.closePanel;
     const { fixture } = await render(MenubarPanelComponent, {
-      imports: [MatIconTestingModule, NoopAnimationsModule],
+      imports: [ MatIconTestingModule, NoopAnimationsModule ],
       providers: [
         menubarServiceMock,
         { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },

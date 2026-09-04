@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { LayerTypesEnum, WMSLayerModel } from '../models';
 import { ServerType } from '@tailormap-viewer/api';

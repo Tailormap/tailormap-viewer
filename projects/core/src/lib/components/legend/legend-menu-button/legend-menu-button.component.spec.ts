@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { LegendMenuButtonComponent } from './legend-menu-button.component';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';

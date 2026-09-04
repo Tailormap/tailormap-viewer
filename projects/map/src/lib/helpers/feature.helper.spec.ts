@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { Circle, Point } from 'ol/geom';
 import { FeatureHelper } from './feature.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';

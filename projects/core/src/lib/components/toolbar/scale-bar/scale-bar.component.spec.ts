@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ScaleBarComponent } from './scale-bar.component';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';

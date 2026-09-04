@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogTreeComponent } from './catalog-tree.component';
 import { createMockStore } from '@ngrx/store/testing';

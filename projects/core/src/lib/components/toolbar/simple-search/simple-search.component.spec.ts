@@ -1,3 +1,4 @@
+import { vi, describe, test, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { SimpleSearchComponent } from './simple-search.component';
 import { of } from 'rxjs';

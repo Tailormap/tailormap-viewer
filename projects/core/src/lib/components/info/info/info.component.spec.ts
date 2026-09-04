@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { InfoComponent } from './info.component';
 import { provideMockStore } from '@ngrx/store/testing';

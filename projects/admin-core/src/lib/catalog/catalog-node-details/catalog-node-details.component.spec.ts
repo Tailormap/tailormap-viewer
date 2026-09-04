@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { CatalogNodeDetailsComponent } from './catalog-node-details.component';
 import { of } from 'rxjs';

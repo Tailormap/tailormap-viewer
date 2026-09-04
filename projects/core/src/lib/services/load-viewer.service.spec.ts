@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import {
   ViewerResponseModel, getViewerResponseData, TailormapApiV1ServiceModel, TAILORMAP_API_V1_SERVICE,
 } from '@tailormap-viewer/api';

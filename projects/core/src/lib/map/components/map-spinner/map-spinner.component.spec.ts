@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/angular';
 import { MapSpinnerComponent } from './map-spinner.component';
 import { of } from 'rxjs';

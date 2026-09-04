@@ -1,3 +1,4 @@
+import { expect, describe, test } from 'vitest';
 import { screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AuthenticatedUserTestHelper } from './authenticated-user-test.helper.spec';

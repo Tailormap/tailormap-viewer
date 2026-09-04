@@ -1,3 +1,4 @@
+import { describe, beforeAll, afterAll, test, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { ProfileComponent } from './profile.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

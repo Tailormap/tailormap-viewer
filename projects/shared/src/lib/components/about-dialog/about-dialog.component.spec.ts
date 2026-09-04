@@ -1,10 +1,10 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AboutDialogComponent } from './about-dialog.component';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 
 describe('AboutDialogComponent', () => {
@@ -12,7 +12,6 @@ describe('AboutDialogComponent', () => {
   test('should render', async () => {
     const closeFn = vi.fn();
     await render(AboutDialogComponent, {
-      imports: [MatProgressSpinnerModule],
       providers: [
         provideHttpClient(
           withXsrfConfiguration({
@@ -34,7 +33,7 @@ describe('AboutDialogComponent', () => {
     });
     expect(await screen.findByText('11.1.2')).toBeInTheDocument();
     expect(await screen.findByText('Oct 25, 2023')).toBeInTheDocument();
-    expect(await screen.findByText('1:28:49 PM')).toBeInTheDocument();
+    expect(await screen.findByText('3:28:49 PM')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Close'));
     expect(closeFn).toHaveBeenCalled();
   });

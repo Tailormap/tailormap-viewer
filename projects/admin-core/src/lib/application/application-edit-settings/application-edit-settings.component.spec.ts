@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationEditSettingsComponent } from './application-edit-settings.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

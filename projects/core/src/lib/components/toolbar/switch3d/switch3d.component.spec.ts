@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { Switch3dComponent } from './switch3d.component';
 import { MatSnackBar } from '@angular/material/snack-bar';

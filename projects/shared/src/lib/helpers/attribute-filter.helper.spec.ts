@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from './attribute-filter.helper';
 import { getFilterGroup } from './attribute-filter.mock';

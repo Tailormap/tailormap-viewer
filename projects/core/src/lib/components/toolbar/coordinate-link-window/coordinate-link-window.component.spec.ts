@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CoordinateLinkWindowComponent } from './coordinate-link-window.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

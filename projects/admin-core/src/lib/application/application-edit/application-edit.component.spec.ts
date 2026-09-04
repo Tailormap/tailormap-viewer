@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationEditComponent } from './application-edit.component';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';

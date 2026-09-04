@@ -429,8 +429,8 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "projects/admin-core/**/*.ts",
-              "projects/admin-core/**/*.html"
+              "projects/admin-api/**/*.ts",
+              "projects/admin-api/**/*.html"
             ]
           }
         },

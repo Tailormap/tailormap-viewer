@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
 import { FilterToolEnum, UniqueValuesService, UpdateSliderFilterModel } from '@tailormap-viewer/api';

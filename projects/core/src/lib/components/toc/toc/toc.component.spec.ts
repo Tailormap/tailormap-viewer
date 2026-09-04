@@ -1,3 +1,4 @@
+import { vi, describe, test, expect } from 'vitest';
 import { TocComponent } from './toc.component';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';

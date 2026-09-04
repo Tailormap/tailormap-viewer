@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';

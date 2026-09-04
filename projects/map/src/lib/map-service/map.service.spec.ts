@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import { MapService } from './map.service';
 import { TestBed } from '@angular/core/testing';
 import { NgZone } from '@angular/core';

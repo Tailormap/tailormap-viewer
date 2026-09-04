@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { TerrainControlsComponent } from './terrain-controls.component';
 import { of } from 'rxjs';

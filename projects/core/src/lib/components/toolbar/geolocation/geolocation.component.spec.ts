@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GeolocationComponent } from './geolocation.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

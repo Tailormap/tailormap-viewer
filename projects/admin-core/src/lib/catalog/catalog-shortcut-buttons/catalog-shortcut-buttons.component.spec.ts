@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -18,11 +19,14 @@ const featureType: ExtendedFeatureTypeModel = {
   featureSourceId: '1',
   type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   title: 'begroeidterreindeel',
+  featureSourceProtocol: 'JDBC',
   originalId: '1',
   name: 'abc',
   id: '1',
   hasAttributes: false,
   catalogNodeId: '',
+  defaultGeometryAttribute: '',
+  primaryKeyAttribute: null,
 };
 
 const geoService: ExtendedGeoServiceModel = {
@@ -34,6 +38,7 @@ const geoService: ExtendedGeoServiceModel = {
 
 const geoServiceLayer: ExtendedGeoServiceLayerModel = {
   ...getGeoServiceLayer({ id: '1_1', title: 'my wonderful layer', name: 'service:my-wonderful-layer' }),
+  layerTitle: 'my wonderful layer',
   type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
   serviceId: '1',
   originalId: '1',

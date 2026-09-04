@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { MapClickToolModel, ToolTypeEnum } from '../models';
 import { OpenLayersEventManager } from './open-layers-event-manager';

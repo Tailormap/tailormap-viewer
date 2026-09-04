@@ -1,3 +1,4 @@
+import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { RedirectCommand, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -70,7 +71,7 @@ describe('AdminAuthGuard', () => {
     if (result instanceof RedirectCommand) {
       expect(result.navigationBehaviorOptions).toBeDefined();
       expect(result.navigationBehaviorOptions?.state).toBeDefined();
-      expect(result.navigationBehaviorOptions?.state?.routeBeforeLogin).toBe(originalUrl);
+      expect(result.navigationBehaviorOptions?.state?.['routeBeforeLogin']).toBe(originalUrl);
     }
   });
 });

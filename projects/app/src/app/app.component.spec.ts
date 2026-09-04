@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { AppComponent } from './app.component';
 import { render } from '@testing-library/angular';
 import { RouterModule } from '@angular/router';

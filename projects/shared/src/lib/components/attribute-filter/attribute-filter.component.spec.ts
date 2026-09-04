@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { AttributeFilterComponent } from './attribute-filter.component';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { AttributeType } from '@tailormap-viewer/api';

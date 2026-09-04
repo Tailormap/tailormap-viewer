@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node.component';
 import { render, screen } from '@testing-library/angular';
 import { TooltipDirective, TreeModel, TreeService } from '@tailormap-viewer/shared';

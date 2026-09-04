@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { MouseCoordinatesComponent } from './mouse-coordinates.component';
 import { of } from 'rxjs';

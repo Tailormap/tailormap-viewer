@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceDetailsComponent } from './geo-service-details.component';
 import { of } from 'rxjs';

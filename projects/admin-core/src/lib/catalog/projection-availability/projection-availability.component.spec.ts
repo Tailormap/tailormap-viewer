@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ProjectionAvailabilityComponent } from './projection-availability.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

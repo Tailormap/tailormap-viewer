@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

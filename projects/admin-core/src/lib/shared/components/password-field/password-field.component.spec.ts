@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { PasswordFieldComponent } from './password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

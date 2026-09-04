@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { TocNodeLayerComponent } from './toc-node-layer.component';
 import { render, screen } from '@testing-library/angular';
 import { TreeModel } from '@tailormap-viewer/shared';

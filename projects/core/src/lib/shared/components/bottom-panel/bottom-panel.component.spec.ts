@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { BottomPanelComponent } from './bottom-panel.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

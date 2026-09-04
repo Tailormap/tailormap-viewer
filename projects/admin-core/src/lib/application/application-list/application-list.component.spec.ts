@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationListComponent } from './application-list.component';
 import { getApplication } from '@tailormap-admin/admin-api';

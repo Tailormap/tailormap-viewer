@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AuthorizationEditComponent } from './authorization-edit.component';
 import { AUTHORIZATION_RULE_ANONYMOUS, AuthorizationGroups, AuthorizationRuleDecision, AuthorizationRuleGroup, getGroup } from '@tailormap-admin/admin-api';

@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ImageWithDescriptionComponent } from './image-with-description.component';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';

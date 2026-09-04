@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditSelectFeatureComponent } from './edit-select-feature.component';
 import { getFeatureModel } from "@tailormap-viewer/api";

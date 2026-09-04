@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureInfoContentComponent } from './feature-info-content.component';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';

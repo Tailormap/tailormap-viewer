@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
@@ -14,6 +15,8 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async (hasNode = false) => {
   const createCatalogNodeMock = vi.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
@@ -24,7 +27,11 @@ const setup = async (hasNode = false) => {
   };
   const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
-  const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
+  const catalogNodeModel: ExtendedCatalogNodeModel = {
+    ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }),
+    parentId: 'root',
+    type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
+  };
   const store = createMockStore({
     initialState: {
       [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] },

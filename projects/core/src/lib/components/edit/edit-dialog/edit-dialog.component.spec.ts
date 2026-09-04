@@ -1,3 +1,4 @@
+import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditDialogComponent } from './edit-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';

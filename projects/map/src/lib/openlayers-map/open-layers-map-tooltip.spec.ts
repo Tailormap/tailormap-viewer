@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersMapTooltip } from './open-layers-map-tooltip';
 import { screen } from '@testing-library/angular';
 

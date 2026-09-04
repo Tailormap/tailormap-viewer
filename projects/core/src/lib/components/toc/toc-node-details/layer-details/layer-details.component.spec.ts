@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LayerDetailsComponent } from './layer-details.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';

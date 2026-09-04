@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { FilterConditionEnum, FilterToolEnum, FilterTypeEnum, AttributeType, CheckboxFilterModel } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper } from './features-filter.helper';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';

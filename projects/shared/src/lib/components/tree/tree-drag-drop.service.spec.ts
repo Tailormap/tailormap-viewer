@@ -1,3 +1,4 @@
+import { describe, beforeAll, it, expect, vi } from 'vitest';
 import { FlatTreeModel } from './models';
 import { TreeDragDropService } from './tree-drag-drop.service';
 
