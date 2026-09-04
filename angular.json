@@ -240,7 +240,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/core/junit.xml"
           }
         }
       }
@@ -280,7 +281,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/api/junit.xml"
           }
         }
       }
@@ -320,7 +322,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/shared/junit.xml"
           }
         }
       }
@@ -360,7 +363,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/map/junit.xml"
           }
         }
       }
@@ -399,7 +403,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/admin-core/junit.xml"
           }
         }
       }
@@ -438,7 +443,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "setupFiles": ["test-setup.ts"],
-            "runnerConfig": true
+            "runnerConfig": true,
+            "outputFile": "junit/admin-api/junit.xml"
           }
         }
       }
