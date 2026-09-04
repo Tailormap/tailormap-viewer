@@ -32,7 +32,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 'Install'
-        run: npm install
+        run: npm ci
 
       - name: 'Lint'
         run: npm run lint
@@ -53,7 +53,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 'Install'
-        run: npm install
+        run: npm ci
 
       - name: 'Test'
         run: npm run test:ci
@@ -93,7 +93,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 'Install'
-        run: npm install
+        run: npm ci
 
       - name: 'Build Angular libraries (release dry-run)'
         run: npm run release-packages -- --dry-run --version=0.0.0
