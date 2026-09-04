@@ -64,7 +64,7 @@ export class DrawingAccessibleFeaturesService {
     const proxy = document.createElement('button');
     proxy.type = 'button';
     proxy.setAttribute('data-feature-fid', feature.__fid);
-    proxy.className = 'drawing-feature-proxy feature-' + feature.__fid;
+    proxy.className = 'drawing-feature-proxy';
 
     // Accessible label based on feature type and description
     const label = feature.attributes?.style.description || `${feature.attributes?.type} ${index + 1}`;

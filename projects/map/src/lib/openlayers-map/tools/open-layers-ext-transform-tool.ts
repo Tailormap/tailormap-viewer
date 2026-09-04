@@ -232,7 +232,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
     setTimeout(() => {
       // todo use fid attribute instead of class selector
-      const targetElement: HTMLElement | null = document.querySelector('.feature-' + feature.__fid);
+      const targetElement: HTMLElement | null = document.querySelector(`.drawing-feature-proxy[data-feature-fid="${feature.__fid}"]`);
       if (!targetElement) {
         return;
       }
