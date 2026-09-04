@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
@@ -122,7 +122,7 @@ describe('FeatureInfoDialogComponent', () => {
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
     store.refreshState();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
     });
   });

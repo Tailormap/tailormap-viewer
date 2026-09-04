@@ -1,16 +1,23 @@
 import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GroupCreateComponent } from './group-create.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { GroupService } from '../services/group.service';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { GroupFormComponent } from '../group-form/group-form.component';
+
+@Component({
+  selector: 'tm-admin-group-form',
+  template: '<div>Group Form</div>',
+})
+class MockGroupFormComponent {}
 
 describe('GroupCreateComponent', () => {
 
   test('should render', async () => {
     await render(GroupCreateComponent, {
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [MatSnackBarModule],
+      importOverrides: [
+        { replace: GroupFormComponent, with: MockGroupFormComponent },
+      ],
       providers: [
         { provide: GroupService, useValue: {} },
       ],

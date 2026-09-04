@@ -1,6 +1,6 @@
 import { vi, describe, test, expect } from 'vitest';
 import { TocComponent } from './toc.component';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
@@ -107,7 +107,7 @@ describe('TocComponent', () => {
     expect(mockDispatch).toHaveBeenCalledWith({ type: toggleSelectedLayerId.type, layerId: '2' });
     mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
       expect((screen.getByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     });

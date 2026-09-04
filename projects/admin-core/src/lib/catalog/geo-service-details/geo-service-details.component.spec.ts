@@ -15,6 +15,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async () => {
   const activeRoute = {
@@ -32,6 +33,7 @@ const setup = async () => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },

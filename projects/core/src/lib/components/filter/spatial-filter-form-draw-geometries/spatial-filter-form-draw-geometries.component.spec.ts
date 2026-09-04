@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
@@ -42,7 +42,7 @@ describe('SpatialFilterFormDrawGeometriesComponent', () => {
     const { addDrawingEvent, addGeometry } = await setup();
     await userEvent.click(screen.getByLabelText('Draw circle'));
     addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(addGeometry).toHaveBeenCalledWith(expectedGeom);
     });
   });

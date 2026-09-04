@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
@@ -41,7 +41,7 @@ describe('UserFormComponent', () => {
     await userEvent.type(screen.getByLabelText('Email'), 'test@test.com');
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.type(screen.getByLabelText('Confirm password'), 'secret-secret');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(userUpdated).toHaveBeenCalledWith({
         username: 'user1',
         email: 'test@test.com',
@@ -61,7 +61,7 @@ describe('UserFormComponent', () => {
     const { mockApiService } = await setup(false);
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.tab();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(mockApiService.validatePasswordStrength$).toHaveBeenCalled();
       expect(screen.getByText('Password too short or too easily guessable')).toBeInTheDocument();
     });

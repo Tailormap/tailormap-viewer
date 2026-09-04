@@ -72,7 +72,7 @@ const geoServicesAndLayers = [
     ],
   },
 ]
-  .map(s => ({ ...getGeoService(s), layers: s.layers.map(l => getGeoServiceLayer({ ...l, crs: l.crs || ['EPSG:28992'] })) }))
+  .map(s => ({ ...getGeoService(s), layers: s.layers.map(l => getGeoServiceLayer({ ...l, crs: l.crs && l.crs.length > 0 ? l.crs : ['EPSG:28992'] })) }))
   .map(s => ExtendedCatalogModelHelper.getExtendedGeoService(s, '1'));
 
 const baseFeatureType = { defaultGeometryAttribute: '', primaryKeyAttribute: '', attributes: [], settings: {}, hasAttributes: false };

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { ApplicationFormComponent } from './application-form.component';
 import { TailormapAdminApiV1Service, getApplication, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import userEvent from '@testing-library/user-event';
@@ -49,7 +49,7 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Name')).toHaveValue('');
     await userEvent.type(await screen.findByPlaceholderText('Name'), 'new-app');
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Cool application');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         application: {
           authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
@@ -78,7 +78,7 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Title')).toHaveValue(application.title);
     await userEvent.click(await screen.findByPlaceholderText('Projection'));
     await userEvent.click(await screen.findByText('EPSG:3857 (WGS 84 / Pseudo-Mercator)', { exact: false }));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         application: {
           authorizationRules: [],

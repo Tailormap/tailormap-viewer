@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceFormComponent } from './feature-source-form.component';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -30,7 +30,7 @@ describe('FeatureSourceFormComponent', () => {
     expect(await screen.queryByPlaceholderText('URL')).toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
     await ue.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({ title: 'Some WFS source', url: 'http://localhost.test', protocol: 'WFS', authentication: undefined, jdbcConnection: undefined });
     });

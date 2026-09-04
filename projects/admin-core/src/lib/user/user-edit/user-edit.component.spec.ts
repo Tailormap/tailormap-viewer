@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { UserEditComponent } from './user-edit.component';
 import { of } from 'rxjs';
 import { getUser } from '@tailormap-admin/admin-api';
@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
@@ -30,6 +31,7 @@ const setup = async (hasUser?: boolean) => {
   await render(UserEditComponent, {
     imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserService, useValue: userService },
       { provide: GroupService, useValue: groupService },
@@ -55,7 +57,7 @@ describe('UserEditComponent', () => {
   test('should update user', async () => {
     const { userService } = await setup(true);
     await userEvent.type(screen.getByLabelText('Name'), '23');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(screen.getByLabelText('Name')).toHaveValue('user 123');
     });
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');

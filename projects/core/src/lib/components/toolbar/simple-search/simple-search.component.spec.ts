@@ -1,5 +1,5 @@
 import { vi, describe, test, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { SimpleSearchComponent } from './simple-search.component';
 import { of } from 'rxjs';
 import type { Mock } from 'vitest';
@@ -56,11 +56,11 @@ describe('SimpleSearchComponent', () => {
     const { mapService, searchService } = await setup();
     await userEvent.click(await screen.findByLabelText('Search location'));
     await userEvent.type(await screen.findByRole('combobox'), 'Str');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(searchService.search$).not.toHaveBeenCalled();
     }, { timeout: 1100 });
     await userEvent.type(await screen.findByRole('combobox'), 'eet');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(searchService.search$).toHaveBeenCalledWith('EPSG:28992', 'Street', { enabled: true, municipalities: ['Utrecht'] });
       expect(screen.getByText('Test Searcher')).toBeInTheDocument();
       expect(screen.getByText('Better result')).toBeInTheDocument();

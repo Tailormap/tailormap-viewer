@@ -1,11 +1,10 @@
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/angular';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-layer.model';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -13,6 +12,7 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { GeoServiceLayerFormDialogComponent } from './geo-service-layer-form-dialog.component';
 import { catalogStateKey } from '../state/catalog.state';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
+import { AsyncPipe } from '@angular/common';
 
 const setup = async () => {
   const dialogRefMock = { close: vi.fn() };
@@ -33,8 +33,14 @@ const setup = async () => {
   };
   const { geoServiceService, updateGeoService$ } = createGeoServiceMock();
   await render(GeoServiceLayerFormDialogComponent, {
-    imports: [MatIconTestingModule],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    configureTestBed: testBed => {
+      testBed.overrideComponent(GeoServiceLayerFormDialogComponent, {
+        set: {
+          imports: [AsyncPipe],
+          schemas: [NO_ERRORS_SCHEMA],
+        },
+      });
+    },
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       provideMockStore({

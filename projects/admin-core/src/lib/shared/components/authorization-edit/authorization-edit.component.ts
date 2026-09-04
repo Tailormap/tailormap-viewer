@@ -4,7 +4,11 @@ import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups,
 import { Subject } from 'rxjs';
 import { MatLabel, MatFormField } from '@angular/material/form-field';
 import { MatChipListbox, MatChipOption } from '@angular/material/chips';
-import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow } from '@angular/material/table';
+import {
+  MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell,
+  MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef,
+  MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow,
+} from '@angular/material/table';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
@@ -20,41 +24,41 @@ interface ExtendedAuthorizationRuleGroupInner extends AuthorizationRuleGroup {
 type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { headerText: string };
 
 @Component({
-    selector: 'tm-admin-authorization-edit',
-    templateUrl: './authorization-edit.component.html',
-    styleUrls: ['./authorization-edit.component.css'],
-    providers: [{
-            provide: NG_VALUE_ACCESSOR,
-            multi: true,
-            useExisting: AuthorizationEditComponent,
-        }],
-    imports: [
-        MatLabel,
-        MatChipListbox,
-        MatChipOption,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatFooterCellDef,
-        MatFooterCell,
-        MatFormField,
-        MatSelect,
-        MatOption,
-        MatCheckbox,
-        ReactiveFormsModule,
-        FormsModule,
-        MatIconButton,
-        MatIcon,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        MatFooterRowDef,
-        MatFooterRow,
-    ],
+  selector: 'tm-admin-authorization-edit',
+  templateUrl: './authorization-edit.component.html',
+  styleUrls: [ './authorization-edit.component.css' ],
+  providers: [ {
+    provide: NG_VALUE_ACCESSOR,
+    multi: true,
+    useExisting: AuthorizationEditComponent,
+  } ],
+  imports: [
+    MatLabel,
+    MatChipListbox,
+    MatChipOption,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    MatCheckbox,
+    ReactiveFormsModule,
+    FormsModule,
+    MatIconButton,
+    MatIcon,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+  ],
 })
 export class AuthorizationEditComponent implements OnDestroy, ControlValueAccessor {
   private destroyed = new Subject();
@@ -213,10 +217,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
         this.updateValue([], true);
         break;
       case 'anonymous':
-        this.updateValue([{ groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
+        this.updateValue([ { groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } } ], true);
         break;
       case 'loggedIn':
-        this.updateValue([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
+        this.updateValue([ { groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } } ], true);
         break;
       case 'specificGroups':
         this.selectedChip = 'specificGroups';
@@ -300,5 +304,8 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
     return rowData.headerText !== undefined;
   }
 
-  protected readonly undefined = undefined;
+  public trackByRow(_index: number, rowData: ExtendedAuthorizationRuleGroup): string {
+    return 'groupName' in rowData ? rowData.groupName : `header:${rowData.headerText}`;
+  }
+
 }

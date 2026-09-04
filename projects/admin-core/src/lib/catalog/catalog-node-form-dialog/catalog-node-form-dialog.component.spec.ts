@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { CatalogNodeFormDialogComponent } from './catalog-node-form-dialog.component';
 import { of } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -39,7 +39,7 @@ describe('CatalogNodeFormDialogComponent', () => {
     const { catalogServiceMock, dialogRefMock } = await setup();
     expect(screen.getByText('Create new folder')).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText('Title'), 'The new folder');
-    await waitFor(() => expect(screen.getByText('Save').closest('button')).not.toBeDisabled());
+    await vi.waitFor(() => expect(screen.getByText('Save').closest('button')).not.toBeDisabled());
     await userEvent.click(screen.getByText('Save'));
     expect(catalogServiceMock.createCatalogNode$).toHaveBeenCalledWith({
       title: 'The new folder',
@@ -56,7 +56,7 @@ describe('CatalogNodeFormDialogComponent', () => {
     const { catalogServiceMock, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit The editable folder')).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText('Title'), '_edited');
-    await waitFor(() => expect(screen.getByText('Save').closest('button')).not.toBeDisabled());
+    await vi.waitFor(() => expect(screen.getByText('Save').closest('button')).not.toBeDisabled());
     await userEvent.click(screen.getByText('Save'));
     expect(catalogServiceMock.updateCatalogNode$).toHaveBeenCalledWith({
       id: '2',

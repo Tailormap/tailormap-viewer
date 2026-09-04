@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { provideNoopAnimations } from "@angular/platform-browser/animations";
 
 const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockState: ApplicationState = {
@@ -35,8 +36,8 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
     imports: [ MatIconTestingModule, RouterModule.forRoot(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
     ) ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
+      provideNoopAnimations(),
       { provide: Store, useValue: mockStore },
       { provide: ApplicationService, useValue: appService },
     ],

@@ -1,5 +1,5 @@
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseType } from '@tailormap-admin/admin-api';
@@ -11,6 +11,7 @@ import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
@@ -44,6 +45,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
   await render(FeatureSourceDetailsComponent, {
     imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureServiceMock },
       { provide: Store, useValue: store },
@@ -75,7 +77,7 @@ describe('FeatureSourceDetailsComponent', () => {
     await ue.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
     await ue.type(await screen.findByPlaceholderText('Schema'), 'roads');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
         protocol: featureSourceModel.protocol,
@@ -103,7 +105,7 @@ describe('FeatureSourceDetailsComponent', () => {
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     await ue.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
         protocol: featureSourceModel.protocol,
@@ -127,7 +129,7 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(passwordField).toBeInTheDocument();
     await ue.type(passwordField, 'secret');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title,
         protocol: featureSourceModel.protocol,

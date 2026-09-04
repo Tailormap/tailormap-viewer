@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { render, waitFor } from '@testing-library/angular';
+import { render } from '@testing-library/angular';
 import { BaseLayoutComponent } from './base-layout.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectComponentsConfig } from '../../state/core.selectors';
@@ -54,7 +54,7 @@ describe('BaseLayoutComponent', () => {
     // Its `activeComponent$` is debounced (debounceTime(0)), so wait for the resulting macrotask.
     TestBed.inject(MenubarService).toggleActiveComponent(BaseComponentTypeEnum.DRAWING, 'Drawing');
     detectChanges();
-    await waitFor(() => expect(container.querySelector('tm-drawing')).toBeInTheDocument());
+    await vi.waitFor(() => expect(container.querySelector('tm-drawing')).toBeInTheDocument());
   });
 
   test('does not render disabled components', async () => {

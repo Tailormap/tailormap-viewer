@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { GeoServiceFormComponent } from './geo-service-form.component';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
@@ -23,7 +23,7 @@ describe('GeoServiceFormComponent', () => {
       ],
     });
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
         authorizationRules: [],
@@ -36,7 +36,7 @@ describe('GeoServiceFormComponent', () => {
     });
     await userEvent.click(await screen.findByText('wms'));
     await userEvent.click(await screen.findByText('wmts'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
       expect(changedFn).toHaveBeenNthCalledWith(2, {
         authorizationRules: [],

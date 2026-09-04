@@ -10,7 +10,6 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { getSpatialFilterGroup } from '../../../filter/helpers/spatial-filter-group.mock';
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
-import { waitFor } from '@testing-library/angular';
 import { selectLayers } from '../../../map';
 import { FilterManagerService } from '../../../filter';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
@@ -76,7 +75,7 @@ describe('SpatialFilterCrudService', () => {
   test('updates the selected layers and selected filter group', async () => {
     const { service, dispatch } = setup(true);
     service.updateSelectedLayers([ '2', '3' ]);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
     });
     expect(dispatch).toHaveBeenNthCalledWith(1, setSelectedLayers({ layers: [ '2', '3' ] }));
@@ -90,7 +89,7 @@ describe('SpatialFilterCrudService', () => {
   test('adds geometry without selected layers, do nothing - should not happen in UI', async () => {
     const { service, dispatch } = setup();
     service.addGeometry({ id: '1', geometry: 'CIRCLE(1 2 3)' });
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).not.toHaveBeenCalled();
     });
   });
@@ -98,7 +97,7 @@ describe('SpatialFilterCrudService', () => {
   test('adds geometry with selected layers, should create filter group', async () => {
     const { service, dispatch } = setup(false, true);
     service.addGeometry({ id: '1', geometry: 'CIRCLE(1 2 3)' });
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
     });
     const spatialGroup = getSpatialFilterGroup(
@@ -118,7 +117,7 @@ describe('SpatialFilterCrudService', () => {
   test('adds geometry with selected layers and selected group, should update filter group', async () => {
     const { service, dispatch } = setup(true, true);
     service.addGeometry({ id: '2', geometry: 'CIRCLE(4 5 6)' });
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup = getSpatialFilterGroup(
@@ -131,7 +130,7 @@ describe('SpatialFilterCrudService', () => {
   test('removes geometry with selected group, should update filter group', async () => {
     const { service, dispatch } = setup(true, true);
     service.removeGeometry('1');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup = getSpatialFilterGroup(
@@ -144,7 +143,7 @@ describe('SpatialFilterCrudService', () => {
   test('removes geometry without selected group, should update filter group', async () => {
     const { service, dispatch } = setup(false, false);
     service.removeGeometry('1');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).not.toHaveBeenCalled();
     });
   });
@@ -152,7 +151,7 @@ describe('SpatialFilterCrudService', () => {
   test('updates buffer', async () => {
     const { service, dispatch } = setup(true, true);
     service.updateBuffer(10);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
@@ -165,7 +164,7 @@ describe('SpatialFilterCrudService', () => {
   test('updates reference layer', async () => {
     const { service, dispatch } = setup(true, true);
     service.updateReferenceLayer('5');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {
@@ -187,7 +186,7 @@ describe('SpatialFilterCrudService', () => {
     };
     const { service, dispatch } = setup(true, true, groupWithReferenceGeom);
     service.updateReferenceLayer(undefined);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(dispatch).toHaveBeenCalledTimes(1);
     });
     const updatedGroup: FilterGroupModel<SpatialFilterModel> = {

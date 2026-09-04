@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { GroupFormComponent } from './group-form.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
@@ -30,7 +30,7 @@ describe('GroupFormComponent', () => {
     const { groupUpdated } = await setup();
     await userEvent.type(screen.getByLabelText('Name'), 'secret-group');
     await userEvent.type(screen.getByLabelText('Description'), 'A very secret group');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(groupUpdated).toHaveBeenCalledWith({
         name: 'secret-group',
         description: 'A very secret group',

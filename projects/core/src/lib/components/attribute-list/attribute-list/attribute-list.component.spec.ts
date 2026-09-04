@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { getLoadedStoreNoRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -235,7 +235,7 @@ describe('AttributeList', () => {
     tabEl.style.pointerEvents = 'auto';
     await userEvent.click(tabEl);
 
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();
     }, { timeout: 100 });
 

@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormBufferComponent } from './spatial-filter-form-buffer.component';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -25,7 +25,7 @@ describe('SpatialFilterFormBufferComponent', () => {
     expect(await screen.findByLabelText('Buffer in meters')).toBeInTheDocument();
     expect(await screen.findByRole('spinbutton')).toHaveValue(0);
     await userEvent.type(await screen.findByRole('spinbutton'), '10');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(updateBuffer).toHaveBeenCalledWith(10);
     });
   });

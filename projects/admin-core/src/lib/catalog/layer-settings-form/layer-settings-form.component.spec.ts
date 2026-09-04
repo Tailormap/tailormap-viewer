@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { LayerSettingsFormComponent } from './layer-settings-form.component';
 import userEvent from '@testing-library/user-event';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -8,12 +8,13 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 
 describe('LayerSettingsFormComponent', () => {
 
   test('should render', async () => {
     const store = provideMockStore({
-      initialState: { [userStateKey]: initialUserState },
+      initialState: { [userStateKey]: initialUserState, [catalogStateKey]: initialCatalogState },
     });
 
     const changedFn = vi.fn();
@@ -28,7 +29,7 @@ describe('LayerSettingsFormComponent', () => {
       on: { changed: changedFn },
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
         attribution: undefined,
@@ -47,7 +48,7 @@ describe('LayerSettingsFormComponent', () => {
       });
     });
     await userEvent.click(await screen.findByText('Disabled'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
       expect(changedFn).toHaveBeenNthCalledWith(2, {
         attribution: undefined,

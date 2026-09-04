@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
 import {
   AttributeType, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
@@ -43,7 +43,7 @@ describe('EditFormComponent', () => {
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property 2')).toBeInTheDocument();
     await userEvent.type(screen.getByPlaceholderText('Property'), '123');
-    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123', invalid: false }));
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123', invalid: false }));
   });
 
   test('should render form', async () => {
@@ -85,7 +85,7 @@ describe('EditFormComponent', () => {
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property alias')).toBeInTheDocument();
     await userEvent.type(screen.getByPlaceholderText('Property'), '123');
-    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
       { attribute: 'prop', value: '123', invalid: false },
     ));
     expect(await screen.getByPlaceholderText('Property alias')).toHaveValue("editor");

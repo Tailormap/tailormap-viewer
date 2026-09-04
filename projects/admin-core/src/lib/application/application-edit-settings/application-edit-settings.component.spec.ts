@@ -15,6 +15,7 @@ import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-us
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -33,6 +34,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       provideHttpClient(
         withXsrfConfiguration({
           cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
