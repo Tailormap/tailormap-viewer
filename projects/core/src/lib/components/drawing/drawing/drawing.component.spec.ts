@@ -33,7 +33,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   };
   const drawingAccessibleFeaturesServiceMock = {
     initAccessibleFeaturesContainer: jest.fn(),
-    destroy: jest.fn(),
+    destroyAccessibleFeaturesContainer: jest.fn(),
   };
   const { container } = await render(DrawingComponent, {
     imports: [ SharedImportsModule, SharedDirectivesModule, MatIconTestingModule ],
