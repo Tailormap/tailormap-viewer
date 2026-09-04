@@ -2,18 +2,34 @@ import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } fr
 import { Routes } from '../../../routes';
 import { Observable, of, take } from 'rxjs';
 import { ApplicationFeature, ApplicationFeatureSwitchService, AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
-import { Router } from '@angular/router';
-import { AboutDialogComponent } from '@tailormap-viewer/shared';
+import { Router, RouterLinkActive, RouterLink } from '@angular/router';
+import { AboutDialogComponent, TooltipDirective, LanguageToggleComponent } from '@tailormap-viewer/shared';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationButtonPropsModel } from '../../models/navigation-button-props.model';
 import { AdminNavigationService, NavigationButtonWithPositionModel } from '../../admin-navigation.service';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 
 @Component({
-  selector: 'tm-admin-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-navigation',
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        RouterLinkActive,
+        RouterLink,
+        TooltipDirective,
+        MatIcon,
+        NgTemplateOutlet,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        LanguageToggleComponent,
+        AsyncPipe,
+    ],
 })
 export class NavigationComponent implements OnInit {
   private router = inject(Router);

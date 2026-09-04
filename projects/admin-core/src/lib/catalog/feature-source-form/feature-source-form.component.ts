@@ -1,19 +1,33 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   FeatureSourceModel,
   FeatureSourceProtocolEnum, JdbcConnectionPropertiesModel, JdbcDatabaseType, ServiceAuthenticationModel,
 } from '@tailormap-admin/admin-api';
 import { FormHelper } from '../../helpers/form.helper';
 import { FeatureSourceCreateModel } from '../models/feature-source-update.model';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-admin-feature-source-form',
-  templateUrl: './feature-source-form.component.html',
-  styleUrls: ['./feature-source-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-source-form',
+    templateUrl: './feature-source-form.component.html',
+    styleUrls: ['./feature-source-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatSelect,
+        MatOption,
+        PasswordFieldComponent,
+    ],
 })
 export class FeatureSourceFormComponent implements OnInit {
 

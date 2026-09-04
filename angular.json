@@ -235,6 +235,14 @@
               "projects/core/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/core/junit.xml"
+          }
         }
       }
     },
@@ -267,6 +275,14 @@
               "projects/api/**/*.ts",
               "projects/api/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/api/junit.xml"
           }
         }
       }
@@ -301,6 +317,14 @@
               "projects/shared/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/shared/junit.xml"
+          }
         }
       }
     },
@@ -334,6 +358,14 @@
               "projects/map/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/map/junit.xml"
+          }
         }
       }
     },
@@ -366,6 +398,14 @@
               "projects/admin-core/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/admin-core/junit.xml"
+          }
         }
       }
     },
@@ -394,9 +434,17 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "projects/admin-core/**/*.ts",
-              "projects/admin-core/**/*.html"
+              "projects/admin-api/**/*.ts",
+              "projects/admin-api/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "setupFiles": ["test-setup.ts"],
+            "runnerConfig": true,
+            "outputFile": "junit/admin-api/junit.xml"
           }
         }
       }

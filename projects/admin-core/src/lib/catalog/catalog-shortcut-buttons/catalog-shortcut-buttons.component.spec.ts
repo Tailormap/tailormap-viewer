@@ -1,7 +1,7 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { GeoServiceService } from '../services/geo-service.service';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -19,11 +19,14 @@ const featureType: ExtendedFeatureTypeModel = {
   featureSourceId: '1',
   type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
   title: 'begroeidterreindeel',
+  featureSourceProtocol: 'JDBC',
   originalId: '1',
   name: 'abc',
   id: '1',
   hasAttributes: false,
   catalogNodeId: '',
+  defaultGeometryAttribute: '',
+  primaryKeyAttribute: null,
 };
 
 const geoService: ExtendedGeoServiceModel = {
@@ -35,6 +38,7 @@ const geoService: ExtendedGeoServiceModel = {
 
 const geoServiceLayer: ExtendedGeoServiceLayerModel = {
   ...getGeoServiceLayer({ id: '1_1', title: 'my wonderful layer', name: 'service:my-wonderful-layer' }),
+  layerTitle: 'my wonderful layer',
   type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
   serviceId: '1',
   originalId: '1',
@@ -42,13 +46,13 @@ const geoServiceLayer: ExtendedGeoServiceLayerModel = {
 };
 
 const setup = async (geoServiceId?: string, geoServiceLayerId?: string, featureTypeId?: string) => {
-  const getDraftGeoService$Mock = jest.fn();
-  const getDraftFeatureType$Mock = jest.fn();
+  const getDraftGeoService$Mock = vi.fn();
+  const getDraftFeatureType$Mock = vi.fn();
   const featureTypes = [featureType];
   const geoServices = [geoService];
   const geoServiceLayers = [geoServiceLayer];
   await render(CatalogShortcutButtonsComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     inputs: {
       featureTypeId: featureTypeId || null,
       geoServiceId: geoServiceId || null,

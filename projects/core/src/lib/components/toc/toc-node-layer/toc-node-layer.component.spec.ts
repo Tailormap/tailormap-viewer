@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { TocNodeLayerComponent } from './toc-node-layer.component';
 import { render, screen } from '@testing-library/angular';
 import { TreeModel } from '@tailormap-viewer/shared';
@@ -5,11 +6,10 @@ import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatRadioModule } from '@angular/material/radio';
-import { SharedDirectivesModule } from '@tailormap-viewer/shared';
 
 const setup = async (node: TreeModel, scale?: number ) => {
   await render(TocNodeLayerComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatRadioModule, SharedDirectivesModule ],
+    imports: [ MatIconModule, MatIconTestingModule, MatRadioModule ],
     inputs: { node, scale },
   });
 };

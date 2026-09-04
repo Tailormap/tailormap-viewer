@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { DrawingComponent } from './drawing.component';
 import { of } from 'rxjs';
@@ -10,30 +11,28 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../../../map/helpers/drawing.helper';
-import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
-import { ConfirmDialogService, LoadingStateEnum, SharedDirectivesModule, SharedImportsModule } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
   const menubarServiceMock = {
-    isComponentVisible$: jest.fn(() => of(isComponentVisible)),
-    registerComponent: jest.fn(),
-    deregisterComponent: jest.fn(),
+    isComponentVisible$: vi.fn(() => of(isComponentVisible)),
+    registerComponent: vi.fn(),
+    deregisterComponent: vi.fn(),
   };
   const confirmServiceMock = {
-    confirm$: jest.fn(() => of(true)),
+    confirm$: vi.fn(() => of(true)),
   };
   const { container } = await render(DrawingComponent, {
-    imports: [ SharedImportsModule, SharedDirectivesModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    declarations: [DrawingStyleFormComponent],
     providers: [
       provideMockStore({
         initialState: { [drawingStateKey]: initialDrawingState },
@@ -78,7 +77,7 @@ describe('DrawingComponent', () => {
       { selector: selectHasDrawingFeatures, value: true },
     ]);
     const store = TestBed.inject(MockStore);
-    const mockDispatch = jest.fn();
+    const mockDispatch = vi.fn();
     store.dispatch = mockDispatch;
 
     expect(await screen.getByText(/Fill color/)).toBeInTheDocument();

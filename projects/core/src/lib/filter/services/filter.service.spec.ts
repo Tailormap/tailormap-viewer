@@ -1,14 +1,15 @@
+import { describe, test, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
-import { take, toArray } from 'rxjs';
+import { firstValueFrom, take, toArray } from 'rxjs';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
 import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
 
 describe('FilterService', () => {
 
-  test('gets changed filters', (done) => {
+  test('gets changed filters', async () => {
     TestBed.configureTestingModule({
       providers: [
         FilterService,
@@ -64,20 +65,19 @@ describe('FilterService', () => {
       new Map([[ '1', null ]]),
     ];
 
-    service.getChangedFilters$()
-      .pipe(take(stateUpdates.length), toArray())
-      .subscribe((actualValues) => {
-        actualValues.forEach((actualValue, index) => {
-          assertEqualFilterMaps(actualValue, expectedValues[index]);
-        });
-        done();
-      });
+    const actualValuesPromise = firstValueFrom(
+      service.getChangedFilters$().pipe(take(stateUpdates.length), toArray()),
+    );
 
     stateUpdates.forEach((stateUpdate) => {
       store.overrideSelector(selectCQLFilters, stateUpdate);
       store.refreshState();
     });
 
+    const actualValues = await actualValuesPromise;
+    actualValues.forEach((actualValue, index) => {
+      assertEqualFilterMaps(actualValue, expectedValues[index]);
+    });
   });
 
 });

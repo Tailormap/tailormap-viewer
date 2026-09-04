@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { ComponentModel } from '@tailormap-viewer/api';
+import { RegisteredComponentsRendererComponent } from '../../registered-components-renderer/registered-components-renderer.component';
 
 @Component({
-  selector: 'tm-mobile-menubar-bottom',
-  templateUrl: './mobile-menubar.component.html',
-  styleUrls: ['./mobile-menubar.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-mobile-menubar-bottom',
+    templateUrl: './mobile-menubar.component.html',
+    styleUrls: ['./mobile-menubar.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RegisteredComponentsRendererComponent],
 })
 export class MobileMenubarComponent {
 

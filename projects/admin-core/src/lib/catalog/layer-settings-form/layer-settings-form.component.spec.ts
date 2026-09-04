@@ -1,38 +1,35 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { LayerSettingsFormComponent } from './layer-settings-form.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { GeoServiceProtocolEnum, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 
 describe('LayerSettingsFormComponent', () => {
 
   test('should render', async () => {
     const store = provideMockStore({
-      initialState: { [userStateKey]: initialUserState },
+      initialState: { [userStateKey]: initialUserState, [catalogStateKey]: initialCatalogState },
     });
 
-    const changedFn = jest.fn();
+    const changedFn = vi.fn();
     await render(LayerSettingsFormComponent, {
-      imports: [SharedModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [ TriStateBooleanComponent, AuthorizationEditComponent ],
       providers: [
         store,
-        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of(null)) } },
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],
       inputs: { isLayerSpecific: true, protocol: GeoServiceProtocolEnum.WMTS },
       on: { changed: changedFn },
     });
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Some title');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({
         attribution: undefined,
@@ -51,7 +48,7 @@ describe('LayerSettingsFormComponent', () => {
       });
     });
     await userEvent.click(await screen.findByText('Disabled'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(2);
       expect(changedFn).toHaveBeenNthCalledWith(2, {
         attribution: undefined,

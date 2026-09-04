@@ -1,14 +1,14 @@
+import { describe, beforeAll, afterAll, beforeEach, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LanguageToggleComponent } from './language-toggle.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import userEvent from '@testing-library/user-event';
-import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-const hrefGetMock = jest.fn();
-const hrefSetMock = jest.fn();
+const hrefGetMock = vi.fn();
+const hrefSetMock = vi.fn();
 
 const setup = async (baseHref: string, locale: string, currentHref?: string) => {
   if (currentHref) {
@@ -19,7 +19,7 @@ const setup = async (baseHref: string, locale: string, currentHref?: string) => 
       { provide: APP_BASE_HREF, useValue: baseHref },
       { provide: LOCALE_ID, useValue: locale },
     ],
-    imports: [ SharedImportsModule, MatIconTestingModule, NoopAnimationsModule ],
+    imports: [ MatIconTestingModule, NoopAnimationsModule ],
   });
 };
 
@@ -36,6 +36,7 @@ describe('LanguageToggleComponent', () => {
   });
 
   afterAll(() => {
+    // @ts-expect-error restoring the original location object after overwriting it above
     window.location = location;
   });
 

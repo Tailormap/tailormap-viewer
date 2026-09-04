@@ -1,19 +1,35 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output, inject } from '@angular/core';
 import { FormHelper } from '../helpers/form.helper';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
 import { AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { DateTime } from 'luxon';
 import { EditFormInput } from '../models/edit-form-input.model';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { SelectFieldComponent } from '../fields/select-field/select-field.component';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-edit-form',
-  templateUrl: './edit-form.component.html',
-  styleUrls: ['./edit-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-form',
+    templateUrl: './edit-form.component.html',
+    styleUrls: ['./edit-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        SelectFieldComponent,
+        MatCheckbox,
+    ],
 })
 export class EditFormComponent implements OnDestroy {
   private cdr = inject(ChangeDetectorRef);

@@ -5,13 +5,20 @@ import { LegendService } from '../../../legend/services/legend.service';
 import { MapService } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
 import { selectLayerWithService } from '../../../../map/state/map.selectors';
+import { LayerTransparencyComponent } from '../layer-transparency/layer-transparency.component';
+import { LegendLayerComponent } from '../../../legend/legend-layer/legend-layer.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-layer-details',
-  templateUrl: './layer-details.component.html',
-  styleUrls: ['./layer-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-layer-details',
+    templateUrl: './layer-details.component.html',
+    styleUrls: ['./layer-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        LayerTransparencyComponent,
+        LegendLayerComponent,
+        AsyncPipe,
+    ],
 })
 export class LayerDetailsComponent {
 

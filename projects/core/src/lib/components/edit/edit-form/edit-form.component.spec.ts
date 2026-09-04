@@ -1,9 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
 import {
   AttributeType, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
@@ -11,24 +11,23 @@ import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated
 describe('EditFormComponent', () => {
 
   test('should render', async () => {
-    const featureAttributeChanged = jest.fn();
+    const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
-      imports: [SharedModule],
       providers: [
         {
           provide: TAILORMAP_SECURITY_API_V1_SERVICE,
           useValue: {
-            getUserDetails$: jest.fn(() => of({})),
+            getUserDetails$: vi.fn(() => of({})),
           },
         },
       ],
       inputs: { input: {
         feature: {
-          feature: getFeatureModel(),
+          feature: { ...getFeatureModel(), layerId: 'layer-1' },
           columnMetadata: [
-            { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-            { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+            { name: 'prop', alias: 'Property', type: AttributeType.STRING, layerId: 'layer-1' },
+            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING, layerId: 'layer-1' },
+            { name: 'fid', alias: 'fid', type: AttributeType.STRING, layerId: 'layer-1' },
           ],
         },
         details: getLayerDetailsModel({
@@ -44,30 +43,24 @@ describe('EditFormComponent', () => {
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property 2')).toBeInTheDocument();
     await userEvent.type(screen.getByPlaceholderText('Property'), '123');
-    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123', invalid: false }));
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith({ attribute: 'prop', value: '123', invalid: false }));
   });
 
   test('should render form', async () => {
-    const featureAttributeChanged = jest.fn();
+    const featureAttributeChanged = vi.fn();
     await render(EditFormComponent, {
-      imports: [SharedModule],
       providers: [
         AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
       ],
       inputs: { input: {
           feature: {
-            feature: getFeatureModel(),
+            feature: { ...getFeatureModel(), layerId: 'layer-1' },
             columnMetadata: [
-              { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-              { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-              { name: 'fid', alias: 'fid', type: AttributeType.STRING },
+              { name: 'prop', alias: 'Property', type: AttributeType.STRING, layerId: 'layer-1' },
+              { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING, layerId: 'layer-1' },
+              { name: 'fid', alias: 'fid', type: AttributeType.STRING, layerId: 'layer-1' },
             ],
           },
-          columnMetadata: [
-            { name: 'prop', alias: 'Property', type: AttributeType.STRING },
-            { name: 'prop2', alias: 'Property 2', type: AttributeType.STRING },
-            { name: 'fid', alias: 'fid', type: AttributeType.STRING },
-          ],
           details: getLayerDetailsModel({
             editable: true,
             attributes: [
@@ -92,7 +85,7 @@ describe('EditFormComponent', () => {
     expect(await screen.findByText('Property')).toBeInTheDocument();
     expect(await screen.findByText('Property alias')).toBeInTheDocument();
     await userEvent.type(screen.getByPlaceholderText('Property'), '123');
-    await waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
       { attribute: 'prop', value: '123', invalid: false },
     ));
     expect(await screen.getByPlaceholderText('Property alias')).toHaveValue("editor");

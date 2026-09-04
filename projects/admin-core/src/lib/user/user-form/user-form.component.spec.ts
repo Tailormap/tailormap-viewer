@@ -1,29 +1,26 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async (isValidPassword: boolean) => {
   const mockAdminApiService = {
-    getGroups$: jest.fn(() => of([])),
-    getUsers$: jest.fn(() => of([])),
+    getGroups$: vi.fn(() => of([])),
+    getUsers$: vi.fn(() => of([])),
   };
   const mockApiService = {
-    validatePasswordStrength$: jest.fn(() => of(isValidPassword)),
+    validatePasswordStrength$: vi.fn(() => of(isValidPassword)),
   };
-  const userUpdated = jest.fn();
+  const userUpdated = vi.fn();
   await render(UserFormComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
-    declarations: [PasswordFieldComponent],
+    imports: [MatIconTestingModule],
     on: { userUpdated },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },
@@ -44,7 +41,7 @@ describe('UserFormComponent', () => {
     await userEvent.type(screen.getByLabelText('Email'), 'test@test.com');
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.type(screen.getByLabelText('Confirm password'), 'secret-secret');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(userUpdated).toHaveBeenCalledWith({
         username: 'user1',
         email: 'test@test.com',
@@ -64,7 +61,7 @@ describe('UserFormComponent', () => {
     const { mockApiService } = await setup(false);
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.tab();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(mockApiService.validatePasswordStrength$).toHaveBeenCalled();
       expect(screen.getByText('Password too short or too easily guessable')).toBeInTheDocument();
     });

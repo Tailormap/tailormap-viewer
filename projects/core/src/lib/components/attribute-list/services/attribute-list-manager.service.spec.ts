@@ -1,7 +1,9 @@
+import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { createMockStore } from '@ngrx/store/testing';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, of } from 'rxjs';
+import type { Mock } from 'vitest';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { AttributeListApiService } from './attribute-list-api.service';
 import {
@@ -24,7 +26,7 @@ import { GetFeaturesParams } from '../../../models/get-features-param.model';
 
 describe('AttributeListManagerService', () => {
   let managerService: AttributeListManagerService;
-  let mockApiService: Record<keyof AttributeListApiServiceModel, jest.Mock>;
+  let mockApiService: Record<keyof AttributeListApiServiceModel, Mock>;
 
   const setup = () => {
     const store = createMockStore({
@@ -36,13 +38,13 @@ describe('AttributeListManagerService', () => {
     }) as Store;
 
     mockApiService = {
-      getFeatures$: jest.fn(),
-      getLayerExtractCapabilities$: jest.fn(),
-      startLayerExtract$: jest.fn(),
-      getUniqueValues$: jest.fn(),
-      canExpandRow$: jest.fn(),
-      getFeatureDetails$: jest.fn(),
-    } as Record<keyof AttributeListApiServiceModel, jest.Mock>;
+      getFeatures$: vi.fn(),
+      getLayerExtractCapabilities$: vi.fn(),
+      startLayerExtract$: vi.fn(),
+      getUniqueValues$: vi.fn(),
+      canExpandRow$: vi.fn(),
+      getFeatureDetails$: vi.fn(),
+    } as Record<keyof AttributeListApiServiceModel, Mock>;
 
     TestBed.configureTestingModule({
       providers: [
@@ -66,30 +68,27 @@ describe('AttributeListManagerService', () => {
   });
 
   describe('canExpandRow', () => {
-    it('should return false when source is not found', (done) => {
+    it('should return false when source is not found', async () => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      managerService.canExpandRow$('non-existent-source', params)
-        .subscribe(result => {
-          expect(result).toBe(false);
-          done();
-        });
+      const result = await firstValueFrom(managerService.canExpandRow$('non-existent-source', params));
+      expect(result).toBe(false);
     });
 
-    it('should return false when source dataLoader does not have canExpandRow method', (done) => {
+    it('should return false when source dataLoader does not have canExpandRow method', async () => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
       };
 
       const dataLoaderWithoutMethod: AttributeListApiServiceModel = {
-        getFeatures$: jest.fn(),
-        getLayerExportCapabilities$: jest.fn(),
-        getLayerExport$: jest.fn(),
-        getUniqueValues$: jest.fn(),
+        getFeatures$: vi.fn(),
+        getLayerExportCapabilities$: vi.fn(),
+        getLayerExport$: vi.fn(),
+        getUniqueValues$: vi.fn(),
       } as any;
 
       const source: AttributeListSourceModel = {
@@ -100,14 +99,11 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.canExpandRow$('test-source', params)
-        .subscribe(result => {
-          expect(result).toBe(false);
-          done();
-        });
+      const result = await firstValueFrom(managerService.canExpandRow$('test-source', params));
+      expect(result).toBe(false);
     });
 
-    it('should return result from dataLoader canExpandRow when available', (done) => {
+    it('should return result from dataLoader canExpandRow when available', async () => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
@@ -123,15 +119,12 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.canExpandRow$('test-source', params)
-        .subscribe(result => {
-          expect(result).toBe(true);
-          expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
-          done();
-        });
+      const result = await firstValueFrom(managerService.canExpandRow$('test-source', params));
+      expect(result).toBe(true);
+      expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
     });
 
-    it('should return false from dataLoader canExpandRow when it returns false', (done) => {
+    it('should return false from dataLoader canExpandRow when it returns false', async () => {
       const params: CanExpandRowParams = {
         applicationId: '1',
         layerId: '1',
@@ -147,30 +140,25 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.canExpandRow$('test-source', params)
-        .subscribe(result => {
-          expect(result).toBe(false);
-          expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
-          done();
-        });
+      const result = await firstValueFrom(managerService.canExpandRow$('test-source', params));
+      expect(result).toBe(false);
+      expect(mockApiService.canExpandRow$).toHaveBeenCalledWith(params);
     });
   });
 
   describe('getFeatureDetails$', () => {
-    it('should return null when source is not found', (done) => {
+    it('should return null when source is not found', async () => {
       const params: GetFeatureDetailsParams = {
         applicationId: '1',
         layerId: '1',
         __fid: 'feature-1',
       };
 
-      managerService.getFeatureDetails$('non-existent-source', params).subscribe(result => {
-        expect(result).toBeNull();
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatureDetails$('non-existent-source', params));
+      expect(result).toBeNull();
     });
 
-    it('should return null when source dataLoader does not have getFeatureDetails$ method', (done) => {
+    it('should return null when source dataLoader does not have getFeatureDetails$ method', async () => {
       const params: GetFeatureDetailsParams = {
         applicationId: '1',
         layerId: '1',
@@ -178,10 +166,10 @@ describe('AttributeListManagerService', () => {
       };
 
       const dataLoaderWithoutMethod: AttributeListApiServiceModel = {
-        getFeatures$: jest.fn(),
-        getLayerExportCapabilities$: jest.fn(),
-        getLayerExport$: jest.fn(),
-        getUniqueValues$: jest.fn(),
+        getFeatures$: vi.fn(),
+        getLayerExportCapabilities$: vi.fn(),
+        getLayerExport$: vi.fn(),
+        getUniqueValues$: vi.fn(),
       } as any;
 
       const source: AttributeListSourceModel = {
@@ -192,13 +180,11 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getFeatureDetails$('test-source', params).subscribe(result => {
-        expect(result).toBeNull();
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatureDetails$('test-source', params));
+      expect(result).toBeNull();
     });
 
-    it('should return feature details from dataLoader when available', (done) => {
+    it('should return feature details from dataLoader when available', async () => {
       const params: GetFeatureDetailsParams = {
         applicationId: '1',
         layerId: '1',
@@ -232,14 +218,12 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getFeatureDetails$('test-source', params).subscribe(result => {
-        expect(result).toEqual(featureDetails);
-        expect(mockApiService.getFeatureDetails$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatureDetails$('test-source', params));
+      expect(result).toEqual(featureDetails);
+      expect(mockApiService.getFeatureDetails$).toHaveBeenCalledWith(params);
     });
 
-    it('should return null from dataLoader when feature is not found', (done) => {
+    it('should return null from dataLoader when feature is not found', async () => {
       const params: GetFeatureDetailsParams = {
         applicationId: '1',
         layerId: '1',
@@ -256,29 +240,25 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getFeatureDetails$('test-source', params).subscribe(result => {
-        expect(result).toBeNull();
-        expect(mockApiService.getFeatureDetails$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatureDetails$('test-source', params));
+      expect(result).toBeNull();
+      expect(mockApiService.getFeatureDetails$).toHaveBeenCalledWith(params);
     });
   });
 
   describe('getFeatures$', () => {
-    it('should return empty response when source is not found', (done) => {
+    it('should return empty response when source is not found', async () => {
       const params: GetFeaturesParams = {
         applicationId: '1',
         layerId: '1',
         layerName: 'layer1',
       };
 
-      managerService.getFeatures$('non-existent-source', params).subscribe(result => {
-        expect(result).toEqual({ features: [], columnMetadata: [], total: null, page: null, pageSize: null, template: null });
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatures$('non-existent-source', params));
+      expect(result).toEqual({ features: [], columnMetadata: [], total: null, page: null, pageSize: null, template: null });
     });
 
-    it('should return features from dataLoader when source is found', (done) => {
+    it('should return features from dataLoader when source is found', async () => {
       const params: GetFeaturesParams = {
         applicationId: '1',
         layerId: '1',
@@ -305,28 +285,24 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getFeatures$('test-source', params).subscribe(result => {
-        expect(result).toEqual(featuresResponse);
-        expect(mockApiService.getFeatures$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.getFeatures$('test-source', params));
+      expect(result).toEqual(featuresResponse);
+      expect(mockApiService.getFeatures$).toHaveBeenCalledWith(params);
     });
   });
 
   describe('getLayerExtractCapabilities$', () => {
-    it('should return empty capabilities when source is not found', (done) => {
+    it('should return empty capabilities when source is not found', async () => {
       const params: GetLayerExtractCapabilitiesParams = {
         applicationId: '1',
         layerId: '1',
       };
 
-      managerService.getLayerExtractCapabilities$('non-existent-source', params).subscribe(result => {
-        expect(result).toEqual({ outputFormats: [] });
-        done();
-      });
+      const result = await firstValueFrom(managerService.getLayerExtractCapabilities$('non-existent-source', params));
+      expect(result).toEqual({ outputFormats: [] });
     });
 
-    it('should return export capabilities from dataLoader when source is found', (done) => {
+    it('should return export capabilities from dataLoader when source is found', async () => {
       const params: GetLayerExtractCapabilitiesParams = {
         applicationId: '1',
         layerId: '1',
@@ -346,16 +322,14 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getLayerExtractCapabilities$('test-source', params).subscribe(result => {
-        expect(result).toEqual(capabilities);
-        expect(mockApiService.getLayerExtractCapabilities$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.getLayerExtractCapabilities$('test-source', params));
+      expect(result).toEqual(capabilities);
+      expect(mockApiService.getLayerExtractCapabilities$).toHaveBeenCalledWith(params);
     });
   });
 
   describe('startLayerExtract$', () => {
-    it('should return null when source is not found', (done) => {
+    it('should return null when source is not found', async () => {
       const params:  GetLayerExtractParams = {
         clientId: 'test',
         applicationId: '1',
@@ -363,13 +337,11 @@ describe('AttributeListManagerService', () => {
         outputFormat: 'csv',
       };
 
-      managerService.startLayerExtract$('non-existent-source', params).subscribe(result => {
-        expect(result).toBeNull();
-        done();
-      });
+      const result = await firstValueFrom(managerService.startLayerExtract$('non-existent-source', params));
+      expect(result).toBeNull();
     });
 
-    it('should return export response from dataLoader when source is found', (done) => {
+    it('should return export response from dataLoader when source is found', async () => {
       const params: GetLayerExtractParams = {
         clientId: 'test',
         applicationId: '1',
@@ -392,14 +364,12 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.startLayerExtract$('test-source', params).subscribe(result => {
-        expect(result).toEqual(exportResponse);
-        expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.startLayerExtract$('test-source', params));
+      expect(result).toEqual(exportResponse);
+      expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
     });
 
-    it('should return export response from dataLoader when source is found - direct download', (done) => {
+    it('should return export response from dataLoader when source is found - direct download', async () => {
       const params: GetLayerExtractParams = {
         clientId: 'test',
         applicationId: '1',
@@ -422,29 +392,25 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.startLayerExtract$('test-source', params).subscribe(result => {
-        expect(result).toEqual(exportResponse);
-        expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.startLayerExtract$('test-source', params));
+      expect(result).toEqual(exportResponse);
+      expect(mockApiService.startLayerExtract$).toHaveBeenCalledWith(params);
     });
   });
 
   describe('getUniqueValues$', () => {
-    it('should return empty response when source is not found', (done) => {
+    it('should return empty response when source is not found', async () => {
       const params: GetUniqueValuesParams = {
         applicationId: '1',
         layerId: '1',
         attribute: 'status',
       };
 
-      managerService.getUniqueValues$('non-existent-source', params).subscribe(result => {
-        expect(result).toEqual({ values: [], filterApplied: false });
-        done();
-      });
+      const result = await firstValueFrom(managerService.getUniqueValues$('non-existent-source', params));
+      expect(result).toEqual({ values: [], filterApplied: false });
     });
 
-    it('should return unique values from dataLoader when source is found', (done) => {
+    it('should return unique values from dataLoader when source is found', async () => {
       const params: GetUniqueValuesParams = {
         applicationId: '1',
         layerId: '1',
@@ -466,11 +432,9 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.getUniqueValues$('test-source', params).subscribe(result => {
-        expect(result).toEqual(uniqueValuesResponse);
-        expect(mockApiService.getUniqueValues$).toHaveBeenCalledWith(params);
-        done();
-      });
+      const result = await firstValueFrom(managerService.getUniqueValues$('test-source', params));
+      expect(result).toEqual(uniqueValuesResponse);
+      expect(mockApiService.getUniqueValues$).toHaveBeenCalledWith(params);
     });
   });
 
@@ -498,7 +462,7 @@ describe('AttributeListManagerService', () => {
     });
 
     it('should call onCheckedRowsChanged on the dataLoader when available', () => {
-      const onCheckedRowsChanged = jest.fn();
+      const onCheckedRowsChanged = vi.fn();
       const source: AttributeListSourceModel = {
         id: 'test-source',
         tabs$: of([]),
@@ -595,14 +559,12 @@ describe('AttributeListManagerService', () => {
   });
 
   describe('isLoadingTabs$', () => {
-    it('should return false when there are no sources', (done) => {
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+    it('should return false when there are no sources', async () => {
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(false);
     });
 
-    it('should return false when single source is not loading', (done) => {
+    it('should return false when single source is not loading', async () => {
       const source: AttributeListSourceModel = {
         id: 'test-source',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -612,13 +574,11 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(false);
     });
 
-    it('should return true when single source is loading', (done) => {
+    it('should return true when single source is loading', async () => {
       const source: AttributeListSourceModel = {
         id: 'test-source',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -628,13 +588,11 @@ describe('AttributeListManagerService', () => {
 
       managerService.addAttributeListSource(source);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(true);
-        done();
-      });
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(true);
     });
 
-    it('should return false when multiple sources are all not loading', (done) => {
+    it('should return false when multiple sources are all not loading', async () => {
       const source1: AttributeListSourceModel = {
         id: 'source-1',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -652,13 +610,11 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source1);
       managerService.addAttributeListSource(source2);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(false);
     });
 
-    it('should return true when one of multiple sources is loading', (done) => {
+    it('should return true when one of multiple sources is loading', async () => {
       const source1: AttributeListSourceModel = {
         id: 'source-1',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -676,13 +632,11 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source1);
       managerService.addAttributeListSource(source2);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(true);
-        done();
-      });
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(true);
     });
 
-    it('should return true when all sources are loading', (done) => {
+    it('should return true when all sources are loading', async () => {
       const source1: AttributeListSourceModel = {
         id: 'source-1',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -700,13 +654,11 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source1);
       managerService.addAttributeListSource(source2);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        expect(result).toBe(true);
-        done();
-      });
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(true);
     });
 
-    it('should handle sources without isLoadingTabs$ property (defaults to false)', (done) => {
+    it('should handle sources without isLoadingTabs$ property (defaults to false)', async () => {
       const source1: AttributeListSourceModel = {
         id: 'source-1',
         tabs$: of([{ id: 'layer-1', label: 'Layer 1' }]),
@@ -724,14 +676,12 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source1);
       managerService.addAttributeListSource(source2);
 
-      managerService.isLoadingTabs$().subscribe(result => {
-        // Should be true because source2 is loading, and source1 defaults to false
-        expect(result).toBe(true);
-        done();
-      });
+      // Should be true because source2 is loading, and source1 defaults to false
+      const result = await firstValueFrom(managerService.isLoadingTabs$());
+      expect(result).toBe(true);
     });
 
-    it('should reactively update when source loading state changes', (done) => {
+    it('should reactively update when source loading state changes', async () => {
       const loadingState$ = new BehaviorSubject<boolean>(false);
 
       const source: AttributeListSourceModel = {
@@ -744,19 +694,21 @@ describe('AttributeListManagerService', () => {
       managerService.addAttributeListSource(source);
 
       const results: boolean[] = [];
-      managerService.isLoadingTabs$().subscribe(result => {
-        results.push(result);
+      await new Promise<void>(resolve => {
+        managerService.isLoadingTabs$().subscribe(result => {
+          results.push(result);
 
-        if (results.length === 1) {
-          // First emission should be false
-          expect(result).toBe(false);
-          // Change loading state to true
-          loadingState$.next(true);
-        } else if (results.length === 2) {
-          // Second emission should be true
-          expect(result).toBe(true);
-          done();
-        }
+          if (results.length === 1) {
+            // First emission should be false
+            expect(result).toBe(false);
+            // Change loading state to true
+            loadingState$.next(true);
+          } else if (results.length === 2) {
+            // Second emission should be true
+            expect(result).toBe(true);
+            resolve();
+          }
+        });
       });
     });
   });

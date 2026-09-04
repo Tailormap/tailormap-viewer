@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SnackBarMessageComponent } from './snack-bar-message.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -11,14 +12,14 @@ describe('SnackbarMessageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: MAT_SNACK_BAR_DATA, useValue: { message: 'Here is a message' } },
-        { provide: MatSnackBarRef, useValue: { dismiss: jest.fn() } },
+        { provide: MatSnackBarRef, useValue: { dismiss: vi.fn() } },
       ],
     });
     expect(screen.getByText('Here is a message'));
   });
 
   test('renders close button and triggers close', async () => {
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     const config: SnackBarMessageOptionsModel = {
       message: 'Some message',
       showCloseButton: true,

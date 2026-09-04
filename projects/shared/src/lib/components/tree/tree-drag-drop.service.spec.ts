@@ -1,5 +1,5 @@
+import { describe, beforeAll, it, expect, vi } from 'vitest';
 import { FlatTreeModel } from './models';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { TreeDragDropService } from './tree-drag-drop.service';
 
 describe('Tree Drag Drop Service', () => {
@@ -27,28 +27,36 @@ describe('Tree Drag Drop Service', () => {
     };
   };
 
-  const treeEl = document.createElement('div');
-  const treeWrapper = document.createElement('div');
-  treeWrapper.className = 'tree-wrapper';
-  treeWrapper.style.height = '50px';
-  treeWrapper.appendChild(treeEl);
-  const treeNode1 = createTreeNode(1);
-  treeEl.appendChild(treeNode1);
-  const treeNode2 = createTreeNode(2);
-  treeEl.appendChild(treeNode2);
-  const treeNode3 = createTreeNode(3);
-  treeEl.appendChild(treeNode3);
-  const treeNode4 = createTreeNode(4);
-  treeEl.appendChild(treeNode4);
-  const dataNodes = [
-    createNodes(1),
-    createNodes(2),
-    createNodes(3),
-    createNodes(4),
-  ];
+  const treeEl: HTMLDivElement = document.createElement('div');
+  const treeWrapper: HTMLDivElement = document.createElement('div');
+  let treeNode1: HTMLDivElement;
+  let treeNode2: HTMLDivElement;
+  let treeNode3: HTMLDivElement;
+  let treeNode4: HTMLDivElement;
+  let dataNodes: FlatTreeModel[];
 
-  it ('handles drag drop', fakeAsync(() => {
-    const positionChangedFn = jest.fn();
+  beforeAll(() => {
+    treeWrapper.className = 'tree-wrapper';
+    treeWrapper.style.height = '50px';
+    treeWrapper.appendChild(treeEl);
+    treeNode1 = createTreeNode(1);
+    treeEl.appendChild(treeNode1);
+    treeNode2 = createTreeNode(2);
+    treeEl.appendChild(treeNode2);
+    treeNode3 = createTreeNode(3);
+    treeEl.appendChild(treeNode3);
+    treeNode4 = createTreeNode(4);
+    treeEl.appendChild(treeNode4);
+    dataNodes = [
+      createNodes(1),
+      createNodes(2),
+      createNodes(3),
+      createNodes(4),
+    ];
+  });
+
+  it ('handles drag drop', () => {
+    const positionChangedFn = vi.fn();
     const dragStartEvent = new Event('dragstart') as DragEvent;
     service.handleDragStart(dragStartEvent, dataNodes[0], [{
       getTargetElement: (): HTMLDivElement => {
@@ -74,7 +82,6 @@ describe('Tree Drag Drop Service', () => {
       },
       nodePositionChanged: positionChangedFn,
     }]);
-    tick(10);
     treeWrapper.dispatchEvent(new Event('dragover', {
       // @ts-expect-error property does exist on a drag event
       clientY: 0,
@@ -101,6 +108,6 @@ describe('Tree Drag Drop Service', () => {
       },
     );
     expect(treeEl.classList).not.toContain('mat-tree--drag-active');
-  }));
+  });
 
 });

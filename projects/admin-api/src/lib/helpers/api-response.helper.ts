@@ -3,8 +3,8 @@ export type ApiErrorResponse = { error: string };
 export class ApiResponseHelper {
 
   // For viewer API
-  public static isErrorResponse<T>(res: T | ApiErrorResponse): res is ApiErrorResponse {
-    return typeof (res as ApiErrorResponse).error !== 'undefined';
+  public static isErrorResponse<T>(res: null | T | ApiErrorResponse): res is ApiErrorResponse {
+    return res !== null && typeof (res as ApiErrorResponse).error !== 'undefined';
   }
 
   // For admin API (JSON produced by Spring Data REST RepositoryRestExceptionHandler) - get message for response with non-OK HTTP status

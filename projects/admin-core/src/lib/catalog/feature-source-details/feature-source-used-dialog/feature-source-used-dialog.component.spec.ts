@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureSourceUsedDialogComponent } from './feature-source-used-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -17,7 +18,7 @@ describe('FeatureSourceUsedDialogComponent', () => {
       getGeoServiceLayer({ title: 'Layer 1' }),
       getGeoServiceLayer({ title: 'Layer 2' }),
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(FeatureSourceUsedDialogComponent, {
       imports: [ MatDialogModule, MatSnackBarModule, MatIconModule, MatIconTestingModule ],
       providers: [

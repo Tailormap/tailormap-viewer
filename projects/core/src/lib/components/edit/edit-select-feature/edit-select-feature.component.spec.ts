@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditSelectFeatureComponent } from './edit-select-feature.component';
 import { getFeatureModel } from "@tailormap-viewer/api";
@@ -5,7 +6,7 @@ import { FeatureInfoFeatureModel } from "../../feature-info/models/feature-info-
 import { Store } from "@ngrx/store";
 import userEvent from "@testing-library/user-event";
 import { setSelectedEditFeature } from "../state/edit.actions";
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const features: FeatureInfoFeatureModel[] = [
   { layerId: '1', ...getFeatureModel(), __fid: 'feature-1' },
@@ -16,7 +17,7 @@ const features: FeatureInfoFeatureModel[] = [
 describe('EditSelectFeatureComponent', () => {
 
   test('should render', async () => {
-    const dispatchMock = jest.fn();
+    const dispatchMock = vi.fn();
     await render(EditSelectFeatureComponent, {
       providers: [
         getMapServiceMock().provider,

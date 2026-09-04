@@ -1,21 +1,28 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, NgZone, inject } from '@angular/core';
-import {
-  DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService,
-} from '@tailormap-viewer/shared';
+import { DropZoneHelper, NodePositionChangedEventModel, TreeDragDropService, TreeModel, TreeNodePosition, TreeService, TreeComponent } from '@tailormap-viewer/shared';
 import { Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name/application-folder-node-name.component';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
+import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node/application-layer-tree-node.component';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-application-layer-tree',
-  templateUrl: './application-layer-tree.component.html',
-  styleUrls: ['./application-layer-tree.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TreeDragDropService],
-  standalone: false,
+    selector: 'tm-admin-application-layer-tree',
+    templateUrl: './application-layer-tree.component.html',
+    styleUrls: ['./application-layer-tree.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [TreeDragDropService],
+    imports: [
+        ApplicationLayerTreeNodeComponent,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatButton,
+        TreeComponent,
+    ],
 })
 export class ApplicationLayerTreeComponent implements OnInit, OnDestroy {
   private treeService = inject(TreeService);

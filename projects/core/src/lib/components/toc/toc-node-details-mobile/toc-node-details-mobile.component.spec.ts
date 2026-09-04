@@ -1,12 +1,11 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
-import { SharedModule, TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile.component';
-import { LayerDetailsComponent } from '../toc-node-details/layer-details/layer-details.component';
-import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
 
 const setup = async (withLayer: boolean) => {
   const node: TreeModel<AppLayerModel> = {
@@ -27,8 +26,7 @@ const setup = async (withLayer: boolean) => {
   };
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   await render(TocNodeDetailsMobileComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ LayerDetailsComponent, LayerTransparencyComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       getMapServiceMock().provider,
       provideMockStore({

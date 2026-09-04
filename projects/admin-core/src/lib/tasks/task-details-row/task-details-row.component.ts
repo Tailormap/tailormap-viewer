@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, inject, LOCALE_ID } from '@angular/core';
 import { CronExpressionHelper } from '../helpers/cron-expression.helper';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-task-details-row',
-  templateUrl: './task-details-row.component.html',
-  styleUrls: ['./task-details-row.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-task-details-row',
+    templateUrl: './task-details-row.component.html',
+    styleUrls: ['./task-details-row.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [DatePipe],
 })
 export class TaskDetailsRowComponent {
   public locale = inject(LOCALE_ID);

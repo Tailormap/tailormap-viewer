@@ -4,11 +4,10 @@ import { MapService, ScaleBarToolConfigModel, ScaleBarToolModel, ToolTypeEnum } 
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 
 @Component({
-  selector: 'tm-scale-bar',
-  templateUrl: './scale-bar.component.html',
-  styleUrls: ['./scale-bar.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-scale-bar',
+    templateUrl: './scale-bar.component.html',
+    styleUrls: ['./scale-bar.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScaleBarComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);

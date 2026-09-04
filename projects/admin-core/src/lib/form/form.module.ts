@@ -2,13 +2,13 @@ import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormListComponent } from './form-list/form-list.component';
 import { FormHomeComponent } from './form-home/form-home.component';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { provideState } from '@ngrx/store';
 import { formStateKey } from './state/form.state';
 import { formReducer } from './state/form.reducer';
 import { FormEditComponent } from './form-edit/form-edit.component';
 import { FormCreateComponent } from './form-create/form-create.component';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { FormFormComponent } from './form-form/form-form.component';
 import { CatalogModule } from '../catalog/catalog.module';
 import { FormEditFieldComponent } from './form-edit-field/form-edit-field.component';
@@ -19,7 +19,10 @@ import { FormWarningMessageComponent } from './form-warning-message/form-warning
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    CatalogModule,
+    DragDropModule,
     FormListComponent,
     FormHomeComponent,
     FormEditComponent,
@@ -29,25 +32,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     FormAttributeListComponent,
     FormFieldListComponent,
     FormWarningMessageComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedAdminComponentsModule,
-    CatalogModule,
-    DragDropModule,
-  ],
-  exports: [
-    FormListComponent,
-    FormHomeComponent,
-    FormEditComponent,
-    FormCreateComponent,
-    FormWarningMessageComponent,
-  ],
-  providers: [
-    provideState(formStateKey, formReducer),
-    provideEnvironmentInitializer(() => inject(FormService).listenForApplicationChanges()),
-  ],
+],
+    exports: [
+        FormListComponent,
+        FormHomeComponent,
+        FormEditComponent,
+        FormCreateComponent,
+        FormWarningMessageComponent,
+    ],
+    providers: [
+        provideState(formStateKey, formReducer),
+        provideEnvironmentInitializer(() => inject(FormService).listenForApplicationChanges()),
+    ],
 })
 export class FormModule {
 }

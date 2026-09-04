@@ -1,15 +1,14 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationFolderNodeNameComponent } from './application-folder-node-name.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 
 describe('ApplicationFolderNodeNameComponent', () => {
 
   test('should render', async () => {
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(ApplicationFolderNodeNameComponent, {
-      imports: [SharedImportsModule],
       providers: [
         { provide: MatDialogRef, useValue: { close: closeFn } },
         { provide: MAT_DIALOG_DATA, useValue: {} },

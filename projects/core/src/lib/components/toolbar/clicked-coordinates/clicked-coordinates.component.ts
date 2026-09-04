@@ -3,7 +3,7 @@ import { combineLatest, filter, map, of, Subject, switchMap, take, takeUntil, ta
 import { MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Store } from '@ngrx/store';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { BaseComponentTypeEnum, FeatureModel } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { selectMapSettings } from '../../../map/state/map.selectors';
@@ -14,14 +14,31 @@ import { ClickedCoordinatesMenuButtonComponent } from './clicked-coordinates-men
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withLatestFrom } from 'rxjs/operators';
 import { selectComponentTitle } from '../../../state';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { TooltipDirective, ErrorMessageComponent } from '@tailormap-viewer/shared';
 
 
 @Component({
-  selector: 'tm-clicked-coordinates',
-  templateUrl: './clicked-coordinates.component.html',
-  styleUrls: ['./clicked-coordinates.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-clicked-coordinates',
+    templateUrl: './clicked-coordinates.component.html',
+    styleUrls: ['./clicked-coordinates.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        ErrorMessageComponent,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
@@ -14,15 +15,12 @@ import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
-import { CoreSharedModule } from '../../../shared';
-import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
 import { of } from 'rxjs';
 import {
   selectActiveFilterGroups,
   selectAllFilterGroupsForLayerId, selectAllFiltersForAttribute, selectComponentsConfig, selectViewerLoadingState,
 } from '../../../state';
 import { selectIn3dView } from '../../../map/state/map.selectors';
-import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 
@@ -46,14 +44,11 @@ const setup = async (withState = false) => {
   const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
-      SharedModule,
-      CoreSharedModule,
       NoopAnimationsModule,
       MatIconTestingModule,
     ],
-    declarations: [ FeatureInfoLayerListComponent, FeatureInfoContentComponent ],
     providers: [
-      { provide: ViewerLayoutService, useValue: { setLeftPadding: jest.fn(), setRightPadding: jest.fn() } },
+      { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       provideMockStore({
         initialState: { [featureInfoStateKey]: { ...initialFeatureInfoState } },
         selectors: withState ? [
@@ -108,7 +103,7 @@ describe('FeatureInfoDialogComponent', () => {
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     expect((await screen.findByText(/Property 2/)).nextSibling?.textContent?.trim()).toEqual('another test');
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
     (await screen.findByText(/Next/)).click();
     expect(store.dispatch).toHaveBeenCalledWith({ type: showNextFeatureInfoFeature.type });
     (await screen.findByText(/Previous/)).click();
@@ -121,13 +116,13 @@ describe('FeatureInfoDialogComponent', () => {
     //   This is an expensive operation requiring destruction and subsequent creation of DOM nodes, directives, components etc.
     //   Please review the "track expression" and make sure that it uniquely identifies items in a collection.
     //   Find more at https://angular.dev/errors/NG0956
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     await setup(true);
     expect((await screen.findByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('1');
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
     store.refreshState();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
     });
   });

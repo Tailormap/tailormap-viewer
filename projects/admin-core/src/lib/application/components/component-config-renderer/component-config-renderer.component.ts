@@ -10,11 +10,10 @@ import { selectComponentsConfigByType } from '../../state/application.selectors'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'tm-admin-component-config-renderer',
-  templateUrl: './component-config-renderer.component.html',
-  styleUrls: ['./component-config-renderer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-component-config-renderer',
+    templateUrl: './component-config-renderer.component.html',
+    styleUrls: ['./component-config-renderer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComponentConfigRendererComponent implements OnInit {
   private store$ = inject(Store);

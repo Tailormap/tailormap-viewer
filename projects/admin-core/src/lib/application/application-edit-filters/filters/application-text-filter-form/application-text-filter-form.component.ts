@@ -1,18 +1,30 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, UpdateTextFilterModel,
 } from '@tailormap-viewer/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-application-text-filter-form',
-  templateUrl: './application-text-filter-form.component.html',
-  styleUrls: ['./application-text-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-text-filter-form',
+    templateUrl: './application-text-filter-form.component.html',
+    styleUrls: ['./application-text-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatCheckbox,
+    ],
 })
 export class ApplicationTextFilterFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

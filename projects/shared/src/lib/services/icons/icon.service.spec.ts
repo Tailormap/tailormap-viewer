@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { IconService } from './icon.service';
 import { ICON_SERVICE_ICON_LOCATION } from './icon-service.injection-token';
 import { APP_BASE_HREF } from '@angular/common';
@@ -26,10 +27,10 @@ describe('IconService', () => {
 
   it('loads icons to registry', () => {
     const iconRegistryMock: any = {
-      addSvgIcon: jest.fn(),
+      addSvgIcon: vi.fn(),
     };
     const domSanitizerMock: any = {
-      bypassSecurityTrustResourceUrl: jest.fn((url: string) => url),
+      bypassSecurityTrustResourceUrl: vi.fn((url: string) => url),
     };
     service.loadIconsToIconRegistry(iconRegistryMock, domSanitizerMock);
     const iconCount = service.icons.reduce((count, icon) => {

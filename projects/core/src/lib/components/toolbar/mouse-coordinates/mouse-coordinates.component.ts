@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@
 import { MapService, MousePositionToolConfigModel, MousePositionToolModel, ToolTypeEnum } from '@tailormap-viewer/map';
 import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-mouse-coordinates',
-  templateUrl: './mouse-coordinates.component.html',
-  styleUrls: ['./mouse-coordinates.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-mouse-coordinates',
+    templateUrl: './mouse-coordinates.component.html',
+    styleUrls: ['./mouse-coordinates.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsyncPipe],
 })
 export class MouseCoordinatesComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);

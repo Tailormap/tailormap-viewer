@@ -2,17 +2,25 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { filter, map, Observable, of, take } from 'rxjs';
 import { resetAttributeFilters } from '../../../state/filter-state/filter.actions';
 import { Store } from '@ngrx/store';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, TooltipDirective } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../../../filter/models/extended-filter-group.model';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-reset-filters-button',
-  templateUrl: './reset-filters-button.component.html',
-  styleUrls: ['./reset-filters-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-reset-filters-button',
+    templateUrl: './reset-filters-button.component.html',
+    styleUrls: ['./reset-filters-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class ResetFiltersButtonComponent implements OnInit {
   private store$ = inject(Store);

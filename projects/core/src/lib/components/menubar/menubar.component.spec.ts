@@ -1,49 +1,49 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MenubarComponent } from './menubar.component';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from './menubar-button/menubar-button.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../map/state/map.selectors';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { getFullInitialAppState } from '../../test-helpers/full-app-state.mock';
+import { APP_BASE_HREF } from '@angular/common';
 
 @Component({
   selector: 'tm-menu-button-test',
-  standalone: false,
-  template: '<tm-menubar-button icon="test" [tooltip$]="tooltip$">Click me</tm-menubar-button>',
+  imports: [MenubarButtonComponent],
+  template: '<tm-menubar-button icon="test" [tooltip]="tooltip">Click me</tm-menubar-button>',
 })
 class TmTestingComponent {
-  public tooltip$ = of('MenuButton');
+  public tooltip = 'MenuButton';
 }
 
 const mockedControlsService = {
   getRegisteredComponents$: () => {
     return of([{ type: 'TEST', component: TmTestingComponent }]);
   },
+  registerComponent: vi.fn(),
+  deregisterComponent: vi.fn(),
 };
 
 describe('MenubarComponent', () => {
 
   test('should render', async () => {
     await render(MenubarComponent, {
-      declarations: [
-        MenubarComponent,
-        MenubarButtonComponent,
-        RegisteredComponentsRendererComponent,
-      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        SharedModule,
         NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
-        provideMockStore({ selectors: [{ selector: selectIn3dView, value: false }] }),
+        { provide: APP_BASE_HREF, useValue: '/' },
+        provideMockStore({ initialState: getFullInitialAppState(), selectors: [{ selector: selectIn3dView, value: false }] }),
+        AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
       ],
     });
     expect(await screen.findByText(/Click me/)).toBeInTheDocument();

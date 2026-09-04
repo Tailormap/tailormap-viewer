@@ -1,17 +1,16 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditAttributeFiltersComponent } from './edit-attribute-filters.component';
-import { SliderFilterComponent } from './slider-filter/slider-filter.component';
-import { FilterToolEnum, UniqueValuesService } from '@tailormap-viewer/api';
-import { getFilterGroup } from '../../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
-import { SharedImportsModule, SliderComponent } from '@tailormap-viewer/shared';
+import { FilterToolEnum, UniqueValuesService, UpdateSliderFilterModel } from '@tailormap-viewer/api';
 import { provideMockStore } from '@ngrx/store/testing';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 
 const setup = async () => {
 
-  const sliderFilterConfiguration = {
+  const sliderFilterConfiguration: UpdateSliderFilterModel = {
     filterTool: FilterToolEnum.SLIDER,
     minimumValue: 0,
     maximumValue: 100,
@@ -24,12 +23,10 @@ const setup = async () => {
   const filterGroupId = filterGroup.id;
 
   const uniqueValuesService = {
-    getUniqueValues$: jest.fn(() => of({ values: [] })),
+    getUniqueValues$: vi.fn(() => of({ values: [] })),
   };
 
   await render(EditAttributeFiltersComponent, {
-    imports: [SharedImportsModule],
-    declarations: [ SliderFilterComponent, SliderComponent ],
     providers: [
       provideMockStore(),
       { provide: UniqueValuesService, useValue: uniqueValuesService },

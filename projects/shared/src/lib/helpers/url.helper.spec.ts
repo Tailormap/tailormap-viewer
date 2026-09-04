@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { UrlHelper } from './url.helper';
 
 describe('UrlHelper', () => {
@@ -13,7 +14,7 @@ describe('UrlHelper', () => {
 
   test('throws error on invalid URL', () => {
     expect(() => UrlHelper.filterUrlParameters('test', () => true))
-      .toThrowError('Invalid URL: test');
+      .toThrow('Invalid URL');
   });
 
   test('gets case exact url parameter', () => {

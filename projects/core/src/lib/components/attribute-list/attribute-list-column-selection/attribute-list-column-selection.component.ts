@@ -1,17 +1,32 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragPreview, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { changeColumnPosition, toggleAllColumnsVisible, toggleColumnVisible } from '../state/attribute-list.actions';
-import { OVERLAY_DATA, OverlayRef } from '@tailormap-viewer/shared';
+import { OVERLAY_DATA, OverlayRef, TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { selectColumnsForData } from '../state/attribute-list.selectors';
 import { map } from 'rxjs/operators';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-attribute-list-column-selection',
-  templateUrl: './attribute-list-column-selection.component.html',
-  styleUrls: ['./attribute-list-column-selection.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-list-column-selection',
+    templateUrl: './attribute-list-column-selection.component.html',
+    styleUrls: ['./attribute-list-column-selection.component.css'],
+    imports: [
+        MatCheckbox,
+        TooltipDirective,
+        MatIconButton,
+        MatIcon,
+        CdkDropList,
+        CdkDrag,
+        CdkDragPlaceholder,
+        CdkDragPreview,
+        CdkDragHandle,
+        AsyncPipe,
+    ],
 })
 export class AttributeListColumnSelectionComponent {
 

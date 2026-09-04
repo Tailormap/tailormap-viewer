@@ -2,16 +2,22 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit
 import {
   AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
 } from '@tailormap-admin/admin-api';
-import { ArrayHelper, TemplatePicklistConfig } from '@tailormap-viewer/shared';
+import { ArrayHelper, TemplatePicklistConfig, MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'tm-admin-feature-type-template',
-  templateUrl: './feature-type-template.component.html',
-  styleUrls: ['./feature-type-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-template',
+    templateUrl: './feature-type-template.component.html',
+    styleUrls: ['./feature-type-template.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardTitle,
+        MatCardContent,
+        MarkdownEditorComponent,
+    ],
 })
 export class FeatureTypeTemplateComponent implements OnInit {
   private uploadService = inject(TailormapAdminUploadService);

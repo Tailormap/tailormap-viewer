@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { MapSizeHelper } from './map-size.helper';
 
 describe('MapSizeHelper', () => {

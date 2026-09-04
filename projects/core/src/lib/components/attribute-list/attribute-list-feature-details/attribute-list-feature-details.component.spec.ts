@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details.component';
 import { FeatureDetailsModel } from '../models/attribute-list-api-service.model';

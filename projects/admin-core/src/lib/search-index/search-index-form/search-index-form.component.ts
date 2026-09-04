@@ -1,21 +1,36 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FeatureSourceProtocolEnum, SearchIndexModel } from '@tailormap-admin/admin-api';
 import { concatMap, debounceTime, distinctUntilChanged, filter, forkJoin, map, of, take } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TypesHelper } from '@tailormap-viewer/shared';
+import { TypesHelper, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { selectFeatureTypeBySourceIdAndName } from '../../catalog/state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { AdminSseService } from '../../shared/services/admin-sse.service';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selector/feature-type-selector.component';
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-search-index-form',
-  templateUrl: './search-index-form.component.html',
-  styleUrls: ['./search-index-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-form',
+    templateUrl: './search-index-form.component.html',
+    styleUrls: ['./search-index-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatProgressBar,
+        FeatureTypeSelectorComponent,
+        DecimalPipe,
+        DatePipe,
+    ],
 })
 export class SearchIndexFormComponent implements OnInit {
   private store$ = inject(Store);

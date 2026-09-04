@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
@@ -7,33 +8,30 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { CatalogNodeFormDialogComponent } from '../catalog-node-form-dialog/catalog-node-form-dialog.component';
-import { GeoServiceFormDialogComponent } from '../geo-service-form-dialog/geo-service-form-dialog.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CatalogService } from '../services/catalog.service';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
-import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
-import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { Router } from '@angular/router';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
+import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
+import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
 const setup = async (hasNode = false) => {
-  const createCatalogNodeMock = jest.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
-  const updateCatalogNodeMock = jest.fn(() => of(true));
+  const createCatalogNodeMock = vi.fn(() => of({ node: { id: '3', title: 'New Folder Inside' } }));
+  const updateCatalogNodeMock = vi.fn(() => of(true));
   const catalogService = {
     createCatalogNode$: createCatalogNodeMock,
     updateCatalogNode$: updateCatalogNodeMock,
   };
   const { geoServiceService, createGeoService$ } = createGeoServiceMock();
   const rootModel = getCatalogNode({ id: 'root', title: 'Root', root: true });
-  const catalogNodeModel = { ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }), parentId: 'root' };
+  const catalogNodeModel: ExtendedCatalogNodeModel = {
+    ...getCatalogNode({ id: '1', title: 'Random services folder', root: false }),
+    parentId: 'root',
+    type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
+  };
   const store = createMockStore({
     initialState: {
       [catalogStateKey]: { ...initialCatalogState, catalog: [ rootModel, catalogNodeModel ] },
@@ -41,26 +39,16 @@ const setup = async (hasNode = false) => {
     },
   });
   await render(CatalogCreateButtonsComponent, {
-    declarations: [
-      CatalogNodeFormDialogComponent,
-      GeoServiceFormDialogComponent,
-      CatalogNodeFormComponent,
-      GeoServiceFormComponent,
-      SaveButtonComponent,
-      SpinnerButtonComponent,
-      PasswordFieldComponent,
-      AuthorizationEditComponent,
-    ],
     inputs: {
       node: hasNode ? catalogNodeModel : null,
     },
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: CatalogService, useValue: catalogService },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },
-      { provide: Router, useValue: { navigateByUrl: jest.fn() } },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: Router, useValue: { navigateByUrl: vi.fn() } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

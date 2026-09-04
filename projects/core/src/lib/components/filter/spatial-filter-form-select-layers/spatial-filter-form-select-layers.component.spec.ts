@@ -1,6 +1,6 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormSelectLayersComponent } from './spatial-filter-form-select-layers.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
@@ -20,10 +20,9 @@ const setup = async (layers: FilterableLayerModel[], selectedLayers: string[]) =
       { selector: selectSelectedLayers, value: selectedLayers },
     ],
   });
-  const mockSpatialCrudService = { updateSelectedLayers: jest.fn() };
+  const mockSpatialCrudService = { updateSelectedLayers: vi.fn() };
   const mockFilterManagerService = { filterableLayers$: of(layers) };
   await render(SpatialFilterFormSelectLayersComponent, {
-    imports: [SharedImportsModule],
     providers: [ store,
       { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },
       { provide: FilterManagerService, useValue: mockFilterManagerService },

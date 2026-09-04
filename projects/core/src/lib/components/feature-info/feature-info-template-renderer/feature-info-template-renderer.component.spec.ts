@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/angular';
 import { FeatureInfoTemplateRendererComponent } from './feature-info-template-renderer.component';
 

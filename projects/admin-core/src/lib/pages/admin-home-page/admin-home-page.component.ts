@@ -1,13 +1,19 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, DestroyRef, LOCALE_ID } from '@angular/core';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgClass, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'tm-admin-home-page',
-  templateUrl: './admin-home-page.component.html',
-  styleUrls: ['./admin-home-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-home-page',
+    templateUrl: './admin-home-page.component.html',
+    styleUrls: ['./admin-home-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        RouterLink,
+        DatePipe,
+    ],
 })
 export class AdminHomePageComponent implements OnInit {
 

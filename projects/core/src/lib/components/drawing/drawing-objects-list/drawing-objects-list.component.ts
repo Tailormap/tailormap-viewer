@@ -3,13 +3,23 @@ import { Store } from '@ngrx/store';
 import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
 import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { DrawingStyleIconComponent } from '../../../map/components/drawing-style-icon/drawing-style-icon.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-drawing-objects-list',
-  templateUrl: './drawing-objects-list.component.html',
-  styleUrls: ['./drawing-objects-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-drawing-objects-list',
+    templateUrl: './drawing-objects-list.component.html',
+    styleUrls: ['./drawing-objects-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatExpansionPanelDescription,
+        DrawingStyleIconComponent,
+        AsyncPipe,
+    ],
 })
 export class DrawingObjectsListComponent {
   private store$ = inject(Store);

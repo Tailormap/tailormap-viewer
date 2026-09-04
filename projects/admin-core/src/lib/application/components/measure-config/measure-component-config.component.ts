@@ -1,16 +1,25 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { BaseComponentTypeEnum, MeasureComponentConfigModel } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'tm-admin-measure-component-config',
-  templateUrl: './measure-component-config.component.html',
-  styleUrls: ['./measure-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-measure-component-config',
+    templateUrl: './measure-component-config.component.html',
+    styleUrls: ['./measure-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+    ],
 })
 export class MeasureComponentConfigComponent implements ConfigurationComponentModel<MeasureComponentConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

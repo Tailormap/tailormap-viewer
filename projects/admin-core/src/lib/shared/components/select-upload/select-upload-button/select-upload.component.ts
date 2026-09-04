@@ -4,14 +4,15 @@ import { SelectUploadDialogComponent } from '../select-upload-dialog/select-uplo
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { UploadHelper } from '@tailormap-admin/admin-api';
+import { MatButton } from '@angular/material/button';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 @Component({
-  selector: 'tm-admin-select-upload',
-  templateUrl: './select-upload.component.html',
-  styleUrls: ['./select-upload.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-select-upload',
+    templateUrl: './select-upload.component.html',
+    styleUrls: ['./select-upload.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatButton],
 })
 export class SelectUploadComponent {
   private dialog = inject(MatDialog);

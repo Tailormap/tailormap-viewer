@@ -3,18 +3,32 @@ import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'r
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
 import { LoadViewerService } from '../../services/load-viewer.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { EmbeddedLayoutComponent } from '../../layout/embedded-layout/embedded-layout.component';
+import { MobileLayoutComponent } from '../../layout/mobile-layout/mobile-layout.component';
+import { BaseLayoutComponent } from '../../layout/base-layout/base-layout.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-viewer-app',
-  templateUrl: './viewer-app.component.html',
-  styleUrls: ['./viewer-app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-viewer-app',
+    templateUrl: './viewer-app.component.html',
+    styleUrls: ['./viewer-app.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIcon,
+        ErrorMessageComponent,
+        MatProgressSpinner,
+        EmbeddedLayoutComponent,
+        MobileLayoutComponent,
+        BaseLayoutComponent,
+        AsyncPipe,
+    ],
 })
 export class ViewerAppComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormComponent } from './spatial-filter-form.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -5,9 +6,8 @@ import { selectIn3dView } from '../../../map/state/map.selectors';
 import {
   hasSelectedLayersAndGeometry, selectSelectedFilterGroup, selectSelectedFilterGroupError, selectSelectedFilterGroupId,
   selectSelectedLayers,
-  selectSelectedLayersCount, selectSpatialFilterHasExceededMaxFeatures,
+  selectSelectedLayersCount, selectSelectedSpatialFilterFeatureId, selectSpatialFilterHasExceededMaxFeatures,
 } from '../state/filter-component.selectors';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { FilterTypeEnum, SpatialFilterModel } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +17,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
 import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 
@@ -37,15 +37,15 @@ const setup = async (conf: {
       { selector: selectSelectedFilterGroup, value: conf.selectedFilterGroup || null },
       { selector: selectSelectedFilterGroupId, value: conf.selectedFilterGroup?.id || null },
       { selector: selectSelectedFilterGroupError, value: conf.selectedFilterGroup?.error || undefined },
+      { selector: selectSelectedSpatialFilterFeatureId, value: null },
       { selector: selectSpatialFilterHasExceededMaxFeatures, value: conf.exceededMax ?? false },
       { selector: selectIn3dView, value: false },
     ],
   });
   const mapServiceMock = createMapServiceMockWithDrawingTools();
-  const removeFilterServiceMock = { removeFilter$: jest.fn(() => of(true)) };
+  const removeFilterServiceMock = { removeFilter$: vi.fn(() => of(true)) };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [SharedModule],
     providers: [
       store,
       mapServiceMock.provider,
@@ -58,7 +58,7 @@ const setup = async (conf: {
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
-  injectedStore.dispatch = jest.fn();
+  injectedStore.dispatch = vi.fn();
   return {
     dispatch: injectedStore.dispatch,
     removeFilter$: removeFilterServiceMock.removeFilter$,
@@ -86,6 +86,7 @@ const getSpatialFilterGroup = (
     geometryColumns: [{ layerId: '1', column: ['geom'] }],
     geometries: [{ id: '1', geometry: 'POINT(0 0)' }],
     baseLayerId: '1',
+    projectionCode: 'EPSG:4326',
     ...filterOverrides,
   }],
   ...groupOverrides,

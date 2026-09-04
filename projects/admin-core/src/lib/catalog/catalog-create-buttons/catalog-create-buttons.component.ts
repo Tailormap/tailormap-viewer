@@ -12,13 +12,15 @@ import { Router } from '@angular/router';
 import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-admin-catalog-create-buttons',
-  templateUrl: './catalog-create-buttons.component.html',
-  styleUrls: ['./catalog-create-buttons.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-create-buttons',
+    templateUrl: './catalog-create-buttons.component.html',
+    styleUrls: ['./catalog-create-buttons.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ MatButton, MatIcon ],
 })
 export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);

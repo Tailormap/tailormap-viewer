@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { TreeDragDropService } from './tree-drag-drop.service';
 import { TreeService } from './tree.service';
 import { render, screen } from '@testing-library/angular';
@@ -6,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 import { BaseTreeModel, TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 import { getTreeModelMock } from './mock-data/tree-model.mock-data';
-import { SharedImportsModule } from '../../shared-imports.module';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
@@ -34,8 +34,8 @@ const getTree = () => [
 describe('TreeComponent', () => {
 
   test('renders tree', async () => {
-    const ngZoneRunMock = jest.fn((cb: () => void) => cb());
-    const ngZoneOutsideMock = jest.fn();
+    const ngZoneRunMock = vi.fn((cb: () => void) => cb());
+    const ngZoneOutsideMock = vi.fn();
     const treeService = new TreeService();
     const { fixture } = await render(TreeComponent, {
       providers: [
@@ -43,7 +43,6 @@ describe('TreeComponent', () => {
         { provide: TreeDragDropService, useValue: undefined },
       ],
       imports: [
-        SharedImportsModule,
         MatIconTestingModule,
         CdkVirtualScrollViewport,
         CdkFixedSizeVirtualScroll,

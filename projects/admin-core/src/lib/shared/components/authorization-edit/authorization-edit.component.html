@@ -20,7 +20,7 @@
     </div>
 
     @if (selectedChip === 'specificGroups') {
-      <table mat-table [dataSource]="decisions">
+      <table mat-table [dataSource]="decisions" [trackBy]="trackByRow">
         <ng-container matColumnDef="groupName">
           <th mat-header-cell i18n="@@admin-core.authorizations.access" *matHeaderCellDef>Access</th>
           <td mat-cell *matCellDef="let rule">{{ groupLabels.get(rule.groupName) }} @if (rule.overridden) {

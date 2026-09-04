@@ -10,15 +10,25 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 import { CatalogService } from '../services/catalog.service';
 import { expandTree, setCatalogFilterTerm } from '../state/catalog.actions';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-catalog-tree',
-  templateUrl: './catalog-tree.component.html',
-  styleUrls: ['./catalog-tree.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ TreeService, TreeDragDropService ],
-  standalone: false,
+    selector: 'tm-admin-catalog-tree',
+    templateUrl: './catalog-tree.component.html',
+    styleUrls: ['./catalog-tree.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ TreeService, TreeDragDropService ],
+    imports: [
+        CatalogTreeNodeComponent,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        CatalogBaseTreeComponent,
+        AsyncPipe,
+    ],
 })
 export class CatalogTreeComponent implements OnInit {
   private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);

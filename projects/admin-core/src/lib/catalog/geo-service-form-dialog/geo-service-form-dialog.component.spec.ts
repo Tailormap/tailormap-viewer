@@ -1,38 +1,30 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GeoServiceFormDialogComponent } from './geo-service-form-dialog.component';
 import userEvent from '@testing-library/user-event';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, getGeoService, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
 import { of } from 'rxjs';
-import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
 import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
-import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async (editMode = false) => {
-  const dialogRefMock = { close: jest.fn() };
+  const dialogRefMock = { close: vi.fn() };
   const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
-    imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
-    declarations: [ GeoServiceFormComponent, LayerSettingsFormComponent, PasswordFieldComponent, SaveButtonComponent, AuthorizationEditComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       provideMockStore(),
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: MAT_DIALOG_DATA, useValue: { geoService: editMode ? geoServiceModelMock : null, parentNode: '1' } },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],

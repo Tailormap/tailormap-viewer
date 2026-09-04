@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExtendedGeoServiceModel } from '../models/extended-geo-service.model';
 import { BehaviorSubject, Observable, of, Subject, takeUntil } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
@@ -9,6 +9,11 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { selectGeoServiceLayerSettingsByLayerId } from '../state/catalog.selectors';
 import { Store } from '@ngrx/store';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { AsyncPipe } from '@angular/common';
 
 export interface GeoServiceLayerFormDialogData {
   geoService: ExtendedGeoServiceModel;
@@ -16,11 +21,20 @@ export interface GeoServiceLayerFormDialogData {
 }
 
 @Component({
-  selector: 'tm-admin-geo-service-layer-form-dialog',
-  templateUrl: './geo-service-layer-form-dialog.component.html',
-  styleUrls: ['./geo-service-layer-form-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-geo-service-layer-form-dialog',
+    templateUrl: './geo-service-layer-form-dialog.component.html',
+    styleUrls: ['./geo-service-layer-form-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        LayerSettingsFormComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class GeoServiceLayerFormDialogComponent {
   public data = inject<GeoServiceLayerFormDialogData>(MAT_DIALOG_DATA);

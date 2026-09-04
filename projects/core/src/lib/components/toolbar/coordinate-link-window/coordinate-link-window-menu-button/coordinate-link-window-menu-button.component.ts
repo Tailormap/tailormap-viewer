@@ -2,13 +2,15 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { selectComponentTitle } from '../../../../state';
+import { MenubarButtonComponent } from '../../../menubar/menubar-button/menubar-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-coordinate-link-window-menu-button',
-  templateUrl: './coordinate-link-window-menu-button.component.html',
-  styleUrls: ['./coordinate-link-window-menu-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-coordinate-link-window-menu-button',
+    templateUrl: './coordinate-link-window-menu-button.component.html',
+    styleUrls: ['./coordinate-link-window-menu-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class CoordinateLinkWindowMenuButtonComponent {
   private store$ = inject(Store);

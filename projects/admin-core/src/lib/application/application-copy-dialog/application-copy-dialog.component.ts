@@ -1,21 +1,33 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { ApplicationService } from '../services/application.service';
 import { nanoid } from 'nanoid';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { ApplicationFormComponent } from '../application-form/application-form.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 export interface ApplicationCopyDialogData {
   application: ApplicationModel;
 }
 
 @Component({
-  selector: 'tm-admin-application-copy-dialog',
-  templateUrl: './application-copy-dialog.component.html',
-  styleUrls: ['./application-copy-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-copy-dialog',
+    templateUrl: './application-copy-dialog.component.html',
+    styleUrls: ['./application-copy-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        ApplicationFormComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+    ],
 })
 export class ApplicationCopyDialogComponent {
   public data = inject<ApplicationCopyDialogData>(MAT_DIALOG_DATA);

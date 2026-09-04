@@ -1,6 +1,6 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AuthorizationEditComponent } from './authorization-edit.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { AUTHORIZATION_RULE_ANONYMOUS, AuthorizationGroups, AuthorizationRuleDecision, AuthorizationRuleGroup, getGroup } from '@tailormap-admin/admin-api';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
@@ -19,7 +19,7 @@ const renderComponent = async (parentType?: string, parentAuthorizations?: Autho
             parentType: parentType,
           } : { }),
       },
-      imports: [ SharedImportsModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
     });
 
     return component;
@@ -29,8 +29,8 @@ describe('AuthorizationEditComponent', () => {
   test('selects "Specific groups" chip and lists groups', async () => {
     const component = await renderComponent();
 
-    let value: AuthorizationRuleGroup[] = [];
-    component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+    const onChange = vi.fn();
+    component.fixture.componentInstance.registerOnChange(onChange);
     component.fixture.componentInstance.writeValue([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.ALLOW } },
        { groupName: 'bar', decisions: { read: AuthorizationRuleDecision.DENY } },
@@ -45,7 +45,7 @@ describe('AuthorizationEditComponent', () => {
     expect(fooCheckbox?.checked).toBe(true);
     fooCheckbox?.click();
     component.detectChanges();
-    expect(value).toEqual([
+    expect(onChange).toHaveBeenCalledWith([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.DENY } },
        { groupName: 'bar', decisions: { read: AuthorizationRuleDecision.DENY } },
     ]);
@@ -58,7 +58,7 @@ describe('AuthorizationEditComponent', () => {
     barCheckbox?.click();
     component.detectChanges();
     expect(barCheckbox?.checked).toBe(true);
-    expect(value).toEqual([
+    expect(onChange).toHaveBeenCalledWith([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.DENY } },
        { groupName: 'bar', decisions: { read: AuthorizationRuleDecision.ALLOW } },
     ]);
@@ -67,8 +67,8 @@ describe('AuthorizationEditComponent', () => {
   test('Toggling from "Specific groups" to "Anyone" works', async () => {
     const component = await renderComponent();
 
-    let value: AuthorizationRuleGroup[] = [];
-    component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+    const onChange = vi.fn();
+    component.fixture.componentInstance.registerOnChange(onChange);
 
     component.fixture.componentInstance.writeValue([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.ALLOW } },
@@ -84,14 +84,14 @@ describe('AuthorizationEditComponent', () => {
     expect((await screen.findByText("Specific groups")).parentElement).toHaveAttribute("aria-selected", "false");
     expect((await screen.findByText("Anyone")).parentElement).toHaveAttribute("aria-selected", "true");
 
-    expect(value).toEqual([AUTHORIZATION_RULE_ANONYMOUS]);
+    expect(onChange).toHaveBeenCalledWith([AUTHORIZATION_RULE_ANONYMOUS]);
   });
 
   test('Toggling from "Specific groups" to "Logged in" works', async () => {
     const component = await renderComponent();
 
-    let value: AuthorizationRuleGroup[] = [];
-    component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+    const onChange = vi.fn();
+    component.fixture.componentInstance.registerOnChange(onChange);
     component.fixture.componentInstance.writeValue([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.ALLOW } },
        { groupName: 'bar', decisions: { read: AuthorizationRuleDecision.DENY } },
@@ -105,14 +105,14 @@ describe('AuthorizationEditComponent', () => {
     expect((await screen.findByText("Specific groups")).parentElement).toHaveAttribute("aria-selected", "false");
     expect((await screen.findByText("Logged in")).parentElement).toHaveAttribute("aria-selected", "true");
 
-    expect(value).toEqual([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }]);
+    expect(onChange).toHaveBeenCalledWith([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }]);
   });
 
   test('Toggling from "Specific groups" to "Logged in" and back wipes the current groups', async () => {
     const component = await renderComponent();
 
-    let value: AuthorizationRuleGroup[] = [];
-    component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+    const onChange = vi.fn();
+    component.fixture.componentInstance.registerOnChange(onChange);
     component.fixture.componentInstance.writeValue([
        { groupName: 'foo', decisions: { read: AuthorizationRuleDecision.ALLOW } },
        { groupName: 'bar', decisions: { read: AuthorizationRuleDecision.DENY } },
@@ -124,7 +124,7 @@ describe('AuthorizationEditComponent', () => {
     (await screen.findByText('Logged in')).click();
     (await screen.findByText('Specific groups')).click();
 
-    expect(value).toEqual([]);
+    expect(onChange).toHaveBeenCalledWith([]);
   });
 
   test('Parent inheritance is picked up', async () => {
@@ -135,8 +135,8 @@ describe('AuthorizationEditComponent', () => {
   test('Parent groups-based inheritance is picked up, and denying rules work', async () => {
       const component = await renderComponent('Parent', [{ groupName: 'foo', decisions: { read: AuthorizationRuleDecision.ALLOW } }]);
 
-      let value: AuthorizationRuleGroup[] = [];
-      component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+      const onChange = vi.fn();
+      component.fixture.componentInstance.registerOnChange(onChange);
       component.detectChanges();
 
       expect(await screen.findByText('Specific groups (inherited)')).not.toBeNull();
@@ -147,7 +147,7 @@ describe('AuthorizationEditComponent', () => {
       fooCheckbox?.click();
       component.detectChanges();
 
-      expect(value).toEqual([{ groupName: 'foo', decisions: { read: AuthorizationRuleDecision.DENY } }]);
+      expect(onChange).toHaveBeenCalledWith([{ groupName: 'foo', decisions: { read: AuthorizationRuleDecision.DENY } }]);
 
       fooCheckbox =  (await screen.findByText("foo")).parentElement?.querySelector("input");
       expect(fooCheckbox).not.toBeNull();
@@ -155,20 +155,20 @@ describe('AuthorizationEditComponent', () => {
       fooCheckbox?.click();
       component.detectChanges();
 
-      expect(value).toEqual([]);
+      expect(onChange).toHaveBeenCalledWith([]);
   });
 
 
   test('Overriding parent\'s "anyone" with "logged in" ', async () => {
       const component = await renderComponent('Parent', [AUTHORIZATION_RULE_ANONYMOUS]);
 
-      let value: AuthorizationRuleGroup[] = [];
-      component.fixture.componentInstance.registerOnChange((v: AuthorizationRuleGroup[]) => { value = v; });
+      const onChange = vi.fn();
+      component.fixture.componentInstance.registerOnChange(onChange);
       component.detectChanges();
 
       expect((await screen.findByText('Inherit from Parent (Anyone)')).parentElement).toHaveAttribute('aria-selected', 'true');
       (await screen.findByText('Logged in')).click();
 
-      expect(value).toEqual([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }]);
+      expect(onChange).toHaveBeenCalledWith([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }]);
   });
 });

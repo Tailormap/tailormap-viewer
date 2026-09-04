@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, test, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AttributeListExportButtonComponent } from './attribute-list-export-button.component';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -7,7 +8,7 @@ import {
 import { BehaviorSubject, of } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
-import { FileHelper, SharedImportsModule } from '@tailormap-viewer/shared';
+import { FileHelper } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
@@ -32,12 +33,12 @@ const setup = async (
     ],
   });
   const exportService = {
-    getExportFormats$: jest.fn().mockReturnValue(of(supportedFormats)),
-    export$: jest.fn().mockReturnValue(exportResult.asObservable()),
+    getExportFormats$: vi.fn().mockReturnValue(of(supportedFormats)),
+    export$: vi.fn().mockReturnValue(exportResult.asObservable()),
     extractProgress$: of(progress),
   };
   await render(AttributeListExportButtonComponent, {
-    imports: [ SharedImportsModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [ store, { provide: AttributeListExportService, useValue: exportService }],
   });
   return { exportService };
@@ -51,7 +52,7 @@ describe('AttributeListExportButtonComponent', () => {
     // Keep original method in a var to restore after testing
     saveAsFile = FileHelper.saveAsFile;
     // Replace by mock fn to prevent URL.createObjectURL on empty blobs
-    FileHelper.saveAsFile = jest.fn();
+    FileHelper.saveAsFile = vi.fn();
   });
 
   afterEach(() => {

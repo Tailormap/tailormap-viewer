@@ -2,15 +2,23 @@ import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { OIDCConfigurationFormComponent } from '../oidc-configuration-form/oidc-configuration-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-oidc-configuration-create',
-  templateUrl: './oidc-configuration-create.component.html',
-  styleUrls: ['./oidc-configuration-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-oidc-configuration-create',
+    templateUrl: './oidc-configuration-create.component.html',
+    styleUrls: ['./oidc-configuration-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        OIDCConfigurationFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class OIDCConfigurationCreateComponent implements OnDestroy {
   private oidcConfigurationService = inject(OIDCConfigurationService);

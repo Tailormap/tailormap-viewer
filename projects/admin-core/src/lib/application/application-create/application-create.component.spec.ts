@@ -1,21 +1,29 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationCreateComponent } from './application-create.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApplicationService } from '../services/application.service';
 import { of } from 'rxjs';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApplicationFormComponent } from '../application-form/application-form.component';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'tm-admin-application-form',
+  template: '<div>Application Form</div>',
+})
+class MockApplicationFormComponent {}
 
 describe('ApplicationCreateComponent', () => {
 
   test('should render', async () => {
     await render(ApplicationCreateComponent, {
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [MatSnackBarModule],
+      importOverrides: [
+        { replace: ApplicationFormComponent, with: MockApplicationFormComponent },
+      ],
       providers: [
-        { provide: ApplicationService, useValue: { createApplication$: jest.fn(() => of({})) } },
+        { provide: ApplicationService, useValue: { createApplication$: vi.fn(() => of({})) } },
       ],
     });
-    expect(screen.getByText('Create application'));
+    expect(screen.getByText('Create application')).toBeInTheDocument();
   });
 
 });

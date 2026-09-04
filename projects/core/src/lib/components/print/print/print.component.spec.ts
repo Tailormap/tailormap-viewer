@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PrintComponent } from './print.component';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -39,7 +40,7 @@ describe('PrintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PrintComponent],
+      imports: [PrintComponent],
       providers: [
         provideMockStore({ initialState }),
         { provide: MenubarService, useValue: { isComponentVisible$: () => of(false), registerComponent: () => {}, deregisterComponent: () => {} } },
@@ -58,7 +59,7 @@ describe('PrintComponent', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render', () => {

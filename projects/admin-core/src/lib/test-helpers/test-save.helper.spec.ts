@@ -1,4 +1,5 @@
-import { screen, waitFor } from '@testing-library/angular';
+import { expect, describe, test, vi } from 'vitest';
+import { screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { AuthenticatedUserTestHelper } from './authenticated-user-test.helper.spec';
 
@@ -8,7 +9,7 @@ export class TestSaveHelper {
     const btnIdx = typeof idx === 'number' ? idx : 0;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await waitFor(async () => {
+    await vi.waitFor(async () => {
       expect((await screen.findAllByLabelText(labelText))[btnIdx]).toBeEnabled();
     });
     await (ue || userEvent).click((await screen.findAllByLabelText(labelText))[btnIdx]);
@@ -18,7 +19,7 @@ export class TestSaveHelper {
     const btnIdx = typeof idx === 'number' ? idx : 0;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await waitFor(async () => {
+    await vi.waitFor(async () => {
       expect((await screen.findAllByLabelText(labelText))[btnIdx]).toBeDisabled();
     });
   }

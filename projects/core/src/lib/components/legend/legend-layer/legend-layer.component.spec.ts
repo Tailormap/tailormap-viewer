@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
@@ -5,7 +6,7 @@ import { LegendImageComponent } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
-  get: jest.fn().mockReturnValue(2),
+  get: vi.fn().mockReturnValue(2),
 }) as any;
 
 const setup = async (legendInfo: LegendInfoModel) => {
@@ -31,7 +32,7 @@ describe('LegendLayerComponent', () => {
   });
 
   test('should render high dpi legend for GeoServer', async () => {
-    jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
+    vi.spyOn(global, 'window', 'get').mockImplementation(windowMock);
     await setup({
       layer: { ...getAppLayerModel({ title: 'Layer title' }), service: getServiceModel() },
       url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',

@@ -1,53 +1,59 @@
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 import { Snap } from 'ol/interaction';
 import { LayerTypesEnum } from '../models';
 import { Style } from 'ol/style';
 import { FeatureHelper } from '../helpers/feature.helper';
+import { firstValueFrom } from 'rxjs';
+import type { Mock } from 'vitest';
 
-jest.mock('ol/interaction', () => ({
+vi.mock('ol/interaction', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  Snap: jest.fn(),
+  Snap: vi.fn(),
 }));
 
-const mockSnap = Snap as jest.MockedClass<typeof Snap>;
+const mockSnap = vi.mocked(Snap);
 const getFeaturesFn = (FeatureHelper as any).getFeatures;
 
 describe('OpenLayersSnappingManager', () => {
   let manager: OpenLayersSnappingManager;
-  let mockOlMap: { addInteraction: jest.Mock; removeInteraction: jest.Mock };
+  let mockOlMap: { addInteraction: Mock; removeInteraction: Mock };
   let mockVectorSource: {
-    getFeatures: jest.Mock;
-    removeFeature: jest.Mock;
-    addFeature: jest.Mock;
-    getProjection: jest.Mock;
+    getFeatures: Mock;
+    removeFeature: Mock;
+    addFeature: Mock;
+    getProjection: Mock;
   };
-  let mockVectorLayer: { getSource: jest.Mock; setStyle: jest.Mock };
-  let mockLayerManager: { addLayer: jest.Mock; removeLayer: jest.Mock };
-  let mockSnapInstance: { setProperties: jest.Mock };
+  let mockVectorLayer: { getSource: Mock; setStyle: Mock };
+  let mockLayerManager: { addLayer: Mock; removeLayer: Mock };
+  let mockSnapInstance: { setProperties: Mock; on: Mock };
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     manager = new OpenLayersSnappingManager();
     mockVectorSource = {
-      getFeatures: jest.fn().mockReturnValue([]),
-      removeFeature: jest.fn(),
-      addFeature: jest.fn(),
-      getProjection: jest.fn().mockReturnValue(null),
+      getFeatures: vi.fn().mockReturnValue([]),
+      removeFeature: vi.fn(),
+      addFeature: vi.fn(),
+      getProjection: vi.fn().mockReturnValue(null),
     };
     mockVectorLayer = {
-      getSource: jest.fn().mockReturnValue(mockVectorSource),
-      setStyle: jest.fn(),
+      getSource: vi.fn().mockReturnValue(mockVectorSource),
+      setStyle: vi.fn(),
     };
     mockLayerManager = {
-      addLayer: jest.fn().mockReturnValue(mockVectorLayer),
-      removeLayer: jest.fn(),
+      addLayer: vi.fn().mockReturnValue(mockVectorLayer),
+      removeLayer: vi.fn(),
     };
     mockOlMap = {
-      addInteraction: jest.fn(),
-      removeInteraction: jest.fn(),
+      addInteraction: vi.fn(),
+      removeInteraction: vi.fn(),
     };
-    mockSnapInstance = { setProperties: jest.fn() };
-    mockSnap.mockImplementation(() => mockSnapInstance as unknown as Snap);
-    (FeatureHelper as any).getFeatures = jest.fn((features: unknown[]) => features);
+    mockSnapInstance = { setProperties: vi.fn(), on: vi.fn() };
+    // Note: the mocked Snap is invoked with `new` by the code under test. Vitest constructs mock
+    // implementations via `Reflect.construct`, which throws for arrow functions (they have no
+    // [[Construct]]); use a regular function so `new Snap(...)` can return `mockSnapInstance`.
+    mockSnap.mockImplementation(function () { return mockSnapInstance as unknown as Snap; });
+    (FeatureHelper as any).getFeatures = vi.fn((features: unknown[]) => features);
   });
 
   afterEach(() => {
@@ -136,8 +142,8 @@ describe('OpenLayersSnappingManager', () => {
       setup({ withLayer: true });
       manager.destroy();
 
-      const newMockOlMap = { addInteraction: jest.fn(), removeInteraction: jest.fn() };
-      const newMockLayerManager = { addLayer: jest.fn().mockReturnValue(mockVectorLayer), removeLayer: jest.fn() };
+      const newMockOlMap = { addInteraction: vi.fn(), removeInteraction: vi.fn() };
+      const newMockLayerManager = { addLayer: vi.fn().mockReturnValue(mockVectorLayer), removeLayer: vi.fn() };
 
       manager.init(newMockOlMap as any, newMockLayerManager as any);
       manager.renderFeatures([]);
@@ -311,17 +317,15 @@ describe('OpenLayersSnappingManager', () => {
       expect(mockVectorSource.removeFeature).toHaveBeenCalledWith(existingFeature);
     });
 
-    test('adds each provided feature to the source', (done) => {
+    test('adds each provided feature to the source', async () => {
       setup({ withLayer: true });
       const featureA = { id: 'a' } as any;
       const featureB = { id: 'b' } as any;
       manager.renderFeatures([ featureA, featureB ]);
-      (manager as any).snappingLayer.asObservable().subscribe(() => {
-        expect(mockVectorSource.addFeature).toHaveBeenCalledTimes(2);
-        expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureA);
-        expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureB);
-        done();
-      });
+      await firstValueFrom((manager as any).snappingLayer.asObservable());
+      expect(mockVectorSource.addFeature).toHaveBeenCalledTimes(2);
+      expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureA);
+      expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureB);
     });
 
     test('does not call addFeature when an empty array is provided', () => {

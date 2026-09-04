@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, take } from 'rxjs';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
@@ -7,14 +7,28 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { draftFormSetSelectedField, draftFormUpdateFields } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected } from '../state/form.selectors';
 import { FormFieldModel } from '@tailormap-viewer/api';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-form-field-list',
-  templateUrl: './form-field-list.component.html',
-  styleUrls: ['./form-field-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-field-list',
+    templateUrl: './form-field-list.component.html',
+    styleUrls: ['./form-field-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        CdkDropList,
+        MatListItem,
+        CdkDrag,
+        MatIcon,
+        CdkDragHandle,
+        AsyncPipe,
+    ],
 })
 export class FormFieldListComponent implements OnInit {
   private store$ = inject(Store);

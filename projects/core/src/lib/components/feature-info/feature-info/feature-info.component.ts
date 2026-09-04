@@ -16,13 +16,20 @@ import { take, withLatestFrom } from 'rxjs/operators';
 import { FeatureUpdatedService } from '../../../services';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
+import { MapSpinnerComponent } from '../../../map/components/map-spinner/map-spinner.component';
+import { FeatureInfoDialogComponent } from '../feature-info-dialog/feature-info-dialog.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-feature-info',
-  templateUrl: './feature-info.component.html',
-  styleUrls: ['./feature-info.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-feature-info',
+    templateUrl: './feature-info.component.html',
+    styleUrls: ['./feature-info.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MapSpinnerComponent,
+        FeatureInfoDialogComponent,
+        AsyncPipe,
+    ],
 })
 export class FeatureInfoComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);

@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, HostListener, ElementRef, viewChild, effect,
+  ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, ElementRef, viewChild, effect,
   AfterViewChecked,
 } from '@angular/core';
 import { TreeService } from './tree.service';
@@ -8,13 +8,33 @@ import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
 import { distinctUntilChanged, filter, Subject, take } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf } from '@angular/cdk/scrolling';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioButton } from '@angular/material/radio';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'tm-tree',
-  templateUrl: './tree.component.html',
-  styleUrls: ['./tree.component.css'],
-  standalone: false,
+    selector: 'tm-tree',
+    templateUrl: './tree.component.html',
+    styleUrls: ['./tree.component.css'],
+    host: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        '(window:resize)': 'onResize()',
+    },
+    imports: [
+        CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
+        CdkVirtualForOf,
+        MatCheckbox,
+        MatRadioButton,
+        MatIconButton,
+        MatIcon,
+        MatProgressSpinner,
+        NgTemplateOutlet,
+    ],
 })
 export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private treeService = inject(TreeService);
@@ -22,7 +42,6 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private cdr = inject(ChangeDetectorRef);
   private treeDragDropService = inject(TreeDragDropService, { optional: true });
 
-  @HostListener('window:resize', ['$event'])
   public onResize() {
     this.updateDropzoneHeight();
   }

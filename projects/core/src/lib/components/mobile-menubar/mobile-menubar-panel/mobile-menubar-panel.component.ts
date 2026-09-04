@@ -5,13 +5,15 @@ import { MenubarService } from '../../menubar/menubar.service';
 import { BrowserHelper, ConfirmDialogService, CssHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { BottomPanelComponent } from '../../../shared/components/bottom-panel/bottom-panel.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-mobile-menubar-panel',
-  templateUrl: './mobile-menubar-panel.component.html',
-  styleUrls: ['./mobile-menubar-panel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-mobile-menubar-panel',
+    templateUrl: './mobile-menubar-panel.component.html',
+    styleUrls: ['./mobile-menubar-panel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ BottomPanelComponent, AsyncPipe ],
 })
 export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private menubarService = inject(MenubarService);

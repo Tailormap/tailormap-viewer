@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
@@ -13,13 +13,33 @@ import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../sta
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catalog-model.helper';
+import { FormFormComponent } from '../form-form/form-form.component';
+import { CatalogShortcutButtonsComponent } from '../../catalog/catalog-shortcut-buttons/catalog-shortcut-buttons.component';
+import { FormWarningMessageComponent } from '../form-warning-message/form-warning-message.component';
+import { FormAttributeListComponent } from '../form-attribute-list/form-attribute-list.component';
+import { FormFieldListComponent } from '../form-field-list/form-field-list.component';
+import { FormEditFieldComponent } from '../form-edit-field/form-edit-field.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-form-edit',
-  templateUrl: './form-edit.component.html',
-  styleUrls: ['./form-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-edit',
+    templateUrl: './form-edit.component.html',
+    styleUrls: ['./form-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FormFormComponent,
+        CatalogShortcutButtonsComponent,
+        FormWarningMessageComponent,
+        FormAttributeListComponent,
+        FormFieldListComponent,
+        FormEditFieldComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class FormEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

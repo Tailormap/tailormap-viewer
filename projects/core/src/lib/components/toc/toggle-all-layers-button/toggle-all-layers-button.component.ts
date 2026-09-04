@@ -4,13 +4,22 @@ import { Store } from '@ngrx/store';
 import { toggleAllLayersVisibility } from '../../../map/state/map.actions';
 import { selectFilterEnabled, selectFilterTerm, selectSomeLayersVisibleInToc } from '../state/toc.selectors';
 import { take } from 'rxjs/operators';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-toggle-all-layers-button',
-  templateUrl: './toggle-all-layers-button.component.html',
-  styleUrls: ['./toggle-all-layers-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-toggle-all-layers-button',
+    templateUrl: './toggle-all-layers-button.component.html',
+    styleUrls: ['./toggle-all-layers-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class ToggleAllLayersButtonComponent implements OnInit {
   private store$ = inject(Store);

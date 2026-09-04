@@ -4,22 +4,43 @@ import { CoordinateHelper, MapClickToolConfigModel, MapClickToolModel, MapServic
 import { selectComponentsConfigForType, selectComponentTitle } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, CoordinateLinkWindowConfigModel, CoordinateLinkWindowConfigUrlModel } from '@tailormap-viewer/api';
 import { combineLatest, filter, map, Observable, of, switchMap, tap } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { take, withLatestFrom } from 'rxjs/operators';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ComponentRegistrationService } from '../../../services';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button/coordinate-link-window-menu-button.component';
 import { MenubarService } from '../../menubar';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, TooltipDirective, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatSelectionList, MatListOption, MatListItemIcon, MatListItemTitle } from '@angular/material/list';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-coordinate-link-window',
-  templateUrl: './coordinate-link-window.component.html',
-  styleUrls: ['./coordinate-link-window.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-coordinate-link-window',
+    templateUrl: './coordinate-link-window.component.html',
+    styleUrls: ['./coordinate-link-window.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        AutoFocusDirective,
+        ReactiveFormsModule,
+        MatOption,
+        MatSelectionList,
+        MatListOption,
+        MatListItemIcon,
+        MatListItemTitle,
+        AsyncPipe,
+    ],
 })
 export class CoordinateLinkWindowComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

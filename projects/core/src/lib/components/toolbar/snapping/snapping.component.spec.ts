@@ -1,9 +1,9 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { SnappingComponent } from './snapping.component';
 import { BehaviorSubject, of } from 'rxjs';
 import { createMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { MapService } from '@tailormap-viewer/map';
@@ -24,22 +24,22 @@ const mockLayer = {
 
 const setup = async (snappingActive = false) => {
   const mapServiceMock = {
-    setSnappingTolerance: jest.fn(),
-    setSnappingLayerStyle: jest.fn(),
-    setSnappingFeatures: jest.fn(),
-    allowSnapping: jest.fn(),
+    setSnappingTolerance: vi.fn(),
+    setSnappingLayerStyle: vi.fn(),
+    setSnappingFeatures: vi.fn(),
+    allowSnapping: vi.fn(),
   };
 
   const snappingServiceMock = {
     snappingLayers$: new BehaviorSubject([]),
     snappingGeometries$: new BehaviorSubject([]),
     snappingActive$: of(snappingActive),
-    isSnappingActive: jest.fn(() => snappingActive),
+    isSnappingActive: vi.fn(() => snappingActive),
     hasSelectableLayers$: of(true),
     selectableLayers$: of([mockLayer]),
-    toggleLayer: jest.fn(),
-    enableSnapping: jest.fn(),
-    disableSnapping: jest.fn(),
+    toggleLayer: vi.fn(),
+    enableSnapping: vi.fn(),
+    disableSnapping: vi.fn(),
   };
 
   const mockStore = createMockStore({
@@ -49,7 +49,7 @@ const setup = async (snappingActive = false) => {
   });
 
   await render(SnappingComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: MapService, useValue: mapServiceMock },
       { provide: SnappingService, useValue: snappingServiceMock },

@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 
@@ -14,7 +15,7 @@ export class AuthenticatedUserTestHelper {
   public static provideAuthenticatedUserService(isAuthenticated: boolean, roles: string[], username?: string) {
     return {
       provide: AuthenticatedUserService,
-      useValue: { getUserDetails$: jest.fn(() => of({ isAuthenticated, roles, username })) },
+      useValue: { getUserDetails$: vi.fn(() => of({ isAuthenticated, roles, username })) },
     };
   }
 

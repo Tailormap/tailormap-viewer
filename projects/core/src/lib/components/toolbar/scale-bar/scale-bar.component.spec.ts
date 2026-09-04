@@ -1,12 +1,13 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ScaleBarComponent } from './scale-bar.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 describe('ScaleBarComponent', () => {
 
   test('should render', async () => {
     const mockTool = {
-      setTarget: jest.fn((el: HTMLElement) => {
+      setTarget: vi.fn((el: HTMLElement) => {
         el.innerHTML = 'TEST COMPLETED';
       }),
     };

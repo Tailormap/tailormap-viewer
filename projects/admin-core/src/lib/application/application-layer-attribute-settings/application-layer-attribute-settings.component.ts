@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { AppLayerSettingsModel, AttributeDescriptorModel, FeatureTypeModel, FeatureTypeSettingsModel } from '@tailormap-admin/admin-api';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FeatureTypeAttributesComponent } from '../../catalog/feature-type-attributes/feature-type-attributes.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 interface ApplicationLayerAttributeSettingsData {
   featureType: FeatureTypeModel;
@@ -13,11 +17,19 @@ interface ApplicationLayerAttributeSettingsResult {
 }
 
 @Component({
-  selector: 'tm-admin-application-layer-attribute-settings',
-  templateUrl: './application-layer-attribute-settings.component.html',
-  styleUrls: ['./application-layer-attribute-settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-layer-attribute-settings',
+    templateUrl: './application-layer-attribute-settings.component.html',
+    styleUrls: ['./application-layer-attribute-settings.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        FeatureTypeAttributesComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+    ],
 })
 export class ApplicationLayerAttributeSettingsComponent {
   private dialogRef = inject<MatDialogRef<ApplicationLayerAttributeSettingsResult>>(MatDialogRef);

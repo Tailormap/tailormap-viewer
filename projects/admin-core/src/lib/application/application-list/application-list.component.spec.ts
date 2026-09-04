@@ -1,7 +1,8 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationListComponent } from './application-list.component';
 import { getApplication } from '@tailormap-admin/admin-api';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
 import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
@@ -12,7 +13,6 @@ import { ConfigService } from '../../config/services/config.service';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { ApplicationService } from '../services/application.service';
 
 const setup = async (
@@ -36,11 +36,11 @@ const setup = async (
   const mockStore = createMockStore({
     initialState: { [applicationStateKey]: applicationState },
   });
-  mockStore.dispatch = jest.fn();
-  const configService = { getConfigValue$: jest.fn(() => of('app2')) };
-  const loadApplications = jest.fn();
+  mockStore.dispatch = vi.fn();
+  const configService = { getConfigValue$: vi.fn(() => of('app2')) };
+  const loadApplications = vi.fn();
   await render(ApplicationListComponent, {
-    imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
+    imports: [ MatListModule, MatIconTestingModule ],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },

@@ -4,13 +4,19 @@ import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectDisabledComponentsForSelectedApplication, selectDraftApplication3dEnabled } from '../../state/application.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-components-list',
-  templateUrl: './components-list.component.html',
-  styleUrls: ['./components-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-components-list',
+    templateUrl: './components-list.component.html',
+    styleUrls: ['./components-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatSelectionList,
+        MatListItem,
+        AsyncPipe,
+    ],
 })
 export class ComponentsListComponent implements OnInit, OnDestroy {
   private configurationComponentRegistryService = inject(ConfigurationComponentRegistryService);

@@ -5,7 +5,7 @@ export enum AuthorizationRuleDecision {
 
 export interface AuthorizationRuleGroup {
   groupName: string;
-  decisions: { [name: string]: AuthorizationRuleDecision },
+  decisions: { [name: string]: AuthorizationRuleDecision };
 }
 
 export enum AuthorizationGroups {

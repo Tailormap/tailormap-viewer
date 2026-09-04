@@ -1,40 +1,37 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { UserEditComponent } from './user-edit.component';
 import { of } from 'rxjs';
 import { getUser } from '@tailormap-admin/admin-api';
-import { UserFormComponent } from '../user-form/user-form.component';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { UserService } from '../services/user.service';
 import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SpinnerButtonComponent, SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
     paramMap: of({ get: () => 'user1' }),
   };
   const userService = {
-    selectUser: jest.fn(),
+    selectUser: vi.fn(),
     getUserByName$: () => hasUser ? of(getUser({ username: 'user1', name: 'user 1', groupNames: [] })) : of(null),
-    deleteUser$: jest.fn(() => of(true)),
-    addOrUpdateUser$: jest.fn(() => of(true)),
-    getUsers$: jest.fn(() => of([])),
+    deleteUser$: vi.fn(() => of(true)),
+    addOrUpdateUser$: vi.fn(() => of(true)),
+    getUsers$: vi.fn(() => of([])),
   };
   const groupService = {
-    getGroups$: jest.fn(() => of([])),
+    getGroups$: vi.fn(() => of([])),
   };
   const router = {
-    navigateByUrl: jest.fn(),
+    navigateByUrl: vi.fn(),
   };
   await render(UserEditComponent, {
-    declarations: [ UserFormComponent, SaveButtonComponent, SpinnerButtonComponent, PasswordFieldComponent ],
-    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
+    imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserService, useValue: userService },
       { provide: GroupService, useValue: groupService },
@@ -60,7 +57,7 @@ describe('UserEditComponent', () => {
   test('should update user', async () => {
     const { userService } = await setup(true);
     await userEvent.type(screen.getByLabelText('Name'), '23');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(screen.getByLabelText('Name')).toHaveValue('user 123');
     });
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save');

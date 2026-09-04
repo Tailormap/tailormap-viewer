@@ -1,11 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { ApplicationFormComponent } from './application-form.component';
 import { TailormapAdminApiV1Service, getApplication, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { getBoundsModel } from '@tailormap-viewer/api';
-import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
@@ -14,7 +12,7 @@ import { applicationStateKey, initialApplicationState } from '../state/applicati
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
 const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
-  const onUpdate = jest.fn();
+  const onUpdate = vi.fn();
   const application = getApplication({
     id: '1',
     title: 'Test application',
@@ -22,8 +20,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
     maxExtent: getBoundsModel(),
   });
   await render(ApplicationFormComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ BoundsFieldComponent, AuthorizationEditComponent ],
+    imports: [MatIconTestingModule],
     inputs: {
       application: hasApp ? application : undefined,
     },
@@ -31,7 +28,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
       updateApplication: onUpdate,
     },
     providers: [
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       provideMockStore({ initialState: {
         [userStateKey]: initialUserState,
@@ -52,7 +49,7 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Name')).toHaveValue('');
     await userEvent.type(await screen.findByPlaceholderText('Name'), 'new-app');
     await userEvent.type(await screen.findByPlaceholderText('Title'), 'Cool application');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         application: {
           authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
@@ -81,7 +78,7 @@ describe('ApplicationFormComponent', () => {
     expect(await screen.findByPlaceholderText('Title')).toHaveValue(application.title);
     await userEvent.click(await screen.findByPlaceholderText('Projection'));
     await userEvent.click(await screen.findByText('EPSG:3857 (WGS 84 / Pseudo-Mercator)', { exact: false }));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         application: {
           authorizationRules: [],

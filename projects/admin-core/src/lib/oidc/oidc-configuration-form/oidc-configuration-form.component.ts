@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { DateTime } from 'luxon';
@@ -7,17 +7,40 @@ import { FormHelper } from '../../helpers/form.helper';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { OidcImageRemoveService } from '../services/oidc-image-remove.service';
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
+import { MatFormField, MatLabel, MatHint, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { NgClass } from '@angular/common';
+import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-oidc-configuration-form',
-  templateUrl: './oidc-configuration-form.component.html',
-  styleUrls: ['./oidc-configuration-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: OidcImageRemoveService },
+    selector: 'tm-admin-oidc-configuration-form',
+    templateUrl: './oidc-configuration-form.component.html',
+    styleUrls: ['./oidc-configuration-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: UPLOAD_REMOVE_SERVICE, useClass: OidcImageRemoveService },
+    ],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatInput,
+    AutoFocusDirective,
+    MatHint,
+    PasswordFieldComponent,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    NgClass,
+    SelectUploadComponent,
+    MatCheckbox,
+    ReactiveFormsModule,
   ],
-  standalone: false,
 })
 export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
 

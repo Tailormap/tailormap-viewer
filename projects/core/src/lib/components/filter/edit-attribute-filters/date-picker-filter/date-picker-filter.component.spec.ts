@@ -1,10 +1,10 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { DatePickerFilterComponent } from './date-picker-filter.component';
 import {
   AttributeFilterModel, AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ const setup = async (type: 'single' | 'range') => {
     editConfiguration: datePickerFilterEditConfiguration,
   };
   await render(DatePickerFilterComponent, {
-    imports: [ ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatInputModule, SharedImportsModule ],
+    imports: [ ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatInputModule ],
     inputs: { datePickerFilter },
   });
 };

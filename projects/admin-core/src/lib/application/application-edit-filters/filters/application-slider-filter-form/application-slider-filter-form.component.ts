@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, input, OnInit, Output, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AttributeType, FilterConditionEnum, FilterToolEnum, UpdateSliderFilterModel, SliderFilterInputModeEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
@@ -7,13 +7,25 @@ import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs';
 import { FormHelper } from '../../../../helpers/form.helper';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'tm-admin-application-slider-filter-form',
-  templateUrl: './application-slider-filter-form.component.html',
-  styleUrls: ['./application-slider-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-slider-filter-form',
+    templateUrl: './application-slider-filter-form.component.html',
+    styleUrls: ['./application-slider-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatButton,
+        MatInput,
+    ],
 })
 export class ApplicationSliderFilterFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

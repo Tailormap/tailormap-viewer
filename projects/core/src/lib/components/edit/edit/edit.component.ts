@@ -10,7 +10,7 @@ import {
   setEditActive, setEditCopyOtherLayerFeaturesActive, setEditCopyOtherLayerFeaturesDisabled, setEditCreateNewFeatureActive,
   setSelectedEditLayer,
 } from '../state/edit.actions';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { selectEditableLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, withLatestFrom } from 'rxjs/operators';
@@ -23,13 +23,37 @@ import {
 } from '@tailormap-viewer/api';
 import { DrawingType, MapService, ScaleHelper } from '@tailormap-viewer/map';
 import { ComponentConfigHelper } from '../../../shared';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatBadge } from '@angular/material/badge';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { AutoFocusDirective, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit',
+    templateUrl: './edit.component.html',
+    styleUrls: ['./edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        ReactiveFormsModule,
+        AutoFocusDirective,
+        MatOption,
+        MatButton,
+        TooltipDirective,
+        MatMenuTrigger,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatBadge,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class EditComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

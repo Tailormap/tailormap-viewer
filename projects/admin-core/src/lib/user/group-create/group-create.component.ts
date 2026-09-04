@@ -1,16 +1,24 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { GroupService } from '../services/group.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { GroupFormComponent } from '../group-form/group-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-group-create',
-  templateUrl: './group-create.component.html',
-  styleUrls: ['./group-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-group-create',
+    templateUrl: './group-create.component.html',
+    styleUrls: ['./group-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        GroupFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class GroupCreateComponent implements OnDestroy {
   private groupDetailsService = inject(GroupService);

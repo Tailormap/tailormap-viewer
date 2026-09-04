@@ -1,13 +1,19 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, inject } from '@angular/core';
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { MapService } from '@tailormap-viewer/map';
+import { NgStyle, AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'tm-map-spinner',
-  templateUrl: './map-spinner.component.html',
-  styleUrls: ['./map-spinner.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-map-spinner',
+    templateUrl: './map-spinner.component.html',
+    styleUrls: ['./map-spinner.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgStyle,
+        MatProgressSpinner,
+        AsyncPipe,
+    ],
 })
 export class MapSpinnerComponent implements OnInit {
   private mapService = inject(MapService);

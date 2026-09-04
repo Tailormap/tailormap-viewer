@@ -1,51 +1,56 @@
+import { describe, test, expect, vi } from 'vitest';
 import { EditMobilePanelComponent } from './edit-mobile-panel.component';
 import { render } from '@testing-library/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
-import { AuthenticatedUserService } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
 import { ComponentRegistrationService } from '../../../services';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
-import { MapService } from '@tailormap-viewer/map';
 import { selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
+import { getFullInitialAppState } from '../../../test-helpers/full-app-state.mock';
 
 const setup = async (visible: boolean) => {
   const menubarServiceMock = {
-    isComponentVisible$: jest.fn(() => of(visible)),
-    setMobilePanelHeight: jest.fn(),
-    toggleActiveComponent: jest.fn(),
+    isComponentVisible$: vi.fn(() => of(visible)),
+    setMobilePanelHeight: vi.fn(),
+    toggleActiveComponent: vi.fn(),
+    setDialogTitle: vi.fn(),
   };
 
   const authenticatedUserServiceMock = {
-    getUserDetails$: jest.fn(() => of({ isAuthenticated: true })),
+    getUserDetails$: vi.fn(() => of({ isAuthenticated: true })),
   };
 
   const componentRegistrationServiceMock = {
-    registerComponent: jest.fn(),
-    deregisterComponent: jest.fn(),
+    registerComponent: vi.fn(),
+    deregisterComponent: vi.fn(),
   };
 
   const mobileLayoutServiceMock = {
     isMobileLayoutEnabled$: of(true),
   };
 
-  const mapServiceMock = {
-    someToolsEnabled$: jest.fn(() => of(false)),
-  };
+  // EditComponent's constructor does `someToolsEnabled$(...).pipe(first(enabled => enabled))` when opened
+  // from the mobile panel, so this must not complete without ever emitting `true` (of(false) would throw EmptyError).
+  const someToolsEnabled$ = new BehaviorSubject(false);
+  const mapServiceMock = getMapServiceMock(null, null, { someToolsEnabled$: vi.fn(() => someToolsEnabled$.asObservable()) });
 
   const { container } = await render(EditMobilePanelComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       provideMockStore({
-        initialState: {},
+        initialState: getFullInitialAppState(),
         selectors: [{ selector: selectEditOpenedFromFeatureInfo, value: false }],
       }),
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: AuthenticatedUserService, useValue: authenticatedUserServiceMock },
       { provide: ComponentRegistrationService, useValue: componentRegistrationServiceMock },
       { provide: MobileLayoutService, useValue: mobileLayoutServiceMock },
-      { provide: MapService, useValue: mapServiceMock },
+      mapServiceMock.provider,
+      { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
     ],
   });
 

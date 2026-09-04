@@ -1,7 +1,14 @@
 function getInvalidImportsRule(projectName, allowOpenLayers, allowAdmin) {
   const rule = {
     // node packages
-    paths: ["assert", "buffer", "child_process", "cluster", "crypto", "dgram", "dns", "domain", "events", "freelist", "fs", "http", "https", "module", "net", "os", "path", "punycode", "querystring", "readline", "repl", "smalloc", "stream", "string_decoder", "sys", "timers", "tls", "tracing", "tty", "url", "util", "vm", "zlib"],
+    paths: [
+      "assert", "buffer", "child_process", "cluster", "crypto", "dgram", "dns", "domain", "events", "freelist", "fs", "http", "https", "module", "net", "os", "path", "punycode", "querystring", "readline", "repl", "smalloc", "stream", "string_decoder", "sys", "timers", "tls", "tracing", "tty", "url", "util", "vm", "zlib",
+      {
+        name: "@testing-library/angular",
+        importNames: ["waitFor"],
+        message: "`waitFor` from @testing-library/angular only detects Jest fake timers, so it hangs until the real test timeout when used with vi.useFakeTimers(). Use `vi.waitFor` from 'vitest' instead."
+      }
+    ],
     patterns: [
       // do not allow circular references to own project
       {

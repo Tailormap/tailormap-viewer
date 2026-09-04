@@ -7,13 +7,30 @@ import { AppLayerModel } from '@tailormap-viewer/api';
 import { setSelectedFilterGroup } from '../state/filter-component.actions';
 import { RemoveFilterService } from '../services/remove-filter.service';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
+import { MatCard, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { FilterDescriptionComponent } from '../../../filter/filter-description/filter-description.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIconButton } from '@angular/material/button';
+import { EditAttributeFiltersComponent } from '../edit-attribute-filters/edit-attribute-filters.component';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-filter-list-item',
-  templateUrl: './filter-list-item.component.html',
-  styleUrls: ['./filter-list-item.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-filter-list-item',
+    templateUrl: './filter-list-item.component.html',
+    styleUrls: ['./filter-list-item.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatCard,
+        MatCardContent,
+        MatIcon,
+        TooltipDirective,
+        FilterDescriptionComponent,
+        MatCardActions,
+        MatCheckbox,
+        MatIconButton,
+        EditAttributeFiltersComponent,
+    ],
 })
 export class FilterListItemComponent {
 

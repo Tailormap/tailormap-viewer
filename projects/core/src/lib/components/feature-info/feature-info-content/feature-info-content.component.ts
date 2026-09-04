@@ -3,7 +3,7 @@ import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { combineLatest, map, Observable, take } from 'rxjs';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, ErrorMessageComponent, TooltipDirective, HtmlifyPipe } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { selectAllFiltersForAttribute } from '../../../state';
@@ -12,13 +12,28 @@ import { AttributeType } from '@tailormap-viewer/api';
 import { FeaturesFilterHelper, FilterTypeHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
+import { FeatureInfoTemplateRendererComponent } from '../feature-info-template-renderer/feature-info-template-renderer.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-feature-info-content',
-  templateUrl: './feature-info-content.component.html',
-  styleUrls: ['./feature-info-content.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-feature-info-content',
+    templateUrl: './feature-info-content.component.html',
+    styleUrls: ['./feature-info-content.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ErrorMessageComponent,
+        FeatureInfoTemplateRendererComponent,
+        MatIcon,
+        TooltipDirective,
+        MatIconButton,
+        MatTooltip,
+        MatButton,
+        AsyncPipe,
+        HtmlifyPipe,
+    ],
 })
 export class FeatureInfoContentComponent {
   public attachmentHelper = inject(AttachmentService);

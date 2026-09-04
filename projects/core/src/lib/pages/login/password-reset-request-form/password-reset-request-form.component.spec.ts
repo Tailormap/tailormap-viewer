@@ -1,10 +1,11 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { PasswordResetRequestFormComponent } from './password-reset-request-form.component';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 describe('PasswordResetRequestFormComponent', () => {
 
@@ -17,7 +18,7 @@ describe('PasswordResetRequestFormComponent', () => {
   });
 
   test('triggers requestReset method', async () => {
-    const requestResetFn = jest.fn(() => of<boolean>(true));
+    const requestResetFn = vi.fn(() => of<boolean>(true));
     await render(PasswordResetRequestFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [ReactiveFormsModule], declarations: [AutoFocusDirective], inputs: {
         requestReset$: requestResetFn,

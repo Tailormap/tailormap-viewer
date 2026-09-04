@@ -1,32 +1,16 @@
 
-@if (!menuTrigger) {
-  <button mat-icon-button
-    (click)="handleClick()"
-    [tmTooltip]="tooltip || ''"
-    matTooltipPosition="right"
-    [matBadge]="badgeCount"
-    matBadgeSize="small"
-    matBadgeColor="primary"
-    [class.button--active]="(active$ | async) ?? false"
-    [aria-expanded]="active$ | async">
-    @if (icon) {
-      <mat-icon [svgIcon]="icon"></mat-icon>
-    }
-    <ng-content></ng-content>
-  </button>
-} @else {
-  @if (menuTrigger) {
-    <button
-      mat-icon-button
-      (click)="handleClick()"
-      [matMenuTriggerFor]="menuTrigger"
-      [tmTooltip]="tooltip || ''"
-      matTooltipPosition="right"
-      [class.button--active]="(active$ | async) ?? false">
-      @if (icon) {
-        <mat-icon [svgIcon]="icon"></mat-icon>
-      }
-      <ng-content></ng-content>
-    </button>
+<button mat-icon-button
+  (click)="handleClick()"
+  [tmTooltip]="tooltip || ''"
+  matTooltipPosition="right"
+  [matMenuTriggerFor]="menuTrigger"
+  [matBadge]="menuTrigger ? null : badgeCount"
+  matBadgeSize="small"
+  matBadgeColor="primary"
+  [class.button--active]="(active$ | async) ?? false"
+  [aria-expanded]="menuTrigger ? null : (active$ | async)">
+  @if (icon) {
+    <mat-icon [svgIcon]="icon"></mat-icon>
   }
-}
+  <ng-content></ng-content>
+</button>

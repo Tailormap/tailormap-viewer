@@ -5,17 +5,27 @@ import { Observable, of, Subject, takeUntil, tap, withLatestFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { TypesHelper } from '@tailormap-viewer/shared';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { GeoServiceHelper } from '../helpers/geo-service.helper';
 import { FeatureSourceProtocolEnum } from '@tailormap-admin/admin-api';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-feature-type-selector',
-  templateUrl: './feature-type-selector.component.html',
-  styleUrls: ['./feature-type-selector.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-type-selector',
+    templateUrl: './feature-type-selector.component.html',
+    styleUrls: ['./feature-type-selector.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class FeatureTypeSelectorComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

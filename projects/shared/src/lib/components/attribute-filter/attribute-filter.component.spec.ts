@@ -1,5 +1,6 @@
+import { describe, test, expect, vi } from 'vitest';
 import { AttributeFilterComponent } from './attribute-filter.component';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { AttributeType } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { FilterConditionEnum } from '@tailormap-viewer/api';
@@ -14,7 +15,7 @@ import { of } from 'rxjs';
 describe('AttributeFilterComponent', () => {
 
   test('should create a filter', async () => {
-    const filterChangedFn = jest.fn(() => {});
+    const filterChangedFn = vi.fn(() => {});
     await render(AttributeFilterComponent, {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
       inputs: {
@@ -26,7 +27,7 @@ describe('AttributeFilterComponent', () => {
     await userEvent.click(screen.getByLabelText('Select condition'));
     await userEvent.click(await screen.findByText('Contains'));
     await userEvent.type(screen.getByRole('textbox'), 'test');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(filterChangedFn).toHaveBeenCalledWith({
         condition: FilterConditionEnum.STRING_LIKE_KEY,
         value: ['test'],
@@ -37,7 +38,7 @@ describe('AttributeFilterComponent', () => {
   });
 
   test('should not render case sensitive for unique values', async () => {
-    const filterChangedFn = jest.fn(() => {});
+    const filterChangedFn = vi.fn(() => {});
     const uniqueValuesLoader$ = of([ 'value1', 'value2' ]);
     await render(AttributeFilterComponent, {
       imports: [ ReactiveFormsModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule ],
@@ -51,13 +52,13 @@ describe('AttributeFilterComponent', () => {
     await userEvent.click(screen.getByLabelText('Select condition'));
     expect(screen.queryByText('Case sensitive')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Choose values'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(screen.getByText('value1')).toBeInTheDocument();
       expect(screen.queryByText('Case sensitive')).not.toBeInTheDocument();
     });
     await userEvent.click(screen.getByText('value1'));
     await userEvent.click(screen.getByText('value2'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(filterChangedFn).toHaveBeenCalledWith({
         condition: FilterConditionEnum.UNIQUE_VALUES_KEY,
         value: [ 'value1', 'value2' ],

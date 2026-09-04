@@ -1,13 +1,13 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogBaseTreeComponent } from './catalog-base-tree.component';
-import { LoadingStateEnum, SharedModule, TreeService } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
 import { CatalogNodeModel, getCatalogTree, getGeoService, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import userEvent from '@testing-library/user-event';
 import { createMockStore } from '@ngrx/store/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node/catalog-base-tree-node.component';
 import { Store } from '@ngrx/store';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { TestBed } from '@angular/core/testing';
@@ -22,17 +22,16 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       [catalogStateKey]: { ...initialCatalogState, ...state },
     },
   });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   const mockApiService = {
-    getGeoServices$: jest.fn(() => {
+    getGeoServices$: vi.fn(() => {
       return of([getGeoService()]);
     }),
   };
-  const loadCatalog = jest.fn();
+  const loadCatalog = vi.fn();
   await render(CatalogBaseTreeComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [CatalogBaseTreeNodeComponent],
+    imports: [MatIconTestingModule],
     providers: [
       TreeService,
       { provide: Store, useValue: mockStore },

@@ -1,39 +1,37 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GroupEditComponent } from './group-edit.component';
 import { of } from 'rxjs';
 import { getGroup } from '@tailormap-admin/admin-api';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { GroupFormComponent } from '../group-form/group-form.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
     paramMap: of({ get: () => 'secret-group' }),
   };
   const groupService = {
-    selectGroup: jest.fn(),
+    selectGroup: vi.fn(),
     getGroups$: () => of([]),
     getGroupByName$: () => hasGroup ? of(getGroup({ name: 'secret-group', description: 'some secret group' })) : of(null),
-    deleteGroup$: jest.fn(() => of(true)),
-    addOrUpdateGroup$: jest.fn(() => of(true)),
+    deleteGroup$: vi.fn(() => of(true)),
+    addOrUpdateGroup$: vi.fn(() => of(true)),
   };
   const oidcConfigurationService = {
-    getOIDCConfigurations$: jest.fn(() => of([])),
+    getOIDCConfigurations$: vi.fn(() => of([])),
   };
   const router = {
-    navigateByUrl: jest.fn(),
+    navigateByUrl: vi.fn(),
   };
   await render(GroupEditComponent, {
-    declarations: [ GroupFormComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [ SharedImportsModule, MatIconTestingModule, SharedAdminComponentsModule ],
+    imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },
       { provide: Router, useValue: router },

@@ -1,24 +1,19 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceFormDialogComponent } from './feature-source-form-dialog.component';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { FeatureSourceService } from '../services/feature-source.service';
-import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (editMode = false) => {
-  const dialogRefMock = { close: jest.fn() };
-  const featureServiceMock = { createFeatureSource$: jest.fn(() => of({})), updateFeatureSource$: jest.fn(() => of({})) };
+  const dialogRefMock = { close: vi.fn() };
+  const featureServiceMock = { createFeatureSource$: vi.fn(() => of({})), updateFeatureSource$: vi.fn(() => of({})) };
   await render(FeatureSourceFormDialogComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: MatDialogRef, useValue: dialogRefMock },
       { provide: FeatureSourceService, useValue: featureServiceMock },
@@ -37,16 +32,16 @@ const setup = async (editMode = false) => {
 describe('FeatureSourceFormDialogComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render and handle cancel', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
     await ue.click(screen.getByText('Cancel'));
@@ -54,8 +49,8 @@ describe('FeatureSourceFormDialogComponent', () => {
   });
 
   test('should save new node', async () => {
-    jest.useFakeTimers();
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    vi.useFakeTimers();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
 
     const { featureServiceMock, dialogRefMock } = await setup();
     expect(screen.getByText('Create new feature source')).toBeInTheDocument();
@@ -68,7 +63,7 @@ describe('FeatureSourceFormDialogComponent', () => {
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
     await ue.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.createFeatureSource$).toHaveBeenCalledWith({
         title: 'My WFS service',
         protocol: 'WFS',
@@ -81,7 +76,7 @@ describe('FeatureSourceFormDialogComponent', () => {
   });
 
   test('should edit node', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureServiceMock, dialogRefMock } = await setup(true);
     expect(screen.getByText('Edit wfs source')).toBeInTheDocument();
     await ue.type(await screen.findByPlaceholderText('URL'), '/path');
