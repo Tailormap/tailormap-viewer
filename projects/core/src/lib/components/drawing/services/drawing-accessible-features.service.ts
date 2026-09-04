@@ -6,6 +6,8 @@ import { setSelectedFeature } from '../state/drawing.actions';
 import { selectDrawingFeatures } from '../state/drawing.selectors';
 import { MapService } from '@tailormap-viewer/map';
 import { take } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -14,18 +16,17 @@ export class DrawingAccessibleFeaturesService {
   private store$ = inject(Store);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
+  private snackBar = inject(MatSnackBar);
 
   private proxyContainer: HTMLElement | null = null;
   private proxyElements = new Map<string, HTMLElement>();
 
   public initAccessibleFeaturesContainer() {
+    if (this.proxyContainer) {
+      return;
+    }
     this.proxyContainer = document.createElement('div');
     this.proxyContainer.id = 'drawing-feature-proxies';
-    this.proxyContainer.style.position = 'absolute';
-    this.proxyContainer.style.left = '-9999px';
-    this.proxyContainer.style.width = '1px';
-    this.proxyContainer.style.height = '1px';
-    this.proxyContainer.style.overflow = 'hidden';
 
     this.mapService.getMapTargetElement$().pipe(take(1)).subscribe(container => {
       if (container && this.proxyContainer) {
@@ -51,42 +52,53 @@ export class DrawingAccessibleFeaturesService {
     }
 
     // Create or update proxies for features
-    features.forEach((feature, index) => {
+    features.forEach(feature => {
       if (!this.proxyElements.has(feature.__fid)) {
-        const proxy = this.createProxyElement(feature, index);
-        this.proxyContainer?.appendChild(proxy);
-        this.proxyElements.set(feature.__fid, proxy);
+        const proxyElement = this.createProxyElement(feature);
+        this.proxyContainer?.appendChild(proxyElement);
+        this.proxyElements.set(feature.__fid, proxyElement);
       }
     });
   }
 
-  private createProxyElement(feature: DrawingFeatureModel, index: number): HTMLElement {
-    const proxy = document.createElement('button');
-    proxy.type = 'button';
-    proxy.setAttribute('data-feature-fid', feature.__fid);
-    proxy.className = 'drawing-feature-proxy';
+  private createProxyElement(feature: DrawingFeatureModel): HTMLElement {
+    const proxyElement = document.createElement('div');
+    proxyElement.tabIndex = 0;
+    proxyElement.setAttribute('data-feature-fid', feature.__fid);
+    proxyElement.className = 'drawing-feature-proxy';
 
-    // Accessible label based on feature type and description
-    const label = feature.attributes?.style.description || `${feature.attributes?.type} ${index + 1}`;
-    proxy.textContent = label;
-    proxy.setAttribute('aria-label', `Select ${label} on map`);
+    const featureLabel = feature.attributes?.style.description || feature.attributes?.type;
+    const message = $localize `:@@core.drawing.edit-feature-keyboard:Edit ${featureLabel},
+      use arrow keys to move the feature, use '+' and '-' keys to resize, and use 'r' and 'shift+r' to rotate.`;
+    proxyElement.setAttribute('aria-label', message);
 
-    // Handle focus - select the feature on the map
-    proxy.addEventListener('focus', () => {
-      if (proxy.matches(':focus-visible')) {
+    proxyElement.addEventListener('focus', () => {
+      if (proxyElement.matches(':focus-visible')) {
         this.store$.dispatch(setSelectedFeature({ fid: feature.__fid }));
+        this.showSnackbarMessage(message);
       }
     });
 
-    proxy.addEventListener('blur', () => {
+    proxyElement.addEventListener('blur', () => {
       this.store$.dispatch(setSelectedFeature({ fid: null }));
     });
 
-    return proxy;
+    return proxyElement;
   }
 
-  public destroy() {
+  public destroyAccessibleFeaturesContainer() {
     this.proxyContainer?.remove();
+    this.proxyContainer = null;
     this.proxyElements.clear();
+  }
+
+  private showSnackbarMessage(msg: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message: msg,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 }

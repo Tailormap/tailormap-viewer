@@ -105,7 +105,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
           this.drawingService.disableDrawingTools();
-          this.drawingAccessibleFeaturesService.destroy();
+          this.drawingAccessibleFeaturesService.destroyAccessibleFeaturesContainer();
         } else {
           this.drawingService.createDrawingTools({
             drawingLayerId: this.drawingLayerId,
