@@ -111,7 +111,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
             drawingLayerId: this.drawingLayerId,
             selectionStyle: this.selectionStyle,
           });
-          this.drawingAccessibleFeaturesService.initAccessibilityContainer();
+          this.drawingAccessibleFeaturesService.initAccessibleFeaturesContainer();
           this.enableSelectAndModify();
         }
       }),

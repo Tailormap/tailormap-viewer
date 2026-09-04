@@ -18,7 +18,7 @@ export class DrawingAccessibleFeaturesService {
   private proxyContainer: HTMLElement | null = null;
   private proxyElements = new Map<string, HTMLElement>();
 
-  public initAccessibilityContainer() {
+  public initAccessibleFeaturesContainer() {
     this.proxyContainer = document.createElement('div');
     this.proxyContainer.id = 'drawing-feature-proxies';
     this.proxyContainer.style.position = 'absolute';
