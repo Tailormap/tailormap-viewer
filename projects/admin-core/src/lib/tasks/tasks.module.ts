@@ -5,11 +5,9 @@ import { TasksListComponent } from './tasks-list/tasks-list.component';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
 import { MatListItem, MatSelectionList } from '@angular/material/list';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 import { tasksStateKey } from './state/tasks.state';
 import { tasksReducer } from './state/tasks.reducer';
-import { TasksEffects } from './state/tasks.effects';
 import { TaskDetailsComponent } from './task-details/task-details.component';
 import { TaskDetailsRowComponent } from './task-details-row/task-details-row.component';
 
@@ -24,14 +22,15 @@ import { TaskDetailsRowComponent } from './task-details-row/task-details-row.com
     CommonModule,
     SharedModule,
     SharedAdminComponentsModule,
-    StoreModule.forFeature(tasksStateKey, tasksReducer),
-    EffectsModule.forFeature([TasksEffects]),
     MatListItem,
     MatSelectionList,
   ],
   exports: [
     TasksHomeComponent,
     TasksListComponent,
+  ],
+  providers: [
+    provideState(tasksStateKey, tasksReducer),
   ],
 })
 export class TasksModule { }

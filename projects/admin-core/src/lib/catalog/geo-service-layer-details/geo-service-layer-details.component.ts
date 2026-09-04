@@ -9,10 +9,10 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { LayerSettingsModel } from '@tailormap-admin/admin-api';
 import { GeoServiceLayerSettingsModel } from '../models/geo-service-layer-settings.model';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
+import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 @Component({
   selector: 'tm-admin-geo-service-layer-details',

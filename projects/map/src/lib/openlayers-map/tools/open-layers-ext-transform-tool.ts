@@ -48,6 +48,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     private toolConfig: ExtTransformToolConfigModel,
     private olMap: OlMap,
     private ngZone: NgZone,
+    private eventManager: OpenLayersEventManager,
   ) {}
 
   public isActive = false;
@@ -86,7 +87,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     this.fixCursorBug();
     this.enableVertices(source);
     this.createKeyboardControl(args.feature);
-    OpenLayersEventManager.onMapMove$()
+    this.eventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
         if (this.interaction) {
@@ -205,7 +206,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private fixCursorBug() {
     let timer: number | null = null;
-    OpenLayersEventManager.onMouseMove$().pipe(takeUntil(this.destroyed)).subscribe(e => {
+    this.eventManager.onMouseMove$().pipe(takeUntil(this.destroyed)).subscribe(e => {
       if (!this.interaction) {
         return;
       }

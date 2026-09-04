@@ -4,13 +4,14 @@ import { Observable, of, take } from 'rxjs';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { loadForms, setFormListFilter } from '../state/form.actions';
+import { setFormListFilter } from '../state/form.actions';
 import {
   FormList,
   selectFilteredFormsList, selectFormsListFilter, selectFormsLoadError, selectFormsLoadStatus,
 } from '../state/form.selectors';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
-import { loadCatalog } from '../../catalog/state/catalog.actions';
+import { CatalogService } from '../../catalog/services/catalog.service';
+import { FormService } from '../services/form.service';
 
 @Component({
   selector: 'tm-admin-form-list',
@@ -22,6 +23,8 @@ import { loadCatalog } from '../../catalog/state/catalog.actions';
 export class FormListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private catalogService = inject(CatalogService);
+  private formService = inject(FormService);
 
 
   public filter = new FormControl('');
@@ -43,20 +46,20 @@ export class FormListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadForms());
+          this.formService.loadForms();
         }
       });
     this.store$.select(selectCatalogLoadStatus)
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadCatalog());
+          this.catalogService.loadCatalog();
         }
       });
   }
 
   public onRetryClick() {
-    this.store$.dispatch(loadForms());
+    this.formService.loadForms();
   }
 
 }

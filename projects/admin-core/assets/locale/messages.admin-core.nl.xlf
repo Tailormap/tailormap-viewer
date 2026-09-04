@@ -1977,6 +1977,10 @@
         <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
         <target>Bij inloggen worden groepsleden automatisch toegevoegd aan de groep in &apos;Alias voor groep&apos;. Dit is handig om een single sign-on groep te koppelen aan een andere Tailormap groep, zoals &apos;admin&apos;. Geneste aliassen worden niet ondersteund.</target>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for-label" datatype="html">
+        <source>Set a display label if the group name is not descriptive enough, for example an object-id/guid.</source>
+        <target>Stel een weergave-label in als de groepsnaam niet beschrijvend genoeg is, bijvoorbeeld een object-id/guid.</target>
+      </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
         <target>Verwijder groep <x id="PH" equiv-text="group.name"/></target>
@@ -2144,6 +2148,14 @@
       <trans-unit id="admin-core.oidc.default-authorities-hint" datatype="html">
         <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
         <target>Komma-gescheiden lijst van groepen die aan elke ingelogde gebruiker worden toegekend (inclusief aliases voor die groepen)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-checkbox" datatype="html">
+        <source>Disable automatic group creation</source>
+        <target>Automatisch aanmaken van groepen uitschakelen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-hint" datatype="html">
+        <source>If checked, groups will not be automatically created for roles received from the identity provider. This is useful if you want to manage groups manually or many unnecessary groups are received unfiltered from the identity provider.</source>
+        <target>Als dit is aangevinkt, worden groepen niet automatisch aangemaakt voor rollen die van de identiteitsprovider worden ontvangen. Dit is handig als u groepen handmatig wilt beheren of als er veel onnodige groepen ongefilterd van de identiteitsprovider worden ontvangen.</target>
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>

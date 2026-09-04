@@ -1,10 +1,10 @@
-import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { TailormapAdminApiV1Service, UserModel } from '@tailormap-admin/admin-api';
+import { ApiResponseHelper, TailormapAdminApiV1Service, UserModel } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { Store } from '@ngrx/store';
-import { addUser, deleteUser, loadUsers, updateUser } from '../state/user.actions';
+import { addUser, deleteUser, loadUsersFailed, loadUsersStart, loadUsersSuccess, updateUser } from '../state/user.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectUsers, selectUsersLoadStatus } from '../state/user.selectors';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
@@ -47,12 +47,34 @@ export class UserService {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-            this.store$.dispatch(loadUsers());
+            this.loadUsers();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectUsers)),
       );
+  }
+
+  public loadUsers(): void {
+    this.store$.select(selectUsersLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadUsersStart());
+        this.adminApiService.getUsers$()
+          .pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.users.error-loading-users:Error while loading list of users` })),
+          )
+          .subscribe(response => {
+            if (ApiResponseHelper.isErrorResponse(response)) {
+              this.store$.dispatch(loadUsersFailed({ error: response.error }));
+              return;
+            }
+            this.store$.dispatch(loadUsersSuccess({ users: response }));
+          });
+      });
   }
 
   public getUserByName$(username: string): Observable<UserModel | null> {

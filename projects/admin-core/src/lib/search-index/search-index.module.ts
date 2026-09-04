@@ -1,12 +1,10 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { searchIndexStateKey } from './state/search-index.state';
 import { searchIndexReducer } from './state/search-index.reducer';
 import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
-import { EffectsModule } from '@ngrx/effects';
-import { SearchIndexEffects } from './state/search-index.effects';
 import { SearchIndexHomeComponent } from './search-index-home/search-index-home.component';
 import { SearchIndexEditComponent } from './search-index-edit/search-index-edit.component';
 import { SearchIndexCreateComponent } from './search-index-create/search-index-create.component';
@@ -32,8 +30,6 @@ import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(searchIndexStateKey, searchIndexReducer),
-    EffectsModule.forFeature([SearchIndexEffects]),
     SharedAdminComponentsModule,
     CatalogModule,
     FormModule,
@@ -44,11 +40,10 @@ import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular
   exports: [
     SearchIndexListComponent,
   ],
+  providers: [
+    provideState(searchIndexStateKey, searchIndexReducer),
+    provideEnvironmentInitializer(() => inject(SearchIndexService).listenForSearchIndexChanges()),
+  ],
 })
 export class SearchIndexModule {
-  constructor() {
-    const searchIndexService = inject(SearchIndexService);
-
-    searchIndexService.listenForSearchIndexChanges();
-  }
 }

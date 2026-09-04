@@ -18,7 +18,7 @@ export class ApplicationStyleService implements OnDestroy {
 
   private static initialPrimaryColor = CssHelper.getCssVariableValue('--primary-color');
 
-  constructor() {
+  public init() {
     this.store$.select(selectViewerStyling)
       .pipe(takeUntil(this.destroyed), distinctUntilChanged())
       .subscribe((appStyling) => {

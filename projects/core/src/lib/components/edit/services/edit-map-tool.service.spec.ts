@@ -7,12 +7,17 @@ import { of } from "rxjs";
 import { ApplicationLayerService } from "../../../map/services/application-layer.service";
 import { SharedImportsModule } from "@tailormap-viewer/shared";
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { FeatureInfoService } from '../../feature-info';
 
 describe('EditMapToolService', () => {
 
   const setup = (editStatus: string) => {
     const mockApplicationLayerService = {
       getLayerDetails$: () => of( { details: { geometryAttribute: 'geom' } }),
+    };
+    const mockFeatureInfoService = {
+      getEditableFeatures$: jest.fn(() => of(null)),
+      getFeaturesForLayer$: jest.fn(() => of(null)),
     };
     const mapServiceMock = getMapServiceMock();
     TestBed.configureTestingModule({
@@ -21,6 +26,7 @@ describe('EditMapToolService', () => {
         EditMapToolService,
         mapServiceMock.provider,
         { provide: ApplicationLayerService, useValue: mockApplicationLayerService },
+        { provide: FeatureInfoService, useValue: mockFeatureInfoService },
         provideMockStore({
           initialState: {
             edit: {

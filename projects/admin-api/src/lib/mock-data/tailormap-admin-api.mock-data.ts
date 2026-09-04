@@ -114,8 +114,9 @@ export const getGeoServiceSummary = (overrides?: Partial<GeoServiceSummaryModel>
 
 export const getGroup = (overrides?: Partial<GroupModel>): GroupModel => ({
   name: 'admin',
+  label: null,
   description: 'Administrators with full access',
-  systemGroup: true,
+  systemGroup: false,
   version: null,
   ...overrides,
 });

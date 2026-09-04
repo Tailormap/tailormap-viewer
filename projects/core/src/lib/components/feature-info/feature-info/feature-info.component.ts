@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, filter, Observable, of, Subject, takeUntil, tap } from 'rxjs';
+import { combineLatest, concatMap, filter, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
 import {
@@ -51,7 +51,7 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => this.tool = tool.id),
-        concatMap(({ tool }) => tool?.mapClick$ || of(null)),
+        switchMap(({ tool }) => tool?.mapClick$ || of(null)),
       )
       .subscribe(mapClick => {
         this.handleMapClick(mapClick);

@@ -6,7 +6,6 @@ import { MatListModule } from '@angular/material/list';
 import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
-import { loadApplications } from '../state/application.actions';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
@@ -14,6 +13,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { ApplicationService } from '../services/application.service';
 
 const setup = async (
   loadStatus: LoadingStateEnum = LoadingStateEnum.INITIAL,
@@ -38,6 +38,7 @@ const setup = async (
   });
   mockStore.dispatch = jest.fn();
   const configService = { getConfigValue$: jest.fn(() => of('app2')) };
+  const loadApplications = jest.fn();
   await render(ApplicationListComponent, {
     imports: [ SharedModule, MatListModule, MatIconTestingModule, SharedAdminComponentsModule ],
     providers: [
@@ -45,25 +46,25 @@ const setup = async (
       { provide: ConfigService, useValue: configService },
       { provide: ENVIRONMENT_CONFIG, useValue: { viewerBaseUrl: viewerUrl || '' } },
       { provide: APP_BASE_HREF, useValue: baseHref || '' },
+      { provide: ApplicationService, useValue: { loadApplications } },
     ],
   });
-  return { mockStore, appModels };
+  return { mockStore, appModels, loadApplications };
 };
 
 describe('ApplicationListComponent', () => {
 
   test('should render', async () => {
-    const { mockStore } = await setup();
+    const { loadApplications } = await setup();
     expect(await screen.findByText('Applications')).toBeInTheDocument();
-    expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
-    expect(mockStore.dispatch).toHaveBeenCalledWith(loadApplications());
+    expect(loadApplications).toHaveBeenCalledTimes(1);
   });
 
   test('should render spinner', async () => {
-    const { mockStore } = await setup(LoadingStateEnum.LOADING);
+    const { loadApplications } = await setup(LoadingStateEnum.LOADING);
     expect(await screen.findByText('Applications')).toBeInTheDocument();
     expect(await screen.findByRole('progressbar')).toBeInTheDocument();
-    expect(mockStore.dispatch).not.toHaveBeenCalled();
+    expect(loadApplications).not.toHaveBeenCalled();
   });
 
   test('should render list of applications', async () => {
@@ -80,13 +81,12 @@ describe('ApplicationListComponent', () => {
   });
 
   test('should render error message & retry loading', async () => {
-    const { mockStore } = await setup(LoadingStateEnum.FAILED, '', 'Something went wrong');
-    expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+    const { loadApplications } = await setup(LoadingStateEnum.FAILED, '', 'Something went wrong');
+    expect(loadApplications).toHaveBeenCalledTimes(1);
     expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
     expect(await screen.findByText('Retry')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Retry'));
-    expect(mockStore.dispatch).toHaveBeenCalledTimes(2);
-    expect(mockStore.dispatch).toHaveBeenCalledWith(loadApplications());
+    expect(loadApplications).toHaveBeenCalledTimes(2);
   });
 
   test('sets viewer url when on different base href', async () => {

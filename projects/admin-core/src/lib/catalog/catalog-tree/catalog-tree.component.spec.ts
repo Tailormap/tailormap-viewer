@@ -14,6 +14,7 @@ import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
 import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
+import { CatalogService } from '../services/catalog.service';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
@@ -23,19 +24,21 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   });
   const mockDispatch = jest.fn();
   mockStore.dispatch = mockDispatch;
+  const loadCatalog = jest.fn();
   await render(CatalogTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
     declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],
     providers: [
       { provide: Store, useValue: mockStore },
       provideHttpClient(),
+      { provide: CatalogService, useValue: { loadCatalog } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   const updateMockStore = (updatedState: Partial<CatalogState> = {}) => {
     mockStore.setState({ [catalogStateKey]: { ...initialCatalogState, ...updatedState } });
   };
-  return { mockStore, updateMockStore, mockDispatch };
+  return { mockStore, updateMockStore, mockDispatch, loadCatalog };
 };
 
 const getExtendedCatalogNodes = (catalogNodes: CatalogNodeModel[]) => {
@@ -49,8 +52,8 @@ const getExtendedCatalogNodes = (catalogNodes: CatalogNodeModel[]) => {
 describe('CatalogTreeComponent', () => {
 
   test('should trigger loading catalog', async () => {
-    const { mockDispatch } = await setup();
-    expect(mockDispatch).toHaveBeenCalledWith({ type: '[Admin/Catalog] Load Catalog' });
+    const { loadCatalog } = await setup();
+    expect(loadCatalog).toHaveBeenCalledTimes(1);
   });
 
   test('should render spinner when loading', async () => {

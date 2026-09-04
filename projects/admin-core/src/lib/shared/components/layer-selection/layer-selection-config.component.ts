@@ -7,7 +7,7 @@ import { take } from 'rxjs';
 import { MatSelectionListChange } from '@angular/material/list';
 import { Store } from '@ngrx/store';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
-import { loadCatalog } from '../../../catalog/state/catalog.actions';
+import { CatalogService } from '../../../catalog/services/catalog.service';
 import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
 import { selectExtendedAppLayerNodesForSelectedApplication } from '../../../application/state/application.selectors';
 
@@ -28,6 +28,7 @@ import { selectExtendedAppLayerNodesForSelectedApplication } from '../../../appl
 export class LayerSelectionConfigComponent implements ControlValueAccessor {
   private destroyRef = inject(DestroyRef);
   private store$ = inject(Store);
+  private catalogService = inject(CatalogService);
 
   public withAttributesOnly = input<boolean>(false);
   public changed = output<string[]>();
@@ -64,7 +65,7 @@ export class LayerSelectionConfigComponent implements ControlValueAccessor {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadCatalog());
+          this.catalogService.loadCatalog();
         }
       });
     this.filterControl.valueChanges

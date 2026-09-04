@@ -14,6 +14,7 @@ import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { CatalogService } from '../services/catalog.service';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
   const mockStore = createMockStore({
@@ -28,6 +29,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       return of([getGeoService()]);
     }),
   };
+  const loadCatalog = jest.fn();
   await render(CatalogBaseTreeComponent, {
     imports: [ SharedModule, MatIconTestingModule ],
     declarations: [CatalogBaseTreeNodeComponent],
@@ -35,11 +37,12 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       TreeService,
       { provide: Store, useValue: mockStore },
       { provide: TailormapAdminApiV1Service, useValue: mockApiService },
+      { provide: CatalogService, useValue: { loadCatalog } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   const treeService = TestBed.inject(TreeService);
-  return { mockStore, mockDispatch, mockApiService, treeService };
+  return { mockStore, mockDispatch, mockApiService, treeService, loadCatalog };
 };
 
 const getExtendedCatalogNodes = (catalogNodes: CatalogNodeModel[]) => {
@@ -53,8 +56,8 @@ const getExtendedCatalogNodes = (catalogNodes: CatalogNodeModel[]) => {
 describe('CatalogBaseTreeComponent', () => {
 
   test('should trigger loading catalog', async () => {
-    const { mockDispatch } = await setup();
-    expect(mockDispatch).toHaveBeenCalledWith({ type: '[Admin/Catalog] Load Catalog' });
+    const { loadCatalog } = await setup();
+    expect(loadCatalog).toHaveBeenCalledTimes(1);
   });
 
   test('should render spinner when loading', async () => {

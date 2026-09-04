@@ -13,6 +13,7 @@ const mockSnap = Snap as jest.MockedClass<typeof Snap>;
 const getFeaturesFn = (FeatureHelper as any).getFeatures;
 
 describe('OpenLayersSnappingManager', () => {
+  let manager: OpenLayersSnappingManager;
   let mockOlMap: { addInteraction: jest.Mock; removeInteraction: jest.Mock };
   let mockVectorSource: {
     getFeatures: jest.Mock;
@@ -25,6 +26,7 @@ describe('OpenLayersSnappingManager', () => {
   let mockSnapInstance: { setProperties: jest.Mock };
   beforeEach(() => {
     jest.resetAllMocks();
+    manager = new OpenLayersSnappingManager();
     mockVectorSource = {
       getFeatures: jest.fn().mockReturnValue([]),
       removeFeature: jest.fn(),
@@ -49,20 +51,17 @@ describe('OpenLayersSnappingManager', () => {
   });
 
   afterEach(() => {
-    // snappingAllowed is not reset by destroy(), so reset it explicitly
-    (OpenLayersSnappingManager as any).snappingAllowed = false;
-    OpenLayersSnappingManager.destroy();
     (FeatureHelper as any).getFeatures = getFeaturesFn;
   });
 
   const setup = ({ withLayer = false, withSnap = false } = {}) => {
-    OpenLayersSnappingManager.init(mockOlMap as any, mockLayerManager as any);
+    manager.init(mockOlMap as any, mockLayerManager as any);
     if (withLayer || withSnap) {
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
     }
     if (withSnap) {
-      OpenLayersSnappingManager.allowSnapping(true);
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.allowSnapping(true);
+      manager.enableSnappingIfAllowed(true);
     }
   };
 
@@ -72,14 +71,14 @@ describe('OpenLayersSnappingManager', () => {
 
   describe('init', () => {
     test('marks the manager as initialized', () => {
-      OpenLayersSnappingManager.init(mockOlMap as any, mockLayerManager as any);
-      expect((OpenLayersSnappingManager as any).initialized.value).toBe(true);
+      manager.init(mockOlMap as any, mockLayerManager as any);
+      expect((manager as any).initialized.value).toBe(true);
     });
 
     test('stores olMap and layerManager references', () => {
-      OpenLayersSnappingManager.init(mockOlMap as any, mockLayerManager as any);
-      expect((OpenLayersSnappingManager as any).olMap).toBe(mockOlMap);
-      expect((OpenLayersSnappingManager as any).layerManager).toBe(mockLayerManager);
+      manager.init(mockOlMap as any, mockLayerManager as any);
+      expect((manager as any).olMap).toBe(mockOlMap);
+      expect((manager as any).layerManager).toBe(mockLayerManager);
     });
   });
 
@@ -90,60 +89,60 @@ describe('OpenLayersSnappingManager', () => {
   describe('destroy', () => {
     test('sets initialized to false', () => {
       setup();
-      OpenLayersSnappingManager.destroy();
-      expect((OpenLayersSnappingManager as any).initialized.value).toBe(false);
+      manager.destroy();
+      expect((manager as any).initialized.value).toBe(false);
     });
 
     test('removes the snap interaction from the map when snap was initialised', () => {
       setup({ withSnap: true });
       mockOlMap.removeInteraction.mockClear();
 
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
 
       expect(mockOlMap.removeInteraction).toHaveBeenCalledWith(mockSnapInstance);
     });
 
     test('resets snap state flags after destroy', () => {
       setup({ withSnap: true });
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
 
-      expect((OpenLayersSnappingManager as any).snappingInteraction.value).toBeNull();
-      expect((OpenLayersSnappingManager as any).snapInitialized).toBe(false);
-      expect((OpenLayersSnappingManager as any).snapInitializing).toBe(false);
+      expect((manager as any).snappingInteraction.value).toBeNull();
+      expect((manager as any).snapInitialized).toBe(false);
+      expect((manager as any).snapInitializing).toBe(false);
     });
 
     test('does not call removeInteraction when snap was never initialised', () => {
       setup(); // init only – no layer, no snap
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
       expect(mockOlMap.removeInteraction).not.toHaveBeenCalled();
     });
 
     test('calls removeLayer on layerManager', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
       expect(mockLayerManager.removeLayer).toHaveBeenCalledWith('snapping-layer');
     });
 
     test('resets layer state flags after destroy', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
 
-      expect((OpenLayersSnappingManager as any).snappingLayer.value).toBeNull();
-      expect((OpenLayersSnappingManager as any).layerInitialized).toBe(false);
-      expect((OpenLayersSnappingManager as any).layerInitializing).toBe(false);
+      expect((manager as any).snappingLayer.value).toBeNull();
+      expect((manager as any).layerInitialized).toBe(false);
+      expect((manager as any).layerInitializing).toBe(false);
     });
 
     test('allows the manager to be re-initialised and used after destroy', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.destroy();
+      manager.destroy();
 
       const newMockOlMap = { addInteraction: jest.fn(), removeInteraction: jest.fn() };
       const newMockLayerManager = { addLayer: jest.fn().mockReturnValue(mockVectorLayer), removeLayer: jest.fn() };
 
-      OpenLayersSnappingManager.init(newMockOlMap as any, newMockLayerManager as any);
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.init(newMockOlMap as any, newMockLayerManager as any);
+      manager.renderFeatures([]);
 
-      expect((OpenLayersSnappingManager as any).initialized.value).toBe(true);
+      expect((manager as any).initialized.value).toBe(true);
       expect(newMockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
@@ -156,21 +155,21 @@ describe('OpenLayersSnappingManager', () => {
     test('calls setStyle on the snapping layer', () => {
       setup({ withLayer: true });
       const style = new Style();
-      OpenLayersSnappingManager.setSnappingLayerStyle(style);
+      manager.setSnappingLayerStyle(style);
       expect(mockVectorLayer.setStyle).toHaveBeenCalledWith(style);
     });
 
     test('lazily initialises the snapping layer on the first call', () => {
       setup(); // init only – no layer yet
       expect(mockLayerManager.addLayer).not.toHaveBeenCalled();
-      OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
+      manager.setSnappingLayerStyle(new Style());
       expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
 
     test('does not call addLayer again on subsequent calls', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
-      OpenLayersSnappingManager.setSnappingLayerStyle(new Style());
+      manager.setSnappingLayerStyle(new Style());
+      manager.setSnappingLayerStyle(new Style());
       expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
@@ -183,7 +182,7 @@ describe('OpenLayersSnappingManager', () => {
     test('lazily creates the snap interaction on the first call', () => {
       setup({ withLayer: true }); // layer ready, snap NOT yet created
       expect(mockSnap).not.toHaveBeenCalled();
-      OpenLayersSnappingManager.setSnappingTolerance(5);
+      manager.setSnappingTolerance(5);
       expect(mockSnap).toHaveBeenCalledTimes(1);
       expect(mockSnap).toHaveBeenCalledWith({ pixelTolerance: 5, source: expect.anything() });
     });
@@ -196,8 +195,8 @@ describe('OpenLayersSnappingManager', () => {
   describe('allowSnapping', () => {
     test('prevents enableSnappingIfAllowed from adding the interaction when false', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.allowSnapping(false);
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.allowSnapping(false);
+      manager.enableSnappingIfAllowed(true);
       expect(mockOlMap.addInteraction).not.toHaveBeenCalled();
     });
 
@@ -206,14 +205,14 @@ describe('OpenLayersSnappingManager', () => {
       // the existing OL interaction (see enableSnappingIfAllowed guard).
       setup({ withSnap: true });
       mockOlMap.removeInteraction.mockClear();
-      OpenLayersSnappingManager.allowSnapping(false);
+      manager.allowSnapping(false);
       expect(mockOlMap.removeInteraction).not.toHaveBeenCalled();
     });
 
     test('enables enableSnappingIfAllowed to work when set to true', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.allowSnapping(true);
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.allowSnapping(true);
+      manager.enableSnappingIfAllowed(true);
       expect(mockOlMap.addInteraction).toHaveBeenCalledWith(mockSnapInstance);
     });
   });
@@ -225,56 +224,56 @@ describe('OpenLayersSnappingManager', () => {
   describe('enableSnappingIfAllowed', () => {
     beforeEach(() => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.allowSnapping(true);
+      manager.allowSnapping(true);
     });
 
     test('creates a Snap interaction using the snapping layer source', () => {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
       expect(mockSnap).toHaveBeenCalledWith({ pixelTolerance: 10, source: mockVectorSource });
     });
 
     test('adds the snap interaction to the map when enabling', () => {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
       expect(mockOlMap.addInteraction).toHaveBeenCalledWith(mockSnapInstance);
     });
 
     test('always removes the interaction before re-adding so snap is last in the chain', () => {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
       mockOlMap.removeInteraction.mockClear();
       mockOlMap.addInteraction.mockClear();
 
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
 
       expect(mockOlMap.removeInteraction).toHaveBeenCalledWith(mockSnapInstance);
       expect(mockOlMap.addInteraction).toHaveBeenCalledWith(mockSnapInstance);
     });
 
     test('removes the snap interaction without re-adding it when disabling', () => {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
       mockOlMap.removeInteraction.mockClear();
       mockOlMap.addInteraction.mockClear();
 
-      OpenLayersSnappingManager.enableSnappingIfAllowed(false);
+      manager.enableSnappingIfAllowed(false);
 
       expect(mockOlMap.removeInteraction).toHaveBeenCalledWith(mockSnapInstance);
       expect(mockOlMap.addInteraction).not.toHaveBeenCalled();
     });
 
     test('does nothing when snappingAllowed is false', () => {
-      OpenLayersSnappingManager.allowSnapping(false);
+      manager.allowSnapping(false);
       mockOlMap.addInteraction.mockClear();
       mockOlMap.removeInteraction.mockClear();
 
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
 
       expect(mockOlMap.addInteraction).not.toHaveBeenCalled();
       expect(mockOlMap.removeInteraction).not.toHaveBeenCalled();
     });
 
     test('only creates the Snap instance once regardless of how many times it is called', () => {
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
-      OpenLayersSnappingManager.enableSnappingIfAllowed(false);
-      OpenLayersSnappingManager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(true);
+      manager.enableSnappingIfAllowed(false);
+      manager.enableSnappingIfAllowed(true);
       expect(mockSnap).toHaveBeenCalledTimes(1);
     });
   });
@@ -287,13 +286,13 @@ describe('OpenLayersSnappingManager', () => {
     test('lazily initialises the snapping layer on the first call', () => {
       setup(); // init only
       expect(mockLayerManager.addLayer).not.toHaveBeenCalled();
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
       expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
 
     test('adds the snapping layer with the correct configuration', () => {
       setup();
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
       expect(mockLayerManager.addLayer).toHaveBeenCalledWith({
         id: 'snapping-layer',
         name: 'Snapping layer',
@@ -307,7 +306,7 @@ describe('OpenLayersSnappingManager', () => {
       const existingFeature = { id: 'existing' } as any;
       mockVectorSource.getFeatures.mockReturnValue([existingFeature]);
 
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
 
       expect(mockVectorSource.removeFeature).toHaveBeenCalledWith(existingFeature);
     });
@@ -316,8 +315,8 @@ describe('OpenLayersSnappingManager', () => {
       setup({ withLayer: true });
       const featureA = { id: 'a' } as any;
       const featureB = { id: 'b' } as any;
-      OpenLayersSnappingManager.renderFeatures([ featureA, featureB ]);
-      (OpenLayersSnappingManager as any).snappingLayer.asObservable().subscribe(() => {
+      manager.renderFeatures([ featureA, featureB ]);
+      (manager as any).snappingLayer.asObservable().subscribe(() => {
         expect(mockVectorSource.addFeature).toHaveBeenCalledTimes(2);
         expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureA);
         expect(mockVectorSource.addFeature).toHaveBeenCalledWith(featureB);
@@ -327,14 +326,14 @@ describe('OpenLayersSnappingManager', () => {
 
     test('does not call addFeature when an empty array is provided', () => {
       setup({ withLayer: true });
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
       expect(mockVectorSource.addFeature).not.toHaveBeenCalled();
     });
 
     test('does not call addLayer again on subsequent calls', () => {
       setup();
-      OpenLayersSnappingManager.renderFeatures([]);
-      OpenLayersSnappingManager.renderFeatures([]);
+      manager.renderFeatures([]);
+      manager.renderFeatures([]);
       expect(mockLayerManager.addLayer).toHaveBeenCalledTimes(2);
     });
   });
