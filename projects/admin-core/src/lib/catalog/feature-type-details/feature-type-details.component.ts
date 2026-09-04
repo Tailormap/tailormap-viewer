@@ -14,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './feature-type-details.component.html',
     styleUrls: ['./feature-type-details.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FeatureTypeFormComponent, AsyncPipe],
+    imports: [ FeatureTypeFormComponent, AsyncPipe ],
 })
 export class FeatureTypeDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);

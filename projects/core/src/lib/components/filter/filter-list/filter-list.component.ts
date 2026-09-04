@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './filter-list.component.html',
     styleUrls: ['./filter-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FilterListItemComponent, AsyncPipe],
+    imports: [ FilterListItemComponent, AsyncPipe ],
 })
 export class FilterListComponent implements OnInit {
   private store$ = inject(Store);

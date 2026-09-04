@@ -14,7 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
             multi: true,
         },
     ],
-    imports: [MatButtonToggleGroup, MatButtonToggle],
+    imports: [ MatButtonToggleGroup, MatButtonToggle ],
 })
 export class TriStateBooleanComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);

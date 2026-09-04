@@ -11,7 +11,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './feature-info-layer-list.component.html',
     styleUrls: ['./feature-info-layer-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FeatureInfoLayerItemComponent, AsyncPipe],
+    imports: [ FeatureInfoLayerItemComponent, AsyncPipe ],
 })
 export class FeatureInfoLayerListComponent {
   private store$ = inject(Store);

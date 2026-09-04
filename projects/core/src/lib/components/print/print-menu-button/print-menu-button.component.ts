@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './print-menu-button.component.html',
     styleUrls: ['./print-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class PrintMenuButtonComponent {
   private store$ = inject(Store);

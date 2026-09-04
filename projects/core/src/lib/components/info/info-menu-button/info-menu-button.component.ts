@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './info-menu-button.component.html',
     styleUrls: ['./info-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class InfoMenuButtonComponent {
   private store$ = inject(Store);

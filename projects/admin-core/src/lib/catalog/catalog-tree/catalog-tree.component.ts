@@ -21,7 +21,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './catalog-tree.component.html',
     styleUrls: ['./catalog-tree.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [TreeService, TreeDragDropService],
+    providers: [ TreeService, TreeDragDropService ],
     imports: [
         CatalogTreeNodeComponent,
         ListFilterComponent,

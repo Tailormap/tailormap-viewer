@@ -9,7 +9,11 @@ import { AttributeListStatisticColumnModel, StatisticValueModel } from '../model
 import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
-import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow } from '@angular/material/table';
+import {
+  MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell,
+  MatCellDef, MatCell, MatFooterCellDef, MatFooterCell, MatHeaderRowDef,
+  MatHeaderRow, MatRowDef, MatRow, MatFooterRowDef, MatFooterRow,
+} from '@angular/material/table';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -20,38 +24,38 @@ import { TooltipDirective, PanelResizerComponent } from '@tailormap-viewer/share
 const DEFAULT_COLUMN_WIDTH = 170;
 
 @Component({
-    selector: 'tm-attribute-list-table',
-    templateUrl: './attribute-list-table.component.html',
-    styleUrls: ['./attribute-list-table.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatMenu,
-        MatMenuContent,
-        MatMenuItem,
-        MatIcon,
-        MatTable,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCheckbox,
-        MatCellDef,
-        MatCell,
-        MatFooterCellDef,
-        MatFooterCell,
-        MatIconButton,
-        TooltipDirective,
-        PanelResizerComponent,
-        MatMenuTrigger,
-        MatProgressSpinner,
-        AttributeListFeatureDetailsComponent,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        NgClass,
-        MatFooterRowDef,
-        MatFooterRow,
-    ],
+  selector: 'tm-attribute-list-table',
+  templateUrl: './attribute-list-table.component.html',
+  styleUrls: ['./attribute-list-table.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatMenu,
+    MatMenuContent,
+    MatMenuItem,
+    MatIcon,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCheckbox,
+    MatCellDef,
+    MatCell,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatIconButton,
+    TooltipDirective,
+    PanelResizerComponent,
+    MatMenuTrigger,
+    MatProgressSpinner,
+    AttributeListFeatureDetailsComponent,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    NgClass,
+    MatFooterRowDef,
+    MatFooterRow,
+  ],
 })
 export class AttributeListTableComponent {
 
@@ -127,7 +131,7 @@ export class AttributeListTableComponent {
     return new Map<string, StatisticValueModel>(statistics.map(
       s => {
         const label = s.hasError
-          ? $localize `:@@core.attribute-list.statistics-error:Error loading statistic`
+          ? $localize`:@@core.attribute-list.statistics-error:Error loading statistic`
           : StatisticsHelper.getLabelForStatisticType(s);
         const value: StatisticValueModel = {
           ...s,
@@ -293,11 +297,11 @@ export class AttributeListTableComponent {
   }
 
   public getColumnFilterLabel(columnLabel: string): string {
-    return $localize `:@@core.attribute-list.filter-column:Filter on ${columnLabel}`;
+    return $localize`:@@core.attribute-list.filter-column:Filter on ${columnLabel}`;
   }
 
   public getColumnSortLabel(columnLabel: string): string {
-    return $localize `:@@core.attribute-list.sort-column:Sort by ${columnLabel}`;
+    return $localize`:@@core.attribute-list.sort-column:Sort by ${columnLabel}`;
   }
 
   public toggleRowChecked(row: AttributeListRowModel) {
@@ -311,7 +315,7 @@ export class AttributeListTableComponent {
   }
 
   public getColumnResizeLabel(columnLabel: string): string {
-    return $localize `:@@core.attribute-list.resize-column:Resize ${columnLabel} column`;
+    return $localize`:@@core.attribute-list.resize-column:Resize ${columnLabel} column`;
   }
 
 }

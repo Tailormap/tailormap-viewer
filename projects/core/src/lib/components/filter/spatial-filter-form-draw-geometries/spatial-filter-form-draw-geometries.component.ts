@@ -18,7 +18,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './spatial-filter-form-draw-geometries.component.html',
     styleUrls: ['./spatial-filter-form-draw-geometries.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MapDrawingButtonsComponent, AsyncPipe],
+    imports: [ MapDrawingButtonsComponent, AsyncPipe ],
 })
 export class SpatialFilterFormDrawGeometriesComponent {
   private store$ = inject(Store);

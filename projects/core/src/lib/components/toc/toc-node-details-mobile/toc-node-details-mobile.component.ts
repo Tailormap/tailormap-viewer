@@ -11,7 +11,7 @@ import { LayerTransparencyComponent } from '../toc-node-details/layer-transparen
     templateUrl: './toc-node-details-mobile.component.html',
     styleUrls: ['./toc-node-details-mobile.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [LayerTransparencyComponent, HtmlifyPipe],
+    imports: [ LayerTransparencyComponent, HtmlifyPipe ],
 })
 export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);

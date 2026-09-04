@@ -17,7 +17,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './legend.component.html',
     styleUrls: ['./legend.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [LegendLayerComponent, AsyncPipe],
+    imports: [ LegendLayerComponent, AsyncPipe ],
 })
 export class LegendComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

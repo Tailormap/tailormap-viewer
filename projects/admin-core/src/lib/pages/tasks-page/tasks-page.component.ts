@@ -7,7 +7,7 @@ import { TasksListComponent } from '../../tasks/tasks-list/tasks-list.component'
     templateUrl: './tasks-page.component.html',
     styleUrls: ['./tasks-page.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [AdminPageTemplateComponent, TasksListComponent],
+    imports: [ AdminPageTemplateComponent, TasksListComponent ],
 })
 export class TasksPageComponent {
 

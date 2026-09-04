@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './terrain-controls-menu-button.component.html',
     styleUrls: ['./terrain-controls-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class TerrainControlsMenuButtonComponent {
   private store$ = inject(Store);

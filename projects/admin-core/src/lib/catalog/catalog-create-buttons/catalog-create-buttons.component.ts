@@ -20,7 +20,7 @@ import { MatIcon } from '@angular/material/icon';
     templateUrl: './catalog-create-buttons.component.html',
     styleUrls: ['./catalog-create-buttons.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatButton, MatIcon],
+    imports: [ MatButton, MatIcon ],
 })
 export class CatalogCreateButtonsComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);

@@ -33,7 +33,7 @@ export interface AddLayerEvent {
     templateUrl: './application-catalog-tree.component.html',
     styleUrls: ['./application-catalog-tree.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [TreeService, TreeDragDropService],
+    providers: [ TreeService, TreeDragDropService ],
     imports: [
         CatalogBaseTreeNodeComponent,
         ListFilterComponent,

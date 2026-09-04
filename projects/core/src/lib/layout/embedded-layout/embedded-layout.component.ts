@@ -22,7 +22,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
     selector: 'tm-embedded-layout',
     templateUrl: './embedded-layout.component.html',
-    styleUrls: ['../base-layout/base-layout.component.css', './embedded-layout.component.css'],
+    styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         FeatureInfoComponent,

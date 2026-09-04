@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './coordinate-link-window-menu-button.component.html',
     styleUrls: ['./coordinate-link-window-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class CoordinateLinkWindowMenuButtonComponent {
   private store$ = inject(Store);

@@ -425,8 +425,8 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  getAttributeStatistics$(params: {
-    attribute: string; featureTypeId: string; filter?: string | undefined
+  public getAttributeStatistics$(params: {
+    attribute: string; featureTypeId: string; filter?: string | undefined;
   }): Observable<AttributeStatisticsResponseModel> {
     return this.httpClient.get<AttributeStatisticsResponseModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/statistics/${params.featureTypeId}/${params.attribute}`,

@@ -9,7 +9,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-toc-menu-button',
     templateUrl: './toc-menu-button.component.html',
     styleUrls: ['./toc-menu-button.component.css'],
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class TocMenuButtonComponent {
   private store$ = inject(Store);

@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './oidc-configuration-edit-settings.component.html',
     styleUrls: ['./oidc-configuration-edit-settings.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [OIDCConfigurationFormComponent, AsyncPipe],
+    imports: [ OIDCConfigurationFormComponent, AsyncPipe ],
 })
 export class OIDCConfigurationEditSettingsComponent implements OnInit {
   private store$ = inject(Store);

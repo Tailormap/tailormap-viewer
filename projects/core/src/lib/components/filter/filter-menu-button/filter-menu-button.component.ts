@@ -14,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './filter-menu-button.component.html',
     styleUrls: ['./filter-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class FilterMenuButtonComponent {
   private store$ = inject(Store);

@@ -1,7 +1,11 @@
 import { Component, ChangeDetectionStrategy, input, output, effect, signal, inject } from '@angular/core';
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import {
+  MatTableDataSource, MatTable, MatColumnDef,
+  MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell,
+  MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow,
+} from '@angular/material/table';
 import { debounceTime, map } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CdkDragDrop, CdkDropList, CdkDragHandle, CdkDrag } from '@angular/cdk/drag-drop';
@@ -13,34 +17,34 @@ import { MatInput } from '@angular/material/input';
 import { MatSelect, MatOption } from '@angular/material/select';
 
 @Component({
-    selector: 'tm-admin-feature-type-attachment-attributes',
-    templateUrl: './feature-type-attachment-attributes.component.html',
-    styleUrls: ['./feature-type-attachment-attributes.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        MatButton,
-        MatIcon,
-        MatTable,
-        CdkDropList,
-        MatColumnDef,
-        MatHeaderCellDef,
-        MatHeaderCell,
-        MatCellDef,
-        MatCell,
-        MatFormField,
-        MatInput,
-        MatError,
-        MatSelect,
-        MatOption,
-        MatIconButton,
-        CdkDragHandle,
-        MatHeaderRowDef,
-        MatHeaderRow,
-        MatRowDef,
-        MatRow,
-        CdkDrag,
-    ],
+  selector: 'tm-admin-feature-type-attachment-attributes',
+  templateUrl: './feature-type-attachment-attributes.component.html',
+  styleUrls: ['./feature-type-attachment-attributes.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    MatButton,
+    MatIcon,
+    MatTable,
+    CdkDropList,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatSelect,
+    MatOption,
+    MatIconButton,
+    CdkDragHandle,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    CdkDrag,
+  ],
 })
 export class FeatureTypeAttachmentAttributesComponent {
   private adminApiService = inject(TailormapAdminApiV1Service);
@@ -277,7 +281,7 @@ export class FeatureTypeAttachmentAttributesComponent {
     return dropdownItem ? dropdownItem[0] : '';
   }
 
-  private convertFromAcceptDropdownItem(item: string | null): string | null{
+  private convertFromAcceptDropdownItem(item: string | null): string | null {
     if (item === '') {
       return null;
     }

@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list-button',
     templateUrl: './attribute-list-menu-button.component.html',
     styleUrls: ['./attribute-list-menu-button.component.css'],
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class AttributeListMenuButtonComponent implements OnInit {
   private store$ = inject(Store);

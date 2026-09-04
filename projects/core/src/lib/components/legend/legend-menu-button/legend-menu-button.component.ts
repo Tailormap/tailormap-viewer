@@ -9,7 +9,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-legend-menu-button',
     templateUrl: './legend-menu-button.component.html',
     styleUrls: ['./legend-menu-button.component.css'],
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class LegendMenuButtonComponent {
   private store$ = inject(Store);

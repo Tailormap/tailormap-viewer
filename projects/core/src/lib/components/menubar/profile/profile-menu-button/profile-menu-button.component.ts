@@ -11,7 +11,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './profile-menu-button.component.html',
     styleUrls: ['./profile-menu-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class ProfileMenuButtonComponent {
   private store$ = inject(Store);

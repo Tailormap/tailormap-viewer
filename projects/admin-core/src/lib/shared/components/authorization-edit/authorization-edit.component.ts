@@ -26,12 +26,12 @@ type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { he
 @Component({
   selector: 'tm-admin-authorization-edit',
   templateUrl: './authorization-edit.component.html',
-  styleUrls: [ './authorization-edit.component.css' ],
-  providers: [ {
+  styleUrls: ['./authorization-edit.component.css'],
+  providers: [{
     provide: NG_VALUE_ACCESSOR,
     multi: true,
     useExisting: AuthorizationEditComponent,
-  } ],
+  }],
   imports: [
     MatLabel,
     MatChipListbox,
@@ -221,10 +221,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
         this.updateValue([], true);
         break;
       case 'anonymous':
-        this.updateValue([ { groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } } ], true);
+        this.updateValue([{ groupName: AuthorizationGroups.ANONYMOUS, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
         break;
       case 'loggedIn':
-        this.updateValue([ { groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } } ], true);
+        this.updateValue([{ groupName: AuthorizationGroups.AUTHENTICATED, decisions: { read: AuthorizationRuleDecision.ALLOW } }], true);
         break;
       case 'specificGroups':
         this.selectedChip = 'specificGroups';

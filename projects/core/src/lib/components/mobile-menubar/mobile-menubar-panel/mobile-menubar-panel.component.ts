@@ -13,7 +13,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './mobile-menubar-panel.component.html',
     styleUrls: ['./mobile-menubar-panel.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [BottomPanelComponent, AsyncPipe],
+    imports: [ BottomPanelComponent, AsyncPipe ],
 })
 export class MobileMenubarPanelComponent implements OnDestroy, OnInit {
   private menubarService = inject(MenubarService);

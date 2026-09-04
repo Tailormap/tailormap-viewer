@@ -14,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './background-layer-toggle.component.html',
     styleUrls: ['./background-layer-toggle.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SplitButtonComponent, AsyncPipe],
+    imports: [ SplitButtonComponent, AsyncPipe ],
 })
 export class BackgroundLayerToggleComponent {
   private store$ = inject(Store);

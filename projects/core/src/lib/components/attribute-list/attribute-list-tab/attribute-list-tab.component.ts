@@ -11,7 +11,7 @@ import { AttributeListContentComponent } from '../attribute-list-content/attribu
     templateUrl: './attribute-list-tab.component.html',
     styleUrls: ['./attribute-list-tab.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [AttributeListTabToolbarComponent, AttributeListContentComponent],
+    imports: [ AttributeListTabToolbarComponent, AttributeListContentComponent ],
 })
 export class AttributeListTabComponent {
   private store$ = inject(Store);

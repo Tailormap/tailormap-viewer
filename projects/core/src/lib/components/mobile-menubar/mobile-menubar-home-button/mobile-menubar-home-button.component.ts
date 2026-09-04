@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './mobile-menubar-home-button.component.html',
     styleUrls: ['./mobile-menubar-home-button.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MenubarButtonComponent, AsyncPipe],
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class MobileMenubarHomeButtonComponent {
   private store$ = inject(Store);

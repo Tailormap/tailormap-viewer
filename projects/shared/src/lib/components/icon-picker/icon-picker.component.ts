@@ -8,7 +8,7 @@ import { MatIcon } from '@angular/material/icon';
     selector: 'tm-icon-picker',
     templateUrl: './icon-picker.component.html',
     styleUrls: ['./icon-picker.component.css'],
-    imports: [MatButton, MatIcon],
+    imports: [ MatButton, MatIcon ],
 })
 export class IconPickerComponent {
   private popper = inject(PopoverService);

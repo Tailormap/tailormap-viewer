@@ -248,7 +248,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(mockData.getUniqueValues());
   }
 
-  getAttributeStatistics$(): Observable<AttributeStatisticsResponseModel> {
+  public getAttributeStatistics$(): Observable<AttributeStatisticsResponseModel> {
     return of(mockData.getAttributeStatistics());
   }
 
