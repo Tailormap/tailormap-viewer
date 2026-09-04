@@ -253,9 +253,9 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   private onKeyboardControlKeyDown(ev: KeyboardEvent) {
     if (ev.key === 'Escape') {
-      this.disable();
       ev.preventDefault();
       ev.stopPropagation();
+      this.disable();
       return;
     }
 
@@ -271,62 +271,51 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
     const view = this.olMap.getView();
     const resolution = view.getResolution() || 1;
-    const pixelStep = ev.shiftKey ? 20 : 5;              // pixels
-    const mapStep = pixelStep * resolution;             // map units
-    const rotationDeg = ev.shiftKey ? 15 : 5;           // degrees
-    const scaleStep = ev.shiftKey ? 0.1 : 0.05;         // scale factor step
+    const pixelStep = 5;
+    const mapStep = pixelStep * resolution;
+    const rotationDeg = 5;
+    const scaleStep = 0.05;
+    const extent = geom.getExtent();
+    const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
 
-    let handled = false;
+    let handled = true;
 
     switch (ev.key) {
       case 'ArrowUp':
         geom.translate(0, mapStep);
-        handled = true;
         break;
       case 'ArrowDown':
         geom.translate(0, -mapStep);
-        handled = true;
         break;
       case 'ArrowLeft':
         geom.translate(-mapStep, 0);
-        handled = true;
         break;
       case 'ArrowRight':
         geom.translate(mapStep, 0);
-        handled = true;
         break;
       case 'r':
       case 'R': {
-        const rotationRad = rotationDeg * Math.PI / 180 * (ev.key === 'R' ? -1 : 1);
-        const extent = geom.getExtent();
-        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
-        geom.rotate(rotationRad, anchor);
-        handled = true;
+        const direction = ev.key === 'R' ? -1 : 1;
+        geom.rotate(rotationDeg * Math.PI / 180 * direction, anchor);
         break;
       }
       case '+':
       case '=': {
-        const extent = geom.getExtent();
-        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
         const scaleFactor = 1 + scaleStep;
         geom.scale(scaleFactor, scaleFactor, anchor);
-        handled = true;
         break;
       }
       case '-': {
-        const extent = geom.getExtent();
-        const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
         const scaleFactor = 1 - scaleStep;
         geom.scale(scaleFactor, scaleFactor, anchor);
-        handled = true;
         break;
       }
       default:
+        handled = false;
         break;
     }
 
     if (handled) {
-      feature.setGeometry(geom);
       this.eventHandler(feature);
       ev.preventDefault();
       ev.stopPropagation();
