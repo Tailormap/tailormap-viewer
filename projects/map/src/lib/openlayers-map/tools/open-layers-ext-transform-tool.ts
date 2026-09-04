@@ -1,4 +1,4 @@
-  import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
@@ -7,7 +7,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
 import { MapStyleModel } from '../../models';
-import { FeatureModel } from '@tailormap-viewer/api';
+import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { ExtTransformEnableToolArguments, ExtTransformToolModel } from '../../models/tools/ext-transform-tool.model';
 import { ExtTransformToolConfigModel } from '../../models/tools/ext-transform-tool-config.model';
 import OlExtTransform from 'ol-ext/interaction/Transform';
@@ -37,8 +37,11 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   public featureModified$ = this.geometryChangedSubject.asObservable();
   private editLayer: VectorLayer | null = null;
   private source: VectorSource | null = null;
+  private keyboardControlElement: HTMLElement | null = null;
 
   public supportsSnapping = true;
+
+  private keyboardControlHandler = (ev: KeyboardEvent) => this.onKeyboardControlKeyDown(ev);
 
   constructor(
     public id: string,
@@ -52,6 +55,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public destroy(): void {
     this.disable();
+    this.removeKeyboardControl();
     if (this.editLayer) {
       this.olMap.removeLayer(this.editLayer);
       this.editLayer.dispose();
@@ -63,6 +67,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
 
   public disable(): void {
     this.isActive = false;
+    this.removeKeyboardControl();
     this.stopModify();
   }
 
@@ -81,6 +86,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
+    this.createKeyboardControl(args.feature);
     this.eventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -222,6 +228,98 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
         }, 50);
       }
     });
+  }
+
+  private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
+    setTimeout(() => {
+      const targetElement: HTMLElement | null = document.querySelector(`.drawing-feature-proxy[data-feature-fid="${feature.__fid}"]`);
+      if (!targetElement) {
+        return;
+      }
+      this.keyboardControlElement = targetElement;
+      this.keyboardControlElement.focus();
+      this.keyboardControlElement.addEventListener('keydown', this.keyboardControlHandler);
+    });
+  }
+
+  private removeKeyboardControl() {
+    if (!this.keyboardControlElement) {
+      return;
+    }
+    this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
+    this.keyboardControlElement.blur();
+    this.keyboardControlElement = null;
+  }
+
+  private onKeyboardControlKeyDown(ev: KeyboardEvent) {
+    if (ev.key === 'Escape') {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.disable();
+      return;
+    }
+
+    const features = this.source?.getFeatures();
+    if (!features || features.length === 0) {
+      return;
+    }
+    const feature = features[0];
+    const geom = feature.getGeometry();
+    if (!geom) {
+      return;
+    }
+
+    const view = this.olMap.getView();
+    const resolution = view.getResolution() || 1;
+    const pixelStep = 5;
+    const mapStep = pixelStep * resolution;
+    const rotationDeg = 5;
+    const scaleStep = 0.05;
+    const extent = geom.getExtent();
+    const anchor = [ (extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2 ];
+
+    let handled = true;
+
+    switch (ev.key) {
+      case 'ArrowUp':
+        geom.translate(0, mapStep);
+        break;
+      case 'ArrowDown':
+        geom.translate(0, -mapStep);
+        break;
+      case 'ArrowLeft':
+        geom.translate(-mapStep, 0);
+        break;
+      case 'ArrowRight':
+        geom.translate(mapStep, 0);
+        break;
+      case 'r':
+      case 'R': {
+        const direction = ev.key === 'R' ? -1 : 1;
+        geom.rotate(rotationDeg * Math.PI / 180 * direction, anchor);
+        break;
+      }
+      case '+':
+      case '=': {
+        const scaleFactor = 1 + scaleStep;
+        geom.scale(scaleFactor, scaleFactor, anchor);
+        break;
+      }
+      case '-': {
+        const scaleFactor = 1 - scaleStep;
+        geom.scale(scaleFactor, scaleFactor, anchor);
+        break;
+      }
+      default:
+        handled = false;
+        break;
+    }
+
+    if (handled) {
+      this.eventHandler(feature);
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
   }
 
 }
