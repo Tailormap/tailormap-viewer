@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { OIDCConfigurationModel, UploadCategoryEnum } from '@tailormap-admin/admin-api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { OIDCConfigurationModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, Subject, takeUntil } from 'rxjs';
 import { DateTime } from 'luxon';
 import { FormHelper } from '../../helpers/form.helper';
@@ -14,6 +14,7 @@ import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular
 import { NgClass } from '@angular/common';
 import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
+import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 @Component({
     selector: 'tm-admin-oidc-configuration-form',
@@ -87,6 +88,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
     userNameAttribute: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     defaultAuthorities: new FormControl<string | null>(null),
     rolesClaimFilterRegex: new FormControl<string | null>(null),
+    disableAutomaticGroupCreation: new FormControl<boolean>(false, { nonNullable: true }),
     image: new FormControl<string | null>(null),
   });
 
@@ -110,6 +112,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
           userNameAttribute: value.userNameAttribute || 'name',
           defaultAuthorities: value.defaultAuthorities ? value.defaultAuthorities.split(',') : null,
           rolesClaimFilterRegex: value.rolesClaimFilterRegex || null,
+          disableAutomaticGroupCreation: value.disableAutomaticGroupCreation,
           image: value.image,
         });
       });
@@ -130,6 +133,7 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
       userNameAttribute: oidcConfiguration?.userNameAttribute ?? 'name',
       defaultAuthorities: oidcConfiguration?.defaultAuthorities?.join(',') ?? null,
       rolesClaimFilterRegex: oidcConfiguration?.rolesClaimFilterRegex ?? null,
+      disableAutomaticGroupCreation: oidcConfiguration?.disableAutomaticGroupCreation ?? false,
       image: oidcConfiguration?.image ?? null,
     }, { emitEvent: false });
   }

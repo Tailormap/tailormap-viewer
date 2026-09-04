@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, ElementRef, OnDestroy, Signal, viewChild, signal, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectComponentsConfigForType } from '../../../state';
-import { BaseComponentTypeEnum, ComponentModel, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel, UploadCategoryEnum } from '@tailormap-viewer/api';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { HeaderHelper } from './header.helper';
 import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
@@ -80,7 +80,7 @@ export class HeaderComponent implements OnDestroy {
   }
 
   public getUrl(url: string) {
-    return `/api/uploads/${HEADER_LOGO_CATEGORY}/${url}/logo`;
+    return `/api/uploads/${UploadCategoryEnum.HEADER_LOGO}/${url}/logo`;
   }
 
   private setCss(css: string, headerContainer?: ElementRef<HTMLDivElement>) {

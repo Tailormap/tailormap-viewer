@@ -40,7 +40,8 @@ export class GroupListComponent {
     ]).pipe(
       map(([ groups, filterString, selectedGroup ]) => {
         return groups
-          .filter(group => group.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1)
+          .filter(group => group.name.toLowerCase().indexOf(filterString.toLowerCase()) !== -1
+            || (group.label !== null && group.label?.toLowerCase().indexOf(filterString.toLowerCase()) !== -1))
           .map(group => ({
             ...group,
             selected: !!(selectedGroup && group.name === selectedGroup),

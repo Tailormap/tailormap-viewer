@@ -58,6 +58,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
       nonNullable: true,
       validators: [ Validators.required, Validators.pattern(ValidatorsHelper.NAME_REGEX) ],
     }),
+    label: new FormControl<string | null>(null, { nonNullable: false }),
     description: new FormControl<string>('', { nonNullable: false }),
     aliasForGroup: new FormControl<string>('', { nonNullable: false }),
     notes: new FormControl<string>('', { nonNullable: false, validators: [Validators.maxLength(10000)] }),
@@ -74,6 +75,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     this._group = group;
     this.groupForm.patchValue({
       name: group ? group.name : '',
+      label: group ? group.label : '',
       description: group ? group.description : '',
       aliasForGroup: group ? group.aliasForGroup : '',
       notes: group ? group.notes : null,
@@ -146,6 +148,7 @@ export class GroupFormComponent implements OnInit, OnDestroy {
     }
     this.groupUpdated.emit({
       name: this.groupForm.get('name')?.value || '',
+      label: this.groupForm.get('label')?.value || null,
       description: this.groupForm.get('description')?.value || null,
       aliasForGroup: this.groupForm.get('aliasForGroup')?.value || null,
       notes: this.groupForm.get('notes')?.value || null,

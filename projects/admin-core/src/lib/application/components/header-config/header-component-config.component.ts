@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import {
-  BaseComponentTypeEnum, HEADER_LOGO_CATEGORY, HeaderComponentConfigModel, HeaderMenuItemModel,
+  BaseComponentTypeEnum, HeaderComponentConfigModel, HeaderMenuItemModel, UploadCategoryEnum,
 } from '@tailormap-viewer/api';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -72,7 +72,7 @@ export class HeaderComponentConfigComponent implements ConfigurationComponentMod
   public cssControl = new FormControl<string>('', { nonNullable: true });
   public menuItems = new FormArray<MenuItemType>([]);
 
-  public readonly HEADER_LOGO_CATEGORY = HEADER_LOGO_CATEGORY;
+  public readonly HEADER_LOGO_CATEGORY = UploadCategoryEnum.HEADER_LOGO;
   public dropdownPosition = PopoverPositionEnum.BOTTOM_LEFT_DOWN;
 
   constructor() {

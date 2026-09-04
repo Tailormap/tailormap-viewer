@@ -195,6 +195,12 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,
     });
+    setTimeout(() => {
+      const firstBtn: HTMLButtonElement | null = document.querySelector('.color-picker__color');
+      if (firstBtn) {
+        firstBtn.focus();
+      }
+    });
   }
 
   public getClass() {
