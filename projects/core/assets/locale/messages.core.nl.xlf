@@ -414,6 +414,10 @@
         <source>Duplicate selected drawing object</source>
         <target>Geselecteerd object kopiëren</target>
       </trans-unit>
+      <trans-unit id="core.drawing.edit-feature-keyboard" datatype="html">
+        <source>Edit <x id="PH" equiv-text="featureLabel"/>, use arrow keys to move the feature, use &apos;+&apos; and &apos;-&apos; keys to resize, and use &apos;r&apos; and &apos;shift+r&apos; to rotate.</source>
+        <target>Bewerk <x id="PH" equiv-text="featureLabel"/>, gebruik pijltjestoetsen om het object te verplaatsen, gebruik &apos;+&apos; en &apos;-&apos; toetsen om de grootte aan te passen, en gebruik &apos;r&apos; en &apos;shift+r&apos; om te draaien.</target>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
         <target>Vullen</target>

@@ -414,6 +414,10 @@
         <source>Duplicate selected drawing object</source>
         <target>Ausgewähltes Zeichenobjekt duplizieren</target>
       </trans-unit>
+      <trans-unit id="core.drawing.edit-feature-keyboard" datatype="html">
+        <source>Edit <x id="PH" equiv-text="featureLabel"/>, use arrow keys to move the feature, use &apos;+&apos; and &apos;-&apos; keys to resize, and use &apos;r&apos; and &apos;shift+r&apos; to rotate.</source>
+        <target>Bearbeite <x id="PH" equiv-text="featureLabel"/>, verwende die Pfeiltasten, um das Objekt zu bewegen, verwende die Tasten &apos;+&apos; und &apos;-&apos;, um die Größe anzupassen, und verwende &apos;r&apos; und &apos;Umschalt+r&apos;, um zu drehen.</target>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
         <target>Füllen</target>
