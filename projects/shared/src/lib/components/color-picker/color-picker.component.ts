@@ -179,7 +179,6 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
       width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
       closeOnClickOutside: true,
     });
-
     const overlayKeydownSub = this.popoverRef.overlay.keydownEvents()
       .pipe(takeUntil(this.popoverRef.afterClosed$))
       .subscribe((ev: KeyboardEvent) => {
@@ -190,6 +189,12 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
         }
       });
     this.subscription.add(overlayKeydownSub);
+    setTimeout(() => {
+      const firstBtn: HTMLButtonElement | null = document.querySelector('.color-picker__color');
+      if (firstBtn) {
+        firstBtn.focus();
+      }
+    });
   }
 
   public getClass() {

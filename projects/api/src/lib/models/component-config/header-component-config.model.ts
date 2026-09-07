@@ -1,7 +1,5 @@
 import { ComponentBaseConfigModel } from '../component-base-config.model';
 
-export const HEADER_LOGO_CATEGORY = 'header-logo';
-
 export interface HeaderMenuItemModel {
   id: string;
   label: string;

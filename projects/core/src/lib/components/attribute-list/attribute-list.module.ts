@@ -1,15 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideEnvironmentInitializer, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button/attribute-list-menu-button.component';
 import { AttributeListComponent } from './attribute-list/attribute-list.component';
 import { AttributeListTabComponent } from './attribute-list-tab/attribute-list-tab.component';
 import { MenubarModule } from '../menubar';
-import { StoreModule } from '@ngrx/store';
-import { attributeListStateKey } from './state/attribute-list.state';
-import { attributeListReducer } from './state/attribute-list.reducer';
-import { AttributeListEffects } from './state/attribute-list.effects';
-import { EffectsModule } from '@ngrx/effects';
 import { AttributeListContentComponent } from './attribute-list-content/attribute-list-content.component';
 import { AttributeListTableComponent } from './attribute-list-table/attribute-list-table.component';
 import { AttributeListTabToolbarComponent } from './attribute-list-tab-toolbar/attribute-list-tab-toolbar.component';
@@ -21,6 +16,9 @@ import { CoreSharedModule } from '../../shared';
 import { AttributeListFeatureDetailsComponent } from './attribute-list-feature-details/attribute-list-feature-details.component';
 import { AttributeListApiService } from './services/attribute-list-api.service';
 import { AttributeListColumnSelectionComponent } from './attribute-list-column-selection/attribute-list-column-selection.component';
+import { provideState } from '@ngrx/store';
+import { attributeListStateKey } from './state/attribute-list.state';
+import { attributeListReducer } from './state/attribute-list.reducer';
 
 @NgModule({
   declarations: [
@@ -40,21 +38,18 @@ import { AttributeListColumnSelectionComponent } from './attribute-list-column-s
     CommonModule,
     SharedModule,
     MenubarModule,
-    StoreModule.forFeature(attributeListStateKey, attributeListReducer),
-    EffectsModule.forFeature([AttributeListEffects]),
     FilterModule,
     CoreSharedModule,
   ],
   exports: [
     AttributeListComponent,
   ],
+  providers: [
+    provideState(attributeListStateKey, attributeListReducer),
+    // Watches changes to visible layers to create tabs; must run after `provideState` above since it
+    // needs `attributeListStateKey` to already be registered.
+    provideEnvironmentInitializer(() => inject(AttributeListApiService).initDefaultAttributeListSource()),
+  ],
 })
 export class AttributeListModule {
-  public constructor(
-    // Service is instantiated here, watches changes to visible layers to create tabs
-    //eslint-disable-next-line @angular-eslint/prefer-inject
-    public attributeListApiService: AttributeListApiService,
-  ) {
-    this.attributeListApiService.initDefaultAttributeListSource();
-  }
 }

@@ -1,10 +1,15 @@
 import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { catchError, switchMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { combineLatest, filter, Observable, of, Subject } from 'rxjs';
+import {
+  combineLatest, debounceTime, filter, groupBy, mergeMap, Observable, of, Subject,
+} from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
-import { selectAttributeListTab, selectAttributeListTabData, selectAttributeListTabs } from '../state/attribute-list.selectors';
+import {
+  selectAttributeListDataForId, selectAttributeListRow, selectAttributeListTab, selectAttributeListTabData,
+  selectAttributeListTabForDataId, selectAttributeListTabs,
+} from '../state/attribute-list.selectors';
 import {
   ColumnMetadataModel, FeatureModel, Sortorder, AttributeTypeHelper,
 } from '@tailormap-viewer/api';
@@ -18,6 +23,7 @@ import * as AttributeListActions from '../state/attribute-list.actions';
 import { FeatureUpdatedService } from '../../../services/feature-updated.service';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectLayer } from '../../../map';
+import { MapService } from '@tailormap-viewer/map';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +33,11 @@ export class AttributeListDataService implements OnDestroy {
   private store$ = inject(Store);
   private filterService = inject(FilterService);
   private featureUpdatedService = inject(FeatureUpdatedService);
+  private mapService = inject(MapService);
 
 
   private destroyed = new Subject();
+  private reloadTabSubject = new Subject<string>();
 
   public static DEFAULT_ERROR_MESSAGE = $localize `:@@core.attribute-list.failed-loading-data:Failed to load attribute list data`;
   private static FILTER_GEOMETRY_COLUMNS = true;
@@ -43,11 +51,124 @@ export class AttributeListDataService implements OnDestroy {
       this.featureUpdatedService.featureUpdated$,
       (updatedFeature, layerId) => layerId === updatedFeature.layerId,
     );
+    this.reloadTabSubject.pipe(
+      takeUntil(this.destroyed),
+      groupBy(
+        tabId => tabId,
+        {
+          // Added duration to clean up non-existing tab id streams
+          duration: group$ => this.store$.select(selectAttributeListTabs).pipe(
+            filter(tabs => !tabs.some(tab => tab.id === group$.key)),
+          ),
+        },
+      ),
+      mergeMap(tabIds$ => tabIds$.pipe(
+        debounceTime(50),
+        switchMap(tabId => this.loadDataForTab$(tabId).pipe(map(result => ({ tabId, result })))),
+      )),
+    ).subscribe(({ tabId, result }) => {
+      if (!result.success) {
+        this.store$.dispatch(AttributeListActions.loadDataFailed({ tabId, data: result }));
+      } else {
+        this.store$.dispatch(AttributeListActions.loadDataSuccess({ tabId, data: result }));
+      }
+    });
   }
 
   public ngOnDestroy() {
     this.destroyed.next(null);
     this.destroyed.complete();
+  }
+
+  public loadData(tabId: string): void {
+    this.store$.dispatch(AttributeListActions.loadData({ tabId }));
+    this.reloadTabData(tabId);
+  }
+
+  public updatePage(dataId: string, page: number): void {
+    this.store$.dispatch(AttributeListActions.updatePage({ dataId, page }));
+    this.reloadDataForId(dataId);
+  }
+
+  public updateSort(dataId: string, column: string, direction: 'asc' | 'desc' | ''): void {
+    this.store$.dispatch(AttributeListActions.updateSort({ dataId, column, direction }));
+    this.reloadDataForId(dataId);
+  }
+
+  public updateRowSelected(dataId: string, rowId: string, selected: boolean): void {
+    this.store$.dispatch(AttributeListActions.updateRowSelected({ dataId, rowId, selected }));
+    if (selected) {
+      this.notifyRowSelected(dataId, rowId);
+    }
+  }
+
+  public updateRowChecked(tabId: string, dataId: string, rowId: string, checked: boolean): void {
+    this.store$.dispatch(AttributeListActions.updateRowChecked({ tabId, dataId, rowId, checked }));
+    this.notifyCheckedRowsChanged(dataId);
+  }
+
+  public updateAllRowsChecked(tabId: string, dataId: string, checked: boolean): void {
+    this.store$.dispatch(AttributeListActions.updateAllRowsChecked({ tabId, dataId, checked }));
+    this.notifyCheckedRowsChanged(dataId);
+  }
+
+  private reloadTabData(tabId: string): void {
+    this.reloadTabSubject.next(tabId);
+  }
+
+  private reloadDataForId(dataId: string): void {
+    this.store$.select(selectAttributeListDataForId(dataId))
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          this.reloadTabData(data.tabId);
+        }
+      });
+  }
+
+  private notifyRowSelected(dataId: string, rowId: string): void {
+    combineLatest([
+      this.store$.select(selectAttributeListTabForDataId(dataId)),
+      this.store$.select(selectAttributeListRow(dataId, rowId)),
+      this.store$.select(selectViewerId),
+      this.mapService.getProjectionCode$(),
+    ]).pipe(
+      take(1),
+      switchMap(([ tab, row, applicationId ]) => this.store$.select(selectLayer(tab?.layerId || ''))
+        .pipe(take(1), map(layer => ({ tab, row, applicationId, layer })))),
+    ).subscribe(({ tab, row, applicationId, layer }) => {
+      if (!tab || !row || !row.__fid || !tab.layerId || applicationId === null || !layer) {
+        return;
+      }
+      this.api.getFeatures$(tab.tabSourceId, {
+        applicationId,
+        layerId: tab.layerId,
+        layerName: layer.layerName || '',
+        __fid: row.__fid,
+      }).pipe(take(1)).subscribe(result => {
+        const feature = result.features && result.features.length > 0
+          ? { ...result.features[0], tabId: tab.id }
+          : null;
+        this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature }));
+      });
+    });
+  }
+
+  private notifyCheckedRowsChanged(dataId: string): void {
+    combineLatest([
+      this.store$.select(selectAttributeListDataForId(dataId)),
+      this.store$.select(selectAttributeListTabForDataId(dataId)),
+      this.store$.select(selectViewerId),
+    ]).pipe(take(1)).subscribe(([ data, tab, applicationId ]) => {
+      if (!data || !tab || !tab.layerId || applicationId === null) {
+        return;
+      }
+      this.api.notifyCheckedRowsChanged(tab.tabSourceId, {
+        applicationId,
+        layerId: tab.layerId,
+        checkedRows: data.checkedRows.filter(r => !!r.__fid).map(r => ({ __fid: r.__fid })),
+      });
+    });
   }
 
   public loadDataForTab$(tabId: string): Observable<LoadAttributeListDataResultModel> {
@@ -173,6 +294,7 @@ export class AttributeListDataService implements OnDestroy {
         tabs.forEach(tab => {
           // After changes, reset the page index because the number of results may have changed
           this.store$.dispatch(AttributeListActions.updatePage({ dataId: tab.selectedDataId, page: 1 }));
+          this.reloadTabData(tab.id);
         });
       });
   }

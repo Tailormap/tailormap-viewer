@@ -35,6 +35,7 @@ describe('GroupFormComponent', () => {
     await waitFor(() => {
       expect(groupUpdated).toHaveBeenCalledWith({
         name: 'secret-group',
+        label: null,
         description: 'A very secret group',
         notes: null,
         systemGroup: false,

@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, i
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
-import { UploadCategoryEnum } from '@tailormap-admin/admin-api';
 import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
@@ -10,6 +9,7 @@ import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-us
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl } from '@angular/forms';
+import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 export interface SelectUploadData {
   uploadId: string | null;

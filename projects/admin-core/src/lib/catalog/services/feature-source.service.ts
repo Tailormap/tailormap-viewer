@@ -8,7 +8,7 @@ import {
 import { CatalogService } from './catalog.service';
 import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
 import {
-  addFeatureSources, deleteFeatureSource, loadCatalog, loadDraftFeatureSource, updateFeatureSource, updateFeatureType,
+  addFeatureSources, deleteFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
@@ -40,7 +40,7 @@ export class FeatureSourceService {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL) {
-            this.store$.dispatch(loadCatalog());
+            this.catalogService.loadCatalog();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
@@ -53,7 +53,7 @@ export class FeatureSourceService {
         .pipe(
           tap(draftFeatureSource => {
             if (draftFeatureSource?.id !== id) {
-              this.store$.dispatch(loadDraftFeatureSource({ id }));
+              this.catalogService.loadDraftFeatureSource(id);
             }
           }),
           switchMap(() => this.store$.select(selectDraftFeatureSourceLoadStatus)),

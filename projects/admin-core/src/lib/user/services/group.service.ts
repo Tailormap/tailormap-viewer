@@ -1,12 +1,12 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import {
-  GroupModel, TailormapAdminApiV1Service,
+  ApiResponseHelper, GroupModel, TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectGroups, selectGroupsLoadStatus } from '../state/user.selectors';
-import { addGroup, deleteGroup, loadGroups, updateGroup } from '../state/user.actions';
+import { addGroup, deleteGroup, loadGroupsFailed, loadGroupsStart, loadGroupsSuccess, updateGroup } from '../state/user.actions';
 import { Store } from '@ngrx/store';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -47,12 +47,34 @@ export class GroupService {
       .pipe(
         tap(loadStatus => {
           if (loadStatus === LoadingStateEnum.INITIAL) {
-            this.store$.dispatch(loadGroups());
+            this.loadGroups();
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
         switchMap(() => this.store$.select(selectGroups)),
       );
+  }
+
+  public loadGroups(): void {
+    this.store$.select(selectGroupsLoadStatus)
+      .pipe(take(1))
+      .subscribe(loadStatus => {
+        if (loadStatus === LoadingStateEnum.LOADED || loadStatus === LoadingStateEnum.LOADING) {
+          return;
+        }
+        this.store$.dispatch(loadGroupsStart());
+        this.adminApiService.getGroups$()
+          .pipe(
+            catchError(() => of({ error: $localize `:@@admin-core.groups.error-loading-groups:Error while loading list of groups` })),
+          )
+          .subscribe(response => {
+            if (ApiResponseHelper.isErrorResponse(response)) {
+              this.store$.dispatch(loadGroupsFailed({ error: response.error }));
+              return;
+            }
+            this.store$.dispatch(loadGroupsSuccess({ groups: response }));
+          });
+      });
   }
 
   public getGroupByName$(name: string): Observable<GroupModel | null> {

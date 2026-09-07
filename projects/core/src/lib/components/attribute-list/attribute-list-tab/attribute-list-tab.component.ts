@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loadData } from '../state/attribute-list.actions';
 import { selectAttributeListTab } from '../state/attribute-list.selectors';
 import { take } from 'rxjs';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
 
 @Component({
   selector: 'tm-attribute-list-tab',
@@ -13,6 +13,7 @@ import { take } from 'rxjs';
 })
 export class AttributeListTabComponent {
   private store$ = inject(Store);
+  private attributeListDataService = inject(AttributeListDataService);
 
 
   @Input()
@@ -36,7 +37,7 @@ export class AttributeListTabComponent {
         if (!tab || !tab.layerId || tab.initialDataLoaded) {
           return;
         }
-        this.store$.dispatch(loadData({ tabId: id }));
+        this.attributeListDataService.loadData(id);
       });
   }
 

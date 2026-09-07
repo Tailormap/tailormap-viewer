@@ -1,4 +1,4 @@
-import { inject, NgModule } from '@angular/core';
+import { inject, NgModule, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@tailormap-viewer/shared';
 import { FilterDescriptionComponent } from './filter-description/filter-description.component';
@@ -18,11 +18,12 @@ import { FilterApiService } from './services/filter-api.service';
   exports: [
     FilterDescriptionComponent,
   ],
+  providers: [
+    provideEnvironmentInitializer(() => {
+      inject(SpatialFilterReferenceLayerService); // instantiated here to watch for changes
+      inject(FilterApiService).initDefaultFilterSource();
+    }),
+  ],
 })
 export class FilterModule {
-  //eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor(_spatialFilterReferenceLayerService: SpatialFilterReferenceLayerService) {
-    // constructor is used to initialize the service
-    inject(FilterApiService).initDefaultFilterSource();
-  }
 }

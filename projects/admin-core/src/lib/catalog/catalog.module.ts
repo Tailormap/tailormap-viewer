@@ -1,12 +1,10 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MarkdownEditorComponent, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
 import { catalogReducer } from './state/catalog.reducer';
 import { catalogStateKey } from './state/catalog.state';
-import { StoreModule } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import { CatalogTreeComponent } from './catalog-tree/catalog-tree.component';
-import { EffectsModule } from '@ngrx/effects';
-import { CatalogEffects } from './state/catalog.effects';
 import { CatalogTreeNodeComponent } from './catalog-tree/catalog-tree-node/catalog-tree-node.component';
 import { GeoServiceDetailsComponent } from './geo-service-details/geo-service-details.component';
 import { GeoServiceLayerDetailsComponent } from './geo-service-layer-details/geo-service-layer-details.component';
@@ -82,8 +80,6 @@ import {
   imports: [
     CommonModule,
     SharedModule,
-    StoreModule.forFeature(catalogStateKey, catalogReducer),
-    EffectsModule.forFeature([CatalogEffects]),
     SharedAdminComponentsModule,
     MarkdownEditorComponent,
     SharedDirectivesModule,
@@ -97,15 +93,14 @@ import {
     CatalogShortcutButtonsComponent,
     ProjectionAvailabilityComponent,
   ],
+  providers: [
+    provideState(catalogStateKey, catalogReducer),
+    provideEnvironmentInitializer(() => {
+      inject(GeoServiceService).listenForGeoServiceChanges();
+      inject(FeatureSourceService).listenForFeatureSourceChanges();
+      inject(CatalogService).listenForCatalogChanges();
+    }),
+  ],
 })
 export class CatalogModule {
-  constructor() {
-    const geoServiceService = inject(GeoServiceService);
-    const featureSourceService = inject(FeatureSourceService);
-    const catalogService = inject(CatalogService);
-
-    geoServiceService.listenForGeoServiceChanges();
-    featureSourceService.listenForFeatureSourceChanges();
-    catalogService.listenForCatalogChanges();
-  }
 }

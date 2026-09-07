@@ -10,7 +10,7 @@ import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import {
-  BehaviorSubject, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
+  BehaviorSubject, combineLatest, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
 } from 'rxjs';
 import { Size } from 'ol/size';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -27,6 +27,7 @@ import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
 import { Attribution } from 'ol/control';
 import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
 import { CesiumManager } from './cesium-map/cesium-manager';
+import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 import { FeatureModelType } from '../models/feature-model.type';
@@ -36,6 +37,11 @@ export class OpenLayersMap implements MapViewerModel {
   private map: BehaviorSubject<OlMap | null> = new BehaviorSubject<OlMap | null>(null);
   private layerManager: BehaviorSubject<OpenLayersLayerManager | null> = new BehaviorSubject<OpenLayersLayerManager | null>(null);
   private toolManager: BehaviorSubject<ToolManagerModel | null> = new BehaviorSubject<ToolManagerModel | null>(null);
+
+  // Holds the container passed to render(), which may happen before or after initMap() has created a
+  // map. Paired with `map` below so the map gets bound to its container whichever of the two arrives last.
+  private container: BehaviorSubject<HTMLElement | null> = new BehaviorSubject<HTMLElement | null>(null);
+  private observedContainer: HTMLElement | null = null;
 
   private map3d: BehaviorSubject<CesiumManager | null> = new BehaviorSubject<CesiumManager | null>(null);
   private made3d: boolean;
@@ -48,33 +54,27 @@ export class OpenLayersMap implements MapViewerModel {
 
   private hasUserInteractedSubject = new BehaviorSubject(false);
 
+  private eventManager = new OpenLayersEventManager();
+  private cesiumEventManager = new CesiumEventManager();
+  private snappingManager = new OpenLayersSnappingManager();
+
   constructor(
     private ngZone: NgZone,
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
     this.made3d = false;
+
+    const isNotNullContainer = (item: HTMLElement | null): item is HTMLElement => item !== null;
+    combineLatest([ this.getMap$(), this.container.asObservable().pipe(filter(isNotNullContainer)) ])
+      .subscribe(([ olMap, container ]) => this.ngZone.runOutsideAngular(() => this.bindMapToContainer(olMap, container)));
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
-    if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
-      // Do not re-create the map if the projection is the same as previous
-      this.map.value.getView().getProjection().setExtent(options.maxExtent);
-      if (this.initialCenterZoom !== undefined) {
-          this.map.value.getView().setCenter(this.initialCenterZoom[0]);
-          this.map.value.getView().setZoom(this.initialCenterZoom[1]);
-      } else if (options.initialExtent && options.initialExtent.length > 0) {
-        this.map.value.getView().fit(options.initialExtent);
-      }
-      return;
-    }
-
+    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
     if (typeof initialOptions?.initialCenter !== 'undefined' && typeof initialOptions?.initialZoom !== 'undefined') {
       this.initialCenterZoom = [ initialOptions.initialCenter, initialOptions.initialZoom ];
     }
-
-    ProjectionsHelper.initProjection(options.projection, options.projectionDefinition, options.projectionAliases);
-
     const view = new View({
       projection: options.projection,
       extent: options.maxExtent,
@@ -82,7 +82,16 @@ export class OpenLayersMap implements MapViewerModel {
       zoom: initialOptions?.initialZoom,
       showFullExtent: true,
     });
-
+    if (this.map.value && this.map.value.getView().getProjection().getCode() === options.projection) {
+      this.map.value.setView(view);
+      if (this.initialCenterZoom !== undefined) {
+        this.map.value.getView().setCenter(this.initialCenterZoom[0]);
+        this.map.value.getView().setZoom(this.initialCenterZoom[1]);
+      } else if (options.initialExtent && options.initialExtent.length > 0) {
+        this.map.value.getView().fit(options.initialExtent);
+      }
+      return;
+    }
     const isInIframe = window.self !== window.top;
     const olMap = new OlMap({
       controls: [],
@@ -138,20 +147,20 @@ export class OpenLayersMap implements MapViewerModel {
       this.map.value.dispose();
     }
 
-    OpenLayersEventManager.destroy();
-    OpenLayersSnappingManager.destroy();
+    this.eventManager.destroy();
+    this.snappingManager.destroy();
 
     const layerManager = new OpenLayersLayerManager(olMap, this.ngZone, this.httpXsrfTokenExtractor);
     layerManager.init();
-    const toolManager = new OpenLayersToolManager(olMap, this.ngZone);
-    OpenLayersEventManager.initEvents(olMap, this.ngZone, this.in3d);
-    OpenLayersSnappingManager.init(olMap, layerManager);
+    this.eventManager.initEvents(olMap, this.ngZone, this.in3d);
+    this.snappingManager.init(olMap, layerManager);
+    const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.eventManager, this.cesiumEventManager, this.snappingManager);
 
     // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
     merge(
       timer(5000),
-      OpenLayersEventManager.onMapClick$(),
-      OpenLayersEventManager.onMapMoveStart$(),
+      this.eventManager.onMapClick$(),
+      this.eventManager.onMapMoveStart$(),
     )
       .pipe(
         take(1),
@@ -160,7 +169,7 @@ export class OpenLayersMap implements MapViewerModel {
         attributionControl?.setCollapsed(true);
       });
 
-    race([ OpenLayersEventManager.onMapClick$(), OpenLayersEventManager.onMapMoveStart$() ])
+    race([ this.eventManager.onMapClick$(), this.eventManager.onMapMoveStart$() ])
       .pipe(take(1))
       .subscribe(() => this.hasUserInteractedSubject.next(true));
 
@@ -170,7 +179,7 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public render(container: HTMLElement) {
-    this.ngZone.runOutsideAngular(this._render.bind(this, container));
+    this.container.next(container);
   }
 
   public getLayerManager$(): Observable<LayerManagerModel> {
@@ -324,7 +333,7 @@ export class OpenLayersMap implements MapViewerModel {
   public getPixelForCoordinates$(coordinates: [number, number]): Observable<[number, number] | null> {
     return merge(
       this.getMap$(),
-      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+      this.eventManager.onMapMove$().pipe(map(evt => evt.map)))
         .pipe(
           map(olMap => {
             const px = olMap.getPixelFromCoordinate(coordinates);
@@ -339,7 +348,7 @@ export class OpenLayersMap implements MapViewerModel {
   public getMapViewDetails$(): Observable<MapViewDetailsModel> {
     return merge(
       this.getMap$(),
-      OpenLayersEventManager.onMapMove$().pipe(map(evt => evt.map)))
+      this.eventManager.onMapMove$().pipe(map(evt => evt.map)))
       .pipe(
         map(olMap => {
           const view = olMap.getView();
@@ -414,19 +423,22 @@ export class OpenLayersMap implements MapViewerModel {
     }));
   }
 
-  private _render(container: HTMLElement) {
-    this.executeMapAction(olMap => {
-      olMap.setTarget(container);
-      olMap.render();
-      if (this.initialCenterZoom !== undefined) {
-          olMap.getView().setCenter(this.initialCenterZoom[0]);
-          olMap.getView().setZoom(this.initialCenterZoom[1]);
-      } else if (this.initialExtent && this.initialExtent.length > 0) {
-        olMap.getView().fit(this.initialExtent);
-      }
-      window.setTimeout(() => this.updateMapSize(), 0);
-      this.resizeObserver.observe(container);
-    });
+  private bindMapToContainer(olMap: OlMap, container: HTMLElement) {
+    if (this.observedContainer && this.observedContainer !== container) {
+      this.resizeObserver.unobserve(this.observedContainer);
+    }
+    this.observedContainer = container;
+
+    olMap.setTarget(container);
+    olMap.render();
+    if (this.initialCenterZoom !== undefined) {
+        olMap.getView().setCenter(this.initialCenterZoom[0]);
+        olMap.getView().setZoom(this.initialCenterZoom[1]);
+    } else if (this.initialExtent && this.initialExtent.length > 0) {
+      olMap.getView().fit(this.initialExtent);
+    }
+    window.setTimeout(() => this.updateMapSize(), 0);
+    this.resizeObserver.observe(container);
   }
 
   private updateMapSize() {
@@ -450,7 +462,7 @@ export class OpenLayersMap implements MapViewerModel {
     if (!this.made3d) {
       this.made3d = true;
       this.executeMapAction(olMap => {
-        this.map3d.next(new CesiumManager(olMap, this.ngZone, this.map.getValue()?.getView().getProjection()));
+        this.map3d.next(new CesiumManager(olMap, this.ngZone, this.cesiumEventManager, this.map.getValue()?.getView().getProjection()));
       });
       this.executeCesiumAction(cesiumManager => {
         cesiumManager.init();
@@ -486,23 +498,23 @@ export class OpenLayersMap implements MapViewerModel {
   }
 
   public getPointerDrag$(): Observable<void> {
-    return OpenLayersEventManager.onPointerDrag$().pipe(map(() => undefined));
+    return this.eventManager.onPointerDrag$().pipe(map(() => undefined));
   }
 
   public allowSnapping(allow: boolean) {
-    OpenLayersSnappingManager.allowSnapping(allow);
+    this.snappingManager.allowSnapping(allow);
   }
 
   public setSnappingLayerStyle(style: OlMapStyleType) {
-    OpenLayersSnappingManager.setSnappingLayerStyle(style);
+    this.snappingManager.setSnappingLayerStyle(style);
   }
 
   public setSnappingTolerance(tolerance: number) {
-    OpenLayersSnappingManager.setSnappingTolerance(tolerance);
+    this.snappingManager.setSnappingTolerance(tolerance);
   }
 
   public renderSnappingFeatures(features: FeatureModelType[]) {
-    return OpenLayersSnappingManager.renderFeatures(features);
+    return this.snappingManager.renderFeatures(features);
   }
 
 }

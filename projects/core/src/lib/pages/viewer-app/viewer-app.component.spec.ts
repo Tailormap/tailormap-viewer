@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/angular';
 import { ViewerAppComponent } from './viewer-app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { firstValueFrom, of } from 'rxjs';
-import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { ErrorMessageComponent, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +13,7 @@ import {
 } from '@tailormap-viewer/api';
 import { CrossOriginPostMessageApiService } from '@tailormap-viewer/api';
 import { TAILORMAP_CROSS_ORIGIN_API_SERVICE } from '@tailormap-viewer/api';
+import { LoadViewerService } from '../../services/load-viewer.service';
 
 export const getActivatedRouteProvider = (segments: string[], fragment = '') => {
   return { provide: ActivatedRoute, useValue: {
@@ -27,6 +27,7 @@ export const getMockedRouterProvider = () => {
 };
 
 const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => {
+  const loadViewer = jest.fn();
   const { container } = await render(ViewerAppComponent, {
     declarations: [ ViewerAppComponent, ErrorMessageComponent ],
     imports: [MatProgressSpinnerModule],
@@ -45,19 +46,19 @@ const setup = async (loadingState?: LoadingStateEnum, errorMessage?: string) => 
       { provide: TAILORMAP_CROSS_ORIGIN_API_SERVICE, useClass: CrossOriginPostMessageApiService },
       { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useClass: TailormapSecurityApiV1MockService },
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
+      { provide: LoadViewerService, useValue: { loadViewer } },
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });
-  const store = TestBed.inject(MockStore);
-  return { container, store };
+  return { container, loadViewer };
 };
 
 describe('ViewerAppComponent', () => {
 
   test('should render', async () => {
-    const { container, store } = await setup();
+    const { container, loadViewer } = await setup();
     expect(container.querySelector('tm-base-layout')).toBeInTheDocument();
-    expect(await firstValueFrom(store.scannedActions$)).toEqual({ type: '[Core] Load Viewer', id: 'app/default' });
+    expect(loadViewer).toHaveBeenCalledWith('app/default');
     expect(document.title).toEqual('my fancy title');
   });
 

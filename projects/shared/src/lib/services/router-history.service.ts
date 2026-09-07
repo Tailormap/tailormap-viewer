@@ -14,7 +14,7 @@ export class RouterHistoryService {
   private currentUrl = new BehaviorSubject<string | null>(null);
   private historySize = 0;
 
-  constructor() {
+  public init() {
     this.router.events
       .pipe(
         takeUntilDestroyed(this.destroyRef),

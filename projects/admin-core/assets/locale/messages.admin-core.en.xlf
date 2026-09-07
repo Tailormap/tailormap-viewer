@@ -1463,6 +1463,9 @@
       <trans-unit id="admin-core.groups.alias-for-hint" datatype="html">
         <source>When logging in, group members will automatically be added to the group specified in &apos;Alias for group&apos;. This is useful for mapping a single sign-on group to another group, such as &apos;admin&apos;. Nested aliases are not supported.</source>
       </trans-unit>
+      <trans-unit id="admin-core.groups.alias-for-label" datatype="html">
+        <source>Set a display label if the group name is not descriptive enough, for example an object-id/guid.</source>
+      </trans-unit>
       <trans-unit id="admin-core.groups.delete-group-confirm" datatype="html">
         <source>Delete group <x id="PH" equiv-text="group.name"/></source>
       </trans-unit>
@@ -1588,6 +1591,12 @@
       </trans-unit>
       <trans-unit id="admin-core.oidc.default-authorities-hint" datatype="html">
         <source>Comma-separated list of groups assigned to all logged in users (including aliases for these groups).</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-checkbox" datatype="html">
+        <source>Disable automatic group creation</source>
+      </trans-unit>
+      <trans-unit id="admin-core.oidc.disable-automatic-group-creation-hint" datatype="html">
+        <source>If checked, groups will not be automatically created for roles received from the identity provider. This is useful if you want to manage groups manually or many unnecessary groups are received unfiltered from the identity provider.</source>
       </trans-unit>
       <trans-unit id="admin-core.oidc.edit-configuration" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ oidcConfiguration.name }}"/></source>

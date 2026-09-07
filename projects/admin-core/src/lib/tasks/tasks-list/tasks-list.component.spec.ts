@@ -5,6 +5,7 @@ import { initialTasksState, TasksState, tasksStateKey } from '../state/tasks.sta
 import { getTasks } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { TaskMonitoringService } from '../services/task-monitoring.service';
 
 const setup = async () => {
   const testTasks = getTasks();
@@ -20,6 +21,7 @@ const setup = async () => {
     imports: [SharedModule],
     providers: [
       { provide: Store, useValue: mockStore },
+      { provide: TaskMonitoringService, useValue: { loadTasks: jest.fn() } },
     ],
   });
   return mockStore;

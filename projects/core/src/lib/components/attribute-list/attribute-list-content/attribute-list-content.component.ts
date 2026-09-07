@@ -11,8 +11,8 @@ import {
   selectRowCountForSelectedTab,
   selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { loadData, updateAllRowsChecked, updateRowChecked, updateRowSelected, updateSort } from '../state/attribute-list.actions';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { BaseComponentTypeEnum, AttributeType, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
@@ -37,6 +37,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 export class AttributeListContentComponent implements OnInit {
   private store$ = inject(Store);
   private attributeListStateService = inject(AttributeListStateService);
+  private attributeListDataService = inject(AttributeListDataService);
   private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
   private attributeListStatisticsService = inject(AttributeListStatisticsService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
@@ -86,21 +87,13 @@ export class AttributeListContentComponent implements OnInit {
 
   public onSelectRow(row: { id: string; selected: boolean }): void {
     this.attributeListStateService.executeActionForCurrentData(dataId => {
-      this.store$.dispatch(updateRowSelected({
-        dataId,
-        rowId: row.id,
-        selected: row.selected,
-      }));
+      this.attributeListDataService.updateRowSelected(dataId, row.id, row.selected);
     });
   }
 
   public onSortClick(sort: { columnId: string; direction: 'asc' | 'desc' | '' }): void {
     this.attributeListStateService.executeActionForCurrentData(dataId => {
-      this.store$.dispatch(updateSort({
-        dataId,
-        column: sort.columnId,
-        direction: sort.direction,
-      }));
+      this.attributeListDataService.updateSort(dataId, sort.columnId, sort.direction);
     });
   }
 
@@ -170,7 +163,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!tab || !tab.layerId) {
           return;
         }
-        this.store$.dispatch(loadData({ tabId: tab.id }));
+        this.attributeListDataService.loadData(tab.id);
       });
   }
 
@@ -197,7 +190,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!tab || !tab.layerId) {
           return;
         }
-        this.store$.dispatch(updateAllRowsChecked({ tabId: tab.id, dataId: tab.selectedDataId, checked: $event.checked }));
+        this.attributeListDataService.updateAllRowsChecked(tab.id, tab.selectedDataId, $event.checked);
       });
   }
 
@@ -208,7 +201,7 @@ export class AttributeListContentComponent implements OnInit {
         if (!tab || !tab.layerId) {
           return;
         }
-        this.store$.dispatch(updateRowChecked({ tabId: tab.id, dataId: tab.selectedDataId, rowId: $event.id, checked: $event.checked }));
+        this.attributeListDataService.updateRowChecked(tab.id, tab.selectedDataId, $event.id, $event.checked);
       });
   }
 

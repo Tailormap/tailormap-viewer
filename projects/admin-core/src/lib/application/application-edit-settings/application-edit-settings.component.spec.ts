@@ -46,7 +46,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
       provideHttpClientTesting(),
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

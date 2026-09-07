@@ -5,8 +5,9 @@ import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum
 import { Store } from '@ngrx/store';
 import { selectCatalogLoadError, selectCatalogLoadStatus } from '../state/catalog.selectors';
 import { map, Observable, of, Subject, take, takeUntil } from 'rxjs';
-import { expandTree, loadCatalog } from '../state/catalog.actions';
+import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
+import { CatalogService } from '../services/catalog.service';
 
 @Component({
   selector: 'tm-admin-catalog-base-tree',
@@ -19,6 +20,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);
   private store$ = inject(Store);
   private ngZone = inject(NgZone);
+  private catalogService = inject(CatalogService);
 
 
   public isLoading$: Observable<boolean> = of(false);
@@ -49,7 +51,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe(loadStatus => {
         if (loadStatus === LoadingStateEnum.INITIAL || loadStatus === LoadingStateEnum.FAILED) {
-          this.store$.dispatch(loadCatalog());
+          this.catalogService.loadCatalog();
         }
       });
   }
@@ -61,7 +63,7 @@ export class CatalogBaseTreeComponent implements OnDestroy {
   }
 
   public onRetryClick() {
-    this.store$.dispatch(loadCatalog());
+    this.catalogService.loadCatalog();
   }
 
   public ngOnDestroy(): void {

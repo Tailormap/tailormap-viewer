@@ -20,7 +20,7 @@ describe('GeoServiceFormComponent', () => {
       declarations: [ PasswordFieldComponent, AuthorizationEditComponent ],
       on: { changed: changedFn },
       providers: [
-        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of(null)) } },
+        { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
         provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
       ],

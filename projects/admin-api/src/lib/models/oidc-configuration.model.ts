@@ -10,4 +10,5 @@ export interface OIDCConfigurationModel {
   image?: string | null;
   defaultAuthorities?: string[] | null;
   rolesClaimFilterRegex?: string | null;
+  disableAutomaticGroupCreation?: boolean;
 }

@@ -64,7 +64,7 @@
     <mat-selection-list formControlName="groups">
       @for (group of allGroups$ | async; track group) {
         <mat-list-option [value]="group.name">
-          {{group.name}}
+          {{group.label || group.name}}
         </mat-list-option>
       }
     </mat-selection-list>

@@ -109,27 +109,27 @@
   height: 40px;
 }
 
-::ng-deep.body--has-dialog-left .map-controls-left {
+::ng-deep.has-dialog-left .map-controls-left {
   transform: translateX(var(--dialog-width-left));
 }
 
-::ng-deep.body--has-dialog-left .map-controls-left--on-bottom {
+::ng-deep.has-dialog-left .map-controls-left--on-bottom {
   transform: none;
 }
 
-::ng-deep.body--has-dialog-right .map-controls-right {
+::ng-deep.has-dialog-right .map-controls-right {
   transform: translateX(calc((var(--dialog-width-right) + var(--body-margin)) * -1));
 }
 
-::ng-deep.body--has-dialog-right .map-controls-right--on-bottom {
+::ng-deep.has-dialog-right .map-controls-right--on-bottom {
   transform: none;
 }
 
 @media screen and (max-width: 725px) {
-  ::ng-deep.body--has-dialog-left .map-controls-left {
+  ::ng-deep.has-dialog-left .map-controls-left {
     transform: none;
   }
-  ::ng-deep.body--has-dialog-right .map-controls-right {
+  ::ng-deep.has-dialog-right .map-controls-right {
     transform: none;
   }
 }

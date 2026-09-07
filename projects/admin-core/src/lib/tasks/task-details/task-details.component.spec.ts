@@ -9,6 +9,7 @@ import { TaskMonitoringService } from '../services/task-monitoring.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TaskDetailsRowComponent } from '../task-details-row/task-details-row.component';
+import { SearchIndexService } from '../../search-index/services/search-index.service';
 
 const setup = async () => {
   const testTasks = getTasks();
@@ -33,6 +34,7 @@ const setup = async () => {
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: TaskMonitoringService, useValue: taskService },
+      { provide: SearchIndexService, useValue: { reloadSearchIndexes: jest.fn() } },
       provideHttpClient(),
       provideHttpClientTesting(),
     ],

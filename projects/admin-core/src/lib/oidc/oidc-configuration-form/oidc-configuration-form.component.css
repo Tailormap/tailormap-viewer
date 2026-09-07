@@ -23,3 +23,12 @@
   margin-top: 16px;
   margin-bottom: 16px;
 }
+
+.checkbox-hint-wrapper {
+  padding: 0 16px 32px 16px;
+  font-family: var(--mat-form-field-subscript-text-font, var(--mat-sys-body-small-font));
+  line-height: var(--mat-form-field-subscript-text-line-height, var(--mat-sys-body-small-line-height));
+  font-size: var(--mat-form-field-subscript-text-size, var(--mat-sys-body-small-size));
+  letter-spacing: var(--mat-form-field-subscript-text-tracking, var(--mat-sys-body-small-tracking));
+  font-weight: var(--mat-form-field-subscript-text-weight, var(--mat-sys-body-small-weight));
+}

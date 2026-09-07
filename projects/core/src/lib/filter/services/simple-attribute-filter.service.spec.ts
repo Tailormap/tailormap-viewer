@@ -3,7 +3,7 @@ import { SimpleAttributeFilterService } from './simple-attribute-filter.service'
 import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';
 import { FilterConditionEnum, AttributeFilterModel, FilterTypeEnum } from '@tailormap-viewer/api';
 import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../../state/filter-state/filter.selectors';
-import { Store, StoreModule } from '@ngrx/store';
+import { provideStore, Store } from '@ngrx/store';
 import { addAppLayers } from '../../map/state/map.actions';
 import { mapStateKey } from '../../map/state/map.state';
 import { mapReducer } from '../../map/state/map.reducer';
@@ -21,8 +21,7 @@ jest.mock('nanoid', () => ({
 const createService = () => {
   idCount = 0;
   TestBed.configureTestingModule({
-    imports: [StoreModule.forRoot({ [coreStateKey]: coreReducer, [mapStateKey]: mapReducer })],
-    providers: [SimpleAttributeFilterService],
+    providers: [ SimpleAttributeFilterService, provideStore({ [coreStateKey]: coreReducer, [mapStateKey]: mapReducer }) ],
   });
   const service = TestBed.inject(SimpleAttributeFilterService);
   const store = TestBed.inject(Store);

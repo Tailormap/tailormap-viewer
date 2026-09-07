@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DOCUMENT, inject
 import { distinctUntilChanged, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { loadViewer } from '../../state/core.actions';
 import { selectViewerErrorMessage, selectViewerLoadingState, selectViewerTitle } from '../../state/core.selectors';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { ApplicationBookmarkService } from '../../services/application-bookmark/application-bookmark.service';
 import { MobileLayoutService } from '../../services/viewer-layout/mobile-layout.service';
+import { LoadViewerService } from '../../services/load-viewer.service';
 
 @Component({
   selector: 'tm-viewer-app',
@@ -24,6 +24,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
   private appStyleService = inject(ApplicationStyleService);
   private document = inject<Document>(DOCUMENT);
   private mobileLayoutService = inject(MobileLayoutService);
+  private loadViewerService = inject(LoadViewerService);
 
 
   private static DEFAULT_TITLE = 'Tailormap';
@@ -54,7 +55,7 @@ export class ViewerAppComponent implements OnInit, OnDestroy {
       )
       .subscribe(loadViewerParams => {
         this.appStyleService.resetStyling();
-        this.store$.dispatch(loadViewer(loadViewerParams || {}));
+        this.loadViewerService.loadViewer(loadViewerParams?.id);
       });
 
     this.errorMessage$ = this.store$.select(selectViewerErrorMessage);
