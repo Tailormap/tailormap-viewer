@@ -155,6 +155,7 @@
 .section-label__heading {
   color: var(--primary-color);
   font-size: 13px;
+  font-weight: normal;
 }
 
 .attribution ::ng-deep a {

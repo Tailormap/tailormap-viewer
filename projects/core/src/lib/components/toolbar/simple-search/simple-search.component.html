@@ -71,9 +71,9 @@
                 @for (searchResult of searchResults; track searchResult.id) {
                   @if (searchResult && searchResult.results.length > 0) {
                     <mat-optgroup class="section-label" [id]="'search-group-' + searchResult.id">
-                      <div role="heading" class="section-label__heading">
+                      <h2 class="section-label__heading">
                         {{ searchResult.name }}
-                      </div>
+                      </h2>
                       @for(option of searchResult.results; track option.id) {
                         <mat-option [value]="option">{{option.label}}</mat-option>
                       }
