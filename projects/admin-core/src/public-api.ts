@@ -4,8 +4,8 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./typings.d.ts" />
 
-export * from './lib/admin-core.module';
-export * from './lib/admin-core-routing.module';
+export * from './lib/admin-core.providers';
+export * from './lib/admin-core.routes';
 export * from './lib/settings/services/admin-settings-router.service';
 export * from './lib/config/services/config.service';
 export * from './lib/application/services/application-api.service';

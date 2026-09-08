@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogTreeNodeComponent } from './catalog-tree-node.component';
 import { getCatalogNode, getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
@@ -47,6 +48,7 @@ describe('CatalogTreeNodeComponent', () => {
   test('should render layer', async () => {
     const layer: ExtendedGeoServiceLayerModel = {
       ...getGeoServiceLayer({ id: 'my-layer', name: 'my-layer', title: 'nice layer' }),
+      layerTitle: 'nice layer',
       type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
       serviceId: 'test',
       catalogNodeId: '1',

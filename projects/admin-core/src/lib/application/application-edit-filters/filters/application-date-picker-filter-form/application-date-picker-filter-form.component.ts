@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, input, computed, Input, EventEmitter, Output, DestroyRef, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AttributeType, EditFilterConfigurationModel, FilterConditionEnum, FilterToolEnum, UpdateDatePickerFilterModel,
 } from '@tailormap-viewer/api';
@@ -7,13 +7,28 @@ import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { DateTime } from 'luxon';
 import { debounceTime } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
-  selector: 'tm-admin-application-date-picker-filter-form',
-  templateUrl: './application-date-picker-filter-form.component.html',
-  styleUrls: ['./application-date-picker-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-date-picker-filter-form',
+    templateUrl: './application-date-picker-filter-form.component.html',
+    styleUrls: ['./application-date-picker-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+    ],
 })
 export class ApplicationDatePickerFilterFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

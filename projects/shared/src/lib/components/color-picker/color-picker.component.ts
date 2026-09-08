@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ColorHelper } from '../../helpers/color.helper';
@@ -7,6 +7,11 @@ import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
 import { BrowserHelper } from '../../helpers';
 import { PopoverPositionEnum } from '../../services';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatError, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 const defaultColors: Array<string | undefined> = [
   'rgb(136, 14, 79)',
@@ -59,10 +64,21 @@ const defaultColors: Array<string | undefined> = [
 ];
 
 @Component({
-  selector: 'tm-color-picker',
-  templateUrl: './color-picker.component.html',
-  styleUrls: ['./color-picker.component.css'],
-  standalone: false,
+    selector: 'tm-color-picker',
+    templateUrl: './color-picker.component.html',
+    styleUrls: ['./color-picker.component.css'],
+    imports: [
+        MatButton,
+        MatIcon,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatError,
+        MatSuffix,
+        MatIconButton,
+        TooltipDirective,
+    ],
 })
 export class ColorPickerComponent implements OnInit, OnDestroy {
   private popper = inject(PopoverService);

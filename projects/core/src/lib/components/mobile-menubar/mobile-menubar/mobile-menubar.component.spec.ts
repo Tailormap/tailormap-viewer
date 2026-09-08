@@ -1,9 +1,9 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { RegisteredComponentsRendererComponent } from '../../registered-components-renderer/registered-components-renderer.component';
+import { MenubarButtonComponent } from '../../menubar/menubar-button/menubar-button.component';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../../map/state/map.selectors';
@@ -11,11 +11,11 @@ import { MobileMenubarComponent } from './mobile-menubar.component';
 
 @Component({
   selector: 'tm-menu-button-test',
-  standalone: false,
-  template: '<tm-menubar-button icon="test" [tooltip$]="tooltip$">Click me</tm-menubar-button>',
+  imports: [MenubarButtonComponent],
+  template: '<tm-menubar-button icon="test" [tooltip]="tooltip">Click me</tm-menubar-button>',
 })
 class TmTestingComponent {
-  public tooltip$ = of('MenuButton');
+  public tooltip = 'MenuButton';
 }
 
 const mockedControlsService = {
@@ -28,10 +28,8 @@ describe('MenubarComponent', () => {
 
   test('should render', async () => {
     await render(MobileMenubarComponent, {
-      declarations: [RegisteredComponentsRendererComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        SharedModule,
         MatIconTestingModule,
       ],
       providers: [

@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { HtmlHelper } from './html.helper';
 
 describe('HtmlHelper', () => {

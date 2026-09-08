@@ -1,8 +1,8 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FilterMenuButtonComponent } from './filter-menu-button.component';
 import { of } from 'rxjs';
-import { MenubarButtonComponent, MenubarService } from '../../menubar';
-import { SharedModule } from '@tailormap-viewer/shared';
+import { MenubarService } from '../../menubar';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -13,14 +13,13 @@ import { selectActiveFilterGroups, selectVerifiedCurrentFilterGroups } from '../
 describe('FilterMenuButtonComponent', () => {
 
   test('should render', async () => {
-    const toggleVisibleFn = jest.fn();
+    const toggleVisibleFn = vi.fn();
     const menubarService = {
       toggleActiveComponent: toggleVisibleFn,
       isComponentVisible$: () => of(false),
     };
     await render(FilterMenuButtonComponent, {
-      declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
+      imports: [ MatIconTestingModule, MatBadge ],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },

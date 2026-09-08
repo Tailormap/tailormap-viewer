@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { FeatureSourceModel } from '@tailormap-admin/admin-api';
 import { Store } from '@ngrx/store';
 import { selectGeoServiceById } from '../../state/catalog.selectors';
@@ -7,13 +7,23 @@ import { ExtendedGeoServiceLayerModel } from '../../models/extended-geo-service-
 import { of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { GeoServiceLayerFormDialogComponent } from '../../geo-service-layer-form-dialog/geo-service-layer-form-dialog.component';
 import { AdminSnackbarService } from '../../../shared/services/admin-snackbar.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-geo-service-used-dialog',
-  templateUrl: './feature-source-used-dialog.component.html',
-  styleUrls: ['./feature-source-used-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-geo-service-used-dialog',
+    templateUrl: './feature-source-used-dialog.component.html',
+    styleUrls: ['./feature-source-used-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatIcon,
+        MatDialogActions,
+        MatButton,
+    ],
 })
 export class FeatureSourceUsedDialogComponent {
   private dialogRef = inject<MatDialogRef<FeatureSourceUsedDialogComponent, boolean | 'layer-updated'>>(MatDialogRef);

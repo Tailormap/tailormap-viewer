@@ -19,6 +19,12 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { nanoid } from 'nanoid';
 import { UserLoginCheckService } from '../../services/user-login-check.service';
 import { ProviderHelper } from '../../viewer-instance/provider.helper';
+import { provideAttributeList } from '../../components/attribute-list/attribute-list.providers';
+import { provideDrawing } from '../../components/drawing/drawing.providers';
+import { provideEdit } from '../../components/edit/edit.providers';
+import { provideFeatureInfo } from '../../components/feature-info/feature-info.providers';
+import { provideFilterComponent } from '../../components/filter/filter-component.providers';
+import { provideToc } from '../../components/toc/toc.providers';
 
 /**
  * Providers that give a {@link StoriesViewerAppComponent} its own, isolated NgRx store + effects +
@@ -55,6 +61,12 @@ export function getRootProviders(
     { provide: VIEWER_ROUTE_SYNC_ENABLED, useValue: false },
     { provide: VIEWER_ROOT_ELEMENT, useValue: hostElement },
     ...ProviderHelper.getBaseProviders(),
+    ...provideToc(),
+    ...provideDrawing(),
+    ...provideEdit(),
+    ...provideFeatureInfo(),
+    ...provideFilterComponent(),
+    ...provideAttributeList(),
     provideEnvironmentInitializer(() => {
       inject(IconService).loadIconsToIconRegistry(inject(MatIconRegistry), inject(DomSanitizer));
       inject(AuthenticatedUserService).fetchUserDetails();
@@ -90,11 +102,11 @@ export interface StoriesViewerRef {
  * Mounts a {@link StoriesViewerAppComponent} into `hostElement` as its **own Angular application**, so
  * multiple viewers can live on one page, each with a fully independent store/map context.
  *
- * The viewer's feature NgModules (imported by {@link StoriesViewerAppComponent} via `LayoutModule`) each
- * register their own state slice via the standalone `provideState()` (in their own `providers` array),
- * same as the main, single-viewer app (`CoreModule`, which provides its root store via `provideStore()`
- * too). Both roots use the standalone `@ngrx/store` API rather than `StoreModule.forRoot()`/
- * `forFeature()`, so `ROOT_STORE_PROVIDER` is available to every feature slice in either application.
+ * Each feature component's state slice is registered here via its own `provide*()` function (e.g.
+ * {@link provideToc}, {@link provideDrawing}), same as the main, single-viewer app (`provideCore()`,
+ * which provides its root store via `provideStore()` too, and wires up the same `provide*()` functions).
+ * Both roots use the standalone `@ngrx/store` API rather than `StoreModule.forRoot()`/`forFeature()`, so
+ * `ROOT_STORE_PROVIDER` is available to every feature slice in either application.
  *
  * @example
  * const ref = await mountStoriesViewer({

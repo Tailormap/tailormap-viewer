@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { FeatureSelectionBookmarkHelper } from './feature-selection-bookmark.helper';
 import { FilterConditionEnum, FilterTypeEnum } from '@tailormap-viewer/api';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';

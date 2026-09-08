@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl } from '@tailormap-viewer/shared';
+import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
 import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
 import {
   selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
   selectPagingDataSelectedTab, selectSelectedTab,
 } from '../state/attribute-list.selectors';
-import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, PageEvent, MatPaginator } from '@angular/material/paginator';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { AttributeListPagingDialogComponent } from '../attribute-list-paging-dialog/attribute-list-paging-dialog.component';
@@ -19,17 +19,30 @@ import { MapService } from '@tailormap-viewer/map';
 import { selectCQLFilters, selectViewerId } from '../../../state';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 import { map } from 'rxjs/operators';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatButton } from '@angular/material/button';
+import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-attribute-list-tab-toolbar',
-  templateUrl: './attribute-list-tab-toolbar.component.html',
-  styleUrls: ['./attribute-list-tab-toolbar.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
-  providers: [
-    { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
-  ],
+    selector: 'tm-attribute-list-tab-toolbar',
+    templateUrl: './attribute-list-tab-toolbar.component.html',
+    styleUrls: ['./attribute-list-tab-toolbar.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
+    ],
+    imports: [
+        MatToolbar,
+        MatButton,
+        AttributeListExportButtonComponent,
+        MatProgressSpinner,
+        TooltipDirective,
+        MatPaginator,
+        AsyncPipe,
+    ],
 })
 export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

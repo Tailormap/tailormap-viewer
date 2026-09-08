@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { RegisteredComponentsRendererComponent } from './registered-components-renderer.component';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

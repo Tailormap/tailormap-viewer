@@ -1,29 +1,30 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { InfoComponent } from './info.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
-import { LoadingStateEnum, SharedDirectivesModule, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, ComponentModel, InfoComponentConfigModel } from '@tailormap-viewer/api';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CoreSharedModule } from '../../../shared';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 
 describe('InfoComponent', () => {
   test('should render template content', async () => {
     const mockMenubarService = {
-      isComponentVisible$: jest.fn(() => of(true)),
-      registerComponent: jest.fn(),
-      toggleActiveComponent: jest.fn(),
-      deregisterComponent: jest.fn(),
+      isComponentVisible$: vi.fn(() => of(true)),
+      registerComponent: vi.fn(),
+      toggleActiveComponent: vi.fn(),
+      deregisterComponent: vi.fn(),
+      setMobilePanelHeight: vi.fn(),
     };
 
     const mockComponentRegistrationService = {
-      registerComponent: jest.fn(),
-      deregisterComponent: jest.fn(),
+      registerComponent: vi.fn(),
+      deregisterComponent: vi.fn(),
     };
 
     const mockConfig: ComponentModel<InfoComponentConfigModel> = {
@@ -37,10 +38,7 @@ describe('InfoComponent', () => {
 
     await render(InfoComponent, {
       imports: [
-        SharedModule,
-        CoreSharedModule,
         NoopAnimationsModule,
-        SharedDirectivesModule,
         MatIconTestingModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

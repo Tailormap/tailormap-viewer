@@ -54,5 +54,43 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/shared/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/shared/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/admin-core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-api/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/admin-api/tsconfig.spec.json"
+    }
+  ]
 }

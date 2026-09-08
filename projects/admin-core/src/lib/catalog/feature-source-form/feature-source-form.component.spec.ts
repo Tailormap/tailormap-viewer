@@ -1,27 +1,25 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceFormComponent } from './feature-source-form.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('FeatureSourceFormComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
-    const changedFn = jest.fn();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const changedFn = vi.fn();
     await render(FeatureSourceFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [PasswordFieldComponent],
+      imports: [MatIconTestingModule],
       on: { changed: changedFn },
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
@@ -32,17 +30,16 @@ describe('FeatureSourceFormComponent', () => {
     expect(await screen.queryByPlaceholderText('URL')).toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();
     await ue.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(changedFn).toHaveBeenCalledTimes(1);
       expect(changedFn).toHaveBeenCalledWith({ title: 'Some WFS source', url: 'http://localhost.test', protocol: 'WFS', authentication: undefined, jdbcConnection: undefined });
     });
   });
 
   test('should show JDBC fields in case of JDBC protocol', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
-      declarations: [PasswordFieldComponent],
+      imports: [MatIconTestingModule],
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();

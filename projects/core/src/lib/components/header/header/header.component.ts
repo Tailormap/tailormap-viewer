@@ -4,13 +4,24 @@ import { selectComponentsConfigForType } from '../../../state';
 import { BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel, UploadCategoryEnum } from '@tailormap-viewer/api';
 import { CssHelper } from '@tailormap-viewer/shared';
 import { HeaderHelper } from './header.helper';
+import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ImageWithDescriptionComponent,
+        MatIconButton,
+        MatMenuTrigger,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+    ],
 })
 export class HeaderComponent implements OnDestroy {
   private store$ = inject(Store);

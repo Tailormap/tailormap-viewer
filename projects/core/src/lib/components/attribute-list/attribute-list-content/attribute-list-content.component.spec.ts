@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
 import { AttributeListContentComponent } from './attribute-list-content.component';
@@ -10,10 +11,10 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
-import { getMockApiService } from '../../../services/load-viewer.service.spec';
+import { getMockApiService } from '../../../services/load-viewer.service.mock';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 describe('AttributeListContent', () => {
 
@@ -25,7 +26,14 @@ describe('AttributeListContent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         getMapServiceMock().provider,
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });
@@ -41,7 +49,14 @@ describe('AttributeListContent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         getMapServiceMock().provider,
         provideMockStore({
-          initialState: store,
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
         }),
       ],
     });

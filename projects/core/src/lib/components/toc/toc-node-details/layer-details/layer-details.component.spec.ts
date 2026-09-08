@@ -1,19 +1,17 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LayerDetailsComponent } from './layer-details.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { LegendLayerComponent } from '../../../legend/legend-layer/legend-layer.component';
-import { LayerTransparencyComponent } from '../layer-transparency/layer-transparency.component';
 import { LegendService } from '../../../legend/services/legend.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getMapServiceMock } from '../../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../../test-helpers/map-service.mock';
 
 const setup = async () => {
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   const legendServiceMock = {
-    getLegendInfo$: jest.fn(() => of([
+    getLegendInfo$: vi.fn(() => of([
       {
         layer: { ...appLayer, service: getServiceModel() },
         url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',
@@ -22,8 +20,7 @@ const setup = async () => {
     ])),
   };
   await render(LayerDetailsComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ LegendLayerComponent, LayerTransparencyComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },

@@ -1,9 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogService } from '../services/catalog.service';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { CatalogNodeModel } from '@tailormap-admin/admin-api';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 export interface CatalogNodeFormDialogData {
   node: ExtendedCatalogNodeModel | null;
@@ -11,11 +15,19 @@ export interface CatalogNodeFormDialogData {
 }
 
 @Component({
-  selector: 'tm-admin-catalog-node-form-dialog',
-  templateUrl: './catalog-node-form-dialog.component.html',
-  styleUrls: ['./catalog-node-form-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-node-form-dialog',
+    templateUrl: './catalog-node-form-dialog.component.html',
+    styleUrls: ['./catalog-node-form-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        CatalogNodeFormComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+    ],
 })
 export class CatalogNodeFormDialogComponent {
   public data = inject<CatalogNodeFormDialogData>(MAT_DIALOG_DATA);

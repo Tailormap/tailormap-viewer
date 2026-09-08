@@ -1,13 +1,20 @@
 import { Component, ChangeDetectionStrategy, Input, signal, computed } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { PanelResizerComponent } from '@tailormap-viewer/shared';
 
 const LOCALSTORAGE_LIST_WIDTH_KEY = 'tm-admin-page-template-list-width';
 
 @Component({
-  selector: 'tm-admin-admin-page-template',
-  templateUrl: './admin-page-template.component.html',
-  styleUrls: ['./admin-page-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-admin-page-template',
+    templateUrl: './admin-page-template.component.html',
+    styleUrls: ['./admin-page-template.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgClass,
+        PanelResizerComponent,
+        RouterOutlet,
+    ],
 })
 export class AdminPageTemplateComponent {
 

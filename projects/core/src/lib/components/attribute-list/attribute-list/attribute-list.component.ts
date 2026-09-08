@@ -9,7 +9,7 @@ import {
 import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { setAttributeListVisibility, setSelectedTab } from '../state/attribute-list.actions';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { MenubarService } from '../../menubar';
 import { AttributeListMenuButtonComponent } from '../attribute-list-menu-button/attribute-list-menu-button.component';
@@ -17,14 +17,31 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { MapService } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { OverlayRef, PopoverPositionEnum, PopoverService } from '@tailormap-viewer/shared';
+import { OverlayRef, PopoverPositionEnum, PopoverService, TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListColumnSelectionComponent } from '../attribute-list-column-selection/attribute-list-column-selection.component';
+import { BottomPanelComponent } from '../../../shared/components/bottom-panel/bottom-panel.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AttributeListTabComponent } from '../attribute-list-tab/attribute-list-tab.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-attribute-list',
-  templateUrl: './attribute-list.component.html',
-  styleUrls: ['./attribute-list.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-list',
+    templateUrl: './attribute-list.component.html',
+    styleUrls: ['./attribute-list.component.css'],
+    imports: [
+        BottomPanelComponent,
+        MatProgressSpinner,
+        MatTabGroup,
+        MatTab,
+        MatTabLabel,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        AttributeListTabComponent,
+        AsyncPipe,
+    ],
 })
 export class AttributeListComponent implements OnInit, OnDestroy {
   private store$ = inject<Store<AttributeListState>>(Store);

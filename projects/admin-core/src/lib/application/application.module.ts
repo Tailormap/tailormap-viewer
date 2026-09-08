@@ -6,10 +6,10 @@ import { provideState } from '@ngrx/store';
 import { ApplicationEditSettingsComponent } from './application-edit-settings/application-edit-settings.component';
 import { ApplicationCreateComponent } from './application-create/application-create.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { RouterOutlet } from '@angular/router';
 import { ApplicationFormComponent } from './application-form/application-form.component';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { ApplicationHomeComponent } from './application-home/application-home.component';
 import { ApplicationEditComponent } from './application-edit/application-edit.component';
 import { ApplicationEditLayersComponent } from './application-edit-layers/application-edit-layers.component';
@@ -49,7 +49,15 @@ import {
 } from './application-edit-filters/filters/application-dropdown-list-filter-form/application-dropdown-list-filter-form.component';
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    RouterOutlet,
+    CatalogModule,
+    ComponentsModule,
+    FormModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
     ApplicationEditSettingsComponent,
     ApplicationCreateComponent,
     ApplicationListComponent,
@@ -82,28 +90,16 @@ import {
     ApplicationDatePickerFilterFormComponent,
     ApplicationDropdownListFilterFormComponent,
     ApplicationTextFilterFormComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    SharedAdminComponentsModule,
-    RouterOutlet,
-    CatalogModule,
-    ComponentsModule,
-    FormModule,
-    CdkVirtualScrollViewport,
-    CdkFixedSizeVirtualScroll,
-    CdkVirtualForOf,
-  ],
+],
     exports: [
         ApplicationListComponent,
     ],
-  providers: [
-    provideState(applicationStateKey, applicationReducer),
-    provideEnvironmentInitializer(() => {
-      inject(ApplicationService).listenForApplicationChanges();
-    }),
-  ],
+    providers: [
+        provideState(applicationStateKey, applicationReducer),
+        provideEnvironmentInitializer(() => {
+            inject(ApplicationService).listenForApplicationChanges();
+        }),
+    ],
 })
 export class ApplicationModule {
 }

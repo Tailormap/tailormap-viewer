@@ -1,18 +1,17 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AboutDialogComponent } from './about-dialog.component';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 
 describe('AboutDialogComponent', () => {
 
   test('should render', async () => {
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(AboutDialogComponent, {
-      imports: [MatProgressSpinnerModule],
       providers: [
         provideHttpClient(
           withXsrfConfiguration({

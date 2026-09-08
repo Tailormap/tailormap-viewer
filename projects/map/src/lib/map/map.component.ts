@@ -5,10 +5,9 @@ import { combineLatest, take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'tm-map',
-  templateUrl: 'map.component.html',
-  styleUrl: 'map.component.css',
-  standalone: false,
+    selector: 'tm-map',
+    templateUrl: 'map.component.html',
+    styleUrl: 'map.component.css',
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   public inIframe = window.self !== window.top;

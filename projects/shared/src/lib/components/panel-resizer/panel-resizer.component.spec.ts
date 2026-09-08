@@ -1,27 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PanelResizerComponent } from './panel-resizer.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { render, screen } from '@testing-library/angular';
+import { describe, test, expect } from 'vitest';
 
-describe('ResizeHandleComponent', () => {
-  let component: PanelResizerComponent;
-  let fixture: ComponentFixture<PanelResizerComponent>;
+describe('PanelResizerComponent', () => {
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [PanelResizerComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PanelResizerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  test('should create', async () => {
+    await render(PanelResizerComponent);
+    expect(await screen.findByRole('separator')).toBeInTheDocument();
   });
 
 });

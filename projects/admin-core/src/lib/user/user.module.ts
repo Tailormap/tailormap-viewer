@@ -1,6 +1,6 @@
 import { NgModule, inject, provideEnvironmentInitializer } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@tailormap-viewer/shared';
+
 import { UserListComponent } from './user-list/user-list.component';
 import { GroupListComponent } from './group-list/group-list.component';
 import { UserFormComponent } from './user-form/user-form.component';
@@ -9,7 +9,7 @@ import { UserHomeComponent } from './user-home/user-home.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { RouterModule } from '@angular/router';
-import { SharedAdminComponentsModule } from '../shared/components/shared-admin-components.module';
+
 import { GroupHomeComponent } from './group-home/group-home.component';
 import { GroupEditComponent } from './group-edit/group-edit.component';
 import { GroupCreateComponent } from './group-create/group-create.component';
@@ -20,7 +20,9 @@ import { UserService } from './services/user.service';
 import { GroupService } from './services/group.service';
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    RouterModule,
     UserListComponent,
     GroupListComponent,
     UserFormComponent,
@@ -31,24 +33,18 @@ import { GroupService } from './services/group.service';
     GroupHomeComponent,
     GroupEditComponent,
     GroupCreateComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule,
-    SharedAdminComponentsModule,
-  ],
-  exports: [
-    UserListComponent,
-    GroupListComponent,
-  ],
-  providers: [
-    provideState(userStateKey, userReducer),
-    provideEnvironmentInitializer(() => {
-      inject(UserService).listenForUserChanges();
-      inject(GroupService).listenForGroupChanges();
-    }),
-  ],
+],
+    exports: [
+        UserListComponent,
+        GroupListComponent,
+    ],
+    providers: [
+        provideState(userStateKey, userReducer),
+        provideEnvironmentInitializer(() => {
+            inject(UserService).listenForUserChanges();
+            inject(GroupService).listenForGroupChanges();
+        }),
+    ],
 })
 export class UserModule {
 }

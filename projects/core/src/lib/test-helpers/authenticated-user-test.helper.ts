@@ -22,9 +22,9 @@ export class AuthenticatedUserTestHelper {
     const getUserDetailsMock = new BehaviorSubject<SecurityModel>({ isAuthenticated, roles, username });
     return {
       getUserDetailsMock,
-      getUserDetails$: jest.fn(() => getUserDetailsMock.asObservable()),
-      isAdminUser$: jest.fn(() => getUserDetailsMock.asObservable().pipe(map(user => (user.roles || []).includes('admin')))),
-      logout$: jest.fn(() => of(true)),
+      getUserDetails$: vi.fn(() => getUserDetailsMock.asObservable()),
+      isAdminUser$: vi.fn(() => getUserDetailsMock.asObservable().pipe(map(user => (user.roles || []).includes('admin')))),
+      logout$: vi.fn(() => of(true)),
     };
   }
 

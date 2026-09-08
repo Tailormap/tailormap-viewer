@@ -11,7 +11,7 @@ import {
   expandCollapseFeatureInfoDialog, expandCollapseFeatureInfoLayerList, hideFeatureInfoDialog, showNextFeatureInfoFeature,
   showPreviousFeatureInfoFeature,
 } from '../state/feature-info.actions';
-import { CssHelper } from '@tailormap-viewer/shared';
+import { CssHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
 import { FeatureInfoHelper } from '../helpers/feature-info.helper';
@@ -24,13 +24,31 @@ import { selectIn3dView } from '../../../map/state/map.selectors';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarService } from '../../menubar';
 import { selectComponentTitle } from '../../../state';
+import { FeatureInfoLayerDropdownComponent } from '../feature-info-layer-dropdown/feature-info-layer-dropdown.component';
+import { FeatureInfoContentComponent } from '../feature-info-content/feature-info-content.component';
+import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { FeatureInfoLayerListComponent } from '../feature-info-layer-list/feature-info-layer-list.component';
+import { FeatureInfoLayerItemComponent } from '../feature-info-layer-item/feature-info-layer-item.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-feature-info-dialog',
-  templateUrl: './feature-info-dialog.component.html',
-  styleUrls: ['./feature-info-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-feature-info-dialog',
+    templateUrl: './feature-info-dialog.component.html',
+    styleUrls: ['./feature-info-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FeatureInfoLayerDropdownComponent,
+        FeatureInfoContentComponent,
+        DialogComponent,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        FeatureInfoLayerListComponent,
+        FeatureInfoLayerItemComponent,
+        AsyncPipe,
+    ],
 })
 export class FeatureInfoDialogComponent {
   private store$ = inject(Store);

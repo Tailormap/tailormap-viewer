@@ -2,18 +2,24 @@ import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@
 import {
   BaseComponentTypeEnum, FeatureInfoConfigModel,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { debounceTime } from 'rxjs';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-feature-info-component-config',
-  templateUrl: './feature-info-component-config.component.html',
-  styleUrls: ['./feature-info-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-info-component-config',
+    templateUrl: './feature-info-component-config.component.html',
+    styleUrls: ['./feature-info-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        ReactiveFormsModule,
+        MatCheckbox,
+    ],
 })
 export class FeatureInfoComponentConfigComponent implements ConfigurationComponentModel<FeatureInfoConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

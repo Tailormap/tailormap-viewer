@@ -1,17 +1,29 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { DateTime } from 'luxon';
 import { AttributeFilterModel, FilterConditionEnum, FilterToolEnum } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
-  selector: 'tm-date-picker-filter',
-  templateUrl: './date-picker-filter.component.html',
-  styleUrls: ['./date-picker-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-date-picker-filter',
+    templateUrl: './date-picker-filter.component.html',
+    styleUrls: ['./date-picker-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+    ],
 })
 export class DatePickerFilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

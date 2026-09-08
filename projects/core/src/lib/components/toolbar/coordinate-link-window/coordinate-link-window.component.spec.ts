@@ -1,13 +1,13 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CoordinateLinkWindowComponent } from './coordinate-link-window.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { of, Subject } from 'rxjs';
 import { CoordinateLinkWindowConfigModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { CoordinateHelper } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const setup = async (withConfig?: boolean) => {
   const config: CoordinateLinkWindowConfigModel | undefined = withConfig ? {
@@ -20,8 +20,8 @@ const setup = async (withConfig?: boolean) => {
     title: 'CLW',
   } : undefined;
   const storeMock = {
-    select: jest.fn(() => of(({ config }))),
-    dispatch: jest.fn(),
+    select: vi.fn(() => of(({ config }))),
+    dispatch: vi.fn(),
   };
   const mapClickSubject = new Subject();
   const mapServiceMock = getMapServiceMock(tool => ({
@@ -29,7 +29,7 @@ const setup = async (withConfig?: boolean) => {
     mapClick$: mapClickSubject.asObservable(),
   }), 'EPSG:28992');
   await render(CoordinateLinkWindowComponent, {
-    imports: [ MatIconTestingModule, SharedModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: Store, useValue: storeMock },
       mapServiceMock.provider,
@@ -55,14 +55,14 @@ describe('CoordinateLinkWindowComponent', () => {
   test('should render button and open window on map click', async () => {
     // override window.open and projectCoordinates
     const projectCoordinates = CoordinateHelper.projectCoordinates;
-    CoordinateHelper.projectCoordinates = jest.fn((mapCoordinates, mapProjection, targetProjection) => {
+    CoordinateHelper.projectCoordinates = vi.fn((mapCoordinates, mapProjection, targetProjection) => {
       if (targetProjection === 'EPSG:4326') {
         return [ 52, 52 ];
       }
       return mapCoordinates;
     });
     const windowOpen = window.open;
-    window.open = jest.fn();
+    window.open = vi.fn();
     // run tests
     const { mapService, store, simulateMapClick } = await setup(true);
     expect(await screen.findByRole('button')).toBeInTheDocument();
@@ -86,16 +86,16 @@ describe('CoordinateLinkWindowComponent', () => {
 
   test('should open window with GPS and click coordinates on map click', async () => {
     const projectCoordinates = CoordinateHelper.projectCoordinates;
-    CoordinateHelper.projectCoordinates = jest.fn((mapCoordinates, mapProjection, targetProjection) => {
+    CoordinateHelper.projectCoordinates = vi.fn((mapCoordinates, mapProjection, targetProjection) => {
       if (targetProjection === 'EPSG:4326') {
         return [ 52, 52 ];
       }
       return mapCoordinates;
     });
     const windowOpen = window.open;
-    window.open = jest.fn();
+    window.open = vi.fn();
     Object.defineProperty(navigator, 'geolocation', {
-      value: { getCurrentPosition: jest.fn((success: (pos: { coords: { latitude: number; longitude: number } }) => void) =>
+      value: { getCurrentPosition: vi.fn((success: (pos: { coords: { latitude: number; longitude: number } }) => void) =>
           success({ coords: { latitude: 51.9, longitude: 4.5 } })) },
       configurable: true,
     });

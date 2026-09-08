@@ -2,11 +2,10 @@ import { Component, ChangeDetectionStrategy, inject, signal, input, effect, OnDe
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'tm-image-with-description',
-  templateUrl: './image-with-description.component.html',
-  styleUrls: ['./image-with-description.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-image-with-description',
+    templateUrl: './image-with-description.component.html',
+    styleUrls: ['./image-with-description.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageWithDescriptionComponent implements OnDestroy {
   private httpClient = inject(HttpClient);

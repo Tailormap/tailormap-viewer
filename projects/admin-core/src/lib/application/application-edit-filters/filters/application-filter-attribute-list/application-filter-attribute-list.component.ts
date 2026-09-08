@@ -1,17 +1,33 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { AttributeTypeHelper, FilterToolEnum, AttributeType } from '@tailormap-viewer/api';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-filter-attribute-list',
-  templateUrl: './application-filter-attribute-list.component.html',
-  styleUrls: ['./application-filter-attribute-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-filter-attribute-list',
+    templateUrl: './application-filter-attribute-list.component.html',
+    styleUrls: ['./application-filter-attribute-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class ApplicationFilterAttributeListComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

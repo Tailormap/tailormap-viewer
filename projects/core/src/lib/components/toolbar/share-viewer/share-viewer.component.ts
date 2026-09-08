@@ -3,13 +3,22 @@ import { ShareViewerDialogComponent } from './share-viewer-dialog/share-viewer-d
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, take } from 'rxjs';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-share-viewer',
-  templateUrl: './share-viewer.component.html',
-  styleUrls: ['./share-viewer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-share-viewer',
+    templateUrl: './share-viewer.component.html',
+    styleUrls: ['./share-viewer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        AsyncPipe,
+    ],
 })
 export class ShareViewerComponent {
   private dialog = inject(MatDialog);

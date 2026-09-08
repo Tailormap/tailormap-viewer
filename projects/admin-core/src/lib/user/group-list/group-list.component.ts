@@ -1,15 +1,26 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { GroupModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { GroupService } from '../services/group.service';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-group-list',
-  templateUrl: './group-list.component.html',
-  styleUrls: ['./group-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-group-list',
+    templateUrl: './group-list.component.html',
+    styleUrls: ['./group-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class GroupListComponent {
   private groupDetailsService = inject(GroupService);

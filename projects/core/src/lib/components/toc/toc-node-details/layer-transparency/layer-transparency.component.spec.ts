@@ -1,17 +1,17 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { LayerTransparencyComponent } from './layer-transparency.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TestBed } from '@angular/core/testing';
 import userEvent from '@testing-library/user-event';
 import { setLayerOpacity } from '../../../../map/state/map.actions';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SharedModule } from '@tailormap-viewer/shared';
 
 describe('LayerTransparencyComponent', () => {
 
   test('should render', async () => {
     await render(LayerTransparencyComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       inputs: {
         layer: '1',
       },
@@ -25,12 +25,12 @@ describe('LayerTransparencyComponent', () => {
         }),
       ],
     });
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const store = TestBed.inject(MockStore);
     store.dispatch = dispatch;
 
     expect(screen.getByText('Opacity'));
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(screen.getByText('50%'));
     });
 

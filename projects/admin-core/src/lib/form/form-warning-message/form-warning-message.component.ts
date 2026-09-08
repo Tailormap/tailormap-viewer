@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core';
 import { AppLayerSettingsModel, FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
+import { ErrorMessageComponent } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-admin-form-warning-message',
-  templateUrl: './form-warning-message.component.html',
-  styleUrls: ['./form-warning-message.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-warning-message',
+    templateUrl: './form-warning-message.component.html',
+    styleUrls: ['./form-warning-message.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ErrorMessageComponent],
 })
 export class FormWarningMessageComponent implements OnChanges {
 

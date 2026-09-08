@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SwitchFilterComponent } from './switch-filter.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';

@@ -1,20 +1,17 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { FeatureSourceDetailsComponent } from './feature-source-details.component';
 import { of } from 'rxjs';
 import { FeatureSourceProtocolEnum, getFeatureSource, JdbcDatabaseType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
@@ -33,12 +30,12 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     } : undefined,
   });
   const featureServiceMock = {
-    getDraftFeatureSource$: jest.fn(() => of(featureSourceModel)),
-    updateFeatureSource$: jest.fn((_id, updatedSource) => of({
+    getDraftFeatureSource$: vi.fn(() => of(featureSourceModel)),
+    updateFeatureSource$: vi.fn((_id, updatedSource) => of({
       ...featureSourceModel,
       ...updatedSource,
     })),
-    refreshFeatureSource$: jest.fn(() => of({
+    refreshFeatureSource$: vi.fn(() => of({
       ...featureSourceModel,
     })),
   };
@@ -46,9 +43,9 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureSourceDetailsComponent, {
-    declarations: [ FeatureSourceFormComponent, PasswordFieldComponent, SaveButtonComponent, SpinnerButtonComponent ],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureServiceMock },
       { provide: Store, useValue: store },
@@ -60,16 +57,16 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
 describe('FeatureSourceDetailsComponent', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   test('should render and handle editing JDBC source', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     expect(await screen.findByText('Edit Some JDBC source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -80,7 +77,7 @@ describe('FeatureSourceDetailsComponent', () => {
     await ue.type(await screen.findByPlaceholderText('Port'), '[Backspace]5432');
     await ue.type(await screen.findByPlaceholderText('Schema'), 'roads');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
         protocol: featureSourceModel.protocol,
@@ -104,11 +101,11 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should not ask to refresh when just updating title', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     await ue.type(await screen.findByPlaceholderText('Title'), '___');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title + '___',
         protocol: featureSourceModel.protocol,
@@ -121,7 +118,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should render and handle editing WFS source', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureSourceModel, featureServiceMock } = await setup(FeatureSourceProtocolEnum.WFS);
     expect(await screen.findByText('Edit Some WFS source')).toBeInTheDocument();
     expect(await screen.findByLabelText('Save')).toBeDisabled();
@@ -132,7 +129,7 @@ describe('FeatureSourceDetailsComponent', () => {
     expect(passwordField).toBeInTheDocument();
     await ue.type(passwordField, 'secret');
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', undefined, ue);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(featureServiceMock.updateFeatureSource$).toHaveBeenCalledWith('1', {
         title: featureSourceModel.title,
         protocol: featureSourceModel.protocol,
@@ -151,7 +148,7 @@ describe('FeatureSourceDetailsComponent', () => {
   });
 
   test('should refresh', async () => {
-    const ue = userEvent.setup({ advanceTimers: jest.advanceTimersByTimeAsync });
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { featureServiceMock } = await setup(FeatureSourceProtocolEnum.JDBC);
     await TestSaveHelper.waitForButtonToBeEnabledAndClick('Refresh feature source', undefined, ue);
     expect(featureServiceMock.refreshFeatureSource$).toHaveBeenCalled();

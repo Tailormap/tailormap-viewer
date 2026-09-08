@@ -1,23 +1,32 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, ChangeDetectorRef, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { BoundsModel } from '@tailormap-viewer/api';
 import { Subject, takeUntil } from 'rxjs';
 import { AdminProjectionsHelper } from '../../../application/helpers/admin-projections-helper';
 import { ClipboardHelper } from '@tailormap-viewer/shared';
+import { MatLabel, MatFormField } from '@angular/material/form-field';
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'tm-admin-bounds-form-field',
-  templateUrl: './bounds-field.component.html',
-  styleUrls: ['./bounds-field.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BoundsFieldComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-admin-bounds-form-field',
+    templateUrl: './bounds-field.component.html',
+    styleUrls: ['./bounds-field.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => BoundsFieldComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        ReactiveFormsModule,
+        MatLabel,
+        MatButton,
+        MatFormField,
+        MatInput,
+    ],
 })
 export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);

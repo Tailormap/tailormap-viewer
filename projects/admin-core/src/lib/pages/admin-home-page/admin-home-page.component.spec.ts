@@ -1,6 +1,6 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AdminHomePageComponent } from './admin-home-page.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
@@ -16,7 +16,7 @@ describe('AdminHomePageComponent', () => {
     };
 
     await render(AdminHomePageComponent, {
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       componentProviders: [
         { provide: Store, useValue: {} },
         { provide: OIDCConfigurationService, useValue: mockOIDCConfigurationService },

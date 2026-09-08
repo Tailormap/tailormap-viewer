@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationEditSettingsComponent } from './application-edit-settings.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -5,19 +6,16 @@ import { createMockStore } from '@ngrx/store/testing';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
 import { Store } from '@ngrx/store';
 import { TailormapAdminApiV1Service, getApplication } from '@tailormap-admin/admin-api';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
-import { ApplicationFormComponent } from '../application-form/application-form.component';
-import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
-import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) => {
   const appState: ApplicationState = {
@@ -29,14 +27,14 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
     initialState: { [applicationStateKey]: appState, [userStateKey]: initialUserState },
   });
   const configService = {
-    getConfigValue$: jest.fn(() => of(isDefaultApplication ? 'app1' : '')),
-    saveConfig$: jest.fn(() => of(null)),
+    getConfigValue$: vi.fn(() => of(isDefaultApplication ? 'app1' : '')),
+    saveConfig$: vi.fn(() => of(null)),
   };
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ SharedImportsModule, MatIconTestingModule ],
-    declarations: [ ApplicationFormComponent, BoundsFieldComponent, AuthorizationEditComponent ],
+    imports: [MatIconTestingModule],
     providers: [
+      provideNoopAnimations(),
       provideHttpClient(
         withXsrfConfiguration({
           cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,
@@ -46,7 +44,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
       provideHttpClientTesting(),
       { provide: Store, useValue: store },
       { provide: ConfigService, useValue: configService },
-      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: jest.fn(() => of([])) } },
+      { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });

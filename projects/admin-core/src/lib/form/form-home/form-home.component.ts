@@ -1,11 +1,18 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-admin-form-home',
-  templateUrl: './form-home.component.html',
-  styleUrls: ['./form-home.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-home',
+    templateUrl: './form-home.component.html',
+    styleUrls: ['./form-home.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        RouterLink,
+        MatIcon,
+    ],
 })
 export class FormHomeComponent {
 }

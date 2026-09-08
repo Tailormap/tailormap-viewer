@@ -2,12 +2,12 @@ import { of } from 'rxjs';
 import { GeoServiceWithLayersModel } from '@tailormap-admin/admin-api';
 
 export const createGeoServiceMock = (geoServiceModelMock?: GeoServiceWithLayersModel) => {
-  const updateGeoServiceDetails = jest.fn((_details) => ({}));
-  const updateGeoServiceSettings = jest.fn((_settings) => ({}));
+  const updateGeoServiceDetails = vi.fn((_details) => ({}));
+  const updateGeoServiceSettings = vi.fn((_settings) => ({}));
   const geoServiceService = {
-    getDraftGeoService$: jest.fn(() => of(geoServiceModelMock)),
-    createGeoService$: jest.fn(() => of(true)),
-    updateGeoService$: jest.fn((id, serviceCallback, settingsCallback) => {
+    getDraftGeoService$: vi.fn(() => of(geoServiceModelMock)),
+    createGeoService$: vi.fn(() => of(true)),
+    updateGeoService$: vi.fn((id, serviceCallback, settingsCallback) => {
       const result = serviceCallback(geoServiceModelMock || {});
       updateGeoServiceDetails(result);
       let settings = geoServiceModelMock?.settings || {};
@@ -21,7 +21,7 @@ export const createGeoServiceMock = (geoServiceModelMock?: GeoServiceWithLayersM
         settings,
       });
     }),
-    refreshGeoService$: jest.fn((geoServiceId: string) => {
+    refreshGeoService$: vi.fn((geoServiceId: string) => {
       return of(geoServiceModelMock || {});
     }),
   };

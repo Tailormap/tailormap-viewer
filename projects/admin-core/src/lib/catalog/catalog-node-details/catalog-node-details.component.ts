@@ -11,13 +11,24 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { CatalogItemsInFolderDialogComponent } from './catalog-items-in-folder-dialog/catalog-items-in-folder-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { CatalogCreateButtonsComponent } from '../catalog-create-buttons/catalog-create-buttons.component';
+import { CatalogNodeFormComponent } from '../catalog-node-form/catalog-node-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-catalog-node-details',
-  templateUrl: './catalog-node-details.component.html',
-  styleUrls: ['./catalog-node-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-node-details',
+    templateUrl: './catalog-node-details.component.html',
+    styleUrls: ['./catalog-node-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CatalogCreateButtonsComponent,
+        CatalogNodeFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class CatalogNodeDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

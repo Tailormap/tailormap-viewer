@@ -10,10 +10,9 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @Component({
-  selector: 'tm-filter-description',
-  templateUrl: './filter-description.component.html',
-  styleUrls: ['./filter-description.component.css'],
-  standalone: false,
+    selector: 'tm-filter-description',
+    templateUrl: './filter-description.component.html',
+    styleUrls: ['./filter-description.component.css'],
 })
 export class FilterDescriptionComponent {
 

@@ -8,13 +8,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EditMenuButtonComponent } from '../edit-menu-button/edit-menu-button.component';
 import { Store } from '@ngrx/store';
 import { selectEditOpenedFromFeatureInfo } from '../state/edit.selectors';
+import { EditComponent } from '../edit/edit.component';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-edit-mobile-panel',
-  templateUrl: './edit-mobile-panel.component.html',
-  styleUrls: ['./edit-mobile-panel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-mobile-panel',
+    templateUrl: './edit-mobile-panel.component.html',
+    styleUrls: ['./edit-mobile-panel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        EditComponent,
+        EditDialogComponent,
+        AsyncPipe,
+    ],
 })
 export class EditMobilePanelComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

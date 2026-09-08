@@ -1,17 +1,27 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { GroupModel } from '@tailormap-admin/admin-api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GroupService } from '../services/group.service';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
+import { GroupFormComponent } from '../group-form/group-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-group-edit',
-  templateUrl: './group-edit.component.html',
-  styleUrls: ['./group-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-group-edit',
+    templateUrl: './group-edit.component.html',
+    styleUrls: ['./group-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        GroupFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class GroupEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

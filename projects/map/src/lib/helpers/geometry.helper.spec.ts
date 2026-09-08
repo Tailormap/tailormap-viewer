@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { GeometryHelper } from './geometry.helper';
 
 describe('GeometryHelper', () => {

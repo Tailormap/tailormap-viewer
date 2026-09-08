@@ -1,11 +1,12 @@
 import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { OverlayRef } from '../overlay-ref';
 import { OverlayContent } from '../overlay-content';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'tm-overlay',
-  templateUrl: './overlay.component.html',
-  standalone: false,
+    selector: 'tm-overlay',
+    templateUrl: './overlay.component.html',
+    imports: [NgTemplateOutlet],
 })
 export class OverlayComponent implements OnInit {
   private ref = inject(OverlayRef);

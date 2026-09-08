@@ -1,15 +1,26 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { UserModel } from '@tailormap-admin/admin-api';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-user-list',
+    templateUrl: './user-list.component.html',
+    styleUrls: ['./user-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class UserListComponent {
   private userDetailsService = inject(UserService);

@@ -1,13 +1,29 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, take } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { ErrorMessageComponent, InfoMessageComponent, AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-password-reset-request-form',
-  templateUrl: './password-reset-request-form.component.html',
-  styleUrls: ['./password-reset-request-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-password-reset-request-form',
+    templateUrl: './password-reset-request-form.component.html',
+    styleUrls: ['./password-reset-request-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatIcon,
+        ErrorMessageComponent,
+        InfoMessageComponent,
+        AutoFocusDirective,
+        MatButton,
+        MatProgressSpinner,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class PasswordResetRequestFormComponent {
   @Input() public requestReset$!: (email: string) => Observable<boolean>;

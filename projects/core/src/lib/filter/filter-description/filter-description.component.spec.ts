@@ -1,9 +1,10 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FilterDescriptionComponent } from './filter-description.component';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { AttributeFilterModel } from '@tailormap-viewer/api';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
-import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 describe('FilterDescriptionComponent', () => {
 

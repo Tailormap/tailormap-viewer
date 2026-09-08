@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { SliderFilterComponent } from './slider-filter.component';
 import { render, screen } from '@testing-library/angular';
 import {

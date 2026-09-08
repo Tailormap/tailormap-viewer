@@ -1,9 +1,14 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { GeoServiceService } from '../services/geo-service.service';
 import { GeoServiceCreateModel } from '../models/geo-service-update.model';
 import { GeoServiceModel, GeoServiceWithLayersModel, LayerSettingsModel } from '@tailormap-admin/admin-api';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { GeoServiceFormComponent } from '../geo-service-form/geo-service-form.component';
+import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { MatButton } from '@angular/material/button';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 
 export interface GeoServiceFormDialogData {
   geoService: GeoServiceModel | null;
@@ -11,11 +16,20 @@ export interface GeoServiceFormDialogData {
 }
 
 @Component({
-  selector: 'tm-admin-geo-service-form-dialog',
-  templateUrl: './geo-service-form-dialog.component.html',
-  styleUrls: ['./geo-service-form-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-geo-service-form-dialog',
+    templateUrl: './geo-service-form-dialog.component.html',
+    styleUrls: ['./geo-service-form-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        GeoServiceFormComponent,
+        LayerSettingsFormComponent,
+        MatDialogActions,
+        MatButton,
+        SaveButtonComponent,
+    ],
 })
 export class GeoServiceFormDialogComponent {
   public data = inject<GeoServiceFormDialogData>(MAT_DIALOG_DATA);

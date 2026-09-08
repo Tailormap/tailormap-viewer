@@ -2,12 +2,13 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { fromEvent, tap } from 'rxjs';
 import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import { CssHelper } from '../../helpers';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-panel-resize',
-  templateUrl: './panel-resizer.component.html',
-  styleUrls: ['./panel-resizer.component.css'],
-  standalone: false,
+    selector: 'tm-panel-resize',
+    templateUrl: './panel-resizer.component.html',
+    styleUrls: ['./panel-resizer.component.css'],
+    imports: [MatIcon],
 })
 export class PanelResizerComponent implements OnInit {
 

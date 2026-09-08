@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { AttributeType } from '@tailormap-viewer/api';
@@ -8,12 +8,31 @@ import { FilterConditionEnum } from '@tailormap-viewer/api';
 import { FilterConditionModel } from '../../models/filter-condition.model';
 import { AttributeFilterHelper } from '../../helpers/attribute-filter.helper';
 import { FilterData, InputFilterData, OutputFilterData } from '../../models/attribute-filter-data.model';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'tm-attribute-filter',
-  templateUrl: './attribute-filter.component.html',
-  styleUrls: ['./attribute-filter.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-filter',
+    templateUrl: './attribute-filter.component.html',
+    styleUrls: ['./attribute-filter.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatInput,
+        MatDatepickerInput,
+        MatDatepickerToggle,
+        MatSuffix,
+        MatDatepicker,
+        MatCheckbox,
+        MatProgressSpinner,
+    ],
 })
 export class AttributeFilterComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);

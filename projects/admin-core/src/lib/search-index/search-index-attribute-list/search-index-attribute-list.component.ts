@@ -1,16 +1,29 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, Output, EventEmitter, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-search-index-attribute-list',
-  templateUrl: './search-index-attribute-list.component.html',
-  styleUrls: ['./search-index-attribute-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-attribute-list',
+    templateUrl: './search-index-attribute-list.component.html',
+    styleUrls: ['./search-index-attribute-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        MatCheckbox,
+        AsyncPipe,
+    ],
 })
 export class SearchIndexAttributeListComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

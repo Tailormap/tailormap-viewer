@@ -1,19 +1,16 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogTreeComponent } from './catalog-tree.component';
 import { createMockStore } from '@ngrx/store/testing';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { CatalogNodeModel, getCatalogTree } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { CatalogTreeNodeComponent } from './catalog-tree-node/catalog-tree-node.component';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
-import { CatalogBaseTreeComponent } from '../catalog-base-tree/catalog-base-tree.component';
-import { CatalogBaseTreeNodeComponent } from '../catalog-base-tree/catalog-base-tree-node/catalog-base-tree-node.component';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClient } from '@angular/common/http';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { CatalogService } from '../services/catalog.service';
 
 const setup = async (state: Partial<CatalogState> = {}) => {
@@ -22,12 +19,11 @@ const setup = async (state: Partial<CatalogState> = {}) => {
       [catalogStateKey]: { ...initialCatalogState, ...state },
     },
   });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
-  const loadCatalog = jest.fn();
+  const loadCatalog = vi.fn();
   await render(CatalogTreeComponent, {
-    imports: [ SharedModule, MatIconTestingModule, SharedAdminComponentsModule ],
-    declarations: [ CatalogTreeNodeComponent, CatalogBaseTreeComponent, CatalogBaseTreeNodeComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: Store, useValue: mockStore },
       provideHttpClient(),

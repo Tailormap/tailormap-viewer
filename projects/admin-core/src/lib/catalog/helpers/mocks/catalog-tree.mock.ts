@@ -1,5 +1,6 @@
 import {
-  CatalogItemKindEnum, CatalogItemModel, getCatalogNode, getFeatureSource, getFeatureType, getGeoService, getGeoServiceLayer,
+  CatalogItemKindEnum, CatalogItemModel, getCatalogNode, getFeatureSource, getFeatureType, getFeatureTypeSummary, getGeoService,
+  getGeoServiceLayer,
 } from '@tailormap-admin/admin-api';
 import { ExtendedCatalogNodeModel } from '../../models/extended-catalog-node.model';
 import { ExtendedCatalogModelHelper } from '../extended-catalog-model.helper';
@@ -7,6 +8,7 @@ import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model
 import { ExtendedGeoServiceLayerModel } from '../../models/extended-geo-service-layer.model';
 import { ExtendedFeatureSourceModel } from '../../models/extended-feature-source.model';
 import { ExtendedFeatureTypeModel } from '../../models/extended-feature-type.model';
+import { CatalogExtendedTypeEnum } from '../../models/catalog-extended.model';
 
 export type CatalogTestNode = { id: string; children?: string[]; items?: CatalogItemModel[] };
 
@@ -15,6 +17,7 @@ const getFolderNode = (id: string, parentId?: string, children?: string[], items
     ...getCatalogNode({ root: id === 'root', title: `Folder ${id}`, id, children, items }),
     expanded: false,
     parentId: parentId || null,
+    type: CatalogExtendedTypeEnum.CATALOG_NODE_TYPE,
   };
 };
 
@@ -51,24 +54,38 @@ export const baseTree: CatalogTestNode[] = [
 ];
 
 const geoServicesAndLayers = [
-  { id: 's1', title: 'Geo Service Background', layers: [{ id: '1', name: 'OSM', title: 'OSM' }] },
+  { id: 's1', title: 'Geo Service Background', layers: [getGeoServiceLayer({ id: '1', name: 'OSM', title: 'OSM' })] },
   {
     id: 's2',
     title: 'Important service',
-    layers: [{ id: '1', name: 'Layer 1', title: 'The important one', crs: ['EPSG:3857'] }, { id: '2', name: 'Layer 2', title: 'The next important one', crs: ['EPSG:3857'] }],
+    layers: [
+      getGeoServiceLayer({ id: '1', name: 'Layer 1', title: 'The important one', crs: ['EPSG:3857'] }),
+      getGeoServiceLayer({ id: '2', name: 'Layer 2', title: 'The next important one', crs: ['EPSG:3857'] }),
+    ],
   },
-  { id: 's3', title: 'Bad service', layers: [{ id: '1', name: 'Bad layer', title: 'Bad layer' }, { id: '2', name: 'Worst layer', title: 'Worst layer' }] },
+  {
+    id: 's3',
+    title: 'Bad service',
+    layers: [
+      getGeoServiceLayer({ id: '1', name: 'Bad layer', title: 'Bad layer' }),
+      getGeoServiceLayer({ id: '2', name: 'Worst layer', title: 'Worst layer' }),
+    ],
+  },
 ]
-  .map(s => ({ ...getGeoService(s), layers: s.layers.map(l => getGeoServiceLayer({ ...l, crs: l.crs || ['EPSG:28992'] })) }))
-  .map(s => ExtendedCatalogModelHelper.getExtendedGeoService(s));
+  .map(s => ({ ...getGeoService(s), layers: s.layers.map(l => getGeoServiceLayer({ ...l, crs: l.crs && l.crs.length > 0 ? l.crs : ['EPSG:28992'] })) }))
+  .map(s => ExtendedCatalogModelHelper.getExtendedGeoService(s, '1'));
 
+const baseFeatureType = { defaultGeometryAttribute: '', primaryKeyAttribute: '', attributes: [], settings: {}, hasAttributes: false };
 const featureSourceAndTypes = [
-  { id: 'f1', title: 'JDBC source', featureTypes: [{ id: '1', name: 'layer1', title: 'Layer 1 source' }] },
-  { id: 'f2', title: 'SQL Server source', featureTypes: [{ id: '1', name: 'CAPS', title: 'CAPS' }, { id: '2', name: 'SECOND', title: 'SECOND' }] },
-  { id: 'f3', title: 'Oracle', featureTypes: [{ id: '1', name: 'bla', title: 'bla' }, { id: '2', name: 'blah', title: 'blah' }] },
+  { id: 'f1', title: 'JDBC source', featureTypes: [{ ...baseFeatureType, id: '1', name: 'layer1', title: 'Layer 1 source' }] },
+  { id: 'f2', title: 'SQL Server source', featureTypes: [
+      { ...baseFeatureType, id: '1', name: 'CAPS', title: 'CAPS' },
+      { ...baseFeatureType, id: '2', name: 'SECOND', title: 'SECOND' },
+    ] },
+  { id: 'f3', title: 'Oracle', featureTypes: [{ ...baseFeatureType, id: '1', name: 'bla', title: 'bla' }, { ...baseFeatureType, id: '2', name: 'blah', title: 'blah' }] },
 ]
-  .map(s => ({ ...getFeatureSource(s), featureTypes: s.featureTypes.map(l => getFeatureType(l)) }))
-  .map(f => ExtendedCatalogModelHelper.getExtendedFeatureSource(f));
+  .map(s => ({ ...getFeatureSource(s), featureTypes: s.featureTypes.map(l => getFeatureTypeSummary(l)) }))
+  .map(f => ExtendedCatalogModelHelper.getExtendedFeatureSource(f, '1'));
 
 export const getFullCatalogTreeData = (): {
   catalogTree: ExtendedCatalogNodeModel[];

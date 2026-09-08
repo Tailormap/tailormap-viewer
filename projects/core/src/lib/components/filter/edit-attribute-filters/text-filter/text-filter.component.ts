@@ -1,16 +1,23 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { AttributeFilterModel, FilterToolEnum } from '@tailormap-viewer/api';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'tm-text-filter',
-  templateUrl: './text-filter.component.html',
-  styleUrls: ['./text-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-text-filter',
+    templateUrl: './text-filter.component.html',
+    styleUrls: ['./text-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+    ],
 })
 export class TextFilterComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

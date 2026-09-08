@@ -166,11 +166,15 @@
       "env": {
         "jest": true
       },
+      "plugins": [
+        "@vitest"
+      ],
       "rules": {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@stylistic/ban-ts-comment": "off",
-        "@stylistic/no-empty-function": "off"
+        "@stylistic/no-empty-function": "off",
+        "@vitest/prefer-importing-vitest-globals": "error"
       }
     },
     {

@@ -1,29 +1,35 @@
 import {
   ChangeDetectionStrategy, Component, DestroyRef, inject, signal, computed, input, output, forwardRef,
 } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
-import { MatSelectionListChange } from '@angular/material/list';
+import { MatSelectionListChange, MatSelectionList, MatListOption } from '@angular/material/list';
 import { Store } from '@ngrx/store';
 import { FilterHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import { CatalogService } from '../../../catalog/services/catalog.service';
 import { selectCatalogLoadStatus } from '../../../catalog/state/catalog.selectors';
 import { selectExtendedAppLayerNodesForSelectedApplication } from '../../../application/state/application.selectors';
+import { ListFilterComponent } from '../list-filter/list-filter.component';
 
 @Component({
-  selector: 'tm-admin-layer-selection-config-component',
-  templateUrl: './layer-selection-config.component.html',
-  styleUrls: ['./layer-selection-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => LayerSelectionConfigComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-admin-layer-selection-config-component',
+    templateUrl: './layer-selection-config.component.html',
+    styleUrls: ['./layer-selection-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => LayerSelectionConfigComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListOption,
+    ],
 })
 export class LayerSelectionConfigComponent implements ControlValueAccessor {
   private destroyRef = inject(DestroyRef);

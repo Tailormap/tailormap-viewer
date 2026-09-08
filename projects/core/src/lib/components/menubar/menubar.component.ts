@@ -1,11 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel } from '@tailormap-viewer/api';
+import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
+import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @Component({
-  selector: 'tm-menubar',
-  templateUrl: './menubar.component.html',
-  styleUrls: ['./menubar.component.css'],
-  standalone: false,
+    selector: 'tm-menubar',
+    templateUrl: './menubar.component.html',
+    styleUrls: ['./menubar.component.css'],
+    imports: [
+        MenubarLogoComponent,
+        RegisteredComponentsRendererComponent,
+        ProfileComponent,
+    ],
 })
 export class MenubarComponent {
 

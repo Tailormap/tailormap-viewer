@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node.component';
 import { render, screen } from '@testing-library/angular';
 import { TooltipDirective, TreeModel, TreeService } from '@tailormap-viewer/shared';
@@ -12,9 +13,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
   const mockTreeService = {
-    getNode: jest.fn().mockReturnValue({}),
-    descendantsPartiallySelected: jest.fn().mockReturnValue(false),
-    descendantsAllSelected: jest.fn().mockReturnValue(false),
+    getNode: vi.fn().mockReturnValue({}),
+    descendantsPartiallySelected: vi.fn().mockReturnValue(false),
+    descendantsAllSelected: vi.fn().mockReturnValue(false),
   };
   await render(ApplicationLayerTreeNodeComponent, {
     imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule, MatFormFieldModule, MatSelectModule, MatTooltipModule ],

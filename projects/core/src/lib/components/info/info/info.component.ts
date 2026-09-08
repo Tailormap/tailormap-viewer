@@ -8,13 +8,14 @@ import { MarkdownHelper } from '@tailormap-viewer/shared';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { distinctUntilChanged, Observable, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-info',
+    templateUrl: './info.component.html',
+    styleUrls: ['./info.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsyncPipe],
 })
 export class InfoComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

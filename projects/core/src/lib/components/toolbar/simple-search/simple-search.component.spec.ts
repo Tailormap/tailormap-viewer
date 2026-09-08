@@ -1,21 +1,22 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { vi, describe, test, expect } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { SimpleSearchComponent } from './simple-search.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { of } from 'rxjs';
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SimpleSearchService } from './simple-search.service';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SearchResultModel } from './models';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
 const setup = async () => {
   const mockedSearchService = {
-    search$: jest.fn(() => of<SearchResultModel[]>([{
+    search$: vi.fn(() => of<SearchResultModel[]>([{
       id: 'test',
       name: 'Test Searcher',
       results: [
@@ -28,7 +29,7 @@ const setup = async () => {
   const mockedMapService = getMapServiceMock(null, 'EPSG:28992');
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(SimpleSearchComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: SimpleSearchService, useValue: mockedSearchService },
       mockedMapService.provider,
@@ -55,18 +56,18 @@ describe('SimpleSearchComponent', () => {
     const { mapService, searchService } = await setup();
     await userEvent.click(await screen.findByLabelText('Search location'));
     await userEvent.type(await screen.findByRole('combobox'), 'Str');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(searchService.search$).not.toHaveBeenCalled();
     }, { timeout: 1100 });
     await userEvent.type(await screen.findByRole('combobox'), 'eet');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(searchService.search$).toHaveBeenCalledWith('EPSG:28992', 'Street', { enabled: true, municipalities: ['Utrecht'] });
       expect(screen.getByText('Test Searcher')).toBeInTheDocument();
       expect(screen.getByText('Better result')).toBeInTheDocument();
     }, { timeout: 1100 });
     await userEvent.click(await screen.findByText('Better result'));
     expect(mapService.renderFeatures$).toHaveBeenCalled();
-    const renderFeaturesCall = (mapService.renderFeatures$ as jest.Mock).mock.calls[0];
+    const renderFeaturesCall = (mapService.renderFeatures$ as Mock).mock.calls[0];
     expect(renderFeaturesCall[0]).toEqual('search-result-highlight');
   });
 

@@ -1,29 +1,27 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries.component';
-import { MapDrawingButtonsComponent } from './map-drawing-buttons/map-drawing-buttons.component';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 import { of } from 'rxjs';
-import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock.spec';
+import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 
-let idCount = 0;
-jest.mock('nanoid', () => ({
-  nanoid: () => {
-    idCount++;
-    return `id-${idCount}`;
-  },
+// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
+// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
+// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
+const idState = vi.hoisted(() => ({ count: 0 }));
+vi.mock('nanoid', () => ({
+  nanoid: () => `id-${++idState.count}`,
 }));
 
 const setup = async () => {
-  const store = { dispatch: jest.fn(), select: jest.fn(() => of(null)) };
+  const store = { dispatch: vi.fn(), select: vi.fn(() => of(null)) };
   const mapServiceMock = createMapServiceMockWithDrawingTools();
-  const mockSpatialCrudService = { addGeometry: jest.fn(), removeGeometry: jest.fn() };
+  const mockSpatialCrudService = { addGeometry: vi.fn(), removeGeometry: vi.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
-    declarations: [MapDrawingButtonsComponent],
-    imports: [ SharedModule, MatIconTestingModule ],
+    imports: [MatIconTestingModule],
     providers: [
       { provide: Store, useValue: store },
       mapServiceMock.provider,
@@ -44,7 +42,7 @@ describe('SpatialFilterFormDrawGeometriesComponent', () => {
     const { addDrawingEvent, addGeometry } = await setup();
     await userEvent.click(screen.getByLabelText('Draw circle'));
     addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(addGeometry).toHaveBeenCalledWith(expectedGeom);
     });
   });

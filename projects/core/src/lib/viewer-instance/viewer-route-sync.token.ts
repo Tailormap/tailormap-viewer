@@ -2,8 +2,8 @@ import { InjectionToken } from '@angular/core';
 
 /**
  * Whether `LoadViewerService` should sync the loaded viewer into the browser URL via `Router`.
- * Defaults to `true` (the main, single-viewer `ViewerAppComponent`, which runs under `CoreModule`'s
- * `RouterModule.forRoot`/`forChild` with real routes configured).
+ * Defaults to `true` (the main, single-viewer `ViewerAppComponent`, which runs under `provideCore()`'s
+ * `provideRouter(coreRoutes)` with real routes configured).
  *
  * An isolated viewer instance (stories) must opt out: since Angular 20's `Router` is `providedIn:
  * 'root'`, it auto-instantiates in *every* environment/application root — including a `createApplication`

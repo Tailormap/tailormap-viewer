@@ -1,16 +1,17 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
-import { TreeModel } from '@tailormap-viewer/shared';
+import { TreeModel, HtmlifyPipe } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectLayer } from '../../../map';
+import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
 
 @Component({
-  selector: 'tm-toc-node-details-mobile',
-  templateUrl: './toc-node-details-mobile.component.html',
-  styleUrls: ['./toc-node-details-mobile.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-toc-node-details-mobile',
+    templateUrl: './toc-node-details-mobile.component.html',
+    styleUrls: ['./toc-node-details-mobile.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ LayerTransparencyComponent, HtmlifyPipe ],
 })
 export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);

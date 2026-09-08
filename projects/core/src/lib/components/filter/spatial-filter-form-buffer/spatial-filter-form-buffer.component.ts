@@ -1,17 +1,24 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { selectBuffer } from '../state/filter-component.selectors';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'tm-spatial-filter-form-buffer',
-  templateUrl: './spatial-filter-form-buffer.component.html',
-  styleUrls: ['./spatial-filter-form-buffer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-spatial-filter-form-buffer',
+    templateUrl: './spatial-filter-form-buffer.component.html',
+    styleUrls: ['./spatial-filter-form-buffer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+    ],
 })
 export class SpatialFilterFormBufferComponent implements OnInit, OnDestroy {
 

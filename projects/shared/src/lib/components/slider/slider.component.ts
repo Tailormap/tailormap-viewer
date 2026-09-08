@@ -1,19 +1,24 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, NgZone, forwardRef, ChangeDetectorRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatSlider, MatSliderRangeThumb, MatSliderThumb } from '@angular/material/slider';
 
 @Component({
-  selector: 'tm-slider',
-  templateUrl: './slider.component.html',
-  styleUrls: ['./slider.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SliderComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-slider',
+    templateUrl: './slider.component.html',
+    styleUrls: ['./slider.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SliderComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        MatSlider,
+        MatSliderRangeThumb,
+        MatSliderThumb,
+    ],
 })
 export class SliderComponent implements ControlValueAccessor {
   private ngZone = inject(NgZone);

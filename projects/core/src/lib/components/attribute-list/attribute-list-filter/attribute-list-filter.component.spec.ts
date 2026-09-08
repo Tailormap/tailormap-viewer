@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AttributeListFilterComponent, FilterDialogData } from './attribute-list-filter.component';
@@ -5,8 +6,6 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import {
   AttributeType, UniqueValuesService, FilterTypeEnum, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { AttributeFilterComponent } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
@@ -16,7 +15,7 @@ import { selectAttributeListTabs, selectAttributeListVisible } from '../state/at
 describe('AttributeListFilterComponent', () => {
 
   it('should create', async () => {
-    const dialogRef = { close: jest.fn() };
+    const dialogRef = { close: vi.fn() };
     const dialogData: FilterDialogData = {
       columnName: 'col',
       filter: null,
@@ -25,9 +24,9 @@ describe('AttributeListFilterComponent', () => {
       applicationId: '1',
       tabSourceId: ATTRIBUTE_LIST_DEFAULT_SOURCE,
     };
-    const attributeFilterService = { setFilter: jest.fn(), removeFilter: jest.fn() };
+    const attributeFilterService = { setFilter: vi.fn(), removeFilter: vi.fn() };
     const uniqueValuesService = {
-      getUniqueValues$: jest.fn(() => of({ values: [] })),
+      getUniqueValues$: vi.fn(() => of({ values: [] })),
     };
     await render(AttributeListFilterComponent, {
       providers: [
@@ -43,8 +42,6 @@ describe('AttributeListFilterComponent', () => {
         }),
         { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
       ],
-      imports: [SharedModule],
-      declarations: [AttributeFilterComponent],
     });
 
     expect(await screen.findByText('Filter on col')).toBeInTheDocument();

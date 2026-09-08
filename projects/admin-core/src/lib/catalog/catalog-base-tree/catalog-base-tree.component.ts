@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, Input, TemplateRef, NgZone, inject } from '@angular/core';
-import { DropZoneOptions, FlatTreeModel, LoadingStateEnum, TreeService } from '@tailormap-viewer/shared';
+import { DropZoneOptions, FlatTreeModel, LoadingStateEnum, TreeService, ErrorMessageComponent, TreeComponent } from '@tailormap-viewer/shared';
 import { CatalogTreeModel, CatalogTreeModelMetadataTypes } from '../models/catalog-tree.model';
 import { CatalogTreeModelTypeEnum } from '../models/catalog-tree-model-type.enum';
 import { Store } from '@ngrx/store';
@@ -8,13 +8,22 @@ import { map, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import { expandTree } from '../state/catalog.actions';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogService } from '../services/catalog.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-catalog-base-tree',
-  templateUrl: './catalog-base-tree.component.html',
-  styleUrls: ['./catalog-base-tree.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-base-tree',
+    templateUrl: './catalog-base-tree.component.html',
+    styleUrls: ['./catalog-base-tree.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ErrorMessageComponent,
+        MatButton,
+        TreeComponent,
+        AsyncPipe,
+    ],
 })
 export class CatalogBaseTreeComponent implements OnDestroy {
   private treeService = inject<TreeService<CatalogTreeModelMetadataTypes, CatalogTreeModelTypeEnum>>(TreeService);

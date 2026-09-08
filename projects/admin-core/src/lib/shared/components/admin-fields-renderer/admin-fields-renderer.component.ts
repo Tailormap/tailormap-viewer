@@ -1,15 +1,28 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, ChangeDetectorRef, inject } from '@angular/core';
 import { AdminFieldModel } from '../../services/admin-field-registration.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdditionalPropertyModel } from '@tailormap-admin/admin-api';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
 
 @Component({
-  selector: 'tm-admin-fields-renderer',
-  templateUrl: './admin-fields-renderer.component.html',
-  styleUrls: ['./admin-fields-renderer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-fields-renderer',
+    templateUrl: './admin-fields-renderer.component.html',
+    styleUrls: ['./admin-fields-renderer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatSlideToggle,
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatSelect,
+        MatOption,
+        MatHint,
+    ],
 })
 export class AdminFieldsRendererComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

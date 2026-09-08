@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@
 import {
   BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil,
 } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectOIDCConfigurationsLoadStatus, selectDraftOIDCConfiguration, selectDraftOIDCConfigurationUpdated } from '../state/oidc-configuration.selectors';
 import { GroupModel, OIDCConfigurationModel } from '@tailormap-admin/admin-api';
@@ -11,13 +11,35 @@ import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared
 import { OIDCConfigurationService } from '../services/oidc-configuration.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { GroupService } from '../../user/services/group.service';
+import { OIDCConfigurationEditSettingsComponent } from '../oidc-configuration-edit-settings/oidc-configuration-edit-settings.component';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-oidc-configuration-edit',
-  templateUrl: './oidc-configuration-edit.component.html',
-  styleUrls: ['./oidc-configuration-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-oidc-configuration-edit',
+    templateUrl: './oidc-configuration-edit.component.html',
+    styleUrls: ['./oidc-configuration-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        OIDCConfigurationEditSettingsComponent,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        RouterLink,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        SaveButtonComponent,
+        MatButton,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class OIDCConfigurationEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

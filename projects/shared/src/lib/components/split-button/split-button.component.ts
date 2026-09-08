@@ -1,12 +1,23 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { SplitButtonOptionModel } from './split-button-option.model';
+import { MatButton } from '@angular/material/button';
+import { TooltipDirective } from '../../directives/tooltip.directive';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-split-button',
-  templateUrl: './split-button.component.html',
-  styleUrls: ['./split-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-split-button',
+    templateUrl: './split-button.component.html',
+    styleUrls: ['./split-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatMenuTrigger,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+    ],
 })
 export class SplitButtonComponent {
 

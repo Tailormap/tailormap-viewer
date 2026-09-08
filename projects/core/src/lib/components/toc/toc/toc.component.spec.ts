@@ -1,9 +1,11 @@
+import { vi, describe, test, expect } from 'vitest';
 import { TocComponent } from './toc.component';
-import { render, screen, waitFor } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
 import { createMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
-import { LoadingStateEnum, SharedModule } from '@tailormap-viewer/shared';
+import type { Mock } from 'vitest';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
@@ -11,15 +13,11 @@ import {
   selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
 } from '../../../map/state/map.selectors';
 import { setLayerVisibility, toggleSelectedLayerId } from '../../../map/state/map.actions';
-import { TocNodeLayerComponent } from '../toc-node-layer/toc-node-layer.component';
-import { ToggleAllLayersButtonComponent } from '../toggle-all-layers-button/toggle-all-layers-button.component';
 import { AuthenticatedUserService, getAppLayerModel, getLayerTreeNode } from '@tailormap-viewer/api';
-import { TocFilterInputComponent } from '../toc-filter-input/toc-filter-input.component';
 import { toggleFilterEnabled } from '../state/toc.actions';
 import { selectFilterEnabled, selectFilterTerm, selectInfoTreeNodeId } from '../state/toc.selectors';
 import { Store } from '@ngrx/store';
-import { TocNodeDetailsComponent } from '../toc-node-details/toc-node-details.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { selectFilteredLayerIdsWithSource } from '../../../state/filter-state/filter.selectors';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 
@@ -51,28 +49,27 @@ const buildMockStore = (selectedLayer = '') => {
   });
 };
 
-const getMenubarService = (visible: boolean, registerComponentFn: jest.Mock) => {
+const getMenubarService = (visible: boolean, registerComponentFn: Mock) => {
   return { provide: MenubarService, useValue: {
       isComponentVisible$: () => of(visible),
       registerComponent: registerComponentFn,
-      deregisterComponent: jest.fn(),
+      deregisterComponent: vi.fn(),
     },
   };
 };
 
 const setup = async (visible: boolean, selectedLayer = '') => {
-  const registerComponentFn = jest.fn();
+  const registerComponentFn = vi.fn();
   const mockStore = buildMockStore(selectedLayer);
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
-    imports: [ SharedModule, MatIconTestingModule ],
-    declarations: [ TocNodeLayerComponent, ToggleAllLayersButtonComponent, TocFilterInputComponent, TocNodeDetailsComponent ],
+    imports: [MatIconTestingModule],
     providers: [
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },
       getMenubarService(visible, registerComponentFn),
-      { provide: AuthenticatedUserService, useValue: { getUserDetails$: jest.fn(() => of({ isAuthenticated: false })) } },
+      { provide: AuthenticatedUserService, useValue: { getUserDetails$: vi.fn(() => of({ isAuthenticated: false })) } },
     ],
   });
   return { registerComponentFn, mockStore, mockDispatch };
@@ -110,7 +107,7 @@ describe('TocComponent', () => {
     expect(mockDispatch).toHaveBeenCalledWith({ type: toggleSelectedLayerId.type, layerId: '2' });
     mockStore.overrideSelector(selectSelectedNodeId, '2');
     mockStore.refreshState();
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect((screen.getByText('Disaster map')).closest('.mat-tree-node')).not.toHaveClass('tree-node--selected');
       expect((screen.getByText('Some other map')).closest('.mat-tree-node')).toHaveClass('tree-node--selected');
     });

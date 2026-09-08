@@ -1,16 +1,24 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
+import { UserFormComponent } from '../user-form/user-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-user-create',
-  templateUrl: './user-create.component.html',
-  styleUrls: ['./user-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-user-create',
+    templateUrl: './user-create.component.html',
+    styleUrls: ['./user-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        UserFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class UserCreateComponent implements OnDestroy {
   private userDetailsService = inject(UserService);

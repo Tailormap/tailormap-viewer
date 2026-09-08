@@ -4,19 +4,50 @@ import {
 } from '../../../map/models/drawing-feature.model';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 import { DrawingHelper } from '../../../map/helpers/drawing.helper';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
-import { StyleHelper } from '@tailormap-viewer/shared';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { StyleHelper, SliderComponent, IconPickerComponent, ColorPickerComponent, TooltipDirective } from '@tailormap-viewer/shared';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { ApplicationStyleService } from '../../../services/application-style.service';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'tm-drawing-style-form',
-  templateUrl: './drawing-style-form.component.html',
-  styleUrls: ['./drawing-style-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-drawing-style-form',
+    templateUrl: './drawing-style-form.component.html',
+    styleUrls: ['./drawing-style-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        SliderComponent,
+        IconPickerComponent,
+        ColorPickerComponent,
+        MatExpansionPanelDescription,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatSuffix,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        MatButtonToggleGroup,
+        MatButtonToggle,
+        MatSelect,
+        MatSelectTrigger,
+        NgTemplateOutlet,
+        MatOption,
+        MatCheckbox,
+    ],
 })
 export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);

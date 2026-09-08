@@ -1,9 +1,9 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { StreetviewComponent } from './streetview.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 describe('StreetviewComponent', () => {
 
@@ -11,7 +11,7 @@ describe('StreetviewComponent', () => {
     const mapServiceMock = getMapServiceMock(undefined, 'EPSG:28992');
     await render(StreetviewComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [MatIconTestingModule],
       providers: [mapServiceMock.provider],
     });
     expect(mapServiceMock.createTool$).toHaveBeenCalled();

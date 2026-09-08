@@ -1,17 +1,19 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { LoginFormComponent } from './login-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { AutoFocusDirective } from '../../../../../../shared/src/lib/directives';
 import { UserResponseModel } from '@tailormap-viewer/api';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 describe('LoginFormComponent', () => {
 
   test('should render', async () => {
     const mockLoginConfiguration = {
-      allowPasswordLogin: true,
+      hideLoginForm: false,
+      enablePasswordReset: true,
       ssoLinks: [],
     };
     await render(LoginFormComponent, {
@@ -33,17 +35,18 @@ describe('LoginFormComponent', () => {
 
   test('triggers login method', async () => {
     const mockLoginConfiguration = {
-      allowPasswordLogin: true,
+      hideLoginForm: false,
+      enablePasswordReset: true,
       ssoLinks: [],
     };
-    const loginFn = jest.fn(() => of<UserResponseModel>({
+    const loginFn = vi.fn(() => of<UserResponseModel>({
       isAuthenticated: true,
       username: 'user',
       roles: [],
       groupProperties: [],
       properties: [],
     }));
-    const loggedIn = jest.fn();
+    const loggedIn = vi.fn();
     await render(LoginFormComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       on: { loggedIn },

@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import * as MapActions from './map.actions';
 import { initialMapState, MapState } from './map.state';
 import { mapReducer } from './map.reducer';

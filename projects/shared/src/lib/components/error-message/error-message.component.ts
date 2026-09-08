@@ -2,11 +2,10 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'tm-error-message',
-  templateUrl: './error-message.component.html',
-  styleUrls: ['./error-message.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-error-message',
+    templateUrl: './error-message.component.html',
+    styleUrls: ['./error-message.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorMessageComponent {
 

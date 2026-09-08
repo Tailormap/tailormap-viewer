@@ -13,13 +13,22 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { FeatureSourceUsedDialogComponent } from './feature-source-used-dialog/feature-source-used-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { selectFeatureSourceById } from '../state/catalog.selectors';
+import { FeatureSourceFormComponent } from '../feature-source-form/feature-source-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-feature-source-details',
-  templateUrl: './feature-source-details.component.html',
-  styleUrls: ['./feature-source-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-feature-source-details',
+    templateUrl: './feature-source-details.component.html',
+    styleUrls: ['./feature-source-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FeatureSourceFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class FeatureSourceDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

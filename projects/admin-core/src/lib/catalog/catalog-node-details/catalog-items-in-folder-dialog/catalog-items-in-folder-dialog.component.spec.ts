@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogItemsInFolderDialogComponent } from './catalog-items-in-folder-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ describe('CatalogItemsInFolderDialogComponent', () => {
       getFeatureSource({ title: 'Feature Source 1' }),
       getGeoService({ title: 'Geo Service 1' }),
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(CatalogItemsInFolderDialogComponent, {
       imports: [MatDialogModule],
       providers: [
