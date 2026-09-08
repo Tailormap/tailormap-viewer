@@ -1,6 +1,6 @@
 import {
   AfterViewInit, ChangeDetectorRef, Component, ElementRef, EnvironmentInjector, inject, NgZone, OnDestroy, QueryList, ViewChildren,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { mountStoriesViewer, StoriesViewerRef } from '../stories-viewer-app/stories-viewer-app.helper';
 import { MapService } from '@tailormap-viewer/map';
