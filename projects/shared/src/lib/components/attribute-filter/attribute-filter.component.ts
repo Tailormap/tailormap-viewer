@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, take, takeUntil, tap } from 'rxjs/operators';
@@ -19,6 +19,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     selector: 'tm-attribute-filter',
     templateUrl: './attribute-filter.component.html',
     styleUrls: ['./attribute-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         ReactiveFormsModule,
         MatFormField,

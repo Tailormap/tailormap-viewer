@@ -3,7 +3,7 @@
   <tm-admin-geo-service-form [geoService]="geoService"
   (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
   <h3 i18n="@@admin-core.catalog.default-layer-settings">Default layer settings</h3>
-  <tm-admin-layer-settings-form [layerSettings]="geoService.settings?.defaultLayerSettings"
+  <tm-admin-layer-settings-form [layerSettings]="$safeNavigationMigration(geoService.settings?.defaultLayerSettings)"
     [protocol]="geoService.protocol"
   (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   <div class="page-details-actions">

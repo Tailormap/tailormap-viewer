@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MapService } from '../map-service/map.service';
 import { OverlayHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { combineLatest, take } from 'rxjs';
@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
     selector: 'tm-map',
     templateUrl: 'map.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: 'map.component.css',
 })
 export class MapComponent implements AfterViewInit, OnDestroy {

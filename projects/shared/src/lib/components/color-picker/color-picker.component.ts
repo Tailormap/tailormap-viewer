@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -67,6 +67,7 @@ const defaultColors: Array<string | undefined> = [
     selector: 'tm-color-picker',
     templateUrl: './color-picker.component.html',
     styleUrls: ['./color-picker.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatButton,
         MatIcon,

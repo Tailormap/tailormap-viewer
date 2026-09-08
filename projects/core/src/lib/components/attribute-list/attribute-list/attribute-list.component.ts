@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -30,6 +30,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list',
     templateUrl: './attribute-list.component.html',
     styleUrls: ['./attribute-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         BottomPanelComponent,
         MatProgressSpinner,

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectComponentTitle } from '../../../state/core.selectors';
@@ -9,6 +9,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-toc-menu-button',
     templateUrl: './toc-menu-button.component.html',
     styleUrls: ['./toc-menu-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class TocMenuButtonComponent {

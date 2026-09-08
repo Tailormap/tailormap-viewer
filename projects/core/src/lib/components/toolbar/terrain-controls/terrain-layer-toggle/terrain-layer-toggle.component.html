@@ -11,7 +11,7 @@
     class="terrain-layer-selection-list"
     [multiple]="false"
     [hideSingleSelectionIndicator]="true"
-    (selectionChange)="terrainChanged($event.options[0]?.value)">
+    (selectionChange)="terrainChanged($safeNavigationMigration($event.options[0]?.value))">
     @for (option of terrainLayers; track option.id) {
       <mat-list-option
         [value]="option.id"

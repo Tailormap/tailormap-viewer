@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups, GroupModel } from '@tailormap-admin/admin-api';
 import { Subject } from 'rxjs';
@@ -32,6 +32,7 @@ type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { he
     multi: true,
     useExisting: AuthorizationEditComponent,
   }],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatLabel,
     MatChipListbox,
