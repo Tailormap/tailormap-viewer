@@ -138,7 +138,7 @@
   <ng-container [matColumnDef]="EXPAND_DETAILS_ROW_NAME">
     <mat-cell *matCellDef="let currRow" [attr.colspan]="colNames.length">
       @if (expandedRowsIds.has(currRow.id) && featureDetails()?.has(currRow.__fid)) {
-        <tm-attribute-list-feature-details [featureDetails]="featureDetails()?.get(currRow.__fid)!"></tm-attribute-list-feature-details>
+        <tm-attribute-list-feature-details [featureDetails]="$safeNavigationMigration(featureDetails()?.get(currRow.__fid))!"></tm-attribute-list-feature-details>
       }
       @if (expandedRowsIds.has(currRow.id) && loadingFeatureDetailsIds()?.has(currRow.id)) {
         <div class="loading-details-spinner">

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, inject } from '@angular/core';
+import { Component, OnInit, TemplateRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { OverlayRef } from '../overlay-ref';
 import { OverlayContent } from '../overlay-content';
 import { NgTemplateOutlet } from '@angular/common';
@@ -6,6 +6,7 @@ import { NgTemplateOutlet } from '@angular/common';
 @Component({
     selector: 'tm-overlay',
     templateUrl: './overlay.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgTemplateOutlet],
 })
 export class OverlayComponent implements OnInit {

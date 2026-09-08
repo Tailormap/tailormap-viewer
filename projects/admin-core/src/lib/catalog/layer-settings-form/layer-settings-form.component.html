@@ -76,8 +76,8 @@
     @if (isWMS || isWMTS || isXYZ) {
       <div class="form-control">
         <strong i18n="@@admin-core.catalog.connect-feature-source">Connected feature source and type</strong>
-        <tm-admin-feature-type-selector [featureSourceId]="layerSettingsForm.get('featureSourceId')?.value"
-          [featureTypeName]="layerSettingsForm.get('featureTypeName')?.value"
+        <tm-admin-feature-type-selector [featureSourceId]="$safeNavigationMigration(layerSettingsForm.get('featureSourceId')?.value)"
+          [featureTypeName]="$safeNavigationMigration(layerSettingsForm.get('featureTypeName')?.value)"
           [layerName]="layerName"
         (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
       </div>
