@@ -67,7 +67,6 @@ export class TreeDragDropService implements OnDestroy {
 
   private static loopNodes(treeElement: HTMLElement, callback: (treeNode: HTMLElement) => void) {
     const nodes = treeElement.querySelectorAll(`.${treeNodeBaseClass}`);
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < nodes.length; i++) {
       callback(nodes[i] as HTMLElement);
     }

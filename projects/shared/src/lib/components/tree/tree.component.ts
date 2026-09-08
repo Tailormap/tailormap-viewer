@@ -1,7 +1,7 @@
 import {
   ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, ElementRef, viewChild, effect,
   AfterViewChecked,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';

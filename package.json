@@ -86,6 +86,7 @@
     "@typescript-eslint/utils": "^8.38.0",
     "@vitest/coverage-v8": "^4.1.11",
     "@vitest/eslint-plugin": "^1.6.27",
+    "angular-eslint": "^22.5.0",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsdoc": "^52.0.2",
@@ -97,6 +98,7 @@
     "ng-packagr": "^22.1.1",
     "tsutils-etc": "^1.4.2",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0",
     "vitest": "^4.1.11"
   },
   "engines": {

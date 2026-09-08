@@ -1,6 +1,6 @@
 import {
   Component, computed, effect, inject, input, NgZone, OnDestroy, OnInit, signal, Signal, viewChild, ViewContainerRef,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
