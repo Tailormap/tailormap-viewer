@@ -152,9 +152,10 @@
   color: var(--primary-color);
 }
 
-.section-label {
-  --mat-optgroup-label-text-size: 13px;
+.section-label__heading {
   color: var(--primary-color);
+  font-size: 13px;
+  font-weight: normal;
 }
 
 .attribution ::ng-deep a {

@@ -7,6 +7,10 @@ export class UploadHelper {
     return UploadedImageHelper.getUrlForFile(id, category, fileName);
   }
 
+  public static getAdminUrlForLegend(id: string, category: string, fileName: string = 't') {
+    return UploadedImageHelper.getAdminUrlForLegend(id, category, fileName);
+  }
+
   public static prepareBase64(image: string) {
     const dataIdx = image.indexOf('data:');
     const base64Idx = image.indexOf(';base64,');

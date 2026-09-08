@@ -70,7 +70,10 @@
               @if (searchResults$ | async; as searchResults) {
                 @for (searchResult of searchResults; track searchResult.id) {
                   @if (searchResult && searchResult.results.length > 0) {
-                    <mat-optgroup class="section-label" [label]="searchResult.name" [id]="'search-group-' + searchResult.id">
+                    <mat-optgroup class="section-label" [id]="'search-group-' + searchResult.id">
+                      <h2 class="section-label__heading">
+                        {{ searchResult.name }}
+                      </h2>
                       @for(option of searchResult.results; track option.id) {
                         <mat-option [value]="option">{{option.label}}</mat-option>
                       }
