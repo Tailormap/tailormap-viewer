@@ -24,7 +24,7 @@
       </div>
     }
     @for (layer of (selectableLayers$ | async); track layer.id) {
-      @let selectedLayer = $safeNavigationMigration(selectedLayers?.has(layer.id));
+      @let selectedLayer = selectedLayers?.has(layer.id);
       <button mat-menu-item
               [tmTooltip]="layer.title"
               [disabled]="cannotSelectMoreLayers && !selectedLayer"

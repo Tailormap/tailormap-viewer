@@ -1,7 +1,6 @@
 import {
   ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, TemplateRef, inject, ElementRef, viewChild, effect,
   AfterViewChecked,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -25,7 +24,6 @@ import { NgTemplateOutlet } from '@angular/common';
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '(window:resize)': 'onResize()',
     },
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         CdkVirtualScrollViewport,
         CdkFixedSizeVirtualScroll,

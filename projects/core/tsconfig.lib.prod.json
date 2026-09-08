@@ -4,13 +4,7 @@
     "outDir": "../../out-tsc/lib"
   },
   "angularCompilerOptions": {
-    "compilationMode": "partial",
-    "extendedDiagnostics": {
-      "checks": {
-        "nullishCoalescingNotNullable": "suppress",
-        "optionalChainNotNullable": "suppress"
-      }
-    }
+    "compilationMode": "partial"
   },
   "exclude": [
     "src/test.ts",

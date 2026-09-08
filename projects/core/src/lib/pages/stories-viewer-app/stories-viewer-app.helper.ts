@@ -8,7 +8,7 @@ import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration, withXhr } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import {
   AuthenticatedUserService, ENVIRONMENT_CONFIG, EnvironmentConfigModel,
   TAILORMAP_CROSS_ORIGIN_API_SERVICE, TailormapApiConstants,
@@ -45,7 +45,7 @@ export function getRootProviders(
 ): Array<Provider | EnvironmentProviders> {
   return [
     provideAnimations(),
-    provideHttpClient(withXhr(), 
+    provideHttpClient(
       withInterceptorsFromDi(),
       withXsrfConfiguration({
         cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,

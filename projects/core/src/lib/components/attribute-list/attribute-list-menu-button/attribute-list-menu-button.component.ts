@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectAttributeListPanelTitle, selectAttributeListVisible } from '../state/attribute-list.selectors';
@@ -10,7 +10,6 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list-button',
     templateUrl: './attribute-list-menu-button.component.html',
     styleUrls: ['./attribute-list-menu-button.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class AttributeListMenuButtonComponent implements OnInit {

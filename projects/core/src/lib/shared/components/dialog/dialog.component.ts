@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { style, transition, trigger, animate } from '@angular/animations';
 import { DialogService } from './dialog.service';
 import { BrowserHelper, TooltipDirective } from '@tailormap-viewer/shared';
@@ -30,7 +30,6 @@ const DIALOG_DEFAULT_WIDTH = 300;
         '(document:pointermove)': 'onDocumentPointerMove($event)',
         '(document:pointerup)': 'onDocumentPointerUp()',
     },
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIconButton,
         MatIcon,

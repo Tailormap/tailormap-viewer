@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { fromEvent, tap } from 'rxjs';
 import { finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import { CssHelper } from '../../helpers';
@@ -8,7 +8,6 @@ import { MatIcon } from '@angular/material/icon';
     selector: 'tm-panel-resize',
     templateUrl: './panel-resizer.component.html',
     styleUrls: ['./panel-resizer.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIcon],
 })
 export class PanelResizerComponent implements OnInit {

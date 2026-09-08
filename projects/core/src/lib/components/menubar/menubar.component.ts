@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BaseComponentTypeEnum, ComponentModel, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 import { MenubarLogoComponent } from './menubar-logo/menubar-logo.component';
 import { RegisteredComponentsRendererComponent } from '../registered-components-renderer/registered-components-renderer.component';
@@ -8,7 +8,6 @@ import { ProfileComponent } from './profile/profile.component';
     selector: 'tm-menubar',
     templateUrl: './menubar.component.html',
     styleUrls: ['./menubar.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MenubarLogoComponent,
         RegisteredComponentsRendererComponent,

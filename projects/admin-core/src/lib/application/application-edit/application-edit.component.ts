@@ -124,6 +124,7 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(copiedApplication => {
         if (copiedApplication) {
+          // eslint-disable-next-line max-len
           this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-copied:Application ${copiedApplication.title || copiedApplication.name} copied`);
           this.router.navigateByUrl('/admin/applications/application/' + copiedApplication.id);
         }
