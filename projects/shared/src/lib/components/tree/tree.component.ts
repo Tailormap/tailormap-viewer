@@ -7,7 +7,7 @@ import { TreeService } from './tree.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FlatTreeHelper } from './helpers/flat-tree.helper';
 import { FlatTreeModel } from './models';
-import { distinctUntilChanged, filter, Subject, take } from 'rxjs';
+import { distinctUntilChanged, filter, map, Observable, Subject, take } from 'rxjs';
 import { DropZoneOptions, TreeDragDropService, treeNodeBaseClass } from './tree-drag-drop.service';
 import { CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf } from '@angular/cdk/scrolling';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -15,7 +15,7 @@ import { MatRadioButton } from '@angular/material/radio';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'tm-tree',
@@ -37,6 +37,7 @@ import { NgTemplateOutlet } from '@angular/common';
         MatIcon,
         MatProgressSpinner,
         NgTemplateOutlet,
+        AsyncPipe,
     ],
 })
 export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
@@ -98,6 +99,9 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   @Input()
   public onNodeDoubleClick?: (node: FlatTreeModel) => void;
+
+  @Input()
+  public treeLabel?: string;
 
   private treeElement = viewChild('treeElement', { read: CdkVirtualScrollViewport });
 
@@ -330,6 +334,33 @@ export class TreeComponent implements OnInit, OnDestroy, AfterViewChecked {
       const dropzoneHeight = Math.max(0, viewportHeight - contentHeight);
       dropzoneEl.nativeElement.style.height = `${dropzoneHeight}px`;
     }, 100);
+  }
+
+  public getChildren(node: FlatTreeModel): string[] {
+    return this.treeService.getDescendants(node).map(n => n.id);
+  }
+
+  public getAllRootNodeIds(): string[] {
+    return this.treeService.getAllRootNodeIds();
+  }
+
+  public getSetSize$(node: FlatTreeModel): Observable<number> {
+    return this.dataSource$.pipe(
+      map(nodes => {
+        const parentNode = FlatTreeHelper.getParentNode(node, nodes);
+        return parentNode ? this.treeService.getDescendants(parentNode).length : this.treeService.getAllRootNodeIds().length;
+      }),
+    );
+  }
+
+  public getPositionInSet$(node: FlatTreeModel): Observable<number> {
+    return this.dataSource$.pipe(
+      map(nodes => {
+        const parentNode = FlatTreeHelper.getParentNode(node, nodes);
+        const siblings = parentNode ? this.treeService.getDescendants(parentNode) : nodes;
+        return siblings.findIndex(n => n.id === node.id) + 1;
+      }),
+    );
   }
 
 }

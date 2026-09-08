@@ -1503,6 +1503,10 @@
         <source>Toggle all layers on</source>
         <target>Alle Ebenen einschalten</target>
       </trans-unit>
+      <trans-unit id="core.toc.tree-label" datatype="html">
+        <source>Tree with available map layers.</source>
+        <target>Baumstruktur mit verfügbaren Kartenebenen.</target>
+      </trans-unit>
       <trans-unit id="core.toc.zoom-to-scale" datatype="html">
         <source>Click to zoom in to make this layer visible</source>
         <target>Klicken Sie, um heranzuzoomen und diese Ebene sichtbar zu machen</target>

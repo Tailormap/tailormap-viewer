@@ -189,3 +189,7 @@ mat-checkbox {
   outline: 2px solid var(--primary-color-0_5);
   outline-offset: -2px;
 }
+
+.tree-group {
+  display: none;
+}

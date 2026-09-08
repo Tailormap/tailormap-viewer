@@ -6,6 +6,9 @@
                              [itemSize]="30"
                              [minBufferPx]="200"
                              [maxBufferPx]="400"
+                             role="tree"
+                             [aria-label]="treeLabel"
+                             [attr.aria-owns]="getAllRootNodeIds().join(' ')"
                              class="mat-tree tree-wrapper">
   <ng-container *cdkVirtualFor="let node of dataSource$; trackBy: treeTrackBy">
     <div [class.tree-node--selected]="selectedNodeId === node.id && !openInfoInTree"
@@ -15,7 +18,14 @@
          [class.mat-tree-node--folder]="hasChild(node)"
          [style.--tree-node-indent]="depth(node) * 20 + 'px'"
          tabindex="0"
-         role="button"
+         role="treeitem"
+         [id]="node.id"
+         [attr.aria-level]="node.level + 1"
+         [attr.aria-expanded]="hasChild(node) ? isExpanded(node) : null"
+         [attr.aria-selected]="selectedNodeId === node.id"
+         [attr.aria-checked]="isChecked(node)"
+         [attr.aria-setsize]="getSetSize$(node) | async"
+         [attr.aria-posinset]="getPositionInSet$(node) | async"
          (click)="setNodeSelected(node, $event)"
          (dblclick)="onNodeDoubleClick ? onNodeDoubleClick(node) : null"
          (keydown.enter)="setNodeSelected(node)">
@@ -69,6 +79,13 @@
           }
         </div>
       </div>
+      @if (hasChild(node)) {
+        <div [id]="'tree-group-' + node.id"
+             class="tree-group"
+             role="group"
+             aria-hidden="false"
+             [attr.aria-owns]="getChildren(node).join(' ')"></div>
+      }
       @if (activeInTreeInfoNodes.includes(node.id)) {
         <div class="tree-node__info">
           <ng-container *ngTemplateOutlet="nodeInfoInTreeTemplate ? nodeInfoInTreeTemplate : null; context: {$implicit: node}"></ng-container>
