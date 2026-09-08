@@ -1503,6 +1503,10 @@
         <source>Toggle all layers on</source>
         <target>Alle lagen aanzetten</target>
       </trans-unit>
+      <trans-unit id="core.toc.tree-label" datatype="html">
+        <source>Tree with available map layers.</source>
+        <target>Boom met beschikbare kaartlagen.</target>
+      </trans-unit>
       <trans-unit id="core.toc.zoom-to-scale" datatype="html">
         <source>Click to zoom in to make this layer visible</source>
         <target>Klik om in te zoomen zodat deze laag zichtbaar wordt</target>

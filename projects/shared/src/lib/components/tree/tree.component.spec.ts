@@ -8,6 +8,7 @@ import { BaseTreeModel, TreeModel } from './models';
 import userEvent from '@testing-library/user-event';
 import { getTreeModelMock } from './mock-data/tree-model.mock-data';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { AsyncPipe } from "@angular/common";
 
 const getTree = () => [
   getTreeModelMock(),
@@ -45,6 +46,7 @@ describe('TreeComponent', () => {
         CdkVirtualScrollViewport,
         CdkFixedSizeVirtualScroll,
         CdkVirtualForOf,
+        AsyncPipe,
       ],
     });
     expect(fixture.componentInstance).toBeTruthy();

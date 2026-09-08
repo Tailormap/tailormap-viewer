@@ -92,6 +92,7 @@ export class TocComponent implements OnInit, OnDestroy {
   public toggleExpandAllTooltip$ = this.allLevelNodesCollapsed$.pipe(
     map(collapsed => collapsed ? $localize `:@@core.toc.expand-all:Expand all groups` : $localize `:@@core.toc.collapse-all:Collapse all groups`),
   );
+  public treeLabel = $localize `:@@core.toc.tree-label:Tree with available map layers.`;
 
   public in3D: Signal<boolean> = signal(false);
   public layersWithoutWebMercator: Signal<string[]> = signal([]);
