@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
@@ -57,17 +57,27 @@ const setup = async (hasNode = false) => {
 
 describe('CatalogCreateButtonsComponent', () => {
 
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
   test('should render', async () => {
     await setup();
     expect(screen.getByText('Add folder'));
   });
 
   test('should open add folder popup', async () => {
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { createCatalogNodeMock } = await setup();
-    await userEvent.click(await screen.findByText('Add folder'));
+    await ue.click(await screen.findByText('Add folder'));
     expect(await screen.findByText('Create new folder')).toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('Title'), 'New Folder Inside');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0);
+    await ue.type(await screen.findByPlaceholderText('Title'), 'New Folder Inside');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0, ue);
     expect(createCatalogNodeMock).toHaveBeenCalledWith({
       title: 'New Folder Inside',
       type: 'catalog-node',
@@ -79,11 +89,12 @@ describe('CatalogCreateButtonsComponent', () => {
   });
 
   test('should open add geo service', async () => {
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const { createGeoService$ } = await setup(true);
-    await userEvent.click(await screen.findByText('Add map service'));
+    await ue.click(await screen.findByText('Add map service'));
     expect(await screen.findByText('Create new service')).toBeInTheDocument();
-    await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
-    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0);
+    await ue.type(await screen.findByPlaceholderText('URL'), 'http://service.url');
+    await TestSaveHelper.waitForButtonToBeEnabledAndClick('Save', 0, ue);
     expect(createGeoService$).toHaveBeenCalledWith({
       authorizationRules: [AUTHORIZATION_RULE_ANONYMOUS],
       title: '',
