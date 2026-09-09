@@ -33,7 +33,7 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
     attachmentCount: 0,
     sortedAttributes: [
       { key: 'prop', attributeValue: 'test', label: 'Property' },
-      { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
+      { key: 'prop2', attributeValue: updated ? 'another test updated' : 'another test', label: 'Property 2' },
       { key: 'fid', attributeValue: updated ? '6' : '1', label: 'fid' },
     ],
   };
@@ -122,9 +122,8 @@ describe('FeatureInfoDialogComponent', () => {
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
     store.refreshState();
-    await vi.waitFor(() => {
-      expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
-    });
+    expect(await screen.findByText('another test updated')).toBeInTheDocument();
+    expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
   });
 
 });

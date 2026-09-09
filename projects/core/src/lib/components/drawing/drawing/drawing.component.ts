@@ -1,5 +1,6 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, signal, viewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -89,6 +90,8 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public selectionStyle = DrawingHelper.applyDrawingStyle as ((feature: FeatureModel) => MapStyleModel);
   public showMeasures = this.drawingService.showMeasures.asReadonly();
 
+  public drawingWKT = signal<string | null>(null);
+
   public mapUnits$ = this.mapService.getUnitsOfMeasure$();
 
   public SIZE_MAX = this.drawingService.SIZE_MAX;
@@ -156,6 +159,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.selectedDrawingType = feature.attributes.type;
           this.drawingService.lockedStyle.set(feature?.attributes.lockedStyle ?? false);
         }
+        this.drawingWKT.set(feature?.geometry ?? null);
         this.cdr.detectChanges();
       });
 

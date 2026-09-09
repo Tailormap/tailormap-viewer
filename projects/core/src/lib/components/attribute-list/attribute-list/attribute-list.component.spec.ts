@@ -227,22 +227,18 @@ describe('AttributeList', () => {
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();
     expect(await screen.findByText('Attribute 1')).toBeInTheDocument();
-    expect(await screen.queryByText('City')).not.toBeInTheDocument();
+    expect(screen.queryByText('City')).not.toBeInTheDocument();
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
 
     const tabEl = await screen.findByText('Layer 2');
     tabEl.style.pointerEvents = 'auto';
     await userEvent.click(tabEl);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();
-    }, { timeout: 100 });
-
     expect(await screen.findByText('Country')).toBeInTheDocument();
     expect(await screen.findByText('City')).toBeInTheDocument();
     expect(await screen.findByText('1: The Netherlands')).toBeInTheDocument();
     expect(await screen.findByText('10: Zonnebaan')).toBeInTheDocument();
+    expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();
   });
 
   it('renders tabs from other source', async () => {

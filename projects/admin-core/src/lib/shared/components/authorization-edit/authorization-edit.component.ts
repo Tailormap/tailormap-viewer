@@ -297,6 +297,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
     this.newRuleDecision = true;
   }
 
+  public changeNewRuleDecision(checked: boolean): void {
+    this.newRuleDecision = checked;
+  }
+
   // Disable the select options actually changing.
   public compareValues(): boolean {
     return false;

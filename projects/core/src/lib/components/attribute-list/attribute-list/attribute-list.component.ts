@@ -57,7 +57,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public tabs = this.store$.selectSignal(selectAttributeListTabs);
   private destroyed = new Subject();
 
-  public selectedTab?: string;
+  public selectedTab = this.store$.selectSignal(selectAttributeListSelectedTab);
   public title$: Observable<string> = of('');
 
   private columnSelectionOverlayRef: OverlayRef | undefined;
@@ -65,9 +65,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.title$ = this.store$.select(selectAttributeListPanelTitle);
-    this.store$.select(selectAttributeListSelectedTab)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(selectedTab => this.selectedTab = selectedTab);
   }
 
   public ngOnInit() {

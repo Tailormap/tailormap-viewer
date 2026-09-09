@@ -5,7 +5,7 @@
     }
     @if (node.metadata?.id) {
       <div class="toc-node-details-transparency">
-        <tm-layer-transparency [layer]="node.metadata?.id ?? null"></tm-layer-transparency>
+        <tm-layer-transparency [layer]="node.metadata.id"></tm-layer-transparency>
       </div>
     }
   </div>

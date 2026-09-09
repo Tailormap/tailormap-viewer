@@ -187,5 +187,10 @@
         <div class="locked-style" i18n="@@core.drawing.locked-style">The style for this drawing object cannot be changed.</div>
       }
     }
+
+    <mat-form-field appearance="outline" color="primary" style="margin-top: 16px;">
+      <mat-label>WKT</mat-label>
+      <textarea matInput i18n-placeholder="@@core.drawing.label" placeholder="Label" [value]="drawingWKT()"></textarea>
+    </mat-form-field>
   </div>
 }

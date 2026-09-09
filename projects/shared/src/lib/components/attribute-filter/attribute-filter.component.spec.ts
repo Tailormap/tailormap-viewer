@@ -52,10 +52,8 @@ describe('AttributeFilterComponent', () => {
     await userEvent.click(screen.getByLabelText('Select condition'));
     expect(screen.queryByText('Case sensitive')).toBeInTheDocument();
     await userEvent.click(await screen.findByText('Choose values'));
-    await vi.waitFor(() => {
-      expect(screen.getByText('value1')).toBeInTheDocument();
-      expect(screen.queryByText('Case sensitive')).not.toBeInTheDocument();
-    });
+    expect(await screen.findByText('value1')).toBeInTheDocument();
+    expect(screen.queryByText('Case sensitive')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('value1'));
     await userEvent.click(screen.getByText('value2'));
     await vi.waitFor(() => {

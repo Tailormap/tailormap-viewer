@@ -12,12 +12,12 @@
   @if (searchIndex?.summary) {
     <div class="form-control">
       <h3 i18n="@@admin-core.common.summary">Summary</h3>
-      @if (searchIndex?.summary?.total) {
-        <p i18n="@@admin-core.search-index.summary">Last indexing started at {{ $safeNavigationMigration(searchIndex?.summary?.startedAt) | date:'medium' }} and
-          took {{ $safeNavigationMigration(searchIndex?.summary?.duration) | number: '1.1-2' }} seconds,
-          skipped {{ searchIndex?.summary?.skippedCounter }} of {{ searchIndex?.summary?.total }} features.</p>
-      } @else if (searchIndex?.summary?.errorMessage) {
-        <p class="error-message">{{ searchIndex?.summary?.errorMessage }} </p>
+      @if (searchIndex.summary.total) {
+        <p i18n="@@admin-core.search-index.summary">Last indexing started at {{ $safeNavigationMigration(searchIndex.summary.startedAt) | date:'medium' }} and
+          took {{ $safeNavigationMigration(searchIndex.summary.duration) | number: '1.1-2' }} seconds,
+          skipped {{ searchIndex.summary.skippedCounter }} of {{ searchIndex.summary.total }} features.</p>
+      } @else if (searchIndex.summary.errorMessage) {
+        <p class="error-message">{{ searchIndex.summary.errorMessage }} </p>
       }
     </div>
   }
