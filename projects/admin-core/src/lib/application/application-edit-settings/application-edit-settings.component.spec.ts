@@ -10,7 +10,6 @@ import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
@@ -31,7 +30,7 @@ const setup = async (hasApplication: boolean, isDefaultApplication?: boolean) =>
   };
   await render(ApplicationEditSettingsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       provideHttpClient(
         withXsrfConfiguration({

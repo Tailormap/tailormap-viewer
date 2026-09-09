@@ -3,7 +3,6 @@ import { AttributeListMenuButtonComponent } from './attribute-list-menu-button.c
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getLoadedStoreNoRows } from '../state/mocks/attribute-list-state-test-data';
@@ -19,7 +18,7 @@ describe('AttributeListMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(AttributeListMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [ MatBadge ],
       providers: [
         { provide: MenubarService, useValue: menubarService },
         provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),

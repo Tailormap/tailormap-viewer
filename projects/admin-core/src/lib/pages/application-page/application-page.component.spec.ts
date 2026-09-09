@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationPageComponent } from './application-page.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
@@ -19,7 +18,7 @@ describe('ApplicationPageComponent', () => {
   test('should render', async () => {
     await render(ApplicationPageComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         provideMockStore({ initialState }),
         provideHttpClient(),

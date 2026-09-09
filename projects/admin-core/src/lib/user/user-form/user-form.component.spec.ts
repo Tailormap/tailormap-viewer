@@ -6,7 +6,6 @@ import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
@@ -20,7 +19,7 @@ const setup = async (isValidPassword: boolean) => {
   };
   const userUpdated = vi.fn();
   await render(UserFormComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     on: { userUpdated },
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockAdminApiService },

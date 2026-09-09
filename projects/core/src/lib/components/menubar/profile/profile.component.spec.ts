@@ -1,7 +1,6 @@
 import { describe, beforeAll, afterAll, test, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { ProfileComponent } from './profile.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
@@ -30,8 +29,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
     imports: [
-      MatIconTestingModule,
-    ],
+      ],
   });
   return { navigateFn, userService };
 };

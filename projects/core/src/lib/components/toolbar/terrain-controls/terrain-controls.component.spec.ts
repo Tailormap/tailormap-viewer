@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { TerrainControlsComponent } from './terrain-controls.component';
 import { of } from 'rxjs';
 import { LayoutService } from '../../../layout/layout.service';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
@@ -26,7 +25,7 @@ describe('TerrainControlsComponent', () => {
       isComponentEnabled: vi.fn(() => true),
     };
     await render(TerrainControlsComponent, {
-      imports: [ MatIconModule, MatIconTestingModule, CommonModule ],
+      imports: [ MatIconModule, CommonModule ],
       providers: [
         { provide: LayoutService, useValue: mockLayoutService },
         getMapServiceMock().provider,

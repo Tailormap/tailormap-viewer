@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { MapDrawingButtonsComponent } from './map-drawing-buttons.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { DrawingFeatureTypeEnum } from '../../../../map/models/drawing-feature-type.enum';
 import { createMapServiceMockWithDrawingTools } from '../../../../test-helpers/map-service.mock';
@@ -11,7 +10,7 @@ const setup = async (allowedDrawingShapes?: DrawingFeatureTypeEnum[]) => {
   const toolChanged = vi.fn();
   const drawingAdded = vi.fn();
   await render(MapDrawingButtonsComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       mapServiceMock.provider,
     ],

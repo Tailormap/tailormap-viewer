@@ -8,8 +8,6 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
     paramMap: of({ get: () => 'user1' }),
@@ -28,7 +26,7 @@ const setup = async (hasUser?: boolean) => {
     navigateByUrl: vi.fn(),
   };
   await render(UserEditComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserService, useValue: userService },

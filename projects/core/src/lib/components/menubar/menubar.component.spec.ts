@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MenubarComponent } from './menubar.component';
 import { of } from 'rxjs';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from './menubar-button/menubar-button.component';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -35,8 +34,7 @@ describe('MenubarComponent', () => {
     await render(MenubarComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        MatIconTestingModule,
-      ],
+        ],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
         { provide: APP_BASE_HREF, useValue: '/' },

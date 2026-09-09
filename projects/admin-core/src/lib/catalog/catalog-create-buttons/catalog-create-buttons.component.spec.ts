@@ -8,7 +8,6 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CatalogService } from '../services/catalog.service';
 import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
@@ -42,7 +41,7 @@ const setup = async (hasNode = false) => {
     inputs: {
       node: hasNode ? catalogNodeModel : null,
     },
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: CatalogService, useValue: catalogService },
       { provide: GeoServiceService, useValue: geoServiceService },

@@ -4,7 +4,6 @@ import { Switch3dComponent } from './switch3d.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { createMockStore } from '@ngrx/store/testing';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectEnable3d } from '../../../state/core.selectors';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { selectIn3dView } from '../../../map/state/map.selectors';
@@ -28,7 +27,7 @@ const setup = async (enable3d: boolean, toolsEnabled = false) => {
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(Switch3dComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: MatSnackBar, useValue: { dismiss: vi.fn() } },
       mapServiceMock.provider,

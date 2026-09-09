@@ -4,12 +4,11 @@ import { render, screen } from '@testing-library/angular';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatRadioModule } from '@angular/material/radio';
 
 const setup = async (node: TreeModel, scale?: number ) => {
   await render(TocNodeLayerComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatRadioModule ],
+    imports: [ MatIconModule, MatRadioModule ],
     inputs: { node, scale },
   });
 };

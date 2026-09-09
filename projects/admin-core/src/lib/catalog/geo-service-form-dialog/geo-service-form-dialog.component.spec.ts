@@ -8,7 +8,6 @@ import { of } from 'rxjs';
 import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
@@ -18,7 +17,7 @@ const setup = async (editMode = false) => {
   const geoServiceModelMock = getGeoService({ id: '2', title: 'my service', url: 'http://test.service' });
   const { geoServiceService, updateGeoService$, updateGeoServiceDetails } = createGeoServiceMock(geoServiceModelMock);
   await render(GeoServiceFormDialogComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       provideMockStore(),
       { provide: MatDialogRef, useValue: dialogRefMock },

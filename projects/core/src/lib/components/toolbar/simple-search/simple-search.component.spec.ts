@@ -7,7 +7,6 @@ import { TestBed } from '@angular/core/testing';
 import { SimpleSearchService } from './simple-search.service';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import userEvent from '@testing-library/user-event';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { SearchResultModel } from './models';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -29,7 +28,7 @@ const setup = async () => {
   const mockedMapService = getMapServiceMock(null, 'EPSG:28992');
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(SimpleSearchComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: SimpleSearchService, useValue: mockedSearchService },
       mockedMapService.provider,

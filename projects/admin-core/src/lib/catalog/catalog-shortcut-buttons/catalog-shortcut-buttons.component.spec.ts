@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogShortcutButtonsComponent } from './catalog-shortcut-buttons.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { GeoServiceService } from '../services/geo-service.service';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -52,7 +51,7 @@ const setup = async (geoServiceId?: string, geoServiceLayerId?: string, featureT
   const geoServices = [geoService];
   const geoServiceLayers = [geoServiceLayer];
   await render(CatalogShortcutButtonsComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     inputs: {
       featureTypeId: featureTypeId || null,
       geoServiceId: geoServiceId || null,

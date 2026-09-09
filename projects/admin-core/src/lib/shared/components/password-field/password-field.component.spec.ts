@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { PasswordFieldComponent } from './password-field.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 
 describe('PasswordFieldComponent', () => {
@@ -9,7 +8,7 @@ describe('PasswordFieldComponent', () => {
   test('should render', async () => {
     const changed = vi.fn();
     await render(PasswordFieldComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       inputs: {
         value: 'secret',
         label: 'Password',

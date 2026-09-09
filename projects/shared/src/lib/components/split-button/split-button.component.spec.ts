@@ -1,13 +1,12 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SplitButtonComponent } from './split-button.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 
 const setup = async () => {
   const optionSelectedMock = vi.fn();
   await render(SplitButtonComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     inputs: {
       options: [{ id: '1', label: 'Test 1' }, { id: '2', label: 'Test 2' }],
       selectedOption: '1',

@@ -7,7 +7,6 @@ import { FeatureSourceService } from '../services/feature-source.service';
 import { createMockStore } from '@ngrx/store/testing';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { Store } from '@ngrx/store';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
@@ -27,7 +26,7 @@ const setup = async () => {
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureTypeFormComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     inputs: {
       featureType: featureTypeModel,
     },

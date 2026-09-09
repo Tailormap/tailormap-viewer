@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SpatialFilterFormDrawGeometriesComponent } from './spatial-filter-form-draw-geometries.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
@@ -21,7 +20,7 @@ const setup = async () => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
   const mockSpatialCrudService = { addGeometry: vi.fn(), removeGeometry: vi.fn() };
   await render(SpatialFilterFormDrawGeometriesComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: Store, useValue: store },
       mapServiceMock.provider,

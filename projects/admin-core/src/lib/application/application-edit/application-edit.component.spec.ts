@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { RouterModule } from '@angular/router';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
@@ -32,7 +31,7 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
-    imports: [ MatIconTestingModule, RouterModule.forRoot(
+    imports: [ RouterModule.forRoot(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
     ) ],
     providers: [

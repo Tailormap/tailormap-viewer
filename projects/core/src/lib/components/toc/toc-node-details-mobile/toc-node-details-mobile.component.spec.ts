@@ -2,7 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile.component';
@@ -26,7 +25,7 @@ const setup = async (withLayer: boolean) => {
   };
   const appLayer = getAppLayerModel({ title: 'The Layer' });
   await render(TocNodeDetailsMobileComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       getMapServiceMock().provider,
       provideMockStore({

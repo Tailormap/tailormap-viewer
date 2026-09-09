@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CoordinateLinkWindowComponent } from './coordinate-link-window.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of, Subject } from 'rxjs';
 import { CoordinateLinkWindowConfigModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
@@ -29,7 +28,7 @@ const setup = async (withConfig?: boolean) => {
     mapClick$: mapClickSubject.asObservable(),
   }), 'EPSG:28992');
   await render(CoordinateLinkWindowComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: Store, useValue: storeMock },
       mapServiceMock.provider,

@@ -7,7 +7,6 @@ import { getBoundsModel } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { applicationStateKey, initialApplicationState } from '../state/application.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
 
@@ -20,7 +19,7 @@ const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
     maxExtent: getBoundsModel(),
   });
   await render(ApplicationFormComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     inputs: {
       application: hasApp ? application : undefined,
     },

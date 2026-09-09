@@ -8,8 +8,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 describe('FeatureSourceUsedDialogComponent', () => {
 
   test('should render', async () => {
@@ -20,7 +18,7 @@ describe('FeatureSourceUsedDialogComponent', () => {
     ];
     const closeFn = vi.fn();
     await render(FeatureSourceUsedDialogComponent, {
-      imports: [ MatDialogModule, MatSnackBarModule, MatIconModule, MatIconTestingModule ],
+      imports: [ MatDialogModule, MatSnackBarModule, MatIconModule ],
       providers: [
         { provide: MatDialogRef, useValue: { close: closeFn, afterClosed: () => (new Subject()).asObservable() } },
         { provide: MAT_DIALOG_DATA, useValue: { layers, featureSource } },

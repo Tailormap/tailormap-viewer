@@ -9,7 +9,6 @@ import {
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { AuthenticatedUserService, getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
@@ -43,8 +42,7 @@ const setup = async (withState = false) => {
   const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
-      MatIconTestingModule,
-    ],
+      ],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       provideMockStore({

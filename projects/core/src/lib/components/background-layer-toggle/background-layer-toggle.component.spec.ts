@@ -7,8 +7,6 @@ import {
   selectSelectedBackgroundNodeId,
 } from '../../map/state/map.selectors';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const getMockedState = (initiallySelected = '') => {
   return provideMockStore({
     selectors: [
@@ -25,7 +23,7 @@ describe('BackgroundLayerToggleComponent', () => {
 
   test('should render', async () => {
     await render(BackgroundLayerToggleComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         getMockedState(),
       ],
@@ -35,7 +33,7 @@ describe('BackgroundLayerToggleComponent', () => {
 
   test('should render default selected', async () => {
     await render(BackgroundLayerToggleComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         getMockedState('1'),
       ],

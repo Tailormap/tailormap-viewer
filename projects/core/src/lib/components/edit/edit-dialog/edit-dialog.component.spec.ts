@@ -5,7 +5,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import {
   AttributeType, getAppLayerModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService, UniqueValuesService,
 } from '@tailormap-viewer/api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { editStateKey, initialEditState } from '../state/edit.state';
 import { ApplicationLayerService } from '../../../map/services/application-layer.service';
 import { EditFeatureService } from '../services/edit-feature.service';
@@ -33,8 +32,7 @@ const getFeatureInfo = (): FeatureWithMetadataModel => {
 const setup = async (getLayerDetails = false, selectors: any[] = []) => {
   const { container, fixture } = await render(EditDialogComponent, {
     imports: [
-      MatIconTestingModule,
-    ],
+      ],
     providers: [
       {
         provide: ApplicationLayerService,

@@ -7,7 +7,6 @@ import { CatalogState, catalogStateKey, initialCatalogState } from '../state/cat
 import userEvent from '@testing-library/user-event';
 import { createMockStore } from '@ngrx/store/testing';
 import { BehaviorSubject, of } from 'rxjs';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { Store } from '@ngrx/store';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { TestBed } from '@angular/core/testing';
@@ -31,7 +30,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   };
   const loadCatalog = vi.fn();
   await render(CatalogBaseTreeComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       TreeService,
       { provide: Store, useValue: mockStore },

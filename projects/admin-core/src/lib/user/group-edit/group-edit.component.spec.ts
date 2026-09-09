@@ -7,7 +7,6 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async (hasGroup?: boolean) => {
@@ -28,7 +27,7 @@ const setup = async (hasGroup?: boolean) => {
     navigateByUrl: vi.fn(),
   };
   await render(GroupEditComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },

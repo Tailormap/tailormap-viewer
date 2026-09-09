@@ -2,8 +2,6 @@ import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureSourceFormComponent } from './feature-source-form.component';
 import userEvent from '@testing-library/user-event';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 describe('FeatureSourceFormComponent', () => {
 
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('FeatureSourceFormComponent', () => {
     const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     const changedFn = vi.fn();
     await render(FeatureSourceFormComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       on: { changed: changedFn },
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
@@ -39,7 +37,7 @@ describe('FeatureSourceFormComponent', () => {
   test('should show JDBC fields in case of JDBC protocol', async () => {
     const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
     });
     expect(await screen.queryByPlaceholderText('URL')).not.toBeInTheDocument();
     expect(await screen.queryByPlaceholderText('Database')).not.toBeInTheDocument();

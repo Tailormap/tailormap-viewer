@@ -11,7 +11,6 @@ import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model'
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideHttpClient } from '@angular/common/http';
 
 const setup = async () => {
@@ -59,7 +58,7 @@ const setup = async () => {
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
   await render(FeatureTypeDetailsComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureSourceService },

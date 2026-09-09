@@ -2,11 +2,9 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { DrawingStyleFormComponent } from './drawing-style-form.component';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const setup = async (type?: DrawingFeatureTypeEnum) => {
   await render(DrawingStyleFormComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     inputs: type ? { type } : {},
   });
 };

@@ -2,7 +2,6 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { MobileMenubarHomeButtonComponent } from './mobile-menubar-home-button.component';
 import { of } from 'rxjs';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatBadge } from '@angular/material/badge';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state';
@@ -18,7 +17,7 @@ describe('MobileMenubarHomeButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(MobileMenubarHomeButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [ MatBadge ],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

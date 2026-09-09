@@ -8,7 +8,6 @@ import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CatalogService } from '../services/catalog.service';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 
@@ -25,7 +24,7 @@ const setup = async () => {
     initialState: { [catalogStateKey]: { ...initialCatalogState, catalog: [{ ...catalogNodeModel, root: false, parentId: 'root' }] } },
   });
   await render(CatalogNodeDetailsComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: CatalogService, useValue: catalogService },

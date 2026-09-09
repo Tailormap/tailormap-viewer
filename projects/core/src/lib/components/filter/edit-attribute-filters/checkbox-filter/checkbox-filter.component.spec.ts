@@ -2,8 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CheckboxFilterComponent } from './checkbox-filter.component';
 import { FilterConditionEnum, FilterToolEnum, AttributeType, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 describe('CheckboxFilterComponent', () => {
 
   test('should render', async () => {
@@ -38,7 +36,7 @@ describe('CheckboxFilterComponent', () => {
       substringFilters: [],
     };
     await render(CheckboxFilterComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       inputs: { checkboxFilter },
     });
     expect(screen.getByText('attribute1')).toBeInTheDocument();

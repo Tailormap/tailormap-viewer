@@ -10,8 +10,6 @@ import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {
     paramMap: of({ get: () => '1' }),
@@ -42,7 +40,7 @@ const setup = async (protocol: FeatureSourceProtocolEnum) => {
     initialState: { [catalogStateKey]: { ...initialCatalogState } },
   });
   await render(FeatureSourceDetailsComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: FeatureSourceService, useValue: featureServiceMock },
