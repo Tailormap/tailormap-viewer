@@ -32,28 +32,34 @@ window.EventSource = window.EventSource || vi.fn(class {
   public close = vi.fn();
 });
 
-const mockStorage: Storage = {
-  store: {},
-  length: 0,
-  key(index: number) {
-    const keys = Object.keys(this['store']);
-    return keys[index] ?? null;
-  },
-  getItem(key: string) {
-    return this['store'][key] ?? null;
-  },
-  setItem(key: string, value: any) {
-    this['store'][key] = value;
-  },
-  removeItem(key: string) {
-    delete this['store'][key];
-  },
-  clear() {
-    this['store'] = {};
-  },
+const createMockStorage = (): Storage => {
+  let store: Record<string, string> = {};
+  return {
+    get length() {
+      return Object.keys(store).length;
+    },
+    key(index: number) {
+      return Object.keys(store)[index] ?? null;
+    },
+    getItem(key: string) {
+      return store[key] ?? null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = value;
+    },
+    removeItem(key: string) {
+      delete store[key];
+    },
+    clear() {
+      store = {};
+    },
+  };
 };
-Object.defineProperty(window, 'localStorage', { value: mockStorage });
-Object.defineProperty(window, 'sessionStorage', { value: mockStorage });
+
+const mockLocalStorage = createMockStorage();
+const mockSessionStorage = createMockStorage();
+Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
+Object.defineProperty(window, 'sessionStorage', { value: mockSessionStorage });
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
