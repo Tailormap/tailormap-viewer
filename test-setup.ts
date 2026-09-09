@@ -6,11 +6,6 @@ import { vi, beforeEach } from "vitest";
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
-// Error is thrown because the JSDOM version Jest uses does not support @layer css construct, ignore for now
-// const allowedErrors = ['Could not parse CSS stylesheet'];
-// failOnConsole({
-//   silenceMessage: (msg) => allowedErrors.some(err => msg.includes(err)),
-// });
 
 global.TextEncoder = TextEncoder;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -36,6 +31,29 @@ window.IntersectionObserver =
 window.EventSource = window.EventSource || vi.fn(class {
   public close = vi.fn();
 });
+
+const mockStorage: Storage = {
+  store: {},
+  length: 0,
+  key(index: number) {
+    const keys = Object.keys(this['store']);
+    return keys[index] ?? null;
+  },
+  getItem(key: string) {
+    return this['store'][key] ?? null;
+  },
+  setItem(key: string, value: any) {
+    this['store'][key] = value;
+  },
+  removeItem(key: string) {
+    delete this['store'][key];
+  },
+  clear() {
+    this['store'] = {};
+  },
+};
+Object.defineProperty(window, 'localStorage', { value: mockStorage });
+Object.defineProperty(window, 'sessionStorage', { value: mockStorage });
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
