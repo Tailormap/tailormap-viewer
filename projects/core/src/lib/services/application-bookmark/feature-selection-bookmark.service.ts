@@ -290,7 +290,6 @@ export class FeatureSelectionBookmarkService {
     ]).pipe(
       take(1),
       map(([ layer, bookmark ]) => {
-        console.log('bookmark', bookmark);
         if (!layer || !fid) {
           return null;
         }
