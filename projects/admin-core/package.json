@@ -13,7 +13,6 @@
     "@angular/material-luxon-adapter": "^22.1.5",
     "@angular/platform-browser": "^22.1.5",
     "@angular/router": "^22.1.5",
-    "@ngrx/effects": "^20.0.0",
     "@ngrx/operators": "^22.0.0",
     "@ngrx/store": "^22.0.0",
     "@ngrx/store-devtools": "^22.0.0",
