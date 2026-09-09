@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, signal, viewChild,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -61,6 +61,7 @@ import { AsyncPipe } from '@angular/common';
         DrawingStyleFormComponent,
         AsyncPipe,
     ],
+    /* eslint-disable @typescript-eslint/naming-convention */
     host: {
         '(window:keydown.delete)': 'onDeleteKey($event)',
     },
