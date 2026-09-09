@@ -13,6 +13,7 @@ import { AutoFocusDirective } from '@tailormap-viewer/shared';
     selector: 'tm-attribute-list-paging-dialog',
     templateUrl: './attribute-list-paging-dialog.component.html',
     styleUrls: ['./attribute-list-paging-dialog.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatFormField,

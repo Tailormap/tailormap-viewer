@@ -67,6 +67,7 @@ const defaultColors: Array<string | undefined> = [
     selector: 'tm-color-picker',
     templateUrl: './color-picker.component.html',
     styleUrls: ['./color-picker.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatButton,

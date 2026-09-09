@@ -11,6 +11,7 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
     selector: 'tm-toc-node-layer',
     templateUrl: './toc-node-layer.component.html',
     styleUrls: ['./toc-node-layer.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIcon,

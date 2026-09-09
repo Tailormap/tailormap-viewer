@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
     selector: 'tm-menubar',
     templateUrl: './menubar.component.html',
     styleUrls: ['./menubar.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MenubarLogoComponent,

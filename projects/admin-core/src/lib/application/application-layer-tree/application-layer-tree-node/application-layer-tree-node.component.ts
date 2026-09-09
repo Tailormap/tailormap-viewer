@@ -14,6 +14,7 @@ import { MatSelect, MatOption } from '@angular/material/select';
     selector: 'tm-admin-application-layer-tree-node',
     templateUrl: './application-layer-tree-node.component.html',
     styleUrls: ['./application-layer-tree-node.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIcon,

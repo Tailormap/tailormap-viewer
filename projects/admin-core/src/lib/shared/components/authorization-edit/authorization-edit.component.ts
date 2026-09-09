@@ -32,6 +32,7 @@ type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { he
     multi: true,
     useExisting: AuthorizationEditComponent,
   }],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatLabel,

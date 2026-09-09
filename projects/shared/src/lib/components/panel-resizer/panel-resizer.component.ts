@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
     selector: 'tm-panel-resize',
     templateUrl: './panel-resizer.component.html',
     styleUrls: ['./panel-resizer.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MatIcon],
 })

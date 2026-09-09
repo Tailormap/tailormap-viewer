@@ -3,6 +3,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "../../out-tsc/spec",
+    "rootDir": "../..",
     "types": [
       "node",
       "vitest/globals",

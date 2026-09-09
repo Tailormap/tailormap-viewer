@@ -19,6 +19,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     selector: 'tm-attribute-filter',
     templateUrl: './attribute-filter.component.html',
     styleUrls: ['./attribute-filter.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         ReactiveFormsModule,

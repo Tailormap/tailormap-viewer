@@ -25,6 +25,7 @@ import { NgTemplateOutlet } from '@angular/common';
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '(window:resize)': 'onResize()',
     },
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         CdkVirtualScrollViewport,

@@ -6,6 +6,7 @@ import { NgTemplateOutlet } from '@angular/common';
 @Component({
     selector: 'tm-overlay',
     templateUrl: './overlay.component.html',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgTemplateOutlet],
 })

@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
     selector: 'tm-map',
     templateUrl: 'map.component.html',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: 'map.component.css',
 })

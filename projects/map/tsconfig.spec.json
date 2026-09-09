@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../../out-tsc/spec",
+    "rootDir": "../..",
     "types": [
       "node",
       "vitest/globals",

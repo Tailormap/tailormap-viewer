@@ -30,6 +30,7 @@ const DIALOG_DEFAULT_WIDTH = 300;
         '(document:pointermove)': 'onDocumentPointerMove($event)',
         '(document:pointerup)': 'onDocumentPointerUp()',
     },
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIconButton,

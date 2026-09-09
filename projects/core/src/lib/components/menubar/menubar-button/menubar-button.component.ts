@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 import { MenubarService } from '../menubar.service';
@@ -12,7 +12,6 @@ import { TooltipDirective } from '@tailormap-viewer/shared';
     selector: 'tm-menubar-button',
     templateUrl: './menubar-button.component.html',
     styleUrls: ['./menubar-button.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIconButton,
         TooltipDirective,

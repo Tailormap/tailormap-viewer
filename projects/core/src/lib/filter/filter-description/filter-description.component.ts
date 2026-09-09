@@ -12,6 +12,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 @Component({
     selector: 'tm-filter-description',
     templateUrl: './filter-description.component.html',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./filter-description.component.css'],
 })

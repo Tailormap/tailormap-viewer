@@ -1,4 +1,3 @@
-import '@angular/localize/init';
 import './projects/app/src/polyfills';
 import 'zone.js/testing';
 import '@testing-library/jest-dom/vitest';

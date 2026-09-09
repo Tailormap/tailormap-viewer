@@ -15,6 +15,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list-column-selection',
     templateUrl: './attribute-list-column-selection.component.html',
     styleUrls: ['./attribute-list-column-selection.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatCheckbox,

@@ -31,6 +31,7 @@ interface FilterType {
     selector: 'tm-attribute-list-filter',
     templateUrl: './attribute-list-filter.component.html',
     styleUrls: ['./attribute-list-filter.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatDialogTitle,

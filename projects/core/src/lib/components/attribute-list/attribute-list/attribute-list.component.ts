@@ -30,6 +30,7 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list',
     templateUrl: './attribute-list.component.html',
     styleUrls: ['./attribute-list.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         BottomPanelComponent,
