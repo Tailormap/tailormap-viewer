@@ -16,6 +16,7 @@ const DIALOG_DEFAULT_WIDTH = 300;
         '(window:resize)': 'onResize()',
         '(document:pointermove)': 'onDocumentPointerMove($event)',
         '(document:pointerup)': 'onDocumentPointerUp()',
+        '(document:keydown.escape)': 'onDocumentEscape($event)',
     },
     // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -92,8 +93,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  public onDocumentEscape(event: KeyboardEvent): void {
+  public onDocumentEscape(event: Event): void {
     const overlayContainer = document.querySelector('.cdk-overlay-container');
     if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
       return;

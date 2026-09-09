@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, signal, viewChild,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, signal, viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -61,6 +61,9 @@ import { AsyncPipe } from '@angular/common';
         DrawingStyleFormComponent,
         AsyncPipe,
     ],
+    host: {
+        '(window:keydown.delete)': 'onDeleteKey($event)',
+    },
 })
 export class DrawingComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
@@ -200,7 +203,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  @HostListener('window:keydown.delete', ['$event'])
   public onDeleteKey(event: Event) {
     const target = event.target as HTMLElement;
     const isInput = target && (
