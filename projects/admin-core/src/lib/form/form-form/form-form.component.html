@@ -14,8 +14,8 @@
   </mat-form-field>
   <div class="form-control">
     <strong i18n="@@admin-core.common.feature-source">Feature source and type</strong>
-    <tm-admin-feature-type-selector [featureSourceId]="$safeNavigationMigration(formForm.get('featureSourceId')?.value)"
-                                    [featureTypeName]="$safeNavigationMigration(formForm.get('featureTypeName')?.value)"
+    <tm-admin-feature-type-selector [featureSourceId]="formForm.get('featureSourceId')?.value"
+                                    [featureTypeName]="formForm.get('featureTypeName')?.value"
                                     [disabled]="!!form"
                                     (featureTypeSelected)="updateFeatureTypeSelection($event)"></tm-admin-feature-type-selector>
   </div>

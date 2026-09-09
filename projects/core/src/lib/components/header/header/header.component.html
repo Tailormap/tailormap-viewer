@@ -1,4 +1,4 @@
-@let cnf = $safeNavigationMigration(config()?.config);
+@let cnf = config()?.config;
 @if (cnf) {
   <div class="header-container" #headerContainer>
     @if (cnf.logoFileId) {

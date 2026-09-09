@@ -11,7 +11,7 @@
   (changed)="updateGeoService($event)"></tm-admin-geo-service-form>
   @if (data.geoService) {
     <h3 i18n="@@admin-core.catalog.default-layer-settings">Default layer settings</h3>
-    <tm-admin-layer-settings-form [layerSettings]="$safeNavigationMigration(data.geoService.settings?.defaultLayerSettings)"
+    <tm-admin-layer-settings-form [layerSettings]="data.geoService.settings?.defaultLayerSettings"
       [protocol]="data.geoService.protocol"
     (changed)="updateDefaultLayerSettings($event)"></tm-admin-layer-settings-form>
   }

@@ -21,7 +21,7 @@ import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, Ma
     ],
 })
 export class AttributeListFeatureDetailsComponent {
-  public featureDetails = input<FeatureDetailsModel | null>(null);
+  public featureDetails = input<FeatureDetailsModel | null | undefined>(undefined);
   public getColumnKeys(detail: FeatureDetailModel) {
     return detail.columns.map(c => c.key);
   }
