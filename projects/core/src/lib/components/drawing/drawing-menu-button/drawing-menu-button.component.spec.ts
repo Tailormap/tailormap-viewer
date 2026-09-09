@@ -17,7 +17,7 @@ describe('DrawingMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(DrawingMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

@@ -8,7 +8,7 @@ import { MatBadge } from '@angular/material/badge';
 describe('MenubarButtonComponent', () => {
   test('renders with default inputs', async () => {
     await render(MenubarButtonComponent, {
-      imports: [ MatBadge ], providers: [{
+      imports: [MatBadge], providers: [{
         provide: MenubarService, useValue: { isComponentVisible$: vi.fn(() => of(false)), toggleActiveComponent: vi.fn() },
       }],
     });
@@ -18,7 +18,7 @@ describe('MenubarButtonComponent', () => {
   test('emits buttonClicked event on click', async () => {
     const onClick = vi.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [{
         provide: MenubarService,
         useValue: { isComponentVisible$: vi.fn(() => of(false)), toggleActiveComponent: vi.fn() },
@@ -34,7 +34,7 @@ describe('MenubarButtonComponent', () => {
   test('calls toggleActiveComponent with correct arguments on click', async () => {
     const toggleActiveComponent = vi.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$: vi.fn(() => of(false)), toggleActiveComponent } }],
       inputs: { component: 'test', panelTitle: 'test title' },
     });
@@ -45,7 +45,7 @@ describe('MenubarButtonComponent', () => {
   test('does not call toggleActiveComponent if component is undefined', async () => {
     const toggleActiveComponent = vi.fn();
     await render(MenubarButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$: vi.fn(() => of(false)), toggleActiveComponent } }],
     });
     fireEvent.click(screen.getByRole('button'));
@@ -55,7 +55,7 @@ describe('MenubarButtonComponent', () => {
   test('sets active$ observable based on isComponentVisible$', async () => {
     const isComponentVisible$ = vi.fn(() => of(true));
     const { fixture } = await render(MenubarButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [{ provide: MenubarService, useValue: { isComponentVisible$, toggleActiveComponent: vi.fn() } }],
       inputs: { component: 'test' },
     });

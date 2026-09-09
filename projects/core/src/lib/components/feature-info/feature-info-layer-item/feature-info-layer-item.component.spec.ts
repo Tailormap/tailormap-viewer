@@ -11,7 +11,7 @@ describe('FeatureInfoLayerItemComponent', () => {
   test('should render', async () => {
     const dispatch = vi.fn();
     await render(FeatureInfoLayerItemComponent, {
-      imports: [ MatIconModule ],
+      imports: [MatIconModule],
       providers: [{ provide: Store, useValue: { dispatch } }],
       inputs: {
         layer: { id: '1', title: 'Layer1', loading: LoadingStateEnum.LOADED, totalCount: 2, disabled: false, selected: false },

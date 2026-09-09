@@ -18,7 +18,7 @@ describe('FilterMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(FilterMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },

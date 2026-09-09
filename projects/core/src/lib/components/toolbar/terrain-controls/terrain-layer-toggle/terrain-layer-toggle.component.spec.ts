@@ -26,7 +26,7 @@ const setup = async (initiallySelected: string) => {
   const mockStore = getMockedState(initiallySelected);
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(TerrainLayerToggleComponent, {
-    imports: [ CommonModule ],
+    imports: [CommonModule],
     providers: [
       mockStore,
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },

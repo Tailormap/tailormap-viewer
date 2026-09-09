@@ -17,7 +17,7 @@ describe('PrintMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(PrintMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

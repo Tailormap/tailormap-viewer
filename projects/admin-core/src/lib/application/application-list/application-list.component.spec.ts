@@ -39,7 +39,7 @@ const setup = async (
   const configService = { getConfigValue$: vi.fn(() => of('app2')) };
   const loadApplications = vi.fn();
   await render(ApplicationListComponent, {
-    imports: [ MatListModule ],
+    imports: [MatListModule],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },

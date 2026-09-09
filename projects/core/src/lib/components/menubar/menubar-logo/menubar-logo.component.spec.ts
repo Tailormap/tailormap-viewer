@@ -11,7 +11,7 @@ describe('MenubarLogoComponent', () => {
 
   test('should render default logo', async () => {
     await render(MenubarLogoComponent, {
-      imports: [ MatIconModule ],
+      imports: [MatIconModule],
       providers: [provideMockStore({ initialState: { [coreStateKey]: { ...initialCoreState } } })],
       declarations: [ImageWithDescriptionComponent],
     });

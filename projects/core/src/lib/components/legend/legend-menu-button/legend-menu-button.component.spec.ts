@@ -17,7 +17,7 @@ describe('LegendMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(LegendMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

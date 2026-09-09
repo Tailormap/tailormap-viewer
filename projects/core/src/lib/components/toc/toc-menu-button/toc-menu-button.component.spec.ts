@@ -17,7 +17,7 @@ describe('TocMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(TocMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

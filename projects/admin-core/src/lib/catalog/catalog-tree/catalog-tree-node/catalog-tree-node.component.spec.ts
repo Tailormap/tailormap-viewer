@@ -13,7 +13,7 @@ import { TooltipDirective } from '@tailormap-viewer/shared';
 
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogTreeNodeComponent, {
-    imports: [ MatIconModule ],
+    imports: [MatIconModule],
     declarations: [ CatalogBaseTreeNodeComponent, TooltipDirective ],
     inputs: { node },
   });

@@ -17,7 +17,7 @@ const setup = async (isVisible: boolean) => {
     setMobilePanelHeight: vi.fn(),
   };
   await render(FilterComponent, {
-    imports: [ MatIconModule ],
+    imports: [MatIconModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: MenubarService, useValue: menubarServiceMock },

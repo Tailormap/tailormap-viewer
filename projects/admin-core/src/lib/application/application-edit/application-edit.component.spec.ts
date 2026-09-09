@@ -31,9 +31,9 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
-    imports: [ RouterModule.forRoot(
+    imports: [RouterModule.forRoot(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
-    ) ],
+    )],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ApplicationService, useValue: appService },

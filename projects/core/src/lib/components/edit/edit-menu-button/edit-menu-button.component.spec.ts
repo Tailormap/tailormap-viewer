@@ -17,7 +17,7 @@ describe('EditMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(EditMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

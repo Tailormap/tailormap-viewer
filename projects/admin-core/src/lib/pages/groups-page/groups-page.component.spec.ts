@@ -10,7 +10,7 @@ import { initialUserState, userStateKey } from '../../user/state/user.state';
 
 const setup = async () => {
   await render(GroupsPageComponent, {
-    imports: [ MatListModule ],
+    imports: [MatListModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),

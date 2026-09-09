@@ -18,7 +18,7 @@ describe('AttributeListMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(AttributeListMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         { provide: MenubarService, useValue: menubarService },
         provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),

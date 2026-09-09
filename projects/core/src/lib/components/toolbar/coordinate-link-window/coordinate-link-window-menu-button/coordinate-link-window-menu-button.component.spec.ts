@@ -17,7 +17,7 @@ describe('CoordinateLinkWindowMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(CoordinateLinkWindowMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

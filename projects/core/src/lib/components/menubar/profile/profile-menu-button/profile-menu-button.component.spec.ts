@@ -21,7 +21,7 @@ describe('ProfileMenuButtonComponent', () => {
       getUserDetails$: () => of({ isAuthenticated: false }),
     };
     await render(ProfileMenuButtonComponent, {
-      imports: [ MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },
