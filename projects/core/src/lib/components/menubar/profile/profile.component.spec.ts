@@ -5,7 +5,6 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
@@ -32,7 +31,6 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
     ],
     imports: [
       MatIconTestingModule,
-      NoopAnimationsModule,
     ],
   });
   return { navigateFn, userService };

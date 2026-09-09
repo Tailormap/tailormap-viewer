@@ -5,7 +5,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 const hrefGetMock = vi.fn();
 const hrefSetMock = vi.fn();
@@ -19,7 +18,7 @@ const setup = async (baseHref: string, locale: string, currentHref?: string) => 
       { provide: APP_BASE_HREF, useValue: baseHref },
       { provide: LOCALE_ID, useValue: locale },
     ],
-    imports: [ MatIconTestingModule, NoopAnimationsModule ],
+    imports: [MatIconTestingModule],
   });
 };
 

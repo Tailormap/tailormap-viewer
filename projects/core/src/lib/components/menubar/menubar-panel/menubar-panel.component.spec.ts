@@ -5,7 +5,6 @@ import { MenubarService } from '../menubar.service';
 import { BehaviorSubject } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
 
 const getMenuBarServiceMock = (initialValue: { componentId: string; dialogTitle: string } | null = null) => {
@@ -39,7 +38,7 @@ describe('MenubarPanelComponent', () => {
     const menubarServiceMock = getMenuBarServiceMock({ componentId: 'TOC', dialogTitle: 'Available layers' });
     const closePanelFn = menubarServiceMock.useValue.closePanel;
     const { fixture } = await render(MenubarPanelComponent, {
-      imports: [ MatIconTestingModule, NoopAnimationsModule ],
+      imports: [MatIconTestingModule],
       providers: [
         menubarServiceMock,
         { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },

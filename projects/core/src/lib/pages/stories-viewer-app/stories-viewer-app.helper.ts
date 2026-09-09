@@ -7,7 +7,6 @@ import { createApplication, DomSanitizer } from '@angular/platform-browser';
 import { StoriesViewerAppComponent } from './stories-viewer-app.component';
 import { VIEWER_ROUTE_SYNC_ENABLED } from '../../viewer-instance/viewer-route-sync.token';
 import { VIEWER_ROOT_ELEMENT } from '../../viewer-instance/viewer-root-element.token';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration, withXhr } from '@angular/common/http';
 import {
   AuthenticatedUserService, ENVIRONMENT_CONFIG, EnvironmentConfigModel,
@@ -44,7 +43,6 @@ export function getRootProviders(
   viewerId?: string,
 ): Array<Provider | EnvironmentProviders> {
   return [
-    provideAnimations(),
     provideHttpClient(withXhr(), 
       withInterceptorsFromDi(),
       withXsrfConfiguration({

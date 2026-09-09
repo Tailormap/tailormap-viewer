@@ -1,6 +1,5 @@
 import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration, withXhr } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 import { provideCore } from '@tailormap-viewer/core';
@@ -16,7 +15,6 @@ const main = async () => {
           production: environment.production,
           viewerBaseUrl: environment.viewerBaseUrl,
         }),
-        provideAnimations(),
         ...environment.providers,
         provideHttpClient(withXhr(), withInterceptorsFromDi(), withXsrfConfiguration({
           cookieName: TailormapApiConstants.XSRF_COOKIE_NAME,

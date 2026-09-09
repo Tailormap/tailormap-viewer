@@ -4,7 +4,6 @@ import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
@@ -44,7 +43,6 @@ const setup = async (withState = false) => {
   const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
-      NoopAnimationsModule,
       MatIconTestingModule,
     ],
     providers: [

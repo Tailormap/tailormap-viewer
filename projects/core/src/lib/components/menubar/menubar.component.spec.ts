@@ -5,7 +5,6 @@ import { MenubarComponent } from './menubar.component';
 import { of } from 'rxjs';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from './menubar-button/menubar-button.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentRegistrationService } from '../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectIn3dView } from '../../map/state/map.selectors';
@@ -36,7 +35,6 @@ describe('MenubarComponent', () => {
     await render(MenubarComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        NoopAnimationsModule,
         MatIconTestingModule,
       ],
       providers: [

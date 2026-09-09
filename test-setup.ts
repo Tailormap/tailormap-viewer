@@ -5,6 +5,7 @@ import { TextEncoder, TextDecoder } from 'util';
 import { vi, beforeEach } from "vitest";
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 // Error is thrown because the JSDOM version Jest uses does not support @layer css construct, ignore for now
 // const allowedErrors = ['Could not parse CSS stylesheet'];
 // failOnConsole({
@@ -47,6 +48,7 @@ Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [MatIconTestingModule],
+    providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
   });
 });
 

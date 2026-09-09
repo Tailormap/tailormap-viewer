@@ -18,7 +18,6 @@ import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { EditMapToolService } from '../services/edit-map-tool.service';
 import { coreStateKey, initialCoreState, ViewerState } from '../../../state';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const getFeatureInfo = (): FeatureWithMetadataModel => {
   return {
@@ -52,7 +51,6 @@ const setup = async (getLayerDetails = false, selectors: any[] = []) => {
       { provide: EditMapToolService, useValue: { allEditGeometry$: of() } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
-      provideNoopAnimations(),
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   });

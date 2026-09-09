@@ -9,7 +9,6 @@ import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (hasGroup?: boolean) => {
   const activeRoute = {
@@ -31,7 +30,6 @@ const setup = async (hasGroup?: boolean) => {
   await render(GroupEditComponent, {
     imports: [MatIconTestingModule],
     providers: [
-      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GroupService, useValue: groupService },
       { provide: Router, useValue: router },

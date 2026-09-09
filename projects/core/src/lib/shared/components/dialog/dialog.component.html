@@ -1,9 +1,11 @@
 @if (open) {
   <div
-    [@inOutAnimation]="{ value: true, params: { translate: openFromRight ? actualWidth + 'px' : (-1 * actualWidth) + 'px' }}"
+    animate.enter="dialog-enter-animation"
+    animate.leave="dialog-leave-animation"
     class="dialog mat-elevation-z4"
     (keyup.escape)="toggleFullscreen(false)"
     [style.width]="actualWidth + 'px'"
+    [style.--dialog-slide-distance]="getSlideDistance()"
     [class.dialog--hidden]="hidden"
     [class.dialog--fullscreen]="fullscreen"
     [class.dialog--collapsed]="collapsed">

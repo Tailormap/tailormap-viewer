@@ -5,7 +5,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, ComponentModel, InfoComponentConfigModel } from '@tailormap-viewer/api';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -38,7 +37,6 @@ describe('InfoComponent', () => {
 
     await render(InfoComponent, {
       imports: [
-        NoopAnimationsModule,
         MatIconTestingModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

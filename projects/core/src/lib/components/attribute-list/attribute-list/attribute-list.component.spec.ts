@@ -19,7 +19,6 @@ import userEvent from '@testing-library/user-event';
 import { provideStore, Store } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialFilterState } from '../../../state/filter-state/filter.state';
 import { CoreState, coreStateKey } from '../../../state/core.state';
@@ -168,7 +167,6 @@ const setupWithActualState = async (store?: StoreDef) => {
   });
   const renderResult = await render(AttributeListComponent, {
     imports: [
-      NoopAnimationsModule,
       MatIconTestingModule,
     ],
     providers: [
