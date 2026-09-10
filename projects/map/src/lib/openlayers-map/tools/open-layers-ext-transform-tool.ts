@@ -231,9 +231,13 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
+    if (this.keyboardControlElement) {
+      this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
+      this.keyboardControlElement = null;
+    }
     setTimeout(() => {
       const targetElement: HTMLElement | null = document.querySelector(`.drawing-feature-proxy[data-feature-fid="${feature.__fid}"]`);
-      if (!targetElement) {
+      if (!targetElement || !this.isActive) {
         return;
       }
       this.keyboardControlElement = targetElement;
