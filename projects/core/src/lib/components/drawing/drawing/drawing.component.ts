@@ -26,6 +26,7 @@ import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
+import { DrawingAccessibleFeaturesService } from '../services/drawing-accessible-features.service';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
@@ -72,6 +73,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   private confirmService = inject(ConfirmDialogService);
   private drawingService = inject(DrawingService);
   private drawingFeatureRegistrationService = inject(DrawingFeatureRegistrationService);
+  private drawingAccessibleFeaturesService = inject(DrawingAccessibleFeaturesService);
   private cdr = inject(ChangeDetectorRef);
 
   private belowDrawingButtonsContainer = viewChild('belowDrawingButtonsContainer', { read: ViewContainerRef });
@@ -130,11 +132,13 @@ export class DrawingComponent implements OnInit, OnDestroy {
           this.store$.dispatch(setSelectedFeature({ fid: null }));
           this.activeTool = null;
           this.drawingService.disableDrawingTools();
+          this.drawingAccessibleFeaturesService.destroyAccessibleFeaturesContainer();
         } else {
           this.drawingService.createDrawingTools({
             drawingLayerId: this.drawingLayerId,
             selectionStyle: this.selectionStyle,
           });
+          this.drawingAccessibleFeaturesService.initAccessibleFeaturesContainer();
           this.enableSelectAndModify();
         }
       }),
@@ -196,6 +200,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.store$.dispatch(setSelectedFeature({ fid: null }));
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.DRAWING);
+    this.drawingAccessibleFeaturesService.destroyAccessibleFeaturesContainer();
     this.destroyed.next(null);
     this.destroyed.complete();
   }

@@ -308,6 +308,9 @@
       <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
         <source>Duplicate selected drawing object</source>
       </trans-unit>
+      <trans-unit id="core.drawing.edit-feature-keyboard" datatype="html">
+        <source>Edit <x id="PH" equiv-text="featureLabel"/>, use arrow keys to move the feature, use &apos;+&apos; and &apos;-&apos; keys to resize, and use &apos;r&apos; and &apos;shift+r&apos; to rotate.</source>
+      </trans-unit>
       <trans-unit id="core.drawing.fill" datatype="html">
         <source>Fill</source>
       </trans-unit>

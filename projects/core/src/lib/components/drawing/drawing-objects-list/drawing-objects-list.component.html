@@ -9,7 +9,7 @@
       <mat-panel-description>{{ features.length }}</mat-panel-description>
     </mat-expansion-panel-header>
     @for (feature of features; track feature.__fid; let index = $index) {
-      <div class="row"
+      <button class="row"
            [attr.data-feature-fid]="feature.__fid"
            (click)="selectFeature(feature.__fid)"
            (dblclick)="selectFeatureAndEditDescription(feature.__fid)"
@@ -29,7 +29,7 @@
             <div>{{ stripMacros(feature.attributes.style.description) }}</div>
           }
         </div>
-      </div>
+      </button>
     }
   </mat-expansion-panel>
 }

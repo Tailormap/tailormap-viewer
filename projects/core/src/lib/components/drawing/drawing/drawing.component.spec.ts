@@ -18,6 +18,7 @@ import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
+import { DrawingAccessibleFeaturesService } from '../services/drawing-accessible-features.service';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
@@ -28,6 +29,10 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   };
   const confirmServiceMock = {
     confirm$: vi.fn(() => of(true)),
+  };
+  const drawingAccessibleFeaturesServiceMock = {
+    initAccessibleFeaturesContainer: vi.fn(),
+    destroyAccessibleFeaturesContainer: vi.fn(),
   };
   const { container } = await render(DrawingComponent, {
     imports: [],
@@ -45,6 +50,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
       mapServiceMock.provider,
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
+      { provide: DrawingAccessibleFeaturesService, useValue: drawingAccessibleFeaturesServiceMock },
     ],
   });
   return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };
