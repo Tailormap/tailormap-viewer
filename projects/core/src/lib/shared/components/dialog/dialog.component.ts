@@ -29,6 +29,7 @@ const DIALOG_DEFAULT_WIDTH = 300;
         '(window:resize)': 'onResize()',
         '(document:pointermove)': 'onDocumentPointerMove($event)',
         '(document:pointerup)': 'onDocumentPointerUp()',
+        '(window:keydown.escape)': 'onDocumentEscape($event)',
     },
     imports: [
         MatIconButton,
@@ -99,8 +100,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  public onDocumentEscape(event: KeyboardEvent): void {
+  public onDocumentEscape(event: Event): void {
     const overlayContainer = document.querySelector('.cdk-overlay-container');
     if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
       return;
