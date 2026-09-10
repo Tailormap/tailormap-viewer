@@ -25,7 +25,7 @@ import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/share
     ],
     host: {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-        '(document:keydown.escape)': 'onDocumentEscape($event)',
+      '(window:keydown.escape)': 'onDocumentEscape($event)',
     },
 })
 export class BottomPanelComponent implements OnInit {

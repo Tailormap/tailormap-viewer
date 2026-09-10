@@ -1,6 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, viewChild,
-  ViewContainerRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -61,9 +60,9 @@ import { AsyncPipe } from '@angular/common';
         DrawingStyleFormComponent,
         AsyncPipe,
     ],
-    /* eslint-disable @typescript-eslint/naming-convention */
     host: {
-        '(window:keydown.delete)': 'onDeleteKey($event)',
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      '(window:keydown.delete)': 'onDeleteKey($event)',
     },
 })
 export class DrawingComponent implements OnInit, OnDestroy {

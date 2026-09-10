@@ -8,7 +8,7 @@ import { addFilterGroup, removeFilterGroup } from '../../state/filter-state/filt
 import { selectVisibleAppLayerIds, selectLayer, selectLayers, selectVisibleLayersWithAttributes } from '../../map';
 import { selectViewerId } from '../../state';
 import { LoadingStateEnum, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
-import { BehaviorSubject, catchError, combineLatest, concatMap, filter, forkJoin, map, Observable, of, startWith, take } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, concatMap, defaultIfEmpty, filter, forkJoin, map, Observable, of, take } from 'rxjs';
 import { CqlFilterHelper, FeaturesFilterHelper, FeaturesFilters } from '../../filter';
 import {
   emptyFeatureInfo,
@@ -286,7 +286,7 @@ export class FeatureSelectionBookmarkService {
   public getFidSelectionUrl$(appLayerId: string, fid: string): Observable<string | null> {
     return combineLatest([
       this.store$.select(selectLayer(appLayerId)),
-      this.bookmarkService.getBookmarkValue$().pipe(startWith('')),
+      this.bookmarkService.getBookmarkValue$().pipe(defaultIfEmpty('')),
     ]).pipe(
       take(1),
       map(([ layer, bookmark ]) => {

@@ -29,9 +29,205 @@
         <source>Color is required</source>
         <target>Kleur is vereist</target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.color.amber" datatype="html">
+        <source>Amber</source>
+        <target>Amber</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.black" datatype="html">
+        <source>Black</source>
+        <target>Zwart</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.blue" datatype="html">
+        <source>Blue</source>
+        <target>Blauw</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.bright-yellow" datatype="html">
+        <source>Bright yellow</source>
+        <target>Felgeel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.brown" datatype="html">
+        <source>Brown</source>
+        <target>Bruin</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.coral-red" datatype="html">
+        <source>Coral red</source>
+        <target>Koraalrood</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.cyan" datatype="html">
+        <source>Cyan</source>
+        <target>Cyaan</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-blue" datatype="html">
+        <source>Dark blue</source>
+        <target>Donkerblauw</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-brown" datatype="html">
+        <source>Dark brown</source>
+        <target>Donkerbruin</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-green" datatype="html">
+        <source>Dark green</source>
+        <target>Donkergroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-grey" datatype="html">
+        <source>Dark grey</source>
+        <target>Donkergrijs</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-orange" datatype="html">
+        <source>Dark orange</source>
+        <target>Donkeroranje</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-pink" datatype="html">
+        <source>Dark pink</source>
+        <target>Donkerroze</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-red" datatype="html">
+        <source>Dark red</source>
+        <target>Donkerrood</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-red-brown" datatype="html">
+        <source>Dark red brown</source>
+        <target>Donker roodbruin</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.golden-yellow" datatype="html">
+        <source>Golden yellow</source>
+        <target>Goudgeel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.green" datatype="html">
+        <source>Green</source>
+        <target>Groen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.grey" datatype="html">
+        <source>Grey</source>
+        <target>Grijs</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.indigo" datatype="html">
+        <source>Indigo</source>
+        <target>Indigo</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.lavender" datatype="html">
+        <source>Lavender</source>
+        <target>Lavendel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-amber" datatype="html">
+        <source>Light amber</source>
+        <target>Licht amber</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-blue" datatype="html">
+        <source>Light blue</source>
+        <target>Lichtblauw</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-cyan" datatype="html">
+        <source>Light cyan</source>
+        <target>Lichtcyaan</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-green" datatype="html">
+        <source>Light green</source>
+        <target>Lichtgroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-grey" datatype="html">
+        <source>Light grey</source>
+        <target>Lichtgrijs</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-orange" datatype="html">
+        <source>Light orange</source>
+        <target>Lichtoranje</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-pink" datatype="html">
+        <source>Light pink</source>
+        <target>Lichtroze</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-red" datatype="html">
+        <source>Light red</source>
+        <target>Lichtrood</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-yellow" datatype="html">
+        <source>Light yellow</source>
+        <target>Lichtgeel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.medium-green" datatype="html">
+        <source>Medium green</source>
+        <target>Middelgroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.mint" datatype="html">
+        <source>Mint</source>
+        <target>Munt</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.navy" datatype="html">
+        <source>Navy</source>
+        <target>Marineblauw</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.olive" datatype="html">
+        <source>Olive</source>
+        <target>Olijfgroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.orange" datatype="html">
+        <source>Orange</source>
+        <target>Oranje</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.pale-green" datatype="html">
+        <source>Pale green</source>
+        <target>Bleekgroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.periwinkle" datatype="html">
+        <source>Periwinkle</source>
+        <target>Periwinkel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.pink" datatype="html">
+        <source>Pink</source>
+        <target>Roze</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.purple" datatype="html">
+        <source>Purple</source>
+        <target>Paars</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.red" datatype="html">
+        <source>Red</source>
+        <target>Rood</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.rosy-brown" datatype="html">
+        <source>Rosy brown</source>
+        <target>Rozebruin</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.salmon" datatype="html">
+        <source>Salmon</source>
+        <target>Zalm</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.teal" datatype="html">
+        <source>Teal</source>
+        <target>Turkoois</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.violet" datatype="html">
+        <source>Violet</source>
+        <target>Violet</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.white" datatype="html">
+        <source>White</source>
+        <target>Wit</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow" datatype="html">
+        <source>Yellow</source>
+        <target>Geel</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow-green" datatype="html">
+        <source>Yellow green</source>
+        <target>Geelgroen</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow-lime" datatype="html">
+        <source>Yellow lime</source>
+        <target>Geel limoen</target>
+      </trans-unit>
       <trans-unit id="shared.color-picker.copy" datatype="html">
         <source>Copy</source>
         <target>Kopiëren</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.no-color" datatype="html">
+        <source>No color</source>
+        <target>Geen kleur</target>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.pick" datatype="html">
+        <source>Pick <x id="PH" equiv-text="colorLabel"/></source>
+        <target>Kies <x id="PH" equiv-text="colorLabel"/></target>
       </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
@@ -243,7 +439,7 @@
       </trans-unit>
       <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
         <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>
-        <target state="new"><x id="PH" equiv-text="this.getLabel()"/> wordt getoond – klik om te schakelen naar <x id="PH_1" equiv-text="nextLabel"/></target>
+        <target><x id="PH" equiv-text="this.getLabel()"/> wordt getoond – klik om te schakelen naar <x id="PH_1" equiv-text="nextLabel"/></target>
       </trans-unit>
       <trans-unit id="shared.tree.items" datatype="html">
         <source><x id="PH" equiv-text="dragNodeIds.length"/> items</source>

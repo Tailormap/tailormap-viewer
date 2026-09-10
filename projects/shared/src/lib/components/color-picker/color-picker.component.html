@@ -35,6 +35,7 @@
           (click)="selectColor(pickerColor)"
           (touchend)="selectColor(pickerColor)"
           [style.backgroundColor]="pickerColor"
+          [aria-label]="getColorLabel(pickerColor)"
           [class.color-picker__color-transparent]="!pickerColor"
         [class.mat-elevation-z4]="pickerColor === color"></button>
       }
