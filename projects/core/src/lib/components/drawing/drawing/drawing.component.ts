@@ -61,7 +61,7 @@ import { AsyncPipe } from '@angular/common';
         AsyncPipe,
     ],
     host: {
-      /* eslint-disable @typescript-eslint/naming-convention */
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '(window:keydown.delete)': 'onDeleteKey($event)',
     },
 })

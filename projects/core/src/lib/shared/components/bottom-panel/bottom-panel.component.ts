@@ -24,7 +24,7 @@ import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/share
         AsyncPipe,
     ],
     host: {
-      /* eslint-disable @typescript-eslint/naming-convention */
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '(window:keydown.escape)': 'onDocumentEscape($event)',
     },
 })
