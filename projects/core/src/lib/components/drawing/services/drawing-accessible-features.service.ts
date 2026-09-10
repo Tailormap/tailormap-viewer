@@ -43,6 +43,9 @@ export class DrawingAccessibleFeaturesService {
   }
 
   private updateProxies(features: DrawingFeatureModel[]) {
+    if (!this.proxyContainer) {
+      return;
+    }
     // Remove proxies for deleted features
     for (const [ fid, element ] of this.proxyElements) {
       if (!features.find(f => f.__fid === fid)) {
@@ -68,8 +71,7 @@ export class DrawingAccessibleFeaturesService {
     proxyElement.className = 'drawing-feature-proxy';
 
     const featureLabel = feature.attributes?.style.description || feature.attributes?.type;
-    const message = $localize `:@@core.drawing.edit-feature-keyboard:Edit ${featureLabel},
-      use arrow keys to move the feature, use '+' and '-' keys to resize, and use 'r' and 'shift+r' to rotate.`;
+    const message = $localize `:@@core.drawing.edit-feature-keyboard:Edit ${featureLabel}, use arrow keys to move the feature, use '+' and '-' keys to resize, and use 'r' and 'shift+r' to rotate.`;
     proxyElement.setAttribute('aria-label', message);
 
     proxyElement.addEventListener('focus', () => {
