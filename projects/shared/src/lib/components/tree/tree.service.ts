@@ -324,6 +324,10 @@ export class TreeService<T = any, TypeDef extends string = string> implements On
     return this.dataSource.value.nodes.find(node => node.level === 0)?.id || null;
   }
 
+  public getAllRootNodeIds(): string[] {
+    return this.dataSource.value.nodes.filter(node => node.level === 0).map(node => node.id);
+  }
+
   public expandAllLevelNodes() {
     this.dataSource.value.nodes
       .filter(node => node.expandable && !node.expanded)

@@ -1128,6 +1128,9 @@
       <trans-unit id="core.toc.toggle-layers-on" datatype="html">
         <source>Toggle all layers on</source>
       </trans-unit>
+      <trans-unit id="core.toc.tree-label" datatype="html">
+        <source>Tree with available map layers.</source>
+      </trans-unit>
       <trans-unit id="core.toc.zoom-to-scale" datatype="html">
         <source>Click to zoom in to make this layer visible</source>
       </trans-unit>
