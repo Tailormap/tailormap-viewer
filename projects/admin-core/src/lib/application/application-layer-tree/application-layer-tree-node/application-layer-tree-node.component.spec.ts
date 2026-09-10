@@ -3,7 +3,6 @@ import { ApplicationLayerTreeNodeComponent } from './application-layer-tree-node
 import { render, screen } from '@testing-library/angular';
 import { TooltipDirective, TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { AppTreeLayerNodeModel, AppTreeLevelNodeModel, AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,7 +17,7 @@ const setup = async (node: TreeModel<AppTreeNodeModel> | null) => {
     descendantsAllSelected: vi.fn().mockReturnValue(false),
   };
   await render(ApplicationLayerTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule, MatMenuModule, MatCheckboxModule, MatFormFieldModule, MatSelectModule, MatTooltipModule ],
+    imports: [ MatIconModule, MatMenuModule, MatCheckboxModule, MatFormFieldModule, MatSelectModule, MatTooltipModule ],
     inputs: { node },
     providers: [
       { provide: TreeService, useValue: mockTreeService },

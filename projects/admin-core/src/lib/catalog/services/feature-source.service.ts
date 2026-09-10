@@ -198,7 +198,6 @@ export class FeatureSourceService {
         concatMap(featureSource => {
           return this.adminApiService.refreshFeatureSource$({ id: featureSource.id })
             .pipe(
-              // eslint-disable-next-line max-len
               this.handleUpdateFeatureSource($localize `:@@admin-core.catalog.error-refreshing-feature-source:Error while refreshing feature source: `),
             );
         }),

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
 import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
@@ -31,6 +31,8 @@ interface FilterType {
     selector: 'tm-attribute-list-filter',
     templateUrl: './attribute-list-filter.component.html',
     styleUrls: ['./attribute-list-filter.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatDialogTitle,
         AttributeFilterComponent,

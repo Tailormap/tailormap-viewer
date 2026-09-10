@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { ResetFiltersButtonComponent } from './reset-filters-button.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
@@ -13,7 +12,7 @@ describe('ResetFiltersButtonComponent', () => {
 
   test('should render', async () => {
     await render(ResetFiltersButtonComponent, {
-      imports: [ MatMenuModule, MatButtonModule, MatIconModule, MatIconTestingModule ],
+      imports: [ MatMenuModule, MatButtonModule, MatIconModule ],
       providers: [
         provideMockStore({
           selectors: [

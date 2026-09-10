@@ -6,14 +6,12 @@ import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { setSelectedFeatureInfoLayer } from '../state/feature-info.actions';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 describe('FeatureInfoLayerItemComponent', () => {
 
   test('should render', async () => {
     const dispatch = vi.fn();
     await render(FeatureInfoLayerItemComponent, {
-      imports: [ MatIconModule, MatIconTestingModule ],
+      imports: [MatIconModule],
       providers: [{ provide: Store, useValue: { dispatch } }],
       inputs: {
         layer: { id: '1', title: 'Layer1', loading: LoadingStateEnum.LOADED, totalCount: 2, disabled: false, selected: false },

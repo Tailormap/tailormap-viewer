@@ -4,13 +4,11 @@ import { FeatureInfoDialogComponent } from './feature-info-dialog.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   selectCurrentlySelectedFeature, selectFeatureInfoDialogVisible, selectFeatureInfoMetadata, selectIsNextButtonDisabled,
   selectIsPrevButtonDisabled, selectSelectedFeatureInfoLayer,
 } from '../state/feature-info.selectors';
 import { AuthenticatedUserService, getAppLayerModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TestBed } from '@angular/core/testing';
 import { FeatureInfoModel } from '../models/feature-info.model';
 import { showNextFeatureInfoFeature, showPreviousFeatureInfoFeature } from '../state/feature-info.actions';
@@ -33,7 +31,7 @@ const getFeatureInfo = (updated?: boolean): FeatureInfoModel => {
     attachmentCount: 0,
     sortedAttributes: [
       { key: 'prop', attributeValue: 'test', label: 'Property' },
-      { key: 'prop2', attributeValue: 'another test', label: 'Property 2' },
+      { key: 'prop2', attributeValue: updated ? 'another test updated' : 'another test', label: 'Property 2' },
       { key: 'fid', attributeValue: updated ? '6' : '1', label: 'fid' },
     ],
   };
@@ -44,9 +42,7 @@ const setup = async (withState = false) => {
   const mockFeatureSelectionBookmarkService = { getFidSelectionUrl$: () => of(null) };
   return await render(FeatureInfoDialogComponent, {
     imports: [
-      NoopAnimationsModule,
-      MatIconTestingModule,
-    ],
+      ],
     providers: [
       { provide: ViewerLayoutService, useValue: { setLeftPadding: vi.fn(), setRightPadding: vi.fn() } },
       provideMockStore({
@@ -122,9 +118,8 @@ describe('FeatureInfoDialogComponent', () => {
     const store = TestBed.inject(MockStore);
     store.overrideSelector(selectCurrentlySelectedFeature, getFeatureInfo(true));
     store.refreshState();
-    await vi.waitFor(() => {
-      expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
-    });
+    expect(await screen.findByText('another test updated')).toBeInTheDocument();
+    expect((screen.getByText(/fid/)).nextSibling?.textContent?.trim()).toEqual('6');
   });
 
 });

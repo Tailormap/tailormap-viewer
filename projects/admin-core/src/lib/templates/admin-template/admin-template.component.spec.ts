@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AdminTemplateComponent } from './admin-template.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { APP_BASE_HREF } from '@angular/common';
@@ -11,7 +10,7 @@ describe('AdminTemplateComponent', () => {
 
   test('should AdminTemplateComponent', async () => {
     await render(AdminTemplateComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         { provide: APP_BASE_HREF, useValue: '' },
         { provide: TAILORMAP_SECURITY_API_V1_SERVICE, useValue: { getUser$: vi.fn(() => of({})) } },

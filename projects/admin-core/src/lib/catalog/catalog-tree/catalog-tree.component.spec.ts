@@ -6,7 +6,6 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { CatalogNodeModel, getCatalogTree } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
@@ -23,7 +22,7 @@ const setup = async (state: Partial<CatalogState> = {}) => {
   mockStore.dispatch = mockDispatch;
   const loadCatalog = vi.fn();
   await render(CatalogTreeComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: Store, useValue: mockStore },
       provideHttpClient(),

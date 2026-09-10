@@ -1,4 +1,3 @@
-import '@angular/localize/init';
 import './projects/app/src/polyfills';
 import 'zone.js/testing';
 import '@testing-library/jest-dom/vitest';
@@ -6,11 +5,7 @@ import { TextEncoder, TextDecoder } from 'util';
 import { vi, beforeEach } from "vitest";
 import { TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-// Error is thrown because the JSDOM version Jest uses does not support @layer css construct, ignore for now
-// const allowedErrors = ['Could not parse CSS stylesheet'];
-// failOnConsole({
-//   silenceMessage: (msg) => allowedErrors.some(err => msg.includes(err)),
-// });
+import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 
 global.TextEncoder = TextEncoder;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -37,6 +32,35 @@ window.EventSource = window.EventSource || vi.fn(class {
   public close = vi.fn();
 });
 
+const createMockStorage = (): Storage => {
+  let store: Record<string, string> = {};
+  return {
+    get length() {
+      return Object.keys(store).length;
+    },
+    key(index: number) {
+      return Object.keys(store)[index] ?? null;
+    },
+    getItem(key: string) {
+      return store[key] ?? null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = value;
+    },
+    removeItem(key: string) {
+      delete store[key];
+    },
+    clear() {
+      store = {};
+    },
+  };
+};
+
+const mockLocalStorage = createMockStorage();
+const mockSessionStorage = createMockStorage();
+Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
+Object.defineProperty(window, 'sessionStorage', { value: mockSessionStorage });
+
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 
 // Registers a fake MatIconRegistry for every test so `<mat-icon svgIcon="...">` never tries to
@@ -48,6 +72,7 @@ Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
 beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [MatIconTestingModule],
+    providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
   });
 });
 

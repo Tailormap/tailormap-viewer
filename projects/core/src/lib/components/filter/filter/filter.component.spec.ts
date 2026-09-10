@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { selectSpatialFormVisible } from '../state/filter-component.selectors';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
 
 const setup = async (isVisible: boolean) => {
@@ -18,7 +17,7 @@ const setup = async (isVisible: boolean) => {
     setMobilePanelHeight: vi.fn(),
   };
   await render(FilterComponent, {
-    imports: [ MatIconModule, MatIconTestingModule ],
+    imports: [MatIconModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       { provide: MenubarService, useValue: menubarServiceMock },

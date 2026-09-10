@@ -2,7 +2,6 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureInfoContentComponent } from './feature-info-content.component';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { FeatureInfoModel } from '../models';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { AttachmentService } from '../../../services';
@@ -39,8 +38,7 @@ describe('FeatureInfoContentComponent', () => {
     const mockSimpleAttributeFilterService = { setFilter: vi.fn(), removeFilterById: vi.fn() };
     await render(FeatureInfoContentComponent, {
       imports: [
-        MatIconTestingModule,
-      ],
+        ],
       providers: [
         { provide: AttachmentService, useValue: mockAttachmentService },
         { provide: FeatureSelectionBookmarkService, useValue: mockFeatureSelectionBookmarkService },

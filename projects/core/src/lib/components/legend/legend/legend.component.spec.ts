@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendComponent } from './legend.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -31,7 +30,7 @@ describe('LegendComponent', () => {
   test('renders Legend with visible false', async () => {
     const registerComponentFn = vi.fn();
     await render(LegendComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
@@ -49,7 +48,7 @@ describe('LegendComponent', () => {
 
   test('renders Legend with visible true', async () => {
     await render(LegendComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),

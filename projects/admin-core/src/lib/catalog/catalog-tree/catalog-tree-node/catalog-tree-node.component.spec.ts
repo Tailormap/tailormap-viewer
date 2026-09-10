@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { CatalogTreeNodeComponent } from './catalog-tree-node.component';
 import { getCatalogNode, getGeoService, getGeoServiceLayer } from '@tailormap-admin/admin-api';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
@@ -14,7 +13,7 @@ import { TooltipDirective } from '@tailormap-viewer/shared';
 
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule ],
+    imports: [MatIconModule],
     declarations: [ CatalogBaseTreeNodeComponent, TooltipDirective ],
     inputs: { node },
   });

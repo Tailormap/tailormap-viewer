@@ -11,8 +11,6 @@ import { Store } from '@ngrx/store';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const setup = async () => {
   const activeRoute = {
     paramMap: of({
@@ -39,7 +37,7 @@ const setup = async () => {
   });
   await render(GeoServiceLayerDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },

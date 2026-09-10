@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthorizationRuleDecision, AuthorizationRuleGroup, AuthorizationGroups, GroupModel } from '@tailormap-admin/admin-api';
 import { Subject } from 'rxjs';
@@ -32,6 +32,8 @@ type ExtendedAuthorizationRuleGroup = ExtendedAuthorizationRuleGroupInner | { he
     multi: true,
     useExisting: AuthorizationEditComponent,
   }],
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatLabel,
     MatChipListbox,
@@ -293,6 +295,10 @@ export class AuthorizationEditComponent implements OnDestroy, ControlValueAccess
 
     this.updateValue(newValue, true);
     this.newRuleDecision = true;
+  }
+
+  public changeNewRuleDecision(checked: boolean): void {
+    this.newRuleDecision = checked;
   }
 
   // Disable the select options actually changing.

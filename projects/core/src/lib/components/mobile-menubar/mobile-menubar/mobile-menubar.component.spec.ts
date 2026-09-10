@@ -2,7 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarButtonComponent } from '../../menubar/menubar-button/menubar-button.component';
 import { ComponentRegistrationService } from '../../../services/component-registration.service';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -30,8 +29,7 @@ describe('MenubarComponent', () => {
     await render(MobileMenubarComponent, {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
-        MatIconTestingModule,
-      ],
+        ],
       providers: [
         { provide: ComponentRegistrationService, useValue: mockedControlsService },
         provideMockStore({ selectors: [{ selector: selectIn3dView, value: false }] }),

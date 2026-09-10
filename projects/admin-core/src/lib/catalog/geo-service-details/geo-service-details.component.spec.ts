@@ -12,10 +12,8 @@ import userEvent from '@testing-library/user-event';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async () => {
   const activeRoute = {
@@ -31,9 +29,8 @@ const setup = async () => {
   });
   await render(GeoServiceDetailsComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
-      provideNoopAnimations(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: GeoServiceService, useValue: geoServiceService },
       { provide: Store, useValue: store },

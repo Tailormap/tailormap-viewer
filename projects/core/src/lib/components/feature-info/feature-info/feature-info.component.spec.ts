@@ -8,7 +8,6 @@ import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { FeatureInfoService } from '../feature-info.service';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 import { TAILORMAP_API_V1_SERVICE, TailormapApiV1MockService } from '@tailormap-viewer/api';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 const setup = async (returnError = false) => {
   const mapServiceMock = getMapServiceMock(tool => ({
@@ -25,7 +24,6 @@ const setup = async (returnError = false) => {
     providers: [
       AuthenticatedUserTestHelper.provideAuthenticatedUserService(false, []),
       { provide: TAILORMAP_API_V1_SERVICE, useClass: TailormapApiV1MockService },
-      provideNoopAnimations(),
     ],
     componentProviders: [
       mapServiceMock.provider,

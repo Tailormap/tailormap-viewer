@@ -3,25 +3,24 @@
   "compilerOptions": {
     "isolatedModules": true,
     "preserveSymlinks": true,
-    "baseUrl": "./",
     "paths": {
       "@tailormap-viewer/api": [
-        "projects/api/src"
+        "./projects/api/src"
       ],
       "@tailormap-viewer/core": [
-        "projects/core/src"
+        "./projects/core/src"
       ],
       "@tailormap-viewer/shared": [
-        "projects/shared/src"
+        "./projects/shared/src"
       ],
       "@tailormap-viewer/map": [
-        "projects/map/src"
+        "./projects/map/src"
       ],
       "@tailormap-admin/admin-core": [
-        "projects/admin-core/src"
+        "./projects/admin-core/src"
       ],
       "@tailormap-admin/admin-api": [
-        "projects/admin-api/src"
+        "./projects/admin-api/src"
       ]
     },
     "outDir": "./dist/out-tsc",

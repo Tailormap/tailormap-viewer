@@ -14,7 +14,6 @@ import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { initialDrawingState, drawingStateKey } from '../state/drawing.state';
 import { selectComponentsConfig, selectViewerLoadingState } from '../../../state';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
@@ -31,7 +30,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     confirm$: vi.fn(() => of(true)),
   };
   const { container } = await render(DrawingComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       provideMockStore({

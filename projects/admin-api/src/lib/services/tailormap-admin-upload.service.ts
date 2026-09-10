@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports
 import { catchError, concatMap, Observable, of, take } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';

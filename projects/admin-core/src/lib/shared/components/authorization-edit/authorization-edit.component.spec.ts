@@ -2,8 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { AuthorizationEditComponent } from './authorization-edit.component';
 import { AUTHORIZATION_RULE_ANONYMOUS, AuthorizationGroups, AuthorizationRuleDecision, AuthorizationRuleGroup, getGroup } from '@tailormap-admin/admin-api';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
 const renderComponent = async (parentType?: string, parentAuthorizations?: AuthorizationRuleGroup[]) => {
     const component = await render(AuthorizationEditComponent, {
       inputs: {
@@ -19,7 +17,7 @@ const renderComponent = async (parentType?: string, parentAuthorizations?: Autho
             parentType: parentType,
           } : { }),
       },
-      imports: [MatIconTestingModule],
+      imports: [],
     });
 
     return component;

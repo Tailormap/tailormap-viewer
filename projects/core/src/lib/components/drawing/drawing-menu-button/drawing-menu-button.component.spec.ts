@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { DrawingMenuButtonComponent } from './drawing-menu-button.component';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
@@ -18,7 +17,7 @@ describe('DrawingMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(DrawingMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

@@ -7,7 +7,6 @@ import { createFilter } from '../state/filter-component.actions';
 import { FilterTypeEnum } from '@tailormap-viewer/api';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 
 describe('CreateFilterButtonComponent', () => {
@@ -15,7 +14,7 @@ describe('CreateFilterButtonComponent', () => {
   test('should render', async () => {
     const dispatch = vi.fn();
     await render(CreateFilterButtonComponent, {
-      imports: [ MatMenuModule, MatButtonModule, MatIconModule, MatIconTestingModule ],
+      imports: [ MatMenuModule, MatButtonModule, MatIconModule ],
       providers: [
         { provide: Store, useValue: { dispatch } },
       ],

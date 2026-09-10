@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { ENVIRONMENT_CONFIG } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { ApplicationService } from '../services/application.service';
@@ -40,7 +39,7 @@ const setup = async (
   const configService = { getConfigValue$: vi.fn(() => of('app2')) };
   const loadApplications = vi.fn();
   await render(ApplicationListComponent, {
-    imports: [ MatListModule, MatIconTestingModule ],
+    imports: [MatListModule],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ConfigService, useValue: configService },

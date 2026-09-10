@@ -1,7 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { InfoMenuButtonComponent } from './info-menu-button.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MenubarService } from '../../menubar';
 import userEvent from '@testing-library/user-event';
@@ -20,7 +19,6 @@ describe('InfoMenuButtonComponent', () => {
 
     await render(InfoMenuButtonComponent, {
       imports: [
-        MatIconTestingModule,
         MatBadge,
       ],
       providers: [

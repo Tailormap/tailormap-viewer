@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { FilterMenuButtonComponent } from './filter-menu-button.component';
 import { of } from 'rxjs';
 import { MenubarService } from '../../menubar';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
@@ -19,7 +18,7 @@ describe('FilterMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(FilterMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },

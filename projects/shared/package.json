@@ -1,17 +1,16 @@
 {
   "name": "@tailormap-viewer/shared",
-  "version": "12.8.4-rc.4",
+  "version": "12.9.0-rc.1",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/animations": "^20.3.27",
-    "@angular/cdk": "^20.2.14",
-    "@angular/common": "^20.3.27",
-    "@angular/core": "^20.3.27",
-    "@angular/forms": "^20.3.27",
-    "@angular/material": "^20.2.14",
-    "@angular/platform-browser": "^20.3.27",
+    "@angular/cdk": "^22.1.5",
+    "@angular/common": "^22.1.5",
+    "@angular/core": "^22.1.5",
+    "@angular/forms": "^22.1.5",
+    "@angular/material": "^22.1.5",
+    "@angular/platform-browser": "^22.1.5",
     "@ctrl/tinycolor": "^4.1.0",
     "@milkdown/core": "^7.22.0",
     "@milkdown/crepe": "^7.22.0",

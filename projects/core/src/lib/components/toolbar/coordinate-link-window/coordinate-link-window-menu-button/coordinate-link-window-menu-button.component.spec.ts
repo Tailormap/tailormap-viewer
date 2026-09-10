@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { CoordinateLinkWindowMenuButtonComponent } from './coordinate-link-window-menu-button.component';
 import { of } from 'rxjs';
 import { MenubarService } from '../../../menubar';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatBadge } from '@angular/material/badge';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../../state';
@@ -18,7 +17,7 @@ describe('CoordinateLinkWindowMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(CoordinateLinkWindowMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarServiceMock },

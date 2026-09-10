@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
@@ -14,6 +14,8 @@ import { MatSelect, MatOption } from '@angular/material/select';
     selector: 'tm-admin-application-layer-tree-node',
     templateUrl: './application-layer-tree-node.component.html',
     styleUrls: ['./application-layer-tree-node.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIcon,
         MatTooltip,

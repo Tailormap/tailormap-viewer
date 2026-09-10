@@ -12,14 +12,12 @@ import {
   TailormapApiV1MockService,
 } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
 import { provideStore, Store } from '@ngrx/store';
 import { attributeListReducer } from '../state/attribute-list.reducer';
 import { mapReducer } from '../../../map/state/map.reducer';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialFilterState } from '../../../state/filter-state/filter.state';
 import { CoreState, coreStateKey } from '../../../state/core.state';
@@ -70,7 +68,7 @@ const getStore = (
 
 const setup = async (store: StoreDef) => {
   await render(AttributeListComponent, {
-    imports: [ MatProgressSpinnerModule, MatIconModule, MatIconTestingModule, MatToolbarModule ],
+    imports: [ MatProgressSpinnerModule, MatIconModule, MatToolbarModule ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       getMapServiceMock().provider,
@@ -168,9 +166,7 @@ const setupWithActualState = async (store?: StoreDef) => {
   });
   const renderResult = await render(AttributeListComponent, {
     imports: [
-      NoopAnimationsModule,
-      MatIconTestingModule,
-    ],
+      ],
     providers: [
       provideHttpClient(
         withXsrfConfiguration({
@@ -227,22 +223,18 @@ describe('AttributeList', () => {
     expect(await screen.findByText('Layer 1')).toBeInTheDocument();
     expect(await screen.findByText('Layer 2')).toBeInTheDocument();
     expect(await screen.findByText('Attribute 1')).toBeInTheDocument();
-    expect(await screen.queryByText('City')).not.toBeInTheDocument();
+    expect(screen.queryByText('City')).not.toBeInTheDocument();
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
 
     const tabEl = await screen.findByText('Layer 2');
     tabEl.style.pointerEvents = 'auto';
     await userEvent.click(tabEl);
-
-    await vi.waitFor(() => {
-      expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();
-    }, { timeout: 100 });
-
     expect(await screen.findByText('Country')).toBeInTheDocument();
     expect(await screen.findByText('City')).toBeInTheDocument();
     expect(await screen.findByText('1: The Netherlands')).toBeInTheDocument();
     expect(await screen.findByText('10: Zonnebaan')).toBeInTheDocument();
+    expect(screen.queryByText('Attribute 1')).not.toBeInTheDocument();
   });
 
   it('renders tabs from other source', async () => {

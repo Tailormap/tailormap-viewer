@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragPreview, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { changeColumnPosition, toggleAllColumnsVisible, toggleColumnVisible } from '../state/attribute-list.actions';
@@ -15,6 +15,8 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list-column-selection',
     templateUrl: './attribute-list-column-selection.component.html',
     styleUrls: ['./attribute-list-column-selection.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatCheckbox,
         TooltipDirective,

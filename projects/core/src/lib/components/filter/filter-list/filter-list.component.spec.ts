@@ -4,14 +4,13 @@ import { FilterListComponent } from './filter-list.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { selectFilterGroupsWithLayers } from '../../../state/filter-state/filter.selectors';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { getFilterGroup } from '@tailormap-viewer/shared';
 
 describe('FilterListComponent', () => {
 
   test('should render empty list', async () => {
     await render(FilterListComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       providers: [
         provideMockStore({
           initialState: {
@@ -46,7 +45,7 @@ describe('FilterListComponent', () => {
     });
     await render(FilterListComponent, {
       providers: [store],
-      imports: [MatIconTestingModule],
+      imports: [],
     });
     expect(await screen.findByText('Applies to The layer')).toBeInTheDocument();
   });

@@ -2,7 +2,6 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { PrintMenuButtonComponent } from './print-menu-button.component';
 import { MenubarService } from '../../menubar';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -18,7 +17,7 @@ describe('PrintMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(PrintMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: initialCoreState } }),
         { provide: MenubarService, useValue: menubarService },

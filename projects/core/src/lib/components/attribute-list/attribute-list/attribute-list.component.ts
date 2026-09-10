@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -30,6 +30,8 @@ import { AsyncPipe } from '@angular/common';
     selector: 'tm-attribute-list',
     templateUrl: './attribute-list.component.html',
     styleUrls: ['./attribute-list.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         BottomPanelComponent,
         MatProgressSpinner,
@@ -55,7 +57,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public tabs = this.store$.selectSignal(selectAttributeListTabs);
   private destroyed = new Subject();
 
-  public selectedTab?: string;
+  public selectedTab = this.store$.selectSignal(selectAttributeListSelectedTab);
   public title$: Observable<string> = of('');
 
   private columnSelectionOverlayRef: OverlayRef | undefined;
@@ -63,9 +65,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
     this.title$ = this.store$.select(selectAttributeListPanelTitle);
-    this.store$.select(selectAttributeListSelectedTab)
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(selectedTab => this.selectedTab = selectedTab);
   }
 
   public ngOnInit() {

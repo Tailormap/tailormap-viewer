@@ -48,7 +48,7 @@
             <mat-checkbox [checked]="rule.decisions.read === 'allow'" [disabled]="rule.decisions.read === 'deny' && rule.inherited" (change)="changeRule(rule.groupName, 'read', $event.checked)"></mat-checkbox>
           </td>
           <td mat-footer-cell *matFooterCellDef>
-            <mat-checkbox [(ngModel)]="newRuleDecision"></mat-checkbox>
+            <mat-checkbox [checked]="newRuleDecision" (change)="changeNewRuleDecision($event.checked)"></mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="button">

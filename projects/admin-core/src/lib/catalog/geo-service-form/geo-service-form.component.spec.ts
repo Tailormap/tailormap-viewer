@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { GeoServiceFormComponent } from './geo-service-form.component';
 import { of } from 'rxjs';
 import userEvent from '@testing-library/user-event';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { AdminServerType, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
@@ -14,7 +13,7 @@ describe('GeoServiceFormComponent', () => {
   test('should render', async () => {
     const changedFn = vi.fn();
     await render(GeoServiceFormComponent, {
-      imports: [MatIconTestingModule],
+      imports: [],
       on: { changed: changedFn },
       providers: [
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },

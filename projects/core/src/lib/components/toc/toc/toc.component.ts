@@ -1,5 +1,6 @@
 import {
   Component, computed, effect, inject, input, NgZone, OnDestroy, OnInit, signal, Signal, viewChild, ViewContainerRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { filter, Observable, of, Subject, take, takeUntil } from 'rxjs';
 import {
@@ -44,6 +45,8 @@ const isAppLayerTreeModel = (node: BaseTreeModel): node is AppLayerTreeModel => 
     templateUrl: './toc.component.html',
     styleUrls: [ './toc.component.css', '../../../../../assets/layer-tree-style.css' ],
     providers: [ TreeService, TreeDragDropService ],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         TocNodeLayerComponent,
         TocNodeDetailsMobileComponent,

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Subscription, takeUntil } from 'rxjs';
@@ -70,6 +70,8 @@ const colorLabels = new Map<string, string>(colorDefinitions);
     selector: 'tm-color-picker',
     templateUrl: './color-picker.component.html',
     styleUrls: ['./color-picker.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatButton,
         MatIcon,

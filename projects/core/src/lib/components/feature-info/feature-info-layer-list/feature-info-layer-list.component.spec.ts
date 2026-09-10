@@ -5,14 +5,13 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { featureInfoStateKey, initialFeatureInfoState } from '../state/feature-info.state';
 import { FeatureInfoLayerModel } from '../models/feature-info-layer.model';
 import { LoadingStateEnum, TooltipDirective } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { FeatureInfoLayerItemComponent } from '../feature-info-layer-item/feature-info-layer-item.component';
 
 const setup = async (layers: FeatureInfoLayerModel[] = []) => {
   return await render(FeatureInfoLayerListComponent, {
-    imports: [ MatIconModule, MatProgressSpinnerModule, MatIconTestingModule ],
+    imports: [ MatIconModule, MatProgressSpinnerModule ],
     declarations: [ TooltipDirective, FeatureInfoLayerItemComponent ],
     providers: [
       provideMockStore({

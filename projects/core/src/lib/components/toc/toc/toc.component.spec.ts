@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 import type { Mock } from 'vitest';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import {
   select3dTilesLayers,
   selectIn3dView, selectLayers, selectLayersWithoutWebMercatorIds, selectLayerTreeNodes, selectSelectedNode, selectSelectedNodeId,
@@ -64,7 +63,7 @@ const setup = async (visible: boolean, selectedLayer = '') => {
   const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(TocComponent, {
-    imports: [MatIconTestingModule],
+    imports: [],
     providers: [
       getMapServiceMock().provider,
       { provide: Store, useValue: mockStore },

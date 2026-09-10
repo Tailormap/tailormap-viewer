@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
-import { style, transition, trigger, animate } from '@angular/animations';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService } from './dialog.service';
 import { BrowserHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatIconButton } from '@angular/material/button';
@@ -11,26 +10,16 @@ const DIALOG_DEFAULT_WIDTH = 300;
     selector: 'tm-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.css'],
-    animations: [
-        trigger('inOutAnimation', [
-            transition(':enter', [
-                style({ transform: 'translate({{translate}})', opacity: 0 }),
-                animate('0.25s ease-out', style({ transform: 'translate(0)', opacity: 1 })),
-            ]),
-            transition(':leave', [
-                style({ transform: 'translate(0)', opacity: 1 }),
-                animate('0.25s ease-out', style({ transform: 'translate({{translate}})', opacity: 0 })),
-            ]),
-        ]),
-    ],
     /* eslint-disable @typescript-eslint/naming-convention */
     host: {
         '[class]': 'dialogAsClass',
         '(window:resize)': 'onResize()',
         '(document:pointermove)': 'onDocumentPointerMove($event)',
         '(document:pointerup)': 'onDocumentPointerUp()',
-        '(window:keydown.escape)': 'onDocumentEscape($event)',
+        '(document:keydown.escape)': 'onDocumentEscape($event)',
     },
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIconButton,
         MatIcon,
@@ -93,6 +82,10 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public get dialogAsClass() {
     return this.dialogId;
+  }
+
+  public getSlideDistance(): string {
+    return `${(this.openFromRight ? this.actualWidth : -1 * this.actualWidth)}px`;
   }
 
   public onResize() {

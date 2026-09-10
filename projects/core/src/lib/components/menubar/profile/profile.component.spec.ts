@@ -1,11 +1,9 @@
 import { describe, beforeAll, afterAll, test, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { ProfileComponent } from './profile.component';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../state/core.selectors';
 import { Router } from '@angular/router';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
@@ -31,9 +29,7 @@ const setup = async (loggedIn: boolean, showLoginButton = true) => {
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },
     ],
     imports: [
-      MatIconTestingModule,
-      NoopAnimationsModule,
-    ],
+      ],
   });
   return { navigateFn, userService };
 };

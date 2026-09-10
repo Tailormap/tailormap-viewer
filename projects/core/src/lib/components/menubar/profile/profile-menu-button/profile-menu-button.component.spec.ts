@@ -2,7 +2,6 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ProfileMenuButtonComponent } from './profile-menu-button.component';
 import { of } from 'rxjs';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatBadge } from '@angular/material/badge';
 import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState, selectShowLoginButton } from '../../../../state';
@@ -22,7 +21,7 @@ describe('ProfileMenuButtonComponent', () => {
       getUserDetails$: () => of({ isAuthenticated: false }),
     };
     await render(ProfileMenuButtonComponent, {
-      imports: [ MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         provideMockStore({
           initialState: { [coreStateKey]: initialCoreState },
