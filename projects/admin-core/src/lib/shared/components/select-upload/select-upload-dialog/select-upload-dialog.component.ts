@@ -178,7 +178,7 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public getImg(upload: UploadModel) {
-    return UploadHelper.getUrlForFile(upload.id, upload.category, upload.filename);
+    return UploadHelper.getAdminUrlForFile(upload.id, upload.category, upload.filename);
   }
 
   public removeUpload($event: MouseEvent, upload: UploadModel) {
