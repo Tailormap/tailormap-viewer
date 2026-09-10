@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject, HostListener } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, combineLatest, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
@@ -23,6 +23,10 @@ import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/share
         NgClass,
         AsyncPipe,
     ],
+    host: {
+      /* eslint-disable @typescript-eslint/naming-convention */
+      '(window:keydown.escape)': 'onDocumentEscape($event)',
+    },
 })
 export class BottomPanelComponent implements OnInit {
   private layoutService = inject(ViewerLayoutService);
@@ -73,8 +77,7 @@ export class BottomPanelComponent implements OnInit {
   @Output()
   public closed = new EventEmitter();
 
-  @HostListener('document:keydown.escape', ['$event'])
-  public onDocumentEscape(event: KeyboardEvent): void {
+  public onDocumentEscape(event: Event): void {
     const overlayContainer = document.querySelector('.cdk-overlay-container');
     if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
       return;

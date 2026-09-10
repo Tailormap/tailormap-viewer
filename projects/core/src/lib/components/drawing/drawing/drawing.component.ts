@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -60,6 +60,10 @@ import { AsyncPipe } from '@angular/common';
         DrawingStyleFormComponent,
         AsyncPipe,
     ],
+    host: {
+      /* eslint-disable @typescript-eslint/naming-convention */
+      '(window:keydown.delete)': 'onDeleteKey($event)',
+    },
 })
 export class DrawingComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
@@ -196,7 +200,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  @HostListener('window:keydown.delete', ['$event'])
   public onDeleteKey(event: Event) {
     const target = event.target as HTMLElement;
     const isInput = target && (
