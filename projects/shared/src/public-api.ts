@@ -11,8 +11,8 @@ export * from './lib/directives';
 export * from './lib/services';
 export * from './lib/pipes';
 export * from './lib/types';
-export * from './lib/shared.module';
-export * from './lib/shared-imports.module';
+
+
 export * from './lib/models/registered-component.model';
 export * from './lib/models/attribute-filter-data.model';
 export * from './lib/models/filter-condition.model';

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest';
 import { CatalogItemKindEnum } from '@tailormap-admin/admin-api';
 import { MoveCatalogNodeModel } from '../models/move-catalog-node.model';
 import { baseTree, CatalogTestNode, getCatalogTree } from './mocks/catalog-tree.mock';

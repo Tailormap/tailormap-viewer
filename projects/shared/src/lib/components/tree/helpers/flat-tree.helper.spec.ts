@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { FlatTreeHelper } from './flat-tree.helper';
 import { getTreeModelMock } from '../mock-data/tree-model.mock-data';
 

@@ -1,16 +1,27 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectPagingDataSelectedTab } from '../state/attribute-list.selectors';
 import { debounceTime, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-attribute-list-paging-dialog',
-  templateUrl: './attribute-list-paging-dialog.component.html',
-  styleUrls: ['./attribute-list-paging-dialog.component.css'],
-  standalone: false,
+    selector: 'tm-attribute-list-paging-dialog',
+    templateUrl: './attribute-list-paging-dialog.component.html',
+    styleUrls: ['./attribute-list-paging-dialog.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        AutoFocusDirective,
+    ],
 })
 export class AttributeListPagingDialogComponent implements OnDestroy {
   private store$ = inject(Store);

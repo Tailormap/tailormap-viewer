@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { FileHelper } from './file.helper';
 
 describe('test file helper util', () => {

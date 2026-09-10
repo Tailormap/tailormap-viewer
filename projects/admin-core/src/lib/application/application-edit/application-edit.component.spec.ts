@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { ApplicationEditComponent } from './application-edit.component';
 import { ApplicationState, applicationStateKey, initialApplicationState } from '../state/application.state';
@@ -5,17 +6,13 @@ import { getApplication } from '@tailormap-admin/admin-api';
 import { createMockStore } from '@ngrx/store/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApplicationService } from '../services/application.service';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
-import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { RouterModule } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (hasApp: boolean, hasChanges?: boolean) => {
   const mockState: ApplicationState = {
@@ -27,18 +24,16 @@ const setup = async (hasApp: boolean, hasChanges?: boolean) => {
     ],
   };
   const appService = {
-    saveDraftApplication$: jest.fn(() => of(true)),
-    deleteApplication$: jest.fn(() => of(true)),
+    saveDraftApplication$: vi.fn(() => of(true)),
+    deleteApplication$: vi.fn(() => of(true)),
   };
   const mockStore = createMockStore({ initialState: { [applicationStateKey]: mockState } });
-  const mockDispatch = jest.fn();
+  const mockDispatch = vi.fn();
   mockStore.dispatch = mockDispatch;
   await render(ApplicationEditComponent, {
-    imports: [ SharedModule, MatIconTestingModule, RouterTestingModule.withRoutes(
+    imports: [RouterModule.forRoot(
       [{ path: 'admin/applications', component: ApplicationEditComponent }],
-    ) ],
-    declarations: [ SaveButtonComponent, SpinnerButtonComponent ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    )],
     providers: [
       { provide: Store, useValue: mockStore },
       { provide: ApplicationService, useValue: appService },

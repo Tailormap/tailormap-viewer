@@ -1,22 +1,20 @@
-import { render, screen, waitFor } from '@testing-library/angular';
+import { describe, test, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/angular';
 import { GroupFormComponent } from './group-form.component';
-import { SharedImportsModule } from '@tailormap-viewer/shared';
 import userEvent from '@testing-library/user-event';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 import { of } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async () => {
-  const groupUpdated = jest.fn();
+  const groupUpdated = vi.fn();
   const groupService = {
     getGroups$: () => of([]),
   };
   const oidcConfigurationService = {
-    getOIDCConfigurations$: jest.fn(() => of([])),
+    getOIDCConfigurations$: vi.fn(() => of([])),
   };
   await render(GroupFormComponent, {
-    imports: [ SharedImportsModule, SharedAdminComponentsModule ],
     on: { groupUpdated: groupUpdated },
     providers: [
       { provide: GroupService, useValue: groupService },
@@ -32,7 +30,7 @@ describe('GroupFormComponent', () => {
     const { groupUpdated } = await setup();
     await userEvent.type(screen.getByLabelText('Name'), 'secret-group');
     await userEvent.type(screen.getByLabelText('Description'), 'A very secret group');
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(groupUpdated).toHaveBeenCalledWith({
         name: 'secret-group',
         label: null,

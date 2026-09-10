@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AttributeFilterHelper } from '@tailormap-viewer/shared';
 import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
@@ -10,10 +10,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @Component({
-  selector: 'tm-filter-description',
-  templateUrl: './filter-description.component.html',
-  styleUrls: ['./filter-description.component.css'],
-  standalone: false,
+    selector: 'tm-filter-description',
+    templateUrl: './filter-description.component.html',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ['./filter-description.component.css'],
 })
 export class FilterDescriptionComponent {
 

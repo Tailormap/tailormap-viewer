@@ -7,7 +7,7 @@
 /reports
 # Only exists if Bazel was run
 /bazel-out
-/junit.xml
+/junit
 
 # dependencies
 /node_modules

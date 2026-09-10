@@ -6,13 +6,15 @@ import { selectActiveFilterGroups } from '../../../state/filter-state/filter.sel
 import { map, Observable } from 'rxjs';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { FilterSourceHelper } from '../../../filter/helpers/filter-source.helper';
+import { MenubarButtonComponent } from '../../menubar/menubar-button/menubar-button.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-filter-menu-button',
-  templateUrl: './filter-menu-button.component.html',
-  styleUrls: ['./filter-menu-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-filter-menu-button',
+    templateUrl: './filter-menu-button.component.html',
+    styleUrls: ['./filter-menu-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ MenubarButtonComponent, AsyncPipe ],
 })
 export class FilterMenuButtonComponent {
   private store$ = inject(Store);

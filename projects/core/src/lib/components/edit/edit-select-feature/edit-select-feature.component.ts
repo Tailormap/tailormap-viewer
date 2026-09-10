@@ -8,11 +8,10 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { setSelectedEditFeature } from "../state/edit.actions";
 
 @Component({
-  selector: 'tm-edit-select-feature',
-  templateUrl: './edit-select-feature.component.html',
-  styleUrls: ['./edit-select-feature.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-edit-select-feature',
+    templateUrl: './edit-select-feature.component.html',
+    styleUrls: ['./edit-select-feature.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditSelectFeatureComponent implements OnInit {
   private mapService = inject(MapService);

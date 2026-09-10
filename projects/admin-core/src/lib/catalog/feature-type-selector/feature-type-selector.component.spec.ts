@@ -1,8 +1,9 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { FeatureTypeSelectorComponent } from './feature-type-selector.component';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { createMockStore } from '@ngrx/store/testing';
-import { LoadingStateEnum, SharedImportsModule } from '@tailormap-viewer/shared';
+import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { ExtendedFeatureTypeModel } from '../models/extended-feature-type.model';
 import { FeatureSourceProtocolEnum, getFeatureSource, getFeatureTypeSummary } from '@tailormap-admin/admin-api';
@@ -18,12 +19,14 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     featureSourceId: '1',
     catalogNodeId: '',
     type: CatalogExtendedTypeEnum.FEATURE_TYPE_TYPE,
+    featureSourceProtocol: FeatureSourceProtocolEnum.JDBC,
   };
   const featureSourceModel: ExtendedFeatureSourceModel = {
     ...getFeatureSource({ id: '1', title: 'JDBC source', protocol: FeatureSourceProtocolEnum.JDBC }),
     featureTypesIds: ['ft_1'],
     catalogNodeId: '',
     type: CatalogExtendedTypeEnum.FEATURE_SOURCE_TYPE,
+    featureTypeOriginalIds: [],
   };
   const catalogState: CatalogState = {
     ...initialCatalogState,
@@ -31,11 +34,10 @@ const setup = async (status: LoadingStateEnum, layerName?: string) => {
     featureSources: [featureSourceModel],
   };
   const store = createMockStore({ initialState: { [catalogStateKey]: catalogState } });
-  const dispatch = jest.fn();
+  const dispatch = vi.fn();
   store.dispatch = dispatch;
-  const featureTypeSelected = jest.fn();
+  const featureTypeSelected = vi.fn();
   await render(FeatureTypeSelectorComponent, {
-    imports: [SharedImportsModule],
     providers: [
       { provide: Store, useValue: store },
     ],

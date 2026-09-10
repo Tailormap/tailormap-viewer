@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { ReadableVisibilityBookmarkHandlerService } from './readable-visibility-bookmark-handler.service';
 import { ExtendedAppLayerModel } from '../../../map/models';
 
@@ -25,16 +26,13 @@ describe('ReadableVisibilityBookmarkHandler', () => {
     [ 'only=s1/layer1',      [{ id: '1', checked: true }, { id: '2', checked: false }], ['3']],
   ];
 
-  test.each(tests)(
-    "parses bookmark - %s",
-    (bookmark, expectedResult, bgIds) => {
-      const result = ReadableVisibilityBookmarkHandlerService.getExclusiveVisibilityChangesForBookmark(bookmark, layers, bgIds);
-      if (expectedResult === null) {
-        expect(result).toBeNull();
-      } else {
-        expect(result).toMatchObject(expectedResult);
-      }
-    },
-  );
+  test.each(tests)('parses bookmark - %s', (bookmark, expectedResult, bgIds) => {
+    const result = ReadableVisibilityBookmarkHandlerService.getExclusiveVisibilityChangesForBookmark(bookmark, layers, bgIds);
+    if (expectedResult === null) {
+      expect(result).toBeNull();
+    } else {
+      expect(result).toMatchObject(expectedResult);
+    }
+  });
 
 });

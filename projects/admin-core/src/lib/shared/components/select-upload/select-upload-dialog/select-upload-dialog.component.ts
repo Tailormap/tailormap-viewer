@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
 import { UploadHelper } from '@tailormap-admin/admin-api';
@@ -8,7 +8,14 @@ import { UploadRemoveServiceModel } from '../models/upload-remove-service.model'
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ImageUploadFieldComponent } from '../../image-upload-field/image-upload-field.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AsyncPipe } from '@angular/common';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 export interface SelectUploadData {
@@ -51,11 +58,24 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
 };
 
 @Component({
-  selector: 'tm-admin-select-upload-dialog',
-  templateUrl: './select-upload-dialog.component.html',
-  styleUrls: ['./select-upload-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-select-upload-dialog',
+    templateUrl: './select-upload-dialog.component.html',
+    styleUrls: ['./select-upload-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        MatProgressSpinner,
+        MatIconButton,
+        MatIcon,
+        ImageUploadFieldComponent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatDialogActions,
+        MatButton,
+        AsyncPipe,
+    ],
 })
 export class SelectUploadDialogComponent implements OnInit {
   private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);

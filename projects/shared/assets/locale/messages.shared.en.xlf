@@ -23,8 +23,155 @@
       <trans-unit id="shared.color-picker.color-required" datatype="html">
         <source>Color is required</source>
       </trans-unit>
+      <trans-unit id="shared.color-picker.color.amber" datatype="html">
+        <source>Amber</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.black" datatype="html">
+        <source>Black</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.blue" datatype="html">
+        <source>Blue</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.bright-yellow" datatype="html">
+        <source>Bright yellow</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.brown" datatype="html">
+        <source>Brown</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.coral-red" datatype="html">
+        <source>Coral red</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.cyan" datatype="html">
+        <source>Cyan</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-blue" datatype="html">
+        <source>Dark blue</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-brown" datatype="html">
+        <source>Dark brown</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-green" datatype="html">
+        <source>Dark green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-grey" datatype="html">
+        <source>Dark grey</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-orange" datatype="html">
+        <source>Dark orange</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-pink" datatype="html">
+        <source>Dark pink</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-red" datatype="html">
+        <source>Dark red</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.dark-red-brown" datatype="html">
+        <source>Dark red brown</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.golden-yellow" datatype="html">
+        <source>Golden yellow</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.green" datatype="html">
+        <source>Green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.grey" datatype="html">
+        <source>Grey</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.indigo" datatype="html">
+        <source>Indigo</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.lavender" datatype="html">
+        <source>Lavender</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-amber" datatype="html">
+        <source>Light amber</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-blue" datatype="html">
+        <source>Light blue</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-cyan" datatype="html">
+        <source>Light cyan</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-green" datatype="html">
+        <source>Light green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-grey" datatype="html">
+        <source>Light grey</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-orange" datatype="html">
+        <source>Light orange</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-pink" datatype="html">
+        <source>Light pink</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-red" datatype="html">
+        <source>Light red</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.light-yellow" datatype="html">
+        <source>Light yellow</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.medium-green" datatype="html">
+        <source>Medium green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.mint" datatype="html">
+        <source>Mint</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.navy" datatype="html">
+        <source>Navy</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.olive" datatype="html">
+        <source>Olive</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.orange" datatype="html">
+        <source>Orange</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.pale-green" datatype="html">
+        <source>Pale green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.periwinkle" datatype="html">
+        <source>Periwinkle</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.pink" datatype="html">
+        <source>Pink</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.purple" datatype="html">
+        <source>Purple</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.red" datatype="html">
+        <source>Red</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.rosy-brown" datatype="html">
+        <source>Rosy brown</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.salmon" datatype="html">
+        <source>Salmon</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.teal" datatype="html">
+        <source>Teal</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.violet" datatype="html">
+        <source>Violet</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.white" datatype="html">
+        <source>White</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow" datatype="html">
+        <source>Yellow</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow-green" datatype="html">
+        <source>Yellow green</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.color.yellow-lime" datatype="html">
+        <source>Yellow lime</source>
+      </trans-unit>
       <trans-unit id="shared.color-picker.copy" datatype="html">
         <source>Copy</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.no-color" datatype="html">
+        <source>No color</source>
+      </trans-unit>
+      <trans-unit id="shared.color-picker.pick" datatype="html">
+        <source>Pick <x id="PH" equiv-text="colorLabel"/></source>
       </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>

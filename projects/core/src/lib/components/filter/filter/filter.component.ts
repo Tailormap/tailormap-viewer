@@ -6,13 +6,25 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectSpatialFormVisible } from '../state/filter-component.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CreateFilterButtonComponent } from '../create-filter-button/create-filter-button.component';
+import { ResetFiltersButtonComponent } from '../reset-filters-button/reset-filters-button.component';
+import { SpatialFilterFormComponent } from '../spatial-filter-form/spatial-filter-form.component';
+import { FilterListComponent } from '../filter-list/filter-list.component';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-filter',
-  templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-filter',
+    templateUrl: './filter.component.html',
+    styleUrls: ['./filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CreateFilterButtonComponent,
+        ResetFiltersButtonComponent,
+        SpatialFilterFormComponent,
+        FilterListComponent,
+        NgTemplateOutlet,
+        AsyncPipe,
+    ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

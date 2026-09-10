@@ -3,25 +3,24 @@
   "compilerOptions": {
     "isolatedModules": true,
     "preserveSymlinks": true,
-    "baseUrl": "./",
     "paths": {
       "@tailormap-viewer/api": [
-        "projects/api/src"
+        "./projects/api/src"
       ],
       "@tailormap-viewer/core": [
-        "projects/core/src"
+        "./projects/core/src"
       ],
       "@tailormap-viewer/shared": [
-        "projects/shared/src"
+        "./projects/shared/src"
       ],
       "@tailormap-viewer/map": [
-        "projects/map/src"
+        "./projects/map/src"
       ],
       "@tailormap-admin/admin-core": [
-        "projects/admin-core/src"
+        "./projects/admin-core/src"
       ],
       "@tailormap-admin/admin-api": [
-        "projects/admin-api/src"
+        "./projects/admin-api/src"
       ]
     },
     "outDir": "./dist/out-tsc",
@@ -54,5 +53,43 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/shared/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/shared/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/api/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/admin-core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/admin-api/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/admin-api/tsconfig.spec.json"
+    }
+  ]
 }

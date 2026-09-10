@@ -20,7 +20,7 @@ import {
   updateApplicationTreeNode, updateApplicationTreeNodeVisibility, updateApplicationTreeOrder,
 } from '../state/application.actions';
 import { nanoid } from 'nanoid';
-import { AddLayerEvent } from '../application-catalog-tree/application-catalog-tree.component';
+import { AddLayerEvent, ApplicationCatalogTreeComponent } from '../application-catalog-tree/application-catalog-tree.component';
 import { ApplicationTreeHelper } from '../helpers/application-tree.helper';
 import { ApplicationModelHelper } from '../helpers/application-model.helper';
 import { selectGeoServiceAndLayerByName } from '../../catalog/state/catalog.selectors';
@@ -29,14 +29,28 @@ import { CatalogTreeModelTypeEnum } from '../../catalog/models/catalog-tree-mode
 import { CatalogTreeHelper } from '../../catalog/helpers/catalog-tree.helper';
 import { ExtendedGeoServiceLayerModel } from '../../catalog/models/extended-geo-service-layer.model';
 import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ApplicationLayerTreeComponent } from '../application-layer-tree/application-layer-tree.component';
+import { ApplicationLayerSettingsComponent } from '../application-layer-settings/application-layer-settings.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit-layers',
-  templateUrl: './application-edit-layers.component.html',
-  styleUrls: ['./application-edit-layers.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TreeService],
-  standalone: false,
+    selector: 'tm-admin-application-edit-layers',
+    templateUrl: './application-edit-layers.component.html',
+    styleUrls: ['./application-edit-layers.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [TreeService],
+    imports: [
+        ApplicationCatalogTreeComponent,
+        MatIconButton,
+        MatIcon,
+        MatProgressSpinner,
+        ApplicationLayerTreeComponent,
+        ApplicationLayerSettingsComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationEditLayersComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

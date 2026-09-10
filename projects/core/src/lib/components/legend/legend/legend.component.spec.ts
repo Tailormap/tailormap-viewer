@@ -1,15 +1,13 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendComponent } from './legend.component';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
 import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { TestBed } from '@angular/core/testing';
-import { LegendLayerComponent } from '../legend-layer/legend-layer.component';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -30,17 +28,16 @@ const createMockStore = () => {
 describe('LegendComponent', () => {
 
   test('renders Legend with visible false', async () => {
-    const registerComponentFn = jest.fn();
+    const registerComponentFn = vi.fn();
     await render(LegendComponent, {
-      declarations: [ LegendComponent, LegendLayerComponent ],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
         { provide: MenubarService, useValue: {
             registerComponent: registerComponentFn,
             isComponentVisible$: () => of(false),
-            deregisterComponent: jest.fn(),
+            deregisterComponent: vi.fn(),
           },
         },
       ],
@@ -51,8 +48,7 @@ describe('LegendComponent', () => {
 
   test('renders Legend with visible true', async () => {
     await render(LegendComponent, {
-      declarations: [ LegendComponent, LegendLayerComponent ],
-      imports: [ SharedModule, MatIconTestingModule ],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),

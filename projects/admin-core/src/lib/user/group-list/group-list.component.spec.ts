@@ -1,21 +1,20 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { GroupListComponent } from './group-list.component';
 import { of } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { SharedModule } from '@tailormap-viewer/shared';
 import { MatListModule } from '@angular/material/list';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
-import { SharedAdminComponentsModule } from '../../shared/components/shared-admin-components.module';
 
 const setup = async () => {
   const mockApiService = {
-    getGroups$: jest.fn(() => of(null)),
+    getGroups$: vi.fn(() => of(null)),
   };
 
   await render(GroupListComponent, {
-    imports: [ SharedModule, MatListModule, SharedAdminComponentsModule ],
+    imports: [MatListModule],
     providers: [
       { provide: TailormapAdminApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),

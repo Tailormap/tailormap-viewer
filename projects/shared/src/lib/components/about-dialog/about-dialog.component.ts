@@ -2,14 +2,25 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, take, tap } from 'rxjs';
 import { VersionModel } from './version.model';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgTemplateOutlet, AsyncPipe, DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-about-dialog',
-  templateUrl: './about-dialog.component.html',
-  styleUrls: ['./about-dialog.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-about-dialog',
+    templateUrl: './about-dialog.component.html',
+    styleUrls: ['./about-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatDialogTitle,
+        MatProgressSpinner,
+        NgTemplateOutlet,
+        MatDialogActions,
+        MatButton,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class AboutDialogComponent {
   private httpClient = inject(HttpClient);

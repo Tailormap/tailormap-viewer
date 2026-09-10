@@ -3,13 +3,20 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AdminPageTemplateComponent } from '../../templates/admin-page-template/admin-page-template.component';
+import { CatalogTreeComponent } from '../../catalog/catalog-tree/catalog-tree.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-catalog-page',
-  templateUrl: './catalog-page.component.html',
-  styleUrls: ['./catalog-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-catalog-page',
+    templateUrl: './catalog-page.component.html',
+    styleUrls: ['./catalog-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AdminPageTemplateComponent,
+        CatalogTreeComponent,
+        AsyncPipe,
+    ],
 })
 export class CatalogPageComponent {
   public className$: Observable<string>;

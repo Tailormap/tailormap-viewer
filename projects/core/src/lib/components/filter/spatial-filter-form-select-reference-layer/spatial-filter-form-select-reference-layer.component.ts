@@ -2,17 +2,27 @@ import { Component, OnInit, ChangeDetectionStrategy, inject, OnDestroy } from '@
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectReferenceLayer } from '../state/filter-component.selectors';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
 import { ReferenceLayerService } from '../services/reference-layer.service';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-spatial-filter-form-select-reference-layer',
-  templateUrl: './spatial-filter-form-select-reference-layer.component.html',
-  styleUrls: ['./spatial-filter-form-select-reference-layer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-spatial-filter-form-select-reference-layer',
+    templateUrl: './spatial-filter-form-select-reference-layer.component.html',
+    styleUrls: ['./spatial-filter-form-select-reference-layer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        ReactiveFormsModule,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class SpatialFilterFormSelectReferenceLayerComponent implements OnInit, OnDestroy {
 

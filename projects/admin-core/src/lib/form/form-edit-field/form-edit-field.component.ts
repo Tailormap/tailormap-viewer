@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldModel } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
@@ -9,16 +9,38 @@ import { draftFormRemoveField, draftFormUpdateField } from '../state/form.action
 import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { AutoFocusDirective } from '@tailormap-viewer/shared';
 
 type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormControl<string> }>;
 
 @Component({
-  selector: 'tm-admin-edit-field',
-  templateUrl: './form-edit-field.component.html',
-  styleUrls: ['./form-edit-field.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-edit-field',
+    templateUrl: './form-edit-field.component.html',
+    styleUrls: ['./form-edit-field.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatSelect,
+        MatOption,
+        MatCheckbox,
+        CdkDropList,
+        CdkDrag,
+        MatIcon,
+        CdkDragHandle,
+        MatIconButton,
+        MatButton,
+    ],
 })
 export class FormEditFieldComponent implements OnInit {
   private store$ = inject(Store);

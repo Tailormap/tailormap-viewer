@@ -7,16 +7,33 @@ import {
   selectTask, selectTaskDetails, selectTaskDetailsLoadError, selectTaskDetailsLoadStatus,
 } from '../state/tasks.selectors';
 import { TaskMonitoringService } from '../services/task-monitoring.service';
-import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum, ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchIndexService } from '../../search-index/services/search-index.service';
+import { TaskDetailsRowComponent } from '../task-details-row/task-details-row.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, DatePipe, KeyValuePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-task-details',
-  templateUrl: './task-details.component.html',
-  styleUrls: ['./task-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-task-details',
+    templateUrl: './task-details.component.html',
+    styleUrls: ['./task-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        TaskDetailsRowComponent,
+        MatProgressSpinner,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        ErrorMessageComponent,
+        MatButton,
+        TooltipDirective,
+        AsyncPipe,
+        DatePipe,
+        KeyValuePipe,
+    ],
 })
 export class TaskDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

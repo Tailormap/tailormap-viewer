@@ -1,15 +1,23 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { UserCreateComponent } from './user-create.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { UserFormComponent } from '../user-form/user-form.component';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'tm-admin-user-form',
+  template: '<div>User Form</div>',
+})
+class MockUserFormComponent {}
 
 describe('UserCreateComponent', () => {
 
   test('should render', async () => {
     await render(UserCreateComponent, {
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [MatSnackBarModule],
+      importOverrides: [
+        { replace: UserFormComponent, with: MockUserFormComponent },
+      ],
       providers: [
         { provide: UserService, useValue: {} },
       ],

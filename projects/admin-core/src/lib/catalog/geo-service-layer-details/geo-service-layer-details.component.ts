@@ -12,17 +12,26 @@ import { AdminSnackbarService } from '../../shared/services/admin-snackbar.servi
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { LegendImageRemoveService } from '../services/legend-image-remove.service';
 import { AdminProjectionsHelper, ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
+import { LayerSettingsFormComponent } from '../layer-settings-form/layer-settings-form.component';
+import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { AsyncPipe } from '@angular/common';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
 
 @Component({
-  selector: 'tm-admin-geo-service-layer-details',
-  templateUrl: './geo-service-layer-details.component.html',
-  styleUrls: ['./geo-service-layer-details.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
-  ],
-  standalone: false,
+    selector: 'tm-admin-geo-service-layer-details',
+    templateUrl: './geo-service-layer-details.component.html',
+    styleUrls: ['./geo-service-layer-details.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: UPLOAD_REMOVE_SERVICE, useClass: LegendImageRemoveService },
+    ],
+    imports: [
+        LayerSettingsFormComponent,
+        SelectUploadComponent,
+        SaveButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

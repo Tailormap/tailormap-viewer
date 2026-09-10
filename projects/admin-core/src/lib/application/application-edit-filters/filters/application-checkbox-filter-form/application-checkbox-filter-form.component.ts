@@ -2,16 +2,47 @@ import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, Ou
 import {
   AttributeValueSettings, CheckboxFilterModel, FilterToolEnum, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDragHandle, CdkDrag } from '@angular/cdk/drag-drop';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton, MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-application-checkbox-filter-form',
-  templateUrl: './application-checkbox-filter-form.component.html',
-  styleUrls: ['./application-checkbox-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-checkbox-filter-form',
+    templateUrl: './application-checkbox-filter-form.component.html',
+    styleUrls: ['./application-checkbox-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ReactiveFormsModule,
+        MatTable,
+        CdkDropList,
+        MatColumnDef,
+        MatHeaderCellDef,
+        MatHeaderCell,
+        MatCellDef,
+        MatCell,
+        MatCheckbox,
+        MatFormField,
+        MatInput,
+        MatTooltip,
+        MatIcon,
+        CdkDragHandle,
+        MatIconButton,
+        MatHeaderRowDef,
+        MatHeaderRow,
+        MatRowDef,
+        MatRow,
+        CdkDrag,
+        MatButton,
+    ],
 })
 export class ApplicationCheckboxFilterFormComponent {
   private destroyRef = inject(DestroyRef);

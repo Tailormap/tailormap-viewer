@@ -6,13 +6,20 @@ import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { updateDraftApplication, updateDraftApplicationValid } from '../state/application.actions';
 import { ConfigService } from '../../config/services/config.service';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
+import { ApplicationFormComponent } from '../application-form/application-form.component';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit-settings',
-  templateUrl: './application-edit-settings.component.html',
-  styleUrls: ['./application-edit-settings.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit-settings',
+    templateUrl: './application-edit-settings.component.html',
+    styleUrls: ['./application-edit-settings.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ApplicationFormComponent,
+        MatSlideToggle,
+        AsyncPipe,
+    ],
 })
 export class ApplicationEditSettingsComponent implements OnInit {
   private store$ = inject(Store);

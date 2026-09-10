@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   selectApplicationsLoadStatus, selectDraftApplication, selectDraftApplicationUpdated, selectDraftApplicationValid,
@@ -10,18 +10,30 @@ import {
 import { ApplicationModel } from '@tailormap-admin/admin-api';
 import { Routes } from '../../routes';
 import { clearSelectedApplication, setSelectedApplication } from '../state/application.actions';
-import { ConfirmDialogService, LoadingStateEnum } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, LoadingStateEnum, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { ApplicationService } from '../services/application.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { ApplicationCopyDialogComponent } from '../application-copy-dialog/application-copy-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit',
-  templateUrl: './application-edit.component.html',
-  styleUrls: ['./application-edit.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit',
+    templateUrl: './application-edit.component.html',
+    styleUrls: ['./application-edit.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        SaveButtonComponent,
+        MatButton,
+        SpinnerButtonComponent,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class ApplicationEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
@@ -112,7 +124,6 @@ export class ApplicationEditComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(copiedApplication => {
         if (copiedApplication) {
-          // eslint-disable-next-line max-len
           this.adminSnackbarService.showMessage($localize `:@@admin-core.application.application-copied:Application ${copiedApplication.title || copiedApplication.name} copied`);
           this.router.navigateByUrl('/admin/applications/application/' + copiedApplication.id);
         }

@@ -2,13 +2,20 @@ import { Component, ChangeDetectionStrategy, LOCALE_ID, inject } from '@angular/
 import { APP_BASE_HREF } from '@angular/common';
 import { LanguageDescriptionModel } from './language-description.model';
 import { LanguageHelper } from './language.helper';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-language-toggle',
-  templateUrl: './language-toggle.component.html',
-  styleUrls: ['./language-toggle.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-language-toggle',
+    templateUrl: './language-toggle.component.html',
+    styleUrls: ['./language-toggle.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatMenuTrigger,
+    ],
 })
 export class LanguageToggleComponent {
   private baseHref = inject(APP_BASE_HREF);

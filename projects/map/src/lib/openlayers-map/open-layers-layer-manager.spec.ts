@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { LayerTypesEnum, WMSLayerModel } from '../models';
 import { ServerType } from '@tailormap-viewer/api';
@@ -8,8 +9,8 @@ const mockHttpXsrfTokenExtractor = { getToken: () => null } as any;
 function createMockOlMap() {
   return {
     getView: () => ({ getProjection: () => 'EPSG:3857' }),
-    addLayer: jest.fn(),
-    removeLayer: jest.fn(),
+    addLayer: vi.fn(),
+    removeLayer: vi.fn(),
   } as any;
 }
 
@@ -45,8 +46,8 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('does not call updateParams when WMS params have not changed', () => {
     const layer = createWmsLayer({ filter: 'prop=1', opacity: 100 });
     const { manager, olLayer, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
-    const updateOpacitySpy = jest.spyOn(olLayer, 'setOpacity');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
+    const updateOpacitySpy = vi.spyOn(olLayer, 'setOpacity');
 
     // Change only opacity so the layer identifier differs, but WMS params stay the same
     manager.setLayers([{ ...layer, opacity: 50 }]);
@@ -59,7 +60,7 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('calls updateParams exactly once with all changed WMS params batched together', () => {
     const layer = createWmsLayer({ filter: 'prop=1', selectedStyleName: 'style1', styles: [{ name: 'style1', title: 'Style 1' }] });
     const { manager, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
 
     const newLayer: WMSLayerModel = { ...layer, name: 'new-layer', layers: 'new-layer', filter: 'prop=2', selectedStyleName: 'style2' };
     manager.setLayers([newLayer]);
@@ -71,7 +72,7 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('clears STYLES param when selectedStyleName is removed', () => {
     const layer = createWmsLayer({ selectedStyleName: 'style1', styles: [{ name: 'style1', title: 'Style 1' }] });
     const { manager, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
 
     const newLayer: WMSLayerModel = { ...layer, selectedStyleName: undefined };
     manager.setLayers([newLayer]);
@@ -83,7 +84,7 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('clears CQL_FILTER param when filter is removed for GeoServer', () => {
     const layer = createWmsLayer({ filter: 'prop=1' });
     const { manager, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
 
     const newLayer: WMSLayerModel = { ...layer, filter: undefined, opacity: 50 };
     manager.setLayers([newLayer]);
@@ -95,7 +96,7 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('does not update CQL_FILTER for non-GeoServer layers when filter changes', () => {
     const layer = createWmsLayer({ serverType: ServerType.GENERIC, filter: undefined });
     const { manager, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
 
     const newLayer: WMSLayerModel = { ...layer, filter: 'prop=1', opacity: 50 };
     manager.setLayers([newLayer]);
@@ -106,7 +107,7 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
   test('updates CQL_FILTER param when filter changes for GeoServer', () => {
     const layer = createWmsLayer({ filter: 'prop=1' });
     const { manager, olSource } = createLayerManagerWithLayer(layer);
-    const updateParamsSpy = jest.spyOn(olSource, 'updateParams');
+    const updateParamsSpy = vi.spyOn(olSource, 'updateParams');
 
     const newLayer = { ...layer, filter: 'prop=2' };
     manager.setLayers([newLayer]);

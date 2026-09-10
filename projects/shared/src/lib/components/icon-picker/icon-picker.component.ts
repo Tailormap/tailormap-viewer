@@ -1,12 +1,16 @@
-import { Component, ElementRef, EventEmitter, Input, Optional, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Optional, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PopoverService } from '../../services/popover/popover.service';
 import { OverlayRef } from '../../services/overlay/overlay-ref';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-icon-picker',
-  templateUrl: './icon-picker.component.html',
-  styleUrls: ['./icon-picker.component.css'],
-  standalone: false,
+    selector: 'tm-icon-picker',
+    templateUrl: './icon-picker.component.html',
+    styleUrls: ['./icon-picker.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ MatButton, MatIcon ],
 })
 export class IconPickerComponent {
   private popper = inject(PopoverService);

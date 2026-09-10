@@ -2,15 +2,15 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, viewChild, effect, signal,
 } from '@angular/core';
 import { LegendInfoModel } from '../models/legend-info.model';
-import { LegendHelper, LegendImageModel } from '@tailormap-viewer/shared';
+import { LegendHelper, LegendImageModel, LegendImageComponent } from '@tailormap-viewer/shared';
 import { ServerType } from '@tailormap-viewer/api';
 
 @Component({
-  selector: 'tm-legend-layer',
-  templateUrl: './legend-layer.component.html',
-  styleUrls: ['./legend-layer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-legend-layer',
+    templateUrl: './legend-layer.component.html',
+    styleUrls: ['./legend-layer.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [LegendImageComponent],
 })
 export class LegendLayerComponent implements OnDestroy {
   private container = viewChild('container', { read: ElementRef });

@@ -1,8 +1,8 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogBaseTreeNodeComponent } from './catalog-base-tree-node.component';
 import { getCatalogNode, getGeoService, getGeoServiceLayer, getGeoServiceSummary } from '@tailormap-admin/admin-api';
 import { CatalogTreeHelper } from '../../helpers/catalog-tree.helper';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { CatalogTreeModel } from '../../models/catalog-tree.model';
 import { ExtendedGeoServiceModel } from '../../models/extended-geo-service.model';
@@ -12,7 +12,7 @@ import { TooltipDirective } from '@tailormap-viewer/shared';
 
 const setup = async (node: CatalogTreeModel | null) => {
   await render(CatalogBaseTreeNodeComponent, {
-    imports: [ MatIconModule, MatIconTestingModule ],
+    imports: [MatIconModule],
     declarations: [ CatalogBaseTreeNodeComponent, TooltipDirective ],
     inputs: { node },
   });
@@ -46,6 +46,7 @@ describe('CatalogBaseTreeNodeComponent', () => {
   test('should render layer', async () => {
     const layer: ExtendedGeoServiceLayerModel = {
       ...getGeoServiceLayer({ id: 'my-layer', name: 'my-layer', title: 'nice layer' }),
+      layerTitle: 'nice layer',
       type: CatalogExtendedTypeEnum.SERVICE_LAYER_TYPE,
       serviceId: 'test',
       catalogNodeId: '1',

@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { TerrainLayerToggleComponent } from './terrain-layer-toggle.component';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -7,8 +8,6 @@ import {
   selectTerrainNodesList,
 } from '../../../../map/state/map.selectors';
 import { getLayerTreeNode } from '@tailormap-viewer/api';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { MobileLayoutService } from '../../../../services/viewer-layout/mobile-layout.service';
@@ -27,7 +26,7 @@ const setup = async (initiallySelected: string) => {
   const mockStore = getMockedState(initiallySelected);
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(TerrainLayerToggleComponent, {
-    imports: [ SharedModule, CommonModule, MatIconTestingModule ],
+    imports: [CommonModule],
     providers: [
       mockStore,
       { provide: MobileLayoutService, useValue: mockMobileLayoutService },

@@ -2,18 +2,26 @@ import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@
 import {
   BaseComponentTypeEnum, EditConfigModel,
 } from '@tailormap-viewer/api';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { debounceTime } from 'rxjs';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { LayerSelectionConfigComponent } from '../../../shared/components/layer-selection/layer-selection-config.component';
 
 @Component({
-  selector: 'tm-admin-edit-component-config',
-  templateUrl: './edit-component-config.component.html',
-  styleUrls: ['./edit-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-edit-component-config',
+    templateUrl: './edit-component-config.component.html',
+    styleUrls: ['./edit-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        MatCheckbox,
+        ReactiveFormsModule,
+        LayerSelectionConfigComponent,
+    ],
 })
 export class EditComponentConfigComponent implements ConfigurationComponentModel<EditConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BoundsModel, I18nSettingsModel, UiSettingsModel, ValidatorsHelper } from '@tailormap-viewer/api';
 import { ApplicationModel, GroupModel, AuthorizationRuleGroup, AUTHORIZATION_RULE_ANONYMOUS } from '@tailormap-admin/admin-api';
 import { Observable, debounceTime, filter, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
@@ -7,16 +7,38 @@ import { FormHelper } from '../../helpers/form.helper';
 import { GroupService } from '../../user/services/group.service';
 import { AdminProjectionsHelper } from '../helpers/admin-projections-helper';
 import { UpdateDraftApplicationModel } from '../models/update-draft-application.model';
-import { LanguageHelper } from '@tailormap-viewer/shared';
+import { LanguageHelper, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { selectApplications } from '../state/application.selectors';
 import { Store } from '@ngrx/store';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-form',
-  templateUrl: './application-form.component.html',
-  styleUrls: ['./application-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-form',
+    templateUrl: './application-form.component.html',
+    styleUrls: ['./application-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        AutoFocusDirective,
+        MatHint,
+        MatSelect,
+        MatOption,
+        BoundsFieldComponent,
+        MatIcon,
+        MatSlideToggle,
+        AuthorizationEditComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationFormComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

@@ -1,16 +1,22 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { BaseComponentTypeEnum, DrawingComponentConfigModel } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-drawing-config',
-  templateUrl: './drawing-config.component.html',
-  styleUrls: ['./drawing-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-drawing-config',
+    templateUrl: './drawing-config.component.html',
+    styleUrls: ['./drawing-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        ReactiveFormsModule,
+        MatCheckbox,
+    ],
 })
 export class DrawingConfigComponent {
 

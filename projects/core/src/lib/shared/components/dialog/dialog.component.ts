@@ -1,30 +1,30 @@
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
-import { style, transition, trigger, animate } from '@angular/animations';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService } from './dialog.service';
-import { BrowserHelper } from '@tailormap-viewer/shared';
+import { BrowserHelper, TooltipDirective } from '@tailormap-viewer/shared';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 const DIALOG_DEFAULT_WIDTH = 300;
 
 @Component({
-  selector: 'tm-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css'],
-  animations: [
-    trigger(
-      'inOutAnimation',
-      [
-        transition(':enter', [
-          style({ transform: 'translate({{translate}})', opacity: 0 }),
-          animate('0.25s ease-out', style({ transform: 'translate(0)', opacity: 1 })),
-        ]),
-        transition(':leave', [
-          style({ transform: 'translate(0)', opacity: 1 }),
-          animate('0.25s ease-out', style({ transform: 'translate({{translate}})', opacity: 0 })),
-        ]),
-      ],
-    ),
-  ],
-  standalone: false,
+    selector: 'tm-dialog',
+    templateUrl: './dialog.component.html',
+    styleUrls: ['./dialog.component.css'],
+    /* eslint-disable @typescript-eslint/naming-convention */
+    host: {
+        '[class]': 'dialogAsClass',
+        '(window:resize)': 'onResize()',
+        '(document:pointermove)': 'onDocumentPointerMove($event)',
+        '(document:pointerup)': 'onDocumentPointerUp()',
+        '(document:keydown.escape)': 'onDocumentEscape($event)',
+    },
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+        MatIconButton,
+        MatIcon,
+        TooltipDirective,
+    ],
 })
 export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   private dialogService = inject(DialogService);
@@ -80,15 +80,33 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public fullscreen = false;
 
-  @HostBinding('class')
   public get dialogAsClass() {
     return this.dialogId;
   }
 
-  @HostListener('window:resize', ['$event'])
+  public getSlideDistance(): string {
+    return `${(this.openFromRight ? this.actualWidth : -1 * this.actualWidth)}px`;
+  }
+
   public onResize() {
     this.updateActualWidth();
     this.dialogService.dialogChanged(this.dialogId, this.getLeft(), this.getRight());
+  }
+
+  public onDocumentEscape(event: Event): void {
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
+      return;
+    }
+    if (this.fullscreen) {
+      this.toggleFullscreen(false);
+      return;
+    }
+    if (this.open && !this.hidden) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close();
+    }
   }
 
   public actualWidth = DIALOG_DEFAULT_WIDTH;
@@ -107,7 +125,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     this.dialogService.unregisterDialog(this.dialogId);
   }
 
-  @HostListener('document:pointermove', ['$event']) public onDocumentPointerMove(event: PointerEvent) {
+  public onDocumentPointerMove(event: PointerEvent) {
     if (!this.resizeActive) {
       return;
     }
@@ -122,7 +140,7 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  @HostListener('document:pointerup') public onDocumentPointerUp() {
+  public onDocumentPointerUp() {
     this.stopResize();
   }
 
@@ -232,4 +250,5 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
   public getClosePanelLabel(): string {
     return $localize `:@@core.dialog.close-panel-label:Close ${this.dialogTitle} panel`;
   }
+
 }

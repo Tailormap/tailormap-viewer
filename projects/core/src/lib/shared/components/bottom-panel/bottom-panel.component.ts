@@ -1,14 +1,32 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, inject } from '@angular/core';
-import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, of, combineLatest, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ViewerLayoutService } from '../../../services/viewer-layout/viewer-layout.service';
+import { NgStyle, NgClass, AsyncPipe } from '@angular/common';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { PanelResizerComponent, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-bottom-panel',
-  templateUrl: './bottom-panel.component.html',
-  styleUrls: ['./bottom-panel.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-bottom-panel',
+    templateUrl: './bottom-panel.component.html',
+    styleUrls: ['./bottom-panel.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        PanelResizerComponent,
+        NgStyle,
+        MatToolbar,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        NgClass,
+        AsyncPipe,
+    ],
+    host: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      '(window:keydown.escape)': 'onDocumentEscape($event)',
+    },
 })
 export class BottomPanelComponent implements OnInit {
   private layoutService = inject(ViewerLayoutService);
@@ -58,6 +76,24 @@ export class BottomPanelComponent implements OnInit {
 
   @Output()
   public closed = new EventEmitter();
+
+  public onDocumentEscape(event: Event): void {
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    if (overlayContainer && overlayContainer.querySelector('.cdk-overlay-pane')) {
+      return;
+    }
+    if (this.isMaximized) {
+      this.isMaximized = false;
+      return;
+    }
+    this.isVisible$.pipe(take(1)).subscribe(visible => {
+      if (visible) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.closed.emit();
+      }
+    });
+  }
 
   private heightSubject = new BehaviorSubject(350);
 

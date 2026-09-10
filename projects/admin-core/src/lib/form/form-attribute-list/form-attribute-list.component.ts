@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FilterHelper } from '@tailormap-viewer/shared';
@@ -7,13 +7,24 @@ import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { draftFormAddField } from '../state/form.actions';
 import { selectDraftFormAttributes } from '../state/form.selectors';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
+import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-form-attribute-list',
-  templateUrl: './form-attribute-list.component.html',
-  styleUrls: ['./form-attribute-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-form-attribute-list',
+    templateUrl: './form-attribute-list.component.html',
+    styleUrls: ['./form-attribute-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListItem,
+        AsyncPipe,
+    ],
 })
 export class FormAttributeListComponent implements OnInit {
   private store$ = inject(Store);

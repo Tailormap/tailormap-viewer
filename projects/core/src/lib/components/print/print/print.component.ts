@@ -6,13 +6,21 @@ import { PrintMenuButtonComponent } from '../print-menu-button/print-menu-button
 import { ExtentHelper, MapService } from '@tailormap-viewer/map';
 import { ApplicationMapService } from '../../../map/services/application-map.service';
 import { selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithLegend } from '../../../map/state/map.selectors';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { selectHasDrawingFeatures } from '../../drawing/state/drawing.selectors';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { ApplicationStyleService } from '../../../services/application-style.service';
 import { PrintImageOptions, PrintOptions, PrintPdfOptions, PrintResult, PrintService } from '../print.service';
 import { DrawingLegendPrintService } from '../../drawing/services/drawing-legend-print-service';
 import type { jsPDF } from 'jspdf';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
 
 const DEFAULT_IMAGE_OPTIONS: PrintImageOptions = {
   type: 'image',
@@ -34,11 +42,26 @@ const DEFAULT_PDF_OPTIONS: PrintPdfOptions = {
 };
 
 @Component({
-  selector: 'tm-print',
-  templateUrl: './print.component.html',
-  styleUrls: ['./print.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-print',
+    templateUrl: './print.component.html',
+    styleUrls: ['./print.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButtonToggleGroup,
+        ReactiveFormsModule,
+        MatButtonToggle,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatHint,
+        MatInput,
+        MatButton,
+        MatSelect,
+        MatOption,
+        MatProgressSpinner,
+        AsyncPipe,
+        DecimalPipe,
+    ],
 })
 export class PrintComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, HostListener, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, viewChild, ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
@@ -19,25 +19,52 @@ import {
   updateSelectedDrawingFeatureGeometry,
 } from '../state/drawing.actions';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
-import { ConfirmDialogService, DynamicComponentsHelper } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, DynamicComponentsHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { BaseComponentTypeEnum, DrawingComponentConfigModel, FeatureModel } from '@tailormap-viewer/api';
 import { DrawingService } from '../../../map/services/drawing.service';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckbox } from '@angular/material/checkbox';
 import { DrawingFeatureRegistrationService } from '../services/drawing-feature-registration.service';
 import { selectComponentTitle } from '../../../state/core.selectors';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
 import { DrawingAccessibleFeaturesService } from '../services/drawing-accessible-features.service';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DrawingObjectsListComponent } from '../drawing-objects-list/drawing-objects-list.component';
+import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'tm-drawing',
-  templateUrl: './drawing.component.html',
-  styleUrls: ['./drawing.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
-  providers: [
-    DrawingService,
-  ],
+    selector: 'tm-drawing',
+    templateUrl: './drawing.component.html',
+    styleUrls: ['./drawing.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        DrawingService,
+    ],
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+        MatCheckbox,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        FormsModule,
+        MatIconButton,
+        MatSuffix,
+        DrawingObjectsListComponent,
+        DrawingStyleFormComponent,
+        AsyncPipe,
+    ],
+    host: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      '(window:keydown.delete)': 'onDeleteKey($event)',
+    },
 })
 export class DrawingComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
@@ -178,8 +205,7 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  @HostListener('window:keydown.delete', ['$event'])
-  public onDeleteKey(event: KeyboardEvent) {
+  public onDeleteKey(event: Event) {
     const target = event.target as HTMLElement;
     const isInput = target && (
       target.tagName === 'INPUT' ||

@@ -3,6 +3,6 @@ export * from './models';
 export * from './helpers/drawing.helper';
 export * from './components/map-spinner/map-spinner.component';
 export * from './components/drawing-style-icon/drawing-style-icon.component';
-export * from './application-map.module';
+export * from './application-map.providers';
 export * from './services/drawing.service';
 export * from './state/map.actions';

@@ -1,14 +1,33 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { TreeModel, TreeService } from '@tailormap-viewer/shared';
 import { AppTreeNodeModel } from '@tailormap-admin/admin-api';
 import { ApplicationTreeHelper } from '../../helpers/application-tree.helper';
 import { ExpandOnStartupEnum } from '@tailormap-viewer/api';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
 
 @Component({
-  selector: 'tm-admin-application-layer-tree-node',
-  templateUrl: './application-layer-tree-node.component.html',
-  styleUrls: ['./application-layer-tree-node.component.css'],
-  standalone: false,
+    selector: 'tm-admin-application-layer-tree-node',
+    templateUrl: './application-layer-tree-node.component.html',
+    styleUrls: ['./application-layer-tree-node.component.css'],
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+        MatIcon,
+        MatTooltip,
+        MatIconButton,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+    ],
 })
 export class ApplicationLayerTreeNodeComponent {
   private treeService = inject(TreeService);

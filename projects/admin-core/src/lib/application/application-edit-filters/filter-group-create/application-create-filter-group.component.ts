@@ -6,18 +6,30 @@ import {
   selectFilterableLayersForApplication, selectSelectedApplicationId,
 } from '../../state/application.selectors';
 import { nanoid } from 'nanoid';
-import { MatSelectionListChange } from '@angular/material/list';
-import { FormControl } from '@angular/forms';
+import { MatSelectionListChange, MatSelectionList, MatListOption } from '@angular/material/list';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { ExtendedAppTreeLayerNodeModel } from '../../models/extended-app-tree-layer-node.model';
+import { ListFilterComponent } from '../../../shared/components/list-filter/list-filter.component';
+import { SaveButtonComponent } from '../../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'tm-admin-application-create-filter-group',
-  templateUrl: './application-create-filter-group.component.html',
-  styleUrls: ['./application-create-filter-group.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-create-filter-group',
+    templateUrl: './application-create-filter-group.component.html',
+    styleUrls: ['./application-create-filter-group.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        MatListOption,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class ApplicationCreateFilterGroupComponent implements OnInit {
   private store$ = inject(Store);

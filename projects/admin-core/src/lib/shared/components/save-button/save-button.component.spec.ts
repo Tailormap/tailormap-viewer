@@ -1,15 +1,14 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SaveButtonComponent } from './save-button.component';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event';
-import { SharedImportsModule, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 const setup = async (isSaving: boolean, disabled: boolean) => {
-  const saveFn = jest.fn();
+  const saveFn = vi.fn();
   await render(SaveButtonComponent, {
-    imports: [ MatProgressSpinnerModule, SharedImportsModule ],
-    declarations: [SpinnerButtonComponent],
+    imports: [MatProgressSpinnerModule],
     inputs: {
       saving$: of(isSaving),
       disabled,

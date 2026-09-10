@@ -1,20 +1,43 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { AdditionalPropertyModel, GroupModel, UserModel } from '@tailormap-admin/admin-api';
-import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
-import { formatDate } from '@angular/common';
+import { formatDate, AsyncPipe } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 import { ValidatorsHelper } from '@tailormap-viewer/api';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatSelectionList, MatListOption } from '@angular/material/list';
+import { AdminFieldsRendererComponent } from '../../shared/components/admin-fields-renderer/admin-fields-renderer.component';
 
 @Component({
-  selector: 'tm-admin-user-form',
-  templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-user-form',
+    templateUrl: './user-form.component.html',
+    styleUrls: ['./user-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        PasswordFieldComponent,
+        MatError,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        MatCheckbox,
+        MatSelectionList,
+        MatListOption,
+        AdminFieldsRendererComponent,
+        AsyncPipe,
+    ],
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   private groupDetailsService = inject(GroupService);

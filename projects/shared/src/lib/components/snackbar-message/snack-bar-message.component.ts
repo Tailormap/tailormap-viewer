@@ -2,13 +2,25 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarDismiss, MatSnackBarRef } from '@angular/material/snack-bar';
 import { SnackBarMessageOptionsModel } from './snack-bar-message-options.model';
 import { map, Observable, takeWhile, timer } from 'rxjs';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-snack-bar-message',
-  templateUrl: './snack-bar-message.component.html',
-  styleUrls: ['./snack-bar-message.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-snack-bar-message',
+    templateUrl: './snack-bar-message.component.html',
+    styleUrls: ['./snack-bar-message.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        MatIconButton,
+        MatIcon,
+        MatButton,
+        MatProgressBar,
+        AsyncPipe,
+    ],
 })
 export class SnackBarMessageComponent implements OnInit {
   public data = inject<SnackBarMessageOptionsModel>(MAT_SNACK_BAR_DATA);

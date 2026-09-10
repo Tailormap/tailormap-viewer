@@ -1,8 +1,9 @@
+import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/angular';
 import { MapSpinnerComponent } from './map-spinner.component';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { getMapServiceMock } from '../../../test-helpers/map-service.mock.spec';
+import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 
 const setup = async (loading: boolean, coordinates?: [ number, number ]) => {
   const mapServiceMock = getMapServiceMock();

@@ -3,34 +3,34 @@
   "compilerOptions": {
     "paths": {
       "@tailormap-viewer/api": [
-        "dist/api/api",
-        "dist/api",
-        "projects/api/src"
+        "./dist/api/api",
+        "./dist/api",
+        "./projects/api/src"
       ],
       "@tailormap-viewer/core": [
-        "dist/core/core",
-        "dist/core",
-        "projects/core/src"
+        "./dist/core/core",
+        "./dist/core",
+        "./projects/core/src"
       ],
       "@tailormap-viewer/shared": [
-        "dist/shared/shared",
-        "dist/shared",
-        "projects/shared/src"
+        "./dist/shared/shared",
+        "./dist/shared",
+        "./projects/shared/src"
       ],
       "@tailormap-viewer/map": [
-        "dist/map/map",
-        "dist/map",
-        "projects/map/src"
+        "./dist/map/map",
+        "./dist/map",
+        "./projects/map/src"
       ],
       "@tailormap-admin/admin-core": [
-        "dist/admin-core/admin-core",
-        "dist/admin-core",
-        "projects/admin-core/src"
+        "./dist/admin-core/admin-core",
+        "./dist/admin-core",
+        "./projects/admin-core/src"
       ],
       "@tailormap-admin/admin-api": [
-        "dist/admin-api/admin-api",
-        "dist/admin-api",
-        "projects/admin-api/src"
+        "./dist/admin-api/admin-api",
+        "./dist/admin-api",
+        "./projects/admin-api/src"
       ]
     },
   }

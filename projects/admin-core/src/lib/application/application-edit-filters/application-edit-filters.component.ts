@@ -2,16 +2,27 @@ import { ChangeDetectionStrategy, Component, computed, Signal, inject } from '@a
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectCatalogLoadStatus } from '../../catalog/state/catalog.selectors';
-import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { LoadingStateEnum, TooltipDirective } from '@tailormap-viewer/shared';
 import { CatalogService } from '../../catalog/services/catalog.service';
 import { selectNoFilterableLayersForSelectedApplication, selectSelectedApplicationId } from '../state/application.selectors';
+import { MatIconButton } from '@angular/material/button';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { ApplicationFilterGroupListComponent } from './filter-group-list/application-filter-group-list.component';
 
 @Component({
-  selector: 'tm-admin-application-edit-filters',
-  templateUrl: './application-edit-filters.component.html',
-  styleUrls: ['./application-edit-filters.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-edit-filters',
+    templateUrl: './application-edit-filters.component.html',
+    styleUrls: ['./application-edit-filters.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        TooltipDirective,
+        MatIconButton,
+        RouterLink,
+        MatIcon,
+        ApplicationFilterGroupListComponent,
+        RouterOutlet,
+    ],
 })
 export class ApplicationEditFiltersComponent {
   private store$ = inject(Store);

@@ -5,13 +5,40 @@ import { MapService } from '@tailormap-viewer/map';
 import { Subject, takeUntil, take } from 'rxjs';
 import { BookmarkService } from '../../services/bookmark/bookmark.service';
 import { ApplicationBookmarkFragments } from '../../services/application-bookmark/application-bookmark-fragments';
+import { FeatureInfoComponent } from '../../components/feature-info/feature-info/feature-info.component';
+import { MapComponent } from '@tailormap-viewer/map';
+import { MeasureComponent } from '../../components/toolbar/measure/measure.component';
+import { ClickedCoordinatesComponent } from '../../components/toolbar/clicked-coordinates/clicked-coordinates.component';
+import { StreetviewComponent } from '../../components/toolbar/streetview/streetview.component';
+import { SimpleSearchComponent } from '../../components/toolbar/simple-search/simple-search.component';
+import { TerrainControlsComponent } from '../../components/toolbar/terrain-controls/terrain-controls.component';
+import { BackgroundLayerToggleComponent } from '../../components/background-layer-toggle/background-layer-toggle.component';
+import { ZoomButtonsComponent } from '../../components/toolbar/zoom-buttons/zoom-buttons.component';
+import { GeolocationComponent } from '../../components/toolbar/geolocation/geolocation.component';
+import { ScaleBarComponent } from '../../components/toolbar/scale-bar/scale-bar.component';
+import { MouseCoordinatesComponent } from '../../components/toolbar/mouse-coordinates/mouse-coordinates.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-embedded-layout',
-  templateUrl: './embedded-layout.component.html',
-  styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-embedded-layout',
+    templateUrl: './embedded-layout.component.html',
+    styleUrls: [ '../base-layout/base-layout.component.css', './embedded-layout.component.css' ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FeatureInfoComponent,
+        MapComponent,
+        MeasureComponent,
+        ClickedCoordinatesComponent,
+        StreetviewComponent,
+        SimpleSearchComponent,
+        TerrainControlsComponent,
+        BackgroundLayerToggleComponent,
+        ZoomButtonsComponent,
+        GeolocationComponent,
+        ScaleBarComponent,
+        MouseCoordinatesComponent,
+        AsyncPipe,
+    ],
 })
 export class EmbeddedLayoutComponent implements OnDestroy {
   public layoutService = inject(LayoutService);

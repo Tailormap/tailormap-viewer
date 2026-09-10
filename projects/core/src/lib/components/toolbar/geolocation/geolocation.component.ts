@@ -6,15 +6,21 @@ import { ApplicationStyleService } from '../../../services/application-style.ser
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { ComponentConfigHelper } from '../../../shared/helpers/component-config.helper';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, TooltipDirective } from '@tailormap-viewer/shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'tm-geolocation',
-  templateUrl: './geolocation.component.html',
-  styleUrls: ['./geolocation.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-geolocation',
+    templateUrl: './geolocation.component.html',
+    styleUrls: ['./geolocation.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        TooltipDirective,
+        MatIcon,
+    ],
 })
 export class GeolocationComponent implements OnInit {
   private store$ = inject(Store);
@@ -146,7 +152,6 @@ export class GeolocationComponent implements OnInit {
           this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-permission-denied:Fetching location failed: permission denied`);
           break;
         case GeolocationPositionError.POSITION_UNAVAILABLE:
-          // eslint-disable-next-line max-len
           this.showSnackbarMessage($localize `:@@core.toolbar.zoom-to-location-failed-location-unavailable:Fetching location failed: location unavailable`);
           break;
         case GeolocationPositionError.TIMEOUT:

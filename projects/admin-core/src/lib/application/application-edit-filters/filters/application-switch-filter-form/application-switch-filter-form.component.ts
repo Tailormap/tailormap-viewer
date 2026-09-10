@@ -2,18 +2,27 @@ import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, On
 import {
   AttributeType, AttributeTypeHelper, FilterConditionEnum, FilterToolEnum, UpdateSwitchFilterModel, EditFilterConfigurationModel,
 } from '@tailormap-viewer/api';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs/operators';
 import { filter } from 'rxjs';
 import { FormHelper } from '../../../../helpers/form.helper';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'tm-admin-application-switch-filter-form',
-  templateUrl: './application-switch-filter-form.component.html',
-  styleUrls: ['./application-switch-filter-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-switch-filter-form',
+    templateUrl: './application-switch-filter-form.component.html',
+    styleUrls: ['./application-switch-filter-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ReactiveFormsModule,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatCheckbox,
+    ],
 })
 export class ApplicationSwitchFilterFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

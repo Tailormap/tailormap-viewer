@@ -112,6 +112,11 @@ export class AttributeListDataService implements OnDestroy {
     this.notifyCheckedRowsChanged(dataId);
   }
 
+  public setSelectedDataId(tabId: string, dataId: string): void {
+    this.store$.dispatch(AttributeListActions.setSelectedDataId({ tabId, dataId }));
+    this.reloadTabData(tabId);
+  }
+
   private reloadTabData(tabId: string): void {
     this.reloadTabSubject.next(tabId);
   }

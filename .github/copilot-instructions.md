@@ -16,7 +16,7 @@ The goal of this guide is to ensure that generated code is both human-readable a
 facilitates collaboration, makes coding simpler, and ensures that best practices are consistently followed.
 
 # Development Environment
-Tailormap Viewer is written in **TypeScript 5.x** using **Angular 20.x** and **OpenLayers 10.x**.
+Tailormap Viewer is written in **TypeScript 5.x** using **Angular 22.x** and **OpenLayers 10.x**.
 Dependencies for this project are managed using npm in the file `package.json` in the root of the repository.
 Code for this project is built using Angular CLI using the file `angular.json` in the root of the repository.
 Builds for this project are executed using npm using the file `package.json` in the root of the repository.
@@ -25,11 +25,11 @@ The main configuration file for the Tailormap Viewer is `src/environments/enviro
 The main module for the Tailormap Viewer is `projects/src/app/app.module.ts`.
 
 The Tailormap Viewer uses OpenAPI definitions from the Tailormap API, located at
-`src/assets/openapi/viewer-api.yaml`, to generate TypeScript API client code using the OpenAPI Generator.
+[src/assets/openapi/viewer-api.yaml](https://github.com/Tailormap/tailormap-api/blob/main/src/main/resources/openapi/viewer-api.yaml), to generate TypeScript API client code using the OpenAPI Generator.
 The generated API client code is located in the `src/app/api` directory.
 The Tailormap Viewer uses Angular Material for UI components and styling.
 The Tailormap Viewer uses RxJS for reactive programming and state management.
-The Tailormap Viewer uses Jest for unit testing.
+The Tailormap Viewer uses Vitest for unit testing.
 
 ## Code Standards
 ### Required Before Each Commit

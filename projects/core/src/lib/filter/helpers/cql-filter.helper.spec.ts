@@ -1,24 +1,11 @@
+import { describe, test, expect } from 'vitest';
 import {
-  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel, FilterTypeEnum, SpatialFilterModel,
+  AttributeFilterModel, AttributeType, FilterConditionEnum, FilterDateIntervalEnum, FilterGroupModel, FilterTypeEnum,
 } from '@tailormap-viewer/api';
 import { CqlFilterHelper } from './cql-filter.helper';
-import { getFilterGroup } from '../../../../../shared/src/lib/helpers/attribute-filter.helper.spec';
 import { FeaturesFilterHelper } from './features-filter.helper';
-
-export const getSpatialFilterGroup = (geoms: string[], columns?: Array<{ layerId: string; column: string[] }>, buffer?: number) => {
-  const group = getFilterGroup<SpatialFilterModel>([{
-    id: '1',
-    type: FilterTypeEnum.SPATIAL,
-    geometryColumns: columns || [{ layerId: '1', column: ['the_geom'] }],
-    geometries: geoms.map((g, idx) => ({ id: `${idx + 1}`, geometry: g })),
-    buffer,
-    projectionCode: 'EPSG:4326',
-  }], FilterTypeEnum.SPATIAL);
-  if (columns) {
-    return { ...group, layerIds: columns.map(c => c.layerId) };
-  }
-  return group;
-};
+import { getSpatialFilterGroup } from './spatial-filter-group.mock';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 
 const simpleNumberFilter = (condition?: FilterConditionEnum, value?: string[], invertCondition = false) => {
   const filterGroup = getFilterGroup();
@@ -38,7 +25,7 @@ const dateIntervalFilter = (interval: FilterDateIntervalEnum | string, dateFrom:
     invertCondition,
     attribute: 'attribute',
     attributeType: AttributeType.DATE,
-    condition: FilterConditionEnum.DATE_INTERVAL_KEY,
+    condition: FilterConditionEnum.DATE_BETWEEN_KEY,
     value: [ dateFrom, interval ],
   }]);
   const filters = CqlFilterHelper.getFilters([filterGroup]);

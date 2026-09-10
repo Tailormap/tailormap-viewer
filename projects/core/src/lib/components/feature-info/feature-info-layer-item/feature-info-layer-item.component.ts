@@ -3,13 +3,20 @@ import { FeatureInfoService } from '../feature-info.service';
 import { Store } from '@ngrx/store';
 import { setSelectedFeatureInfoLayer } from '../state/feature-info.actions';
 import { FeatureInfoLayerListItemModel } from '../models/feature-info-layer-list-item.model';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-feature-info-layer-item',
-  templateUrl: './feature-info-layer-item.component.html',
-  styleUrls: ['./feature-info-layer-item.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-feature-info-layer-item',
+    templateUrl: './feature-info-layer-item.component.html',
+    styleUrls: ['./feature-info-layer-item.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        MatIcon,
+        TooltipDirective,
+    ],
 })
 export class FeatureInfoLayerItemComponent {
   private store$ = inject(Store);

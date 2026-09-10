@@ -1,12 +1,24 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { AttributeFilterModel, AttributeValueSettings, FilterToolEnum } from '@tailormap-viewer/api';
+import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-checkbox-filter',
-  templateUrl: './checkbox-filter.component.html',
-  styleUrls: ['./checkbox-filter.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-checkbox-filter',
+    templateUrl: './checkbox-filter.component.html',
+    styleUrls: ['./checkbox-filter.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatIconButton,
+        TooltipDirective,
+        MatIcon,
+        MatCheckbox,
+    ],
 })
 export class CheckboxFilterComponent {
 

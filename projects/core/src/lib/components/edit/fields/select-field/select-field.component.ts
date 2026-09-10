@@ -6,22 +6,37 @@ import { selectViewerId } from '../../../../state/core.selectors';
 import { filter, take } from 'rxjs';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { concatMap } from 'rxjs/operators';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'tm-select-field',
-  templateUrl: './select-field.component.html',
-  styleUrls: ['./select-field.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectFieldComponent),
-      multi: true,
-    },
-  ],
-  standalone: false,
+    selector: 'tm-select-field',
+    templateUrl: './select-field.component.html',
+    styleUrls: ['./select-field.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SelectFieldComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        MatProgressSpinner,
+        MatSelect,
+    ],
 })
 export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   private uniqueValueService = inject(UniqueValuesService);

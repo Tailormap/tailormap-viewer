@@ -1,9 +1,8 @@
+import { describe, test, expect, vi } from 'vitest';
 import { AttributeListMenuButtonComponent } from './attribute-list-menu-button.component';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
-import { MenubarButtonComponent, MenubarService } from '../../menubar';
-import { SharedModule } from '@tailormap-viewer/shared';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { MenubarService } from '../../menubar';
 import userEvent from '@testing-library/user-event';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { getLoadedStoreNoRows } from '../state/mocks/attribute-list-state-test-data';
@@ -19,15 +18,14 @@ describe('AttributeListMenuButtonComponent', () => {
       isComponentVisible$: () => of(false),
     };
     await render(AttributeListMenuButtonComponent, {
-      declarations: [MenubarButtonComponent],
-      imports: [ SharedModule, MatIconTestingModule, MatBadge ],
+      imports: [MatBadge],
       providers: [
         { provide: MenubarService, useValue: menubarService },
         provideMockStore({ initialState: { ...getLoadedStoreNoRows(), [coreStateKey]: initialCoreState } }),
       ],
     });
     const store = TestBed.inject(MockStore);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
 
     expect(await screen.findByRole('button')).toBeInTheDocument();
     await userEvent.click(await screen.findByRole('button'));

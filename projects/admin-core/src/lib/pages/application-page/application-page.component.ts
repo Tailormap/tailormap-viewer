@@ -3,13 +3,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { RoutePropertyHelper } from '../helpers/route-property.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AdminPageTemplateComponent } from '../../templates/admin-page-template/admin-page-template.component';
+import { ApplicationListComponent } from '../../application/application-list/application-list.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-page',
-  templateUrl: './application-page.component.html',
-  styleUrls: ['./application-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-application-page',
+    templateUrl: './application-page.component.html',
+    styleUrls: ['./application-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AdminPageTemplateComponent,
+        ApplicationListComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationPageComponent {
 

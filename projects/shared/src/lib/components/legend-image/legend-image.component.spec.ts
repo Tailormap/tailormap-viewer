@@ -1,8 +1,9 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendImageComponent, LegendImageModel } from './legend-image.component';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
-  get: jest.fn().mockReturnValue(2),
+  get: vi.fn().mockReturnValue(2),
 }) as any;
 
 const setup = async (legend: LegendImageModel) => {
@@ -27,7 +28,7 @@ describe('LegendImageComponent', () => {
   });
 
   test('should render high dpi legend for GeoServer', async () => {
-    jest.spyOn(global, 'window', 'get').mockImplementation(windowMock);
+    vi.spyOn(global, 'window', 'get').mockImplementation(windowMock);
     await setup({
       title: 'Layer title',
       url: 'http://some-url/geoserver/wms?REQUEST=GetLegendGraphic',

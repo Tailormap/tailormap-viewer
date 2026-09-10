@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { LayerTreeNodeHelper } from './layer-tree-node.helper';
 import { AppLayerModel, getAppLayerModel, getLayerTreeNode, LayerTreeNodeModel } from '@tailormap-viewer/api';
 import { TreeHelper } from '@tailormap-viewer/shared';

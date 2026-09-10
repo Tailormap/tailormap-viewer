@@ -1,22 +1,28 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { PopoverPositionEnum } from '@tailormap-viewer/shared';
+import { PopoverPositionEnum, ColorPickerComponent } from '@tailormap-viewer/shared';
 import { UploadCategoryEnum, ViewerStylingModel } from '@tailormap-viewer/api';
 import { selectStylingConfig } from '../state/application.selectors';
 import { updateApplicationStylingConfig } from '../state/application.actions';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { ApplicationImageRemoveService } from '../services/application-image-remove.service';
+import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-application-edit-styling',
-  templateUrl: './application-edit-styling.component.html',
-  styleUrls: ['./application-edit-styling.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: UPLOAD_REMOVE_SERVICE, useClass: ApplicationImageRemoveService },
-  ],
-  standalone: false,
+    selector: 'tm-admin-application-edit-styling',
+    templateUrl: './application-edit-styling.component.html',
+    styleUrls: ['./application-edit-styling.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: UPLOAD_REMOVE_SERVICE, useClass: ApplicationImageRemoveService },
+    ],
+    imports: [
+        ColorPickerComponent,
+        SelectUploadComponent,
+        AsyncPipe,
+    ],
 })
 export class ApplicationEditStylingComponent {
   private store$ = inject(Store);

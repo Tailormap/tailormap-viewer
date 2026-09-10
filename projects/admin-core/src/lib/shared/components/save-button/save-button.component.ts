@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { SpinnerButtonComponent } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-admin-save-button',
-  templateUrl: './save-button.component.html',
-  styleUrls: ['./save-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-save-button',
+    templateUrl: './save-button.component.html',
+    styleUrls: ['./save-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SpinnerButtonComponent],
 })
 export class SaveButtonComponent {
 

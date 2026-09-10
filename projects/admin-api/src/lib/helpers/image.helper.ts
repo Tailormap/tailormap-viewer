@@ -1,5 +1,4 @@
 import { map, Observable, of, Subject } from 'rxjs';
-import { UploadHelper } from './upload.helper';
 
 export interface ImageResult {
   error?: string;

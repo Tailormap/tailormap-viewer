@@ -1,16 +1,29 @@
 import { Component, ChangeDetectionStrategy, Input, DestroyRef, inject } from '@angular/core';
 import { BaseComponentTypeEnum, DEFAULT_SNAPPING_TOLERANCE, SnappingComponentConfigModel } from '@tailormap-viewer/api';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { LayerSelectionConfigComponent } from '../../../shared/components/layer-selection/layer-selection-config.component';
+import { ColorPickerComponent } from '@tailormap-viewer/shared';
 
 @Component({
-  selector: 'tm-admin-snapping-component-config',
-  templateUrl: './snapping-component-config.component.html',
-  styleUrls: ['./snapping-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-snapping-component-config',
+    templateUrl: './snapping-component-config.component.html',
+    styleUrls: ['./snapping-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        ColorPickerComponent,
+        LayerSelectionConfigComponent,
+    ],
 })
 export class SnappingComponentConfigComponent implements ConfigurationComponentModel<SnappingComponentConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

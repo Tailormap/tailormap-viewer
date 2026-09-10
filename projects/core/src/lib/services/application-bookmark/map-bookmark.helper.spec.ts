@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { MapBookmarkHelper } from './map-bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';

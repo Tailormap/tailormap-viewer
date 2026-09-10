@@ -1,19 +1,43 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@angular/core';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { BehaviorSubject, filter, Observable, startWith } from 'rxjs';
 import { MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/select';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-admin-simple-search-config',
-  templateUrl: './simple-search-component-config.component.html',
-  styleUrls: ['./simple-search-component-config.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-simple-search-config',
+    templateUrl: './simple-search-component-config.component.html',
+    styleUrls: ['./simple-search-component-config.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        BaseComponentConfigComponent,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatIconButton,
+        MatIcon,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        ReactiveFormsModule,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class SimpleSearchComponentConfigComponent implements ConfigurationComponentModel<SimpleSearchConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);

@@ -98,3 +98,33 @@
   left: -4px;
   right: auto;
 }
+
+.dialog-enter-animation {
+  animation: dialog-slide-in 0.25s ease-out;
+}
+
+@keyframes dialog-slide-in {
+  from {
+    transform: translate(var(--dialog-slide-distance));
+    opacity: 0;
+  }
+  to {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+.dialog-leave-animation {
+  animation: dialog-slide-out 0.25s ease-out;
+}
+
+@keyframes dialog-slide-out {
+  from {
+    transform: translate(0);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dialog-slide-distance));
+    opacity: 0;
+  }
+}

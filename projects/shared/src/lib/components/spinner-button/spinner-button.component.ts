@@ -1,12 +1,19 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'tm-spinner-button',
-  templateUrl: './spinner-button.component.html',
-  styleUrls: ['./spinner-button.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-spinner-button',
+    templateUrl: './spinner-button.component.html',
+    styleUrls: ['./spinner-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        MatProgressSpinner,
+        AsyncPipe,
+    ],
 })
 export class SpinnerButtonComponent {
 

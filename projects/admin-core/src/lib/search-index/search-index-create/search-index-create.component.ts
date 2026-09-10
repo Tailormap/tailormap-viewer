@@ -1,15 +1,23 @@
 import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 import { SearchIndexModel, SearchIndexStatusEnum } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, take } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SearchIndexService } from '../services/search-index.service';
+import { SearchIndexFormComponent } from '../search-index-form/search-index-form.component';
+import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'tm-admin-search-index-create',
-  templateUrl: './search-index-create.component.html',
-  styleUrls: ['./search-index-create.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+    selector: 'tm-admin-search-index-create',
+    templateUrl: './search-index-create.component.html',
+    styleUrls: ['./search-index-create.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        SearchIndexFormComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+    ],
 })
 export class SearchIndexCreateComponent {
   private searchIndexService = inject(SearchIndexService);

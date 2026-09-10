@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { TriStateBooleanComponent } from './tri-state-boolean.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -20,7 +21,7 @@ describe('TriStateBooleanComponent', () => {
   });
 
   test('should handle change', async () => {
-    const changed = jest.fn();
+    const changed = vi.fn();
     await render(TriStateBooleanComponent, {
       imports: [MatButtonToggleModule],
       inputs: { value: true },

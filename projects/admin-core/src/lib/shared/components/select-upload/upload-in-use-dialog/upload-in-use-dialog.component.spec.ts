@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { UploadInUseDialogComponent } from './upload-in-use-dialog.component';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +10,7 @@ describe('UploadInUseDialogComponent', () => {
     const items = [
       { id: '1', name: 'Some place', url: 'somewhere' },
     ];
-    const closeFn = jest.fn();
+    const closeFn = vi.fn();
     await render(UploadInUseDialogComponent, {
       imports: [MatDialogModule],
       providers: [
