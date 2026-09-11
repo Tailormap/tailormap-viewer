@@ -54,20 +54,22 @@
       <div class="login-form__body" role="form">
         <div class="form-field">
           <label for="login_username" i18n="@@shared.login-form.username">Username</label>
-          <input id="login_username"
+          <input (keyup.enter)="login()"
                  [tmAutoFocus]="hasSSOButtons"
-                 name="username"
-                 type="text"
+                 autocomplete="username"
                  formControlName="username"
-                 (keyup.enter)="login()" />
+                 id="login_username"
+                 name="username"
+                 type="text"/>
         </div>
         <div class="form-field">
           <label for="login_password" i18n="@@shared.login-form.password">Password</label>
-          <input id="login_password"
-                 name="password"
-                 type="password"
+          <input (keyup.enter)="login()"
+                 autocomplete="current-password"
                  formControlName="password"
-                 (keyup.enter)="login()" />
+                 id="login_password"
+                 name="password"
+                 type="password"/>
         </div>
       </div>
       <div class="buttons">
