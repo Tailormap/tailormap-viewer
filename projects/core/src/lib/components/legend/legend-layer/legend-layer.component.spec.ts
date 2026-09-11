@@ -28,7 +28,7 @@ describe('LegendLayerComponent', () => {
     const img = await screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(img.getAttribute('src')).toEqual('some-url');
-    expect(img.getAttribute('alt')).toEqual('Failed to load legend for Layer title');
+    expect(img.getAttribute('alt')).toEqual('Legend for Layer title');
   });
 
   test('should render high dpi legend for GeoServer', async () => {

@@ -253,9 +253,9 @@
         <source>German</source>
         <target>Deutsch</target>
       </trans-unit>
-      <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
-        <source>Failed to load legend for</source>
-        <target>Legende konnte nicht geladen werden für</target>
+      <trans-unit id="shared.legend-image.alt-text" datatype="html">
+        <source>Legend for</source>
+        <target>Legende für</target>
       </trans-unit>
       <trans-unit id="shared.login-form.forgot-password" datatype="html">
         <source>Forgot your password?</source>

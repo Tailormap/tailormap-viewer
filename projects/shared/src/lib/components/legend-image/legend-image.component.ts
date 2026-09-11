@@ -11,11 +11,11 @@ export interface LegendImageModel {
 interface LegendImageSettingsModel {
   url: string;
   scaleHiDpiImage: boolean;
-  failedToLoadMessage: string;
+  altText: string;
   srcset: string;
 }
 
-const FAILED_TO_LOAD_MESSAGE = $localize `:@@shared.legend-image.failed-loading-legend:Failed to load legend for`;
+const LOCALISED_ALT_TEXT = $localize `:@@shared.legend-image.alt-text:Legend for`;
 
 @Component({
     selector: 'tm-legend-image',
@@ -70,7 +70,7 @@ export class LegendImageComponent {
       url: legend.url,
       srcset: '',
       scaleHiDpiImage: legend.url.includes('/uploads/legend/') && !legend.url.endsWith('.svg'),
-      failedToLoadMessage: `${FAILED_TO_LOAD_MESSAGE} ${legend.title}`,
+      altText: `${LOCALISED_ALT_TEXT} ${legend.title}`,
     };
     if (legend.legendType == 'dynamic') {
       if (legend.serverType === 'geoserver') {
