@@ -253,9 +253,9 @@
         <source>German</source>
         <target>Duits</target>
       </trans-unit>
-      <trans-unit id="shared.legend-image.failed-loading-legend" datatype="html">
-        <source>Failed to load legend for</source>
-        <target>Legenda niet geladen voor</target>
+      <trans-unit id="shared.legend-image.alt-text" datatype="html">
+        <source>Legend for</source>
+        <target>Legenda voor</target>
       </trans-unit>
       <trans-unit id="shared.login-form.forgot-password" datatype="html">
         <source>Forgot your password?</source>
