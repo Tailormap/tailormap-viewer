@@ -115,8 +115,8 @@ describe('TocComponent', () => {
   test('handles checking layer', async () => {
     const { mockDispatch } = await setup(true, '1');
     expect(await screen.findByText('Disaster map')).toBeInTheDocument();
-    expect(await screen.getByLabelText('toggle Disaster map')).toBeInTheDocument();
-    await userEvent.click(await screen.getByLabelText('toggle Disaster map'));
+    expect(await screen.getByLabelText('Disaster map')).toBeInTheDocument();
+    await userEvent.click(await screen.getByLabelText('Disaster map'));
     expect(mockDispatch).toHaveBeenCalledWith({ type: setLayerVisibility.type, visibility: [{ id: '1', checked: true }] });
   });
 
