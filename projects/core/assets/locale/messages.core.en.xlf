@@ -1188,6 +1188,9 @@
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
       </trans-unit>
+      <trans-unit id="core.toolbar.viewer-page-aria-label" datatype="html">
+        <source>Tailormap viewer page</source>
+      </trans-unit>
       <trans-unit id="core.toolbar.zoom-following-canceled" datatype="html">
         <source>Stopped following location</source>
       </trans-unit>

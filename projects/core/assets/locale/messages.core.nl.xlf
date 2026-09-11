@@ -1587,6 +1587,10 @@
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
         <target>Typ ten minste <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> tekens om te beginnen met zoeken of druk op &lt;Enter&gt;</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.viewer-page-aria-label" datatype="html">
+        <source>Tailormap viewer page</source>
+        <target>Tailormap viewer pagina</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.zoom-following-canceled" datatype="html">
         <source>Stopped following location</source>
         <target>Volgen van locatie gestopt</target>
