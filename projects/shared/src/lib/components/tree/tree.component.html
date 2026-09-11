@@ -34,7 +34,7 @@
            (dragstart)="treeDragDropServiceEnabled ? handleDragStart($event, node) : null">
         @if (!hasChild(node)) {
           @if (node.checkbox && !useRadioInputs) {
-            <mat-checkbox [aria-label]="'toggle ' + node.label"
+            <mat-checkbox [aria-label]="node.label"
                           [checked]="isChecked(node)"
                           [disabled]="readOnlyMode"
                           (click)="$event.stopPropagation()"
@@ -43,7 +43,7 @@
           } @else if (useRadioInputs) {
             <mat-radio-button [disabled]="readOnlyMode"
                               [checked]="isChecked(node)"
-                              [aria-label]="'toggle ' + node.label"
+                              [aria-label]="node.label"
                               (click)="handleRadioChange(node, $event)"
                               [value]="node"
                               class="tree-radio-button"></mat-radio-button>
@@ -59,7 +59,7 @@
           }
           @if (node.checkbox && !useRadioInputs) {
             <mat-checkbox [disabled]="readOnlyMode"
-                          [aria-label]="'toggle ' + node.label"
+                          [aria-label]="node.label"
                           (click)="$event.stopPropagation()"
                           (change)="toggleGroupChecked(node)"
                           [checked]="isChecked(node)"
