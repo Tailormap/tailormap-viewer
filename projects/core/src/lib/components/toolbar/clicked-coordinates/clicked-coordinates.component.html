@@ -38,8 +38,7 @@
 
     @if (coordinatesForm.dirty && coordinatesForm.invalid) {
       <tm-error-message
-        i18n="@@core.toolbar.coordinate-picker-invalid-input"
-        [message]="'Your input is invalid for the current application bounds'"
+        [message]="getErrorMessage()"
         [friendlyError]="true"></tm-error-message>
     }
   </div>

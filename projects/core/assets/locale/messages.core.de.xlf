@@ -1207,7 +1207,7 @@
         <target>Passwörter müssen übereinstimmen</target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors[&apos;minlength&apos;].requiredLength }}"/> </source>
         <target>Passwort kürzer als <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
@@ -1523,6 +1523,10 @@
         <source>Copy</source>
         <target>Kopieren</target>
       </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
+        <source>Your input is invalid for the current application bounds</source>
+        <target>Ihre Eingabe ist für die aktuellen Anwendung grenzen ungültig.</target>
+      </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
         <target>X-Koordinate</target>
@@ -1582,6 +1586,10 @@
       <trans-unit id="core.toolbar.type-at-least" datatype="html">
         <source>Type at least <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> characters to start searching or press &lt;Enter&gt;</source>
         <target>Geben Sie mindestens <x id="INTERPOLATION" equiv-text="{{ minLength }}"/> Zeichen ein, um mit der Suche zu beginnen oder drücken Sie &lt;Enter&gt;</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.viewer-page-aria-label" datatype="html">
+        <source>Tailormap viewer page</source>
+        <target>Tailormap Viewer Seite</target>
       </trans-unit>
       <trans-unit id="core.toolbar.zoom-following-canceled" datatype="html">
         <source>Stopped following location</source>
