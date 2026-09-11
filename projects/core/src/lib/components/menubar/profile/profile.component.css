@@ -1,0 +1,7 @@
+::ng-deep .profile-menu .logged-in-as {
+  opacity: 1;
+}
+
+::ng-deep .profile-menu .logged-in-as span {
+  color: var(--disabled-text-color);
+}

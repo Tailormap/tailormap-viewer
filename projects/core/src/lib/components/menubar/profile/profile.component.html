@@ -3,7 +3,7 @@
 @if (userDetails && !inMobilePanel() && (visible$ | async)) {
   <tm-menubar-button [menuTrigger]="userMenu"
   [icon]="(icon$ | async) ?? ''" tooltip="Profile" i18n-tooltip="@@core.profile"></tm-menubar-button>
-  <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
+  <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above" class="profile-menu">
     <button mat-menu-item (click)="showAbout()">
       <span i18n="@@core.profile.about">About</span>
     </button>
@@ -11,7 +11,7 @@
       <tm-language-toggle></tm-language-toggle>
     }
     @if (userDetails.isAuthenticated && userDetails.username) {
-      <button mat-menu-item disabled>
+      <button class="logged-in-as" mat-menu-item disabled>
         <span i18n="@@core.profile.logged-in-as">Logged in as</span>
         <span>{{' '}}{{userDetails.username}}</span>
       </button>
@@ -42,7 +42,7 @@
     <tm-language-toggle></tm-language-toggle>
   }
   @if (userDetails.isAuthenticated && userDetails.username) {
-    <button mat-menu-item disabled>
+    <button class="logged-in-as" mat-menu-item disabled>
       <span i18n="@@core.profile.logged-in-as">Logged in as</span>
       <span>{{' '}}{{userDetails.username}}</span>
     </button>
