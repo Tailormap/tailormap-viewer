@@ -15,11 +15,11 @@
   }
   @if (version$ | async; as version) {
     <div class="row">
-      <div class="label" i18n="@@shared.about.version">Version</div>
+      <h2 class="label" i18n="@@shared.about.version">Version</h2>
       <div><ng-container *ngTemplateOutlet="infoOrUnknown; context: {$implicit: version.version}"></ng-container></div>
     </div>
     <div class="row">
-      <div class="label" i18n="@@shared.about.build-date">Build date</div>
+      <h2 class="label" i18n="@@shared.about.build-date">Build date</h2>
       <div>
         @if (version.buildDate) {
           <span>{{version.buildDate | date:"mediumDate" }}</span>&nbsp;
@@ -32,7 +32,7 @@
     </div>
     @if (version.addedPackages.length > 0) {
       <div class="row">
-        <div class="label" i18n="@@shared.about.added-packages">Extensions</div>
+        <h2 class="label" i18n="@@shared.about.added-packages">Extensions</h2>
         <div>
           @for (pkg of version.addedPackages; track pkg) {
             <div>
@@ -45,6 +45,6 @@
   }
 </div>
 
-<div mat-dialog-actions align="end">
-  <button mat-button color="primary" (click)="close()" i18n="@@shared.common.close">Close</button>
+<div align="end" mat-dialog-actions>
+  <button (click)="close()" color="primary" i18n="@@shared.common.close" mat-flat-button>Close</button>
 </div>
