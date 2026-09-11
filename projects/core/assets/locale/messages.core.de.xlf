@@ -1207,8 +1207,8 @@
         <target>Passwörter müssen übereinstimmen</target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
-        <target>Passwort kürzer als <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors[&apos;minlength&apos;].requiredLength }}"/> </source>
+        <target state="new">Passwort kürzer als <x id="INTERPOLATION" equiv-text="passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength"/></target>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
@@ -1522,6 +1522,10 @@
       <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
         <source>Copy</source>
         <target>Kopieren</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
+        <source>Your input is invalid for the current application bounds</source>
+        <target>Ihre Eingabe ist für die aktuellen Anwendung grenzen ungültig.</target>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>

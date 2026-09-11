@@ -238,6 +238,10 @@ export class ClickedCoordinatesComponent implements OnInit, OnDestroy {
       __fid: 'clicked-coordinates-point-2', geometry: `POINT(${coordinates[0]} ${coordinates[1]})`, attributes: {},
     }]);
   }
+
+  public getErrorMessage(): string {
+    return $localize `:@@core.toolbar.coordinate-picker-invalid-input:Your input is invalid for the current application bounds`;
+  }
 }
 
 export function validateCoordinates(): ValidatorFn {

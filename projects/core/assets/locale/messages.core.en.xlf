@@ -903,7 +903,7 @@
         <source>Passwords need to match</source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-tooshort" datatype="html">
-        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors?.[&apos;minlength&apos;].requiredLength }}"/> </source>
+        <source>Password shorter than <x id="INTERPOLATION" equiv-text="{{ passwordResetForm.controls.newPassword.errors[&apos;minlength&apos;].requiredLength }}"/> </source>
       </trans-unit>
       <trans-unit id="core.password-reset-form.error.password-toosimple" datatype="html">
         <source>Password too short or too easily guessable</source>
@@ -1139,6 +1139,9 @@
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-copy" datatype="html">
         <source>Copy</source>
+      </trans-unit>
+      <trans-unit id="core.toolbar.coordinate-picker-invalid-input" datatype="html">
+        <source>Your input is invalid for the current application bounds</source>
       </trans-unit>
       <trans-unit id="core.toolbar.coordinate-picker-x" datatype="html">
         <source>X-coordinate</source>
