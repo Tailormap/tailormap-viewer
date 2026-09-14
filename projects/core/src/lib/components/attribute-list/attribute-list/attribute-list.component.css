@@ -30,3 +30,8 @@ tm-attribute-list-tab {
   min-width: auto;
   text-align: center;
 }
+
+:host ::ng-deep .mdc-tab--active {
+  outline: 2px solid var(--palette-primary-500) !important;
+  outline-offset: -2px;
+}
