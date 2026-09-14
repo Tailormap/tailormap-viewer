@@ -76,7 +76,7 @@
     "@emnapi/runtime": "1.11.3",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@tailormap-viewer/schematics": "^0.0.18",
-    "@tailormap-viewer/tools": "^0.0.33",
+    "@tailormap-viewer/tools": "^0.0.36",
     "@testing-library/angular": "^19.5.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/user-event": "^14.6.7",
