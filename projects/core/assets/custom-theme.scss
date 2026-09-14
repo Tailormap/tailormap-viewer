@@ -105,6 +105,11 @@ $app-theme: mat.m2-define-light-theme((
 // that you are using.
 @include mat.all-component-themes($app-theme);
 
+@include mat.datepicker-overrides((
+  calendar-date-focus-state-background-color: var(--palette-accent-500),
+  calendar-date-hover-state-background-color: var(--palette-accent-500),
+));
+
 @include mat.radio-density(-1);
 @include mat.checkbox-density(-1);
 @include mat.slide-toggle-density(-1);
@@ -183,7 +188,8 @@ $app-theme: mat.m2-define-light-theme((
 .mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
 .mat-datepicker-content .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
 .mat-datepicker-content .cdk-program-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-  color: var(--palette-primary-contrast-500);
+  outline: 2px dashed white;
+  outline-offset: -3px;
 }
 
 .mat-mdc-dialog-container .mdc-dialog__content {
