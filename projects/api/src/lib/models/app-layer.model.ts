@@ -32,7 +32,7 @@ export interface AppLayerModel {
   attribution?: string;
   description?: string;
   keywords?: string[];
-  autoRefreshInSeconds?: number;
+  autoRefreshInSeconds?: number | null;
   searchIndex?: LayerSearchIndexModel | null;
   webMercatorAvailable?: boolean;
   tileset3dStyle?: Tileset3dStyle;
