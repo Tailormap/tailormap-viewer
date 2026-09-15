@@ -67,7 +67,6 @@ export const getAppLayerModel = (overrides?: Partial<AppLayerModel>): AppLayerMo
   title: 'Test',
   layerName: 'test',
   opacity: 100,
-  searchIndex: null,
   legendType: 'dynamic',
   ...overrides,
 });
