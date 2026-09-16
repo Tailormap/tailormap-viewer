@@ -33,7 +33,7 @@ export interface AppLayerModel {
   description?: string;
   keywords?: string[];
   autoRefreshInSeconds?: number | null;
-  searchIndex?: LayerSearchIndexModel | null;
+  searchIndex: LayerSearchIndexModel | null;
   webMercatorAvailable?: boolean;
   tileset3dStyle?: Tileset3dStyle;
   hiddenFunctionality?: HiddenLayerFunctionality[] | null;
