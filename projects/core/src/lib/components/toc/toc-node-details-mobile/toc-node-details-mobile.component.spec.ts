@@ -19,6 +19,7 @@ const setup = async (withLayer: boolean) => {
       hasAttributes: false,
       editable: false,
       opacity: 0,
+      searchIndex: null,
       description: 'layer description',
     },
   };

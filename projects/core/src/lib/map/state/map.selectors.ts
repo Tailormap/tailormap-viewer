@@ -310,7 +310,7 @@ export const selectFullLayerDetails = (layerId: string) => createSelector(
 
 export const selectSearchableLayers = createSelector(
   selectOrderedVisibleLayersWithServices,
-  layers => layers.filter(l => !!l.searchIndex),
+  layers => layers.filter(l => l.searchIndex !== null),
 );
 
 export const select3DLayers = createSelector(

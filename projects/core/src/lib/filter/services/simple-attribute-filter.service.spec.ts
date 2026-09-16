@@ -53,6 +53,7 @@ const mockLayers: AppLayerModel[] = [
     hasAttributes: true,
     editable: false,
     opacity: 1,
+    searchIndex: null,
   },
   {
     id: '2',
@@ -63,6 +64,7 @@ const mockLayers: AppLayerModel[] = [
     hasAttributes: true,
     editable: false,
     opacity: 1,
+    searchIndex: null,
   },
   {
     id: '3',
@@ -73,6 +75,7 @@ const mockLayers: AppLayerModel[] = [
     hasAttributes: true,
     editable: false,
     opacity: 1,
+    searchIndex: null,
   },
 ];
 
