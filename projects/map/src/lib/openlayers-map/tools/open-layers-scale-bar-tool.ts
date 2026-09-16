@@ -1,6 +1,6 @@
 import { ScaleBarToolModel, ScaleBarToolConfigModel } from '../../models';
 import { Map as OlMap } from 'ol';
-import { ScaleLine } from 'ol/control';
+import { ScaleLine } from 'ol/control.js';
 
 export class OpenLayersScaleBarTool implements ScaleBarToolModel {
 

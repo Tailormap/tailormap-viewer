@@ -1,7 +1,7 @@
 import { Feature } from 'ol';
 import { MapSizeHelper } from '../map-size.helper';
-import { Polygon, LineString, Point, Circle } from 'ol/geom';
-import { Fill, RegularShape, Stroke, Style, Text } from 'ol/style';
+import { Polygon, LineString, Point, Circle } from 'ol/geom.js';
+import { Fill, RegularShape, Stroke, Style, Text } from 'ol/style.js';
 import { LabelStyleHelper } from './label-style.helper';
 
 export class MeasureStyleHelper {

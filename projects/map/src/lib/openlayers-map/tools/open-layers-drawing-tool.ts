@@ -1,23 +1,23 @@
 import { merge, Subject } from 'rxjs';
 import { DrawingToolConfigModel, DrawingType } from '../../models/tools/drawing-tool-config.model';
 import { Map as OlMap } from 'ol';
-import { Draw } from 'ol/interaction';
-import { DrawEvent, GeometryFunction } from 'ol/interaction/Draw';
+import { Draw } from 'ol/interaction.js';
+import { DrawEvent, GeometryFunction } from 'ol/interaction/Draw.js';
 import { MapStyleHelper } from '../../helpers/map-style.helper';
 import { DrawingEnableToolArguments, DrawingToolEvent, DrawingToolModel } from '../../models/tools/drawing-tool.model';
 import { NgZone } from '@angular/core';
-import { EventsKey } from 'ol/events';
-import { unByKey } from 'ol/Observable';
-import { Geometry } from 'ol/geom';
-import { Type as GeometryType } from 'ol/geom/Geometry';
-import { default as BaseEvent } from 'ol/events/Event';
-import { never } from 'ol/events/condition';
-import { getCenter } from 'ol/extent';
+import { EventsKey } from 'ol/events.js';
+import { unByKey } from 'ol/Observable.js';
+import { Geometry } from 'ol/geom.js';
+import { Type as GeometryType } from 'ol/geom/Geometry.js';
+import { default as BaseEvent } from 'ol/events/Event.js';
+import { never } from 'ol/events/condition.js';
+import { getCenter } from 'ol/extent.js';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { GeometryTypeHelper } from '../../helpers/geometry-type.helper';
 import { DrawingHelper } from '../../helpers/drawing.helper';
 import { MapStyleModel, OlMapStyleType } from '../../models';
-import RenderFeature from 'ol/render/Feature';
+import RenderFeature from 'ol/render/Feature.js';
 
 export class OpenLayersDrawingTool implements DrawingToolModel {
 

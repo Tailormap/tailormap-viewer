@@ -1,8 +1,8 @@
 import { OpenlayersExtent } from '../models/extent.type';
-import { Geometry } from 'ol/geom';
-import { fromExtent } from 'ol/geom/Polygon';
-import { getHeight, getWidth, isEmpty, getCenter } from 'ol/extent';
-import { Coordinate } from 'ol/coordinate';
+import { Geometry } from 'ol/geom.js';
+import { fromExtent } from 'ol/geom/Polygon.js';
+import { getHeight, getWidth, isEmpty, getCenter } from 'ol/extent.js';
+import { Coordinate } from 'ol/coordinate.js';
 
 export class ExtentHelper {
   public static shrink(extent: OpenlayersExtent, size: number) {

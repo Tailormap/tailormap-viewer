@@ -1,4 +1,4 @@
-import { Geometry } from 'ol/geom';
+import { Geometry } from 'ol/geom.js';
 import { Feature } from 'ol';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 

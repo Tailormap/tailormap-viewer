@@ -7,7 +7,7 @@ import {
   MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
-import { Layer, Vector as VectorLayer } from 'ol/layer';
+import { Layer, Vector as VectorLayer } from 'ol/layer.js';
 import { MapStyleHelper } from '../helpers/map-style.helper';
 import { MapTooltipModel } from '../models/map-tooltip.model';
 import { OpenLayersMapTooltip } from '../openlayers-map/open-layers-map-tooltip';
@@ -16,8 +16,8 @@ import { FeatureHelper } from '../helpers/feature.helper';
 import { BoundsModel, ErrorResponseModel, FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { Source } from 'ol/source';
-import { default as LayerRenderer } from 'ol/renderer/Layer';
+import { Source } from 'ol/source.js';
+import { default as LayerRenderer } from 'ol/renderer/Layer.js';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { ToolsStatusModel } from '../models/tools-status.model';
 import { withLatestFrom } from 'rxjs/operators';

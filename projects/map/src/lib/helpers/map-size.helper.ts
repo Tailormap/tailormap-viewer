@@ -1,9 +1,9 @@
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { Geometry } from 'ol/geom';
+import { Geometry } from 'ol/geom.js';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { getLength as getSphereLength, getArea as getSphereArea, offset as sphereOffset } from 'ol/sphere';
+import { getLength as getSphereLength, getArea as getSphereArea, offset as sphereOffset } from 'ol/sphere.js';
 import { ProjectionsHelper } from './projections.helper';
-import { fromLonLat, toLonLat } from 'ol/proj';
+import { fromLonLat, toLonLat } from 'ol/proj.js';
 
 export class MapSizeHelper {
 

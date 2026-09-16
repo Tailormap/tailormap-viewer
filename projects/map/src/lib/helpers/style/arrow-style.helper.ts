@@ -1,9 +1,9 @@
 import { StrokeStyleModel } from '../../models';
 import { Feature } from 'ol';
-import { Geometry, Point } from 'ol/geom';
-import { Fill, RegularShape, Stroke, Style } from 'ol/style';
+import { Geometry, Point } from 'ol/geom.js';
+import { Fill, RegularShape, Stroke, Style } from 'ol/style.js';
 import { GeometryTypeHelper } from '../geometry-type.helper';
-import { forEach as forEachSegments } from 'ol/geom/flat/segments';
+import { forEach as forEachSegments } from 'ol/geom/flat/segments.js';
 
 export class ArrowStyleHelper {
 

@@ -1,5 +1,5 @@
-import { circular } from 'ol/geom/Polygon';
-import { getTransform, get as getProjection } from 'ol/proj';
+import { circular } from 'ol/geom/Polygon.js';
+import { getTransform, get as getProjection } from 'ol/proj.js';
 import { FeatureHelper } from './feature.helper';
 import { Proj4Helper } from './proj4.helper';
 

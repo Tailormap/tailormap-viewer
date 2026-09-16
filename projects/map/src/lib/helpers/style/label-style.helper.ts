@@ -1,8 +1,8 @@
 import { MapStyleModel } from '../../models';
 import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
+import { Geometry } from 'ol/geom.js';
 import { UnitsHelper } from './units.helper';
-import { Fill, Stroke, Style, Text } from 'ol/style';
+import { Fill, Stroke, Style, Text } from 'ol/style.js';
 import { GeometryTypeHelper } from '../geometry-type.helper';
 import { SelectionStyleHelper } from './selection-style.helper';
 import { MapSizeHelper } from '../map-size.helper';

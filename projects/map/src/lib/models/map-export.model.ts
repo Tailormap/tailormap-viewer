@@ -1,6 +1,6 @@
 import { OpenlayersExtent } from './extent.type';
 import { LayerModel } from './layer.model';
-import { Coordinate } from 'ol/coordinate';
+import { Coordinate } from 'ol/coordinate.js';
 import { OlLayerFilter } from '../map-service/map.service';
 
 export interface MapExportOptions {

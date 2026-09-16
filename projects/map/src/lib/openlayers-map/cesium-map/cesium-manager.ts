@@ -8,7 +8,7 @@ import { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, EllipsoidTer
 import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 import { TerrainLayerModel } from '../../models/terrain-layer.model';
 import { Tiles3dLayerModel } from '../../models/tiles3d-layer.model';
 

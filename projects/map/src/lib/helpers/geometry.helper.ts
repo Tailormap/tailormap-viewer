@@ -1,8 +1,8 @@
-import { Circle } from 'ol/geom';
-import { fromCircle } from 'ol/geom/Polygon';
-import { WKT } from 'ol/format';
-import { WKTReader, WKTWriter } from 'jsts/org/locationtech/jts/io';
-import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
+import { Circle } from 'ol/geom.js';
+import { fromCircle } from 'ol/geom/Polygon.js';
+import { WKT } from 'ol/format.js';
+import { WKTReader, WKTWriter } from 'jsts/org/locationtech/jts/io.js';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer.js';
 
 export class GeometryHelper {
 

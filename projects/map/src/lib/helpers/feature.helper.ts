@@ -1,16 +1,16 @@
 import { FeatureModelType } from '../models/feature-model.type';
 import { Feature } from 'ol';
-import { GeoJSON, WKT } from 'ol/format';
+import { GeoJSON, WKT } from 'ol/format.js';
 import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
-import { Circle, Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom';
-import { fromCircle, fromExtent } from 'ol/geom/Polygon';
+import { Circle, Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon } from 'ol/geom.js';
+import { fromCircle, fromExtent } from 'ol/geom/Polygon.js';
 import { MapSizeHelper } from '../helpers/map-size.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 import { Feature as GeoJSONFeature } from 'geojson';
 import { nanoid } from 'nanoid';
-import { WriteOptions } from 'ol/format/Feature';
+import { WriteOptions } from 'ol/format/Feature.js';
 import { ProjectionsHelper } from './projections.helper';
 
 export class FeatureHelper {

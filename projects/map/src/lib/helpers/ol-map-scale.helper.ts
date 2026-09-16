@@ -1,5 +1,5 @@
 import { View } from 'ol';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 
 export class OlMapScaleHelper {
 
