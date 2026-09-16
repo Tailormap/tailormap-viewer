@@ -1,11 +1,11 @@
 import { MapStyleModel, StrokeStyleModel } from '../../models';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
-import { Stroke, Style } from 'ol/style';
+import { Stroke, Style } from 'ol/style.js';
 import { Feature } from 'ol';
-import { Geometry, LineString } from 'ol/geom';
+import { Geometry, LineString } from 'ol/geom.js';
 import { ArrowStyleHelper } from './arrow-style.helper';
-import { FeatureLike } from 'ol/Feature';
-import { Coordinate } from 'ol/coordinate';
+import { FeatureLike } from 'ol/Feature.js';
+import { Coordinate } from 'ol/coordinate.js';
 
 export class StrokeStyleHelper {
 

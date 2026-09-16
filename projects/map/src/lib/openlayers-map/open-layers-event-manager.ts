@@ -1,13 +1,13 @@
 import { Map as OlMap } from 'ol';
 import { NgZone } from '@angular/core';
 import { Observable, Subject, takeUntil, filter, skipUntil } from 'rxjs';
-import { default as MapEvent } from 'ol/MapEvent';
-import { default as BaseEvent } from 'ol/events/Event';
-import { EventsKey } from 'ol/events';
-import { unByKey } from 'ol/Observable';
+import { default as MapEvent } from 'ol/MapEvent.js';
+import { default as BaseEvent } from 'ol/events/Event.js';
+import { EventsKey } from 'ol/events.js';
+import { unByKey } from 'ol/Observable.js';
 import { MapBrowserEvent } from 'ol';
-import { ObjectEvent } from 'ol/Object';
-import { default as RenderEvent } from 'ol/render/Event';
+import { ObjectEvent } from 'ol/Object.js';
+import { default as RenderEvent } from 'ol/render/Event.js';
 
 type OlEventType = 'change' | 'error' | 'click' | 'dblclick' | 'pointermove' | 'singleclick' | 'pointerdrag'
   | 'movestart' | 'moveend' | 'propertychange' | 'change:layergroup' | 'change:size' | 'change:target' | 'change:view'

@@ -1,7 +1,7 @@
-import { createBox, createRegularPolygon, SketchCoordType } from 'ol/interaction/Draw';
-import { Circle, Polygon, SimpleGeometry } from 'ol/geom';
-import { fromCircle } from 'ol/geom/Polygon';
-import { Coordinate } from 'ol/coordinate';
+import { createBox, createRegularPolygon, SketchCoordType } from 'ol/interaction/Draw.js';
+import { Circle, Polygon, SimpleGeometry } from 'ol/geom.js';
+import { fromCircle } from 'ol/geom/Polygon.js';
+import { Coordinate } from 'ol/coordinate.js';
 
 export class DrawingHelper {
 

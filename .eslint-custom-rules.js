@@ -28,7 +28,10 @@ function getInvalidImportsRule(projectName, allowOpenLayers, allowAdmin) {
       "message": "Please wrap OpenLayers functionality in map project."
     });
   } else {
-    const exceptions = ["!ol/TileState", "!ol/tilegrid", "!ol/render", "!ol/events", "!ol/renderer", "!ol/MapEvent"];
+    const exceptions = [
+      "!ol/TileState", "!ol/tilegrid", "!ol/render", "!ol/events", "!ol/renderer", "!ol/MapEvent",
+      "!ol/TileState.js", "!ol/tilegrid.js", "!ol/render.js", "!ol/events.js", "!ol/renderer.js", "!ol/MapEvent.js",
+    ];
     rule.patterns.push({
       group: ["ol/*", ...exceptions],
       importNames: ["default"],

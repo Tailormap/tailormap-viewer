@@ -1,16 +1,16 @@
 import { Subject } from 'rxjs';
 import { Map as OlMap } from 'ol';
-import { EventsKey } from 'ol/events';
-import { unByKey } from 'ol/Observable';
+import { EventsKey } from 'ol/events.js';
+import { unByKey } from 'ol/Observable.js';
 import { FeatureHelper } from '../../helpers/feature.helper';
 import { ModifyEnableToolArguments, ModifyToolModel } from '../../models/tools/modify-tool.model';
 import { ModifyToolConfigModel } from '../../models/tools/modify-tool-config.model';
-import { Modify, Translate } from 'ol/interaction';
-import { TranslateEvent } from 'ol/interaction/Translate';
-import { ModifyEvent } from 'ol/interaction/Modify';
+import { Modify, Translate } from 'ol/interaction.js';
+import { TranslateEvent } from 'ol/interaction/Translate.js';
+import { ModifyEvent } from 'ol/interaction/Modify.js';
 import { NgZone } from "@angular/core";
-import { Vector as VectorLayer } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
+import { Vector as VectorLayer } from 'ol/layer.js';
+import { Vector as VectorSource } from 'ol/source.js';
 import { MapStyleHelper } from "../../helpers/map-style.helper";
 import { MapStyleModel } from '../../models';
 

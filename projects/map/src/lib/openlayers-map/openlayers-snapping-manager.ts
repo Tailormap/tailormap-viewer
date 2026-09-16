@@ -1,14 +1,14 @@
 import { Feature, Map as OlMap } from 'ol';
-import { Snap } from 'ol/interaction';
+import { Snap } from 'ol/interaction.js';
 import { LayerTypesEnum, OlMapStyleType } from '../models';
-import { Vector as VectorLayer, Vector } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
+import { Vector as VectorLayer, Vector } from 'ol/layer.js';
+import { Vector as VectorSource } from 'ol/source.js';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import { FeatureModelType } from '../models/feature-model.type';
 import { BehaviorSubject, combineLatest, filter, take } from 'rxjs';
 import { FeatureHelper } from '../helpers/feature.helper';
-import { Fill, RegularShape, Stroke, Style } from 'ol/style';
-import { Point } from 'ol/geom';
+import { Fill, RegularShape, Stroke, Style } from 'ol/style.js';
+import { Point } from 'ol/geom.js';
 
 export class OpenLayersSnappingManager {
 

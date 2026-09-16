@@ -1,6 +1,6 @@
-import { Layer as BaseLayer } from 'ol/layer';
-import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
-import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source';
+import { Layer as BaseLayer } from 'ol/layer.js';
+import { Vector as VectorLayer, Image as ImageLayer, Tile as TileLayer } from 'ol/layer.js';
+import { ImageWMS, WMTS, XYZ, TileWMS } from 'ol/source.js';
 
 export const isOpenLayersVectorLayer = (layer: BaseLayer): layer is VectorLayer => {
   return layer instanceof VectorLayer;

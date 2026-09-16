@@ -1,4 +1,4 @@
-import { register } from 'ol/proj/proj4';
+import { register } from 'ol/proj/proj4.js';
 import { Proj4Helper } from './proj4.helper';
 
 export class ProjectionsHelper {

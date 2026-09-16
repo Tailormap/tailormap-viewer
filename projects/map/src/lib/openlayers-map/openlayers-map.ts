@@ -1,8 +1,8 @@
 import { Map as OlMap } from 'ol';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 import { View } from 'ol';
 import { NgZone } from '@angular/core';
-import { defaults as defaultInteractions, DragPan, Interaction, MouseWheelZoom } from 'ol/interaction';
+import { defaults as defaultInteractions, DragPan, Interaction, MouseWheelZoom } from 'ol/interaction.js';
 import {
   LayerManagerModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
 } from '../models';
@@ -12,20 +12,20 @@ import { OpenLayersLayerManager } from './open-layers-layer-manager';
 import {
   BehaviorSubject, combineLatest, concatMap, filter, forkJoin, map, merge, Observable, of, race, switchMap, take, timer,
 } from 'rxjs';
-import { Size } from 'ol/size';
+import { Size } from 'ol/size.js';
 import { ToolManagerModel } from '../models/tool-manager.model';
 import { OpenLayersToolManager } from './open-layers-tool-manager';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
-import { buffer, Extent, extend, getCenter } from 'ol/extent';
-import { Layer as BaseLayer } from 'ol/layer';
+import { Geometry } from 'ol/geom.js';
+import { buffer, Extent, extend, getCenter } from 'ol/extent.js';
+import { Layer as BaseLayer } from 'ol/layer.js';
 import { OpenLayersWmsGetFeatureInfoHelper } from './helpers/open-layers-wms-get-feature-info.helper';
 import { HttpClient, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
 import { OpenLayersMapImageExporter } from './openlayers-map-image-exporter';
-import { Attribution } from 'ol/control';
-import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition';
+import { Attribution } from 'ol/control.js';
+import { mouseOnly, platformModifierKeyOnly } from 'ol/events/condition.js';
 import { CesiumManager } from './cesium-map/cesium-manager';
 import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';

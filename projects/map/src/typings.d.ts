@@ -1,4 +1,4 @@
-declare module 'jsts/org/locationtech/jts/io' {
+declare module 'jsts/org/locationtech/jts/io.js' {
   export class WKTReader {
     constructor();
     public read(geometry: any): any;
@@ -16,13 +16,13 @@ declare module 'jsts/org/locationtech/jts/io' {
   }
 }
 
-declare module 'jsts/org/locationtech/jts/operation/buffer' {
+declare module 'jsts/org/locationtech/jts/operation/buffer.js' {
   export class BufferOp {
     public static bufferOp(geom: any, distance: number): any;
   }
 }
 
-declare module 'jsts/org/locationtech/jts/geom' {
+declare module 'jsts/org/locationtech/jts/geom.js' {
   export class Geometry {
     constructor(geom?: any): any;
     public difference(geom: any): any;
@@ -42,15 +42,15 @@ type OlExtTransformEventKey = 'change' | 'select' | 'rotatestart' | 'rotating' |
 'scalestart' | 'scaling' | 'scaleend';
 
 // Maybe we can also use https://github.com/Siedlerchr/types-ol-ext
-declare module 'ol-ext/interaction/Transform' {
-import { Pointer } from 'ol/interaction';
+declare module 'ol-ext/interaction/Transform.js' {
+import { Pointer } from 'ol/interaction.js';
 import { Map as OlMap } from 'ol';
 import { Feature } from 'ol';
-import { Coordinate } from 'ol/coordinate';
+import { Coordinate } from 'ol/coordinate.js';
 import { Collection } from 'ol';
-import { Style } from 'ol/style/Style';
-import { Layer } from 'ol/layer';
-import { ConditionType } from 'ol/events/condition';
+import { Style } from 'ol/style/Style.js';
+import { Layer } from 'ol/layer.js';
+import { ConditionType } from 'ol/events/condition.js';
 
 // eslint-disable-next-line import/no-default-export
 export default class OlExtTransform extends Pointer {

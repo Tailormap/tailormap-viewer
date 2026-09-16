@@ -1,8 +1,8 @@
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
-import { Snap } from 'ol/interaction';
+import { Snap } from 'ol/interaction.js';
 import { LayerTypesEnum } from '../models';
-import { Style } from 'ol/style';
+import { Style } from 'ol/style.js';
 import { FeatureHelper } from '../helpers/feature.helper';
 import { firstValueFrom } from 'rxjs';
 import type { Mock } from 'vitest';

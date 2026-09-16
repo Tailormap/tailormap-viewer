@@ -3,11 +3,11 @@ import { FeatureModel, FeatureModelAttributes } from '@tailormap-viewer/api';
 import { Feature } from 'ol';
 import {
   Geometry, Circle as CircleGeometry, LinearRing, LineString, MultiLineString, MultiPoint, MultiPolygon, Polygon, Point,
-} from 'ol/geom';
-import { default as RenderFeature } from 'ol/render/Feature';
+} from 'ol/geom.js';
+import { default as RenderFeature } from 'ol/render/Feature.js';
 import { FeatureHelper } from './feature.helper';
 import { ColorHelper } from '@tailormap-viewer/shared';
-import { Style, Fill, Stroke, Circle } from 'ol/style';
+import { Style, Fill, Stroke, Circle } from 'ol/style.js';
 import { FillStyleHelper } from './style/fill-style.helper';
 import { ArrowStyleHelper } from './style/arrow-style.helper';
 import { UnitsHelper } from './style/units.helper';
@@ -15,9 +15,9 @@ import { IconStyleHelper } from './style/icon-style.helper';
 import { SelectionStyleHelper } from './style/selection-style.helper';
 import { LabelStyleHelper } from './style/label-style.helper';
 import { MeasureStyleHelper } from './style/measure-style.helper';
-import { OL3Parser } from 'jsts/org/locationtech/jts/io';
+import { OL3Parser } from 'jsts/org/locationtech/jts/io.js';
 import { GeometryTypeHelper } from './geometry-type.helper';
-import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer.js';
 import { ImageStyleHelper } from './style/image-style.helper';
 import { StrokeStyleHelper } from './style/stroke-style.helper';
 

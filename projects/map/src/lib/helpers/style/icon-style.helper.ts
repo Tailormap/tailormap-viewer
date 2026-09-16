@@ -1,5 +1,5 @@
-import { Options as RegularShapeOptions } from 'ol/style/RegularShape';
-import { Fill, Icon, RegularShape, Stroke, Style } from 'ol/style';
+import { Options as RegularShapeOptions } from 'ol/style/RegularShape.js';
+import { Fill, Icon, RegularShape, Stroke, Style } from 'ol/style.js';
 import { MapStyleModel, MapStylePointType } from '../../models';
 import { ColorHelper } from '@tailormap-viewer/shared';
 import { UnitsHelper } from './units.helper';

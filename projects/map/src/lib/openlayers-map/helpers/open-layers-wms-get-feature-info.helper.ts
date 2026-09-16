@@ -1,12 +1,12 @@
 import { OpenLayersLayerManager } from '../open-layers-layer-manager';
 import { isOpenLayersWMSLayer } from '../../helpers/ol-layer-types.helper';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { GeoJSON, WFS } from 'ol/format';
+import { GeoJSON, WFS } from 'ol/format.js';
 import { Feature, FeatureCollection, GeoJsonProperties } from 'geojson';
 import { catchError, map, Observable, of } from 'rxjs';
 import { ErrorResponseModel, FeatureModel } from '@tailormap-viewer/api';
-import { WKT } from 'ol/format';
-import { Geometry } from 'ol/geom';
+import { WKT } from 'ol/format.js';
+import { Geometry } from 'ol/geom.js';
 
 export class OpenLayersWmsGetFeatureInfoHelper {
 

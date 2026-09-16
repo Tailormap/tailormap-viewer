@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest';
-import { Circle, Point } from 'ol/geom';
+import { Circle, Point } from 'ol/geom.js';
 import { FeatureHelper } from './feature.helper';
 import { MapUnitEnum } from '../models/map-unit.enum';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 import { ProjectionsHelper } from './projections.helper';
 import { Feature } from 'geojson';
 

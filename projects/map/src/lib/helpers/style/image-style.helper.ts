@@ -1,4 +1,4 @@
-import { Icon, Style } from 'ol/style';
+import { Icon, Style } from 'ol/style.js';
 import { MapStyleModel } from '../../models/map-style.model';
 
 export class ImageStyleHelper {

@@ -1,7 +1,7 @@
 import { Map as OlMap } from 'ol';
-import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer';
-import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source';
-import { get as getProjection, Projection } from 'ol/proj';
+import { Group as LayerGroup, Layer as BaseLayer, Vector as VectorLayer } from 'ol/layer.js';
+import { ImageWMS, TileWMS, Vector as VectorSource, WMTS, XYZ } from 'ol/source.js';
+import { get as getProjection, Projection } from 'ol/proj.js';
 import { LayerManagerModel, LayerTypes, WMSLayerModel } from '../models';
 import { OlLayerHelper, WmsServiceParamsModel } from '../helpers/ol-layer.helper';
 import { LayerModel } from '../models/layer.model';

@@ -1,4 +1,4 @@
-import { Circle, Geometry, LineString, Point, Polygon } from 'ol/geom';
+import { Circle, Geometry, LineString, Point, Polygon } from 'ol/geom.js';
 
 export class GeometryTypeHelper {
 

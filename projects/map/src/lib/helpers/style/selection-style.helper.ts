@@ -1,7 +1,7 @@
 import { Feature } from 'ol';
-import { Geometry, Polygon } from 'ol/geom';
-import { Stroke, Style } from 'ol/style';
-import { buffer as bufferExtent } from 'ol/extent';
+import { Geometry, Polygon } from 'ol/geom.js';
+import { Stroke, Style } from 'ol/style.js';
+import { buffer as bufferExtent } from 'ol/extent.js';
 import { MapStyleModel } from '../../models/map-style.model';
 import { ImageStyleHelper } from './image-style.helper';
 

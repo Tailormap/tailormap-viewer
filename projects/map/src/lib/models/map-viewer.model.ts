@@ -3,7 +3,7 @@ import { LayerManagerModel } from './layer-manager.model';
 import { MapViewerOptionsModel } from './map-viewer-options.model';
 import { Observable } from 'rxjs';
 import { Map as OlMap } from 'ol';
-import { Projection } from 'ol/proj';
+import { Projection } from 'ol/proj.js';
 
 export interface MapViewerModel {
   initMap(options: MapViewerOptionsModel): void;
