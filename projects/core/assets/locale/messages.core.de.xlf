@@ -242,6 +242,10 @@
         <source>Rectangle</source>
         <target>Rechteck</target>
       </trans-unit>
+      <trans-unit id="core.common.required" datatype="html">
+        <source>(required)</source>
+        <target>(erforderlich)</target>
+      </trans-unit>
       <trans-unit id="core.common.retry" datatype="html">
         <source>Retry</source>
         <target>Wiederholen</target>
@@ -1287,8 +1291,8 @@
         <target>Karte PDF herunterladen</target>
       </trans-unit>
       <trans-unit id="core.print.dpi" datatype="html">
-        <source>DPI</source>
-        <target>DPI</target>
+        <source>DPI </source>
+        <target>DPI </target>
       </trans-unit>
       <trans-unit id="core.print.dpi-range" datatype="html">
         <source>Range: 90 - 600</source>
@@ -1303,8 +1307,8 @@
         <target>Fußzeile</target>
       </trans-unit>
       <trans-unit id="core.print.height" datatype="html">
-        <source>Height</source>
-        <target>Höhe</target>
+        <source>Height </source>
+        <target>Höhe </target>
       </trans-unit>
       <trans-unit id="core.print.height-range" datatype="html">
         <source>Range: 50 - 600</source>
@@ -1355,8 +1359,8 @@
         <target>Titel</target>
       </trans-unit>
       <trans-unit id="core.print.width" datatype="html">
-        <source>Width</source>
-        <target>Breite</target>
+        <source>Width </source>
+        <target>Breite </target>
       </trans-unit>
       <trans-unit id="core.print.width-height-ratio" datatype="html">
         <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>

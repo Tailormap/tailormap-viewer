@@ -179,6 +179,9 @@
       <trans-unit id="core.common.rectangle" datatype="html">
         <source>Rectangle</source>
       </trans-unit>
+      <trans-unit id="core.common.required" datatype="html">
+        <source>(required)</source>
+      </trans-unit>
       <trans-unit id="core.common.retry" datatype="html">
         <source>Retry</source>
       </trans-unit>
@@ -963,7 +966,7 @@
         <source>Download map PDF</source>
       </trans-unit>
       <trans-unit id="core.print.dpi" datatype="html">
-        <source>DPI</source>
+        <source>DPI </source>
       </trans-unit>
       <trans-unit id="core.print.dpi-range" datatype="html">
         <source>Range: 90 - 600</source>
@@ -975,7 +978,7 @@
         <source>Footer</source>
       </trans-unit>
       <trans-unit id="core.print.height" datatype="html">
-        <source>Height</source>
+        <source>Height </source>
       </trans-unit>
       <trans-unit id="core.print.height-range" datatype="html">
         <source>Range: 50 - 600</source>
@@ -1014,7 +1017,7 @@
         <source>Title</source>
       </trans-unit>
       <trans-unit id="core.print.width" datatype="html">
-        <source>Width</source>
+        <source>Width </source>
       </trans-unit>
       <trans-unit id="core.print.width-height-ratio" datatype="html">
         <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
