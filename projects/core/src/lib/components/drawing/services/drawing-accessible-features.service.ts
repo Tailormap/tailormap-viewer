@@ -82,9 +82,9 @@ export class DrawingAccessibleFeaturesService {
       }
     });
 
-    proxyElement.addEventListener('blur', () => {
-      this.store$.dispatch(setSelectedFeature({ fid: null }));
-    });
+    // proxyElement.addEventListener('blur', () => {
+    //   this.store$.dispatch(setSelectedFeature({ fid: null }));
+    // });
 
     return proxyElement;
   }

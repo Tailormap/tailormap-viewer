@@ -256,13 +256,6 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private onKeyboardControlKeyDown(ev: KeyboardEvent) {
-    if (ev.key === 'Escape') {
-      ev.preventDefault();
-      ev.stopPropagation();
-      this.disable();
-      return;
-    }
-
     const features = this.source?.getFeatures();
     if (!features || features.length === 0) {
       return;
