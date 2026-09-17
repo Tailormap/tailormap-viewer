@@ -38,8 +38,8 @@ export class LoadGeometriesService {
   ): Observable<LoadedFeaturesResponse> {
     return this.store$.select(selectViewerId)
       .pipe(
-        take(1),
         filter(TypesHelper.isDefined),
+        take(1),
         switchMap(applicationId => {
           return this.dataSourceManagerService.getFeatures$({
             layerId,

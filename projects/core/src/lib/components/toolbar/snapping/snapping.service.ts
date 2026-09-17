@@ -8,8 +8,8 @@ import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
-import { DataSourceManagerService } from "../../../services";
+import { SnackBarMessageComponent, TypesHelper } from '@tailormap-viewer/shared';
+import { DataSourceManagerService } from '../../../services';
 import { DataSourceLayerModel } from '../../../models';
 
 
@@ -38,7 +38,6 @@ export class SnappingService {
     this.configuredLayers.asObservable(),
     this.availableLayers$,
   ]).pipe(map(([ configured, available ]) => {
-    console.log('Available layers', configured, available);
     if (!configured || configured.length === 0) {
       return available;
     }
@@ -50,8 +49,11 @@ export class SnappingService {
   private snappingLayers = new BehaviorSubject<DataSourceLayerModel[]>([]);
   private snappingFeatures = new BehaviorSubject<SnappingFeature[]>([]);
   private geometriesLoaded: Map<string, string> = new Map();
-  private isLoadingGeometries = new BehaviorSubject(false);
-  public isLoadingGeometries$ = this.isLoadingGeometries.asObservable();
+  private pendingGeometriesLoads = new BehaviorSubject(0);
+  public isLoadingGeometries$ = this.pendingGeometriesLoads.asObservable().pipe(
+    map(count => count > 0),
+    distinctUntilChanged(),
+  );
 
   private snappingActive = new BehaviorSubject(false);
   public snappingActive$ = this.snappingActive.asObservable();
@@ -99,7 +101,9 @@ export class SnappingService {
     ])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        filter(([ _snappingLayers, _mapExtent, _allFilters, _viewerId, snappingActive ]) => snappingActive),
+        filter(([ _snappingLayers, _mapExtent, _allFilters, viewerId, snappingActive ]) => {
+          return snappingActive && TypesHelper.isDefined(viewerId);
+        }),
         debounceTime(500),
         concatMap(([ snappingLayers, mapExtent, allFilters, viewerId ]) => {
           if (!viewerId) {
@@ -124,8 +128,11 @@ export class SnappingService {
           const layerFilter = allFilters.get(layer.id);
           const cqlFilter = FeaturesFilterHelper.getFilter(layerFilter) || '';
           const detail = describeLayersResponses.find(r => r?.id === layer.id);
+          if (!detail?.geometryAttribute) {
+            return;
+          }
           const extentFilter = mapExtent !== null
-            ? `BBOX(${detail?.geometryAttribute}, ${mapExtent.join(',')})`
+            ? `BBOX(${detail.geometryAttribute}, ${mapExtent.join(',')})`
             : '';
           const filters = [];
           if (cqlFilter) {
@@ -136,7 +143,15 @@ export class SnappingService {
           }
           const combinedFilter = filters.join(' AND ');
           const updateFilter = FeaturesFilterHelper.updateFilter(combinedFilter, layerFilter);
-          const loadedKey = `${layer.id}-${combinedFilter}`;
+          let loadedKey = `${layer.id}-${combinedFilter}`;
+          if (updateFilter.size > 1) {
+            Array.from(updateFilter.entries()).forEach(([ key, value ]) => {
+              if (typeof key === 'symbol') {
+                return;
+              }
+              loadedKey += `-${key}:${value}`;
+            });
+          }
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(layer.id, loadedKey);
             this.loadGeometries(layer, updateFilter);
@@ -185,11 +200,11 @@ export class SnappingService {
   }
 
   private loadGeometries(layer: DataSourceLayerModel, filters: LayerFeaturesFilters | null): void {
-    this.isLoadingGeometries.next(true);
+    this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value + 1);
     this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, filters)
       .pipe(take(1))
       .subscribe(response => {
-        this.isLoadingGeometries.next(false);
+        this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value - 1);
         if (response.exceededMaxFeatures) {
           const maxFeatures = SnappingService.MAX_SNAPPING_FEATURES;
           const layerTitle = layer.title;
