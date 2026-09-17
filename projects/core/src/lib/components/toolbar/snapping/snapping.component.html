@@ -30,6 +30,7 @@
     @for (layer of (selectableLayers$ | async); track layer.id) {
       @let selectedLayer = selectedLayers?.has(layer.id);
       <button mat-menu-item
+              class="menu-item"
               [tmTooltip]="layer.title"
               [disabled]="cannotSelectMoreLayers && !selectedLayer"
               [matTooltipPosition]="'before'"
