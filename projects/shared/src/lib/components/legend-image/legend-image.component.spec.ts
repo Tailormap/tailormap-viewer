@@ -1,15 +1,27 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
-import { LegendImageComponent, LegendImageModel } from './legend-image.component';
-import { ImageWithDescriptionComponent } from "../image-with-description/image-with-description.component";
+import { LegendImageComponent, LegendImageModel, LegendImageSettingsModel } from './legend-image.component';
+import { Component, input } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
+@Component({
+  selector: 'tm-image-with-description',
+  template: '<img [src]="src()" [srcset]="legendSettings()?.srcset ?? \'\'" [alt]="legendSettings()?.altText ?? \'\'" />',
+})
+class MockImageWithDescriptionComponent {
+  public src = input<string>('');
+  public legendSettings = input<LegendImageSettingsModel | null>(null);
+}
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: vi.fn().mockReturnValue(2),
 }) as any;
 
 const setup = async (legend: LegendImageModel) => {
+  TestBed.overrideComponent(LegendImageComponent, {
+    set: { imports: [MockImageWithDescriptionComponent] },
+  });
   await render(LegendImageComponent, {
-    declarations: [ImageWithDescriptionComponent],
     inputs: { legend },
   });
 };

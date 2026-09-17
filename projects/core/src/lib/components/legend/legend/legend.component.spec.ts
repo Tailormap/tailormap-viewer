@@ -8,7 +8,17 @@ import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.s
 import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { TestBed } from '@angular/core/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
-import { ImageWithDescriptionComponent } from '@tailormap-viewer/shared';
+import { LegendImageComponent, LegendImageSettingsModel } from '@tailormap-viewer/shared';
+import { Component, input } from '@angular/core';
+
+@Component({
+  selector: 'tm-image-with-description',
+  template: '<img [src]="src()" [srcset]="legendSettings()?.srcset ?? \'\'" [alt]="legendSettings()?.altText ?? \'\'" />',
+})
+class MockImageWithDescriptionComponent {
+  public src = input<string>('');
+  public legendSettings = input<LegendImageSettingsModel | null>(null);
+}
 
 const createMockStore = () => {
   const layersAndServices = [
@@ -30,8 +40,11 @@ describe('LegendComponent', () => {
 
   test('renders Legend with visible false', async () => {
     const registerComponentFn = vi.fn();
+    TestBed.overrideComponent(LegendImageComponent, {
+      set: { imports: [MockImageWithDescriptionComponent] },
+    });
     await render(LegendComponent, {
-      declarations: [ImageWithDescriptionComponent],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
@@ -48,8 +61,11 @@ describe('LegendComponent', () => {
   });
 
   test('renders Legend with visible true', async () => {
+    TestBed.overrideComponent(LegendImageComponent, {
+      set: { imports: [MockImageWithDescriptionComponent] },
+    });
     await render(LegendComponent, {
-      declarations: [ImageWithDescriptionComponent],
+      imports: [],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
