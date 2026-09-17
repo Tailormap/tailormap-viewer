@@ -44,22 +44,21 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>}, catalogNodeId: string): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/geo-services`,
+      `${TailormapAdminApiV1Service.BASE_URL}/geo-services/new`,
       {
         ...params.geoService,
-        refreshCapabilities: !!params.refreshCapabilities,
+        catalogNodeId,
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'>; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel> {
+  public updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.patch<GeoServiceWithLayersModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`,
       {
         ...params.geoService,
-        refreshCapabilities: !!params.refreshCapabilities,
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
