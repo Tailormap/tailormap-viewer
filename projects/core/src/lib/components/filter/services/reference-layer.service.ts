@@ -3,16 +3,16 @@ import { combineLatest } from 'rxjs';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { DataSourceManagerService } from '../../../services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReferenceLayerService {
   private store$ = inject(Store);
-  private filterManagerService = inject(FilterManagerService);
+  private dataSourceManagerService = inject(DataSourceManagerService);
   public referencableLayers$ = combineLatest([
-    this.filterManagerService.referencableLayers$,
+    this.dataSourceManagerService.layersWithAttributes$,
     this.store$.select(selectSelectedLayers),
   ]).pipe(
     map(([ layers, selectedLayers ]) => layers.filter(layer => !selectedLayers.includes(layer.id))),

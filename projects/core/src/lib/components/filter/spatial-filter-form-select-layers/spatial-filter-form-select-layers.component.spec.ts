@@ -5,15 +5,16 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { selectSelectedLayers } from '../state/filter-component.selectors';
 import userEvent from '@testing-library/user-event';
 import { SpatialFilterCrudService } from '../services/spatial-filter-crud.service';
-import { FilterableLayerModel, FilterManagerService } from '../../../filter';
+import { DataSourceManagerService } from '../../../services';
 import { of } from 'rxjs';
+import { DataSourceLayerModel } from '../../../models';
 
-const availableLayers: FilterableLayerModel[] = [
-  { id: '1', label: 'Layer 1', filterable: true, referencable: true },
-  { id: '2', label: 'Layer 2', filterable: true, referencable: true },
+const availableLayers: DataSourceLayerModel[] = [
+  { id: '1', title: 'Layer 1', layerName: 'layer_1', filterable: true, hasAttributes: true },
+  { id: '2', title: 'Layer 2', layerName: 'layer_2', filterable: true, hasAttributes: true },
 ];
 
-const setup = async (layers: FilterableLayerModel[], selectedLayers: string[]) => {
+const setup = async (layers: DataSourceLayerModel[], selectedLayers: string[]) => {
   const store = provideMockStore({
     initialState: {},
     selectors: [
@@ -21,11 +22,11 @@ const setup = async (layers: FilterableLayerModel[], selectedLayers: string[]) =
     ],
   });
   const mockSpatialCrudService = { updateSelectedLayers: vi.fn() };
-  const mockFilterManagerService = { filterableLayers$: of(layers) };
+  const mockDataSourceManagerService = { filterableLayers$: of(layers) };
   await render(SpatialFilterFormSelectLayersComponent, {
     providers: [ store,
       { provide: SpatialFilterCrudService, useValue: mockSpatialCrudService },
-      { provide: FilterManagerService, useValue: mockFilterManagerService },
+      { provide: DataSourceManagerService, useValue: mockDataSourceManagerService },
     ],
   });
   return { updateLayers: mockSpatialCrudService.updateSelectedLayers };

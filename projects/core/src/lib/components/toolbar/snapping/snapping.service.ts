@@ -1,17 +1,17 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { ExtendedAppLayerModel, selectVisibleLayersWithAttributes } from '../../../map';
-import {
-  BaseComponentTypeEnum, DescribeAppLayerService, SnappingComponentConfigModel,
-} from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, SnappingComponentConfigModel } from '@tailormap-viewer/api';
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
 import { selectComponentsConfigForType, selectCQLFilters, selectViewerId } from '../../../state';
 import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take, debounceTime, filter } from 'rxjs';
-import { FeaturesFilterHelper } from '../../../filter';
+import { FeaturesFilterHelper, LayerFeaturesFilters } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
+import { DataSourceManagerService } from "../../../services";
+import { DataSourceLayerModel } from '../../../models';
+
 
 interface SnappingFeature {
   __fid: string;
@@ -29,23 +29,29 @@ export class SnappingService {
   private loadFeaturesService = inject(LoadGeometriesService);
   private mapService = inject(MapService);
   private destroyRef = inject(DestroyRef);
-  private describeLayerService = inject(DescribeAppLayerService);
   private snackbar = inject(MatSnackBar);
+  private dataSourceManagerService = inject(DataSourceManagerService);
 
   public configuredLayers = new BehaviorSubject<string[]>([]);
-  public availableLayers$ = this.store$.select(selectVisibleLayersWithAttributes);
+  public availableLayers$ = this.dataSourceManagerService.layersWithAttributes$;
   public selectableLayers$ = combineLatest([
     this.configuredLayers.asObservable(),
     this.availableLayers$,
   ]).pipe(map(([ configured, available ]) => {
+    console.log('Available layers', configured, available);
+    if (!configured || configured.length === 0) {
+      return available;
+    }
     const configuredLayers = new Set(configured);
     return available.filter(layer => configuredLayers.has(layer.id));
   }));
   public hasSelectableLayers$ = this.selectableLayers$.pipe(map(l => l.length > 0));
 
-  private snappingLayers = new BehaviorSubject<ExtendedAppLayerModel[]>([]);
+  private snappingLayers = new BehaviorSubject<DataSourceLayerModel[]>([]);
   private snappingFeatures = new BehaviorSubject<SnappingFeature[]>([]);
   private geometriesLoaded: Map<string, string> = new Map();
+  private isLoadingGeometries = new BehaviorSubject(false);
+  public isLoadingGeometries$ = this.isLoadingGeometries.asObservable();
 
   private snappingActive = new BehaviorSubject(false);
   public snappingActive$ = this.snappingActive.asObservable();
@@ -96,7 +102,13 @@ export class SnappingService {
         filter(([ _snappingLayers, _mapExtent, _allFilters, _viewerId, snappingActive ]) => snappingActive),
         debounceTime(500),
         concatMap(([ snappingLayers, mapExtent, allFilters, viewerId ]) => {
-          const layerDetails = snappingLayers.map(l => this.describeLayerService.getDescribeAppLayer$(viewerId, l.id).pipe(take(1)));
+          if (!viewerId) {
+            throw new Error('Viewer ID must be provided to describe a layer');
+          }
+          const layerDetails = snappingLayers.map(l => {
+            return this.dataSourceManagerService.getDescribeLayer$({ applicationId: viewerId, layerId: l.id, layerName: l.layerName })
+              .pipe(take(1));
+          });
           return forkJoin([
             of(snappingLayers),
             of(mapExtent),
@@ -109,8 +121,9 @@ export class SnappingService {
         this.cleanUpOldGeometries(snappingLayers);
         snappingLayers.forEach(layer => {
           const currentLoadedKey = this.geometriesLoaded.get(layer.id);
-          const cqlFilter = FeaturesFilterHelper.getFilter(allFilters.get(layer.id)) || '';
-          const detail = describeLayersResponses.find(r => r.id === layer.id);
+          const layerFilter = allFilters.get(layer.id);
+          const cqlFilter = FeaturesFilterHelper.getFilter(layerFilter) || '';
+          const detail = describeLayersResponses.find(r => r?.id === layer.id);
           const extentFilter = mapExtent !== null
             ? `BBOX(${detail?.geometryAttribute}, ${mapExtent.join(',')})`
             : '';
@@ -122,10 +135,11 @@ export class SnappingService {
             filters.push(`(${extentFilter})`);
           }
           const combinedFilter = filters.join(' AND ');
+          const updateFilter = FeaturesFilterHelper.updateFilter(combinedFilter, layerFilter);
           const loadedKey = `${layer.id}-${combinedFilter}`;
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(layer.id, loadedKey);
-            this.loadGeometries(layer, combinedFilter);
+            this.loadGeometries(layer, updateFilter);
           }
         });
       });
@@ -142,7 +156,7 @@ export class SnappingService {
       });
   }
 
-  public toggleLayer(layer: ExtendedAppLayerModel) {
+  public toggleLayer(layer: DataSourceLayerModel) {
     const currentLayers = this.snappingLayers.value;
     const idx = currentLayers.findIndex(l => l.id === layer.id);
     let updatedLayers = [];
@@ -170,10 +184,12 @@ export class SnappingService {
     this.snappingActive.next(false);
   }
 
-  private loadGeometries(layer: ExtendedAppLayerModel, cqlFilter: string): void {
-    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, cqlFilter)
+  private loadGeometries(layer: DataSourceLayerModel, filters: LayerFeaturesFilters | null): void {
+    this.isLoadingGeometries.next(true);
+    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, filters)
       .pipe(take(1))
       .subscribe(response => {
+        this.isLoadingGeometries.next(false);
         if (response.exceededMaxFeatures) {
           const maxFeatures = SnappingService.MAX_SNAPPING_FEATURES;
           const layerTitle = layer.title;
@@ -191,7 +207,7 @@ export class SnappingService {
       });
   }
 
-  private cleanUpOldGeometries(snappingLayers: ExtendedAppLayerModel[]) {
+  private cleanUpOldGeometries(snappingLayers: DataSourceLayerModel[]) {
     const snappingLayerIds = new Set(snappingLayers.map(layer => layer.id));
     if (this.snappingFeatures.value.some(f => !snappingLayerIds.has(f.layerId))) {
       this.snappingFeatures.next(this.snappingFeatures.value.filter(f => snappingLayerIds.has(f.layerId)));

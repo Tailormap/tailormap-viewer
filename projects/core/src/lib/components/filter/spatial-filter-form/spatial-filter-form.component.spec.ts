@@ -18,11 +18,11 @@ import { closeForm } from '../state/filter-component.actions';
 import { of } from 'rxjs';
 import { SpatialFilterReferenceLayerService } from '../../../filter/services/spatial-filter-reference-layer.service';
 import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
-import { FilterableLayerModel } from '../../../filter/models/filter-source.model';
-import { FilterManagerService } from '../../../filter/services/filter-manager.service';
+import { DataSourceLayerModel } from '../../../models';
+import { DataSourceManagerService } from '../../../services';
 
 const setup = async (conf: {
-  layers?: FilterableLayerModel[];
+  layers?: DataSourceLayerModel[];
   selectedLayers?: boolean;
   selectedLayersAndGeometry?: boolean;
   selectedFilterGroup?: FilterGroupModel<SpatialFilterModel>;
@@ -44,6 +44,10 @@ const setup = async (conf: {
   });
   const mapServiceMock = createMapServiceMockWithDrawingTools();
   const removeFilterServiceMock = { removeFilter$: vi.fn(() => of(true)) };
+  const dataSourceManagerService = {
+    filterableLayers$: of(conf.layers || []),
+    layersWithAttributes$: of(conf.layers || []),
+  };
   const { container } = await render(SpatialFilterFormComponent, {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
@@ -51,10 +55,7 @@ const setup = async (conf: {
       mapServiceMock.provider,
       { provide: RemoveFilterService, useValue: removeFilterServiceMock },
       { provide: SpatialFilterReferenceLayerService, useValue: { isLoadingGeometryForGroup$: () => of(false) } },
-      { provide: FilterManagerService, useValue: {
-        filterableLayers$: of(conf.layers || []),
-        referencableLayers$: of(conf.layers || []),
-      } },
+      { provide: DataSourceManagerService, useValue: dataSourceManagerService },
     ],
   });
   const injectedStore = TestBed.inject(MockStore);
@@ -66,9 +67,9 @@ const setup = async (conf: {
   };
 };
 
-const layers: FilterableLayerModel[] = [
-  { id: '1', label: 'Layer 1', filterable: true, referencable: true },
-  { id: '2', label: 'Layer 2', filterable: true, referencable: true },
+const layers: DataSourceLayerModel[] = [
+  { id: '1', title: 'Layer 1', layerName: 'layer_1', filterable: true, hasAttributes: true },
+  { id: '2', title: 'Layer 2', layerName: 'layer_2', filterable: true, hasAttributes: true },
 ];
 
 const getSpatialFilterGroup = (

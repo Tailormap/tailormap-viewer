@@ -11,8 +11,8 @@ import { getSpatialFilterGroup } from '../../../filter/helpers/spatial-filter-gr
 import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-component.actions';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
 import { selectLayers } from '../../../map';
-import { FilterManagerService } from '../../../filter';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
+import { DataSourceManagerService } from '../../../services';
 
 // `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
 // over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
@@ -50,7 +50,7 @@ const setup = (
       SpatialFilterCrudService,
       getMapServiceMock().provider,
       mockStore,
-      { provide: FilterManagerService, useValue: describeLayerMock },
+      { provide: DataSourceManagerService, useValue: describeLayerMock },
     ],
   });
   const service = TestBed.inject(SpatialFilterCrudService);

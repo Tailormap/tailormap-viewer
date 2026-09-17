@@ -44,18 +44,21 @@ export class LayerSelectionConfigComponent implements ControlValueAccessor {
   public filterControl = new FormControl<string>('');
   public filterTerm = signal<string>('');
   public allLayers = this.store$.selectSignal(selectExtendedAppLayerNodesForSelectedApplication);
-
-  public filteredLayerList = computed(() => {
+  public availableLayers = computed(() => {
     const allLayers = this.allLayers();
     const selectedLayerIds = this.selectedLayers();
-    const filterTerm = this.filterTerm();
     const withAttributesOnly = this.withAttributesOnly();
-    const layersWithSelected = allLayers
+    return allLayers
       .filter(layer => !withAttributesOnly || layer.featureType?.hasAttributes)
       .map(layer => ({
         ...layer,
         selected: selectedLayerIds.includes(layer.id),
       }));
+  });
+
+  public filteredLayerList = computed(() => {
+    const filterTerm = this.filterTerm();
+    const layersWithSelected = this.availableLayers();
     if (filterTerm) {
       return FilterHelper.filterByTerm(layersWithSelected, filterTerm, l => l.label);
     }
@@ -98,7 +101,9 @@ export class LayerSelectionConfigComponent implements ControlValueAccessor {
   }
 
   public onSelectedLayerChanged($event: MatSelectionListChange) {
-    const selectedLayers = [...this.selectedLayers()];
+    const selectedLayers = [...this.selectedLayers()].filter(l => {
+      return this.availableLayers().some(layer => layer.id === l);
+    });
     $event.options.forEach(option => {
       if (option.selected) {
         selectedLayers.push(option.value);

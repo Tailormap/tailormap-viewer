@@ -4,7 +4,6 @@ import { map, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ApplicationStyleService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ExtendedAppLayerModel } from '../../../map';
 import { SnappingService } from './snapping.service';
 import { selectComponentsConfigForType } from '../../../state';
 import {
@@ -15,23 +14,26 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { AsyncPipe } from '@angular/common';
 import { TooltipDirective, ErrorMessageComponent } from '@tailormap-viewer/shared';
+import { DataSourceLayerModel } from '../../../models';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'tm-snapping',
     templateUrl: './snapping.component.html',
     styleUrls: ['./snapping.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatButtonToggleGroup,
-        TooltipDirective,
-        MatButtonToggle,
-        MatIcon,
-        MatMenuTrigger,
-        MatMenu,
-        ErrorMessageComponent,
-        MatMenuItem,
-        AsyncPipe,
-    ],
+  imports: [
+    MatButtonToggleGroup,
+    TooltipDirective,
+    MatButtonToggle,
+    MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    ErrorMessageComponent,
+    MatMenuItem,
+    AsyncPipe,
+    MatProgressSpinner,
+  ],
 })
 export class SnappingComponent implements OnInit {
   private store$ = inject(Store);
@@ -40,6 +42,7 @@ export class SnappingComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   public toolActive$ = this.snappingService.snappingActive$;
+  public isLoadingGeometries$ = this.snappingService.isLoadingGeometries$;
 
   public selectedLayers$ = this.snappingService.snappingLayers$
     .pipe(map(layers => new Set(layers.map(l => l.id))));
@@ -66,7 +69,7 @@ export class SnappingComponent implements OnInit {
       });
   }
 
-  public toggleLayer(layer: ExtendedAppLayerModel) {
+  public toggleLayer(layer: DataSourceLayerModel) {
     this.snappingService.toggleLayer(layer);
     this.snappingService.snappingLayers$.pipe(take(1)).subscribe(layers => {
       if (layers.length > 0 && !this.snappingService.isSnappingActive()) {

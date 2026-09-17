@@ -1,15 +1,13 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, Subject, switchMap, take } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Observable, Subject, switchMap, take } from 'rxjs';
 import { selectCQLFilters, selectSpatialFilterGroupsWithReferenceLayers } from '../../state/filter-state/filter.selectors';
 import { takeUntil, withLatestFrom } from 'rxjs/operators';
 import { SpatialFilterGeometry, SpatialFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { updateFilterGroup } from '../../state/filter-state/filter.actions';
 import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
 import { LoadGeometriesService } from '../../services/load-geometries.service';
-import { FilterManagerService } from './filter-manager.service';
 import { LayerFeaturesFilters } from '../models/feature-filter.model';
-import { selectViewerId } from '../../state';
 import { selectLayer } from '../../map';
 import { TypesHelper } from '@tailormap-viewer/shared';
 
@@ -22,7 +20,6 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
 
   private store$ = inject(Store);
   private loadFeaturesService = inject(LoadGeometriesService);
-  private filterManagerService = inject(FilterManagerService);
 
   private destroyed = new Subject();
   private geometriesLoaded: Map<string, string> = new Map();
@@ -65,27 +62,12 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
     filters?: LayerFeaturesFilters | null,
   ): void {
     this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ]);
-    combineLatest([
-      this.store$.select(selectViewerId),
-      this.store$.select(selectLayer(referenceLayer)),
-    ])
+    this.store$.select(selectLayer(referenceLayer))
       .pipe(
-        filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
-          const [ applicationId, layer ] = result;
-          return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
-        }),
+        filter(layer => TypesHelper.isDefined(layer)),
         take(1),
-        switchMap(([ applicationId, layer ]) => {
-          const getFeatures$ = this.filterManagerService.getFeatures$({
-            applicationId,
-            layerId: referenceLayer,
-            layerName: layer.layerName,
-            page: 1,
-            pageSize: SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES,
-            filter: filters,
-            includeGeometry: true,
-          });
-          return this.loadFeaturesService.loadGeometries$(SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES, referenceLayer, cqlFilter, getFeatures$)
+        switchMap(layer => {
+          return this.loadFeaturesService.loadGeometries$(SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES, referenceLayer, layer.layerName, filters)
             .pipe(take(1));
         }),
       )

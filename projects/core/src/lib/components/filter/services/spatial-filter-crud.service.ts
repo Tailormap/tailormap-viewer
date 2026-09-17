@@ -8,16 +8,16 @@ import { setSelectedFilterGroup, setSelectedLayers } from '../state/filter-compo
 import { selectSelectedFilterGroup, selectSelectedLayers } from '../state/filter-component.selectors';
 import { FilterTypeHelper } from '../../../filter/helpers/filter-type.helper';
 import { addFilterGroup, updateFilterGroup } from '../../../state/filter-state/filter.actions';
-import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 import { selectLayer } from '../../../map';
 import { MapService } from '@tailormap-viewer/map';
+import { DataSourceManagerService } from '../../../services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SpatialFilterCrudService {
 
-  private filterManagerService = inject(FilterManagerService);
+  private dataSourceManagerService = inject(DataSourceManagerService);
   private store$ = inject(Store);
   private mapService = inject(MapService);
 
@@ -191,7 +191,7 @@ export class SpatialFilterCrudService {
         }
         return forkJoin(layers.map(layer => this.store$.select(selectLayer(layer)).pipe(
           take(1),
-          switchMap(lyr => lyr ? this.filterManagerService.getDescribeLayer$({
+          switchMap(lyr => lyr ? this.dataSourceManagerService.getDescribeLayer$({
             layerId: layer,
             layerName: lyr.layerName,
             applicationId: applicationId,
