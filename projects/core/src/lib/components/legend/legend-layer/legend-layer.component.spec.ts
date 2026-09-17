@@ -2,7 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import { LegendImageComponent } from '@tailormap-viewer/shared';
+import { ImageWithDescriptionComponent, LegendImageComponent } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
@@ -11,6 +11,7 @@ const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
 
 const setup = async (legendInfo: LegendInfoModel) => {
   await render(LegendLayerComponent, {
+    imports: [ImageWithDescriptionComponent],
     declarations: [LegendImageComponent],
     inputs: { legendInfo },
   });

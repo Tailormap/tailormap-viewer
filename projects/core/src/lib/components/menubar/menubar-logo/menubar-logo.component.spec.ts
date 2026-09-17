@@ -4,7 +4,7 @@ import { MenubarLogoComponent } from './menubar-logo.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CoreState, coreStateKey, initialCoreState } from '../../../state/core.state';
 import { MatIconModule } from '@angular/material/icon';
-import { ImageWithDescriptionComponent } from '../../../shared';
+import { ImageWithDescriptionComponent } from '@tailormap-viewer/shared';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('MenubarLogoComponent', () => {

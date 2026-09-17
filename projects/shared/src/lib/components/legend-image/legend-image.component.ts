@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, Input, input, signal } from '@angular/core';
 import { GeoServerLegendOptions, LegendHelper } from './legend.helper';
+import { ImageWithDescriptionComponent } from '../image-with-description/image-with-description.component';
 
 export interface LegendImageModel {
   url: string;
@@ -8,7 +9,7 @@ export interface LegendImageModel {
   title: string;
 }
 
-interface LegendImageSettingsModel {
+export interface LegendImageSettingsModel {
   url: string;
   scaleHiDpiImage: boolean;
   altText: string;
@@ -18,10 +19,13 @@ interface LegendImageSettingsModel {
 const LOCALISED_ALT_TEXT = $localize `:@@shared.legend-image.alt-text:Legend for`;
 
 @Component({
-    selector: 'tm-legend-image',
-    templateUrl: './legend-image.component.html',
-    styleUrls: ['./legend-image.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'tm-legend-image',
+  templateUrl: './legend-image.component.html',
+  styleUrls: ['./legend-image.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ImageWithDescriptionComponent,
+  ],
 })
 export class LegendImageComponent {
 
@@ -62,6 +66,7 @@ export class LegendImageComponent {
     // This forces the <img> tag to re-render in case of changing input
     // Sometimes the zoom for hi-dpi images would otherwise not be applied correctly
     // resulting in too large or too small images
+    console.debug('Creating legend settings:', legend);
     this.legendSettings.set(null);
     if (legend === null) {
       return;
