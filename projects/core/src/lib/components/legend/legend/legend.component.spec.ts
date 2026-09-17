@@ -31,7 +31,7 @@ describe('LegendComponent', () => {
   test('renders Legend with visible false', async () => {
     const registerComponentFn = vi.fn();
     await render(LegendComponent, {
-      imports: [ImageWithDescriptionComponent],
+      declarations: [ImageWithDescriptionComponent],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),
@@ -49,7 +49,7 @@ describe('LegendComponent', () => {
 
   test('renders Legend with visible true', async () => {
     await render(LegendComponent, {
-      imports: [ImageWithDescriptionComponent],
+      declarations: [ImageWithDescriptionComponent],
       providers: [
         getMapServiceMock().provider,
         createMockStore(),

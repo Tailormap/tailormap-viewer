@@ -66,7 +66,6 @@ export class LegendImageComponent {
     // This forces the <img> tag to re-render in case of changing input
     // Sometimes the zoom for hi-dpi images would otherwise not be applied correctly
     // resulting in too large or too small images
-    console.debug('Creating legend settings:', legend);
     this.legendSettings.set(null);
     if (legend === null) {
       return;

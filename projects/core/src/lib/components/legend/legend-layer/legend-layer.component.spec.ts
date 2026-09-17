@@ -11,8 +11,7 @@ const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
 
 const setup = async (legendInfo: LegendInfoModel) => {
   await render(LegendLayerComponent, {
-    imports: [ImageWithDescriptionComponent],
-    declarations: [LegendImageComponent],
+    declarations: [ImageWithDescriptionComponent, LegendImageComponent],
     inputs: { legendInfo },
   });
 };
