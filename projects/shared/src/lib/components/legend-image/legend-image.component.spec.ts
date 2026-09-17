@@ -1,6 +1,7 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendImageComponent, LegendImageModel } from './legend-image.component';
+import { ImageWithDescriptionComponent } from "../image-with-description/image-with-description.component";
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: vi.fn().mockReturnValue(2),
@@ -8,6 +9,7 @@ const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
 
 const setup = async (legend: LegendImageModel) => {
   await render(LegendImageComponent, {
+    declarations: [ImageWithDescriptionComponent],
     inputs: { legend },
   });
 };
