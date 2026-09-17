@@ -2,7 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import { ImageWithDescriptionComponent, LegendImageComponent, LegendImageSettingsModel } from '@tailormap-viewer/shared';
+import { LegendImageComponent, LegendImageSettingsModel } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
 import { Component, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -26,7 +26,7 @@ const setup = async (legendInfo: LegendInfoModel) => {
   });
   await render(LegendLayerComponent, {
     imports: [],
-    declarations: [ LegendImageComponent ],
+    declarations: [LegendImageComponent],
     inputs: { legendInfo },
   });
 };
