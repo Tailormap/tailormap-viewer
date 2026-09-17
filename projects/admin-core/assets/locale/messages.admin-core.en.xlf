@@ -1317,7 +1317,7 @@
         <source>Snapping color</source>
       </trans-unit>
       <trans-unit id="admin-core.components.snapping-select-layers" datatype="html">
-        <source>Select one or more layers which are available for snapping. Select at least one layer to allow snapping.</source>
+        <source>Select one or more layers which are available for snapping. If no layers are selected, all visible layers with attributes (in the viewer) will be available for snapping.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.snapping-tolerance" datatype="html">
         <source>Snapping tolerance (px)</source>
@@ -1743,7 +1743,7 @@
         <source>Selected attributes used to index</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.summary" datatype="html">
-        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex?.summary?.startedAt | date:&apos;medium&apos; }}"/> and took <x id="INTERPOLATION_1" equiv-text="{{ searchIndex?.summary?.duration | number: &apos;1.1-2&apos; }}"/> seconds, skipped <x id="INTERPOLATION_2" equiv-text="{{ searchIndex?.summary?.skippedCounter }}"/> of <x id="INTERPOLATION_3" equiv-text="{{ searchIndex?.summary?.total }}"/> features.</source>
+        <source>Last indexing started at <x id="INTERPOLATION" equiv-text="{{ searchIndex.summary.startedAt | date:&apos;medium&apos; }}"/> and took <x id="INTERPOLATION_1" equiv-text="{{ searchIndex.summary.duration | number: &apos;1.1-2&apos; }}"/> seconds, skipped <x id="INTERPOLATION_2" equiv-text="{{ searchIndex.summary.skippedCounter }}"/> of <x id="INTERPOLATION_3" equiv-text="{{ searchIndex.summary.total }}"/> features.</source>
       </trans-unit>
       <trans-unit id="admin-core.search-index.unavailable" datatype="html">
         <source>Search indexes are not available. This may be because Solr is not deployed or not operating correctly.</source>
