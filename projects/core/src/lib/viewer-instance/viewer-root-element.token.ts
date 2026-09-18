@@ -6,9 +6,9 @@ import { InjectionToken } from '@angular/core';
  * unrelated elements in that same viewer need to read).
  *
  * Defaults to `document.body`: correct for the main, single-viewer `ViewerAppComponent`, since there is
- * only ever one viewer on the page. A `StoriesViewerAppComponent` — mounted as its own Angular
- * application via `mountStoriesViewer` — overrides this to its own `hostElement`, so multiple viewer
- * instances on one page never clobber each other's state through the shared `document.body`/`:root`.
+ * only ever one viewer on the page. A viewer instance mounted as its own Angular application (e.g. via
+ * `createApplication`) should override this to its own host element, so multiple viewer instances on one
+ * page never clobber each other's state through the shared `document.body`/`:root`.
  */
 export const VIEWER_ROOT_ELEMENT = new InjectionToken<HTMLElement>('VIEWER_ROOT_ELEMENT', {
   providedIn: 'root',

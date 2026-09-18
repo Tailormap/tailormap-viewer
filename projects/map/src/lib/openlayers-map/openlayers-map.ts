@@ -237,6 +237,20 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
+  /**
+   * Removes the map's mouse-wheel-zoom interaction (whichever variant it was configured with, see
+   * `initMap`), so scrolling the wheel over the map no longer zooms it. There's no matching enable
+   * method: this is meant for pages that embed the map inline in a scrolling document and want the
+   * page's own scroll to win over the map's default zoom-by-wheel behaviour.
+   */
+  public disableMouseWheelZoom() {
+    this.executeMapAction(olMap => {
+      olMap.getInteractions().getArray()
+        .filter((interaction): interaction is MouseWheelZoom => interaction instanceof MouseWheelZoom)
+        .forEach(interaction => olMap.removeInteraction(interaction));
+    });
+  }
+
   private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {
     if (olFeatures.length === 0) {
       return;
@@ -272,12 +286,12 @@ export class OpenLayersMap implements MapViewerModel {
     });
   }
 
-  public zoomToFeatures(olFeatures: Feature<Geometry>[]) {
+  public zoomToFeatures(olFeatures: Feature<Geometry>[], flyTo = false) {
     const totalExtent = this.getFeaturesExtent(olFeatures);
     if (!totalExtent) {
       return;
     }
-    this.zoomToExtent(totalExtent);
+    this.zoomToExtent(totalExtent, undefined, flyTo);
   }
 
   public zoomToGeometry(geom?: Geometry, maxZoom?: number) {
@@ -287,10 +301,43 @@ export class OpenLayersMap implements MapViewerModel {
     this.zoomToExtent(geom.getExtent(), maxZoom);
   }
 
-  public zoomToExtent(extent: Extent, maxZoom?: number) {
+  public zoomToExtent(extent: Extent, maxZoom?: number, flyTo = false) {
     this.executeMapAction(olMap => {
-      olMap.getView().fit(buffer(extent, 10), { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
+      const bufferedExtent = buffer(extent, 10);
+      if (flyTo) {
+        this.flyToExtent(olMap, bufferedExtent, maxZoom);
+        return;
+      }
+      olMap.getView().fit(bufferedExtent, { duration: 1000, padding: this.mapPadding, maxZoom: maxZoom });
     });
+  }
+
+  /**
+   * Animates the view to the given extent with a 'fly-to' effect: instead of a straight linear
+   * pan/zoom, the view zooms out while panning to the target center and then zooms back in to
+   * the target's resolution (the classic OpenLayers flyTo recipe).
+   */
+  private flyToExtent(olMap: OlMap, extent: Extent, maxZoom?: number, duration = 2000) {
+    const view = olMap.getView();
+    const size = olMap.getSize();
+    const currentZoom = view.getZoom();
+    const resolution = size ? view.getResolutionForExtent(extent, size) : undefined;
+    const targetZoom = resolution ? view.getZoomForResolution(resolution) : undefined;
+    if (typeof currentZoom !== 'number' || typeof targetZoom !== 'number') {
+      view.fit(extent, { duration, padding: this.mapPadding, maxZoom });
+      return;
+    }
+    const clampedTargetZoom = typeof maxZoom === 'number' ? Math.min(targetZoom, maxZoom) : targetZoom;
+    const dipZoom = Math.min(currentZoom, clampedTargetZoom) - 1;
+    // A single chained call (rather than two parallel `animate()` calls) keeps the zoom-out and the
+    // pan+zoom-in as one animation series, so they can't drift out of sync or race with a
+    // previously started flight; cancel any animation still running first so a new fly-to always
+    // starts from a clean state instead of competing with a stale one.
+    view.cancelAnimations();
+    view.animate(
+      { zoom: dipZoom, duration: duration / 2 },
+      { center: getCenter(extent), zoom: clampedTargetZoom, duration: duration / 2 },
+    );
   }
 
   public zoomTo(center: number[], zoomLevel?: number, animationDuration = 1000, ignoreWhileAnimating = false) {
