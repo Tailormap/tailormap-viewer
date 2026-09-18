@@ -1291,8 +1291,8 @@
         <target>Download kaart PDF</target>
       </trans-unit>
       <trans-unit id="core.print.dpi" datatype="html">
-        <source>DPI </source>
-        <target>DPI </target>
+        <source>DPI</source>
+        <target>DPI</target>
       </trans-unit>
       <trans-unit id="core.print.dpi-range" datatype="html">
         <source>Range: 90 - 600</source>
@@ -1307,8 +1307,8 @@
         <target>Voettekst</target>
       </trans-unit>
       <trans-unit id="core.print.height" datatype="html">
-        <source>Height </source>
-        <target>Hoogte </target>
+        <source>Height</source>
+        <target>Hoogte</target>
       </trans-unit>
       <trans-unit id="core.print.height-range" datatype="html">
         <source>Range: 50 - 600</source>
@@ -1359,8 +1359,8 @@
         <target>Titel</target>
       </trans-unit>
       <trans-unit id="core.print.width" datatype="html">
-        <source>Width </source>
-        <target>Breedte </target>
+        <source>Width</source>
+        <target>Breedte</target>
       </trans-unit>
       <trans-unit id="core.print.width-height-ratio" datatype="html">
         <source>Width/height ratio: <x id="INTERPOLATION" equiv-text="{{getImageRatio() | number: &apos;1.1-2&apos; }}"/></source>
