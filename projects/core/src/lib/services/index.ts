@@ -3,3 +3,4 @@ export * from './feature-updated.service';
 export * from './application-style.service';
 export * from './attachment.service';
 export * from './base-feature-registration.service';
+export * from './data-source-manager.service';

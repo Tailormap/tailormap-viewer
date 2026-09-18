@@ -7,6 +7,7 @@ export class BaseComponentConfigHelper {
     BaseComponentTypeEnum.COORDINATE_LINK_WINDOW,
     BaseComponentTypeEnum.HEADER,
     BaseComponentTypeEnum.INFO,
+    BaseComponentTypeEnum.SNAPPING,
   ]);
 
   public static addDefaultDisabledComponent(component: string) {

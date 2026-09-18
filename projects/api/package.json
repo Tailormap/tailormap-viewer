@@ -1,12 +1,12 @@
 {
   "name": "@tailormap-viewer/api",
-  "version": "12.9.0-rc.1",
+  "version": "12.9.0-rc.3",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/common": "^22.1.5",
-    "@angular/core": "^22.1.5",
+    "@angular/common": "^22.1.6",
+    "@angular/core": "^22.1.6",
     "rxjs": "^7.8.2"
   },
   "dependencies": {

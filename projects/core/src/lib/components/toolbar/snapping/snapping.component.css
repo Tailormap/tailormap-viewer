@@ -20,6 +20,17 @@ mat-button-toggle ::ng-deep .mat-button-toggle-label-content {
   height: 20px;
 }
 
+.menu-item ::ng-deep .mat-mdc-menu-item-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+mat-spinner {
+  margin-top: 10px;
+  margin-left: 4px;
+}
+
 .mat-button-toggle + .mat-button-toggle {
   border-left: 0 none;
 }

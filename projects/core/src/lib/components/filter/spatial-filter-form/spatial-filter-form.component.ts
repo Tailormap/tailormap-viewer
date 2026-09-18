@@ -17,7 +17,6 @@ import { SpatialFilterReferenceLayerService } from '../../../filter/services/spa
 import { filter } from 'rxjs/operators';
 import { TypesHelper, ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { ApplicationStyleService } from '../../../services/application-style.service';
-import { FilterManagerService } from '../../../filter/services/filter-manager.service';
 import { ReferenceLayerService } from '../services/reference-layer.service';
 import { SpatialFilterFormSelectLayersComponent } from '../spatial-filter-form-select-layers/spatial-filter-form-select-layers.component';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
@@ -26,6 +25,7 @@ import { SpatialFilterFormSelectReferenceLayerComponent } from '../spatial-filte
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SpatialFilterFormBufferComponent } from '../spatial-filter-form-buffer/spatial-filter-form-buffer.component';
 import { MatButton } from '@angular/material/button';
+import { DataSourceManagerService } from '../../../services';
 
 @Component({
     selector: 'tm-spatial-filter-form',
@@ -50,7 +50,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private removeFilterService = inject(RemoveFilterService);
   private spatialFilterReferenceLayerService = inject(SpatialFilterReferenceLayerService);
-  private filterManagerService = inject(FilterManagerService);
+  private dataSourceManagerService = inject(DataSourceManagerService);
   private referenceLayerService = inject(ReferenceLayerService);
 
 
@@ -65,7 +65,7 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
 
   public drawingLayerId = 'filter-drawing-layer';
-  public availableLayers$ = this.filterManagerService.filterableLayers$;
+  public availableLayers$ = this.dataSourceManagerService.filterableLayers$;
   public referencableLayers$ = this.referenceLayerService.referencableLayers$;
 
   public currentGroup$: Observable<string | undefined> = of(undefined);
@@ -143,14 +143,14 @@ export class SpatialFilterFormComponent implements OnInit, OnDestroy {
   private getLabelForReferenceLayer$() {
     return combineLatest([
       this.store$.select(selectReferenceLayer),
-      this.filterManagerService.referencableLayers$,
+      this.dataSourceManagerService.layersWithAttributes$,
     ]).pipe(
       take(1),
       map(([ selectedLayer, referencableLayers ]) => {
         if (!selectedLayer || (referencableLayers || []).length === 0) {
           return null;
         }
-        return referencableLayers.find(layer => layer.id === selectedLayer)?.label ?? null;
+        return referencableLayers.find(layer => layer.id === selectedLayer)?.title ?? null;
       }));
   }
 

@@ -20,6 +20,21 @@ export class FeaturesFilterHelper {
     return filters.get(key) ?? null;
   }
 
+  public static updateFilter(
+    filter: string | null,
+    filters?: LayerFeaturesFilters | null,
+    featureTypeName?: string | null,
+  ): LayerFeaturesFilters {
+    const key = featureTypeName || FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME;
+    const updatedFilters = filters ? new Map(filters) : new Map<symbol | string, string>();
+    if (filter === null) {
+      updatedFilters.delete(key);
+    } else {
+      updatedFilters.set(key, filter);
+    }
+    return updatedFilters;
+  }
+
   public static separateSubstringFiltersInCheckboxFilters(
     filterGroups: FilterGroupModel<AttributeFilterModel>[],
   ): FilterGroupModel<AttributeFilterModel>[] {

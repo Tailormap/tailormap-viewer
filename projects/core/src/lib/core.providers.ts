@@ -18,20 +18,13 @@ import { provideEdit } from './components/edit/edit.providers';
 import { provideFeatureInfo } from './components/feature-info/feature-info.providers';
 import { provideFilterComponent } from './components/filter/filter-component.providers';
 import { provideToc } from './components/toc/toc.providers';
+import { DefaultDataSourceApiService } from './services/default-data-source-api.service';
 
 export function provideCore(config: EnvironmentConfigModel): Array<Provider | EnvironmentProviders> {
   return [
     { provide: ENVIRONMENT_CONFIG, useValue: config },
     provideRouter(coreRoutes),
-    ...provideApplicationMap(),
-    ...provideFilter(),
     ...ProviderHelper.getBaseProviders(),
-    ...provideToc(),
-    ...provideDrawing(),
-    ...provideEdit(),
-    ...provideFeatureInfo(),
-    ...provideFilterComponent(),
-    ...provideAttributeList(),
     provideEnvironmentInitializer(() => {
       inject(ApplicationStyleService).init();
       inject(RouterHistoryService).init();
@@ -41,6 +34,15 @@ export function provideCore(config: EnvironmentConfigModel): Array<Provider | En
       inject(UserLoginCheckService).pingUserLoggedIn();
       inject(TAILORMAP_CROSS_ORIGIN_API_SERVICE).init();
       inject(NavigationErrorRouterService).init();
+      inject(DefaultDataSourceApiService).initDefaultDataSource();
     }),
+    ...provideApplicationMap(),
+    ...provideFilter(),
+    ...provideToc(),
+    ...provideDrawing(),
+    ...provideEdit(),
+    ...provideFeatureInfo(),
+    ...provideFilterComponent(),
+    ...provideAttributeList(),
   ];
 }

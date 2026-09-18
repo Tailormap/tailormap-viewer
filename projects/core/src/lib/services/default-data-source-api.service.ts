@@ -1,31 +1,31 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FilterManagerService } from './filter-manager.service';
-import { ExtendedAppLayerModel, selectOrderedVisibleLayersWithServices } from '../../map';
-import { FilterableLayerModel, FilterApiServiceModel } from '../models/filter-source.model';
+import { ExtendedAppLayerModel, selectOrderedVisibleLayersWithServices } from '../map';
 import {
   DescribeAppLayerService, FeaturesResponseModel, ServerType, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
-import { GetFeaturesParams } from '../../models/get-features-param.model';
+import { GetFeaturesParams } from '../models/get-features-param.model';
 import { map, Observable } from 'rxjs';
-import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
-import { GetLayerDetailsParams } from '../../models/get-layer-details-param.model';
+import { FeaturesFilterHelper } from '../filter/helpers/features-filter.helper';
+import { GetLayerDetailsParams } from '../models/get-layer-details-param.model';
+import { DataSourceManagerService } from './index';
+import { DataSourceApiServiceModel, DataSourceLayerModel } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FilterApiService implements FilterApiServiceModel {
+export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
 
   private store$ = inject(Store);
-  private filterManagerService = inject(FilterManagerService);
+  private dataSourceManager = inject(DataSourceManagerService);
   private api = inject(TAILORMAP_API_V1_SERVICE);
   private describeLayerService = inject(DescribeAppLayerService);
 
-  public initDefaultFilterSource(): void {
-    this.filterManagerService.addFilterSource({
+  public initDefaultDataSource(): void {
+    this.dataSourceManager.addSource({
       id: 'tm-default-layers',
       availableLayers$: this.store$.select(selectOrderedVisibleLayersWithServices)
-        .pipe(map(FilterApiService.mapLayersToFilterLayer)),
+        .pipe(map(DefaultDataSourceApiService.mapLayersToDataSourceLayer)),
       dataLoader: this,
     });
   }
@@ -53,13 +53,14 @@ export class FilterApiService implements FilterApiServiceModel {
     return this.describeLayerService.getDescribeAppLayer$(params.applicationId, params.layerId);
   }
 
-  private static mapLayersToFilterLayer(layers: ExtendedAppLayerModel[]): FilterableLayerModel[] {
+  private static mapLayersToDataSourceLayer(layers: ExtendedAppLayerModel[]): DataSourceLayerModel[] {
     return layers.map(l => ({
       id: l.id,
-      label: l.title || l.layerName,
+      title: l.title || l.layerName,
+      layerName: l.layerName,
       filterable: l.service?.serverType === ServerType.GEOSERVER && l.hasAttributes,
-      referencable: l.hasAttributes,
-    })).filter(layer => layer.filterable || layer.referencable);
+      hasAttributes: l.hasAttributes,
+    })).filter(layer => layer.filterable || layer.hasAttributes);
   }
 
 }

@@ -1,9 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { FeatureModel, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE } from '@tailormap-viewer/api';
+import { FeatureModel } from '@tailormap-viewer/api';
 import { catchError, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import { selectViewerId } from '../state';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
+import { DataSourceManagerService } from '../services';
+import { LayerFeaturesFilters } from '../filter';
 
 interface LoadFeaturesResponse {
   features: FeatureModel[];
@@ -27,27 +29,27 @@ interface LoadedFeaturesResponse {
 })
 export class LoadGeometriesService {
   private store$ = inject(Store);
-  private api = inject(TAILORMAP_API_V1_SERVICE);
+  private dataSourceManagerService = inject(DataSourceManagerService);
   public loadGeometries$(
     maxFeatures: number,
     layerId: string,
-    cqlFilter: string | undefined,
-    getFeatures$?: Observable<FeaturesResponseModel>,
+    layerName: string,
+    filters?: LayerFeaturesFilters | null,
   ): Observable<LoadedFeaturesResponse> {
     return this.store$.select(selectViewerId)
       .pipe(
-        take(1),
         filter(TypesHelper.isDefined),
+        take(1),
         switchMap(applicationId => {
-          return (getFeatures$ ?? this.api.getFeatures$({
+          return this.dataSourceManagerService.getFeatures$({
             layerId,
             applicationId,
+            layerName,
             page: 1,
             pageSize: maxFeatures,
-            filter: cqlFilter === '' ? undefined : cqlFilter,
-            simplify: false,
-            onlyGeometries: true,
-          })).pipe(
+            filter: filters,
+            includeGeometry: true,
+          }).pipe(
             map((response): LoadFeaturesResponse => ({
               features: response.features,
               error: false,
