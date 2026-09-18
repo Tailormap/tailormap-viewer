@@ -2,15 +2,30 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { LegendLayerComponent } from './legend-layer.component';
 import { getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
-import { LegendImageComponent } from '@tailormap-viewer/shared';
+import { LegendImageComponent, LegendImageSettingsModel } from '@tailormap-viewer/shared';
 import { LegendInfoModel } from '../models/legend-info.model';
+import { Component, input } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
+@Component({
+  selector: 'tm-image-with-description',
+  template: '<img [src]="src()" [srcset]="legendSettings()?.srcset ?? \'\'" [alt]="legendSettings()?.altText ?? \'\'" />',
+})
+class MockImageWithDescriptionComponent {
+  public src = input<string>('');
+  public legendSettings = input<LegendImageSettingsModel | null>(null);
+}
 
 const windowMock = () => Object.defineProperty({}, 'devicePixelRatio', {
   get: vi.fn().mockReturnValue(2),
 }) as any;
 
 const setup = async (legendInfo: LegendInfoModel) => {
+  TestBed.overrideComponent(LegendImageComponent, {
+    set: { imports: [MockImageWithDescriptionComponent] },
+  });
   await render(LegendLayerComponent, {
+    imports: [],
     declarations: [LegendImageComponent],
     inputs: { legendInfo },
   });
