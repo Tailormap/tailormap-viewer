@@ -242,6 +242,10 @@
         <source>Rectangle</source>
         <target>Rechthoek</target>
       </trans-unit>
+      <trans-unit id="core.common.required" datatype="html">
+        <source>(required)</source>
+        <target>(verplicht)</target>
+      </trans-unit>
       <trans-unit id="core.common.retry" datatype="html">
         <source>Retry</source>
         <target>Opnieuw proberen</target>

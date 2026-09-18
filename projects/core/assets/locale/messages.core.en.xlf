@@ -179,6 +179,9 @@
       <trans-unit id="core.common.rectangle" datatype="html">
         <source>Rectangle</source>
       </trans-unit>
+      <trans-unit id="core.common.required" datatype="html">
+        <source>(required)</source>
+      </trans-unit>
       <trans-unit id="core.common.retry" datatype="html">
         <source>Retry</source>
       </trans-unit>

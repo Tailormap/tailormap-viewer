@@ -242,6 +242,10 @@
         <source>Rectangle</source>
         <target>Rechteck</target>
       </trans-unit>
+      <trans-unit id="core.common.required" datatype="html">
+        <source>(required)</source>
+        <target>(erforderlich)</target>
+      </trans-unit>
       <trans-unit id="core.common.retry" datatype="html">
         <source>Retry</source>
         <target>Wiederholen</target>

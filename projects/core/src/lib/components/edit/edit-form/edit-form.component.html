@@ -2,34 +2,59 @@
   @for (item of formConfig; track item) {
     <div>
       @if (item.type === 'text') {
-        <mat-form-field>
-          <mat-label>{{ item.label }}</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>
+            {{ item.label }}
+            @if (item.required) {
+              <em i18n="@@core.common.required">(required)</em>
+            }
+          </mat-label>
           <input matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label">
         </mat-form-field>
       }
       @if (item.type === 'number' || item.type === 'integer') {
-        <mat-form-field>
-          <mat-label>{{ item.label }}</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>
+            {{ item.label }}
+            @if (item.required) {
+              <em i18n="@@core.common.required">(required)</em>
+            }
+          </mat-label>
           <input matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label" type="number">
         </mat-form-field>
       }
       @if (item.type === 'date') {
-        <mat-form-field>
-          <mat-label>{{ item.label }}</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>
+            {{ item.label }}
+            @if (item.required) {
+              <em i18n="@@core.common.required">(required)</em>
+            }
+          </mat-label>
           <input matInput [matDatepicker]="dp" [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label" />
           <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
           <mat-datepicker #dp></mat-datepicker>
         </mat-form-field>
       }
       @if (item.type === 'timestamp') {
-        <mat-form-field>
-          <mat-label>{{ item.label }}</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>
+            {{ item.label }}
+            @if (item.required) {
+              <em i18n="@@core.common.required">(required)</em>
+            }
+          </mat-label>
           <input matInput type="text" [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label">
         </mat-form-field>
       }
       @if (item.type === 'textarea') {
-        <mat-form-field>
-          <mat-label>{{ item.label }}</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>
+            {{ item.label }}
+            @if (item.required) {
+              <em i18n="@@core.common.required">(required)</em>
+            }
+          </mat-label>
           <textarea matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label"></textarea>
         </mat-form-field>
       }
@@ -38,7 +63,7 @@
           [formControl]="getControl(item.name)"
           [item]="item"
           [layerId]="layerId"
-        (clearUniqueValueCacheAfterSave)="clearUniqueValueCacheAfterSave.emit($event)"></tm-select-field>
+          (clearUniqueValueCacheAfterSave)="clearUniqueValueCacheAfterSave.emit($event)"></tm-select-field>
       }
       @if (item.type === 'boolean') {
         <mat-checkbox [formControl]="getControl(item.name)">

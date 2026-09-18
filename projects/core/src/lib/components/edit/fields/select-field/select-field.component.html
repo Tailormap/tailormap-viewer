@@ -1,6 +1,11 @@
 @if (item) {
-  <mat-form-field (click)="loadUniqueValues()">
-    <mat-label>{{ item.label }}</mat-label>
+  <mat-form-field (click)="loadUniqueValues()" hideRequiredMarker>
+    <mat-label>
+      {{ item.label }}
+      @if (item.required) {
+        <em i18n="@@core.common.required">(required)</em>
+      }
+    </mat-label>
     @if (item.allowValueListOnly === false) {
       <input type="text"
              [placeholder]="item.placeholder || item.label"
