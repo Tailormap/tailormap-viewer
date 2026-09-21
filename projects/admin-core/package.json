@@ -16,7 +16,7 @@
     "@ngrx/operators": "^22.0.0",
     "@ngrx/store": "^22.0.0",
     "@ngrx/store-devtools": "^22.0.0",
-    "@tailormap-admin/admin-api": "^12.9.0-rc.3",
+    "@tailormap-admin/admin-api": "^12.9.0",
     "@tailormap-viewer/api": "^12.9.0",
     "@tailormap-viewer/shared": "^12.9.0",
     "nanoid": "^6.0.1",
