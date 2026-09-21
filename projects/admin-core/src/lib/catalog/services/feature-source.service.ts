@@ -87,20 +87,10 @@ export class FeatureSourceService {
 
   public createFeatureSource$(source: FeatureSourceCreateModel, catalogNodeId: string) {
     const featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'> = { ...source };
-    return this.adminApiService.createFeatureSource$({ featureSource, refreshCapabilities: true }).pipe(
+    return this.adminApiService.createFeatureSource$({ featureSource }, catalogNodeId).pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-creating-feature-source:Error while creating feature source: ${message}`);
-        return of(null);
-      }),
-      concatMap(createdFeatureSource => {
-        if (createdFeatureSource) {
-          this.updateFeatureSourceState(createdFeatureSource.id, 'add', createdFeatureSource);
-          return this.catalogService.addItemToCatalog$(catalogNodeId, createdFeatureSource.id, CatalogItemKindEnum.FEATURE_SOURCE)
-            .pipe(
-              map(() => createdFeatureSource),
-            );
-        }
         return of(null);
       }),
     );

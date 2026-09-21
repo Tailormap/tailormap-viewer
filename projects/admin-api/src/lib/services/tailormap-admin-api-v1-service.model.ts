@@ -15,7 +15,7 @@ export interface TailormapAdminApiV1ServiceModel {
   deleteGeoService$(params: { id: string }): Observable<boolean>;
   refreshGeoService$(params: { id: string }): Observable<GeoServiceWithLayersModel>;
   getFeatureSource$(params: { id: string }): Observable<FeatureSourceModel>;
-  createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel>;
+  createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>}, catalogNodeId: string): Observable<FeatureSourceModel>;
   updateFeatureSource$(params: {
     id: string;
     featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'>;

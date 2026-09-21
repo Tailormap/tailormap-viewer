@@ -88,12 +88,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
-  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>}, catalogNodeId: string): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources`,
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/new`,
       {
         ...params.featureSource,
-        refreshCapabilities: !!params.refreshCapabilities,
+        catalogNodeId: catalogNodeId,
       },
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
@@ -102,14 +102,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     params: {
       id: string;
       featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'>;
-      refreshCapabilities?: boolean;
     },
   ): Observable<FeatureSourceModel> {
     return this.httpClient.patch<FeatureSourceModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`,
       {
         ...params.featureSource,
-        refreshCapabilities: !!params.refreshCapabilities,
       },
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
