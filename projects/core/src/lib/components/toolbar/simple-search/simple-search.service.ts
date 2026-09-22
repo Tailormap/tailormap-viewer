@@ -67,6 +67,7 @@ export class SimpleSearchService {
           results: searchResponse.documents.slice(0, SimpleSearchService.MAX_RESULTS).map<SearchResultItemModel>(doc => ({
             id: doc.fid,
             geometry: doc.geometry,
+            projectionCode: doc.projectionCode,
             label: (doc.displayValues || []).join(', '),
           })),
         };
