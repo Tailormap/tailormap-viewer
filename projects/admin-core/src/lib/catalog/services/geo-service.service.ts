@@ -91,20 +91,10 @@ export class GeoServiceService {
         defaultLayerSettings,
       },
     };
-    return this.adminApiService.createGeoService$({ geoService: geoServiceModel, refreshCapabilities: true }).pipe(
+    return this.adminApiService.createGeoService$({ geoService: geoServiceModel }, catalogNodeId).pipe(
       catchError((errorResponse) => {
         const message = ApiResponseHelper.getAdminApiErrorMessage(errorResponse);
         this.adminSnackbarService.showMessage($localize `:@@admin-core.catalog.error-creating-service:Error while creating geo service: ${message}`);
-        return of(null);
-      }),
-      concatMap(createdService => {
-        if (createdService) {
-          this.updateGeoServiceState(createdService.id, 'add', createdService);
-          return this.catalogService.addItemToCatalog$(catalogNodeId, createdService.id, CatalogItemKindEnum.GEO_SERVICE)
-            .pipe(
-              map(() => createdService),
-            );
-        }
         return of(null);
       }),
     );

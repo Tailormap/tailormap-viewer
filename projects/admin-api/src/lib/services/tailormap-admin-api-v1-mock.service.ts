@@ -40,7 +40,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of(node).pipe(delay(this.delay));
   }
 
-  public createGeoService$(params: { geoService: GeoServiceModel; refreshCapabilities: boolean }): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: GeoServiceModel }, _catalogNodeId: string): Observable<GeoServiceWithLayersModel> {
     return of({ ...params.geoService, layers: [] }).pipe(delay(this.delay));
   }
 
@@ -77,7 +77,7 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
     return of([mockData.getFeatureSource()]).pipe(delay(this.delay));
   }
 
-  public createFeatureSource$(params: { featureSource: FeatureSourceModel }): Observable<FeatureSourceModel> {
+  public createFeatureSource$(params: { featureSource: FeatureSourceModel}, _catalogNodeId: string ): Observable<FeatureSourceModel> {
     return of({ ...params.featureSource }).pipe(delay(this.delay));
   }
 
