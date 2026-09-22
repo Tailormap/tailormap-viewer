@@ -46,10 +46,9 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>}, catalogNodeId: string): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/geo-services/new`,
+      `${TailormapAdminApiV1Service.BASE_URL}/geo-services/new`, params.geoService,
       {
-        ...params.geoService,
-        catalogNodeId,
+        params: { catalogNodeId: catalogNodeId },
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
@@ -90,10 +89,9 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>}, catalogNodeId: string): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/new`,
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/new`, params.featureSource,
       {
-        ...params.featureSource,
-        catalogNodeId: catalogNodeId,
+        params: { catalogNodeId: catalogNodeId },
       },
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
