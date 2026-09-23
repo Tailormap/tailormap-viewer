@@ -293,10 +293,22 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       url = `${url}/search/findByCategory`;
       params.category = TailormapAdminApiV1Service.categoryToEnum(category);
     }
-    url = `${url}?projection=summary`;
+    url = `${url}?projection=summary&size=1000`;
     return this.httpClient.get<{ _embedded: { uploads: UploadModel[] }}>(url, { params }).pipe(
       map(response => response._embedded.uploads),
     );
+  }
+
+  public downloadMultipleUploads$(uploadIds: string[]): Observable<Blob> {
+    return this.httpClient.post(`${TailormapAdminApiV1Service.BASE_URL}/uploads/multi`, uploadIds, {
+      responseType: 'blob',
+    });
+  }
+
+  public deleteMultipleUploads$(uploadIds: string[]): Observable<boolean> {
+    return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/uploads/multi`, {
+      body: uploadIds,
+    }).pipe(map(() => true));
   }
 
   public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {
