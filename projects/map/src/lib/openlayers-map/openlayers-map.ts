@@ -4,7 +4,7 @@ import { View } from 'ol';
 import { NgZone } from '@angular/core';
 import { defaults as defaultInteractions, DragPan, Interaction, MouseWheelZoom } from 'ol/interaction.js';
 import {
-  LayerManagerModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
+  LayerManagerModel, LayerSwipeModel, MapExportOptions, MapExportResult, MapViewDetailsModel, MapViewerModel, MapViewerOptionsModel, OlMapStyleType,
 } from '../models';
 import { ProjectionsHelper } from '../helpers/projections.helper';
 import { OpenlayersExtent } from '../models/extent.type';
@@ -31,6 +31,7 @@ import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OlMapScaleHelper } from '../helpers/ol-map-scale.helper';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
 import { FeatureModelType } from '../models/feature-model.type';
+import { OpenLayersLayerSwipe } from './open-layers-layer-swipe';
 
 export class OpenLayersMap implements MapViewerModel {
 
@@ -57,6 +58,7 @@ export class OpenLayersMap implements MapViewerModel {
   private eventManager = new OpenLayersEventManager();
   private cesiumEventManager = new CesiumEventManager();
   private snappingManager = new OpenLayersSnappingManager();
+  private layerSwipe = new OpenLayersLayerSwipe();
 
   constructor(
     private ngZone: NgZone,
@@ -154,6 +156,7 @@ export class OpenLayersMap implements MapViewerModel {
     layerManager.init();
     this.eventManager.initEvents(olMap, this.ngZone, this.in3d);
     this.snappingManager.init(olMap, layerManager);
+    this.layerSwipe.init(olMap);
     const toolManager = new OpenLayersToolManager(olMap, this.ngZone, this.eventManager, this.cesiumEventManager, this.snappingManager);
 
     // Collapse the attribution control after 5 seconds, or the first time the user zooms, pans, or clicks on the map
@@ -249,6 +252,10 @@ export class OpenLayersMap implements MapViewerModel {
         .filter((interaction): interaction is MouseWheelZoom => interaction instanceof MouseWheelZoom)
         .forEach(interaction => olMap.removeInteraction(interaction));
     });
+  }
+
+  public setLayerSwipe(swipe: LayerSwipeModel | null) {
+    this.layerSwipe.setSwipe(swipe);
   }
 
   private getFeaturesExtent(olFeatures: Feature<Geometry>[]) {

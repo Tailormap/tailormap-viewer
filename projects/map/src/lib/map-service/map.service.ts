@@ -3,7 +3,7 @@ import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
+  LayerManagerModel, LayerSwipeModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
   MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -296,6 +296,10 @@ export class MapService {
 
   public disableMouseWheelZoom() {
     this.map.disableMouseWheelZoom();
+  }
+
+  public setLayerSwipe(swipe: LayerSwipeModel | null) {
+    this.map.setLayerSwipe(swipe);
   }
 
   /**
