@@ -102,4 +102,43 @@ describe('FeatureSourceFormComponent', () => {
     expect(adminSseService.listenForCapabilitiesLoadingProgressEventsById$).toHaveBeenCalledWith('123');
   });
 
+  test('should listen for JDBC capabilities loading progress using database when title is empty', async () => {
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const capabilitiesLoadingProgress$ = new Subject<SSECapabilitiesLoadingProgressEvent>();
+    const adminSseService = {
+      listenForCapabilitiesLoadingProgressEventsById$: vi.fn(() => capabilitiesLoadingProgress$.asObservable()),
+      listenForCapabilitiesLoadingProgressEventsByTitle$: vi.fn(() => capabilitiesLoadingProgress$.asObservable()),
+    };
+
+    await render(FeatureSourceFormComponent, {
+      imports: [],
+      providers: [
+        {
+          provide: AdminSseService,
+          useValue: adminSseService,
+        },
+      ],
+    });
+
+    await ue.click(await screen.findByPlaceholderText('Protocol'));
+    await ue.click(await screen.findByText('JDBC'));
+    await ue.type(await screen.findByPlaceholderText('Database'), 'tailormap');
+
+    await vi.waitFor(() => {
+      expect(adminSseService.listenForCapabilitiesLoadingProgressEventsByTitle$).toHaveBeenLastCalledWith('tailormap');
+    });
+
+    capabilitiesLoadingProgress$.next({
+      eventType: EventType.CAPABILITIES_LOADING_PROGRESS,
+      details: {
+        title: 'tailormap',
+        progress: 1,
+        total: null,
+        startedAt: '2026-09-23T00:00:00.000Z',
+      },
+    });
+
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+  });
+
 });

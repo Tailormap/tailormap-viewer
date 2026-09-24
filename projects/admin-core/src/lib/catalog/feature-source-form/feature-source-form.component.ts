@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
-import { debounceTime, distinctUntilChanged, Subject, Subscription, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   FeatureSourceModel,
@@ -132,10 +132,11 @@ export class FeatureSourceFormComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.featureSourceForm.controls.title.valueChanges
+    this.featureSourceForm.valueChanges
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
+        map(() => this.getCapabilitiesLoadingEventTitle()),
         distinctUntilChanged(),
       )
       .subscribe(() => {
@@ -182,14 +183,30 @@ export class FeatureSourceFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const title = this.featureSourceForm.controls.title.value?.trim();
-    if (!title) {
+    const capabilitiesLoadingEventTitle = this.getCapabilitiesLoadingEventTitle();
+    if (!capabilitiesLoadingEventTitle) {
       return;
     }
 
     this.capabilitiesLoadingSubscription = this.adminSseService
-      .listenForCapabilitiesLoadingProgressEventsByTitle$(title)
+      .listenForCapabilitiesLoadingProgressEventsByTitle$(capabilitiesLoadingEventTitle)
       .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+  }
+
+  private getCapabilitiesLoadingEventTitle(): string | null {
+    const { title, protocol, url, database } = this.featureSourceForm.getRawValue();
+    const trimmedTitle = title?.trim();
+
+    if (trimmedTitle) {
+      return trimmedTitle;
+    }
+    if (protocol === FeatureSourceProtocolEnum.WFS) {
+      return url?.trim() || null;
+    }
+    if (protocol === FeatureSourceProtocolEnum.JDBC) {
+      return database?.trim() || null;
+    }
+    return null;
   }
 
   private updateCapabilitiesLoadingProgress(event: SSECapabilitiesLoadingProgressEvent): void {
