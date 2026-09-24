@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, signal, OnDestroy } from '@angular/core';
+import { debounceTime, distinctUntilChanged, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminServerType,
@@ -18,35 +18,44 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { AsyncPipe } from '@angular/common';
+import { MatProgressBar, ProgressBarMode } from '@angular/material/progress-bar';
+import { AdminSseService, SSECapabilitiesLoadingProgressEvent } from '../../shared/services/admin-sse.service';
 
 @Component({
     selector: 'tm-admin-geo-service-form',
     templateUrl: './geo-service-form.component.html',
     styleUrls: ['./geo-service-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        AutoFocusDirective,
-        MatHint,
-        MatSelect,
-        MatOption,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        MatExpansionPanelDescription,
-        MatCheckbox,
-        PasswordFieldComponent,
-        AuthorizationEditComponent,
-        AsyncPipe,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    AutoFocusDirective,
+    MatHint,
+    MatSelect,
+    MatOption,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatCheckbox,
+    PasswordFieldComponent,
+    AuthorizationEditComponent,
+    AsyncPipe,
+    MatProgressBar,
+  ],
 })
-export class GeoServiceFormComponent implements OnInit {
+export class GeoServiceFormComponent implements OnInit, OnDestroy {
 
-  private destroyed = new Subject();
+  private destroyed = new Subject<void>();
+  private capabilitiesLoadingSubscription: Subscription | null = null;
   private _geoService: GeoServiceModel | null = null;
+
+  private adminSseService = inject(AdminSseService);
+  public mode = signal<ProgressBarMode>('determinate');
+  public progress = signal(0);
+  public showCapabilitiesLoadingProgress = signal(false);
 
   public protocols: GeoServiceProtocolEnum[] = [
     GeoServiceProtocolEnum.WMS,
@@ -77,6 +86,7 @@ export class GeoServiceFormComponent implements OnInit {
       this.geoServiceForm.get('protocol')?.disable({ emitEvent: false });
     }
     this._geoService = geoService;
+    this.listenForCapabilitiesLoadingProgress(geoService);
   }
 
   public get geoService(): GeoServiceModel | null {
@@ -155,6 +165,59 @@ export class GeoServiceFormComponent implements OnInit {
           authorizationRules: value.authorizationRules || [],
         });
       });
+
+    this.geoServiceForm.controls.title.valueChanges
+      .pipe(takeUntil(this.destroyed), debounceTime(250), distinctUntilChanged())
+      .subscribe(() => {
+        if (!this.geoService) {
+          this.listenForCapabilitiesLoadingProgress(null);
+        }
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
+    this.capabilitiesLoadingSubscription?.unsubscribe();
+    this.capabilitiesLoadingSubscription = null;
+  }
+
+  private listenForCapabilitiesLoadingProgress(geoService: GeoServiceModel | null): void {
+    this.capabilitiesLoadingSubscription?.unsubscribe();
+    this.capabilitiesLoadingSubscription = null;
+    this.showCapabilitiesLoadingProgress.set(false);
+    this.mode.set('determinate');
+    this.progress.set(0);
+
+    if (geoService) {
+      this.capabilitiesLoadingSubscription = this.adminSseService
+        .listenForCapabilitiesLoadingProgressEventsById$(geoService.id)
+        .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+      return;
+    }
+
+    const title = this.geoServiceForm.controls.title.value?.trim();
+    if (!title) {
+      return;
+    }
+
+    this.capabilitiesLoadingSubscription = this.adminSseService
+      .listenForCapabilitiesLoadingProgressEventsByTitle$(title)
+      .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+  }
+
+  private updateCapabilitiesLoadingProgress(event: SSECapabilitiesLoadingProgressEvent): void {
+    this.showCapabilitiesLoadingProgress.set(true);
+
+    if (typeof event.details.total === 'number' && event.details.total > 0) {
+      const percentage = Math.round((event.details.progress / event.details.total) * 100);
+      this.mode.set('determinate');
+      this.progress.set(Math.max(0, Math.min(100, percentage)));
+      return;
+    }
+
+    this.mode.set('indeterminate');
+    this.progress.set(0);
   }
 
   private isValidForm() {

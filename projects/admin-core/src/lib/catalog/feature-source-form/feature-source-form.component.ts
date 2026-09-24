@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { debounceTime, distinctUntilChanged, Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   FeatureSourceModel,
@@ -10,32 +10,41 @@ import { FeatureSourceCreateModel } from '../models/feature-source-update.model'
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect, MatOption } from '@angular/material/select';
-import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
+import { PasswordFieldComponent } from '../../shared/components';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
+import { MatProgressBar, ProgressBarMode } from '@angular/material/progress-bar';
+import { AdminSseService, SSECapabilitiesLoadingProgressEvent } from '../../shared/services/admin-sse.service';
 
 @Component({
     selector: 'tm-admin-feature-source-form',
     templateUrl: './feature-source-form.component.html',
     styleUrls: ['./feature-source-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        AutoFocusDirective,
-        MatSelect,
-        MatOption,
-        PasswordFieldComponent,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    AutoFocusDirective,
+    MatSelect,
+    MatOption,
+    PasswordFieldComponent,
+    MatProgressBar,
+  ],
 })
-export class FeatureSourceFormComponent implements OnInit {
+export class FeatureSourceFormComponent implements OnInit, OnDestroy {
 
-  private destroyed = new Subject();
+  private destroyed = new Subject<void>();
+  private capabilitiesLoadingSubscription: Subscription | null = null;
   private _featureSource: FeatureSourceModel | null = null;
 
   public protocols: FeatureSourceProtocolEnum[] = [ FeatureSourceProtocolEnum.JDBC, FeatureSourceProtocolEnum.WFS ];
   public dbTypes: JdbcDatabaseType[]=[ JdbcDatabaseType.POSTGIS, JdbcDatabaseType.SQLSERVER, JdbcDatabaseType.ORACLE ];
+
+  private adminSseService = inject(AdminSseService);
+  public mode = signal<ProgressBarMode>('determinate');
+  public progress = signal(0);
+  public showCapabilitiesLoadingProgress = signal(false);
 
   @Input()
   public set featureSource(featureSource: FeatureSourceModel | null) {
@@ -61,6 +70,7 @@ export class FeatureSourceFormComponent implements OnInit {
       this.featureSourceForm.get('dbType')?.disable({ emitEvent: false });
     }
     this._featureSource = featureSource;
+    this.listenForCapabilitiesLoadingProgress(featureSource);
   }
 
   public get featureSource(): FeatureSourceModel | null {
@@ -121,6 +131,25 @@ export class FeatureSourceFormComponent implements OnInit {
           this.updateDefaults(value);
         }
       });
+
+    this.featureSourceForm.controls.title.valueChanges
+      .pipe(
+        takeUntil(this.destroyed),
+        debounceTime(250),
+        distinctUntilChanged(),
+      )
+      .subscribe(() => {
+        if (!this.featureSource) {
+          this.listenForCapabilitiesLoadingProgress(null);
+        }
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
+    this.capabilitiesLoadingSubscription?.unsubscribe();
+    this.capabilitiesLoadingSubscription = null;
   }
 
   public isWFSSource() {
@@ -137,6 +166,44 @@ export class FeatureSourceFormComponent implements OnInit {
       schema: dbType.defaultSchema,
       connectionOptions: dbType.defaultConnectionOptions,
     }, { emitEvent: false });
+  }
+
+  private listenForCapabilitiesLoadingProgress(featureSource: FeatureSourceModel | null): void {
+    this.capabilitiesLoadingSubscription?.unsubscribe();
+    this.capabilitiesLoadingSubscription = null;
+    this.showCapabilitiesLoadingProgress.set(false);
+    this.mode.set('determinate');
+    this.progress.set(0);
+
+    if (featureSource) {
+      this.capabilitiesLoadingSubscription = this.adminSseService
+        .listenForCapabilitiesLoadingProgressEventsById$(featureSource.id)
+        .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+      return;
+    }
+
+    const title = this.featureSourceForm.controls.title.value?.trim();
+    if (!title) {
+      return;
+    }
+
+    this.capabilitiesLoadingSubscription = this.adminSseService
+      .listenForCapabilitiesLoadingProgressEventsByTitle$(title)
+      .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+  }
+
+  private updateCapabilitiesLoadingProgress(event: SSECapabilitiesLoadingProgressEvent): void {
+    this.showCapabilitiesLoadingProgress.set(true);
+
+    if (typeof event.details.total === 'number' && event.details.total > 0) {
+      const percentage = Math.round((event.details.progress / event.details.total) * 100);
+      this.mode.set('determinate');
+      this.progress.set(Math.max(0, Math.min(100, percentage)));
+      return;
+    }
+
+    this.mode.set('indeterminate');
+    this.progress.set(0);
   }
 
   private isValidForm() {

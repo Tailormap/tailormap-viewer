@@ -7,6 +7,12 @@ import { AdminServerType, TailormapAdminApiV1Service } from '@tailormap-admin/ad
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AdminSseService } from '../../shared/services/admin-sse.service';
+
+const createAdminSseServiceMock = () => ({
+  listenForCapabilitiesLoadingProgressEventsById$: vi.fn(() => of()),
+  listenForCapabilitiesLoadingProgressEventsByTitle$: vi.fn(() => of()),
+});
 
 describe('GeoServiceFormComponent', () => {
 
@@ -19,6 +25,7 @@ describe('GeoServiceFormComponent', () => {
         { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
         provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
         AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
+        { provide: AdminSseService, useValue: createAdminSseServiceMock() },
       ],
     });
     await userEvent.type(await screen.findByPlaceholderText('URL'), 'http://localhost.test');
