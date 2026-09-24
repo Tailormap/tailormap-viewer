@@ -44,22 +44,20 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>; refreshCapabilities?: boolean}): Observable<GeoServiceWithLayersModel> {
+  public createGeoService$(params: { geoService: Omit<GeoServiceModel, 'id' | 'type'>}, catalogNodeId: string): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.post<GeoServiceWithLayersModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/geo-services`,
+      `${TailormapAdminApiV1Service.BASE_URL}/geo-services/new`, params.geoService,
       {
-        ...params.geoService,
-        refreshCapabilities: !!params.refreshCapabilities,
+        params: { catalogNodeId: catalogNodeId },
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
 
-  public updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'>; refreshCapabilities?: boolean }): Observable<GeoServiceWithLayersModel> {
+  public updateGeoService$(params: { id: string; geoService: Omit<Partial<GeoServiceModel>, 'type'> }): Observable<GeoServiceWithLayersModel> {
     return this.httpClient.patch<GeoServiceWithLayersModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/geo-services/${params.id}`,
       {
         ...params.geoService,
-        refreshCapabilities: !!params.refreshCapabilities,
       },
     ).pipe(map(CatalogModelHelper.addTypeToGeoServiceModel));
   }
@@ -89,12 +87,11 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       .pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
 
-  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>; refreshCapabilities?: boolean }): Observable<FeatureSourceModel> {
+  public createFeatureSource$(params: { featureSource: Omit<FeatureSourceModel, 'id' | 'type' | 'featureTypes'>}, catalogNodeId: string): Observable<FeatureSourceModel> {
     return this.httpClient.post<FeatureSourceModel>(
-      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources`,
+      `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/new`, params.featureSource,
       {
-        ...params.featureSource,
-        refreshCapabilities: !!params.refreshCapabilities,
+        params: { catalogNodeId: catalogNodeId },
       },
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
@@ -103,14 +100,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     params: {
       id: string;
       featureSource: Omit<Partial<FeatureSourceModel>, 'type' | 'featureTypes'>;
-      refreshCapabilities?: boolean;
     },
   ): Observable<FeatureSourceModel> {
     return this.httpClient.patch<FeatureSourceModel>(
       `${TailormapAdminApiV1Service.BASE_URL}/feature-sources/${params.id}`,
       {
         ...params.featureSource,
-        refreshCapabilities: !!params.refreshCapabilities,
       },
     ).pipe(map(CatalogModelHelper.addTypeAndFeatureTypesToFeatureSourceModel));
   }
@@ -298,10 +293,22 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
       url = `${url}/search/findByCategory`;
       params.category = TailormapAdminApiV1Service.categoryToEnum(category);
     }
-    url = `${url}?projection=summary`;
+    url = `${url}?projection=summary&size=1000`;
     return this.httpClient.get<{ _embedded: { uploads: UploadModel[] }}>(url, { params }).pipe(
       map(response => response._embedded.uploads),
     );
+  }
+
+  public downloadMultipleUploads$(uploadIds: string[]): Observable<Blob> {
+    return this.httpClient.post(`${TailormapAdminApiV1Service.BASE_URL}/uploads/multi`, uploadIds, {
+      responseType: 'blob',
+    });
+  }
+
+  public deleteMultipleUploads$(uploadIds: string[]): Observable<boolean> {
+    return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/uploads/multi`, {
+      body: uploadIds,
+    }).pipe(map(() => true));
   }
 
   public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {

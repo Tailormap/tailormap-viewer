@@ -1,0 +1,9 @@
+@if (legendSettings(); as settings) {
+  <img [class.hi-dpi]="settings.scaleHiDpiImage"
+       [alt]="imageAriaLabel()"
+       [attr.aria-label]="imageAriaLabel()"
+       [src]="imageObjectUrl()"
+       [srcset]="settings.srcset" />
+} @else {
+  <img [src]="imageObjectUrl()" [attr.aria-label]="imageAriaLabel()" [alt]="imageAriaLabel()"/>
+}

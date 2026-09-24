@@ -6,7 +6,7 @@ import { LoginConfigurationModel, UserResponseModel } from '@tailormap-viewer/ap
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
+import { ImageWithDescriptionComponent } from '@tailormap-viewer/shared';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { ErrorMessageComponent, AutoFocusDirective } from '@tailormap-viewer/shared';
 

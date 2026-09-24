@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { selectViewerLogo } from '../../../state/core.selectors';
 import { distinctUntilChanged, Observable, of } from 'rxjs';
-import { ImageWithDescriptionComponent } from '../../../shared/components/image-with-description/image-with-description.component';
+import { ImageWithDescriptionComponent } from '@tailormap-viewer/shared';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 

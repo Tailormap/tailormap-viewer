@@ -2,4 +2,3 @@
 export * from './components/bottom-panel/bottom-panel.component';
 export * from './components/dialog/dialog.component';
 export * from './helpers';
-export * from './components/image-with-description/image-with-description.component';

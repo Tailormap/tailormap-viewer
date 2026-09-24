@@ -1,6 +1,3 @@
 @if (legendSettings(); as settings) {
-  <img [class.hi-dpi]="settings.scaleHiDpiImage"
-       [alt]="settings.altText"
-       [src]="settings.url"
-       [srcset]="settings.srcset" />
+  <tm-image-with-description [src]="settings.url" [legendSettings]="settings"/>
 }
