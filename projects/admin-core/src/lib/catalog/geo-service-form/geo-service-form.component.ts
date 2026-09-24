@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, signal, OnDestroy } from '@angular/core';
-import { debounceTime, distinctUntilChanged, map, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, merge, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminServerType,
@@ -166,7 +166,10 @@ export class GeoServiceFormComponent implements OnInit, OnDestroy {
         });
       });
 
-    this.geoServiceForm.valueChanges
+    merge(
+      this.geoServiceForm.controls.title.valueChanges,
+      this.geoServiceForm.controls.url.valueChanges,
+    )
       .pipe(
         takeUntil(this.destroyed),
         debounceTime(250),
