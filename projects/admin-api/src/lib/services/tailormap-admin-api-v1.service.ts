@@ -281,17 +281,12 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
-  private static categoryToEnum(category: string): string {
-    // We need to make the category matches what Spring Data REST expects, which is uppercase and underscores instead of dashes
-    return category.toUpperCase().replaceAll('-', '_');
-  }
-
   public getUploads$(category?: string): Observable<UploadModel[]> {
     let url = `${TailormapAdminApiV1Service.BASE_URL}/uploads`;
     const params: { category?: string } = {};
     if (category) {
       url = `${url}/search/findByCategory`;
-      params.category = TailormapAdminApiV1Service.categoryToEnum(category);
+      params.category = category;
     }
     url = `${url}?projection=summary&size=1000`;
     return this.httpClient.get<{ _embedded: { uploads: UploadModel[] }}>(url, { params }).pipe(
@@ -312,7 +307,6 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
   }
 
   public createUpload$(upload: Pick<UploadModel, 'content' | 'filename' | 'category' | 'mimeType' | 'description'>): Observable<UploadModel> {
-    upload = { ...upload, category: TailormapAdminApiV1Service.categoryToEnum(upload.category) };
     return this.httpClient.post<UploadModel>(`${TailormapAdminApiV1Service.BASE_URL}/uploads`, upload).pipe(
       map(response => response),
     );
@@ -328,8 +322,7 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
 
   // sha1 hashes are used to identify uploads
   public findUploadsByHash$(category: string, hashes: string[]): Observable<{ id: string; hash: string }[]> {
-    const categoryEnum = TailormapAdminApiV1Service.categoryToEnum(category);
-    return this.httpClient.post<{ id: string; hash: string }[]>(`${TailormapAdminApiV1Service.BASE_URL}/uploads/find-by-hash/${categoryEnum}`, hashes);
+    return this.httpClient.post<{ id: string; hash: string }[]>(`${TailormapAdminApiV1Service.BASE_URL}/uploads/find-by-hash/${category}`, hashes);
   }
 
   public pingSearchIndexEngine$(): Observable<SearchIndexPingResponseModel> {
