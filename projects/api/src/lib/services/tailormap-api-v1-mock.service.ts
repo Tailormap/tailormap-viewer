@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ViewerResponseModel, LayerDetailsModel, MapResponseModel, VersionResponseModel, FeatureModel, ConfigResponseModel,
-  SearchResponseModel, AttachmentMetadataModel, BoundsModel,
+  SearchResponseModel, AttachmentMetadataModel, BoundsModel, UploadCategoryEnum,
 } from '../models';
 import { delay, Observable, of, throwError } from 'rxjs';
 import { TailormapApiV1ServiceModel } from './tailormap-api-v1.service.model';
@@ -109,7 +109,7 @@ export class TailormapApiV1MockService implements TailormapApiV1ServiceModel {
 
   public getLatestUpload$(category: string): Observable<any> {
     switch (category) {
-      case 'drawing-style':
+      case UploadCategoryEnum.DRAWING_STYLE:
         return of({
           styles: [{
             'type': 'IMAGE', 'style': {
