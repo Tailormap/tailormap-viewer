@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, signal, OnDestroy } from '@angular/core';
-import { debounceTime, distinctUntilChanged, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminServerType,
@@ -166,8 +166,13 @@ export class GeoServiceFormComponent implements OnInit, OnDestroy {
         });
       });
 
-    this.geoServiceForm.controls.title.valueChanges
-      .pipe(takeUntil(this.destroyed), debounceTime(250), distinctUntilChanged())
+    this.geoServiceForm.valueChanges
+      .pipe(
+        takeUntil(this.destroyed),
+        debounceTime(250),
+        map(() => this.getCapabilitiesLoadingProgressTitle()),
+        distinctUntilChanged(),
+      )
       .subscribe(() => {
         if (!this.geoService) {
           this.listenForCapabilitiesLoadingProgress(null);
@@ -196,7 +201,7 @@ export class GeoServiceFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const title = this.geoServiceForm.controls.title.value?.trim();
+    const title = this.getCapabilitiesLoadingProgressTitle();
     if (!title) {
       return;
     }
@@ -204,6 +209,10 @@ export class GeoServiceFormComponent implements OnInit, OnDestroy {
     this.capabilitiesLoadingSubscription = this.adminSseService
       .listenForCapabilitiesLoadingProgressEventsByTitle$(title)
       .subscribe(event => this.updateCapabilitiesLoadingProgress(event));
+  }
+
+  private getCapabilitiesLoadingProgressTitle(): string {
+    return this.geoServiceForm.controls.title.value?.trim() || this.geoServiceForm.controls.url.value?.trim() || '';
   }
 
   private updateCapabilitiesLoadingProgress(event: SSECapabilitiesLoadingProgressEvent): void {
