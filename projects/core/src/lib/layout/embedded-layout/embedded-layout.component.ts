@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, effect, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, viewChild, ElementRef, effect, OnDestroy, NgZone } from '@angular/core';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { LayoutService } from '../layout.service';
 import { MapService } from '@tailormap-viewer/map';
@@ -44,6 +44,7 @@ export class EmbeddedLayoutComponent implements OnDestroy {
   public layoutService = inject(LayoutService);
   private mapService = inject(MapService);
   private bookmarkService = inject(BookmarkService);
+  private ngZone = inject(NgZone);
   public componentTypes = BaseComponentTypeEnum;
 
   private mapContainer = viewChild('mapContainer', { read: ElementRef });
@@ -57,7 +58,9 @@ export class EmbeddedLayoutComponent implements OnDestroy {
 
   private resizeObserver = new ResizeObserver(entries => {
     if (entries.length > 0 && entries[0].contentRect.width > 0 && entries[0].contentRect.height > 0) {
-      this.zoomToInitialExtent();
+      // ResizeObserver callbacks are not patched by zone.js, so re-enter the Angular zone explicitly
+      // to avoid NgRx's strictActionWithinNgZone check rejecting dispatches triggered from here
+      this.ngZone.run(() => this.zoomToInitialExtent());
     }
   });
 

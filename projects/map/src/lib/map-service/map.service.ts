@@ -3,7 +3,7 @@ import { OpenLayersMap } from '../openlayers-map/openlayers-map';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
-  LayerManagerModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
+  LayerManagerModel, LayerSwipeModel, LayerTypesEnum, MapExportOptions, MapExportResult, MapStyleModel, MapViewDetailsModel,
   MapViewerOptionsModel, ToolConfigModel, ToolModel, VectorLayerModel,
 } from '../models';
 import { ToolManagerModel } from '../models/tool-manager.model';
@@ -286,12 +286,20 @@ export class MapService {
     this.map.zoomTo(center, zoomLevel, animationDuration, ignoreWhileAnimating);
   }
 
-  public zoomToBounds(bounds: BoundsModel, maxZoom?: number) {
-    this.map.zoomToExtent([ bounds.minx, bounds.miny, bounds.maxx, bounds.maxy ], maxZoom);
+  public zoomToBounds(bounds: BoundsModel, maxZoom?: number, flyTo?: boolean) {
+    this.map.zoomToExtent([ bounds.minx, bounds.miny, bounds.maxx, bounds.maxy ], maxZoom, flyTo);
   }
 
   public zoomToScale(scale: number) {
     this.map.zoomToScale(scale);
+  }
+
+  public disableMouseWheelZoom() {
+    this.map.disableMouseWheelZoom();
+  }
+
+  public setLayerSwipe(swipe: LayerSwipeModel | null) {
+    this.map.setLayerSwipe(swipe);
   }
 
   /**
