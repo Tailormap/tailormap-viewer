@@ -7,7 +7,7 @@ const sanitizerMock: any = {
   bypassSecurityTrustHtml: (str: string | null) => str,
 };
 
-describe('TransformUrlsDirective', () => {
+describe('HtmlifyPipe', () => {
   let pipe: HtmlifyPipe;
 
   beforeEach(() => {
