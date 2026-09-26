@@ -7,6 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeatureSourceProtocolEnum, getFeatureSource } from '@tailormap-admin/admin-api';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
 import { FeatureSourceService } from '../services/feature-source.service';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: vi.fn() };
   const featureServiceMock = { createFeatureSource$: vi.fn(() => of({})), updateFeatureSource$: vi.fn(() => of({})) };
@@ -19,6 +21,7 @@ const setup = async (editMode = false) => {
           featureSource: editMode ? getFeatureSource({ id: '2', title: 'wfs source', protocol: FeatureSourceProtocolEnum.WFS, url: 'http://test-wfs.service' }) : null,
           parentNode: '1',
       } },
+      AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
   });
   return {

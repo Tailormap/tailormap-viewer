@@ -31,11 +31,31 @@ export interface SSETaskProgressEvent extends SSEEvent {
   eventType: EventType.TASK_PROGRESS;
 }
 
+export interface SSECapabilitiesLoadingProgressEvent extends SSEEvent{
+  details: {
+    /** The ID of the source for which capabilities are being loaded, when known.
+     * Unknown for a new source, because the id is assigned when loading is complete and the geoservice or feature sources is saved. */
+    id?: string;
+    /** Title of the source for which capabilities are being loaded (falls back to the url for WFS or database ic JDBC) */
+    title: string;
+    /** Total number of layers/featuretypes to process. May be `null` or empty if unknown. */
+    total?: number | null;
+    /** Number of layers/featuretypes processed so far.*/
+    progress: number;
+    /** ISO date-time formatted string. eg. '2024-12-12T16:02:34.587142504+01:00' */
+    startedAt: string;
+    /** Optional message to display to the user. */
+    message?: string;
+  };
+  eventType: EventType.CAPABILITIES_LOADING_PROGRESS;
+}
+
 export enum EventType {
   ENTITY_CREATED = 'entity-created',
   ENTITY_UPDATED = 'entity-updated',
   ENTITY_DELETED = 'entity-deleted',
   TASK_PROGRESS = 'task-progress',
+  CAPABILITIES_LOADING_PROGRESS = 'capabilities-loading',
 }
 
 @Injectable({
@@ -59,6 +79,7 @@ export class AdminSseService implements OnDestroy {
     EventType.ENTITY_UPDATED,
     EventType.ENTITY_DELETED,
     EventType.TASK_PROGRESS,
+    EventType.CAPABILITIES_LOADING_PROGRESS,
   ]);
 
   private entityEvents = new Subject<SSEEntityEvent>();
@@ -66,6 +87,9 @@ export class AdminSseService implements OnDestroy {
 
   private progressEvents = new Subject<SSETaskProgressEvent>();
   private progressEvents$ = this.progressEvents.asObservable();
+
+  private capabilitiesLoadingProgressEvents = new Subject<SSECapabilitiesLoadingProgressEvent>();
+  private capabilitiesLoadingProgressEvents$ = this.capabilitiesLoadingProgressEvents.asObservable();
 
   constructor() {
     const config = inject<EnvironmentConfigModel>(ENVIRONMENT_CONFIG, { optional: true });
@@ -101,6 +125,14 @@ export class AdminSseService implements OnDestroy {
     return this.progressEvents$.pipe();
   }
 
+  public listenForCapabilitiesLoadingProgressEventsByTitle$(title: string): Observable<SSECapabilitiesLoadingProgressEvent> {
+    return this.capabilitiesLoadingProgressEvents$.pipe(filter(event =>  event.eventType  === 'capabilities-loading' && event.details.title === title));
+  }
+
+  public listenForCapabilitiesLoadingProgressEventsById$(id: string): Observable<SSECapabilitiesLoadingProgressEvent> {
+    return this.capabilitiesLoadingProgressEvents$.pipe(filter(event =>  event.eventType  === 'capabilities-loading' && event.details.id === id));
+  }
+
   private ensureConnection() {
     if (this.eventSource) {
       return;
@@ -115,8 +147,9 @@ export class AdminSseService implements OnDestroy {
         this.retryCount = 0;
         if (evt.eventType===EventType.TASK_PROGRESS && this.supportedEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.progressEvents.next(evt as SSETaskProgressEvent));
-        }
-        else if (this.supportedEvents.has(evt.eventType)) {
+        } else if (evt.eventType===EventType.CAPABILITIES_LOADING_PROGRESS && this.supportedEvents.has(evt.eventType)) {
+          this.ngZone.run(() => this.capabilitiesLoadingProgressEvents.next(evt as SSECapabilitiesLoadingProgressEvent));
+        } else if (this.supportedEvents.has(evt.eventType)) {
           this.ngZone.run(() => this.entityEvents.next( evt as SSEEntityEvent));
         }
       };
