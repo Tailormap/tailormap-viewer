@@ -1,9 +1,33 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 64px);
+}
+
 h2 {
   border-bottom: 1px solid var(--border-color);
 }
 
 .no-margin {
   margin-top: 0;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  /*min-height: 0;*/
+}
+
+.existing-uploads {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  /*min-height: 0*/
+}
+
+.new-uploads {
+  flex: 0 0 auto;
 }
 
 .file-list {
@@ -13,6 +37,8 @@ h2 {
   max-height: 70vh;
   overflow: auto;
   padding-bottom: 20px;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .file-image {

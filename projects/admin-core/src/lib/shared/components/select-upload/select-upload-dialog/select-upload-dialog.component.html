@@ -6,7 +6,7 @@
   }
   @if (existingUploads$ | async; as existingUploads) {
     @if (existingUploads.length > 0) {
-      <div class="uploads-section">
+      <div class="existing-uploads">
         <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
         <div class="file-list">
           @for (upload of existingUploads; track upload.id) {
@@ -32,7 +32,7 @@
     }
   }
 
-  <div class="uploads-section">
+  <div class="new-uploads">
     <h2>{{ dialogProps.uploadNewTitle }}</h2>
     <tm-image-upload-field (imageChanged)="imageSelected($event)"
                            [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
