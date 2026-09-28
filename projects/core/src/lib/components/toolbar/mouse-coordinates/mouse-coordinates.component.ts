@@ -111,7 +111,7 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
 
         return [{
           id: display.id || `coordinate-display-${index}`,
-          label: this.getDisplayLabel(targetProjection, display.format),
+          label: display.label?.trim() || this.getDisplayLabel(targetProjection, display.format),
           coordinates: this.formatCoordinates(projectedCoordinates, targetProjection, display.format),
         }];
       } catch {

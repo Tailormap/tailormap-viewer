@@ -55,7 +55,7 @@ describe('MouseCoordinatesComponent', () => {
                 config: {
                   enabled: true,
                   displays: [
-                    { id: 'dd', projection: 'EPSG:4326', format: 'decimal-degrees' },
+                    { id: 'dd', label: 'WGS84', projection: 'EPSG:4326', format: 'decimal-degrees' },
                     { id: 'ddm', projection: 'EPSG:4326', format: 'degrees-decimal-minutes' },
                   ],
                 },
@@ -67,7 +67,7 @@ describe('MouseCoordinatesComponent', () => {
       ],
     });
 
-    expect(await screen.getByText('EPSG:4326 DD'));
+    expect(await screen.getByText('WGS84'));
     expect(await screen.getByText('52.000000° N'));
     expect(await screen.getByText('5.000000° E'));
     expect(await screen.getByText('EPSG:4326 DDM'));

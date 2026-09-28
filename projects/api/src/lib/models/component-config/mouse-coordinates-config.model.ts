@@ -6,6 +6,7 @@ export type MouseCoordinatesFormat = 'xy' | 'decimal-degrees' | 'degrees-decimal
 
 export interface MouseCoordinatesDisplayConfigModel {
   id: string;
+  label?: string;
   projection: string;
   format: MouseCoordinatesFormat;
 }

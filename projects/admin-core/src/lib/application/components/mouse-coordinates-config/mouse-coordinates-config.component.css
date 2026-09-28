@@ -17,11 +17,18 @@
 .display-form-row mat-form-field {
   margin-top: 0;
   margin-left: 8px;
-  width: 240px;
 }
 
-.display-form-row mat-form-field:first-child {
-  width: 260px;
+.display-form-row mat-form-field:nth-child(1) {
+  width: 180px;
+}
+
+.display-form-row mat-form-field:nth-child(2) {
+  width: 250px;
+}
+
+.display-form-row mat-form-field:nth-child(3) {
+  width: 220px;
 }
 
 .add-display-button {

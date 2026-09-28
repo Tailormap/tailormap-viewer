@@ -18,10 +18,12 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { InfoMessageComponent } from '@tailormap-viewer/shared';
 
 type DisplayFormType = FormGroup<{
   id: FormControl<string>;
+  label: FormControl<string>;
   projection: FormControl<string>;
   format: FormControl<MouseCoordinatesFormat>;
 }>;
@@ -41,6 +43,7 @@ type DisplayFormType = FormGroup<{
     MatOption,
     MatIconButton,
     MatIcon,
+    MatInput,
     MatButton,
   ],
 })
@@ -131,6 +134,7 @@ export class MouseCoordinatesConfigComponent implements ConfigurationComponentMo
 
       return {
         id: display.id || nanoid(),
+        label: display.label?.trim() || undefined,
         projection,
         format,
       };
@@ -142,6 +146,7 @@ export class MouseCoordinatesConfigComponent implements ConfigurationComponentMo
   private createForm(display?: MouseCoordinatesDisplayConfigModel): DisplayFormType {
     return new FormGroup({
       id: new FormControl<string>(display?.id || nanoid(), { nonNullable: true }),
+      label: new FormControl<string>(display?.label || '', { nonNullable: true }),
       projection: new FormControl<string>(display?.projection || MOUSE_COORDINATES_MAP_PROJECTION, { nonNullable: true }),
       format: new FormControl<MouseCoordinatesFormat>(display?.format || 'xy', { nonNullable: true }),
     });
