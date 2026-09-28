@@ -2,9 +2,12 @@ import { circular } from 'ol/geom/Polygon.js';
 import { getTransform, get as getProjection } from 'ol/proj.js';
 import { FeatureHelper } from './feature.helper';
 import { Proj4Helper } from './proj4.helper';
+import { ProjectionsHelper } from './projections.helper';
 
 export class CoordinateHelper {
   public static projectCoordinates(coords: [number, number], fromProjection: string, toProjection: string): [number, number] {
+    ProjectionsHelper.ensureProjection(fromProjection);
+    ProjectionsHelper.ensureProjection(toProjection);
     return Proj4Helper.proj4(fromProjection, toProjection, coords);
   }
 

@@ -19,6 +19,7 @@ import { DrawingConfigComponent } from './drawing-config/drawing-config.componen
 import { TocComponentConfigComponent } from './toc-config/toc-component-config.component';
 
 import { SnappingComponentConfigComponent } from './snapping-config/snapping-component-config.component';
+import { MouseCoordinatesConfigComponent } from './mouse-coordinates-config/mouse-coordinates-config.component';
 
 @NgModule({
     imports: [
@@ -38,6 +39,7 @@ import { SnappingComponentConfigComponent } from './snapping-config/snapping-com
     DrawingConfigComponent,
     TocComponentConfigComponent,
     SnappingComponentConfigComponent,
+    MouseCoordinatesConfigComponent,
 ],
     exports: [
         ComponentsListComponent,
@@ -56,6 +58,7 @@ import { SnappingComponentConfigComponent } from './snapping-config/snapping-com
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.ATTRIBUTE_LIST, $localize `:@@admin-core.application.component-attribute-list:Attribute list`, BaseComponentConfigComponent);
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.EDIT, $localize `:@@admin-core.application.component-edit:Edit`, EditComponentConfigComponent);
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MEASURE, $localize `:@@admin-core.application.component-measure-tools:Measure tools`, MeasureComponentConfigComponent);
+            configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.MOUSE_COORDINATES, $localize `:@@admin-core.application.component-mouse-coordinates:Mouse coordinates`, MouseCoordinatesConfigComponent);
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.COORDINATE_PICKER, $localize `:@@admin-core.application.component-coordinate-picker-tool:Coordinate picker tool`, BaseComponentConfigComponent);
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.STREETVIEW, $localize `:@@admin-core.application.component-streetview-tool:Streetview tool`, BaseComponentConfigComponent);
             configurationComponentService.registerConfigurationComponents(BaseComponentTypeEnum.SHARE_VIEWER, $localize `:@@admin-core.application.component-share-viewer:Share viewer`, BaseComponentConfigComponent);
