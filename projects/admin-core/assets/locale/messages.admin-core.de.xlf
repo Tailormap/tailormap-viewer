@@ -926,6 +926,10 @@
         <source>Leave empty to use the description as provided by the service</source>
         <target>Leer lassen, um die Beschreibung zu verwenden, wie sie vom Dienst bereitgestellt wird</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
+        <source>Insert image or link to file</source>
+        <target>Bild einfügen oder Link zur Datei hinzufügen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
         <target>Bearbeiten von <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/> </target>

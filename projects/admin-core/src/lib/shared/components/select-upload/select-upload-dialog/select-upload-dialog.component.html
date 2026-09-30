@@ -11,7 +11,9 @@
         <div class="file-list">
           @for (upload of existingUploads; track upload.id) {
             <div class="file-image" (click)="selectFile(upload)">
-              <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
+              @if (isImage(upload)) {
+                <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
+              }
               <div class="file-info">
                 <div class="file-name">
                   <span [title]="upload.filename">{{upload.filename}}</span><br />

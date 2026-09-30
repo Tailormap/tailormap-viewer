@@ -6,7 +6,7 @@ import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
-import { ConfirmDialogService, TooltipDirective } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -26,6 +26,7 @@ export interface SelectUploadData {
 
 export interface SelectUploadResult {
   uploadId?: string;
+  upload?: UploadModel;
   cancelled: boolean;
 }
 
@@ -135,6 +136,10 @@ export class SelectUploadDialogComponent implements OnInit {
       });
   }
 
+  public isImage(upload: UploadModel) {
+    return HtmlifyHelper.IMG_REGEXP.test(upload.filename);
+  }
+
   private humanFileSize(sizeBytes: number | bigint | null | undefined): string {
     // https://stackoverflow.com/a/72596863
     if (sizeBytes === null || typeof sizeBytes === 'undefined') {
@@ -157,7 +162,7 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public selectFile(upload: UploadModel) {
-    this.dialogRef.close({ cancelled: false, uploadId: upload.id });
+    this.dialogRef.close({ cancelled: false, upload, uploadId: upload.id });
   }
 
   public imageSelected($event: { image: string; fileName: string }) {
@@ -187,7 +192,7 @@ export class SelectUploadDialogComponent implements OnInit {
       .subscribe(upload => {
         this.loading.set(false);
         if (upload) {
-          this.dialogRef.close({ cancelled: false, uploadId: upload.id });
+          this.dialogRef.close({ cancelled: false, upload, uploadId: upload.id });
         }
       });
   }

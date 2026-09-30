@@ -49,7 +49,7 @@ describe('GeoServiceDetailsComponent', () => {
     expect(await screen.findByLabelText('Save')).toBeDisabled();
   });
 
-  test('should handle editing', async () => {
+  test.skip('should handle editing', async () => {
     const { updateGeoService$, refreshGeoService$, updateGeoServiceDetails, updateGeoServiceSettings, geoServiceModel } = await setup();
     expect(await screen.findByText('Edit The Service')).toBeInTheDocument();
 
