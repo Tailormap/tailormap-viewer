@@ -2394,6 +2394,10 @@
         <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
         <target> Die Beschreibung wird als ARIA-Label für das Bild verwendet, um die Zugänglichkeit der Anwendung zu verbessern. </target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-tooltip" datatype="html">
+        <source>Choose a file to upload, a description can then be added to the uploaded file</source>
+        <target>Wählen Sie eine Datei zum Hochladen aus, dann kann eine Beschreibung zur hochgeladenen Datei hinzugefügt werden</target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Datei wird noch verwendet</target>

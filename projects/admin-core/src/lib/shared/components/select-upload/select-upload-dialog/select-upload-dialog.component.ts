@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject, effect, computed } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
@@ -6,7 +6,7 @@ import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
-import { ConfirmDialogService, HtmlifyHelper } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -76,6 +76,7 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
         MatDialogActions,
         MatButton,
         AsyncPipe,
+        TooltipDirective,
     ],
 })
 export class SelectUploadDialogComponent implements OnInit {
@@ -93,11 +94,25 @@ export class SelectUploadDialogComponent implements OnInit {
   public dialogProps: DialogProps;
   public pendingImage = signal<{ image: string; fileName: string} | null>(null);
   public descriptionControl = new FormControl<string | null>(null);
+  public descriptionTooltip = computed(() => {
+    const pendingImage = this.pendingImage();
+    return pendingImage
+      ? ' '
+      : $localize `:@@admin-core.select-upload.description-tooltip:Choose a file to upload, a description can then be added to the uploaded file`;
+  });
 
   constructor() {
     this.dialogProps = CATEGORY_PROPS[this.data.category]
       ? CATEGORY_PROPS[this.data.category]
       : CATEGORY_PROPS['defaultProps'];
+
+    effect(() => {
+      if (this.pendingImage()) {
+        this.descriptionControl.enable();
+      } else {
+        this.descriptionControl.disable();
+      }
+    });
   }
 
   public static open(
