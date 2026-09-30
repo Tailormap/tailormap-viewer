@@ -81,3 +81,8 @@ export const selectDraftFormSelectedField = createSelector(
     return fields.find(f => f.name === selectedAttribute) || null;
   },
 );
+
+export const selectDraftFormTabs = createSelector(
+  selectDraftForm,
+  draftForm => draftForm?.options.tabs || [],
+);

@@ -6,6 +6,25 @@
                           label="Filter fields"
                           i18n-label="@@admin-core.form.filter-fields"></tm-admin-list-filter>
 
+    <div class="tab-actions">
+      <mat-form-field appearance="outline">
+        <mat-label>Tab name</mat-label>
+        <input
+          formControlName="'tabName'"
+          (keyup.enter)="addTab()">
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        color="primary"
+        type="button"
+        [disabled]="!tabName.value?.trim()"
+        (click)="addTab()"
+        aria-label="Add tab">
+        <mat-icon svgIcon="plus"></mat-icon>
+      </button>
+    </div>
+
     <mat-selection-list cdkDropList
                         [cdkDropListData]="fields$ | async"
                         (cdkDropListDropped)="updateListOrder($event)">

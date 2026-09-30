@@ -17,3 +17,7 @@ mat-selection-list {
 .drag-handle {
   float: right;
 }
+
+.tab-actions {
+  margin: 8px 0;
+}
