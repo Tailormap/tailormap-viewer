@@ -1757,6 +1757,9 @@
       <trans-unit id="admin-core.select-upload.description-hint" datatype="html">
         <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-tooltip" datatype="html">
+        <source>Choose a file to upload, a description can then be added to the uploaded file</source>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
       </trans-unit>
