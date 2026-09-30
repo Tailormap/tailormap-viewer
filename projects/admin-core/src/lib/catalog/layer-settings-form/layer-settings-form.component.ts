@@ -15,7 +15,6 @@ import { ExtendedGeoServiceLayerModel } from '../models/extended-geo-service-lay
 import { ProjectionAvailability } from '../../application/helpers/admin-projections-helper';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatSelectionList, MatListItem } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
@@ -27,37 +26,38 @@ import { MatSelect, MatOption } from '@angular/material/select';
 import { ProjectionAvailabilityComponent } from '../projection-availability/projection-availability.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { AsyncPipe } from '@angular/common';
+import { LayerDescriptionFieldComponent } from '../../shared/components/layer-description-field/layer-description-field.component';
 
 @Component({
     selector: 'tm-admin-layer-settings-form',
     templateUrl: './layer-settings-form.component.html',
     styleUrls: ['./layer-settings-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        AutoFocusDirective,
-        MatHint,
-        CdkTextareaAutosize,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        MatSelectionList,
-        MatListItem,
-        MatIcon,
-        MatSlideToggle,
-        FeatureTypeSelectorComponent,
-        BoundsFieldComponent,
-        TriStateBooleanComponent,
-        MatSelect,
-        MatOption,
-        TooltipDirective,
-        ProjectionAvailabilityComponent,
-        AuthorizationEditComponent,
-        AsyncPipe,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    AutoFocusDirective,
+    MatHint,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatSelectionList,
+    MatListItem,
+    MatIcon,
+    MatSlideToggle,
+    FeatureTypeSelectorComponent,
+    BoundsFieldComponent,
+    TriStateBooleanComponent,
+    MatSelect,
+    MatOption,
+    TooltipDirective,
+    ProjectionAvailabilityComponent,
+    AuthorizationEditComponent,
+    AsyncPipe,
+    LayerDescriptionFieldComponent,
+  ],
 })
 export class LayerSettingsFormComponent implements OnInit {
   private store$ = inject(Store);

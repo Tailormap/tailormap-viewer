@@ -695,6 +695,9 @@
       <trans-unit id="admin-core.catalog.description-hint" datatype="html">
         <source>Leave empty to use the description as provided by the service</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
+        <source>Insert image or link to file</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
       </trans-unit>
