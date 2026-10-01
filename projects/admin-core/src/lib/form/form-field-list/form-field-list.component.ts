@@ -20,6 +20,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 @Component({
     selector: 'tm-admin-form-field-list',
@@ -42,6 +43,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
     MatFormField,
     MatLabel,
     MatLabel,
+    MatInput,
   ],
 })
 export class FormFieldListComponent implements OnInit {
@@ -53,7 +55,7 @@ export class FormFieldListComponent implements OnInit {
   public featureTypeName: string = '';
 
   public filter = new FormControl('');
-  public tabName = new FormControl('');
+  public tabName = new FormControl<string>('');
 
   private attributeFilter = new BehaviorSubject<string | null>(null);
   public fields$: Observable<Array<FormFieldModel & { selected?: boolean }>> = of([]);

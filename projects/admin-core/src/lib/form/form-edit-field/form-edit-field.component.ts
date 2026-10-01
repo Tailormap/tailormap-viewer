@@ -6,7 +6,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { draftFormRemoveField, draftFormUpdateField } from '../state/form.actions';
-import { selectDraftFormSelectedField } from '../state/form.selectors';
+import { selectDraftFormSelectedField, selectDraftFormTabs } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -62,7 +62,7 @@ export class FormEditFieldComponent implements OnInit {
 
   public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
 
-  public tabs: Array<{ id: string; name: string }> = [];
+  public tabs = this.store$.selectSignal(selectDraftFormTabs);
 
   public fieldForm = new FormGroup({
     label: new FormControl('', {

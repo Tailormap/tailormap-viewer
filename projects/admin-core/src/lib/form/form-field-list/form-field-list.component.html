@@ -7,10 +7,11 @@
                           i18n-label="@@admin-core.form.filter-fields"></tm-admin-list-filter>
 
     <div class="tab-actions">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill" class="tab-name-input">
         <mat-label>Tab name</mat-label>
         <input
-          formControlName="'tabName'"
+          matInput
+          [formControl]="tabName"
           (keyup.enter)="addTab()">
       </mat-form-field>
 
