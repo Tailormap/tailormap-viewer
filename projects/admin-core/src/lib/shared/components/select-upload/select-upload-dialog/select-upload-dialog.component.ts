@@ -6,7 +6,7 @@ import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
-import { ConfirmDialogService, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, FileHelper, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -130,7 +130,7 @@ export class SelectUploadDialogComponent implements OnInit {
       .subscribe(uploads => {
         this.existingUploads$.next(uploads === null ? uploads : uploads.map<UploadModel>(upload => ({
           ...upload,
-          contentSize: this.humanFileSize(upload.contentLength),
+          contentSize: FileHelper.byteCountToDisplaySize(upload.contentLength),
         })));
         this.loading.set(false);
       });
@@ -138,23 +138,6 @@ export class SelectUploadDialogComponent implements OnInit {
 
   public isImage(upload: UploadModel) {
     return HtmlifyHelper.IMG_REGEXP.test(upload.filename);
-  }
-
-  private humanFileSize(sizeBytes: number | bigint | null | undefined): string {
-    // https://stackoverflow.com/a/72596863
-    if (sizeBytes === null || typeof sizeBytes === 'undefined') {
-      return '';
-    }
-    const UNITS = [ 'byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte' ];
-    const BYTES_PER_KB = 1000;
-    let size = Math.abs(Number(sizeBytes));
-    let u = 0;
-    while(size >= BYTES_PER_KB && u < UNITS.length-1) {
-      size /= BYTES_PER_KB;
-      ++u;
-    }
-    return new Intl.NumberFormat([], { style: 'unit', unit: UNITS[u], unitDisplay: 'short', maximumFractionDigits: 1 })
-      .format(size);
   }
 
   public dismiss(): void {
