@@ -1,3 +1,4 @@
+
 :host,
 .flex {
   display: flex;
@@ -9,18 +10,171 @@
   flex: 1;
 }
 
-mat-selection-list {
-  flex: 1;
-  overflow: auto;
-}
-
-.drag-handle {
-  float: right;
-}
-
 .tab-actions {
   margin: 8px 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+/* Scrollable container wrapping all drop lists */
+.ffl-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Generic drop list zone */
+.ffl-drop-list {
+  min-height: 40px;
+  border: 1px dashed transparent;
+  border-radius: 4px;
+  transition: border-color 150ms, background-color 150ms;
+}
+
+/* Highlight the drop zone when a draggable item is hovering over it */
+.ffl-drop-list.cdk-drop-list-dragging,
+.ffl-drop-list.cdk-drop-list-receiving {
+  border-color: var(--primary-color, #1976d2);
+  background-color: var(--primary-color-0_5, rgba(25, 118, 210, 0.05));
+}
+
+/* Indented drop list inside a tab */
+.ffl-drop-list--indented {
+  margin-left: 32px;
+}
+
+/* Tab header list — no border, just a container */
+.ffl-tab-header-list {
+  min-height: 8px;
+}
+
+/* Tab header row */
+.ffl-tab-header {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 8px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: default;
+  user-select: none;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.ffl-tab-header:hover {
+  background-color: var(--primary-color-0_5, rgba(0, 0, 0, 0.04));
+}
+
+/* Individual field row */
+.ffl-field-row {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.ffl-field-row:hover {
+  background-color: var(--primary-color-0_5, rgba(0, 0, 0, 0.04));
+}
+
+.ffl-field-row--selected {
+  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  color: var(--primary-color, #1976d2);
+}
+
+/* Drag handle icon */
+.ffl-drag-handle {
+  cursor: grab;
+  opacity: 0.4;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.ffl-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Expand/collapse button */
+.ffl-expand-btn {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  flex-shrink: 0;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Folder icon */
+.ffl-folder-icon {
+  margin-right: 4px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* Label text */
+.ffl-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty drop zone placeholder text */
+.ffl-drop-placeholder {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-style: italic;
+  opacity: 0.45;
+  font-size: 12px;
+}
+
+/* CDK drag placeholder (ghost row while dragging) */
+.ffl-field-row.cdk-drag-placeholder,
+.ffl-tab-header.cdk-drag-placeholder {
+  opacity: 0.3;
+  border: 1px dashed var(--primary-color, #1976d2);
+}
+
+/* CDK drag preview (what follows the cursor) */
+.ffl-field-row.cdk-drag-preview,
+.ffl-tab-header.cdk-drag-preview {
+  background: white;
+  border: 1px solid var(--primary-color, #1976d2);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animate items when list is being sorted */
+.cdk-drop-list-dragging .ffl-field-row:not(.cdk-drag-placeholder),
+.cdk-drop-list-dragging .ffl-tab-header:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.ffl-tab-header.cdk-drop-list-receiving {
+  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  outline: 2px dashed var(--primary-color, #1976d2);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.ffl-delete-tab-btn {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
