@@ -26,7 +26,9 @@ import { MatSelect, MatOption } from '@angular/material/select';
 import { ProjectionAvailabilityComponent } from '../projection-availability/projection-availability.component';
 import { AuthorizationEditComponent } from '../../shared/components/authorization-edit/authorization-edit.component';
 import { AsyncPipe } from '@angular/common';
-import { LayerDescriptionFieldComponent } from '../../shared/components/layer-description-field/layer-description-field.component';
+import {
+  AdminLayerDescriptionFieldHint, LayerDescriptionFieldComponent,
+} from '../../shared/components/layer-description-field/layer-description-field.component';
 
 @Component({
     selector: 'tm-admin-layer-settings-form',
@@ -43,6 +45,7 @@ import { LayerDescriptionFieldComponent } from '../../shared/components/layer-de
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
+    MatInput,
     MatSelectionList,
     MatListItem,
     MatIcon,
@@ -57,6 +60,7 @@ import { LayerDescriptionFieldComponent } from '../../shared/components/layer-de
     AuthorizationEditComponent,
     AsyncPipe,
     LayerDescriptionFieldComponent,
+    AdminLayerDescriptionFieldHint,
   ],
 })
 export class LayerSettingsFormComponent implements OnInit {

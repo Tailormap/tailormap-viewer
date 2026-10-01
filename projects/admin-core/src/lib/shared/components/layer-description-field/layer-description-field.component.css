@@ -1,4 +1,9 @@
 
-mat-form-field {
-  margin-top: 16px;
+:host {
+  display: block;
+  padding: 16px 0 16px 0;
+}
+
+mat-hint:not(:has(tm-admin-layer-description-field-hint)) {
+  display: none;
 }
