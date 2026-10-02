@@ -1,6 +1,6 @@
-<form [formGroup]="form">
-  @for (item of formConfig; track item) {
-    <div>
+<ng-template #formFields let-fields>
+  @for (item of fields; track item) {
+    <div class="edit-form-field">
       @if (item.type === 'text') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
@@ -71,5 +71,19 @@
         </mat-checkbox>
       }
     </div>
+  }
+</ng-template>
+
+<form [formGroup]="form" class="edit-form">
+  @if (tabs.length > 0) {
+    <mat-tab-group>
+      @for (tab of tabs; track tab.id) {
+        <mat-tab [label]="tab.name">
+          <ng-container *ngTemplateOutlet="formFields; context: { $implicit: formConfig.filter(f => f.tab === tab.id) }"></ng-container>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  } @else {
+    <ng-container *ngTemplateOutlet="formFields; context: { $implicit: formConfig }"></ng-container>
   }
 </form>

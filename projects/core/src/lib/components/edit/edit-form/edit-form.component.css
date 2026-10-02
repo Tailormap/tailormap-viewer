@@ -2,6 +2,10 @@ form {
   padding: 16px;
 }
 
-form > div + div {
+.edit-form ::ng-deep .edit-form-field + .edit-form-field {
   margin-top: 16px;
+}
+
+.edit-form ::ng-deep mat-tab-header {
+  margin-bottom: 16px;
 }
