@@ -22,16 +22,8 @@
   overflow-x: hidden;
 }
 
-.ffl-drop-list {
-  min-height: 40px;
-}
-
-.ffl-drop-list--indented {
+.field-list--indented {
   margin-left: 32px;
-}
-
-.ffl-tab-header-list {
-  min-height: 8px;
 }
 
 .ffl-tab-header {
@@ -53,11 +45,8 @@
   justify-content: center;
 }
 
-.ffl-drag-handle {
-  cursor: grab;
+.tab-icon {
   opacity: 0.4;
-  margin-right: 4px;
-  flex-shrink: 0;
 }
 
 .ffl-drag-handle:active {
@@ -71,29 +60,19 @@
   white-space: nowrap;
 }
 
-.ffl-field-row {
+.field-row {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: 34px;
   padding: 0 16px;
   cursor: pointer;
   box-sizing: border-box;
   width: 100%;
 }
 
-.ffl-field-row--selected {
+.field-row--selected {
   background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
   color: var(--primary-color, #1976d2);
-}
-
-.ffl-drop-placeholder {
-  height: 36px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  font-style: italic;
-  opacity: 0.45;
-  font-size: 12px;
 }
 
 .ffl-delete-tab-btn {
@@ -102,12 +81,12 @@
   flex-shrink: 0;
 }
 
-.ffl-field-row.cdk-drag-placeholder,
+.field-row.cdk-drag-placeholder,
 .ffl-tab-header.cdk-drag-placeholder {
   opacity: 0.3;
 }
 
-.ffl-field-row.cdk-drag-preview {
+.field-row.cdk-drag-preview {
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
@@ -125,7 +104,7 @@
   box-sizing: border-box;
 }
 
-.cdk-drop-list-dragging .ffl-field-row:not(.cdk-drag-placeholder),
+.cdk-drop-list-dragging .field-row:not(.cdk-drag-placeholder),
 .cdk-drop-list-dragging .ffl-tab-header:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
