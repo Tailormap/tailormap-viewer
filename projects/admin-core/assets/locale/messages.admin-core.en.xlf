@@ -89,6 +89,9 @@
       <trans-unit id="admin-core.application.component-measure-tools" datatype="html">
         <source>Measure tools</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-mouse-coordinates" datatype="html">
+        <source>Mouse coordinates</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
       </trans-unit>
@@ -1300,6 +1303,27 @@
       </trans-unit>
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-add-display" datatype="html">
+        <source>Add coordinate display</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format" datatype="html">
+        <source>Format</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-decimal-degrees" datatype="html">
+        <source>Decimal degrees</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-degrees-decimal-minutes" datatype="html">
+        <source>Degrees + decimal minutes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-xy" datatype="html">
+        <source>X / Y</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-help" datatype="html">
+        <source>Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection. Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-map-crs" datatype="html">
+        <source>Map CRS</source>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>

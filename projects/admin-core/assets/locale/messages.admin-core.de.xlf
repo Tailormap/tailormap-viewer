@@ -118,6 +118,10 @@
         <source>Measure tools</source>
         <target>Messwerkzeuge</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.component-mouse-coordinates" datatype="html">
+        <source>Mouse coordinates</source>
+        <target>Mauskoordinaten</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
         <target>Drucken</target>
@@ -1761,6 +1765,34 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
         <target>Titel für Streckenmessung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-add-display" datatype="html">
+        <source>Add coordinate display</source>
+        <target>Koordinatenanzeige hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format" datatype="html">
+        <source>Format</source>
+        <target>Format</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-decimal-degrees" datatype="html">
+        <source>Decimal degrees</source>
+        <target>Dezimalgrad</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-degrees-decimal-minutes" datatype="html">
+        <source>Degrees + decimal minutes</source>
+        <target>Grad + Dezimalminuten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-xy" datatype="html">
+        <source>X / Y</source>
+        <target>X / Y</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-help" datatype="html">
+        <source>Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection. Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).</source>
+        <target>Konfigurieren Sie eine oder mehrere Koordinatenanzeigen. Wenn keine konfiguriert sind, werden die Koordinaten in der Kartenprojektion angezeigt. Dezimalgrad sowie Grad/Dezimalminuten sind für WGS84 (EPSG:4326) verfügbar.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-map-crs" datatype="html">
+        <source>Map CRS</source>
+        <target>Karten-CRS</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
