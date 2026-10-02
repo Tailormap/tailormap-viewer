@@ -1,4 +1,6 @@
 import { parse } from '@tinyhttp/content-disposition';
+import { Subject } from 'rxjs';
+import { ArrayBufferHelper } from './array-buffer.helper';
 
 export class FileHelper {
 
@@ -53,5 +55,38 @@ export class FileHelper {
     }
     return new Intl.NumberFormat([], { style: 'unit', unit: UNITS[u], unitDisplay: 'short', maximumFractionDigits: 1 })
       .format(size);
+  }
+
+  public static getFileContentsBase64(file: File) {
+    const subject = new Subject<string | null>();
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (!e.target) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      let result = e.target.result instanceof ArrayBuffer
+        ? ArrayBufferHelper.bufferToBase64(e.target.result)
+        : e.target.result;
+      if (result !== null) {
+        result = FileHelper.parseDataUrl(result).base64!;
+      }
+      subject.next(result);
+      subject.complete();
+    };
+    reader.readAsDataURL(file);
+    return subject.asObservable();
+  }
+
+  public static parseDataUrl(dataUrl: string) {
+    const base64Idx = dataUrl.indexOf(';base64,');
+    let mimeType: string | undefined = undefined;
+    let base64: string | undefined = undefined;
+    if (dataUrl.startsWith('data:') && base64Idx !== -1) {
+      mimeType = dataUrl.substring(5, base64Idx);
+      base64 = dataUrl.substring(base64Idx + 8);
+    }
+    return { base64, mimeType };
   }
 }

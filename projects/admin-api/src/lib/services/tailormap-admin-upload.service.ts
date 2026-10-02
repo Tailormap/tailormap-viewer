@@ -4,8 +4,8 @@ import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 import { ImageHelper } from '../helpers/image.helper';
 import { UploadHelper } from '../helpers/upload.helper';
 import { Injectable, inject } from '@angular/core';
-
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { FileHelper } from '@tailormap-viewer/shared';
 
 export interface ImageUploadResult {
   url?: string;
@@ -18,7 +18,6 @@ export interface ImageUploadResult {
 export class TailormapAdminUploadService {
   private adminApiService = inject(TailormapAdminApiV1Service);
 
-
   public uploadImage$(file: File): Observable<ImageUploadResult | null> {
     return ImageHelper.readFileAsImage$(file, 2, 600)
       .pipe(
@@ -29,9 +28,9 @@ export class TailormapAdminUploadService {
           if (!result || !result.image || !result.fileName) {
             return of(null);
           }
-          const { image, mimeType } = UploadHelper.prepareBase64(result.image);
+          const { base64, mimeType } = FileHelper.parseDataUrl(result.image);
           return this.adminApiService.createUpload$({
-            content: image,
+            content: base64,
             filename: result.fileName,
             category: UploadCategoryEnum.IMAGE,
             mimeType,
