@@ -25,3 +25,5 @@ export * from './municipality.helper';
 export * from './attribute-filter.helper';
 export * from './attribute-filter.mock';
 export * from './tileset-3d-style.helper';
+export * from './hash.helper';
+export * from './array-buffer.helper';
