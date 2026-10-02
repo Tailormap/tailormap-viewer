@@ -100,7 +100,7 @@ export class FormEditFieldComponent implements OnInit {
     this.store$.select(selectDraftFormSelectedField)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        distinctUntilChanged((a, b) => a?.name === b?.name),
+        distinctUntilChanged(),
       )
       .subscribe(field => {
         this.field = field;
