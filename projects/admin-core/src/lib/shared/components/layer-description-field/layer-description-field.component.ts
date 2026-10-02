@@ -2,9 +2,9 @@ import {
   ChangeDetectionStrategy, Component, DestroyRef, forwardRef, inject, OnInit, ElementRef, viewChild, ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
+import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, take } from 'rxjs';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -15,6 +15,12 @@ import { HtmlifyHelper } from '@tailormap-viewer/shared';
 import { UPLOAD_REMOVE_SERVICE } from '../select-upload/models/upload-remove-service.injection-token';
 import { LayerAttachedFileRemoveService } from '../../services/layer-attached-file-remove.service';
 import { SelectUploadDialogComponent } from '../select-upload/select-upload-dialog/select-upload-dialog.component';
+
+@Component({
+  selector: 'tm-admin-layer-description-field-hint',
+  template: `<ng-content></ng-content>`,
+})
+export class AdminLayerDescriptionFieldHint {}
 
 @Component({
   selector: 'tm-admin-layer-description-field',
@@ -40,6 +46,7 @@ import { SelectUploadDialogComponent } from '../select-upload/select-upload-dial
     MatIcon,
     MatSuffix,
     MatTooltip,
+    MatHint,
   ],
 })
 export class LayerDescriptionFieldComponent implements OnInit, ControlValueAccessor {
@@ -54,14 +61,18 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
   public onTouched: any | null = null;
   private onChange: any | null = null;
 
+  private currentDescription: string | null = null;
+
   public ngOnInit(): void {
     this.textareaControl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         distinctUntilChanged(),
+        filter(value => value !== this.currentDescription),
         debounceTime(250),
       )
       .subscribe(description => {
+        this.currentDescription = description;
         if (this.onChange) {
           this.onChange(description);
         }
@@ -69,6 +80,7 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
   }
 
   public writeValue(_description: string | null): void {
+    this.currentDescription = _description;
     this.textareaControl.setValue(_description);
   }
 

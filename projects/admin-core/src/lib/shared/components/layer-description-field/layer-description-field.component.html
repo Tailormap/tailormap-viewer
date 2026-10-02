@@ -12,6 +12,8 @@
   <button type="button" mat-icon-button matSuffix i18n-matTooltip="@@admin-core.catalog.description.insert-upload.icon-button" matTooltip="Insert image or link to file" (click)="addLink()">
     <mat-icon svgIcon="plus"></mat-icon>
   </button>
-
+  <mat-hint>
+    <ng-content select="tm-admin-layer-description-field-hint"/>
+  </mat-hint>
 </mat-form-field>
 

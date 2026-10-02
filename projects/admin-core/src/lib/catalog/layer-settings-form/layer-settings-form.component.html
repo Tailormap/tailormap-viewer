@@ -12,13 +12,14 @@
       </mat-hint>
     </mat-form-field>
   }
-  <tm-admin-layer-description-field formControlName="description"/>
-  <mat-hint>
-    <span i18n="@@admin-core.catalog.description-hint">Leave empty to use the description as provided by the service</span>
-    @if (serviceLayer$ | async; as serviceLayer) {
-      <blockquote class="service-default">{{ serviceLayer?.abstractText }}</blockquote>
-    }
-  </mat-hint>
+  <tm-admin-layer-description-field formControlName="description">
+    <tm-admin-layer-description-field-hint>
+      <span i18n="@@admin-core.catalog.description-hint">Leave empty to use the description as provided by the service</span>
+      @if (serviceLayer$ | async; as serviceLayer) {
+        <blockquote class="service-default">{{ serviceLayer?.abstractText }}</blockquote>
+      }
+    </tm-admin-layer-description-field-hint>
+  </tm-admin-layer-description-field>
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
     <input matInput formControlName="attribution" />
