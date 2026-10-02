@@ -24,7 +24,6 @@
 
     <div class="ffl-scroll">
 
-      <!-- ① Unassigned fields (no tab) -->
       <div cdkDropList
            id="unassigned"
            class="ffl-drop-list"
@@ -37,8 +36,8 @@
                cdkDrag
                [cdkDragData]="field"
                (click)="selectAttribute(field.name)">
-            <mat-icon svgIcon="reorder" class="ffl-drag-handle" cdkDragHandle></mat-icon>
             <span class="ffl-label">{{ field.name }}</span>
+            <mat-icon svgIcon="reorder" class="ffl-drag-handle" cdkDragHandle></mat-icon>
           </div>
         }
         @if (unassignedFields.length === 0) {
@@ -101,8 +100,8 @@
                      cdkDrag
                      [cdkDragData]="field"
                      (click)="selectAttribute(field.name)">
-                  <mat-icon svgIcon="reorder" class="ffl-drag-handle" cdkDragHandle></mat-icon>
                   <span class="ffl-label">{{ field.name }}</span>
+                  <mat-icon svgIcon="reorder" class="ffl-drag-handle" cdkDragHandle></mat-icon>
                 </div>
               }
               @if (tabFields[tabIdx].length === 0) {
