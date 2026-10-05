@@ -2,11 +2,10 @@ import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, i
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
-import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
-import { ConfirmDialogService, FileHelper, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, FileHelper, FileContents, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -16,11 +15,15 @@ import { ImageUploadFieldComponent } from '../../image-upload-field/image-upload
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AsyncPipe } from '@angular/common';
-import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { FileUploadFieldComponent } from '../../file-upload-field/file-upload-field.component';
+import { MatTooltip } from '@angular/material/tooltip';
 
 export interface SelectUploadData {
   uploadId: string | null;
   category: UploadCategoryEnum | string;
+  showFilesTab?: boolean;
   showDescriptionField: boolean;
 }
 
@@ -63,21 +66,25 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
     templateUrl: './select-upload-dialog.component.html',
     styleUrls: ['./select-upload-dialog.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatDialogTitle,
-        MatProgressSpinner,
-        MatIconButton,
-        MatIcon,
-        ImageUploadFieldComponent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        ReactiveFormsModule,
-        MatDialogActions,
-        MatButton,
-        AsyncPipe,
-        TooltipDirective,
-    ],
+  imports: [
+    MatDialogTitle,
+    MatProgressSpinner,
+    MatIconButton,
+    MatIcon,
+    ImageUploadFieldComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatDialogActions,
+    MatButton,
+    AsyncPipe,
+    TooltipDirective,
+    MatTabGroup,
+    MatTab,
+    FileUploadFieldComponent,
+    MatTooltip,
+  ],
 })
 export class SelectUploadDialogComponent implements OnInit {
   private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);
@@ -92,14 +99,15 @@ export class SelectUploadDialogComponent implements OnInit {
   public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
   public loading = signal(false);
   public dialogProps: DialogProps;
-  public pendingImage = signal<{ image: string; fileName: string} | null>(null);
+  public fileToUpload = signal<FileContents | null>(null);
   public descriptionControl = new FormControl<string | null>(null);
   public descriptionTooltip = computed(() => {
-    const pendingImage = this.pendingImage();
+    const pendingImage = this.fileToUpload();
     return pendingImage
       ? ' '
       : $localize `:@@admin-core.select-upload.description-tooltip:Choose a file to upload, a description can then be added to the uploaded file`;
   });
+  public selectedTab: 'files' | 'images' = this.data.showFilesTab ? 'files' : 'images';
 
   constructor() {
     this.dialogProps = CATEGORY_PROPS[this.data.category]
@@ -107,7 +115,7 @@ export class SelectUploadDialogComponent implements OnInit {
       : CATEGORY_PROPS['defaultProps'];
 
     effect(() => {
-      if (this.pendingImage()) {
+      if (this.fileToUpload()) {
         this.descriptionControl.enable();
       } else {
         this.descriptionControl.disable();
@@ -128,12 +136,32 @@ export class SelectUploadDialogComponent implements OnInit {
     this.adminApiService.getUploads$(this.data.category)
       .pipe(take(1), catchError(() => of(null)))
       .subscribe(uploads => {
-        this.existingUploads$.next(uploads === null ? uploads : uploads.map<UploadModel>(upload => ({
-          ...upload,
-          contentSize: FileHelper.byteCountToDisplaySize(upload.contentLength),
-        })));
+        if (uploads !== null) {
+          uploads = uploads.sort((a, b) => a.filename.localeCompare(b.filename));
+          uploads = uploads.map<UploadModel>(upload => ({
+            ...upload,
+            contentSize: FileHelper.byteCountToDisplaySize(upload.contentLength),
+          }));
+        }
+        this.existingUploads$.next(uploads);
         this.loading.set(false);
       });
+  }
+
+  public getFilesTabLabel() {
+    const uploads = this.existingUploads$.value;
+    const count = uploads?.filter(u => !this.isImage(u)).length || 0;
+    return $localize `:@@admin-core.select-upload.files-tab:Files (${count})`;
+  }
+
+  public getImagesTabLabel() {
+    const uploads = this.existingUploads$.value;
+    const count = uploads?.filter(this.isImage).length || 0;
+    return $localize `:@@admin-core.select-upload.images-tab:Images (${count})`;
+  }
+
+  public onTabChange($event: { index: number }) {
+    this.selectedTab = $event.index === 0 ? 'files' : 'images';
   }
 
   public isImage(upload: UploadModel) {
@@ -148,27 +176,37 @@ export class SelectUploadDialogComponent implements OnInit {
     this.dialogRef.close({ cancelled: false, upload, uploadId: upload.id });
   }
 
-  public imageSelected($event: { image: string; fileName: string }) {
-    if ($event.image === '' && $event.fileName === '') {
-      this.pendingImage.set(null);
-      return;
-    }
-    this.pendingImage.set($event);
+  public fileSelected($event: FileContents | null) {
+    this.fileToUpload.set($event);
   }
 
-  public saveImage() {
+  public imageSelected($event: { image: string; fileName: string }) {
+    const haveImage = $event.image !== '' && $event.fileName !== '';
+    const parsed = haveImage ? FileHelper.parseDataUrl($event.image) : null;
+    if (parsed === null) {
+      this.fileToUpload.set(null);
+    } else {
+      this.fileToUpload.set({
+        filename: $event.fileName,
+        dataURL: $event.image,
+        contentsBase64: parsed.contentsBase64,
+        mimeType: parsed.mimeType,
+      });
+    }
+  }
+
+  public uploadFile() {
     this.loading.set(true);
-    const pendingImage = this.pendingImage();
-    if (!pendingImage) {
+    const fileToUpload = this.fileToUpload();
+    if (!fileToUpload) {
       this.loading.set(false);
       return;
     }
-    const { image, mimeType } = UploadHelper.prepareBase64(pendingImage.image);
     this.adminApiService.createUpload$({
-      content: image,
-      filename: pendingImage.fileName,
+      content: fileToUpload.contentsBase64,
+      filename: fileToUpload.filename,
       category: this.data.category,
-      mimeType,
+      mimeType: fileToUpload.mimeType,
       description: this.descriptionControl.value || undefined,
     })
       .pipe(take(1), catchError(() => of(null)))
@@ -181,7 +219,7 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public getImg(upload: UploadModel) {
-    return UploadHelper.getAdminUrlForFile(upload.id, upload.category, upload.filename);
+    return UploadedFileHelper.getAdminUrlForFile(upload.id, upload.category, upload.filename);
   }
 
   public removeUpload($event: MouseEvent, upload: UploadModel) {

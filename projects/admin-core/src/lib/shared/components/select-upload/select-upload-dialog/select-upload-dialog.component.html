@@ -8,36 +8,67 @@
     @if (existingUploads.length > 0) {
       <div class="existing-uploads">
         <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
-        <div class="file-list">
-          @for (upload of existingUploads; track upload.id) {
-            <div class="file-image" (click)="selectFile(upload)">
-              @if (isImage(upload)) {
-                <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
+
+        <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [class.hidden]="!data.showFilesTab" (selectedTabChange)="onTabChange($event)">
+          @if (data.showFilesTab) {
+            <mat-tab [label]="getFilesTabLabel()">
+              @for (upload of existingUploads; track upload.id) {
+                @if (!isImage(upload)) {
+                  <div class="file-no-image" (click)="selectFile(upload)">
+                    <div class="file-info">
+                      <div class="file-name">
+                        @let size = ' (' + upload.contentSize + ')';
+                        @let tooltip = (upload.description ? upload.description : upload.filename) + size;
+                        <span [title]="upload.filename" [matTooltip]="tooltip">{{upload.filename}}</span><br />
+                      </div>
+                      <button mat-icon-button
+                              color="warn"
+                              (click)="removeUpload($event, upload)">
+                        <mat-icon svgIcon="trash_filled"></mat-icon></button>
+                    </div>
+                  </div>
+                }
               }
-              <div class="file-info">
-                <div class="file-name">
-                  <span [title]="upload.filename">{{upload.filename}}</span><br />
-                  <span i18n="@@admin-core.common.size">Size</span>: {{upload.contentSize}}<br />
-                  @if (upload.description) {
-                    <span i18n="@@admin-core.common.description">Description</span>: {{upload.description}}
-                  }
-                </div>
-                <button mat-icon-button
-                        color="warn"
-                        (click)="removeUpload($event, upload)">
-                  <mat-icon svgIcon="trash_filled"></mat-icon></button>
-              </div>
-            </div>
+            </mat-tab>
           }
-        </div>
+
+          <mat-tab [label]="getImagesTabLabel()">
+            <div class="file-list">
+              @for (upload of existingUploads; track upload.id) {
+                @if (isImage(upload)) {
+                  <div class="file-image" (click)="selectFile(upload)">
+                      <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
+                    <div class="file-info">
+                      <div class="file-name">
+                        <span [title]="upload.filename">{{upload.filename}}</span><br />
+                        <span i18n="@@admin-core.common.size">Size</span>: {{upload.contentSize}}<br />
+                        @if (upload.description) {
+                          <span i18n="@@admin-core.common.description">Description</span>: {{upload.description}}
+                        }
+                      </div>
+                      <button mat-icon-button
+                              color="warn"
+                              (click)="removeUpload($event, upload)">
+                        <mat-icon svgIcon="trash_filled"></mat-icon></button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </mat-tab>
+        </mat-tab-group>
       </div>
     }
   }
 
   <div class="new-uploads">
     <h2>{{ dialogProps.uploadNewTitle }}</h2>
-    <tm-image-upload-field (imageChanged)="imageSelected($event)"
-                           [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
+    @if (selectedTab === 'files') {
+      <tm-file-upload-field (fileChanged)="fileSelected($event)"></tm-file-upload-field>
+    } @else {
+      <tm-image-upload-field  (imageChanged)="imageSelected($event)"
+                             [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
+    }
     @if (data.showDescriptionField) {
       <mat-form-field appearance="outline" class="description-field" [tmTooltip]="descriptionTooltip()">
         <mat-label i18n="@@admin-core.select-upload.description">Description</mat-label>
@@ -58,8 +89,8 @@
 <div mat-dialog-actions align="end">
   <button mat-flat-button
           color="primary"
-          [disabled]="!pendingImage()"
-          (click)="saveImage()"
+          [disabled]="!fileToUpload()"
+          (click)="uploadFile()"
           i18n="@@admin-core.common.save">Save</button>
   <button mat-flat-button (click)="dismiss()" i18n="@@admin-core.common.cancel">Cancel</button>
 </div>
