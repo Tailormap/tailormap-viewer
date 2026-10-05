@@ -28,19 +28,22 @@ export class TailormapAdminUploadService {
           if (!result || !result.image || !result.fileName) {
             return of(null);
           }
-          const { base64, mimeType } = FileHelper.parseDataUrl(result.image);
+          const parsed = FileHelper.parseDataUrl(result.image);
+          if (!parsed) {
+            return of({ error: 'Invalid image data' });
+          }
           return this.adminApiService.createUpload$({
-            content: base64,
+            content: parsed.contentsBase64,
             filename: result.fileName,
             category: UploadCategoryEnum.IMAGE,
-            mimeType,
+            mimeType: parsed.mimeType,
           })
             .pipe(
               take(1),
               catchError(() => of(null)),
               map(uploadResult => {
                 return uploadResult
-                  ? { url: UploadHelper.getUrlForFile(uploadResult.id, uploadResult.category, uploadResult.filename) }
+                  ? { url: UploadedFileHelper.getUrlForFile(uploadResult.id, uploadResult.category, uploadResult.filename) }
                   : null;
               }),
             );
