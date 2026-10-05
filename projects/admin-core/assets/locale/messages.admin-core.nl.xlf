@@ -1813,6 +1813,10 @@
         <source>Add form</source>
         <target>Formulier toevoegen</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.add-tab" datatype="html">
+        <source>Add tab</source>
+        <target>Voeg tabblad toe</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Laat de gebruiker ook eigen tekst invullen</target>
@@ -1840,6 +1844,10 @@
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
         <target>Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-tab" datatype="html">
+        <source>Delete tab</source>
+        <target>Verwijder tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
@@ -1933,9 +1941,21 @@
         <source>Label</source>
         <target>Label</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.no-tab" datatype="html">
+        <source>No tab</source>
+        <target>Geen tabblad</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
         <target>Verplicht veld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab" datatype="html">
+        <source>Tab</source>
+        <target>Tabblad</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab-name" datatype="html">
+        <source>Tab name</source>
+        <target>Naam tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>

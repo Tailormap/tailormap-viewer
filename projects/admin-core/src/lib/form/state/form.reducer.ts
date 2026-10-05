@@ -260,6 +260,58 @@ const onUpdateDraftFormValid = (
   draftFormValid: payload.isValid,
 });
 
+const onDraftFormAddTab = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormAddTab>,
+): FormState => {
+  if (!state.draftForm) {
+    return state;
+  }
+
+  const tabs = state.draftForm.options?.tabs || [];
+  const tabExists = tabs.some(tab => tab.id === payload.tabId || tab.name === payload.tabName);
+
+  if (tabExists) {
+    return state;
+  }
+
+  return {
+    ...state,
+    draftFormUpdated: true,
+    draftForm: {
+      ...state.draftForm,
+      options: {
+        ...state.draftForm.options,
+        tabs: [
+          ...tabs,
+          { id: payload.tabId, name: payload.tabName },
+        ],
+      },
+    },
+  };
+};
+
+const onDraftFormUpdateTabs = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormUpdateTabs>,
+): FormState => {
+  if (!state.draftForm) {
+    return state;
+  }
+
+  return {
+    ...state,
+    draftFormUpdated: true,
+    draftForm: {
+      ...state.draftForm,
+      options: {
+        ...state.draftForm.options,
+        tabs: payload.tabs,
+      },
+    },
+  };
+};
+
 const formReducerImpl = createReducer<FormState>(
   initialFormState,
   on(FormActions.loadFormsStart, onLoadFormsStart),
@@ -281,5 +333,7 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),
   on(FormActions.draftFormRemoveField, onDraftFormRemoveField),
   on(FormActions.updateDraftFormValid, onUpdateDraftFormValid),
+  on(FormActions.draftFormAddTab, onDraftFormAddTab),
+  on(FormActions.draftFormUpdateTabs, onDraftFormUpdateTabs),
 );
 export const formReducer = (state: FormState | undefined, action: Action) => formReducerImpl(state, action);

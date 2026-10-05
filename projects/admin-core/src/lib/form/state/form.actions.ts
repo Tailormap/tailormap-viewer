@@ -100,3 +100,13 @@ export const updateDraftFormValid = createAction(
   `${formActionsPrefix} Update Draft Form Valid`,
   props<{ isValid: boolean }>(),
 );
+
+export const draftFormAddTab = createAction(
+  `${formActionsPrefix} Draft Form Add Tab`,
+  props<{ tabId: string; tabName: string }>(),
+);
+
+export const draftFormUpdateTabs = createAction(
+  `${formActionsPrefix} Draft Form Update Tabs`,
+  props<{ tabs: Array<{ id: string; name: string }> }>(),
+);
