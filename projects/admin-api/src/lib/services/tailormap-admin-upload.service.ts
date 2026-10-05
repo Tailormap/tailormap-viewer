@@ -2,9 +2,8 @@ import { catchError, concatMap, Observable, of, take } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
 import { ImageHelper } from '../helpers/image.helper';
-import { UploadHelper } from '../helpers/upload.helper';
 import { Injectable, inject } from '@angular/core';
-import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 import { FileHelper } from '@tailormap-viewer/shared';
 
 export interface ImageUploadResult {
