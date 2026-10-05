@@ -7,5 +7,5 @@ export interface UploadInUseItem {
 }
 
 export interface UploadRemoveServiceModel {
-  isImageInUse$: (fileId: string) => Observable<UploadInUseItem[]>;
+  isUploadInUse$: (uploadId: string) => Observable<UploadInUseItem[]>;
 }

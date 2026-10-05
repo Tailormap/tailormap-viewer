@@ -10,7 +10,7 @@ export class HeaderComponentLogoRemoveService implements UploadRemoveServiceMode
   private applicationService = inject(ApplicationService);
 
 
-  public isImageInUse$(imageId: string) {
+  public isUploadInUse$(uploadId: string) {
     return this.applicationService.getApplications$()
       .pipe(
         take(1),
@@ -19,7 +19,7 @@ export class HeaderComponentLogoRemoveService implements UploadRemoveServiceMode
             .filter(application => {
               const config = (application.components || []).find(c => c.type === BaseComponentTypeEnum.HEADER);
               const headerConfig = config?.config as HeaderComponentConfigModel | undefined;
-              return headerConfig?.logoFileId === imageId;
+              return headerConfig?.logoFileId === uploadId;
             })
             .map<UploadInUseItem>(app => ({
               id: app.id,
