@@ -66,6 +66,10 @@
         <source>Change folder name</source>
         <target>Ordnername ändern</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.clear-file-upload" datatype="html">
+        <source>Clear file</source>
+        <target>Datei löschen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
         <source>This group is collapsed on startup</source>
         <target>Diese Gruppe ist beim Start eingeklappt</target>
@@ -2405,6 +2409,14 @@
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
         <source>This file cannot be removed because it is still used in the following places.</source>
         <target>Diese Datei kann nicht entfernt werden, da sie noch an den folgenden Stellen verwendet wird.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
+        <source>Files (<x id="PH" equiv-text="count"/>)</source>
+        <target>Dateien (<x id="PH" equiv-text="count"/>)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
+        <source>Images (<x id="PH" equiv-text="count"/>)</source>
+        <target>Bilder (<x id="PH" equiv-text="count"/>)</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>
