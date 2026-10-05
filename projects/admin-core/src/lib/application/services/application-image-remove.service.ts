@@ -11,13 +11,13 @@ export class ApplicationImageRemoveService implements UploadRemoveServiceModel {
   private applicationService = inject(ApplicationService);
 
 
-  public isImageInUse$(imageId: string) {
+  public isUploadInUse$(uploadId: string) {
     return this.applicationService.getApplications$()
       .pipe(
         take(1),
         map(applications => {
           return applications
-            .filter(application => application.styling?.logo === imageId)
+            .filter(application => application.styling?.logo === uploadId)
             .map<UploadInUseItem>(app => ({
               id: app.id,
               name: app.title || app.name,

@@ -247,7 +247,7 @@ export class SelectUploadDialogComponent implements OnInit {
     $event.stopPropagation();
     const uploadId = upload.id;
     const uploadName = upload.filename;
-    this.uploadRemoveService.isImageInUse$(uploadId)
+    this.uploadRemoveService.isUploadInUse$(uploadId)
       .pipe(
         take(1),
         concatMap(items => {
