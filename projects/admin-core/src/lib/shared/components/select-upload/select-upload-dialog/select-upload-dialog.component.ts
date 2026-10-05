@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, i
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
-import { UploadHelper } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
@@ -16,7 +15,7 @@ import { ImageUploadFieldComponent } from '../../image-upload-field/image-upload
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AsyncPipe } from '@angular/common';
-import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 
 export interface SelectUploadData {
   uploadId: string | null;
@@ -159,16 +158,16 @@ export class SelectUploadDialogComponent implements OnInit {
   public saveImage() {
     this.loading.set(true);
     const pendingImage = this.pendingImage();
-    if (!pendingImage) {
+    const parsed = pendingImage ? FileHelper.parseDataUrl(pendingImage.image) : null;
+    if (!pendingImage || !parsed) {
       this.loading.set(false);
       return;
     }
-    const { image, mimeType } = UploadHelper.prepareBase64(pendingImage.image);
     this.adminApiService.createUpload$({
-      content: image,
+      content: parsed.contentsBase64,
       filename: pendingImage.fileName,
       category: this.data.category,
-      mimeType,
+      mimeType: parsed.mimeType,
       description: this.descriptionControl.value || undefined,
     })
       .pipe(take(1), catchError(() => of(null)))
@@ -181,7 +180,7 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public getImg(upload: UploadModel) {
-    return UploadHelper.getAdminUrlForFile(upload.id, upload.category, upload.filename);
+    return UploadedFileHelper.getAdminUrlForFile(upload.id, upload.category, upload.filename);
   }
 
   public removeUpload($event: MouseEvent, upload: UploadModel) {
