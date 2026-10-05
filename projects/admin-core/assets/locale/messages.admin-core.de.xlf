@@ -1810,6 +1810,10 @@
         <source>Add form</source>
         <target>Formular hinzufügen</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.add-tab" datatype="html">
+        <source>Add tab</source>
+        <target>Tab hinzufügen</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
         <target>Dem Benutzer erlauben, benutzerdefinierte Eingaben zu machen</target>
@@ -1837,6 +1841,10 @@
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
         <target>Sind Sie sicher, dass Sie das Formular <x id="PH" equiv-text="title"/> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-tab" datatype="html">
+        <source>Delete tab</source>
+        <target>Tab löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
@@ -1930,9 +1938,21 @@
         <source>Label</source>
         <target>Bezeichnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.no-tab" datatype="html">
+        <source>No tab</source>
+        <target>Kein Tab</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
         <target>Pflichtfeld</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab" datatype="html">
+        <source>Tab</source>
+        <target>Tab</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab-name" datatype="html">
+        <source>Tab name</source>
+        <target>Tab name</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>
