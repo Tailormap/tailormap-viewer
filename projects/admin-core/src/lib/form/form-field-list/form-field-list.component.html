@@ -27,9 +27,9 @@
            id="unassigned"
            class="field-list"
            [cdkDropListData]="unassignedFields()"
-           [cdkDropListConnectedTo]="fieldDropListIds"
+           [cdkDropListConnectedTo]="fieldDropListIds()"
            (cdkDropListDropped)="onFieldDrop($event)">
-        @for (field of unassignedFields(); track trackByFieldName($index, field)) {
+        @for (field of unassignedFields(); track field.name) {
           <div class="field-row"
                [class.field-row--selected]="field.selected"
                cdkDrag
@@ -49,14 +49,14 @@
            [cdkDropListConnectedTo]="[]"
            (cdkDropListDropped)="onTabDrop($event)">
 
-        @for (tab of tabs(); track trackByTabId($index, tab); let tabIdx = $index) {
+        @for (tab of tabs(); track tab.id; let tabIdx = $index) {
           <div class="tab-header"
                cdkDrag
                [cdkDragData]="tab"
                cdkDropList
-               [id]="'tab-header-drop-' + tab.id"
+               [id]="getTabHeaderDropId(tab.id)"
                [cdkDropListData]="tabFields()[tabIdx]"
-               [cdkDropListConnectedTo]="fieldDropListIds"
+               [cdkDropListConnectedTo]="fieldDropListIds()"
                cdkDropListSortingDisabled
                (cdkDropListEntered)="onTabDragOver(tab.id)"
                (cdkDropListExited)="onTabDragLeave(tab.id)"
@@ -82,9 +82,9 @@
                  [id]="tab.id"
                  class="field-list field-list--indented"
                  [cdkDropListData]="tabFields()[tabIdx]"
-                 [cdkDropListConnectedTo]="fieldDropListIds"
+                 [cdkDropListConnectedTo]="fieldDropListIds()"
                  (cdkDropListDropped)="onFieldDrop($event)">
-              @for (field of tabFields()[tabIdx]; track trackByFieldName($index, field)) {
+              @for (field of tabFields()[tabIdx]; track field.name) {
                 <div class="field-row"
                      [class.field-row--selected]="field.selected"
                      cdkDrag

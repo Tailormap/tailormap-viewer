@@ -44,6 +44,8 @@ type FieldWithSelected = FormFieldModel & { selected?: boolean };
 export class FormFieldListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
+  private readonly tabHeaderDropPrefix = 'tab-header-drop-';
+  private readonly allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected);
 
   @Input({ required: true })
   public featureTypeName: string = '';
@@ -55,8 +57,8 @@ export class FormFieldListComponent implements OnInit {
 
   public readonly fields = computed(() => {
     const filterStr = this.attributeFilter();
-    const allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected)();
-    return filterStr ? FilterHelper.filterByTerm(allFields, filterStr, f => f.name) : allFields;
+    const fields = this.allFields();
+    return filterStr ? FilterHelper.filterByTerm(fields, filterStr, f => f.name) : fields;
   });
 
   public readonly tabs = this.store$.selectSignal(selectDraftFormTabs);
@@ -66,12 +68,20 @@ export class FormFieldListComponent implements OnInit {
   );
 
   public readonly tabFields = computed(() => {
-    const tabs = this.tabs();
     const fields = this.fields();
-    return tabs.map(tab => fields.filter(f => f.tab === tab.id));
+    return this.tabs().map(tab => fields.filter(f => f.tab === tab.id));
   });
 
   public readonly collapsedTabs = signal<Set<string>>(new Set());
+
+  public readonly fieldDropListIds = computed(() => {
+    const tabs = this.tabs();
+    return [
+      'unassigned',
+      ...tabs.map(tab => tab.id),
+      ...tabs.map(tab => this.getTabHeaderDropId(tab.id)),
+    ];
+  });
 
   public ngOnInit(): void {
     this.filter.valueChanges
@@ -83,12 +93,8 @@ export class FormFieldListComponent implements OnInit {
     this.store$.dispatch(draftFormSetSelectedField({ name }));
   }
 
-  public get fieldDropListIds(): string[] {
-    return [
-      'unassigned',
-      ...this.tabs().map(t => t.id),
-      ...this.tabs().map(t => `tab-header-drop-${t.id}`),
-    ];
+  public getTabHeaderDropId(tabId: string): string {
+    return `${this.tabHeaderDropPrefix}${tabId}`;
   }
 
   public addTab(): void {
@@ -118,18 +124,17 @@ export class FormFieldListComponent implements OnInit {
   }
 
   public deleteTab(tabId: string): void {
-    const tabs = this.tabs().map(t => ({ ...t }));
-    const tabIdx = tabs.findIndex(t => t.id === tabId);
+    const tabs = this.tabs().map(tab => ({ ...tab }));
+    const tabIdx = tabs.findIndex(tab => tab.id === tabId);
     if (tabIdx === -1) {
       return;
     }
 
-    const tabFieldGroups = this.tabFields().map(group => group.map(f => ({ ...f })));
-    const fieldsToUnassign: FieldWithSelected[] = tabFieldGroups[tabIdx].map(f => ({ ...f, tab: undefined }));
-    const newUnassigned: FieldWithSelected[] = [ ...this.unassignedFields().map(f => ({ ...f })), ...fieldsToUnassign ];
+    const { unassigned, tabGroups } = this.createFieldSnapshot();
+    unassigned.push(...tabGroups[tabIdx].map(field => ({ ...field, tab: undefined })));
 
     tabs.splice(tabIdx, 1);
-    tabFieldGroups.splice(tabIdx, 1);
+    tabGroups.splice(tabIdx, 1);
 
     this.collapsedTabs.update(prev => {
       const next = new Set(prev);
@@ -137,29 +142,18 @@ export class FormFieldListComponent implements OnInit {
       return next;
     });
 
-    const allFields: FieldWithSelected[] = [
-      ...newUnassigned,
-      ...tabFieldGroups.reduce<FieldWithSelected[]>((acc, fields) => [ ...acc, ...fields ], []),
-    ];
-
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
-    this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
+    this.updateFields(unassigned, tabGroups);
   }
 
   public onFieldDrop(event: CdkDragDrop<FieldWithSelected[]>): void {
-    // Build mutable snapshots
-    const unassigned = this.unassignedFields().map(f => ({ ...f }));
-    const tabFieldGroups = this.tabFields().map(group => group.map(f => ({ ...f })));
+    const { unassigned, tabGroups } = this.createFieldSnapshot();
     const tabs = this.tabs();
 
-    // Resolve which mutable array corresponds to each drop-list id
     const resolveList = (id: string): FieldWithSelected[] => {
-      if (id === 'unassigned') {
-        return unassigned;
-      }
-      const rawId = id.startsWith('tab-header-drop-') ? id.slice('tab-header-drop-'.length) : id;
-      const idx = tabs.findIndex(t => t.id === rawId);
-      return idx !== -1 ? tabFieldGroups[idx] : unassigned;
+      const tabId = this.getTabIdForDropList(id);
+      const idx = tabs.findIndex(tab => tab.id === tabId);
+      return idx !== -1 ? tabGroups[idx] : unassigned;
     };
 
     const prevList = resolveList(event.previousContainer.id);
@@ -168,56 +162,58 @@ export class FormFieldListComponent implements OnInit {
     if (event.previousContainer.id === event.container.id) {
       moveItemInArray(currList, event.previousIndex, event.currentIndex);
     } else {
-      const containerId = event.container.id;
-      const resolvedTabId = containerId === 'unassigned'
-        ? undefined
-        : containerId.startsWith('tab-header-drop-')
-          ? containerId.slice('tab-header-drop-'.length)
-          : containerId;
-
-      const field = prevList[event.previousIndex];
-      const updatedField: FieldWithSelected = { ...field, tab: resolvedTabId };
+      const updatedField: FieldWithSelected = {
+        ...prevList[event.previousIndex],
+        tab: this.getTabIdForDropList(event.container.id),
+      };
       prevList.splice(event.previousIndex, 1);
       currList.splice(event.currentIndex, 0, updatedField);
     }
 
-    const allFields: FieldWithSelected[] = [
-      ...unassigned,
-      ...tabFieldGroups.reduce<FieldWithSelected[]>((acc, fields) => [ ...acc, ...fields ], []),
-    ];
-    this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
+    this.updateFields(unassigned, tabGroups);
   }
 
   public onTabDrop(event: CdkDragDrop<TabModel[]>): void {
-    const tabs = this.tabs().map(t => ({ ...t }));
-    const tabFieldGroups = this.tabFields().map(group => group.map(f => ({ ...f })));
+    const tabs = this.tabs().map(tab => ({ ...tab }));
+    const { unassigned, tabGroups } = this.createFieldSnapshot();
 
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
-    moveItemInArray(tabFieldGroups, event.previousIndex, event.currentIndex);
+    moveItemInArray(tabGroups, event.previousIndex, event.currentIndex);
 
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
-
-    const allFields: FieldWithSelected[] = [
-      ...this.unassignedFields().map(f => ({ ...f })),
-      ...tabFieldGroups.reduce<FieldWithSelected[]>((acc, fields) => [ ...acc, ...fields ], []),
-    ];
-    this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
-  }
-
-  public trackByTabId(_: number, tab: TabModel): string {
-    return tab.id;
-  }
-
-  public trackByFieldName(_: number, field: FormFieldModel): string {
-    return field.name;
+    this.updateFields(unassigned, tabGroups);
   }
 
   public onTabDragOver(tabId: string): void {
-    document.getElementById(`tab-header-drop-${tabId}`)?.classList.add('tab-header--drop-target');
+    document.getElementById(this.getTabHeaderDropId(tabId))?.classList.add('tab-header--drop-target');
   }
 
   public onTabDragLeave(tabId: string): void {
-    document.getElementById(`tab-header-drop-${tabId}`)?.classList.remove('tab-header--drop-target');
+    document.getElementById(this.getTabHeaderDropId(tabId))?.classList.remove('tab-header--drop-target');
   }
 
+  private getTabIdForDropList(id: string): string | undefined {
+    if (id === 'unassigned') {
+      return undefined;
+    }
+    return id.startsWith(this.tabHeaderDropPrefix)
+      ? id.slice(this.tabHeaderDropPrefix.length)
+      : id;
+  }
+
+  private createFieldSnapshot(): {
+    unassigned: FieldWithSelected[];
+    tabGroups: FieldWithSelected[][];
+  } {
+    return {
+      unassigned: this.unassignedFields().map(field => ({ ...field })),
+      tabGroups: this.tabFields().map(group => group.map(field => ({ ...field }))),
+    };
+  }
+
+  private updateFields(unassigned: FieldWithSelected[], tabGroups: FieldWithSelected[][]): void {
+    this.store$.dispatch(draftFormUpdateFields({
+      fields: [ ...unassigned, ...tabGroups.flat() ],
+    }));
+  }
 }
