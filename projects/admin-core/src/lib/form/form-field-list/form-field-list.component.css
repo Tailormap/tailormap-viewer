@@ -28,6 +28,7 @@
 
 .tab-header {
   display: flex;
+  position: relative;
   align-items: center;
   height: 34px;
   padding: 0 16px;
@@ -68,6 +69,9 @@
 
 .label {
   flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+  padding-block: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -94,9 +98,23 @@
   flex-shrink: 0;
 }
 
-.field-row.cdk-drag-placeholder,
-.tab-header.cdk-drag-placeholder {
+.field-row.cdk-drag-placeholder {
   opacity: 0.3;
+}
+
+.tab-header .cdk-drag-placeholder {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tab-header--drop-target {
+  background-color: #e0e0e0;
 }
 
 .field-row.cdk-drag-preview {
@@ -109,7 +127,6 @@
 }
 
 .tab-header.cdk-drag-preview {
-  background: gray;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;

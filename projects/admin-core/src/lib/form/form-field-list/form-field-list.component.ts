@@ -16,7 +16,7 @@ import { selectDraftFormFieldsWithSelected, selectDraftFormTabs } from '../state
 import { FormFieldModel } from '@tailormap-viewer/api';
 import {
   CdkDrag,
-  CdkDragDrop,
+  CdkDragDrop, CdkDragEnter, CdkDragExit,
   CdkDragHandle,
   CdkDropList,
   moveItemInArray,
@@ -256,4 +256,15 @@ export class FormFieldListComponent implements OnInit {
   public trackByFieldName(_: number, field: FormFieldModel): string {
     return field.name;
   }
+
+  public onTabDragOver(tabId: string): void {
+    // event.preventDefault();
+    console.debug(`Drag over tab ${tabId}`);
+    document.getElementById(`tab-header-drop-${tabId}`)?.classList.add('tab-header--drop-target');
+  }
+
+  public onTabDragLeave(tabId: string): void {
+    document.getElementById(`tab-header-drop-${tabId}`)?.classList.remove('tab-header--drop-target');
+  }
+
 }

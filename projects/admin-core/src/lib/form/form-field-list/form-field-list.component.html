@@ -33,6 +33,7 @@
           <div class="field-row"
                [class.field-row--selected]="field.selected"
                cdkDrag
+               cdkDragPreviewContainer="parent"
                [cdkDragData]="field"
                (click)="selectAttribute(field.name)">
             <span class="label">{{ field.name }}</span>
@@ -57,7 +58,9 @@
                [cdkDropListData]="tabFields()[tabIdx]"
                [cdkDropListConnectedTo]="fieldDropListIds"
                cdkDropListSortingDisabled
-               (cdkDropListDropped)="onFieldDrop($event)">
+               (cdkDropListEntered)="onTabDragOver(tab.id)"
+               (cdkDropListExited)="onTabDragLeave(tab.id)"
+               (cdkDropListDropped)="onFieldDrop($event); onTabDragLeave(tab.id)">
             <button mat-icon-button type="button" class="expand-btn"
                     (click)="$event.stopPropagation(); toggleTab(tab.id)">
               <mat-icon [svgIcon]="isExpanded(tab.id) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
@@ -85,6 +88,7 @@
                 <div class="field-row"
                      [class.field-row--selected]="field.selected"
                      cdkDrag
+                     cdkDragPreviewContainer="parent"
                      [cdkDragData]="field"
                      (click)="selectAttribute(field.name)">
                   <span class="label">{{ field.name }}</span>
