@@ -1,11 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject, effect, computed } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal, ViewContainerRef, inject, effect, computed, DestroyRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
-import { BehaviorSubject, catchError, concatMap, map, of, take, tap } from 'rxjs';
+import { catchError, concatMap, map, of, take, tap } from 'rxjs';
 import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection-token';
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
-import { ConfirmDialogService, FileHelper, FileContents, HtmlifyHelper, TooltipDirective } from '@tailormap-viewer/shared';
+import {
+  ConfirmDialogService, FileHelper, FileContents, HtmlifyHelper, TooltipDirective,
+} from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -14,11 +16,12 @@ import { MatIcon } from '@angular/material/icon';
 import { ImageUploadFieldComponent } from '../../image-upload-field/image-upload-field.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AsyncPipe } from '@angular/common';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { FileUploadFieldComponent } from '../../file-upload-field/file-upload-field.component';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ListFilterComponent } from '../../list-filter/list-filter.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface SelectUploadData {
   uploadId: string | null;
@@ -78,16 +81,17 @@ const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', Dialo
     ReactiveFormsModule,
     MatDialogActions,
     MatButton,
-    AsyncPipe,
     TooltipDirective,
     MatTabGroup,
     MatTab,
     FileUploadFieldComponent,
     MatTooltip,
+    ListFilterComponent,
   ],
 })
 export class SelectUploadDialogComponent implements OnInit {
   private dialogRef = inject<MatDialogRef<SelectUploadDialogComponent, SelectUploadResult>>(MatDialogRef);
+  private destroyRef = inject(DestroyRef);
   public data = inject<SelectUploadData>(MAT_DIALOG_DATA);
   private uploadRemoveService = inject<UploadRemoveServiceModel>(UPLOAD_REMOVE_SERVICE);
   private adminApiService = inject(TailormapAdminApiV1Service);
@@ -96,7 +100,17 @@ export class SelectUploadDialogComponent implements OnInit {
   private adminSnackbarService = inject(AdminSnackbarService);
 
 
-  public existingUploads$ = new BehaviorSubject<UploadModel[] | null>(null);
+  public existingUploads = signal<UploadModel[]>([]);
+  public filteredUploads = computed(() => {
+    const uploads = this.existingUploads();
+    const term = this.filterTerm();
+    if (!uploads || !term || term === '') {
+      return uploads;
+    }
+    return uploads.filter(upload => upload.filename.toLowerCase().includes(term.toLowerCase()));
+  });
+  public filterTerm = signal<string>('');
+
   public loading = signal(false);
   public dialogProps: DialogProps;
   public fileToUpload = signal<FileContents | null>(null);
@@ -107,6 +121,7 @@ export class SelectUploadDialogComponent implements OnInit {
       ? ' '
       : $localize `:@@admin-core.select-upload.description-tooltip:Choose a file to upload, a description can then be added to the uploaded file`;
   });
+  public filenameFilterControl = new FormControl<string | null>(null);
   public selectedTab: 'files' | 'images' = this.data.showFilesTab ? 'files' : 'images';
 
   constructor() {
@@ -143,19 +158,25 @@ export class SelectUploadDialogComponent implements OnInit {
             contentSize: FileHelper.byteCountToDisplaySize(upload.contentLength),
           }));
         }
-        this.existingUploads$.next(uploads);
+        this.existingUploads.set(uploads || []);
         this.loading.set(false);
       });
+
+    this.filenameFilterControl.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(value => {
+      this.filterTerm.set(value || '');
+    });
   }
 
   public getFilesTabLabel() {
-    const uploads = this.existingUploads$.value;
+    const uploads = this.filteredUploads();
     const count = uploads?.filter(u => !this.isImage(u)).length || 0;
     return $localize `:@@admin-core.select-upload.files-tab:Files (${count})`;
   }
 
   public getImagesTabLabel() {
-    const uploads = this.existingUploads$.value;
+    const uploads = this.filteredUploads();
     const count = uploads?.filter(this.isImage).length || 0;
     return $localize `:@@admin-core.select-upload.images-tab:Images (${count})`;
   }
@@ -260,7 +281,7 @@ export class SelectUploadDialogComponent implements OnInit {
         if (!response.success) {
           return;
         }
-        this.existingUploads$.next((this.existingUploads$.value || []).filter(u => u.id !== uploadId));
+        this.existingUploads.set((this.existingUploads() || []).filter(u => u.id !== uploadId));
         this.adminSnackbarService.showMessage($localize `:@@admin-core.upload-select.file-deleted:File ${uploadName} removed`);
       });
   }

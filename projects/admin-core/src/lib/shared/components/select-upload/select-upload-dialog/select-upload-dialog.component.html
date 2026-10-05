@@ -4,15 +4,21 @@
   @if (loading()) {
     <mat-spinner [diameter]="20" mode="indeterminate" color="primary"></mat-spinner>
   }
-  @if (existingUploads$ | async; as existingUploads) {
-    @if (existingUploads.length > 0) {
+
+  @if (existingUploads().length > 0) {
+    <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
+    <tm-admin-list-filter [formControl]="filenameFilterControl"
+                          label="Filter on filename"></tm-admin-list-filter>
+  }
+
+  @if (filteredUploads(); as uploads) {
+    @if (uploads.length > 0) {
       <div class="existing-uploads">
-        <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
 
         <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [class.hidden]="!data.showFilesTab" (selectedTabChange)="onTabChange($event)">
           @if (data.showFilesTab) {
             <mat-tab [label]="getFilesTabLabel()">
-              @for (upload of existingUploads; track upload.id) {
+              @for (upload of uploads; track upload.id) {
                 @if (!isImage(upload)) {
                   <div class="file-no-image" (click)="selectFile(upload)">
                     <div class="file-info">
@@ -34,7 +40,7 @@
 
           <mat-tab [label]="getImagesTabLabel()">
             <div class="file-list">
-              @for (upload of existingUploads; track upload.id) {
+              @for (upload of uploads; track upload.id) {
                 @if (isImage(upload)) {
                   <div class="file-image" (click)="selectFile(upload)">
                       <div class="image"><img [src]="getImg(upload)" [alt]="upload.filename" /></div>
