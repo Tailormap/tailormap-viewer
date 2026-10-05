@@ -1343,6 +1343,9 @@
       <trans-unit id="admin-core.form.add-form" datatype="html">
         <source>Add form</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.add-tab" datatype="html">
+        <source>Add tab</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.allow-free-input" datatype="html">
         <source>Allow the user to enter custom input</source>
       </trans-unit>
@@ -1363,6 +1366,9 @@
       </trans-unit>
       <trans-unit id="admin-core.form.delete-form-message" datatype="html">
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.delete-tab" datatype="html">
+        <source>Delete tab</source>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
@@ -1433,8 +1439,17 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.no-tab" datatype="html">
+        <source>No tab</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab" datatype="html">
+        <source>Tab</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.tab-name" datatype="html">
+        <source>Tab name</source>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
         <source>Use unique values from this column as options</source>

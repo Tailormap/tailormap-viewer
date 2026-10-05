@@ -12,24 +12,30 @@ import { MatInput } from '@angular/material/input';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { SelectFieldComponent } from '../fields/select-field/select-field.component';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { NgTemplateOutlet } from '@angular/common';
+
 
 @Component({
     selector: 'tm-edit-form',
     templateUrl: './edit-form.component.html',
     styleUrls: ['./edit-form.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatSuffix,
-        MatDatepicker,
-        SelectFieldComponent,
-        MatCheckbox,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    SelectFieldComponent,
+    MatCheckbox,
+    MatTabGroup,
+    MatTab,
+    NgTemplateOutlet,
+  ],
 })
 export class EditFormComponent implements OnDestroy {
   private cdr = inject(ChangeDetectorRef);
@@ -39,6 +45,7 @@ export class EditFormComponent implements OnDestroy {
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: ViewerEditFormFieldModel[] = [];
+  public tabs: Array<{ id: string; name: string }> = [];
   public userDetails$: Observable<SecurityModel | null>;
 
   @Input({ required: true })
@@ -84,6 +91,7 @@ export class EditFormComponent implements OnDestroy {
       this.input.feature.columnMetadata,
       this.input.isNewFeature ?? false,
     );
+    this.tabs = this.input.details.form?.options?.tabs ?? [];
     this.form = FormHelper.createForm(this.formConfig);
 
     const changes$ = Object.keys(this.form.controls)

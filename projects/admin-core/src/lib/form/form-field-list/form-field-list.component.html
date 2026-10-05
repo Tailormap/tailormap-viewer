@@ -1,23 +1,105 @@
 @if (featureTypeName) {
   <h2 i18n="@@admin-core.forms.form-fields">Form fields</h2>
   <div class="form-group has-search flex">
+
     <tm-admin-list-filter [formControl]="filter"
-                          [filterTerm]="filterTerm$ | async"
+                          [filterTerm]="attributeFilter()"
                           label="Filter fields"
                           i18n-label="@@admin-core.form.filter-fields"></tm-admin-list-filter>
 
-    <mat-selection-list cdkDropList
-                        [cdkDropListData]="fields$ | async"
-                        (cdkDropListDropped)="updateListOrder($event)">
-      @for (field of fields$ | async; track field.name) {
-        <mat-list-item (click)="selectAttribute(field.name)"
-                       [class.selected]="field.selected"
-                       cdkDrag
-                       [cdkDragData]="field">
-          <span class="detail">{{field.name}}</span>
-          <mat-icon class="drag-handle" cdkDragHandle svgIcon="reorder"></mat-icon>
-        </mat-list-item>
-      }
-    </mat-selection-list>
+    <div class="tab-actions">
+      <mat-form-field appearance="fill">
+        <mat-label i18n="@@admin-core.form.tab-name">Tab name</mat-label>
+        <input matInput [formControl]="tabName" (keyup.enter)="addTab()">
+      </mat-form-field>
+      <button mat-icon-button color="primary" type="button"
+              [disabled]="!tabName.value?.trim()"
+              (click)="addTab()"
+              i18n-aria-label="@@admin-core.form.add-tab"
+              aria-label="Add tab">
+        <mat-icon svgIcon="plus"></mat-icon>
+      </button>
+    </div>
+
+    <div class="scroll">
+
+      <div cdkDropList
+           id="unassigned"
+           class="field-list"
+           [cdkDropListData]="unassignedFields()"
+           [cdkDropListConnectedTo]="fieldDropListIds()"
+           (cdkDropListDropped)="onFieldDrop($event)">
+        @for (field of unassignedFields(); track field.name) {
+          <div class="field-row"
+               [class.field-row--selected]="field.selected"
+               cdkDrag
+               cdkDragPreviewContainer="parent"
+               [cdkDragData]="field"
+               (click)="selectAttribute(field.name)">
+            <span class="label">{{ field.name }}</span>
+            <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
+          </div>
+        }
+      </div>
+
+      <div cdkDropList
+           id="tab-headers"
+           class="tab-header-list"
+           [cdkDropListData]="tabs()"
+           [cdkDropListConnectedTo]="[]"
+           (cdkDropListDropped)="onTabDrop($event)">
+
+        @for (tab of tabs(); track tab.id; let tabIdx = $index) {
+          <div class="tab-header"
+               cdkDrag
+               [cdkDragData]="tab"
+               cdkDropList
+               [id]="getTabHeaderDropId(tab.id)"
+               [cdkDropListData]="tabFields()[tabIdx]"
+               [cdkDropListConnectedTo]="fieldDropListIds()"
+               cdkDropListSortingDisabled
+               (cdkDropListEntered)="onTabDragOver(tab.id)"
+               (cdkDropListExited)="onTabDragLeave(tab.id)"
+               (cdkDropListDropped)="onFieldDrop($event); onTabDragLeave(tab.id)">
+            <button mat-icon-button type="button" class="expand-btn"
+                    (click)="$event.stopPropagation(); toggleTab(tab.id)">
+              <mat-icon [svgIcon]="isExpanded(tab.id) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
+            </button>
+            <mat-icon svgIcon="folder_filled" class="drag-handle tab-icon" cdkDragHandle></mat-icon>
+            <span class="label">{{ tab.name }}</span>
+            <button mat-icon-button
+                    type="button"
+                    class="delete-tab-btn"
+                    (click)="$event.stopPropagation(); deleteTab(tab.id)"
+                    i18n-aria-label="@@admin-core.form.delete-tab"
+                    aria-label="Delete tab">
+              <mat-icon svgIcon="close"></mat-icon>
+            </button>
+          </div>
+
+          @if (isExpanded(tab.id)) {
+            <div cdkDropList
+                 [id]="tab.id"
+                 class="field-list field-list--indented"
+                 [cdkDropListData]="tabFields()[tabIdx]"
+                 [cdkDropListConnectedTo]="fieldDropListIds()"
+                 (cdkDropListDropped)="onFieldDrop($event)">
+              @for (field of tabFields()[tabIdx]; track field.name) {
+                <div class="field-row"
+                     [class.field-row--selected]="field.selected"
+                     cdkDrag
+                     cdkDragPreviewContainer="parent"
+                     [cdkDragData]="field"
+                     (click)="selectAttribute(field.name)">
+                  <span class="label">{{ field.name }}</span>
+                  <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+
+    </div>
   </div>
 }
