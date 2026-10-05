@@ -66,6 +66,10 @@
         <source>Change folder name</source>
         <target>Mapnaam wijzigen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.clear-file-upload" datatype="html">
+        <source>Clear file</source>
+        <target>Bestand wissen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
         <source>This group is collapsed on startup</source>
         <target>Deze groep blijft ingeklapt bij het opstarten</target>
@@ -2408,6 +2412,18 @@
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
         <source>This file cannot be removed because it is still used in the following places.</source>
         <target>Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
+        <source>Files (<x id="PH" equiv-text="count"/>)</source>
+        <target>Bestanden (<x id="PH" equiv-text="count"/>)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.filter-on-filename" datatype="html">
+        <source>Filter on filename</source>
+        <target>Filter op bestandsnaam</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
+        <source>Images (<x id="PH" equiv-text="count"/>)</source>
+        <target>Afbeeldingen (<x id="PH" equiv-text="count"/>)</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>

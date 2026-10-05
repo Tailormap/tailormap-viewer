@@ -26,6 +26,18 @@ h2 {
   min-height: 0
 }
 
+mat-tab-group.hidden ::ng-deep mat-tab-header {
+  display: none;
+}
+
+mat-tab-group {
+  min-height: 0;
+}
+
+mat-tab-group ::ng-deep .mat-mdc-tab-body-content {
+  overflow-x: hidden;
+}
+
 .new-uploads {
   flex: 0 0 auto;
 }
@@ -51,11 +63,13 @@ h2 {
 
 .image {
   flex: 1;
+  cursor: pointer;
 }
 
 .file-info {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .file-name {
@@ -65,6 +79,14 @@ h2 {
   white-space: nowrap;
   padding-right: 8px;
   flex: 1;
+}
+
+.file-no-image .file-info {
+  padding: 4px 0 4px 0;
+}
+
+.file-no-image .file-name {
+  font-size: 14px;
 }
 
 .file-info button {

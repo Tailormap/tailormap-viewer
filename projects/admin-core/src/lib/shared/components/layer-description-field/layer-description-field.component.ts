@@ -105,7 +105,7 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
 
     SelectUploadDialogComponent.open(
       this.dialog,
-      { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false },
+      { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false, showFilesTab: true },
       this.viewContainerRef,
     )
       .afterClosed()
