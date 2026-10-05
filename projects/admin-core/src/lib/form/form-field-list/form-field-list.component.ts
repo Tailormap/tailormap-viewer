@@ -6,21 +6,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  draftFormAddTab,
-  draftFormSetSelectedField,
-  draftFormUpdateFields,
-  draftFormUpdateTabs,
-} from '../state/form.actions';
+import { draftFormAddTab, draftFormSetSelectedField, draftFormUpdateFields, draftFormUpdateTabs } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected, selectDraftFormTabs } from '../state/form.selectors';
 import { FormFieldModel } from '@tailormap-viewer/api';
-import {
-  CdkDrag,
-  CdkDragDrop, CdkDragEnter, CdkDragExit,
-  CdkDragHandle,
-  CdkDropList,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
@@ -62,32 +51,26 @@ export class FormFieldListComponent implements OnInit {
   public filter = new FormControl('');
   public tabName = new FormControl<string>('');
 
-  /** Current filter string */
   public readonly attributeFilter = signal<string | null>(null);
 
-  /** All fields from the store, filtered by `attributeFilter` */
   public readonly fields = computed(() => {
     const filterStr = this.attributeFilter();
     const allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected)();
     return filterStr ? FilterHelper.filterByTerm(allFields, filterStr, f => f.name) : allFields;
   });
 
-  /** Tabs from the store */
   public readonly tabs = this.store$.selectSignal(selectDraftFormTabs);
 
-  /** Fields with no tab assigned */
   public readonly unassignedFields = computed(() =>
     this.fields().filter(f => !f.tab),
   );
 
-  /** Fields grouped per tab, index-aligned with `tabs` */
   public readonly tabFields = computed(() => {
     const tabs = this.tabs();
     const fields = this.fields();
     return tabs.map(tab => fields.filter(f => f.tab === tab.id));
   });
 
-  /** Track which tabs are collapsed */
   public readonly collapsedTabs = signal<Set<string>>(new Set());
 
   public ngOnInit(): void {
@@ -96,17 +79,9 @@ export class FormFieldListComponent implements OnInit {
       .subscribe(value => this.attributeFilter.set(value));
   }
 
-  // ----------------------------------------------------------------
-  // Selection
-  // ----------------------------------------------------------------
-
   public selectAttribute(name: string): void {
     this.store$.dispatch(draftFormSetSelectedField({ name }));
   }
-
-  // ----------------------------------------------------------------
-  // Tab management
-  // ----------------------------------------------------------------
 
   public get fieldDropListIds(): string[] {
     return [
@@ -171,17 +146,6 @@ export class FormFieldListComponent implements OnInit {
     this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
   }
 
-  // ----------------------------------------------------------------
-  // Drag & Drop – fields
-  // ----------------------------------------------------------------
-
-  /**
-   * Called when a field is dropped into any of the field drop lists
-   * (unassigned list or one of the per-tab lists).
-   *
-   * Because `unassignedFields` and `tabFields` are computed signals (immutable),
-   * we build a mutable snapshot, apply the CDK move/transfer, and dispatch.
-   */
   public onFieldDrop(event: CdkDragDrop<FieldWithSelected[]>): void {
     // Build mutable snapshots
     const unassigned = this.unassignedFields().map(f => ({ ...f }));
@@ -224,11 +188,6 @@ export class FormFieldListComponent implements OnInit {
     this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
   }
 
-  // ----------------------------------------------------------------
-  // Drag & Drop – tabs
-  // ----------------------------------------------------------------
-
-  /** Called when a tab header is dropped to reorder tabs */
   public onTabDrop(event: CdkDragDrop<TabModel[]>): void {
     const tabs = this.tabs().map(t => ({ ...t }));
     const tabFieldGroups = this.tabFields().map(group => group.map(f => ({ ...f })));
@@ -245,10 +204,6 @@ export class FormFieldListComponent implements OnInit {
     this.store$.dispatch(draftFormUpdateFields({ fields: allFields }));
   }
 
-  // ----------------------------------------------------------------
-  // Helpers
-  // ----------------------------------------------------------------
-
   public trackByTabId(_: number, tab: TabModel): string {
     return tab.id;
   }
@@ -258,8 +213,6 @@ export class FormFieldListComponent implements OnInit {
   }
 
   public onTabDragOver(tabId: string): void {
-    // event.preventDefault();
-    console.debug(`Drag over tab ${tabId}`);
     document.getElementById(`tab-header-drop-${tabId}`)?.classList.add('tab-header--drop-target');
   }
 
