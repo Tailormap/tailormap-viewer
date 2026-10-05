@@ -2397,6 +2397,10 @@
         <source>Files (<x id="PH" equiv-text="count"/>)</source>
         <target>Bestanden (<x id="PH" equiv-text="count"/>)</target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.filter-on-filename" datatype="html">
+        <source>Filter on filename</source>
+        <target>Filter op bestandsnaam</target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
         <source>Images (<x id="PH" equiv-text="count"/>)</source>
         <target>Afbeeldingen (<x id="PH" equiv-text="count"/>)</target>

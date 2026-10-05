@@ -1775,6 +1775,9 @@
       <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
         <source>Files (<x id="PH" equiv-text="count"/>)</source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.filter-on-filename" datatype="html">
+        <source>Filter on filename</source>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
         <source>Images (<x id="PH" equiv-text="count"/>)</source>
       </trans-unit>
