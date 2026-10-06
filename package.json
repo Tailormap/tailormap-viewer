@@ -34,7 +34,7 @@
     "@angular/material": "^22.1.6",
     "@angular/material-luxon-adapter": "^22.1.6",
     "@angular/platform-browser": "^22.1.6",
-    "@angular/router": "^22.1.6",
+    "@angular/router": "^22.2.0",
     "@ctrl/tinycolor": "^4.2.1",
     "@milkdown/core": "^7.22.1",
     "@milkdown/crepe": "^7.22.1",
