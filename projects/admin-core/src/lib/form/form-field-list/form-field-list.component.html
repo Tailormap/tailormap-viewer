@@ -53,6 +53,7 @@
           <div class="tab-header"
                cdkDrag
                [cdkDragData]="tab"
+               [class.tab-header--drop-target]="activeTabDropTarget() === tab.id"
                cdkDropList
                [id]="getTabHeaderDropId(tab.id)"
                [cdkDropListData]="tabFields()[tabIdx]"
