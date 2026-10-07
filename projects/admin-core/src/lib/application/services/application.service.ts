@@ -9,7 +9,9 @@ import {
   addApplicationRootNodes, addApplication, deleteApplication, loadApplicationsFailed, loadApplicationsStart, loadApplicationsSuccess,
   updateApplication,
 } from '../state/application.actions';
-import { selectApplicationList, selectApplicationsLoadStatus, selectDraftApplication } from '../state/application.selectors';
+import {
+  selectApplications, selectApplicationsLoadStatus, selectDraftApplication,
+} from '../state/application.selectors';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
 
@@ -75,7 +77,7 @@ export class ApplicationService implements OnDestroy {
           }
         }),
         filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-        switchMap(() => this.store$.select(selectApplicationList)),
+        switchMap(() => this.store$.select(selectApplications)),
       );
   }
 
