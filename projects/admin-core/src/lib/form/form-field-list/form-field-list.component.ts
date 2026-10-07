@@ -23,6 +23,7 @@ export interface TabModel {
 }
 
 type FieldWithSelected = FormFieldModel & { selected?: boolean };
+type TabFieldsMap = Map<string, FieldWithSelected[]>;
 
 @Component({
   selector: 'tm-admin-form-field-list',
@@ -47,6 +48,7 @@ export class FormFieldListComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private readonly tabHeaderDropPrefix = 'tab-header-drop-';
   private readonly allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected);
+  public readonly unassignedTabId = 'unassigned';
 
   @Input({ required: true })
   public featureTypeName: string = '';
@@ -65,19 +67,20 @@ export class FormFieldListComponent implements OnInit {
     return filterStr ? FilterHelper.filterByTerm(fields, filterStr, f => f.name) : fields;
   });
 
-  public readonly unassignedFields = computed(() =>
-    this.fields().filter(f => !f.tab),
-  );
-
-  public readonly tabFields = computed(() => {
+  public readonly tabFields = computed<TabFieldsMap>(() => {
     const fields = this.fields();
-    return this.tabs().map(tab => fields.filter(f => f.tab === tab.id));
+    const tabFields: TabFieldsMap = new Map();
+    tabFields.set(this.unassignedTabId, fields.filter(field => !field.tab));
+    this.tabs().forEach(tab => {
+      tabFields.set(tab.id, fields.filter(field => field.tab === tab.id));
+    });
+    return tabFields;
   });
 
   public readonly fieldDropListIds = computed(() => {
     const tabs = this.tabs();
     return [
-      'unassigned',
+      this.unassignedTabId,
       ...tabs.map(tab => tab.id),
       ...tabs.map(tab => this.getTabHeaderDropId(tab.id)),
     ];
@@ -124,19 +127,17 @@ export class FormFieldListComponent implements OnInit {
   }
 
   public deleteTab(tabId: string): void {
-    const tabs = this.tabs();
-    const unassigned = this.unassignedFields();
     const tabGroups = this.tabFields();
-
-    const tabIdx = tabs.findIndex(tab => tab.id === tabId);
-    if (tabIdx === -1) {
+    if (!tabGroups.has(tabId) || tabId === this.unassignedTabId) {
       return;
     }
+    const tabGroup = tabGroups.get(tabId) || [];
+    const unassigned = tabGroups.get(this.unassignedTabId) ?? [];
+    unassigned.push(...tabGroup.map(field => ({ ...field, tab: undefined })));
+    tabGroups.set(this.unassignedTabId, unassigned);
+    tabGroups.delete(tabId);
 
-    unassigned.push(...tabGroups[tabIdx].map(field => ({ ...field, tab: undefined })));
-
-    tabs.splice(tabIdx, 1);
-    tabGroups.splice(tabIdx, 1);
+    const tabs = this.tabs().filter(tab => tab.id !== tabId);
 
     this.collapsedTabs.update(prev => {
       const next = new Set(prev);
@@ -145,22 +146,16 @@ export class FormFieldListComponent implements OnInit {
     });
 
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
-    this.updateFields(unassigned, tabGroups);
+    this.updateFields(tabGroups, tabs);
   }
 
   public onFieldDrop(event: CdkDragDrop<FieldWithSelected[]>): void {
-    const unassigned = this.unassignedFields();
     const tabGroups = this.tabFields();
-    const tabs = this.tabs();
+    const prevTabId = this.getTabIdForDropList(event.previousContainer.id);
+    const currTabId = this.getTabIdForDropList(event.container.id);
 
-    const resolveList = (id: string): FieldWithSelected[] => {
-      const tabId = this.getTabIdForDropList(id);
-      const idx = tabs.findIndex(tab => tab.id === tabId);
-      return idx !== -1 ? tabGroups[idx] : unassigned;
-    };
-
-    const prevList = resolveList(event.previousContainer.id);
-    const currList = resolveList(event.container.id);
+    const prevList = prevTabId ? tabGroups.get(prevTabId) ?? [] : tabGroups.get(this.unassignedTabId) ?? [];
+    const currList = currTabId ? tabGroups.get(currTabId) ?? [] : tabGroups.get(this.unassignedTabId) ?? [];
 
     if (event.previousContainer.id === event.container.id) {
       moveItemInArray(currList, event.previousIndex, event.currentIndex);
@@ -173,19 +168,17 @@ export class FormFieldListComponent implements OnInit {
       currList.splice(event.currentIndex, 0, updatedField);
     }
 
-    this.updateFields(unassigned, tabGroups);
+    this.updateFields(tabGroups, this.tabs());
   }
 
   public onTabDrop(event: CdkDragDrop<TabModel[]>): void {
     const tabs = this.tabs();
-    const unassigned = this.unassignedFields();
     const tabGroups = this.tabFields();
 
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
-    moveItemInArray(tabGroups, event.previousIndex, event.currentIndex);
 
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
-    this.updateFields(unassigned, tabGroups);
+    this.updateFields(tabGroups, tabs);
   }
 
   public onTabDragOver(tabId: string): void {
@@ -199,7 +192,7 @@ export class FormFieldListComponent implements OnInit {
   }
 
   private getTabIdForDropList(id: string): string | undefined {
-    if (id === 'unassigned') {
+    if (id === this.unassignedTabId) {
       return undefined;
     }
     return id.startsWith(this.tabHeaderDropPrefix)
@@ -207,9 +200,12 @@ export class FormFieldListComponent implements OnInit {
       : id;
   }
 
-  private updateFields(unassigned: FieldWithSelected[], tabGroups: FieldWithSelected[][]): void {
+  private updateFields(tabGroups: TabFieldsMap, tabs: TabModel[]): void {
     this.store$.dispatch(draftFormUpdateFields({
-      fields: [ ...unassigned, ...tabGroups.flat() ],
+      fields: [
+        ...(tabGroups.get(this.unassignedTabId) ?? []),
+        ...tabs.flatMap(tab => tabGroups.get(tab.id) ?? []),
+      ],
     }));
   }
 }
