@@ -172,7 +172,7 @@ export class FormFieldListComponent implements OnInit {
   }
 
   public onTabDrop(event: CdkDragDrop<TabModel[]>): void {
-    const tabs = this.tabs();
+    const tabs = [...this.tabs()];
     const tabGroups = this.tabFields();
 
     moveItemInArray(tabs, event.previousIndex, event.currentIndex);
