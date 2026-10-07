@@ -53,18 +53,21 @@ const onClearSelectedForm = (
   ...state,
   draftFormId: null,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
 });
 
 const onLoadDraftForm = (state: FormState, payload: ReturnType<typeof FormActions.loadDraftForm>): FormState => ({
   ...state,
   draftFormId: payload.id,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
 });
 
 const onLoadDraftFormStart = (state: FormState): FormState => ({
   ...state,
   draftFormLoadStatus: LoadingStateEnum.LOADING,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
   draftForm: null,
 });
 
@@ -72,6 +75,7 @@ const onLoadDraftFormSuccess = (state: FormState, payload: ReturnType<typeof For
   ...state,
   draftFormLoadStatus: LoadingStateEnum.LOADED,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
   draftForm: payload.form,
   draftFormValid: true,
   draftFormUpdated: false,
@@ -82,6 +86,7 @@ const onLoadDraftFormFailed = (state: FormState): FormState => ({
   draftFormId: null,
   draftFormLoadStatus: LoadingStateEnum.FAILED,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
   draftForm: null,
 });
 
@@ -182,6 +187,7 @@ const onDraftFormAddField = (
       ],
     },
     draftFormSelectedAttribute: payload.name,
+    draftFormSelectedTabId: null,
     draftFormUpdated: true,
   };
 };
@@ -200,6 +206,24 @@ const onDraftFormSetSelectedField = (
   return {
     ...state,
     draftFormSelectedAttribute: payload.name,
+    draftFormSelectedTabId: null,
+  };
+};
+
+const onDraftFormSetSelectedTabId = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormSetSelectedTabId>,
+): FormState => {
+  if (!state.draftForm) {
+    return state;
+  }
+  if (!(state.draftForm.options?.tabs || []).some(t => t.id === payload.tabId)) {
+    return state;
+  }
+  return {
+    ...state,
+    draftFormSelectedAttribute: null,
+    draftFormSelectedTabId: payload.tabId,
   };
 };
 
@@ -299,9 +323,13 @@ const onDraftFormUpdateTabs = (
     return state;
   }
 
+  const selectedTabRemoved = !!state.draftFormSelectedTabId
+    && !payload.tabs.some(t => t.id === state.draftFormSelectedTabId);
+
   return {
     ...state,
     draftFormUpdated: true,
+    draftFormSelectedTabId: selectedTabRemoved ? null : state.draftFormSelectedTabId,
     draftForm: {
       ...state.draftForm,
       options: {
@@ -330,6 +358,7 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.draftFormUpdateFields, onDraftFormUpdateFields),
   on(FormActions.draftFormAddField, onDraftFormAddField),
   on(FormActions.draftFormSetSelectedField, onDraftFormSetSelectedField),
+  on(FormActions.draftFormSetSelectedTabId, onDraftFormSetSelectedTabId),
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),
   on(FormActions.draftFormRemoveField, onDraftFormRemoveField),
   on(FormActions.updateDraftFormValid, onUpdateDraftFormValid),

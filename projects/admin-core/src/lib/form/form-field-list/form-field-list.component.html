@@ -54,11 +54,13 @@
                cdkDrag
                [cdkDragData]="tab"
                [class.tab-header--drop-target]="activeTabDropTarget() === tab.id"
+               [class.tab-header--selected]="selectedTabId() === tab.id"
                cdkDropList
                [id]="getTabHeaderDropId(tab.id)"
                [cdkDropListData]="tabFields().get(tab.id) || []"
                [cdkDropListConnectedTo]="fieldDropListIds()"
                cdkDropListSortingDisabled
+               (click)="selectTab(tab.id)"
                (cdkDropListEntered)="onTabDragOver(tab.id)"
                (cdkDropListExited)="onTabDragLeave(tab.id)"
                (cdkDropListDropped)="onFieldDrop($event); onTabDragLeave(tab.id)">

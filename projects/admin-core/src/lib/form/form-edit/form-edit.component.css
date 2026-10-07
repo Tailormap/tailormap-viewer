@@ -58,7 +58,8 @@ tm-admin-form-field-list {
   width: 250px;
 }
 
-tm-admin-edit-field {
+tm-admin-edit-field,
+tm-admin-form-edit-tab {
   flex: 1;
   overflow: auto;
 }

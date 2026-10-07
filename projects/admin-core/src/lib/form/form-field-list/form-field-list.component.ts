@@ -6,8 +6,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { draftFormAddTab, draftFormSetSelectedField, draftFormUpdateFields, draftFormUpdateTabs } from '../state/form.actions';
-import { selectDraftFormFieldsWithSelected, selectDraftFormTabs } from '../state/form.selectors';
+import {
+  draftFormAddTab, draftFormSetSelectedField, draftFormSetSelectedTabId, draftFormUpdateFields, draftFormUpdateTabs,
+} from '../state/form.actions';
+import { selectDraftFormFieldsWithSelected, selectDraftFormSelectedTabId, selectDraftFormTabs } from '../state/form.selectors';
 import { FormFieldModel } from '@tailormap-viewer/api';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
@@ -60,6 +62,8 @@ export class FormFieldListComponent implements OnInit {
   public readonly tabs = this.store$.selectSignal(selectDraftFormTabs);
   public readonly collapsedTabs = signal<Set<string>>(new Set());
   public readonly activeTabDropTarget = signal<string | null>(null);
+  public readonly selectedTabId = this.store$.selectSignal(selectDraftFormSelectedTabId);
+
 
   public readonly fields = computed(() => {
     const filterStr = this.attributeFilter();
@@ -94,6 +98,10 @@ export class FormFieldListComponent implements OnInit {
 
   public selectAttribute(name: string): void {
     this.store$.dispatch(draftFormSetSelectedField({ name }));
+  }
+
+  public selectTab(tabId: string): void {
+    this.store$.dispatch(draftFormSetSelectedTabId({ tabId }));
   }
 
   public getTabHeaderDropId(tabId: string): string {

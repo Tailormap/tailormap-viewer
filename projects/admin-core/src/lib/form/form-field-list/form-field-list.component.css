@@ -85,7 +85,8 @@
   white-space: nowrap;
 }
 
-.field-row--selected {
+.field-row--selected,
+.tab-header--selected {
   background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
   color: var(--primary-color, #1976d2);
 }

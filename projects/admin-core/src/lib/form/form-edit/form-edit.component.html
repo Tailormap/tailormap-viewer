@@ -13,7 +13,11 @@
     <tm-admin-form-attribute-list [featureType]="featureType$ | async"
     [loadingFeatureType]="loadingFeatureType$ | async"></tm-admin-form-attribute-list>
     <tm-admin-form-field-list [featureTypeName]="form.featureTypeName"></tm-admin-form-field-list>
-    <tm-admin-edit-field [featureType]="featureType$ | async"></tm-admin-edit-field>
+    @if (selectedTabId()) {
+      <tm-admin-form-edit-tab></tm-admin-form-edit-tab>
+    } @else {
+      <tm-admin-edit-field [featureType]="featureType$ | async"></tm-admin-edit-field>
+    }
   </div>
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
