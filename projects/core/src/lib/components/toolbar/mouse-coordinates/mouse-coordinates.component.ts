@@ -111,24 +111,13 @@ export class MouseCoordinatesComponent implements OnInit, OnDestroy {
 
         return [{
           id: display.id || `coordinate-display-${index}`,
-          label: display.label?.trim() || this.getDisplayLabel(targetProjection, display.format),
+          label: display.label?.trim() || targetProjection,
           coordinates: this.formatCoordinates(projectedCoordinates, targetProjection, display.format),
         }];
       } catch {
         return [];
       }
     });
-  }
-
-  private getDisplayLabel(projection: string, format: MouseCoordinatesFormat): string {
-    switch (format) {
-      case 'decimal-degrees':
-        return `${projection} DD`;
-      case 'degrees-decimal-minutes':
-        return `${projection} DDM`;
-      default:
-        return projection;
-    }
   }
 
   private formatCoordinates(

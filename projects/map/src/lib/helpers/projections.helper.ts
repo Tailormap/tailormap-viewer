@@ -28,7 +28,6 @@ export class ProjectionsHelper {
       return;
     }
     ProjectionsHelper.registerProjection(projection, definition);
-    register(Proj4Helper.proj4);
   }
 
   private static registerProjection(projection: string, definition: string) {

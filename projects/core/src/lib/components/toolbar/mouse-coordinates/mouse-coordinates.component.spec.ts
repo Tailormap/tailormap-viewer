@@ -70,7 +70,7 @@ describe('MouseCoordinatesComponent', () => {
     expect(await screen.getByText('WGS84'));
     expect(await screen.getByText('52.000000° N'));
     expect(await screen.getByText('5.000000° E'));
-    expect(await screen.getByText('EPSG:4326 DDM'));
+    expect(await screen.getByText('EPSG:4326'));
     expect(await screen.getByText("52° 00.000' N"));
     expect(await screen.getByText("005° 00.000' E"));
     expect(mapServiceMock.mapService.getRoundedCoordinates$).not.toHaveBeenCalled();
