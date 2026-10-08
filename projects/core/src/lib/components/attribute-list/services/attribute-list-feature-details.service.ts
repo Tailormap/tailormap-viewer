@@ -116,7 +116,7 @@ export class AttributeListFeatureDetailsService {
         if (!applicationId || !tab || !tab.layerId) {
           return of([ false, '' ]);
         }
-        const key = `${applicationId}_${tab?.layerId}`;
+        const key = `${applicationId}_${tab?.layerId}_${tab?.selectedDataId}`;
         const canExpandCached = this.featureEnabledCache[method].get(key);
         if (typeof canExpandCached === 'boolean') {
           return of([ canExpandCached, key ]);

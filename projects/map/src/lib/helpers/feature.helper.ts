@@ -25,7 +25,7 @@ export class FeatureHelper {
    * @param sourceProjection
    * @param mapProjection
    */
-  public static fromGeoJSON(geojsonGeometry: object, radius?: number, sourceProjection?: string, mapProjection?: string): Geometry {
+  public static fromGeoJSON(geojsonGeometry: object, radius?: number, sourceProjection?: string, mapProjection?: string): Geometry | undefined {
     if (/* geojsonGeometry['type'] === 'Point'  && */ radius) {
       const point = FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
         dataProjection: sourceProjection, featureProjection: mapProjection,
@@ -33,9 +33,10 @@ export class FeatureHelper {
       return new Circle(point.getCoordinates(), radius);
     }
 
-    return FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
+    const geom = FeatureHelper.geoJsonFormatter.readGeometry(geojsonGeometry, {
       dataProjection: sourceProjection, featureProjection: mapProjection,
     });
+    return geom ?? undefined;
   }
 
   /**
