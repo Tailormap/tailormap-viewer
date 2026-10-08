@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, inject, computed } from '@angular/core';
 import {
   BehaviorSubject, distinctUntilChanged, filter, map, Observable, of, Subject, switchMap, take, takeUntil, combineLatest,
 } from 'rxjs';
@@ -7,9 +7,11 @@ import { Store } from '@ngrx/store';
 import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
-import { selectDraftFormSelectedTabId, selectDraftFormUpdated, selectDraftFormValid } from '../state/form.selectors';
+import {
+  selectDraftFormSelectedAttribute, selectDraftFormSelectedTabId, selectDraftFormUpdated, selectDraftFormValid,
+} from '../state/form.selectors';
 import { FormService } from '../services/form.service';
-import { clearSelectedForm, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
+import { clearSelectedForm, draftFormClearSelection, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catalog-model.helper';
@@ -20,9 +22,10 @@ import { FormAttributeListComponent } from '../form-attribute-list/form-attribut
 import { FormFieldListComponent } from '../form-field-list/form-field-list.component';
 import { FormEditFieldComponent } from '../form-edit-field/form-edit-field.component';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'tm-admin-form-edit',
@@ -41,6 +44,8 @@ import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
     RouterLink,
     AsyncPipe,
     FormEditTabComponent,
+    MatIcon,
+    MatIconButton,
   ],
 })
 export class FormEditComponent implements OnInit, OnDestroy {
@@ -61,6 +66,8 @@ export class FormEditComponent implements OnInit, OnDestroy {
   public canSave$: Observable<boolean> = of(false);
 
   public selectedTabId = this.store$.selectSignal(selectDraftFormSelectedTabId);
+  public selectedAttribute = this.store$.selectSignal(selectDraftFormSelectedAttribute);
+  public panelOpen = computed(() => !!this.selectedTabId() || !!this.selectedAttribute());
 
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
   public featureType$ = this.featureTypeSubject$.asObservable();
@@ -152,6 +159,10 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   public validFormChanged($event: boolean) {
     this.store$.dispatch(updateDraftFormValid({ isValid: $event }));
+  }
+
+  public closePanel() {
+    this.store$.dispatch(draftFormClearSelection());
   }
 
 }

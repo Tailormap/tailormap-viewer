@@ -227,6 +227,12 @@ const onDraftFormSetSelectedTabId = (
   };
 };
 
+const onDraftFormClearSelection = (state: FormState): FormState => ({
+  ...state,
+  draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
+});
+
 const onDraftFormUpdateField = (
   state: FormState,
   payload: ReturnType<typeof FormActions.draftFormUpdateField>,
@@ -272,6 +278,9 @@ const onDraftFormRemoveField = (
         ...state.draftForm.fields.slice(fieldIdx + 1),
       ],
     },
+    draftFormSelectedAttribute: state.draftFormSelectedAttribute === payload.field
+      ? null
+      : state.draftFormSelectedAttribute,
     draftFormUpdated: true,
   };
 };
@@ -359,6 +368,7 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.draftFormAddField, onDraftFormAddField),
   on(FormActions.draftFormSetSelectedField, onDraftFormSetSelectedField),
   on(FormActions.draftFormSetSelectedTabId, onDraftFormSetSelectedTabId),
+  on(FormActions.draftFormClearSelection, onDraftFormClearSelection),
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),
   on(FormActions.draftFormRemoveField, onDraftFormRemoveField),
   on(FormActions.updateDraftFormValid, onUpdateDraftFormValid),

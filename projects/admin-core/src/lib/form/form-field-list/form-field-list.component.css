@@ -1,74 +1,117 @@
-:host,
-.flex {
+
+:host {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
 }
 
-.form-group {
-  flex: 1;
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 
 .tab-actions {
-  margin: 8px 0;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.scroll {
+/* Scrolls horizontally when there are many tabs */
+.columns-scroll {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: 0;
+  overflow: auto;
 }
 
-.field-list--indented {
-  margin-left: 32px;
+.columns-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  /* Make sure the row grows with its columns so the container scrolls instead of shrinking them */
+  width: max-content;
+  min-width: 100%;
+  padding-bottom: 8px;
 }
 
-.tab-header,
+.tab-columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.column {
+  width: 240px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background: white;
+}
+
+.column--unassigned {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.column-header,
 .field-row {
   display: flex;
   align-items: center;
   height: 34px;
-  padding: 0 16px;
+  padding: 0 12px;
   box-sizing: border-box;
   width: 100%;
 }
 
-.tab-header {
-  position: relative;
+.column-header {
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.column--unassigned .column-header {
+  cursor: default;
+}
+
+.column-header--selected {
+  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  color: var(--primary-color, #1976d2);
+}
+
+.field-list {
+  /* keeps empty columns usable as a drop target */
+  min-height: 48px;
 }
 
 .field-row {
   cursor: pointer;
+  background: white;
 }
 
-.expand-btn {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  margin-right: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expand-btn mat-icon,
-.expand-btn mat-icon ::ng-deep svg {
-  width: 18px;
-  height: 18px;
+.field-row--selected {
+  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  color: var(--primary-color, #1976d2);
 }
 
 .tab-icon {
   margin-right: 4px;
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
 }
 
 .tab-icon ::ng-deep svg {
   width: 18px;
   height: 18px;
+}
+
+.drag-handle {
+  cursor: grab;
+  flex-shrink: 0;
 }
 
 .drag-handle:active {
@@ -85,55 +128,26 @@
   white-space: nowrap;
 }
 
-.field-row--selected,
-.tab-header--selected {
-  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
-  color: var(--primary-color, #1976d2);
-}
-
-.delete-tab-btn {
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.field-row.cdk-drag-placeholder {
+/* Drag & drop */
+.field-row.cdk-drag-placeholder,
+.column.cdk-drag-placeholder {
   opacity: 0.3;
 }
 
-.tab-header .cdk-drag-placeholder {
-  display: flex;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.tab-header--drop-target {
-  background-color: #e0e0e0;
-}
-
 .field-row.cdk-drag-preview,
-.tab-header.cdk-drag-preview {
+.column.cdk-drag-preview {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
+  background: white;
   box-sizing: border-box;
 }
 
 .field-row.cdk-drag-preview {
-  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
 }
 
 .cdk-drop-list-dragging .field-row:not(.cdk-drag-placeholder),
-.cdk-drop-list-dragging .tab-header:not(.cdk-drag-placeholder) {
+.cdk-drop-list-dragging .column:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

@@ -1,7 +1,7 @@
 @if (featureTypeName) {
   <h2 i18n="@@admin-core.forms.form-fields">Form fields</h2>
-  <div class="form-group has-search flex">
 
+  <div class="toolbar">
     <tm-admin-list-filter [formControl]="filter"
                           [filterTerm]="attributeFilter()"
                           label="Filter fields"
@@ -20,79 +20,58 @@
         <mat-icon svgIcon="plus"></mat-icon>
       </button>
     </div>
+  </div>
 
-    <div class="scroll">
+  <ng-template #fieldListTpl let-listId="listId">
+    <div cdkDropList
+         class="field-list"
+         [id]="listId"
+         [cdkDropListData]="tabFields().get(listId) || []"
+         [cdkDropListConnectedTo]="fieldDropListIds()"
+         (cdkDropListDropped)="onFieldDrop($event)">
+      @for (field of tabFields().get(listId); track field.name) {
+        <div class="field-row"
+             [class.field-row--selected]="field.selected"
+             cdkDrag
+             [cdkDragData]="field"
+             (click)="selectAttribute(field.name)">
+          <span class="label">{{ field.name }}</span>
+          <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
+        </div>
+      }
+    </div>
+  </ng-template>
 
-      <div cdkDropList
-           [id]="unassignedTabId"
-           class="field-list"
-           [cdkDropListData]="tabFields().get(unassignedTabId) || []"
-           [cdkDropListConnectedTo]="fieldDropListIds()"
-           (cdkDropListDropped)="onFieldDrop($event)">
-        @for (field of tabFields().get(unassignedTabId); track field.name) {
-          <div class="field-row"
-               [class.field-row--selected]="field.selected"
-               cdkDrag
-               cdkDragPreviewContainer="parent"
-               [cdkDragData]="field"
-               (click)="selectAttribute(field.name)">
-            <span class="label">{{ field.name }}</span>
-            <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
-          </div>
-        }
+  <div class="columns-scroll">
+    <div class="columns-row">
+
+      <div class="column column--unassigned">
+        <div class="column-header">
+          <span class="label" i18n="@@admin-core.form.no-tab">No tab</span>
+        </div>
+        <ng-container *ngTemplateOutlet="fieldListTpl; context: { listId: unassignedTabId }"></ng-container>
       </div>
 
       <div cdkDropList
-           id="tab-headers"
-           class="tab-header-list"
+           id="tab-columns"
+           class="tab-columns"
+           cdkDropListOrientation="horizontal"
            [cdkDropListData]="tabs()"
-           [cdkDropListConnectedTo]="[]"
            (cdkDropListDropped)="onTabDrop($event)">
-
         @for (tab of tabs(); track tab.id) {
-          <div class="tab-header"
+          <div class="column"
                cdkDrag
-               [cdkDragData]="tab"
-               [class.tab-header--drop-target]="activeTabDropTarget() === tab.id"
-               [class.tab-header--selected]="selectedTabId() === tab.id"
-               cdkDropList
-               [id]="getTabHeaderDropId(tab.id)"
-               [cdkDropListData]="tabFields().get(tab.id) || []"
-               [cdkDropListConnectedTo]="fieldDropListIds()"
-               cdkDropListSortingDisabled
-               (click)="selectTab(tab.id)"
-               (cdkDropListEntered)="onTabDragOver(tab.id)"
-               (cdkDropListExited)="onTabDragLeave(tab.id)"
-               (cdkDropListDropped)="onFieldDrop($event); onTabDragLeave(tab.id)">
-            <button mat-icon-button type="button" class="expand-btn"
-                    (click)="$event.stopPropagation(); toggleTab(tab.id)">
-              <mat-icon [svgIcon]="isExpanded(tab.id) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
-            </button>
-            <mat-icon svgIcon="folder_filled" class="drag-handle tab-icon"></mat-icon>
-            <span class="label">{{ tab.name }}</span>
-            <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
-          </div>
-
-          @if (isExpanded(tab.id)) {
-            <div cdkDropList
-                 [id]="tab.id"
-                 class="field-list field-list--indented"
-                 [cdkDropListData]="tabFields().get(tab.id) || []"
-                 [cdkDropListConnectedTo]="fieldDropListIds()"
-                 (cdkDropListDropped)="onFieldDrop($event)">
-              @for (field of tabFields().get(tab.id); track field.name) {
-                <div class="field-row"
-                     [class.field-row--selected]="field.selected"
-                     cdkDrag
-                     cdkDragPreviewContainer="parent"
-                     [cdkDragData]="field"
-                     (click)="selectAttribute(field.name)">
-                  <span class="label">{{ field.name }}</span>
-                  <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
-                </div>
-              }
+               cdkDragLockAxis="x"
+               [cdkDragData]="tab">
+            <div class="column-header"
+                 [class.column-header--selected]="selectedTabId() === tab.id"
+                 (click)="selectTab(tab.id)">
+              <mat-icon svgIcon="folder_filled" class="tab-icon"></mat-icon>
+              <span class="label">{{ tab.name }}</span>
+              <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
             </div>
-          }
+            <ng-container *ngTemplateOutlet="fieldListTpl; context: { listId: tab.id }"></ng-container>
+          </div>
         }
       </div>
 
