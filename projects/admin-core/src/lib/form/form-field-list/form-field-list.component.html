@@ -68,16 +68,9 @@
                     (click)="$event.stopPropagation(); toggleTab(tab.id)">
               <mat-icon [svgIcon]="isExpanded(tab.id) ? 'chevron_bottom' : 'chevron_right'"></mat-icon>
             </button>
-            <mat-icon svgIcon="folder_filled" class="drag-handle tab-icon" cdkDragHandle></mat-icon>
+            <mat-icon svgIcon="folder_filled" class="drag-handle tab-icon"></mat-icon>
             <span class="label">{{ tab.name }}</span>
-            <button mat-icon-button
-                    type="button"
-                    class="delete-tab-btn"
-                    (click)="deleteTab(tab.id); $event.stopPropagation();"
-                    i18n-aria-label="@@admin-core.form.delete-tab"
-                    aria-label="Delete tab">
-              <mat-icon svgIcon="close"></mat-icon>
-            </button>
+            <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
           </div>
 
           @if (isExpanded(tab.id)) {

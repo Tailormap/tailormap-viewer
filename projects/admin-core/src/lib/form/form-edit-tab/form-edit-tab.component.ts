@@ -6,8 +6,9 @@ import { debounceTime, filter } from 'rxjs';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
-import { selectDraftFormSelectedTab, selectDraftFormTabs } from '../state/form.selectors';
-import { draftFormUpdateTabs } from '../state/form.actions';
+import { selectDraftFormField, selectDraftFormSelectedTab, selectDraftFormTabs } from '../state/form.selectors';
+import { draftFormUpdateFields, draftFormUpdateTabs } from '../state/form.actions';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'tm-admin-form-edit-tab',
@@ -20,6 +21,7 @@ import { draftFormUpdateTabs } from '../state/form.actions';
     MatLabel,
     MatInput,
     AutoFocusDirective,
+    MatButton,
   ],
 })
 export class FormEditTabComponent {
@@ -27,6 +29,7 @@ export class FormEditTabComponent {
 
   public tab = this.store$.selectSignal(selectDraftFormSelectedTab);
   private tabs = this.store$.selectSignal(selectDraftFormTabs);
+  private fields = this.store$.selectSignal(selectDraftFormField);
 
   public tabForm = new FormGroup({
     name: new FormControl('', { nonNullable: true }),
@@ -53,6 +56,26 @@ export class FormEditTabComponent {
       return;
     }
     const tabs = this.tabs().map(t => t.id === selected.id ? { ...t, name } : t);
+    this.store$.dispatch(draftFormUpdateTabs({ tabs }));
+  }
+
+  public deleteTab(): void {
+    const selected = this.tab();
+    if (!selected) {
+      return;
+    }
+    const fields = this.fields();
+    const movedToUnassigned = fields
+      .filter(f => f.tab === selected.id)
+      .map(f => ({ ...f, tab: undefined }));
+    const updatedFields = [
+      ...fields.filter(f => !f.tab),
+      ...movedToUnassigned,
+      ...fields.filter(f => f.tab && f.tab !== selected.id),
+    ];
+    const tabs = this.tabs().filter(t => t.id !== selected.id);
+
+    this.store$.dispatch(draftFormUpdateFields({ fields: updatedFields }));
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
   }
 

@@ -1,3 +1,7 @@
 .form-wrapper {
   max-width: 500px;
 }
+
+.delete-tab-button {
+  margin-top: 16px;
+}
