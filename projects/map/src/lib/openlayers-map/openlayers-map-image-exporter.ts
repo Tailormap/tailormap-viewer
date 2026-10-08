@@ -1,4 +1,4 @@
-import { concatMap, from, map, Observable, Subject, take } from 'rxjs';
+import { concatMap, from, map, Observable, of, Subject, take } from 'rxjs';
 import { Map as OlMap } from 'ol';
 import { Layer as BaseLayer } from 'ol/layer.js';
 import { View } from 'ol';
@@ -114,7 +114,7 @@ export class OpenLayersMapImageExporter {
         });
 
         // Render controls using html2canvas
-        const scaleBar = imageExportOlMap.getViewport().querySelector('.ol-scale-bar') as HTMLElement;
+        const scaleBar = imageExportOlMap.getViewport()?.querySelector<HTMLElement>('.ol-scale-bar');
 
         // Set element visible otherwise html2canvas won't render it
         target.style.visibility = 'visible';
@@ -127,6 +127,9 @@ export class OpenLayersMapImageExporter {
           .pipe(
             map(i => i.default),
             concatMap((html2canvasImport: typeof html2canvas) => {
+              if (!scaleBar) {
+                return of(null);
+              }
               return from(html2canvasImport(scaleBar, {
                 canvas: imageExportCanvas,
                 backgroundColor: null,

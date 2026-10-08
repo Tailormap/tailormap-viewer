@@ -25,8 +25,11 @@ export class CoordinateHelper {
       if (projection === null) {
           return '';
       }
-
-      polygon.applyTransform(getTransform('EPSG:4326', toProjection));
+      const transformFn = getTransform('EPSG:4326', toProjection);
+      if (transformFn === null) {
+          return '';
+      }
+      polygon.applyTransform(transformFn);
       return FeatureHelper.getWKT(polygon, projection);
   }
 }
