@@ -110,8 +110,7 @@ export class OlLayerHelper {
     }
     options.crossOrigin = layer.crossOrigin;
 
-    const extentFromTileGrid = options.tileGrid.getExtent();
-    if (hiDpi && extentFromTileGrid) {
+    if (hiDpi) {
       const hiDpiMode = layer.hiDpiMode || 'showNextZoomLevel';
       // For WMTS with hiDpiMode == 'substituteLayerTilePixelRatioOnly' just setting this option suffices. The service should send tiles with
       // 2x the width and height as it advertises in the capabilities.
@@ -134,7 +133,7 @@ export class OlLayerHelper {
         const resolutions = options.tileGrid.getResolutions().map(value => value * 2);
 
         options.tileGrid = new WMTSTileGrid({
-          extent: extentFromTileGrid,
+          extent: options.tileGrid.getExtent() ?? undefined,
           origin: options.tileGrid.getOrigin(0),
           resolutions,
           matrixIds: options.tileGrid.getMatrixIds(),
@@ -184,15 +183,14 @@ export class OlLayerHelper {
       minZoom,
     });
 
-    const extentFromTileGrid = tileGrid.getExtent();
-    if (hiDpi && extentFromTileGrid) {
+    if (hiDpi) {
       if (layer.hiDpiMode === 'substituteLayerTilePixelRatioOnly' && layer.hiDpiSubstituteUrl) {
         url = layer.hiDpiSubstituteUrl;
         tilePixelRatio = 2;
       } else if (layer.hiDpiMode === 'showNextZoomLevel' || (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl)) {
         // Adjust tile grid to show next zoomlevel at hi DPI similar to WMTS
         tileGrid = new TileGrid({
-          extent: extentFromTileGrid,
+          extent: tileGrid.getExtent() ?? undefined,
           origin: tileGrid.getOrigin(0),
           resolutions: tileGrid.getResolutions().map(value => value * 2),
           tileSize: tileSize / 2,
