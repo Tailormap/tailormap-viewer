@@ -1,0 +1,56 @@
+<tm-admin-base-component-config [type]="type" [label]="label" [config]="config">
+  <tm-info-message class="mouse-coordinates-help">
+    <div i18n="@@admin-core.components.mouse-coordinates-help">
+      Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection.
+      Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).
+    </div>
+  </tm-info-message>
+
+  <div class="display-form" [formGroup]="formGroup">
+    @for(displayForm of displayList.controls; track displayForm; let i = $index) {
+      <div class="display-form-row" [formGroup]="displayForm">
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.common.name">Name</mat-label>
+          <input matInput formControlName="label">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.application.projection">Projection</mat-label>
+          <mat-select formControlName="projection">
+            @for (projection of projections; track projection.code) {
+              <mat-option [value]="projection.code">{{ projection.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.components.mouse-coordinates-format">Format</mat-label>
+          <mat-select formControlName="format">
+            <mat-option value="xy" i18n="@@admin-core.components.mouse-coordinates-format-xy">X / Y</mat-option>
+            <mat-option
+              value="decimal-degrees"
+              [disabled]="displayForm.controls.projection.value !== 'EPSG:4326'"
+              i18n="@@admin-core.components.mouse-coordinates-format-decimal-degrees">
+              Decimal degrees
+            </mat-option>
+            <mat-option
+              value="degrees-decimal-minutes"
+              [disabled]="displayForm.controls.projection.value !== 'EPSG:4326'"
+              i18n="@@admin-core.components.mouse-coordinates-format-degrees-decimal-minutes">
+              Degrees + decimal minutes
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button (click)="deleteDisplay(i)">
+          <mat-icon svgIcon="trash_filled"></mat-icon>
+        </button>
+      </div>
+    }
+
+    <button class="add-display-button" mat-flat-button (click)="addDisplay()">
+      <mat-icon svgIcon="plus"></mat-icon>
+      <span i18n="@@admin-core.components.mouse-coordinates-add-display">Add coordinate display</span>
+    </button>
+  </div>
+</tm-admin-base-component-config>
