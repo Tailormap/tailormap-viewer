@@ -1,18 +1,18 @@
 {
   "name": "@tailormap-admin/admin-core",
-  "version": "12.9.2",
+  "version": "12.9.3",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/cdk": "^22.1.6",
-    "@angular/common": "^22.1.6",
-    "@angular/core": "^22.1.6",
-    "@angular/forms": "^22.1.6",
-    "@angular/material": "^22.1.6",
-    "@angular/material-luxon-adapter": "^22.1.6",
-    "@angular/platform-browser": "^22.1.6",
-    "@angular/router": "^22.1.6",
+    "@angular/cdk": "^22.2.0",
+    "@angular/common": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/material": "^22.2.0",
+    "@angular/material-luxon-adapter": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
     "@ngrx/operators": "^22.0.0",
     "@ngrx/store": "^22.0.0",
     "@ngrx/store-devtools": "^22.0.0",
