@@ -2442,8 +2442,16 @@
         <target>Bestand wordt gebruikt</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
-        <source>This file cannot be removed because it is still used in the following places.</source>
-        <target>Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
+        <source>This file cannot be removed because it is still being used in the following places:</source>
+        <target>Dit bestand kan niet verwijderd worden omdat het nog gebruikt wordt op de volgende plaatsen:</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body-multiple" datatype="html">
+        <source>These files cannot be removed because they are still being used in the following places:</source>
+        <target>Deze bestanden kunnen niet verwijderd worden omdat deze nog gebruikt worden op de volgende plaatsen:</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-multiple" datatype="html">
+        <source>Files are still in use</source>
+        <target>Bestanden worden gebruikt</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
         <source>Files (<x id="PH" equiv-text="count"/>)</source>
