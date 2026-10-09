@@ -13,26 +13,27 @@
     <tm-admin-form-attribute-list [featureType]="featureType$ | async"
                                   [loadingFeatureType]="loadingFeatureType$ | async"></tm-admin-form-attribute-list>
     <tm-admin-form-field-list [featureTypeName]="form.featureTypeName"></tm-admin-form-field-list>
-    @if (panelOpen()) {
-      <aside class="edit-panel">
-        <div class="edit-panel-header">
-          <button mat-icon-button type="button"
-                  (click)="closePanel()"
-                  i18n-aria-label="@@admin-core.common.close"
-                  aria-label="Close">
-            <mat-icon svgIcon="close"></mat-icon>
-          </button>
-        </div>
-        <div class="edit-panel-content">
-          @if (selectedTabId()) {
-            <tm-admin-form-edit-tab></tm-admin-form-edit-tab>
-          } @else {
-            <tm-admin-edit-field [featureType]="featureType$ | async"></tm-admin-edit-field>
-          }
-        </div>
-      </aside>
-    }
+
   </div>
+  @if (panelOpen()) {
+    <aside class="edit-panel">
+      <button mat-icon-button
+              type="button"
+              class="close-panel-button"
+              (click)="closePanel()"
+              i18n-aria-label="@@admin-core.common.close"
+              aria-label="Close">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+      <div class="edit-panel-content">
+        @if (selectedTabId()) {
+          <tm-admin-form-edit-tab></tm-admin-form-edit-tab>
+        } @else {
+          <tm-admin-edit-field [featureType]="featureType$ | async"></tm-admin-edit-field>
+        }
+      </div>
+    </aside>
+  }
   <div class="page-details-actions application-edit-buttons">
     <tm-admin-save-button [saving$]="saving$" [disabled]="(canSave$ | async) === false" (save)="save()"></tm-admin-save-button>
     <button mat-flat-button color="warn" (click)="delete(form)" i18n="@@admin-core.common.delete">Delete</button>

@@ -2,10 +2,16 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  contain: inline-size;
+  position: relative;
 }
 
 .flex-wrapper {
   display: flex;
+  min-width: 0;
 }
 
 .form-wrapper {
@@ -20,7 +26,8 @@
   flex: 1;
   overflow: hidden;
   min-height: 300px;
-  position: relative;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .form-field-wrapper > * + * {
@@ -59,14 +66,13 @@ tm-admin-form-attribute-list {
   flex-shrink: 0;
 }
 
-.form-field-wrapper > .edit-panel {
+.edit-panel {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin-left: 0;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
   width: 420px;
-  max-width: 100%;
+  max-width: calc(100% - 16px);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -74,17 +80,23 @@ tm-admin-form-attribute-list {
   box-sizing: border-box;
   padding: 0 16px 16px;
   background: var(--mat-sys-surface, #fff);
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-.edit-panel-header {
+.close-panel-button {
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .edit-panel-content {
   flex: 1;
+  min-height: 0;
   overflow: auto;
 }
 
