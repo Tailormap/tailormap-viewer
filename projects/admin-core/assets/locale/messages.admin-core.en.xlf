@@ -1809,7 +1809,13 @@
         <source>File is still in use</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
-        <source>This file cannot be removed because it is still used in the following places.</source>
+        <source>This file cannot be removed because it is still being used in the following places:</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body-multiple" datatype="html">
+        <source>These files cannot be removed because they are still being used in the following places:</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-multiple" datatype="html">
+        <source>Files are still in use</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
         <source>Files (<x id="PH" equiv-text="count"/>)</source>

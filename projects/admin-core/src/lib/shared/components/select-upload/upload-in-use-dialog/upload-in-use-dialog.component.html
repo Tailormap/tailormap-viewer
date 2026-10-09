@@ -1,10 +1,24 @@
-<h1 mat-dialog-title i18n="@@admin-core.select-upload.file-in-use">File is still in use</h1>
+@let multiple = multipleUploads();
+
+@if(multiple) {
+  <h1 mat-dialog-title i18n="@@admin-core.select-upload.file-in-use-multiple">Files are still in use</h1>
+} @else {
+  <h1 mat-dialog-title i18n="@@admin-core.select-upload.file-in-use">File is still in use</h1>
+}
+
 
 <div mat-dialog-content>
-  <p class="content" i18n="@@admin-core.select-upload.file-in-use-body">This file cannot be removed because it is still used in the following places.</p>
+  @if(multiple) {
+    <p class="content" i18n="@@admin-core.select-upload.file-in-use-body-multiple">These files cannot be removed because they are still being used in the following places:</p>
+  } @else {
+    <p class="content" i18n="@@admin-core.select-upload.file-in-use-body">This file cannot be removed because it is still being used in the following places:</p>
+  }
   <ul>
     @for (item of data.items; track $index) {
       <li>
+        @if (data.showFileName && item.upload) {
+          {{ item.upload.filename }}:
+        }
         <a [routerLink]="item.url" (click)="onConfirm()">{{item.name}}</a>
       </li>
     }

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { UploadInUseItem } from '../models/upload-remove-service.model';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 
@@ -12,7 +11,6 @@ import { MatButton } from '@angular/material/button';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         MatDialogTitle,
-        CdkScrollable,
         MatDialogContent,
         RouterLink,
         MatDialogActions,
@@ -21,9 +19,21 @@ import { MatButton } from '@angular/material/button';
 })
 export class UploadInUseDialogComponent {
   public data = inject<{
+    showFileName?: boolean;
     items: UploadInUseItem[];
   }>(MAT_DIALOG_DATA);
   private dialogRef = inject<MatDialogRef<UploadInUseDialogComponent>>(MatDialogRef);
+
+  public multipleUploads() {
+    const allUploads = this.data.items
+      .map((item: UploadInUseItem) => item.upload?.id)
+      .filter(upload => !!upload);
+    if (allUploads.length > 0) {
+      return !allUploads.every( v => v === allUploads[0]);
+    } else {
+      return false;
+    }
+  }
 
   public onConfirm() {
     this.dialogRef.close(true);
