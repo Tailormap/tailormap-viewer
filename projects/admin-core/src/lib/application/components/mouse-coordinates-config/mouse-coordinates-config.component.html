@@ -1,9 +1,7 @@
 <tm-admin-base-component-config [type]="type" [label]="label" [config]="config">
   <tm-info-message class="mouse-coordinates-help">
-    <div i18n="@@admin-core.components.mouse-coordinates-help">
-      Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection.
-      Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).
-    </div>
+    <div i18n="@@admin-core.components.mouse-coordinates-help">Configure one or more coordinate displays. If none are configured,
+      coordinates are shown in the map projection. Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).</div>
   </tm-info-message>
 
   <div class="display-form" [formGroup]="formGroup">
@@ -30,15 +28,11 @@
             <mat-option
               value="decimal-degrees"
               [disabled]="displayForm.controls.projection.value !== 'EPSG:4326'"
-              i18n="@@admin-core.components.mouse-coordinates-format-decimal-degrees">
-              Decimal degrees
-            </mat-option>
+              i18n="@@admin-core.components.mouse-coordinates-format-decimal-degrees">Decimal degrees</mat-option>
             <mat-option
               value="degrees-decimal-minutes"
               [disabled]="displayForm.controls.projection.value !== 'EPSG:4326'"
-              i18n="@@admin-core.components.mouse-coordinates-format-degrees-decimal-minutes">
-              Degrees + decimal minutes
-            </mat-option>
+              i18n="@@admin-core.components.mouse-coordinates-format-degrees-decimal-minutes">Degrees + decimal minutes</mat-option>
           </mat-select>
         </mat-form-field>
 
