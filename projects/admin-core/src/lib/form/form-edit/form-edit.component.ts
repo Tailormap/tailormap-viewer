@@ -8,7 +8,7 @@ import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
-  selectDraftFormSelectedAttribute, selectDraftFormSelectedTabId, selectDraftFormUpdated, selectDraftFormValid,
+  selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid,
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
 import { clearSelectedForm, draftFormClearSelection, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
@@ -65,9 +65,9 @@ export class FormEditComponent implements OnInit, OnDestroy {
   public form$: Observable<FormModel | null> = of(null);
   public canSave$: Observable<boolean> = of(false);
 
-  public selectedTabId = this.store$.selectSignal(selectDraftFormSelectedTabId);
+  public selectedTab = this.store$.selectSignal(selectDraftFormSelectedTab);
   public selectedAttribute = this.store$.selectSignal(selectDraftFormSelectedAttribute);
-  public panelOpen = computed(() => !!this.selectedTabId() || !!this.selectedAttribute());
+  public panelOpen = computed(() => !!this.selectedTab() || !!this.selectedAttribute());
 
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
   public featureType$ = this.featureTypeSubject$.asObservable();
@@ -165,4 +165,5 @@ export class FormEditComponent implements OnInit, OnDestroy {
     this.store$.dispatch(draftFormClearSelection());
   }
 
+  protected readonly selectDraftFormSelectedAttribute = selectDraftFormSelectedAttribute;
 }
