@@ -33,6 +33,7 @@
         <div class="field-row"
              [class.field-row--selected]="field.selected"
              cdkDrag
+             cdkDragPreviewContainer="parent"
              [cdkDragData]="field"
              (click)="selectAttribute(field.name)">
           <span class="label">{{ field.name }}</span>
@@ -61,6 +62,7 @@
         @for (tab of tabs(); track tab.id) {
           <div class="column"
                cdkDrag
+               cdkDragPreviewContainer="parent"
                cdkDragLockAxis="x"
                [cdkDragData]="tab">
             <div class="column-header"

@@ -134,19 +134,6 @@
   opacity: 0.3;
 }
 
-.field-row.cdk-drag-preview,
-.column.cdk-drag-preview {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  background: white;
-  box-sizing: border-box;
-}
-
-.field-row.cdk-drag-preview {
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-}
-
 .cdk-drop-list-dragging .field-row:not(.cdk-drag-placeholder),
 .cdk-drop-list-dragging .column:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
