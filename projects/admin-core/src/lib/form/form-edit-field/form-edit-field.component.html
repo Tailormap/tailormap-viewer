@@ -48,7 +48,7 @@
         }
       </div>
       @if(fieldForm.get('type')?.value === 'select') {
-        <div class="form-control">
+        <div class="form-control select-form-control">
           <ng-container formArrayName="valueList">
             <div cdkDropList #valueList="cdkDropList"
                  [cdkDropListData]="getValueListFormArray().controls"
