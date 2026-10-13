@@ -82,7 +82,11 @@ mat-tab-group ::ng-deep .mat-mdc-tab-body-content {
 }
 
 .file-no-image .file-info {
-  padding: 4px 0 4px 0;
+  margin: 4px 0 0 0;
+  background-color: #e9e5f1;
+  padding-left: 4px;
+  min-height: 48px; /* need 48px minimum height because the Material Design touch target is 48 px, otherwise a scrollbar will show */
+  vertical-align: middle;
 }
 
 .file-no-image .file-name {
