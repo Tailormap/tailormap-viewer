@@ -2,7 +2,6 @@ import {
   Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject,
   signal, computed, effect,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
@@ -36,7 +35,6 @@ type TabFieldsMap = Map<string, FieldWithSelected[]>;
   imports: [
     ListFilterComponent,
     ReactiveFormsModule,
-    NgTemplateOutlet,
     MatIcon,
     MatIconButton,
     MatFormField,
@@ -51,7 +49,6 @@ export class FormFieldListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
   private readonly allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected);
-  public readonly unassignedTabId = 'unassigned';
 
   @Input({ required: true })
   public featureTypeName: string = '';

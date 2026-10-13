@@ -75,7 +75,7 @@
 </ng-template>
 
 <form [formGroup]="form" class="edit-form">
-  @if (tabs.length > 0) {
+  @if (tabs.length > 1) {
     <mat-tab-group>
       @for (tab of tabs; track tab.id) {
         <mat-tab [label]="tab.name">

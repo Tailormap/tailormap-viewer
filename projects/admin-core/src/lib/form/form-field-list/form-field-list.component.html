@@ -22,27 +22,6 @@
     </div>
   </div>
 
-  <ng-template #fieldListTpl let-listId="listId">
-    <div cdkDropList
-         class="field-list"
-         [id]="listId"
-         [cdkDropListData]="tabFields().get(listId) || []"
-         [cdkDropListConnectedTo]="fieldDropListIds()"
-         (cdkDropListDropped)="onFieldDrop($event)">
-      @for (field of tabFields().get(listId); track field.name) {
-        <div class="field-row"
-             [class.field-row--selected]="field.selected"
-             cdkDrag
-             cdkDragPreviewContainer="parent"
-             [cdkDragData]="field"
-             (click)="selectAttribute(field.name)">
-          <span class="label">{{ field.name }}</span>
-          <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
-        </div>
-      }
-    </div>
-  </ng-template>
-
   <div class="columns-scroll">
     <div class="columns-row">
       <div cdkDropList
@@ -64,7 +43,24 @@
               <span class="label">{{ tab.name }}</span>
               <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
             </div>
-            <ng-container *ngTemplateOutlet="fieldListTpl; context: { listId: tab.id }"></ng-container>
+            <div cdkDropList
+                 class="field-list"
+                 [id]="tab.id"
+                 [cdkDropListData]="tabFields().get(tab.id) || []"
+                 [cdkDropListConnectedTo]="fieldDropListIds()"
+                 (cdkDropListDropped)="onFieldDrop($event)">
+              @for (field of tabFields().get(tab.id); track field.name) {
+                <div class="field-row"
+                     [class.field-row--selected]="field.selected"
+                     cdkDrag
+                     cdkDragPreviewContainer="parent"
+                     [cdkDragData]="field"
+                     (click)="selectAttribute(field.name)">
+                  <span class="label">{{ field.name }}</span>
+                  <mat-icon svgIcon="reorder" class="drag-handle" cdkDragHandle></mat-icon>
+                </div>
+              }
+            </div>
           </div>
         }
       </div>

@@ -24,7 +24,6 @@
         <mat-form-field>
           <mat-label i18n="@@admin-core.form.tab">Tab</mat-label>
           <mat-select formControlName="tab">
-            <mat-option [value]="null" i18n="@@admin-core.form.no-tab">No tab</mat-option>
             @for (tab of tabs(); track tab.id) {
               <mat-option [value]="tab.id">{{ tab.name }}</mat-option>
             }
