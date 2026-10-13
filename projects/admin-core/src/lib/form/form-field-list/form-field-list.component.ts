@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject,
-  signal, computed,
+  signal, computed, effect,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -72,7 +72,6 @@ export class FormFieldListComponent implements OnInit {
   public readonly tabFields = computed<TabFieldsMap>(() => {
     const fields = this.fields();
     const tabFields: TabFieldsMap = new Map();
-    tabFields.set(this.unassignedTabId, fields.filter(field => !field.tab));
     this.tabs().forEach(tab => {
       tabFields.set(tab.id, fields.filter(field => field.tab === tab.id));
     });
@@ -80,9 +79,30 @@ export class FormFieldListComponent implements OnInit {
   });
 
   public readonly fieldDropListIds = computed(() => [
-    this.unassignedTabId,
     ...this.tabs().map(tab => tab.id),
   ]);
+
+  constructor() {
+    effect(() => {
+      if (this.tabs().length === 0) {
+        this.store$.dispatch(draftFormAddTab({ tabId: nanoid(), tabName: 'Tab 1' }));
+      }
+    });
+
+    effect(() => {
+      const allFields = this.allFields();
+      const tabs = this.tabs();
+      const unassignedFields = allFields.filter(field => !field.tab);
+      if (unassignedFields.length > 0 && tabs) {
+        const firstTabId = this.tabs()[0].id;
+        unassignedFields.forEach(field => {
+          this.store$.dispatch(draftFormUpdateFields({
+            fields: allFields.map(f => f.name === field.name ? { ...f, tab: firstTabId } : f),
+          }));
+        });
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.filter.valueChanges
@@ -110,11 +130,14 @@ export class FormFieldListComponent implements OnInit {
 
   public onFieldDrop(event: CdkDragDrop<FieldWithSelected[]>): void {
     const tabGroups = this.tabFields();
-    const prevTabId = this.getTabIdForDropList(event.previousContainer.id);
-    const currTabId = this.getTabIdForDropList(event.container.id);
+    const prevTabId = event.previousContainer.id;
+    const currTabId = event.container.id;
+    if (!prevTabId || !currTabId) {
+      return;
+    }
 
-    const prevList = tabGroups.get(prevTabId ?? this.unassignedTabId) ?? [];
-    const currList = tabGroups.get(currTabId ?? this.unassignedTabId) ?? [];
+    const prevList = tabGroups.get(prevTabId) ?? [];
+    const currList = tabGroups.get(currTabId) ?? [];
 
     if (event.previousContainer.id === event.container.id) {
       moveItemInArray(currList, event.previousIndex, event.currentIndex);
@@ -143,14 +166,9 @@ export class FormFieldListComponent implements OnInit {
     this.updateFields(tabGroups, tabs);
   }
 
-  private getTabIdForDropList(id: string): string | undefined {
-    return id === this.unassignedTabId ? undefined : id;
-  }
-
   private updateFields(tabGroups: TabFieldsMap, tabs: TabModel[]): void {
     this.store$.dispatch(draftFormUpdateFields({
       fields: [
-        ...(tabGroups.get(this.unassignedTabId) ?? []),
         ...tabs.flatMap(tab => tabGroups.get(tab.id) ?? []),
       ],
     }));
