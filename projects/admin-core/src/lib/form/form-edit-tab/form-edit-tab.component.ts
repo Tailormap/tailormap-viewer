@@ -65,15 +65,14 @@ export class FormEditTabComponent {
       return;
     }
     const fields = this.fields();
-    const movedToUnassigned = fields
-      .filter(f => f.tab === selected.id)
-      .map(f => ({ ...f, tab: undefined }));
-    const updatedFields = [
-      ...fields.filter(f => !f.tab),
-      ...movedToUnassigned,
-      ...fields.filter(f => f.tab && f.tab !== selected.id),
-    ];
     const tabs = this.tabs().filter(t => t.id !== selected.id);
+    const updatedFields = fields
+      .map(f => {
+        if (f.tab === selected.id) {
+          return { ...f, tab: tabs[0]?.id };
+        }
+        return f;
+      });
 
     this.store$.dispatch(draftFormUpdateFields({ fields: updatedFields }));
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
