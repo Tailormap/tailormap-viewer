@@ -36,8 +36,8 @@ export class GeoServiceService {
   private catalogService = inject(CatalogService);
   // Injected lazily (via `Injector`, not eagerly like the services above): `ApplicationService`'s
   // constructor immediately selects `applicationStateKey` state, which isn't registered yet if this
-  // service is constructed as part of `CatalogModule`'s own eager initialization — `CatalogModule` is
-  // processed before `ApplicationModule` registers that feature state (see `application.module.ts`).
+  // service is constructed as part of `provideCatalog()`'s eager initialization — catalog is
+  // initialized before `provideApplication()` registers that feature state (see `admin-core.providers.ts`).
   private injector = inject(Injector);
   private sseService = inject(AdminSseService);
 
