@@ -3,7 +3,7 @@ import {
   signal, computed, effect,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { FilterHelper } from '@tailormap-viewer/shared';
+import { FilterHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -44,6 +44,7 @@ type TabFieldsMap = Map<string, FieldWithSelected[]>;
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
+    TooltipDirective,
   ],
 })
 export class FormFieldListComponent implements OnInit {
@@ -188,5 +189,9 @@ export class FormFieldListComponent implements OnInit {
         ...tabs.flatMap(tab => tabGroups.get(tab.id) ?? []),
       ],
     }));
+  }
+
+  public getAddTabTooltip(): string {
+    return $localize `:@@admin-core.form.add-tab:Add tab`;
   }
 }

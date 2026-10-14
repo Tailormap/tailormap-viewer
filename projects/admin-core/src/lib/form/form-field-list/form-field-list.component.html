@@ -15,8 +15,7 @@
       <button mat-icon-button color="primary" type="button"
               [disabled]="!tabName.value?.trim()"
               (click)="addTab()"
-              i18n-aria-label="@@admin-core.form.add-tab"
-              aria-label="Add tab">
+              [tmTooltip]="getAddTabTooltip()">
         <mat-icon svgIcon="plus"></mat-icon>
       </button>
     </div>
