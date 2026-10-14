@@ -1843,8 +1843,8 @@
         <target>Sind Sie sicher, dass Sie das Formular <x id="PH" equiv-text="title"/> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-tab" datatype="html">
-        <source> Delete tab </source>
-        <target> Tab löschen </target>
+        <source>Delete tab</source>
+        <target>Tab löschen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>

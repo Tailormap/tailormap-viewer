@@ -1362,7 +1362,7 @@
         <source>Are you sure you want to delete form <x id="PH" equiv-text="title"/>? This action cannot be undone.</source>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-tab" datatype="html">
-        <source> Delete tab </source>
+        <source>Delete tab</source>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>

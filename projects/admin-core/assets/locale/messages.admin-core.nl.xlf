@@ -1842,8 +1842,8 @@
         <target>Weet u zeker dat u formulier <x id="PH" equiv-text="title"/> wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.delete-tab" datatype="html">
-        <source> Delete tab </source>
-        <target> Verwijder tabblad </target>
+        <source>Delete tab</source>
+        <target>Verwijder tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
