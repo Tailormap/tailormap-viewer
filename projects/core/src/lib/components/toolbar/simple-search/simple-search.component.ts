@@ -20,7 +20,7 @@ import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autoc
 import { MatOption, MatOptgroup } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AsyncPipe } from '@angular/common';
-import { TooltipDirective, AutoFocusDirective, HtmlifyPipe } from '@tailormap-viewer/shared';
+import { TooltipDirective, AutoFocusDirective, HtmlifyComponent } from '@tailormap-viewer/shared';
 
 type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' | 'complete';
 
@@ -44,7 +44,7 @@ type SearchStatusType = 'empty' | 'no_results' | 'searching' | 'belowMinLength' 
         MatProgressSpinner,
         MatOptgroup,
         AsyncPipe,
-        HtmlifyPipe,
+        HtmlifyComponent,
     ],
 })
 export class SimpleSearchComponent implements OnInit {

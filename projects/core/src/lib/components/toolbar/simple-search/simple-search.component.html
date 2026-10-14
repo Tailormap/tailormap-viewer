@@ -78,7 +78,7 @@
                         <mat-option [value]="option">{{option.label}}</mat-option>
                       }
                       @if (searchResult.attribution) {
-                        <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+                        <mat-option class="attribution" disabled><tm-htmlify [text]="searchResult.attribution" /></mat-option>
                       }
                     </mat-optgroup>
                   }
@@ -125,7 +125,7 @@
                 <mat-option [value]="option" (click)="searchControl.setValue(option)">{{option.label}}</mat-option>
               }
               @if (searchResult.attribution) {
-                <mat-option class="attribution" disabled [innerHTML]="searchResult.attribution | htmlify"></mat-option>
+                <mat-option class="attribution" disabled><tm-htmlify [text]="searchResult.attribution" /></mat-option>
               }
             </mat-optgroup>
           }
