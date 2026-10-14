@@ -1,5 +1,5 @@
 import {
-  Component, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, ViewContainerRef, inject, input, output,
+  Component, ChangeDetectionStrategy, DestroyRef, ViewContainerRef, inject, input, output,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent, SelectUploadTexts } from '../select-upload-dialog/select-upload-dialog.component';

@@ -73,7 +73,8 @@ export class FileHelper {
         return;
       }
       if (typeof e.target.result !== 'string') {
-        throw('Expected string because we called readAsDataURL()');
+        subject.error(new Error('Expected string because we called readAsDataURL()'));
+        return;
       }
       const result: string = e.target.result;
       const parsed = result != null ? FileHelper.parseDataUrl(result) : null;

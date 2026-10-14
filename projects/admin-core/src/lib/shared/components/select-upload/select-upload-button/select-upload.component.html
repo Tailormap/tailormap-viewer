@@ -10,7 +10,7 @@
           color="primary"
           (click)="selectFile()">{{ getSelectButtonTitle() }}</button>
 
-  @if (selectedFile !== null) {
+  @if (selectedFile() !== null) {
     <button mat-flat-button (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
   }
 </div>

@@ -11,7 +11,7 @@ export class ImageHelper {
 
   public static readFileAsImage$(file: File, maxSize = 2, resizeSize: number | null = null, restrictTypes?: string[] | null): Observable<ImageResult | null> {
 
-    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize, restrictTypes);
+    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize, resizeSize, restrictTypes);
     if (errorMsg.length > 0) {
       return of({ error: errorMsg.join('. ') });
     }
@@ -25,9 +25,13 @@ export class ImageHelper {
       }));
   }
 
-  public static checkSizeAndType(file: File, maxSize = 2, restrictTypes?: string[] | null): string[] {
+  public static checkSizeAndType(file: File, maxSize = 2, resizeSize: number | null, restrictTypes?: string[] | null): string[] {
     const result = [];
-    if (!ImageHelper.isRasterImage(file) && file.size > (maxSize * 1000 * 1000)) {
+    const isOversizeLimit = file.size > (maxSize * 1000 * 1000);
+    const isRasterImage = ImageHelper.isRasterImage(file);
+    // When image will be resized it will end up below the size limit if the resizeSize is small enough
+    const canResizeImage = isRasterImage && resizeSize !== null;
+    if (isOversizeLimit && !canResizeImage) {
       result.push('Maximum size allowed is ' + maxSize + 'MB');
     }
     try {
@@ -87,6 +91,10 @@ export class ImageHelper {
             resizedImageBase64.next(fileContents.dataURL);
             resizedImageBase64.complete();
           }
+        };
+        image.onerror = () => {
+          resizedImageBase64.next(null);
+          resizedImageBase64.complete();
         };
 
         return resizedImageBase64.asObservable();
