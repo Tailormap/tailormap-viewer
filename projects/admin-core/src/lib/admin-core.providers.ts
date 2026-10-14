@@ -1,20 +1,25 @@
-import { EnvironmentProviders, importProvidersFrom, inject, Provider, provideEnvironmentInitializer } from '@angular/core';
+import { EnvironmentProviders, inject, Provider, provideEnvironmentInitializer } from '@angular/core';
 import { IconService } from '@tailormap-viewer/shared';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
-import { PagesModule } from './pages/pages.module';
-import { CatalogModule } from './catalog/catalog.module';
-import { ApplicationModule } from './application/application.module';
-import { OIDCConfigurationModule } from './oidc/oidc-configuration.module';
-import { SettingsModule } from './settings/settings.module';
-import { SearchIndexModule } from './search-index/search-index.module';
+import { provideCatalog } from './catalog/catalog.providers';
+import { provideUser } from './user/user.providers';
+import { provideForm } from './form/form.providers';
+import { provideApplication } from './application/application.providers';
+import { provideSearchIndex } from './search-index/search-index.providers';
+import { provideTasks } from './tasks/tasks.providers';
+import { provideOIDCConfiguration } from './oidc/oidc-configuration.providers';
 
 export function provideAdminCore(): Array<Provider | EnvironmentProviders> {
   return [
-    // These feature areas are still NgModule-based; bridge them in until they're migrated to their own
-    // provide*() functions.
-    importProvidersFrom(PagesModule, CatalogModule, ApplicationModule, SettingsModule, SearchIndexModule, OIDCConfigurationModule),
+    ...provideCatalog(),
+    ...provideUser(),
+    ...provideForm(),
+    ...provideApplication(),
+    ...provideSearchIndex(),
+    ...provideTasks(),
+    ...provideOIDCConfiguration(),
     provideEnvironmentInitializer(() => {
       const matIconRegistry = inject(MatIconRegistry);
       const domSanitizer = inject(DomSanitizer);
