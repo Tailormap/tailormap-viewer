@@ -6,7 +6,7 @@ import { UPLOAD_REMOVE_SERVICE } from '../models/upload-remove-service.injection
 import { UploadRemoveServiceModel } from '../models/upload-remove-service.model';
 import { UploadInUseDialogComponent } from '../upload-in-use-dialog/upload-in-use-dialog.component';
 import {
-  ConfirmDialogService, FileHelper, FileContents, HtmlifyHelper, TooltipDirective,
+  ConfirmDialogService, FileHelper, FileContents, TooltipDirective,
 } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../../services/admin-snackbar.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -186,7 +186,7 @@ export class SelectUploadDialogComponent implements OnInit {
   }
 
   public isImage(upload: UploadModel) {
-    return HtmlifyHelper.IMG_REGEXP.test(upload.filename);
+    return upload.mimeType?.startsWith('image/') ?? false;
   }
 
   public dismiss(): void {
