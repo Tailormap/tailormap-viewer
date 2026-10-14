@@ -50,10 +50,6 @@
   background: white;
 }
 
-.column--unassigned {
-  background: rgba(0, 0, 0, 0.02);
-}
-
 .column-header,
 .field-row {
   display: flex;
@@ -70,12 +66,8 @@
   cursor: pointer;
 }
 
-.column--unassigned .column-header {
-  cursor: default;
-}
-
 .column-header--selected {
-  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  background-color: var(--primary-color-0_1);
   color: var(--primary-color, #1976d2);
 }
 
@@ -89,7 +81,7 @@
 }
 
 .field-row--selected {
-  background-color: var(--primary-color-0_1, rgba(25, 118, 210, 0.1));
+  background-color: var(--primary-color-0_1);
   color: var(--primary-color, #1976d2);
 }
 
