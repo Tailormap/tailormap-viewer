@@ -9,9 +9,12 @@
     </div>
     <div class="form-row">
       <strong i18n="@@admin-core.application.logo">Upload logo for application</strong>
-      <tm-admin-select-upload [category]="appLogoCategory"
+      <tm-admin-select-upload
+        [category]="appLogoCategory"
+        [maxImageSize]="LOGO_MAX_SIZE"
+        [dialogTexts]="selectUploadTexts"
         (fileSelected)="onImageChanged($event)"
-      [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
+        [selectedFile]="stylingConfig.logo || null"></tm-admin-select-upload>
     </div>
   </div>
 }

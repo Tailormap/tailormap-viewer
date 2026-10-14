@@ -1,14 +1,14 @@
-@if (selectedFile !== null) {
+@let selected = selectedFile();
+@if (selected !== null) {
   <div class="current-image">
-    <img [src]="getUrl(selectedFile)" [alt]="selectedFile" />
+    <img [src]="getUrl(selected)"/>
   </div>
 }
 
 <div class="buttons">
   <button mat-flat-button
           color="primary"
-          (click)="selectFile()"
-          i18n="@@admin-core.common.select-file">Select file</button>
+          (click)="selectFile()">{{ getSelectButtonTitle() }}</button>
 
   @if (selectedFile !== null) {
     <button mat-flat-button (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>

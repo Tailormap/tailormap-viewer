@@ -17,6 +17,7 @@ import { SelectUploadComponent } from '../../shared/components/select-upload/sel
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { AsyncPipe } from '@angular/common';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { SelectUploadTexts } from '../../shared/components/select-upload/select-upload-dialog/select-upload-dialog.component';
 
 @Component({
     selector: 'tm-admin-geo-service-layer-details',
@@ -39,6 +40,11 @@ export class GeoServiceLayerDetailsComponent implements OnInit, OnDestroy {
   private geoServiceService = inject(GeoServiceService);
   private adminSnackbarService = inject(AdminSnackbarService);
 
+  public selectUploadTexts: SelectUploadTexts = {
+    title: $localize `:@@admin-core.select-upload.select-legend:Select legend`,
+    selectExisting: $localize `:@@admin-core.select-upload.select-existing-legend:Select existing legend`,
+    uploadNew: $localize `:@@admin-core.select-upload.upload-new-legend:Upload a new legend`,
+  };
 
   public geoServiceLayerSettings$: Observable<GeoServiceLayerSettingsModel | null> = of(null);
   private destroyed = new Subject();

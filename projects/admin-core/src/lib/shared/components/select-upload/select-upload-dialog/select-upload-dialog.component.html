@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{dialogProps.title}}</h1>
+<h1 mat-dialog-title>{{ data.texts?.title ?? defaultTexts.title }}</h1>
 
 <div class="dialog-content">
   @if (loading()) {
@@ -6,7 +6,7 @@
   }
 
   @if (existingUploads().length > 0) {
-    <h2 class="no-margin">{{dialogProps.selectExistingTitle}}</h2>
+    <h2 class="no-margin">{{ data.texts?.selectExisting ?? defaultTexts.selectExisting }}</h2>
     <tm-admin-list-filter [formControl]="filenameFilterControl"
                           label="Filter on filename"
                           i18n-label="@@admin-core.select-upload.filter-on-filename"></tm-admin-list-filter>
@@ -69,12 +69,12 @@
   }
 
   <div class="new-uploads">
-    <h2>{{ dialogProps.uploadNewTitle }}</h2>
+    <h2>{{ data.texts?.uploadNew ?? defaultTexts.uploadNew }}</h2>
     @if (selectedTab === 'files') {
       <tm-file-upload-field (fileChanged)="fileSelected($event)"></tm-file-upload-field>
     } @else {
       <tm-image-upload-field  (imageChanged)="imageSelected($event)"
-                             [resizeSize]="dialogProps.maxImageSize"></tm-image-upload-field>
+                             [resizeSize]="data.maxImageSize ?? null"></tm-image-upload-field>
     }
     @if (data.showDescriptionField) {
       <mat-form-field appearance="outline" class="description-field" [tmTooltip]="descriptionTooltip()">

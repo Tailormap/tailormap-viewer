@@ -16,6 +16,7 @@ import { SelectUploadComponent } from '../../shared/components/select-upload/sel
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
 import { UploadCategoryEnum } from "@tailormap-viewer/api";
 import { MatCheckbox } from '@angular/material/checkbox';
+import { SelectUploadTexts } from '../../shared/components/select-upload/select-upload-dialog/select-upload-dialog.component';
 
 @Component({
     selector: 'tm-admin-oidc-configuration-form',
@@ -47,6 +48,13 @@ export class OIDCConfigurationFormComponent implements OnInit, OnDestroy {
   private _oidcConfiguration: OIDCConfigurationModel | null = null;
 
   public imageCategory = UploadCategoryEnum.SSO_IMAGE;
+
+  public LOGO_MAX_SIZE = 600;
+  public selectUploadTexts: SelectUploadTexts = {
+    title: $localize `:@@admin-core.select-upload.select-logo:Select logo`,
+    selectExisting: $localize `:@@admin-core.select-upload.select-existing-logo:Select existing logo`,
+    uploadNew: $localize `:@@admin-core.select-upload.upload-new-logo:Upload a new logo`,
+  };
 
   @Input()
   public set oidcConfiguration(oidcConfiguration: OIDCConfigurationModel | null) {

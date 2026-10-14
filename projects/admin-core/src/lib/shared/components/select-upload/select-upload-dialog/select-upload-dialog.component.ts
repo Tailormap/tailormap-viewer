@@ -23,11 +23,19 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ListFilterComponent } from '../../list-filter/list-filter.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+export interface SelectUploadTexts {
+  title?: string;
+  selectExisting?: string;
+  uploadNew?: string;
+}
+
 export interface SelectUploadData {
   uploadId: string | null;
   category: UploadCategoryEnum | string;
   showFilesTab?: boolean;
   showDescriptionField: boolean;
+  maxImageSize?: number | null;
+  texts?: SelectUploadTexts;
 }
 
 export interface SelectUploadResult {
@@ -35,34 +43,6 @@ export interface SelectUploadResult {
   upload?: UploadModel;
   cancelled: boolean;
 }
-
-interface DialogProps {
-  maxImageSize: number;
-  title: string;
-  selectExistingTitle: string;
-  uploadNewTitle: string;
-}
-
-const CATEGORY_PROPS: Record<UploadCategoryEnum | string | 'defaultProps', DialogProps> = {
-  [UploadCategoryEnum.LEGEND]: {
-    maxImageSize: Infinity,
-    title: $localize `:@@admin-core.select-upload.select-legend:Select legend`,
-    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-legend:Select existing legend`,
-    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-legend:Upload a new legend`,
-  },
-  [UploadCategoryEnum.APPLICATION_LOGO]: {
-    maxImageSize: 600,
-    title: $localize `:@@admin-core.select-upload.select-logo:Select logo`,
-    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-logo:Select existing logo`,
-    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-logo:Upload a new logo`,
-  },
-  defaultProps: {
-    maxImageSize: Infinity,
-    title: $localize `:@@admin-core.select-upload.select-file:Select file`,
-    selectExistingTitle: $localize `:@@admin-core.select-upload.select-existing-file:Select existing file`,
-    uploadNewTitle: $localize `:@@admin-core.select-upload.upload-new-file:Upload a new file`,
-  },
-};
 
 @Component({
     selector: 'tm-admin-select-upload-dialog',
@@ -112,7 +92,13 @@ export class SelectUploadDialogComponent implements OnInit {
   public filterTerm = signal<string>('');
 
   public loading = signal(false);
-  public dialogProps: DialogProps;
+
+  public defaultTexts: SelectUploadTexts = {
+    title: $localize `:@@admin-core.select-upload.select-file:Select file`,
+    selectExisting: $localize `:@@admin-core.select-upload.select-existing-file:Select existing file`,
+    uploadNew: $localize `:@@admin-core.select-upload.upload-new-file:Upload a new file`,
+  };
+
   public fileToUpload = signal<FileContents | null>(null);
   public descriptionControl = new FormControl<string | null>(null);
   public descriptionTooltip = computed(() => {
@@ -125,10 +111,6 @@ export class SelectUploadDialogComponent implements OnInit {
   public selectedTab: 'files' | 'images' = this.data.showFilesTab ? 'files' : 'images';
 
   constructor() {
-    this.dialogProps = CATEGORY_PROPS[this.data.category]
-      ? CATEGORY_PROPS[this.data.category]
-      : CATEGORY_PROPS['defaultProps'];
-
     effect(() => {
       if (this.fileToUpload()) {
         this.descriptionControl.enable();

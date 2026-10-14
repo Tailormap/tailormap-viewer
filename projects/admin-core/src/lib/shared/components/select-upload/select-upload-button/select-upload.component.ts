@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input, DestroyRef, ViewContainerRef, inject } from '@angular/core';
+import {
+  Component, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, ViewContainerRef, inject, input,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectUploadDialogComponent } from '../select-upload-dialog/select-upload-dialog.component';
+import { SelectUploadDialogComponent, SelectUploadTexts } from '../select-upload-dialog/select-upload-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { MatButton } from '@angular/material/button';
@@ -18,15 +20,11 @@ export class SelectUploadComponent {
   private destroyRef = inject(DestroyRef);
   private viewContainerRef = inject(ViewContainerRef);
 
-
-  @Input()
-  public category: UploadCategoryEnum | string = '';
-
-  @Input()
-  public selectedFile: string | null = null;
-
-  @Input()
-  public showDescriptionField: boolean = true;
+  public category = input<UploadCategoryEnum | string>('');
+  public maxImageSize = input<number | null>(null);
+  public dialogTexts = input<SelectUploadTexts | undefined>(undefined);
+  public selectedFile = input<string | null>(null);
+  public showDescriptionField = input(true);
 
   @Output()
   public fileSelected = new EventEmitter<string | null>();
@@ -34,7 +32,13 @@ export class SelectUploadComponent {
   public selectFile() {
     SelectUploadDialogComponent.open(
       this.dialog,
-      { category: this.category, uploadId: this.selectedFile, showDescriptionField: this.showDescriptionField },
+      {
+        category: this.category(),
+        uploadId: this.selectedFile(),
+        showDescriptionField: this.showDescriptionField(),
+        maxImageSize: this.maxImageSize(),
+        texts: this.dialogTexts(),
+      },
       this.viewContainerRef,
     )
       .afterClosed()
@@ -47,12 +51,15 @@ export class SelectUploadComponent {
       });
   }
 
+  public getSelectButtonTitle() {
+    return this.dialogTexts()?.title ?? $localize`:@@admin-core.common.select-file:Select file`;
+  }
+
   public clear() {
     this.fileSelected.emit(null);
   }
 
   public getUrl(selectedFile: string) {
-    return UploadedFileHelper.getAdminUrlForFile(selectedFile, this.category);
+    return UploadedFileHelper.getAdminUrlForFile(selectedFile, this.category());
   }
-
 }
