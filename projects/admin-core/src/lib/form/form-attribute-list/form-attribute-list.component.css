@@ -17,3 +17,7 @@ mat-selection-list {
 mat-spinner {
   margin-top: 16px;
 }
+
+.attribute-row.cdk-drag-preview {
+  padding-left: 8px;
+}
