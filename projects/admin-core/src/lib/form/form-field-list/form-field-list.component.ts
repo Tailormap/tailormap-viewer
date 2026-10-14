@@ -50,7 +50,7 @@ type TabFieldsMap = Map<string, FieldWithSelected[]>;
 export class FormFieldListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
-  private readonly allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected);
+  private allFields = this.store$.selectSignal(selectDraftFormFieldsWithSelected);
 
   @Input({ required: true })
   public featureTypeName: string = '';
@@ -58,17 +58,17 @@ export class FormFieldListComponent implements OnInit {
   public filter = new FormControl('');
   public tabName = new FormControl<string>('');
 
-  public readonly attributeFilter = signal<string | null>(null);
-  public readonly tabs = this.store$.selectSignal(selectDraftFormTabs);
-  public readonly selectedTabId = this.store$.selectSignal(selectDraftFormSelectedTabId);
+  public attributeFilter = signal<string | null>(null);
+  public tabs = this.store$.selectSignal(selectDraftFormTabs);
+  public selectedTabId = this.store$.selectSignal(selectDraftFormSelectedTabId);
 
-  public readonly fields = computed(() => {
+  public fields = computed(() => {
     const filterStr = this.attributeFilter();
     const fields = this.allFields();
     return filterStr ? FilterHelper.filterByTerm(fields, filterStr, f => f.name) : fields;
   });
 
-  public readonly tabFields = computed<TabFieldsMap>(() => {
+  public tabFields = computed<TabFieldsMap>(() => {
     const fields = this.fields();
     const tabFields: TabFieldsMap = new Map();
     this.tabs().forEach(tab => {
@@ -77,7 +77,7 @@ export class FormFieldListComponent implements OnInit {
     return tabFields;
   });
 
-  public readonly fieldDropListIds = computed(() => [
+  public fieldDropListIds = computed(() => [
     FormAttributeListComponent.ATTRIBUTE_LIST_DROP_ID,
     ...this.tabs().map(tab => tab.id),
   ]);

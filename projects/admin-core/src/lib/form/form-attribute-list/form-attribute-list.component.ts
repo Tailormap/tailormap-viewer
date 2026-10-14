@@ -14,20 +14,20 @@ import { AsyncPipe } from '@angular/common';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'tm-admin-form-attribute-list',
-  templateUrl: './form-attribute-list.component.html',
-  styleUrls: ['./form-attribute-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatProgressSpinner,
-    ListFilterComponent,
-    ReactiveFormsModule,
-    MatSelectionList,
-    AsyncPipe,
-    CdkDrag,
-    CdkDropList,
-    MatListItem,
-  ],
+    selector: 'tm-admin-form-attribute-list',
+    templateUrl: './form-attribute-list.component.html',
+    styleUrls: ['./form-attribute-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatProgressSpinner,
+        ListFilterComponent,
+        ReactiveFormsModule,
+        MatSelectionList,
+        AsyncPipe,
+        CdkDrag,
+        CdkDropList,
+        MatListItem,
+    ],
 })
 export class FormAttributeListComponent implements OnInit {
   private store$ = inject(Store);

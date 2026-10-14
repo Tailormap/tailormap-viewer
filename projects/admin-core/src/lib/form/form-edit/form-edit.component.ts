@@ -33,21 +33,21 @@ import { selectDraftFormTabs } from '../state/form.selectors';
     templateUrl: './form-edit.component.html',
     styleUrls: ['./form-edit.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    FormFormComponent,
-    CatalogShortcutButtonsComponent,
-    FormWarningMessageComponent,
-    FormAttributeListComponent,
-    FormFieldListComponent,
-    FormEditFieldComponent,
-    SaveButtonComponent,
-    MatButton,
-    RouterLink,
-    AsyncPipe,
-    FormEditTabComponent,
-    MatIcon,
-    MatIconButton,
-  ],
+    imports: [
+        FormFormComponent,
+        CatalogShortcutButtonsComponent,
+        FormWarningMessageComponent,
+        FormAttributeListComponent,
+        FormFieldListComponent,
+        FormEditFieldComponent,
+        SaveButtonComponent,
+        MatButton,
+        RouterLink,
+        AsyncPipe,
+        FormEditTabComponent,
+        MatIcon,
+        MatIconButton,
+    ],
 })
 export class FormEditComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
@@ -168,5 +168,4 @@ export class FormEditComponent implements OnInit, OnDestroy {
     this.store$.dispatch(draftFormClearSelection());
   }
 
-  protected readonly selectDraftFormSelectedAttribute = selectDraftFormSelectedAttribute;
 }

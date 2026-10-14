@@ -1,4 +1,3 @@
-
 :host {
   display: flex;
   flex-direction: column;
@@ -21,7 +20,6 @@
   align-items: center;
 }
 
-/* Scrolls horizontally when there are many tabs */
 .columns-scroll {
   flex: 1;
   min-height: 0;
@@ -32,7 +30,6 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  /* Make sure the row grows with its columns so the container scrolls instead of shrinking them */
   width: max-content;
   min-width: 100%;
   padding-bottom: 8px;
@@ -83,7 +80,6 @@
 }
 
 .field-list {
-  /* keeps empty columns usable as a drop target */
   min-height: 48px;
 }
 
@@ -128,7 +124,6 @@
   white-space: nowrap;
 }
 
-/* Drag & drop */
 .field-row.cdk-drag-placeholder,
 .column.cdk-drag-placeholder {
   opacity: 0.3;
