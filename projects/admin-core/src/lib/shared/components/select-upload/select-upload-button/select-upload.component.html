@@ -1,7 +1,7 @@
 @let selected = selectedFile();
 @if (selected !== null) {
   <div class="current-image">
-    <img [src]="getUrl(selected)"/>
+    <img [src]="getUrl(selected)" alt=""/>
   </div>
 }
 
