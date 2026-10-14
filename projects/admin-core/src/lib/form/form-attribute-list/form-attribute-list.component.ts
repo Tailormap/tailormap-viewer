@@ -11,7 +11,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatListItem, MatSelectionList } from '@angular/material/list';
 import { AsyncPipe } from '@angular/common';
-import { CdkDrag, CdkDropList, CdkDragEnter, CdkDragExit, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'tm-admin-form-attribute-list',
