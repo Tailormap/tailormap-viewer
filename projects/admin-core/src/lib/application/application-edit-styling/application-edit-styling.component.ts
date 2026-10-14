@@ -8,6 +8,7 @@ import { updateApplicationStylingConfig } from '../state/application.actions';
 import { UPLOAD_REMOVE_SERVICE } from '../../shared/components/select-upload/models/upload-remove-service.injection-token';
 import { ApplicationImageRemoveService } from '../services/application-image-remove.service';
 import { SelectUploadComponent } from '../../shared/components/select-upload/select-upload-button/select-upload.component';
+import { SelectUploadTexts } from '../../shared/components/select-upload/select-upload-dialog/select-upload-dialog.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -27,6 +28,12 @@ import { AsyncPipe } from '@angular/common';
 export class ApplicationEditStylingComponent {
   private store$ = inject(Store);
 
+  public LOGO_MAX_SIZE = 600;
+  public selectUploadTexts: SelectUploadTexts = {
+    title: $localize `:@@admin-core.select-upload.select-logo:Select logo`,
+    selectExisting: $localize `:@@admin-core.select-upload.select-existing-logo:Select existing logo`,
+    uploadNew: $localize `:@@admin-core.select-upload.upload-new-logo:Upload a new logo`,
+  };
 
   public stylingConfig$: Observable<ViewerStylingModel | undefined> = new BehaviorSubject<ViewerStylingModel>({});
 

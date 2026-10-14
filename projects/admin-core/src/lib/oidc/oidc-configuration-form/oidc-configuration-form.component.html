@@ -58,9 +58,12 @@
   </mat-form-field>
   <div class="upload-image-for-sso">
     <strong class="upload-image-label" i18n="@@admin-core.oidc.logo">Upload logo for SSO button</strong>
-    <tm-admin-select-upload [category]="imageCategory"
-                            (fileSelected)="onImageChanged($event)"
-                            [selectedFile]="oidcConfigurationForm.get('image')?.value || null"></tm-admin-select-upload>
+    <tm-admin-select-upload
+      [category]="imageCategory"
+      [maxImageSize]="LOGO_MAX_SIZE"
+      [dialogTexts]="selectUploadTexts"
+      (fileSelected)="onImageChanged($event)"
+      [selectedFile]="oidcConfigurationForm.get('image')?.value || null"></tm-admin-select-upload>
   </div>
   <p>
     <small i18n="@@admin-core.oidc.use-redirect-url">Use <code>{{redirectUrl}}</code> as redirect URL in your IdP.</small>
