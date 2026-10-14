@@ -5,6 +5,9 @@ import { TreeModel } from '@tailormap-viewer/shared';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { TestBed } from '@angular/core/testing';
+import { TocNodeDecorationService } from '../services/toc-node-decoration.service';
 
 const setup = async (node: TreeModel, scale?: number ) => {
   await render(TocNodeLayerComponent, {
@@ -102,5 +105,27 @@ describe('TocNodeLayerComponent', () => {
     expect(screen.queryByRole('radiogroup')).toBeInTheDocument();
     expect(screen.getByText('Default Style')).toBeInTheDocument();
     expect(screen.getByText('Alternate Style')).toBeInTheDocument();
+  });
+
+  test('renders decorations from TocNodeDecorationService', async () => {
+    const appLayer = getAppLayerModel();
+    const layer: TreeModel<AppLayerModel> = {
+      id: `${appLayer.id}`, label: appLayer.title, type: 'layer', metadata: appLayer,
+    };
+    await render(TocNodeLayerComponent, {
+      imports: [ MatIconModule, MatRadioModule, MatIconTestingModule ],
+      inputs: { node: layer },
+      configureTestBed: () => {
+        TestBed.inject(TocNodeDecorationService).registerDecorator('test', node => node.id === layer.id ? {
+          cssClasses: ['decorated-node'],
+          labelCssClasses: ['decorated-label'],
+          icons: [{ svgIcon: 'info', ariaLabel: 'Extra info' }],
+        } : null);
+      },
+    });
+    const label = await screen.findByText(appLayer.title);
+    expect(label).toHaveClass('tree-node__label-content', 'decorated-label');
+    expect(label.closest('.tree-node')).toHaveClass('decorated-node');
+    expect(screen.getByRole('img', { name: 'Extra info' })).toBeInTheDocument();
   });
 });
