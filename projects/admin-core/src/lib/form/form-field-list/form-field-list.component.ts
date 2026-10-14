@@ -10,7 +10,7 @@ import {
   draftFormAddTab, draftFormSetSelectedField, draftFormSetSelectedTabId, draftFormUpdateFields, draftFormUpdateTabs,
 } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected, selectDraftFormSelectedTabId, selectDraftFormTabs } from '../state/form.selectors';
-import { FormFieldModel } from '@tailormap-viewer/api';
+import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-viewer/api';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatIcon } from '@angular/material/icon';
@@ -18,6 +18,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { nanoid } from 'nanoid';
+import { FormAttributeListComponent } from '../form-attribute-list/form-attribute-list.component';
 
 export interface TabModel {
   id: string;
@@ -76,6 +77,7 @@ export class FormFieldListComponent implements OnInit {
   });
 
   public readonly fieldDropListIds = computed(() => [
+    FormAttributeListComponent.ATTRIBUTE_LIST_DROP_ID,
     ...this.tabs().map(tab => tab.id),
   ]);
 
@@ -139,12 +141,29 @@ export class FormFieldListComponent implements OnInit {
     if (event.previousContainer.id === event.container.id) {
       moveItemInArray(currList, event.previousIndex, event.currentIndex);
     } else {
-      const updatedField: FieldWithSelected = {
-        ...prevList[event.previousIndex],
-        tab: currTabId,
-      };
-      prevList.splice(event.previousIndex, 1);
-      currList.splice(event.currentIndex, 0, updatedField);
+      if (prevTabId === FormAttributeListComponent.ATTRIBUTE_LIST_DROP_ID) {
+        const attribute = event.item?.data;
+        if (!attribute || !attribute.name || !(typeof attribute.name === 'string')) {
+          return;
+        }
+        if (this.allFields().some(f => f.name === attribute.name)) {
+          return;
+        }
+        const newField: FieldWithSelected = {
+          name: attribute.name,
+          label: attribute.name,
+          type: FormFieldTypeEnum.TEXT,
+          tab: currTabId,
+        };
+        currList.splice(event.currentIndex, 0, newField);
+      } else {
+        const updatedField: FieldWithSelected = {
+          ...prevList[event.previousIndex],
+          tab: currTabId,
+        };
+        prevList.splice(event.previousIndex, 1);
+        currList.splice(event.currentIndex, 0, updatedField);
+      }
     }
 
     this.updateFields(tabGroups, this.tabs());

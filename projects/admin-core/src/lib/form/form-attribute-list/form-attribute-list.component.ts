@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Input, inject, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
@@ -9,27 +9,33 @@ import { draftFormAddField } from '../state/form.actions';
 import { selectDraftFormAttributes } from '../state/form.selectors';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
-import { MatSelectionList, MatListItem } from '@angular/material/list';
+import { MatListItem, MatSelectionList } from '@angular/material/list';
 import { AsyncPipe } from '@angular/common';
+import { CdkDrag, CdkDropList, CdkDragEnter, CdkDragExit, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
-    selector: 'tm-admin-form-attribute-list',
-    templateUrl: './form-attribute-list.component.html',
-    styleUrls: ['./form-attribute-list.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatProgressSpinner,
-        ListFilterComponent,
-        ReactiveFormsModule,
-        MatSelectionList,
-        MatListItem,
-        AsyncPipe,
-    ],
+  selector: 'tm-admin-form-attribute-list',
+  templateUrl: './form-attribute-list.component.html',
+  styleUrls: ['./form-attribute-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatProgressSpinner,
+    ListFilterComponent,
+    ReactiveFormsModule,
+    MatSelectionList,
+    AsyncPipe,
+    CdkDrag,
+    CdkDropList,
+    MatListItem,
+  ],
 })
 export class FormAttributeListComponent implements OnInit {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
 
+
+  public static readonly ATTRIBUTE_LIST_DROP_ID = 'attribute-list-drop-id';
+  public readonly attributeListDropId = FormAttributeListComponent.ATTRIBUTE_LIST_DROP_ID;
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
@@ -38,6 +44,8 @@ export class FormAttributeListComponent implements OnInit {
   public set featureType(featureType: FeatureTypeModel | null) {
     this.featureTypeSubject$.next(featureType);
   }
+
+  public tabIds = input<string[]>([]);
 
   public filter = new FormControl('');
 

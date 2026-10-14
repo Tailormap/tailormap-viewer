@@ -26,6 +26,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
 import { MatIcon } from '@angular/material/icon';
+import { selectDraftFormTabs } from '../state/form.selectors';
 
 @Component({
     selector: 'tm-admin-form-edit',
@@ -68,6 +69,8 @@ export class FormEditComponent implements OnInit, OnDestroy {
   public selectedTab = this.store$.selectSignal(selectDraftFormSelectedTab);
   public selectedAttribute = this.store$.selectSignal(selectDraftFormSelectedAttribute);
   public panelOpen = computed(() => !!this.selectedTab() || !!this.selectedAttribute());
+  public tabs = this.store$.selectSignal(selectDraftFormTabs);
+  public tabIds = computed(() => this.tabs().map(tab => tab.id));
 
   private featureTypeSubject$ = new BehaviorSubject<FeatureTypeModel | null>(null);
   public featureType$ = this.featureTypeSubject$.asObservable();
