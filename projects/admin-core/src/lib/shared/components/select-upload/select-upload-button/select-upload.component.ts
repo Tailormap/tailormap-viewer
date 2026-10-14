@@ -1,5 +1,5 @@
 import {
-  Component, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, ViewContainerRef, inject, input,
+  Component, ChangeDetectionStrategy, Output, EventEmitter, DestroyRef, ViewContainerRef, inject, input, output,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent, SelectUploadTexts } from '../select-upload-dialog/select-upload-dialog.component';
@@ -25,9 +25,7 @@ export class SelectUploadComponent {
   public dialogTexts = input<SelectUploadTexts | undefined>(undefined);
   public selectedFile = input<string | null>(null);
   public showDescriptionField = input(true);
-
-  @Output()
-  public fileSelected = new EventEmitter<string | null>();
+  public fileSelected = output<string | null>();
 
   public selectFile() {
     SelectUploadDialogComponent.open(
