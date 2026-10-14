@@ -18,7 +18,7 @@ export class TailormapAdminUploadService {
   private adminApiService = inject(TailormapAdminApiV1Service);
 
   public uploadImage$(file: File): Observable<ImageUploadResult | null> {
-    return ImageHelper.readFileAsImage$(file, 2, 600)
+    return ImageHelper.readFileAsImage$(file, 2)
       .pipe(
         concatMap(result => {
           if (result?.error) {

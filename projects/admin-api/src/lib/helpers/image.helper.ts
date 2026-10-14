@@ -1,4 +1,5 @@
-import { map, Observable, of, Subject } from 'rxjs';
+import { concatMap, map, Observable, of, Subject } from 'rxjs';
+import { FileHelper } from '@tailormap-viewer/shared';
 
 export interface ImageResult {
   error?: string;
@@ -8,7 +9,7 @@ export interface ImageResult {
 
 export class ImageHelper {
 
-  public static readFileAsImage$(file: File, maxSize = 2, resizeSize = 600, restrictTypes?: string[] | null): Observable<ImageResult | null> {
+  public static readFileAsImage$(file: File, maxSize = 2, resizeSize: number | null = null, restrictTypes?: string[] | null): Observable<ImageResult | null> {
 
     const errorMsg = ImageHelper.checkSizeAndType(file, maxSize, restrictTypes);
     if (errorMsg.length > 0) {
@@ -26,7 +27,7 @@ export class ImageHelper {
 
   public static checkSizeAndType(file: File, maxSize = 2, restrictTypes?: string[] | null): string[] {
     const result = [];
-    if (!ImageHelper.isResizableImage(file) && file.size > (maxSize * 1000 * 1000)) {
+    if (!ImageHelper.isRasterImage(file) && file.size > (maxSize * 1000 * 1000)) {
       result.push('Maximum size allowed is ' + maxSize + 'MB');
     }
     try {
@@ -63,46 +64,34 @@ export class ImageHelper {
     return false;
   }
 
-  public static isResizableImage(file: File | Blob) {
+  public static isRasterImage(file: File | Blob) {
     return /jpeg|jpg|png/.test(file.type);
   }
 
-  public static readUploadAsImage$(file: File | Blob, resizeSize = 600): Observable<string | null> {
-    const subject = new Subject<string | null>();
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      if (!e.target) {
-        subject.next(null);
-        subject.complete();
-        return;
-      }
-      const result = e.target.result instanceof ArrayBuffer
-        ? ImageHelper.bufferToBase64(e.target.result)
-        : e.target.result;
-      if (!result) {
-        subject.next(null);
-        subject.complete();
-        return;
-      }
-      const image = new Image();
-      image.src = result;
-      image.onload = (_) => {
-        if (ImageHelper.isResizableImage(file)) {
-          const resizedImage = ImageHelper.getResizedImage(image, file.type, resizeSize);
-          subject.next(resizedImage);
-          subject.complete();
-          return;
+  public static readUploadAsImage$(file: File | Blob, resizeSize: number | null = null): Observable<string | null> {
+    return FileHelper.readFileContents(file).pipe(
+      concatMap(fileContents => {
+        if (fileContents === null) {
+          return of(null);
         }
-        subject.next(result);
-        subject.complete();
-      };
-      image.onerror = () => {
-        subject.next(null);
-        subject.complete();
-      };
-    };
-    reader.readAsDataURL(file);
-    return subject.asObservable();
+        const resizedImageBase64 = new Subject<string | null>();
+        const image = new Image();
+        image.src = fileContents.dataURL;
+        image.onload = (_) => {
+          if (ImageHelper.isRasterImage(file) && resizeSize !== null) {
+            const resizedImage = ImageHelper.getResizedImage(image, file.type, resizeSize);
+            resizedImageBase64.next(resizedImage);
+            resizedImageBase64.complete();
+            return;
+          } else {
+            resizedImageBase64.next(fileContents.dataURL);
+            resizedImageBase64.complete();
+          }
+        };
+
+        return resizedImageBase64.asObservable();
+      }),
+    );
   }
 
   private static getResizedImage(image: HTMLImageElement, imageMime: string, resizeSize: number) {
@@ -139,15 +128,4 @@ export class ImageHelper {
     ctx.drawImage(image, 0, 0, width, height);
     return canvas.toDataURL(imageMime);
   }
-
-  private static bufferToBase64(buffer: ArrayBuffer): string {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode( bytes[ i ] );
-    }
-    return window.btoa( binary );
-  }
-
 }

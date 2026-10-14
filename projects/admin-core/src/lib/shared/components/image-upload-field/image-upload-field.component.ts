@@ -20,7 +20,7 @@ export class ImageUploadFieldComponent {
 
   public currentImage = input<string | null | undefined>();
   public maxSize  = input(2);
-  public resizeSize  = input(600);
+  public resizeSize  = input<number | null>(null);
   public acceptedImageTypes = input<string[]>(['image/*']);
   public emitRawImage = input<boolean>(false);
 
