@@ -6,15 +6,15 @@
 export class HtmlifyHelper {
 
   // Matches everything that starts with http until the first space
-  public static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
+  private static readonly URL_PART = 'https?:\\/\\/[^\\s\\r\\n]*';
   // Matches a Markdown URL: [LABEL](URL)
   public static readonly MD_PART = '\\[(.*?(?:\\\\[()[\\]]|[^\\[\\]()])*?)\\][ ]?\\((.*?)\\)';
 
-  public static readonly URL_REGEXP = new RegExp(`${HtmlifyHelper.MD_PART}|${HtmlifyHelper.URL_PART}`, 'ig');
-  public static readonly MD_URL_REGEXP = new RegExp(HtmlifyHelper.MD_PART, 'i');
-  public static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)/i;
-  public static readonly VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
-  public static readonly NEWLINE_REGEXP = /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g;
+  private static readonly URL_REGEXP = new RegExp(`${HtmlifyHelper.MD_PART}|${HtmlifyHelper.URL_PART}`, 'ig');
+  private static readonly MD_URL_REGEXP = new RegExp(HtmlifyHelper.MD_PART, 'i');
+  private static readonly IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)/i;
+  private static readonly VENDOR_SPECIFIC_IMAGE_REGEXP = /getimage\.ashx/i;
+  private static readonly NEWLINE_REGEXP = /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g;
 
   public static htmlifyContents(text: string) {
     const sanitizedHTML = HtmlifyHelper.escapeHTML(text || '');
