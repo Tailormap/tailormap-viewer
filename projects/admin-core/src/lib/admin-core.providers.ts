@@ -13,7 +13,6 @@ import { provideOIDCConfiguration } from './oidc/oidc-configuration.providers';
 
 export function provideAdminCore(): Array<Provider | EnvironmentProviders> {
   return [
-    // Order matters: services initialized by later features select state registered by earlier ones.
     ...provideCatalog(),
     ...provideUser(),
     ...provideForm(),
