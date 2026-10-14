@@ -90,21 +90,26 @@ describe('ImageHelper', () => {
       expect(ImageHelper.checkSizeAndType(file)).toEqual(['Maximum size allowed is 2MB']);
     });
 
+    it('rejects a large resizable image (jpeg) when it will not be resized', () => {
+      const file = makeFileWithSize('large.jpg', 'image/jpeg', 5 * 1000 * 1000); // 5MB
+      expect(ImageHelper.checkSizeAndType(file, 2)).toEqual(['Maximum size allowed is 2MB']);
+    });
+
     it('allows a large resizable image (jpeg) regardless of size', () => {
       const file = makeFileWithSize('large.jpg', 'image/jpeg', 5 * 1000 * 1000); // 5MB
-      expect(ImageHelper.checkSizeAndType(file)).toEqual([]);
+      expect(ImageHelper.checkSizeAndType(file, 2, 600)).toEqual([]);
     });
 
     it('returns a type error when restrictTypes does not include the file type', () => {
       const file = makeFileWithSize('a.jpg', 'image/jpeg', 1000);
-      expect(ImageHelper.checkSizeAndType(file, 2, ['image/png'])).toEqual([
+      expect(ImageHelper.checkSizeAndType(file, 2, null, ['image/png'])).toEqual([
         'Only images of type image/png are allowed.',
       ]);
     });
 
     it('returns both size and type errors when applicable', () => {
       const file = makeFileWithSize('big.gif', 'image/gif', 4 * 1000 * 1000); // 4MB
-      const result = ImageHelper.checkSizeAndType(file, 2, ['image/png']);
+      const result = ImageHelper.checkSizeAndType(file, 2, null, ['image/png']);
       expect(result).toEqual([
         'Maximum size allowed is 2MB',
         'Only images of type image/png are allowed.',

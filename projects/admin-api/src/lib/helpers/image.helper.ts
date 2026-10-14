@@ -25,7 +25,7 @@ export class ImageHelper {
       }));
   }
 
-  public static checkSizeAndType(file: File, maxSize = 2, resizeSize: number | null, restrictTypes?: string[] | null): string[] {
+  public static checkSizeAndType(file: File, maxSize = 2, resizeSize: number | null = null, restrictTypes?: string[] | null): string[] {
     const result = [];
     const isOversizeLimit = file.size > (maxSize * 1000 * 1000);
     const isRasterImage = ImageHelper.isRasterImage(file);
