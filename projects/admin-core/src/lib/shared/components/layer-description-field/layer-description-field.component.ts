@@ -11,7 +11,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadCategoryEnum } from '@tailormap-viewer/api';
-import { HtmlifyHelper } from '@tailormap-viewer/shared';
 import { UPLOAD_REMOVE_SERVICE } from '../select-upload/models/upload-remove-service.injection-token';
 import { LayerAttachedFileRemoveService } from '../../services/layer-attached-file-remove.service';
 import { SelectUploadDialogComponent } from '../select-upload/select-upload-dialog/select-upload-dialog.component';
@@ -116,7 +115,7 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
         }
         const upload = selectResult.upload;
 
-        const isImage = HtmlifyHelper.IMG_REGEXP.test(upload.filename);
+        const isImage = upload.mimeType?.startsWith('image/') ?? false;
         const textToInsert = isImage
           ? ` upload://${upload.id} `
           : `[${upload.filename}](upload://${upload.id})`;
