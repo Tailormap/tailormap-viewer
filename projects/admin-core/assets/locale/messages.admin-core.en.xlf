@@ -50,6 +50,9 @@
       <trans-unit id="admin-core.application.change-folder-name" datatype="html">
         <source>Change folder name</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.clear-file-upload" datatype="html">
+        <source>Clear file</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
         <source>This group is collapsed on startup</source>
       </trans-unit>
@@ -88,6 +91,9 @@
       </trans-unit>
       <trans-unit id="admin-core.application.component-measure-tools" datatype="html">
         <source>Measure tools</source>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-mouse-coordinates" datatype="html">
+        <source>Mouse coordinates</source>
       </trans-unit>
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
@@ -695,6 +701,9 @@
       <trans-unit id="admin-core.catalog.description-hint" datatype="html">
         <source>Leave empty to use the description as provided by the service</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
+        <source>Insert image or link to file</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
       </trans-unit>
@@ -1298,6 +1307,27 @@
       <trans-unit id="admin-core.components.measure-line-title" datatype="html">
         <source>Measure distance title</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-add-display" datatype="html">
+        <source>Add coordinate display</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format" datatype="html">
+        <source>Format</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-decimal-degrees" datatype="html">
+        <source>Decimal degrees</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-degrees-decimal-minutes" datatype="html">
+        <source>Degrees + decimal minutes</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-xy" datatype="html">
+        <source>X / Y</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-help" datatype="html">
+        <source>Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection. Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-map-crs" datatype="html">
+        <source>Map CRS</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
       </trans-unit>
@@ -1772,11 +1802,29 @@
       <trans-unit id="admin-core.select-upload.description-hint" datatype="html">
         <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-tooltip" datatype="html">
+        <source>Choose a file to upload, a description can then be added to the uploaded file</source>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
-        <source>This file cannot be removed because it is still used in the following places.</source>
+        <source>This file cannot be removed because it is still being used in the following places:</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body-multiple" datatype="html">
+        <source>These files cannot be removed because they are still being used in the following places:</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-multiple" datatype="html">
+        <source>Files are still in use</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
+        <source>Files (<x id="PH" equiv-text="count"/>)</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.filter-on-filename" datatype="html">
+        <source>Filter on filename</source>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
+        <source>Images (<x id="PH" equiv-text="count"/>)</source>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>

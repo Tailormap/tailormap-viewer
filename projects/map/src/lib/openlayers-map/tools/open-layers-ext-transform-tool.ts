@@ -149,7 +149,10 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
       this.olMap.removeInteraction(this.interaction);
       this.interaction.dispose();
       this.interaction = null;
-      this.olMap.getTargetElement().style.cursor = '';
+      const targetEl = this.olMap.getTargetElement();
+      if (targetEl) {
+        targetEl.style.cursor = '';
+      }
     }
     this.listeners = [];
   }
@@ -222,9 +225,12 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
         window.clearTimeout(timer);
         timer = null;
       }
-      if (!found.feature && this.olMap.getTargetElement().style.cursor !== '') {
+      const targetEl = this.olMap.getTargetElement();
+      if (!found.feature && targetEl && targetEl.style.cursor !== '') {
         timer = window.setTimeout(() => {
-          this.olMap.getTargetElement().style.cursor = '';
+          if (targetEl) {
+            targetEl.style.cursor = '';
+          }
         }, 50);
       }
     });

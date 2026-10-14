@@ -1,10 +1,10 @@
 declare module 'jsts/org/locationtech/jts/io.js' {
   export class WKTReader {
-    constructor();
+    constructor(geometry?: any);
     public read(geometry: any): any;
   }
   export class WKTWriter {
-    constructor();
+    constructor(geometry?: any);
     public write(geometry: any): string;
   }
 
@@ -24,8 +24,23 @@ declare module 'jsts/org/locationtech/jts/operation/buffer.js' {
 
 declare module 'jsts/org/locationtech/jts/geom.js' {
   export class Geometry {
-    constructor(geom?: any): any;
+    constructor(geom?: any);
     public difference(geom: any): any;
+  }
+  export class Coordinate {
+    constructor(x: number, y: number, z?: number);
+    public x: number;
+    public y: number;
+    public z: number;
+    public equals2D(coord: Coordinate, tolerance: number): boolean;
+    public distance(coord: Coordinate): number;
+  }
+  export class GeometryFactory {
+    constructor();
+    public createPoint(coord: any): any;
+    public createLineString(coords: any): any;
+    public createPolygon(shell: any, holes?: any): any;
+    public createLinearRing(coords: any): any;
   }
 }
 

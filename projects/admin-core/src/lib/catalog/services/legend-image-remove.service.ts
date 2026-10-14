@@ -9,14 +9,14 @@ export class LegendImageRemoveService implements UploadRemoveServiceModel {
   private geoServiceService = inject(GeoServiceService);
 
 
-  public isImageInUse$(imageId: string) {
+  public isUploadInUse$(uploadId: string) {
     return this.geoServiceService.getGeoServicesAndLayers$()
       .pipe(
         take(1),
         map(({ services, layers }) => {
           return services.reduce<UploadInUseItem[]>((layersWithImage, geoService) => {
             const inUseItems = Object.entries(geoService.settings?.layerSettings || {})
-              .filter(([ _layerName, layerSettings ]) => layerSettings.legendImageId === imageId)
+              .filter(([ _layerName, layerSettings ]) => layerSettings.legendImageId === uploadId)
               .map<UploadInUseItem | null>(([ layerName, layerSettings ]) => {
                 const layer = layers.find(l => l.name === layerName && l.serviceId === geoService.id);
                 if (!layer) {

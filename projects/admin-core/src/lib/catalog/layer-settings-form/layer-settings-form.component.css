@@ -5,6 +5,7 @@ mat-slide-toggle {
 .form-control,
 .toggle-control,
 .available-crs,
+mat-expansion-panel + mat-slide-toggle,
 mat-slide-toggle + mat-slide-toggle {
   margin-top: 16px;
 }

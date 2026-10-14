@@ -133,7 +133,7 @@ export class OlLayerHelper {
         const resolutions = options.tileGrid.getResolutions().map(value => value * 2);
 
         options.tileGrid = new WMTSTileGrid({
-          extent: options.tileGrid.getExtent(),
+          extent: options.tileGrid.getExtent() ?? undefined,
           origin: options.tileGrid.getOrigin(0),
           resolutions,
           matrixIds: options.tileGrid.getMatrixIds(),
@@ -190,7 +190,7 @@ export class OlLayerHelper {
       } else if (layer.hiDpiMode === 'showNextZoomLevel' || (layer.hiDpiMode === 'substituteLayerShowNextZoomLevel' && layer.hiDpiSubstituteUrl)) {
         // Adjust tile grid to show next zoomlevel at hi DPI similar to WMTS
         tileGrid = new TileGrid({
-          extent: tileGrid.getExtent(),
+          extent: tileGrid.getExtent() ?? undefined,
           origin: tileGrid.getOrigin(0),
           resolutions: tileGrid.getResolutions().map(value => value * 2),
           tileSize: tileSize / 2,

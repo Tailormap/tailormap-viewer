@@ -66,6 +66,10 @@
         <source>Change folder name</source>
         <target>Mapnaam wijzigen</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.clear-file-upload" datatype="html">
+        <source>Clear file</source>
+        <target>Bestand wissen</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.collapsed-on-startup" datatype="html">
         <source>This group is collapsed on startup</source>
         <target>Deze groep blijft ingeklapt bij het opstarten</target>
@@ -117,6 +121,10 @@
       <trans-unit id="admin-core.application.component-measure-tools" datatype="html">
         <source>Measure tools</source>
         <target>Meetgereedschap</target>
+      </trans-unit>
+      <trans-unit id="admin-core.application.component-mouse-coordinates" datatype="html">
+        <source>Mouse coordinates</source>
+        <target>Muiscoördinaten</target>
       </trans-unit>
       <trans-unit id="admin-core.application.component-print" datatype="html">
         <source>Print</source>
@@ -924,6 +932,10 @@
       <trans-unit id="admin-core.catalog.description-hint" datatype="html">
         <source>Leave empty to use the description as provided by the service</source>
         <target>Laat leeg om de beschrijving te gebruiken zoals aangeleverd door de service</target>
+      </trans-unit>
+      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
+        <source>Insert image or link to file</source>
+        <target>Voeg afbeelding of link naar bestand in</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
@@ -1757,6 +1769,34 @@
         <source>Measure distance title</source>
         <target>Titel voor afstand meten</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-add-display" datatype="html">
+        <source>Add coordinate display</source>
+        <target>Coördinatenweergave toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format" datatype="html">
+        <source>Format</source>
+        <target>Notatie</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-decimal-degrees" datatype="html">
+        <source>Decimal degrees</source>
+        <target>Decimale graden</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-degrees-decimal-minutes" datatype="html">
+        <source>Degrees + decimal minutes</source>
+        <target>Graden + decimale minuten</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-format-xy" datatype="html">
+        <source>X / Y</source>
+        <target>X / Y</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-help" datatype="html">
+        <source>Configure one or more coordinate displays. If none are configured, coordinates are shown in the map projection. Decimal degree and degree/minute formats are available for WGS84 (EPSG:4326).</source>
+        <target>Configureer één of meer coördinatenweergaven. Als er geen zijn geconfigureerd, worden de coördinaten in de kaartprojectie getoond. Decimale graden en graden/minuten zijn beschikbaar voor WGS84 (EPSG:4326).</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.mouse-coordinates-map-crs" datatype="html">
+        <source>Map CRS</source>
+        <target>Kaart-CRS</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
         <target>Gemeente toevoegen</target>
@@ -2393,13 +2433,37 @@
         <source> The description is used as the ARIA label for the image to improve the accessibility of the application. </source>
         <target> De beschrijving wordt gebruikt als ARIA-label voor de afbeelding om de digitale toegankelijkheid van de applicatie te verbeteren. </target>
       </trans-unit>
+      <trans-unit id="admin-core.select-upload.description-tooltip" datatype="html">
+        <source>Choose a file to upload, a description can then be added to the uploaded file</source>
+        <target>Kies een bestand om te uploaden, daarna kan een beschrijving worden toegevoegd aan het geüploade bestand</target>
+      </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use" datatype="html">
         <source>File is still in use</source>
         <target>Bestand wordt gebruikt</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.file-in-use-body" datatype="html">
-        <source>This file cannot be removed because it is still used in the following places.</source>
-        <target>Dit bestand kan niet verwijderd worden omdat het op de volgende plaatsen nog gebruikt wordt.</target>
+        <source>This file cannot be removed because it is still being used in the following places:</source>
+        <target>Dit bestand kan niet verwijderd worden omdat het nog gebruikt wordt op de volgende plaatsen:</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-body-multiple" datatype="html">
+        <source>These files cannot be removed because they are still being used in the following places:</source>
+        <target>Deze bestanden kunnen niet verwijderd worden omdat deze nog gebruikt worden op de volgende plaatsen:</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.file-in-use-multiple" datatype="html">
+        <source>Files are still in use</source>
+        <target>Bestanden worden gebruikt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.files-tab" datatype="html">
+        <source>Files (<x id="PH" equiv-text="count"/>)</source>
+        <target>Bestanden (<x id="PH" equiv-text="count"/>)</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.filter-on-filename" datatype="html">
+        <source>Filter on filename</source>
+        <target>Filter op bestandsnaam</target>
+      </trans-unit>
+      <trans-unit id="admin-core.select-upload.images-tab" datatype="html">
+        <source>Images (<x id="PH" equiv-text="count"/>)</source>
+        <target>Afbeeldingen (<x id="PH" equiv-text="count"/>)</target>
       </trans-unit>
       <trans-unit id="admin-core.select-upload.select-existing-file" datatype="html">
         <source>Select existing file</source>

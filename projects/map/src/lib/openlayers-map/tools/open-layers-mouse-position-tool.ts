@@ -39,7 +39,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
   public disable(): void {
     this.enabled.next(null);
     this.enabled.complete();
-    this.olMap.getViewport().removeEventListener('pointerout', this.pointerOutListener);
+    this.olMap.getViewport()?.removeEventListener('pointerout', this.pointerOutListener);
     this.isActive = false;
   }
 
@@ -55,7 +55,7 @@ export class OpenLayersMousePositionTool implements MousePositionToolModel {
           mouseCoordinates: [ evt.pixel[0], evt.pixel[1] ],
         });
       });
-    this.olMap.getViewport().addEventListener('pointerout', this.pointerOutListener);
+    this.olMap.getViewport()?.addEventListener('pointerout', this.pointerOutListener);
     this.isActive = true;
   }
 

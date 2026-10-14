@@ -3,11 +3,26 @@
   font-size: 14px;
   font-variant-numeric: tabular-nums;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   border-radius: 3px;
   background-color: var(--map-overlay-background-0_8);
+  padding: 4px;
+}
+
+.mouse-coordinates__row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  justify-content: flex-end;
+}
+
+.mouse-coordinates__label {
+  font-size: 12px;
+  margin: 0 4px;
+  opacity: 0.8;
 }
 
 .mouse-coordinates__coordinate {
-  margin: 8px;
+  margin: 4px;
 }

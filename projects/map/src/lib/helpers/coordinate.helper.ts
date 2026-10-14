@@ -2,9 +2,12 @@ import { circular } from 'ol/geom/Polygon.js';
 import { getTransform, get as getProjection } from 'ol/proj.js';
 import { FeatureHelper } from './feature.helper';
 import { Proj4Helper } from './proj4.helper';
+import { ProjectionsHelper } from './projections.helper';
 
 export class CoordinateHelper {
   public static projectCoordinates(coords: [number, number], fromProjection: string, toProjection: string): [number, number] {
+    ProjectionsHelper.ensureProjection(fromProjection);
+    ProjectionsHelper.ensureProjection(toProjection);
     return Proj4Helper.proj4(fromProjection, toProjection, coords);
   }
 
@@ -22,8 +25,11 @@ export class CoordinateHelper {
       if (projection === null) {
           return '';
       }
-
-      polygon.applyTransform(getTransform('EPSG:4326', toProjection));
+      const transformFn = getTransform('EPSG:4326', toProjection);
+      if (transformFn === null) {
+          return '';
+      }
+      polygon.applyTransform(transformFn);
       return FeatureHelper.getWKT(polygon, projection);
   }
 }

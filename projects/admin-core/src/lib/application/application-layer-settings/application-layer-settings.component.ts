@@ -40,6 +40,7 @@ import { MatSelect, MatOption } from '@angular/material/select';
 import { FormWarningMessageComponent } from '../../form/form-warning-message/form-warning-message.component';
 import { ProjectionAvailabilityComponent } from '../../catalog/projection-availability/projection-availability.component';
 import { AsyncPipe } from '@angular/common';
+import { LayerDescriptionFieldComponent } from '../../shared/components/layer-description-field/layer-description-field.component';
 
 type FeatureSourceAndType = {
   featureSource: ExtendedFeatureSourceModel;
@@ -51,32 +52,33 @@ type FeatureSourceAndType = {
     templateUrl: './application-layer-settings.component.html',
     styleUrls: ['./application-layer-settings.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        ReactiveFormsModule,
-        CatalogShortcutButtonsComponent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        SliderComponent,
-        CdkTextareaAutosize,
-        MatSelectionList,
-        CdkDropList,
-        MatListOption,
-        CdkDrag,
-        TooltipDirective,
-        MatListItemTitle,
-        MatListItemLine,
-        MatIcon,
-        CdkDragHandle,
-        MatCheckbox,
-        MatButton,
-        MatSelect,
-        MatOption,
-        FormWarningMessageComponent,
-        ProjectionAvailabilityComponent,
-        ErrorMessageComponent,
-        AsyncPipe,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    CatalogShortcutButtonsComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    SliderComponent,
+    CdkTextareaAutosize,
+    MatSelectionList,
+    CdkDropList,
+    MatListOption,
+    CdkDrag,
+    TooltipDirective,
+    MatListItemTitle,
+    MatListItemLine,
+    MatIcon,
+    CdkDragHandle,
+    MatCheckbox,
+    MatButton,
+    MatSelect,
+    MatOption,
+    FormWarningMessageComponent,
+    ProjectionAvailabilityComponent,
+    ErrorMessageComponent,
+    AsyncPipe,
+    LayerDescriptionFieldComponent,
+  ],
 })
 export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);

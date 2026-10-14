@@ -371,7 +371,7 @@ export class MapService {
 
   public getMapTargetElement$(): Observable<HTMLElement | null> {
     return this.map.getMap$().pipe(
-      map(olMap => olMap.getTargetElement()),
+      map(olMap => olMap.getTargetElement() ?? null),
     );
   }
 

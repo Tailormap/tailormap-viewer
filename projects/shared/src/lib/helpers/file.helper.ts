@@ -1,4 +1,12 @@
 import { parse } from '@tinyhttp/content-disposition';
+import { Observable, Subject } from 'rxjs';
+
+export interface FileContents {
+  filename: string;
+  dataURL: string;
+  contentsBase64: string;
+  mimeType: string;
+}
 
 export class FileHelper {
 
@@ -38,4 +46,54 @@ export class FileHelper {
     return new Blob([], { type: 'application/json' });
   }
 
+  public static byteCountToDisplaySize(sizeBytes: number | bigint | null | undefined): string {
+    // https://stackoverflow.com/a/72596863
+    if (sizeBytes === null || typeof sizeBytes === 'undefined') {
+      return '';
+    }
+    const UNITS = [ 'byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte' ];
+    const BYTES_PER_KB = 1000;
+    let size = Math.abs(Number(sizeBytes));
+    let u = 0;
+    while(size >= BYTES_PER_KB && u < UNITS.length-1) {
+      size /= BYTES_PER_KB;
+      ++u;
+    }
+    return new Intl.NumberFormat([], { style: 'unit', unit: UNITS[u], unitDisplay: 'short', maximumFractionDigits: 1 })
+      .format(size);
+  }
+
+  public static readFileContents(file: File): Observable<FileContents | null> {
+    const subject = new Subject<FileContents | null>();
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (!e.target) {
+        subject.next(null);
+        subject.complete();
+        return;
+      }
+      // result is string because we call readAsDataURL()
+      const result: string = e.target.result as string;
+      const parsed = result != null ? FileHelper.parseDataUrl(result) : null;
+      if (parsed != null) {
+        subject.next({ filename: file.name, dataURL: result, ...parsed });
+      } else {
+        subject.next(null);
+      }
+      subject.complete();
+    };
+    reader.readAsDataURL(file);
+    return subject.asObservable();
+  }
+
+  public static parseDataUrl(dataUrl: string): { contentsBase64: string; mimeType: string } | null {
+    const base64Idx = dataUrl.indexOf(';base64,');
+    if (dataUrl.startsWith('data:') && base64Idx !== -1) {
+      const mimeType = dataUrl.substring(5, base64Idx);
+      const contentsBase64 = dataUrl.substring(base64Idx + 8);
+      return { contentsBase64, mimeType };
+    } else {
+      return null;
+    }
+  }
 }

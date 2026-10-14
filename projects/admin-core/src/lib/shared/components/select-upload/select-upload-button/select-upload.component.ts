@@ -3,9 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectUploadDialogComponent } from '../select-upload-dialog/select-upload-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
-import { UploadHelper } from '@tailormap-admin/admin-api';
 import { MatButton } from '@angular/material/button';
-import { UploadCategoryEnum } from "@tailormap-viewer/api";
+import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 
 @Component({
     selector: 'tm-admin-select-upload',
@@ -53,7 +52,7 @@ export class SelectUploadComponent {
   }
 
   public getUrl(selectedFile: string) {
-    return UploadHelper.getAdminUrlForFile(selectedFile, this.category);
+    return UploadedFileHelper.getAdminUrlForFile(selectedFile, this.category);
   }
 
 }

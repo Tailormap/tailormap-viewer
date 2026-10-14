@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { TreeModel, TooltipDirective } from '@tailormap-viewer/shared';
 import { AppLayerModel, WmsStyleModel } from '@tailormap-viewer/api';
 import { ScaleHelper } from '@tailormap-viewer/map';
@@ -6,13 +6,12 @@ import { FilterSourceHelper } from '../../../filter';
 import { MatIcon } from '@angular/material/icon';
 import { MatListItemMeta } from '@angular/material/list';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { TocNodeDecorationService } from '../services/toc-node-decoration.service';
 
 @Component({
     selector: 'tm-toc-node-layer',
     templateUrl: './toc-node-layer.component.html',
     styleUrls: ['./toc-node-layer.component.css'],
-    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         MatIcon,
         TooltipDirective,
@@ -23,77 +22,52 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 })
 export class TocNodeLayerComponent {
 
-  @Input()
-  public node: TreeModel<AppLayerModel> | null = null;
+  private tocNodeDecorationService = inject(TocNodeDecorationService);
 
-  @Input()
-  public scale: number | null = null;
+  public node = input<TreeModel<AppLayerModel> | null>(null);
+  public scale = input<number | null>(null);
+  public in3D = input<boolean>(false);
+  public layersWithoutWebMercator = input<string[]>([]);
+  public tiles3DLayerIds = input<string[]>([]);
+  public filteredLayerIdsWithSource = input<{ id: string; source: string }[]>([]);
+  public editableLayerIds = input<string[]>([]);
+  public showInfoIcon = input<boolean>(false);
 
-  @Input()
-  public in3D: boolean = false;
+  public zoomToScale = output<number>();
+  public editLayer = output<string>();
+  public changeStyle = output<{ layerId: string; selectedStyle: WmsStyleModel }>();
+  public showInfo = output<TreeModel<AppLayerModel>>();
 
-  @Input()
-  public layersWithoutWebMercator: string[] = [];
+  protected decoration = computed(() => this.tocNodeDecorationService.getDecoration(this.node()));
 
-  @Input()
-  public tiles3DLayerIds: string[] = [];
+  protected isLevel = computed(() => this.node()?.type === 'level');
 
-  @Input()
-  public filteredLayerIdsWithSource: { id: string; source: string}[] = [];
+  protected isInScale = computed(() => {
+    const node = this.node();
+    return ScaleHelper.isInScale(this.scale(), node?.metadata?.minScale, node?.metadata?.maxScale);
+  });
 
-  @Input()
-  public editableLayerIds: string[] = [];
+  protected isLayerHiddenIn2d = computed(() => !this.in3D() && this.tiles3DLayerIds().includes(this.node()?.id || ''));
 
-  @Input()
-  public showInfoIcon: boolean = false;
+  protected isLayerHiddenIn3d = computed(() => this.in3D() && this.layersWithoutWebMercator().includes(this.node()?.id || ''));
 
-  @Output()
-  public zoomToScale = new EventEmitter<number>();
+  protected isLayerHiddenOnMap = computed(() => !this.isInScale() || this.isLayerHiddenIn2d());
 
-  @Output()
-  public editLayer = new EventEmitter<string>();
+  protected isLayerEditable = computed(() => this.editableLayerIds().includes(this.node()?.id || ''));
 
-  @Output()
-  public changeStyle = new EventEmitter<{ layerId: string; selectedStyle: WmsStyleModel }>();
-
-  @Output()
-  public showInfo= new EventEmitter<TreeModel<AppLayerModel>>();
-
-  public isLevel() {
-    return this.node?.type === 'level';
-  }
-
-  public isLayerHiddenOnMap() {
-    return !this.isInScale() || this.isLayerHiddenIn2d();
-  }
-
-  public isInScale() {
-    return ScaleHelper.isInScale(this.scale, this.node?.metadata?.minScale, this.node?.metadata?.maxScale);
-  }
-
-  public isLayerHiddenIn2d() {
-    return !this.in3D && this.tiles3DLayerIds.includes(this.node?.id || '');
-  }
-
-  public isLayerHiddenIn3d() {
-    return this.in3D && this.layersWithoutWebMercator.includes(this.node?.id || '');
-  }
-
-  public isLayerFiltered() {
-    return this.filteredLayerIdsWithSource.some(l => l.id === this.node?.id);
-  }
-
-  public getLayerFilterSourceInfo() {
-    const filterSource = this.filteredLayerIdsWithSource.find(l => l.id === this.node?.id)?.source;
-    return FilterSourceHelper.getFilterInfoBySource().get(filterSource || '') ?? {
+  protected filterSourceInfo = computed(() => {
+    const nodeId = this.node()?.id;
+    const filteredLayer = this.filteredLayerIdsWithSource().find(l => l.id === nodeId);
+    if (!filteredLayer) {
+      return null;
+    }
+    return FilterSourceHelper.getFilterInfoBySource().get(filteredLayer.source) ?? {
       icon: 'components_filter',
       tooltip: $localize`:@@core.toc.filtered-layer:A filter is applied to this layer`,
     };
-  }
+  });
 
-  public isLayerEditable() {
-    return this.editableLayerIds.includes(this.node?.id || '');
-  }
+  protected hasStylesToShow = computed(() => (this.node()?.metadata?.styles?.length ?? 0) > 1);
 
   public zoomToLayer($event: MouseEvent, node: TreeModel<AppLayerModel>) {
     $event.stopPropagation();
@@ -116,18 +90,15 @@ export class TocNodeLayerComponent {
     this.editLayer.emit(node.id);
   }
 
-  protected hasStylesToShow() {
-    return !!this.node?.metadata?.styles && this.node.metadata.styles.length > 1;
-  }
-
   protected styleChanged(style: WmsStyleModel) {
-    this.changeStyle.emit({ layerId: this.node?.id || '', selectedStyle: style });
+    this.changeStyle.emit({ layerId: this.node()?.id || '', selectedStyle: style });
   }
 
   public emitShowInfo($event: MouseEvent) {
     $event.stopPropagation();
-    if (this.node) {
-      this.showInfo.emit(this.node);
+    const node = this.node();
+    if (node) {
+      this.showInfo.emit(node);
     }
   }
 

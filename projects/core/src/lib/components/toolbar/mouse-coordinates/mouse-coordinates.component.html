@@ -1,20 +1,19 @@
-@if (coordinates$ | async; as coordinates) {
+@if (coordinates$ | async; as coordinateDisplays) {
   <div class="mouse-coordinates"
     (pointerenter)="isOverCoordinates(true)"
     (pointerout)="isOverCoordinates(false)"
     (mouseenter)="isOverCoordinates(true)"
     (mouseout)="isOverCoordinates(false)"
     >
-    @if (coordinates[0]) {
-      <span class="mouse-coordinates__coordinate"
-      >{{coordinates[0]}}</span>
-    }
-    @if (coordinates[0] && coordinates[1]) {
-      <span>|</span>
-    }
-    @if (coordinates[1]) {
-      <span class="mouse-coordinates__coordinate"
-      >{{coordinates[1]}}</span>
+    @for (coordinateDisplay of coordinateDisplays; track coordinateDisplay.id) {
+      <div class="mouse-coordinates__row">
+        @if (coordinateDisplay.label) {
+          <span class="mouse-coordinates__label">{{ coordinateDisplay.label }}</span>
+        }
+        <span class="mouse-coordinates__coordinate">{{ coordinateDisplay.coordinates[0] }}</span>
+        <span>|</span>
+        <span class="mouse-coordinates__coordinate">{{ coordinateDisplay.coordinates[1] }}</span>
+      </div>
     }
   </div>
 }

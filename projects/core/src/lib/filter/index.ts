@@ -8,3 +8,4 @@ export * from './helpers/filter-type.helper';
 export * from './filter.providers';
 export * from './models/feature-filter.model';
 export * from './helpers/filter-source.helper';
+export * from './services/simple-attribute-filter.service';

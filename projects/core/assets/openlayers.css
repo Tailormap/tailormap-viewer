@@ -67,6 +67,11 @@
   margin: 8px;
 }
 
+/* Keep right-hand attribution below the mouse coordinates, including multiple rows. */
+.ol-attribution:not(.ol-attribution--left) {
+  bottom: calc(var(--body-margin) - 8px);
+}
+
 .ol-attribution:not(.ol-collapsed) {
   background: var(--map-overlay-background-0_8);
 }

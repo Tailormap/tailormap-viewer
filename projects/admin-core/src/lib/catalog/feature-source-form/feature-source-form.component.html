@@ -67,3 +67,7 @@
     <tm-admin-password-field formControlName="password" label="Password" i18n-label="@@admin-core.common.password"></tm-admin-password-field>
   }
 </form>
+
+@if (showCapabilitiesLoadingProgress()) {
+  <mat-progress-bar [value]="progress()" [mode]="mode()"></mat-progress-bar>
+}

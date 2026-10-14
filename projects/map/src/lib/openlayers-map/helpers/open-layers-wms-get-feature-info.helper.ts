@@ -82,7 +82,7 @@ export class OpenLayersWmsGetFeatureInfoHelper {
             const olGeom = feature.geometry
               ? OpenLayersWmsGetFeatureInfoHelper.geoJSONReader.readGeometry(feature.geometry)
               : undefined;
-            return OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.properties, olGeom);
+            return OpenLayersWmsGetFeatureInfoHelper.getFeatureModel(feature.properties, olGeom ?? undefined);
           })
           .filter(OpenLayersWmsGetFeatureInfoHelper.isValidFeature);
       }

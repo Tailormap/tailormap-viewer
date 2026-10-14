@@ -11,13 +11,13 @@ export class OidcImageRemoveService implements UploadRemoveServiceModel {
   private oidcConfigurationService = inject(OIDCConfigurationService);
 
 
-  public isImageInUse$(imageId: string) {
+  public isUploadInUse$(uploadId: string) {
     return this.oidcConfigurationService.getOIDCConfigurations$()
       .pipe(
         take(1),
         map(configurations => {
           return configurations
-            .filter(configuration => configuration.image === imageId)
+            .filter(configuration => configuration.image === uploadId)
             .map<UploadInUseItem>(configuration => ({
               id: configuration.id.toString(),
               name: configuration.name,
