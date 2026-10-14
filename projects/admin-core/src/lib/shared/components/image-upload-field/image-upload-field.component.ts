@@ -37,7 +37,7 @@ export class ImageUploadFieldComponent {
       return;
     }
     if (this.emitRawImage()) {
-      const errorMsg = ImageHelper.checkSizeAndType(fileInput.files[0], this.maxSize(), this.acceptedImageTypes());
+      const errorMsg = ImageHelper.checkSizeAndType(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes());
       if (errorMsg.length > 0) {
         this.imageError.set(errorMsg.join('. '));
         return;
