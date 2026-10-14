@@ -66,7 +66,10 @@ export const selectDraftFormFieldsWithSelected = createSelector(
   selectDraftFormSelectedAttribute,
   (fields, selectedField): Array<FormFieldModel & { selected?: boolean }> => {
     if (!selectedField) {
-      return fields;
+      return fields.map(f => ({
+        ...f,
+        selected: false,
+      }));
     }
     return fields.map(f => ({
       ...f,

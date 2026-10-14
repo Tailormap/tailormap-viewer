@@ -227,6 +227,7 @@ export class FormEditFieldComponent implements OnInit {
       valueList,
       uniqueValuesAsOptions: rawValue.uniqueValuesAsOptions,
       allowValueListOnly: !rawValue.allowFreeInput,
+      tab: field.tab,
     };
     this.store$.dispatch(draftFormUpdateField({ field: fieldModel }));
   }
