@@ -8,7 +8,8 @@ import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
 import { ExtendedAppLayerModel } from '../../map/models';
 import { ServerType } from '@tailormap-viewer/api';
-import { ImageHelper } from '../../shared/helpers/image.helper';
+import { QrCodeHelper } from '../../shared/helpers/qr-code.helper';
+import { ImageToPNGConverter } from '../../shared/helpers/image-to-png-converter';
 
 interface Size {
   width: number;
@@ -191,7 +192,7 @@ export class MapPdfService {
     return this.legendService.getLegendImages$(layers$, legendURLCallback).pipe(
       tap(legendImages => {
         legendImages.forEach(legendImage => {
-          if (legendImage.imageData != null) {
+          if (legendImage.imageDataURL != null) {
             // XXX put legend images on top of each other for now, more complex layout to be implemented later
             const dpi = legendDpiByLayer.get(legendImage.appLayer) || 90;
             const extraShrinkFactor = 1.25;
@@ -199,7 +200,7 @@ export class MapPdfService {
             const heightMm = legendImage.height / (dpi / 25.4) / extraShrinkFactor;
             const x = width - widthMm - 10;
             const y = height - heightMm - 10;
-            doc.addImage(legendImage.imageData, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
+            doc.addImage(legendImage.imageDataURL, 'PNG', x, y, widthMm, heightMm, '', 'FAST');
             doc.setDrawColor(0);
             doc.rect(x, y, widthMm, heightMm, 'S');
           }
@@ -223,10 +224,10 @@ export class MapPdfService {
   }
 
   private addImage2PDF$(doc: jsPDF, url: string, x: number, y: number): Observable<jsPDF> {
-    return ImageHelper.imageUrlToPng$(url)
+    return ImageToPNGConverter.loadImageFromUrlAndConvertToPNGDataURL$(url)
       .pipe(take(1), map(img => {
         const ratio = img.width / img.height;
-        return doc.addImage(img.imageData, 'PNG', x, y, 20, 20 / ratio, '', 'FAST');
+        return doc.addImage(img.imageDataURL, 'PNG', x, y, 20, 20 / ratio, '', 'FAST');
       }));
   }
 
@@ -248,7 +249,7 @@ export class MapPdfService {
     const pdfWidthPx = size.width * 72 / 25.4;
     const minimumQrOutputWidthPx = Math.ceil((this.minimumBookmarkQrWidthMm / size.width) * pdfWidthPx);
 
-    return ImageHelper.string2Base64QRcode$(bookmarkUrl, foreground, background, minimumQrOutputWidthPx).pipe(take(1), map(imgData => {
+    return QrCodeHelper.string2Base64QRcode$(bookmarkUrl, foreground, background, minimumQrOutputWidthPx).pipe(take(1), map(imgData => {
       const bookmarkText = $localize`:@@core.print.bookmark-text:Bookmark`;
       const bookmarkTextFontSize = 8;
       const bookmarkTextWidthInMM = (doc.getStringUnitWidth(bookmarkText) * bookmarkTextFontSize) / (72 / 25.6);
