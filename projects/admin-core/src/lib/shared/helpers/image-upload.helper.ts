@@ -7,16 +7,16 @@ export interface ImageResult {
   fileName?: string;
 }
 
-export class ImageHelper {
+export class ImageUploadHelper {
 
   public static readFileAsImage$(file: File, maxSize = 2, resizeSize: number | null = null, restrictTypes?: string[] | null): Observable<ImageResult | null> {
 
-    const errorMsg = ImageHelper.checkSizeAndType(file, maxSize, resizeSize, restrictTypes);
+    const errorMsg = ImageUploadHelper.checkSizeAndType(file, maxSize, resizeSize, restrictTypes);
     if (errorMsg.length > 0) {
       return of({ error: errorMsg.join('. ') });
     }
     const fileName = file.name;
-    return ImageHelper.readUploadAsImage$(file, resizeSize)
+    return ImageUploadHelper.readUploadAsImage$(file, resizeSize)
       .pipe(map(image => {
         if (image !== null) {
           return { image, fileName };
@@ -28,14 +28,14 @@ export class ImageHelper {
   public static checkSizeAndType(file: File, maxSize = 2, resizeSize: number | null = null, restrictTypes?: string[] | null): string[] {
     const result = [];
     const isOversizeLimit = file.size > (maxSize * 1000 * 1000);
-    const isRasterImage = ImageHelper.isRasterImage(file);
+    const isRasterImage = ImageUploadHelper.isRasterImage(file);
     // When image will be resized it will end up below the size limit if the resizeSize is small enough
     const canResizeImage = isRasterImage && resizeSize !== null;
     if (isOversizeLimit && !canResizeImage) {
       result.push('Maximum size allowed is ' + maxSize + 'MB');
     }
     try {
-      ImageHelper.assertValidImageFile(file, restrictTypes);
+      ImageUploadHelper.assertValidImageFile(file, restrictTypes);
     } catch (error: any) {
       result.push(error.message);
     }
@@ -50,7 +50,7 @@ export class ImageHelper {
     if (!restrictTypes || restrictTypes.length === 0) {
       return true;
     }
-    if (!restrictTypes.some((allowed) => ImageHelper.mimeMatchesAllowed(mime, allowed))) {
+    if (!restrictTypes.some((allowed) => ImageUploadHelper.mimeMatchesAllowed(mime, allowed))) {
       throw new Error(`Only images of type ${restrictTypes.join(', ')} are allowed.`);
     }
     return true;
@@ -68,11 +68,11 @@ export class ImageHelper {
     return false;
   }
 
-  public static isRasterImage(file: File | Blob) {
+  private static isRasterImage(file: File | Blob) {
     return /jpeg|jpg|png/.test(file.type);
   }
 
-  public static readUploadAsImage$(file: File | Blob, resizeSize: number | null = null): Observable<string | null> {
+  private static readUploadAsImage$(file: File | Blob, resizeSize: number | null = null): Observable<string | null> {
     return FileHelper.readFileContents(file).pipe(
       concatMap(fileContents => {
         if (fileContents === null) {
@@ -82,8 +82,8 @@ export class ImageHelper {
         const image = new Image();
         image.src = fileContents.dataURL;
         image.onload = (_) => {
-          if (ImageHelper.isRasterImage(file) && resizeSize !== null) {
-            const resizedImage = ImageHelper.getResizedImage(image, file.type, resizeSize);
+          if (ImageUploadHelper.isRasterImage(file) && resizeSize !== null) {
+            const resizedImage = ImageUploadHelper.getResizedImage(image, file.type, resizeSize);
             resizedImageBase64.next(resizedImage);
             resizedImageBase64.complete();
             return;

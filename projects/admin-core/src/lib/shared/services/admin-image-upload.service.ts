@@ -1,7 +1,7 @@
 import { catchError, concatMap, Observable, of, take } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TailormapAdminApiV1Service } from './tailormap-admin-api-v1.service';
-import { ImageHelper } from '../helpers/image.helper';
+import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
+import { ImageUploadHelper } from '../helpers/image-upload.helper';
 import { Injectable, inject } from '@angular/core';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 import { FileHelper } from '@tailormap-viewer/shared';
@@ -14,11 +14,11 @@ export interface ImageUploadResult {
 @Injectable({
   providedIn: 'root',
 })
-export class TailormapAdminUploadService {
+export class AdminImageUploadService {
   private adminApiService = inject(TailormapAdminApiV1Service);
 
   public uploadImage$(file: File): Observable<ImageUploadResult | null> {
-    return ImageHelper.readFileAsImage$(file, 2)
+    return ImageUploadHelper.readFileAsImage$(file, 2)
       .pipe(
         concatMap(result => {
           if (result?.error) {

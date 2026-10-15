@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, signal, output } from '@angular/core';
-import { ImageHelper } from '@tailormap-admin/admin-api';
+import { ImageUploadHelper } from '../../../shared/helpers/image-upload.helper';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { ErrorMessageComponent, TooltipDirective } from '@tailormap-viewer/shared';
@@ -37,7 +37,7 @@ export class ImageUploadFieldComponent {
       return;
     }
     if (this.emitRawImage()) {
-      const errorMsg = ImageHelper.checkSizeAndType(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes());
+      const errorMsg = ImageUploadHelper.checkSizeAndType(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes());
       if (errorMsg.length > 0) {
         this.imageError.set(errorMsg.join('. '));
         return;
@@ -45,7 +45,7 @@ export class ImageUploadFieldComponent {
       this.rawImageChanged.emit({ image: fileInput.files[0], fileName: fileInput.files[0].name });
       return;
     }
-    ImageHelper.readFileAsImage$(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes())
+    ImageUploadHelper.readFileAsImage$(fileInput.files[0], this.maxSize(), this.resizeSize(), this.acceptedImageTypes())
       .subscribe(result => {
         if (result?.error) {
           this.imageError.set(result.error);
