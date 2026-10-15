@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ImageUploadHelper } from './image.helper';
+import { ImageUploadHelper } from './image-upload.helper';
 
 function makeFile(name: string, type: string): File {
   return new File([], name, { type });
