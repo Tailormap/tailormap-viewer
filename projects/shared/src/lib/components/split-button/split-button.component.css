@@ -34,7 +34,7 @@
   align-items: center;
 }
 
-.map-control-button-container:not(.split-button-group) {
+.small-icon-button-container {
   display: none;
   overflow: hidden;
 }
@@ -61,7 +61,7 @@
   .hide-on-small-screens {
     display: none;
   }
-  .map-control-button-container {
+  .small-icon-button-container {
     display: block;
   }
 }
