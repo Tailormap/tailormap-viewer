@@ -35,14 +35,14 @@
       class="split-button-menu-item"
       [aria-label]="option.label"
       [class.not-visible-in-3d]="isLayerHiddenOnMap(option)"
-      (click)="selectOption(option.id)">
-      <span [tmTooltip]="option.label"
-            [matTooltipPosition]="'before'">
+      #tmTooltip="tmTooltip"
+      [tmTooltip]="option.label"
+      [matTooltipPosition]="'before'"
+      (click)="selectOption(option.id, tmTooltip)">
         @if (option.id === selectedOptionId) {
           <mat-icon svgIcon="check"></mat-icon>
         }
         {{ option.label }}
-      </span>
     </button>
   }
 </mat-menu>
