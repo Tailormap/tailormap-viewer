@@ -15,7 +15,7 @@
       [cdkDropListData]="attributes$ | async"
       [cdkDropListConnectedTo]="tabIds()"
       cdkDropListSortingDisabled
-      [cdkDropListEnterPredicate]="() => false"
+      [cdkDropListEnterPredicate]="rejectIncomingDrop"
       class="attribute-selection-list">
       @for (attribute of attributes$ | async; track attribute) {
         <mat-list-item>

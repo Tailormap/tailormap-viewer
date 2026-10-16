@@ -36,6 +36,7 @@ export class FormAttributeListComponent implements OnInit {
 
   public static readonly ATTRIBUTE_LIST_DROP_ID = 'attribute-list-drop-id';
   public readonly attributeListDropId = FormAttributeListComponent.ATTRIBUTE_LIST_DROP_ID;
+  public readonly rejectIncomingDrop = () => false;
 
   @Input({ required: true })
   public loadingFeatureType: boolean | null = false;
