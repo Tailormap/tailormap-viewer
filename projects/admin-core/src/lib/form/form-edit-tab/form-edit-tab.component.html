@@ -1,0 +1,22 @@
+@if (tab(); as tab) {
+  <form [formGroup]="tabForm">
+    <div class="form-wrapper">
+      <mat-form-field>
+        <mat-label i18n="@@admin-core.common.name">Name</mat-label>
+        <input matInput
+               tmAutoFocus
+               placeholder="Name"
+               i18n-placeholder="@@admin-core.common.name"
+               formControlName="name"
+        />
+      </mat-form-field>
+    </div>
+    <button
+      mat-flat-button
+      color="warn"
+      type="button"
+      class="delete-tab-button"
+      (click)="deleteTab()"
+      i18n="@@admin-core.form.delete-tab">Delete tab</button>
+  </form>
+}

@@ -18,6 +18,7 @@ export const selectDraftFormId = createSelector(selectFormState, state => state.
 export const selectDraftForm = createSelector(selectFormState, state => state.draftForm);
 export const selectDraftFormLoadStatus = createSelector(selectFormState, state => state.draftFormLoadStatus);
 export const selectDraftFormSelectedAttribute = createSelector(selectFormState, state => state.draftFormSelectedAttribute);
+export const selectDraftFormSelectedTabId = createSelector(selectFormState, state => state.draftFormSelectedTabId);
 export const selectDraftFormUpdated = createSelector(selectFormState, state => state.draftFormUpdated);
 export const selectDraftFormValid = createSelector(selectFormState, state => state.draftFormValid);
 
@@ -65,7 +66,10 @@ export const selectDraftFormFieldsWithSelected = createSelector(
   selectDraftFormSelectedAttribute,
   (fields, selectedField): Array<FormFieldModel & { selected?: boolean }> => {
     if (!selectedField) {
-      return fields;
+      return fields.map(f => ({
+        ...f,
+        selected: false,
+      }));
     }
     return fields.map(f => ({
       ...f,
@@ -85,4 +89,15 @@ export const selectDraftFormSelectedField = createSelector(
 export const selectDraftFormTabs = createSelector(
   selectDraftForm,
   draftForm => draftForm?.options.tabs || [],
+);
+
+export const selectDraftFormSelectedTab = createSelector(
+  selectDraftFormTabs,
+  selectDraftFormSelectedTabId,
+  (tabs, selectedTabId) => {
+    if (!selectedTabId) {
+      return null;
+    }
+    return tabs.find(t => t.id === selectedTabId) || null;
+  },
 );

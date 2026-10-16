@@ -6,7 +6,7 @@ import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { draftFormRemoveField, draftFormUpdateField } from '../state/form.actions';
-import { selectDraftFormSelectedField, selectDraftFormTabs } from '../state/form.selectors';
+import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -62,8 +62,6 @@ export class FormEditFieldComponent implements OnInit {
 
   public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
 
-  public tabs = this.store$.selectSignal(selectDraftFormTabs);
-
   public fieldForm = new FormGroup({
     label: new FormControl('', {
       nonNullable: true,
@@ -73,7 +71,6 @@ export class FormEditFieldComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    tab: new FormControl<string | null>(null),
     required: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     autoFillUser: new FormControl<boolean>(false, { nonNullable: true }),
@@ -100,7 +97,7 @@ export class FormEditFieldComponent implements OnInit {
     this.store$.select(selectDraftFormSelectedField)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        distinctUntilChanged(),
+        distinctUntilChanged((a, b) => a?.name === b?.name && a?.tab === b?.tab),
       )
       .subscribe(field => {
         this.field = field;
@@ -112,14 +109,12 @@ export class FormEditFieldComponent implements OnInit {
         this.filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes(field?.name, this.featureType);
         this.cdr.detectChanges();
       });
-
   }
 
   private initForm(form: FormFieldModel) {
     this.fieldForm.patchValue({
       label: form.label,
       type: form.type,
-      tab: form.tab || null,
       required: form.required,
       disabled: form.disabled,
       autoFillUser: form.autoFillUser,
@@ -144,7 +139,6 @@ export class FormEditFieldComponent implements OnInit {
     this.fieldForm.patchValue({
       label: '',
       type: '',
-      tab: null,
       required: false,
       disabled: false,
       autoFillUser: false,
@@ -210,7 +204,6 @@ export class FormEditFieldComponent implements OnInit {
   private dispatchFieldModel(rawValue: Partial<{
     label: string;
     type: string;
-    tab: string | null;
     required: boolean;
     disabled: boolean;
     autoFillUser: boolean;
@@ -231,10 +224,10 @@ export class FormEditFieldComponent implements OnInit {
       autoFillUser: typeof rawValue.autoFillUser === 'undefined' ? false : rawValue.autoFillUser,
       autoFillDate: typeof rawValue.autoFillDate === 'undefined' ? false : rawValue.autoFillDate,
       type: EditFormFieldHelper.getFormFieldType(rawValue.type),
-      tab: rawValue.tab || undefined,
       valueList,
       uniqueValuesAsOptions: rawValue.uniqueValuesAsOptions,
       allowValueListOnly: !rawValue.allowFreeInput,
+      tab: field.tab,
     };
     this.store$.dispatch(draftFormUpdateField({ field: fieldModel }));
   }

@@ -110,3 +110,12 @@ export const draftFormUpdateTabs = createAction(
   `${formActionsPrefix} Draft Form Update Tabs`,
   props<{ tabs: Array<{ id: string; name: string }> }>(),
 );
+
+export const draftFormSetSelectedTabId = createAction(
+  `${formActionsPrefix} Draft Form Set Selected Tab ID`,
+  props<{ tabId: string }>(),
+);
+
+export const draftFormClearSelection = createAction(
+  `${formActionsPrefix} Draft Form Clear Selection`,
+);

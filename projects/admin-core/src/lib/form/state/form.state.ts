@@ -12,6 +12,7 @@ export interface FormState {
   draftForm: FormModel | null;
   draftFormLoadStatus: LoadingStateEnum;
   draftFormSelectedAttribute: string | null;
+  draftFormSelectedTabId: string | null;
   draftFormUpdated: boolean;
   draftFormValid: boolean;
 }
@@ -23,6 +24,7 @@ export const initialFormState: FormState = {
   draftForm: null,
   draftFormLoadStatus: LoadingStateEnum.INITIAL,
   draftFormSelectedAttribute: null,
+  draftFormSelectedTabId: null,
   draftFormUpdated: false,
   draftFormValid: true,
 };

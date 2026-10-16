@@ -1890,6 +1890,10 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
         <target>Bearbeiten <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
+      <trans-unit id="admin-core.form.edit-tab" datatype="html">
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
+        <target>Tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/> bearbeiten</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
         <target>Fehler beim Erstellen des Formulars.</target>
@@ -1978,10 +1982,6 @@
         <source>Label</source>
         <target>Bezeichnung</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.no-tab" datatype="html">
-        <source>No tab</source>
-        <target>Kein Tab</target>
-      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
         <target>Pflichtfeld</target>
@@ -2011,8 +2011,8 @@
         <target>Verfügbare Attribute</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
-        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
-        <target>Feld <x id="INTERPOLATION" equiv-text="{{field.name}}"/> bearbeiten</target>
+        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{ selectedAttribute() }}"/></source>
+        <target>Feld <x id="INTERPOLATION" equiv-text="{{ selectedAttribute() }}"/> bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.forms.form-fields" datatype="html">
         <source>Form fields</source>

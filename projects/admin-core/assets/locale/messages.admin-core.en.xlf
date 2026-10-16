@@ -1397,6 +1397,9 @@
       <trans-unit id="admin-core.form.edit" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
       </trans-unit>
+      <trans-unit id="admin-core.form.edit-tab" datatype="html">
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
       </trans-unit>
@@ -1463,9 +1466,6 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.no-tab" datatype="html">
-        <source>No tab</source>
-      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
       </trans-unit>
@@ -1488,7 +1488,7 @@
         <source>Available attributes</source>
       </trans-unit>
       <trans-unit id="admin-core.forms.edit-form-field" datatype="html">
-        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{field.name}}"/></source>
+        <source>Edit form field <x id="INTERPOLATION" equiv-text="{{ selectedAttribute() }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.forms.form-fields" datatype="html">
         <source>Form fields</source>

@@ -1,7 +1,6 @@
 @if (featureType) {
   @if (field) {
     <form [formGroup]="fieldForm">
-      <h2 i18n="@@admin-core.forms.edit-form-field">Edit form field {{field.name}}</h2>
       <div class="form-wrapper">
         <mat-form-field>
           <mat-label i18n="@@admin-core.common.label">Label</mat-label>
@@ -19,15 +18,6 @@
               <mat-option [value]="fieldType.value">
                 {{ fieldType.label }}
               </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n="@@admin-core.form.tab">Tab</mat-label>
-          <mat-select formControlName="tab">
-            <mat-option [value]="null" i18n="@@admin-core.form.no-tab">No tab</mat-option>
-            @for (tab of tabs(); track tab.id) {
-              <mat-option [value]="tab.id">{{ tab.name }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -49,7 +39,7 @@
         }
       </div>
       @if(fieldForm.get('type')?.value === 'select') {
-        <div class="form-control">
+        <div class="form-control select-form-control">
           <ng-container formArrayName="valueList">
             <div cdkDropList #valueList="cdkDropList"
                  [cdkDropListData]="getValueListFormArray().controls"

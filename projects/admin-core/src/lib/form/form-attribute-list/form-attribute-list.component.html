@@ -6,13 +6,22 @@
   <h2 i18n="@@admin-core.forms.available-attributes">Available attributes</h2>
   <div class="form-group has-search flex">
     <tm-admin-list-filter [formControl]="filter"
-      [filterTerm]="filterTerm$ | async"
-      label="Filter attributes"
-    i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
-    <mat-selection-list>
+                          [filterTerm]="filterTerm$ | async"
+                          label="Filter attributes"
+                          i18n-label="@@admin-core.common.filter-attributes"></tm-admin-list-filter>
+    <mat-selection-list
+      cdkDropList
+      [id]="attributeListDropId"
+      [cdkDropListData]="attributes$ | async"
+      [cdkDropListConnectedTo]="tabIds()"
+      cdkDropListSortingDisabled
+      [cdkDropListEnterPredicate]="rejectIncomingDrop"
+      class="attribute-selection-list">
       @for (attribute of attributes$ | async; track attribute) {
-        <mat-list-item (click)="addAttribute(attribute)">
-          <span class="detail">{{attribute.name}}</span>
+        <mat-list-item>
+          <div class="attribute-row" cdkDrag cdkDragPreviewContainer="parent" [cdkDragData]="attribute" (click)="addAttribute(attribute)">
+            <span class="detail">{{ attribute.name }}</span>
+          </div>
         </mat-list-item>
       }
     </mat-selection-list>
