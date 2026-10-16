@@ -72,7 +72,8 @@ export class SplitButtonComponent {
     this.optionSelected.emit(this.selectedOptionId);
   }
 
-  public selectOption(id: string) {
+  public selectOption(id: string, tooltip: TooltipDirective) {
+    tooltip.hide(0);
     this.selectedOptionId = id;
     this.setSelectedOption();
     this.optionSelected.emit(id);
