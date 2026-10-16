@@ -8,7 +8,7 @@ import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
-  selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid,
+  selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid, selectDraftFormTabs,
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
 import { clearSelectedForm, draftFormClearSelection, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
@@ -26,7 +26,6 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
 import { MatIcon } from '@angular/material/icon';
-import { selectDraftFormTabs } from '../state/form.selectors';
 
 @Component({
     selector: 'tm-admin-form-edit',

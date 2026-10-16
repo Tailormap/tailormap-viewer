@@ -92,15 +92,13 @@ export class FormFieldListComponent implements OnInit {
     effect(() => {
       const allFields = this.allFields();
       const tabs = this.tabs();
-      const unassignedFields = allFields.filter(field => !field.tab);
-      if (unassignedFields.length > 0 && tabs) {
-        const firstTabId = this.tabs()[0].id;
-        unassignedFields.forEach(field => {
-          this.store$.dispatch(draftFormUpdateFields({
-            fields: allFields.map(f => f.name === field.name ? { ...f, tab: firstTabId } : f),
-          }));
-        });
+      const firstTabId = tabs[0]?.id;
+      if (!firstTabId || !allFields.some(field => !field.tab)) {
+        return;
       }
+      this.store$.dispatch(draftFormUpdateFields({
+        fields: allFields.map(field => field.tab ? field : { ...field, tab: firstTabId }),
+      }));
     });
   }
 
