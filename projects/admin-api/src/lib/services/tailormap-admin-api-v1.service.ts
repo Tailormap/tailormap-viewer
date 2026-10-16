@@ -312,6 +312,18 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     );
   }
 
+  public updateUpload$(upload: Pick<UploadModel, 'id' | 'content' | 'description'>): Observable<boolean> {
+    return this.httpClient.patch<UploadModel>(`${TailormapAdminApiV1Service.BASE_URL}/uploads/${upload.id}`, {
+      ...upload,
+      lastModified: new Date().toISOString(),
+    }, {
+      observe: 'response',
+    }).pipe(
+      map(response => response.status === 202),
+      catchError(() => of(false)),
+    );
+  }
+
   public deleteUpload$(uploadId: string): Observable<boolean> {
     return this.httpClient.delete(`${TailormapAdminApiV1Service.BASE_URL}/uploads/${uploadId}`, {
       observe: 'response',
