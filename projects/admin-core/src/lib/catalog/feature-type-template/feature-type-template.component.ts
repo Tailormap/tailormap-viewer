@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, OnInit, signal, inject } from '@angular/core';
 import {
-  AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel, ImageUploadResult, TailormapAdminUploadService,
-} from '@tailormap-admin/admin-api';
+  AttributeDescriptorModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel } from '@tailormap-admin/admin-api';
 import { ArrayHelper, TemplatePicklistConfig, MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { AttributeTypeHelper } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { ImageUploadResult, AdminImageUploadService } from '../../shared/services/admin-image-upload.service';
 
 @Component({
     selector: 'tm-admin-feature-type-template',
@@ -20,7 +20,7 @@ import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
     ],
 })
 export class FeatureTypeTemplateComponent implements OnInit {
-  private uploadService = inject(TailormapAdminUploadService);
+  private adminImageUploadService = inject(AdminImageUploadService);
 
 
   private _attributes: AttributeDescriptorModel[] = [];
@@ -47,7 +47,7 @@ export class FeatureTypeTemplateComponent implements OnInit {
   public templateContent = signal<string | undefined>('');
 
   public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => {
-    return this.uploadService.uploadImage$(file);
+    return this.adminImageUploadService.uploadImage$(file);
   };
 
   public ngOnInit() {

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Observable } from 'rxjs';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { ImageUploadResult, TailormapAdminUploadService } from '@tailormap-admin/admin-api';
+import { ImageUploadResult, AdminImageUploadService } from '../../../shared/services/admin-image-upload.service';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
@@ -24,7 +24,7 @@ import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
 export class InfoConfigComponent {
 
   private componentConfigService = inject(ComponentConfigurationService);
-  private uploadService = inject(TailormapAdminUploadService);
+  private adminImageUploadService = inject(AdminImageUploadService);
   private destroyRef = inject(DestroyRef);
 
   @Input()
@@ -47,7 +47,7 @@ export class InfoConfigComponent {
   public templateContent = signal<string | undefined>('');
 
   public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => {
-    return this.uploadService.uploadImage$(file);
+    return this.adminImageUploadService.uploadImage$(file);
   };
 
   public formGroup = new FormGroup({
