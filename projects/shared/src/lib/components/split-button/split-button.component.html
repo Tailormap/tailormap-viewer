@@ -1,4 +1,4 @@
-<div class="split-button-group map-control-button-container" [class.hide-on-small-screens]="!!small_screens_icon">
+<div class="split-button-group" [class.hide-on-small-screens]="!!small_screens_icon">
   <button mat-flat-button
           (click)="cycleNextOption()"
           [tmTooltip]="getNextLabel()"
@@ -19,7 +19,7 @@
 </div>
 
 @if (small_screens_icon) {
-  <div class="map-control-button-container">
+  <div class="small-icon-button-container">
     <button mat-flat-button
       class="map-control-button"
       [tmTooltip]="tooltip || ''"
