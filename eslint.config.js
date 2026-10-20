@@ -171,7 +171,17 @@ module.exports = tseslint.config(
     extends: [
       ...angular.configs.templateRecommended,
     ],
-    rules: {},
+  },
+  {
+    files: [
+      'projects/app/**/*.html',
+      'projects/core/**/*.html',
+      'projects/shared/**/*.html',
+      'projects/map/**/*.html',
+    ],
+    extends: [
+      ...angular.configs.templateAccessibility,
+    ],
   },
   // Per-project overrides: type-aware parserOptions.project + the "no-restricted-imports"
   // rule that prevents circular/forbidden imports between the workspace's libraries.
