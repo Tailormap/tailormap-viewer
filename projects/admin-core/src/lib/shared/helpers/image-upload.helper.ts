@@ -72,7 +72,7 @@ export class ImageUploadHelper {
     return /jpeg|jpg|png/.test(file.type);
   }
 
-  private static readUploadAsImage$(file: File | Blob, resizeSize: number | null = null): Observable<string | null> {
+  public static readUploadAsImage$(file: File | Blob, resizeSize: number | null = null): Observable<string | null> {
     return FileHelper.readFileContents(file).pipe(
       concatMap(fileContents => {
         if (fileContents === null) {
