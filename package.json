@@ -69,7 +69,7 @@
     "@angular-eslint/schematics": "^22.5.0",
     "@angular-eslint/template-parser": "^22.5.0",
     "@angular/build": "~22.2.0",
-    "@angular/cli": "~22.2.0",
+    "@angular/cli": "~22.2.3",
     "@angular/compiler-cli": "^22.2.0",
     "@angular/localize": "^22.2.0",
     "@emnapi/core": "1.11.3",
