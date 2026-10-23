@@ -87,7 +87,9 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
-    this.createKeyboardControl(args.feature);
+    if (args.feature.__fid !== this.keyboardControlFid) {
+      this.createKeyboardControl(args.feature);
+    }
     this.eventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -238,21 +240,18 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
-    const isSameFeature = this.keyboardControlFid === feature.__fid;
+    this.keyboardControlFid = feature.__fid;
     if (this.keyboardControlElement) {
       this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
       this.keyboardControlElement = null;
     }
-    this.keyboardControlFid = feature.__fid;
     setTimeout(() => {
       const targetElement: HTMLElement | null = document.querySelector(`.drawing-feature-proxy[data-feature-fid="${feature.__fid}"]`);
       if (!targetElement || !this.isActive) {
         return;
       }
       this.keyboardControlElement = targetElement;
-      if (!isSameFeature) {
-        this.keyboardControlElement.focus();
-      }
+      this.keyboardControlElement.focus();
       this.keyboardControlElement.addEventListener('keydown', this.keyboardControlHandler);
     });
   }
