@@ -1,4 +1,4 @@
-FROM nginx:1.31.7-alpine
+FROM nginx:1.31.8-alpine
 
 COPY entrypoint.sh /docker-entrypoint.d
 COPY *.html /usr/share/nginx/html
