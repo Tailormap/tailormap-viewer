@@ -33,18 +33,42 @@ mat-panel-description {
   border: 2px solid transparent;
   display: flex;
   align-items: center;
-  padding-right: 6px;
-  background-color: transparent;
   width: 100%;
   box-sizing: border-box;
 }
 
-.row:focus-visible {
+.row.selected {
+  border-color: var(--primary-color);
+}
+
+.row-select {
+  border: 0;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  padding: 0 6px 0 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+
+.row-select:focus-visible {
   outline: 2px solid var(--primary-color-0_5);
 }
 
-.selected {
-  border: 2px solid var(--primary-color);
+.row input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  font-family: var(--mat-expansion-container-text-font);
+  font-size: var(--mat-expansion-container-text-size);
+  line-height: var(--mat-expansion-container-text-line-height);
+}
+
+.row input:focus {
+  outline: none;
 }
 
 .row .icon {
@@ -62,22 +86,5 @@ mat-panel-description {
 
 .row .label {
   flex-grow: 1;
-  overflow: hidden;
-}
-
-.label input {
-  border: 0;
-  font-family: var(--mat-expansion-container-text-font);
-  font-size: var(--mat-expansion-container-text-size);
-  line-height: var(--mat-expansion-container-text-line-height);
-}
-
-.label input:focus {
-  outline: none;
-}
-
-.label div {
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
 }
