@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { DrawingToolEvent, FeatureHelper, MapService, MapStyleModel } from '@tailormap-viewer/map';
-import { combineLatest, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, Observable, of, Subject, take, takeUntil, tap } from 'rxjs';
 import {
   selectDrawingFeatures, selectDrawingFeaturesForMapRendering, selectHasDrawingFeatures, selectSelectedDrawingFeature,
   selectSelectedDrawingType,
@@ -170,7 +170,10 @@ export class DrawingComponent implements OnInit, OnDestroy {
     this.menubarService.registerComponent({ type: BaseComponentTypeEnum.DRAWING, component: DrawingMenuButtonComponent });
 
     this.store$.select(selectSelectedDrawingFeature)
-      .pipe(takeUntil(this.destroyed))
+      .pipe(
+        takeUntil(this.destroyed),
+        distinctUntilChanged(),
+      )
       .subscribe(selectedFeature => {
         this.drawingService.setSelectedFeature(selectedFeature);
       });
