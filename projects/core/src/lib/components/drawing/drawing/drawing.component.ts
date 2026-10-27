@@ -269,7 +269,6 @@ export class DrawingComponent implements OnInit, OnDestroy {
 
   public featureSelected(fid: string) {
     if (this.selectedFeature?.__fid === fid) {
-      this.drawingService.enableSelectAndModify(true);
       return;
     }
     this.drawingService.disableDrawing(true);
