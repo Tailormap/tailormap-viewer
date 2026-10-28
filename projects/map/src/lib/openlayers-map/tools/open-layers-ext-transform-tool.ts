@@ -38,6 +38,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   private editLayer: VectorLayer | null = null;
   private source: VectorSource | null = null;
   private keyboardControlElement: HTMLElement | null = null;
+  private keyboardControlFid: string | null = null;
 
   public supportsSnapping = true;
 
@@ -86,7 +87,9 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
     }
     this.fixCursorBug();
     this.enableVertices(source);
-    this.createKeyboardControl(args.feature);
+    if (args.feature.__fid !== this.keyboardControlFid) {
+      this.createKeyboardControl(args.feature);
+    }
     this.eventManager.onMapMove$()
       .pipe(takeUntil(this.destroyed))
       .subscribe(() => {
@@ -237,6 +240,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private createKeyboardControl(feature: FeatureModel<FeatureModelAttributes>) {
+    this.keyboardControlFid = feature.__fid;
     if (this.keyboardControlElement) {
       this.keyboardControlElement.removeEventListener('keydown', this.keyboardControlHandler);
       this.keyboardControlElement = null;
@@ -253,6 +257,7 @@ export class OpenLayersExtTransformTool implements ExtTransformToolModel {
   }
 
   private removeKeyboardControl() {
+    this.keyboardControlFid = null;
     if (!this.keyboardControlElement) {
       return;
     }

@@ -10,6 +10,7 @@ import {
   takeUntil, tap,
 } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
 import {
   selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
@@ -35,6 +36,7 @@ export class ApplicationMapService implements OnDestroy {
   private localeId = inject(LOCALE_ID);
   private _applicationLayerRefreshService = inject(ApplicationLayerRefreshService);
   private mobileLayoutService = inject(MobileLayoutService);
+  private sanitizer = inject(DomSanitizer);
 
   private destroyed = new Subject();
   private capabilities: Map<string, string> = new Map();
@@ -178,7 +180,7 @@ export class ApplicationMapService implements OnDestroy {
       crossOrigin: 'anonymous',
       opacity: extendedAppLayer.opacity,
       attribution: typeof extendedAppLayer.attribution === 'string'
-        ? HtmlifyHelper.htmlifyContents(extendedAppLayer.attribution)
+        ? HtmlifyHelper.htmlifyContents(extendedAppLayer.attribution, this.sanitizer)
         : extendedAppLayer.attribution,
       hiDpiDisabled: extendedAppLayer.hiDpiDisabled,
     };

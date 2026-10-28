@@ -9,27 +9,29 @@
       <mat-panel-description>{{ features.length }}</mat-panel-description>
     </mat-expansion-panel-header>
     @for (feature of features; track feature.__fid; let index = $index) {
-      <button class="row"
+      <div class="row"
            [attr.data-feature-fid]="feature.__fid"
-           (click)="selectFeature(feature.__fid)"
-           (dblclick)="selectFeatureAndEditDescription(feature.__fid)"
            [class.selected]="feature.selected">
-        <div class="icon">
-          <tm-drawing-style-icon [type]="feature.attributes.type" [featureStyle]="feature.attributes.style"></tm-drawing-style-icon>
-        </div>
-        <div class="counter">#{{index+1}}</div>
-        <div class="label">
-          @if(editingDescriptionForFeatureFid === feature.__fid) {
-            <input #editDescription
-                   [value]="feature.attributes.style.description ?? ''"
-                   (keyup.escape)="cancelDescriptionEdit()"
-                   (keyup.enter)="updateDescription()"
-                   (blur)="updateDescription()"/>
-          } @else {
-            <div>{{ stripMacros(feature.attributes.style.description) }}</div>
+        <button type="button"
+                class="row-select"
+                (click)="selectFeature(feature.__fid)"
+                (dblclick)="selectFeatureAndEditDescription(feature.__fid)">
+          <div class="icon">
+            <tm-drawing-style-icon [type]="feature.attributes.type" [featureStyle]="feature.attributes.style"></tm-drawing-style-icon>
+          </div>
+          <div class="counter">#{{index + 1}}</div>
+          @if(editingDescriptionForFeatureFid !== feature.__fid) {
+            <div class="label">{{ stripMacros(feature.attributes.style.description) }}</div>
           }
-        </div>
-      </button>
+        </button>
+        @if(editingDescriptionForFeatureFid === feature.__fid) {
+          <input #editDescription
+                 [value]="feature.attributes.style.description ?? ''"
+                 (keyup.escape)="cancelDescriptionEdit()"
+                 (keyup.enter)="updateDescription()"
+                 (blur)="updateDescription()"/>
+        }
+      </div>
     }
   </mat-expansion-panel>
 }

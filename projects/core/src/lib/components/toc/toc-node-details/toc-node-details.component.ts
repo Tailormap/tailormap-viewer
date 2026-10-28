@@ -2,7 +2,7 @@ import {
   Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject, viewChild, ViewContainerRef,
   effect,
 } from '@angular/core';
-import { BrowserHelper, DynamicComponentsHelper, PanelResizerComponent, TooltipDirective, HtmlifyPipe } from '@tailormap-viewer/shared';
+import { BrowserHelper, DynamicComponentsHelper, PanelResizerComponent, TooltipDirective, HtmlifyComponent } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
@@ -23,7 +23,7 @@ import { AsyncPipe } from '@angular/common';
         MatIcon,
         LayerDetailsComponent,
         AsyncPipe,
-        HtmlifyPipe,
+        HtmlifyComponent,
     ],
 })
 export class TocNodeDetailsComponent implements OnInit {

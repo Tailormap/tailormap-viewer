@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
-import { TreeModel, HtmlifyPipe } from '@tailormap-viewer/shared';
+import { TreeModel, HtmlifyComponent } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
@@ -11,7 +11,7 @@ import { LayerTransparencyComponent } from '../toc-node-details/layer-transparen
     templateUrl: './toc-node-details-mobile.component.html',
     styleUrls: ['./toc-node-details-mobile.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ LayerTransparencyComponent, HtmlifyPipe ],
+    imports: [ LayerTransparencyComponent, HtmlifyComponent ],
 })
 export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);
