@@ -19,3 +19,4 @@ export * from './spinner-button/spinner-button.component';
 export * from './markdown-editor';
 export * from './attribute-filter/attribute-filter.component';
 export * from './image-with-description/image-with-description.component';
+export * from './htmlify/htmlify.component';

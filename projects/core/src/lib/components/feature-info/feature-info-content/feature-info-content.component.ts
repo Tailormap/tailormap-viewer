@@ -3,7 +3,7 @@ import { FeatureInfoLayerModel, FeatureInfoModel } from '../models';
 import { AttachmentService } from '../../../services';
 import { FeatureSelectionBookmarkService } from '../../../services/application-bookmark/feature-selection-bookmark.service';
 import { combineLatest, map, Observable, take } from 'rxjs';
-import { SnackBarMessageComponent, SnackBarMessageOptionsModel, ErrorMessageComponent, TooltipDirective, HtmlifyPipe } from '@tailormap-viewer/shared';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, ErrorMessageComponent, TooltipDirective, HtmlifyComponent } from '@tailormap-viewer/shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { selectAllFiltersForAttribute } from '../../../state';
@@ -32,7 +32,7 @@ import { AsyncPipe } from '@angular/common';
         MatTooltip,
         MatButton,
         AsyncPipe,
-        HtmlifyPipe,
+        HtmlifyComponent,
     ],
 })
 export class FeatureInfoContentComponent {
