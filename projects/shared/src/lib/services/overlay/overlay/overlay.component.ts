@@ -14,7 +14,7 @@ export class OverlayComponent implements OnInit {
   private ref = inject(OverlayRef);
   public content = inject(OverlayContent);
 
-  public contentType: 'template' | 'string' = 'string';
+  public contentType: 'template' | null = null;
   public context: { $implicit: any; close: () => void } | null = null;
 
   public close() {
@@ -29,16 +29,6 @@ export class OverlayComponent implements OnInit {
         close: this.ref.close.bind(this.ref),
       };
     }
-    if (typeof this.content.content === 'string') {
-      this.contentType = 'string';
-    }
-  }
-
-  public getStringContent() {
-    if (typeof this.content.content === 'string') {
-      return this.content.content;
-    }
-    return null;
   }
 
   public getTemplateContent() {

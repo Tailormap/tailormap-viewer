@@ -19,7 +19,7 @@ export class OverlayService {
 
 
   public open<R = any, T = any>(
-    content: TemplateRef<any> | Type<any> | string,
+    content: TemplateRef<any> | Type<any>,
     data: T,
     config?: OverlayConfig,
     createRef?: (overlay: CdkOverlayRef, data: T) => OverlayRef,
@@ -36,7 +36,7 @@ export class OverlayService {
 
     const overlayRef = createRef ? createRef(overlay, data) : new OverlayRef<R, T>(overlay, data);
 
-    if (content instanceof TemplateRef || typeof content === 'string') {
+    if (content instanceof TemplateRef) {
       this.createOverlayForTemplate(overlay, overlayRef, content);
       return overlayRef;
     }
@@ -58,7 +58,7 @@ export class OverlayService {
     return overlayRef;
   }
 
-  private createOverlayForTemplate(overlay: CdkOverlayRef, overlayRef: OverlayRef, content: TemplateRef<any> | string) {
+  private createOverlayForTemplate(overlay: CdkOverlayRef, overlayRef: OverlayRef, content: TemplateRef<any>) {
     const containerPortal = new ComponentPortal(OverlayComponent, undefined, Injector.create({
       parent: this.injector,
       providers: [
