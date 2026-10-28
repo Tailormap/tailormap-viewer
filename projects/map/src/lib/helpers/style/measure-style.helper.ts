@@ -1,6 +1,6 @@
 import { Feature } from 'ol';
 import { MapSizeHelper } from '../map-size.helper';
-import { Polygon, LineString, Point, Circle } from 'ol/geom.js';
+import { Polygon, LineString, Point, Circle, Geometry, MultiLineString, MultiPolygon } from 'ol/geom.js';
 import { Fill, RegularShape, Stroke, Style, Text } from 'ol/style.js';
 import { LabelStyleHelper } from './label-style.helper';
 
@@ -22,26 +22,24 @@ export class MeasureStyleHelper {
       return [];
     }
     if (showSegmentSize) {
-      let line: LineString | undefined;
-      if (geometry instanceof Polygon) {
-        line = new LineString(geometry.getCoordinates()[0]);
-      } else if (geometry instanceof LineString) {
-        line = geometry;
-      }
-      line?.forEachSegment(function (a, b) {
-        const segment = new LineString([ a, b ]);
-        const label = MapSizeHelper.getFormattedSize(segment, projection);
-        const segmentStyle = MeasureStyleHelper.segmentStyle.clone();
-        segmentStyle.setGeometry(segment);
-        segmentStyle.getText()?.setText(label);
-        styles.push(segmentStyle);
+      MeasureStyleHelper.getMeasurableLines(geometry).forEach(line => {
+        line.forEachSegment(function (a, b) {
+          const segment = new LineString([ a, b ]);
+          const label = MapSizeHelper.getFormattedSize(segment, projection);
+          const segmentStyle = MeasureStyleHelper.segmentStyle.clone();
+          segmentStyle.setGeometry(segment);
+          segmentStyle.getText()?.setText(label);
+          styles.push(segmentStyle);
+        });
       });
     }
     if (showTotalSize) {
       let point: Point | undefined;
       if (geometry instanceof Polygon) {
         point = geometry.getInteriorPoint();
-      } else if (geometry instanceof LineString) {
+      } else if (geometry instanceof MultiPolygon) {
+        point = MeasureStyleHelper.getLargestPolygon(geometry)?.getInteriorPoint();
+      } else if (geometry instanceof LineString || geometry instanceof MultiLineString) {
         point = new Point(geometry.getLastCoordinate());
       } else if (geometry instanceof Circle) {
         point = new Point(geometry.getCenter());
@@ -56,6 +54,30 @@ export class MeasureStyleHelper {
       }
     }
     return styles;
+  }
+
+  /**
+   * Returns the lines to show segment sizes for: the exterior ring(s) of (multi)polygons and the line(s) of (multi)linestrings.
+   */
+  private static getMeasurableLines(geometry: Geometry): LineString[] {
+    if (geometry instanceof Polygon) {
+      return [new LineString(geometry.getCoordinates()[0])];
+    }
+    if (geometry instanceof MultiPolygon) {
+      return geometry.getPolygons().map(polygon => new LineString(polygon.getCoordinates()[0]));
+    }
+    if (geometry instanceof LineString) {
+      return [geometry];
+    }
+    if (geometry instanceof MultiLineString) {
+      return geometry.getLineStrings();
+    }
+    return [];
+  }
+
+  private static getLargestPolygon(geometry: MultiPolygon): Polygon | undefined {
+    return geometry.getPolygons()
+      .reduce<Polygon | undefined>((largest, polygon) => (!largest || polygon.getArea() > largest.getArea()) ? polygon : largest, undefined);
   }
 
   private static getLabelStyle(type: 'label' | 'segment') {

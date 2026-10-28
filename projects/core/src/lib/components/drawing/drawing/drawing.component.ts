@@ -35,6 +35,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DrawingObjectsListComponent } from '../drawing-objects-list/drawing-objects-list.component';
 import { DrawingStyleFormComponent } from '../drawing-style-form/drawing-style-form.component';
 import { AsyncPipe } from '@angular/common';
+import { DrawingCopyFromLayerComponent } from '../drawing-copy-from-layer/drawing-copy-from-layer.component';
 
 
 @Component({
@@ -59,6 +60,7 @@ import { AsyncPipe } from '@angular/common';
         MatSuffix,
         DrawingObjectsListComponent,
         DrawingStyleFormComponent,
+        DrawingCopyFromLayerComponent,
         AsyncPipe,
     ],
     host: {

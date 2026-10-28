@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { MapSizeHelper } from './map-size.helper';
+import { MultiLineString, MultiPolygon } from 'ol/geom.js';
 
 describe('MapSizeHelper', () => {
 
@@ -19,6 +20,21 @@ describe('MapSizeHelper', () => {
     expect(MapSizeHelper.getFormattedArea(10001)).toEqual('10001 m\xB2');
     expect(MapSizeHelper.getFormattedArea(50000)).toEqual('50000 m\xB2');
     expect(MapSizeHelper.getFormattedArea(5000000)).toEqual('5 km\xB2');
+  });
+
+  test('get the size of multi geometries', () => {
+    const multiLine = new MultiLineString([
+      [[ 0, 0 ], [ 3, 4 ]],
+      [[ 0, 0 ], [ 0, 1 ]],
+    ]);
+    const multiPolygon = new MultiPolygon([
+      [[[ 0, 0 ], [ 1, 0 ], [ 1, 1 ], [ 0, 1 ], [ 0, 0 ]]],
+      [[[ 2, 2 ], [ 3, 2 ], [ 3, 3 ], [ 2, 3 ], [ 2, 2 ]]],
+    ]);
+    expect(MapSizeHelper.getSize(multiLine)).toEqual(6);
+    expect(MapSizeHelper.getSize(multiPolygon)).toEqual(2);
+    expect(MapSizeHelper.getFormattedSize(multiLine)).toEqual('6 m');
+    expect(MapSizeHelper.getFormattedSize(multiPolygon)).toEqual('2 m\xB2');
   });
 
 });

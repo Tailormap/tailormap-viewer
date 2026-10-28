@@ -1,7 +1,8 @@
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
-  ExtTransformToolModel, FeatureHelper, MapService, MapStyleModel, SelectToolConfigModel, SelectToolModel, ToolManagerModel, ToolTypeEnum,
+  ExtTransformToolModel, FeatureHelper, MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, MapStyleModel,
+  SelectToolConfigModel, SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,6 +22,7 @@ export class DrawingService {
   private drawingTool: DrawingToolModel | null = null;
   private selectTool: SelectToolModel | null = null;
   private extTransformTool: ExtTransformToolModel | null = null;
+  private copyFeaturesTool: MapClickToolModel | null = null;
 
   private drawingAdded = new Subject<DrawingToolEvent>();
   private featureSelected = new Subject<FeatureModel | null>();
@@ -29,6 +31,7 @@ export class DrawingService {
   private selectToolActive = new BehaviorSubject<boolean>(false);
   private drawingResetCalled = new Subject();
   private predefinedStyleSelected = new BehaviorSubject<DrawingFeatureStyleModel | null>(null);
+  private copyFeaturesClicked = new Subject<MapClickEvent>();
 
   public drawingAdded$ = this.drawingAdded.asObservable();
   public featureSelected$ = this.featureSelected.asObservable();
@@ -37,6 +40,7 @@ export class DrawingService {
   public selectToolActive$ = this.selectToolActive.asObservable();
   public drawingResetCalled$ = this.drawingResetCalled.asObservable();
   public predefinedStyleSelected$ = this.predefinedStyleSelected.asObservable();
+  public copyFeaturesClicked$ = this.copyFeaturesClicked.asObservable();
 
   private selectedFeature: FeatureModel | null = null;
   public isSelectedFeaturePointGeometry = false;
@@ -51,6 +55,7 @@ export class DrawingService {
   public lockedStyle = signal<boolean>(false);
   public style = signal<DrawingFeatureStyleModel>(DrawingHelper.getUpdatedDefaultStyle());
   public showMeasures = signal<boolean>(false);
+  public copyFromLayerActive = signal<boolean>(false);
 
   private static getDefaultStyle = (): Partial<MapStyleModel> => ({
     pointType: 'circle',
@@ -80,6 +85,10 @@ export class DrawingService {
         }
         if (this.selectTool) {
           this.selectToolActive.next(enabledTools.some(t => t.toolId === this.selectTool?.id));
+        }
+        if (this.copyFeaturesTool && this.copyFromLayerActive() && disabledTools.some(t => t.toolId === this.copyFeaturesTool?.id)) {
+          // Copy tool is disabled by activating another tool
+          this.copyFromLayerActive.set(false);
         }
       });
   }
@@ -164,6 +173,19 @@ export class DrawingService {
     ).subscribe(modifiedGeometry => {
       this.featureGeometryModified.next(modifiedGeometry);
     });
+
+    this.mapService.createTool$<MapClickToolModel, MapClickToolConfigModel>({
+      type: ToolTypeEnum.MapClick,
+      owner: BaseComponentTypeEnum.DRAWING,
+    }).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap(({ tool }) => {
+        this.copyFeaturesTool = tool;
+      }),
+      switchMap(({ tool }) => tool.mapClick$),
+    ).subscribe(mapClick => {
+      this.copyFeaturesClicked.next(mapClick);
+    });
   }
 
   public disableDrawingTools() {
@@ -176,6 +198,10 @@ export class DrawingService {
     if (this.extTransformTool) {
       this.toolManager?.disableTool(this.extTransformTool.id, true);
     }
+    if (this.copyFeaturesTool) {
+      this.toolManager?.disableTool(this.copyFeaturesTool.id, true);
+    }
+    this.copyFromLayerActive.set(false);
     this.activeDrawingTool = null;
   }
 
@@ -196,6 +222,33 @@ export class DrawingService {
   }
   public getActiveTool() {
     return this.activeDrawingTool;
+  }
+
+  /**
+   * Enables the mode in which clicking on the map copies features from a reference layer to the drawing.
+   * All other drawing tools are disabled while this mode is active.
+   */
+  public enableCopyFromLayer() {
+    if (!this.copyFeaturesTool || !this.drawingTool || !this.selectTool) {
+      return;
+    }
+    this.activeDrawingTool = null;
+    this.toolManager?.disableTool(this.drawingTool.id, true);
+    this.toolManager?.disableTool(this.selectTool.id, true);
+    if (this.extTransformTool) {
+      this.toolManager?.disableTool(this.extTransformTool.id, true);
+    }
+    this.featureSelected.next(null);
+    this.activeToolChanged.next(this.activeDrawingTool);
+    this.toolManager?.enableTool(this.copyFeaturesTool.id, true);
+    this.copyFromLayerActive.set(true);
+  }
+
+  public disableCopyFromLayer() {
+    if (!this.copyFromLayerActive()) {
+      return;
+    }
+    this.enableSelectAndModify();
   }
 
   private static allPolygonDrawingTypes: DrawingFeatureTypeEnum[] = [
@@ -306,6 +359,7 @@ export class DrawingService {
       this.enableModifyTool();
     } else {
       // Enable drawing
+      this.disableCopyFeaturesTool();
       this.activeDrawingTool = drawingFeatureType;
       const style: MapStyleModel = this.showMeasures() ? { showTotalSize: true, showSegmentSize: true } : {};
       this.toolManager?.enableTool(this.drawingTool.id, true, { type, style }, true);
@@ -322,10 +376,18 @@ export class DrawingService {
     if (!this.drawingTool || !this.selectTool) {
       return;
     }
+    this.disableCopyFeaturesTool();
     this.activeDrawingTool = null;
     this.toolManager?.disableTool(this.drawingTool.id, true);
     this.toolManager?.enableTool(this.selectTool.id, disableOtherTools);
     this.activeToolChanged.next(this.activeDrawingTool);
+  }
+
+  private disableCopyFeaturesTool() {
+    if (this.copyFeaturesTool) {
+      this.toolManager?.disableTool(this.copyFeaturesTool.id, true);
+    }
+    this.copyFromLayerActive.set(false);
   }
 
   private enableModifyTool() {
