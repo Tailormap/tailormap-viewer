@@ -4,7 +4,7 @@ import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatu
 import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
-import { DrawingStyleIconComponent } from '../../../map/components/drawing-style-icon/drawing-style-icon.component';
+import { DrawingStyleIconComponent } from '../drawing-style-icon/drawing-style-icon.component';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

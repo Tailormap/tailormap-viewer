@@ -3,11 +3,11 @@ import type { jsPDF } from 'jspdf';
 import { catchError, concatMap, from, map, Observable, of, take, toArray } from 'rxjs';
 import { selectDrawingFeatures } from '../state';
 import { Store } from '@ngrx/store';
-import { DrawingFeatureModel, DrawingHelper, DrawingStyleIconComponent } from '../../../map';
+import { DrawingFeatureModel, DrawingHelper, DrawingStyleSvgHelper } from '../../../map';
 import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { HttpClient } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
-import { IconService } from '@tailormap-viewer/shared';
+import { IconService, SvgHelper } from '@tailormap-viewer/shared';
 import { deepEqual } from 'fast-equals';
 
 const layout = {
@@ -151,8 +151,13 @@ export class DrawingLegendPrintService {
   }
 
   private addStyleSvg(doc: jsPDF, feature: DrawingFeatureModel, x: number, y: number) {
-    const svgContent = DrawingStyleIconComponent.createSvgContent(feature.attributes.type, feature.attributes.style, 0.2);
-    const svgImage = `<svg viewBox="0 0 ${layout.iconSvgSize} ${layout.iconSvgSize}" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
+    const svgImage = DrawingStyleSvgHelper.getSvg({
+      type: feature.attributes.type,
+      styleConfig: feature.attributes.style,
+      viewBoxWidth: layout.iconSvgSize,
+      viewBoxHeight: layout.iconSvgSize,
+      factor: 0.2,
+    });
     return this.addSvgIcon(doc, svgImage, x, y);
   }
 
@@ -161,7 +166,7 @@ export class DrawingLegendPrintService {
     if (svg instanceof SVGSVGElement) {
       element.appendChild(svg.cloneNode(true));
     } else {
-      element.innerHTML = svg;
+      element.innerHTML = SvgHelper.getCleanSvg(svg);
     }
     const svgEl = element.querySelector('svg');
     if (svgEl) {
