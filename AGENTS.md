@@ -57,7 +57,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 Tailormap Viewer is the Angular frontend for **Tailormap**, an open-source web GIS platform. It renders interactive maps (OpenLayers 2D + Cesium 3D) and provides an administration interface for configuring maps, layers, users, and data sources. It is a pure frontend that talks to the **tailormap-api** backend (Java / Spring Boot, developed separately at https://github.com/Tailormap/tailormap-api) over a RESTful API.
 
-Stack: **TypeScript 5.x**, **Angular 22.x**, **OpenLayers 10.x**, **Cesium**, **NgRx** for state, **RxJS** for reactivity, **Angular Material** for UI, **Vitest** for tests. Node **>= 24** is required.
+Stack: **TypeScript 6.x**, **Angular 22.x**, **OpenLayers 10.x**, **Cesium**, **NgRx** for state, **RxJS** for reactivity, **Angular Material** for UI, **Vitest** for tests. Node **>= 24** is required.
 
 ## Commands
 
