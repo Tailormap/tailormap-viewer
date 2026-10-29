@@ -4,6 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 export class MapCursorHelper {
 
   private static CROSSHAIR_CLASS = 'map-container--with-crosshair';
+  private static COPY_CLASS = 'map-container--with-copy-cursor';
 
   private static listening = false;
   private static debounceList = new BehaviorSubject<boolean[]>([]);
@@ -16,7 +17,7 @@ export class MapCursorHelper {
           filter(list => list.length > 0),
         )
         .subscribe(result => {
-          MapCursorHelper.setCursorClass(result.some(r => r));
+          MapCursorHelper.setCursorClass(MapCursorHelper.CROSSHAIR_CLASS, result.some(r => r));
           MapCursorHelper.debounceList.next([]);
         });
     }
@@ -27,15 +28,19 @@ export class MapCursorHelper {
     MapCursorHelper.debounceList.next([ ...MapCursorHelper.debounceList.value, enabled ]);
   }
 
-  private static setCursorClass(enabled: boolean) {
+  public static setCopyCursor(enabled: boolean) {
+    MapCursorHelper.setCursorClass(MapCursorHelper.COPY_CLASS, enabled);
+  }
+
+  private static setCursorClass(cursorClass: string, enabled: boolean) {
     const el = document.querySelector('.map-container');
     if (!el) {
       return;
     }
     if (enabled) {
-      el.classList.add(MapCursorHelper.CROSSHAIR_CLASS);
+      el.classList.add(cursorClass);
     } else {
-      el.classList.remove(MapCursorHelper.CROSSHAIR_CLASS);
+      el.classList.remove(cursorClass);
     }
   }
 

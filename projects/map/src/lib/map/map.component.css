@@ -50,6 +50,10 @@
   cursor: crosshair;
 }
 
+.map-container--with-copy-cursor {
+  cursor: copy;
+}
+
 .map-focus-indicator {
   position: absolute;
   inset: 0;

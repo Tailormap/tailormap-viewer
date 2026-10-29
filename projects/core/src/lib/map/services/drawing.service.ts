@@ -1,7 +1,7 @@
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, effect, inject, Injectable, signal } from '@angular/core';
 import {
   DrawingToolConfigModel, DrawingToolEvent, DrawingToolModel, DrawingType, ExtTransformEnableToolArguments, ExtTransformToolConfigModel,
-  ExtTransformToolModel, FeatureHelper, MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapService, MapStyleModel,
+  ExtTransformToolModel, FeatureHelper, MapClickEvent, MapClickToolConfigModel, MapClickToolModel, MapCursorHelper, MapService, MapStyleModel,
   SelectToolConfigModel, SelectToolModel, ToolManagerModel, ToolTypeEnum,
 } from '@tailormap-viewer/map';
 import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
@@ -71,6 +71,8 @@ export class DrawingService {
     const toolManager$ = this.mapService.getToolManager$()
       .pipe(takeUntilDestroyed(this.destroyRef));
     toolManager$.subscribe(toolManager => this.toolManager = toolManager);
+    effect(() => MapCursorHelper.setCopyCursor(this.copyFromLayerActive()));
+    this.destroyRef.onDestroy(() => MapCursorHelper.setCopyCursor(false));
     toolManager$
       .pipe(switchMap(toolManager => toolManager.getToolStatusChanged$()))
       .subscribe(({ disabledTools, enabledTools }) => {
