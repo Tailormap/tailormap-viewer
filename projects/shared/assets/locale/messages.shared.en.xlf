@@ -167,6 +167,9 @@
       <trans-unit id="shared.color-picker.copy" datatype="html">
         <source>Copy</source>
       </trans-unit>
+      <trans-unit id="shared.color-picker.invalid-color" datatype="html">
+        <source>This is an invalid color. Only hexadecimal colors or rgb codes are allowed</source>
+      </trans-unit>
       <trans-unit id="shared.color-picker.no-color" datatype="html">
         <source>No color</source>
       </trans-unit>
@@ -196,6 +199,9 @@
       </trans-unit>
       <trans-unit id="shared.login-form.forgot-password" datatype="html">
         <source>Forgot your password?</source>
+      </trans-unit>
+      <trans-unit id="shared.login-form.login" datatype="html">
+        <source>Login</source>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>
