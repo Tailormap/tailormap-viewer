@@ -81,7 +81,7 @@
           @if (loggingIn$ | async) {
             <mat-spinner diameter="20" color="primary" mode="indeterminate"></mat-spinner>
           } @else {
-            Login
+            <ng-container i18n="@@shared.login-form.login">Login</ng-container>
           }
         </button>
       </div>

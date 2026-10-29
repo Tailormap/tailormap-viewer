@@ -10,7 +10,7 @@ export const coreRoutes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('@tailormap-admin/admin-core').then(m => m.adminRoutes),
-    title: 'Tailormap Admin',
+    title: $localize `:@@admin-core.common.tailormap-admin-title:Tailormap Admin`,
   },
   { path: '', component: ViewerAppComponent },
 ];
