@@ -66,7 +66,7 @@ export class MarkdownHelper {
     // A link like [test](https://test.nl/some file.pdf) does not get converted properly.
     // Because this is quite common with replaced feature values (file names for example) we want to allow spaces in URL.
     // With this regex-replace we replace all white space in the URL by %20.
-    return markdown.replace(new RegExp(HtmlifyHelper.MD_PART, 'ig'), MarkdownHelper.replaceWhitespaceInLink);
+    return HtmlifyHelper.replaceMarkdownLinks(markdown, MarkdownHelper.replaceWhitespaceInLink);
   }
 
   private static replaceWhitespaceInLink(link: string) {

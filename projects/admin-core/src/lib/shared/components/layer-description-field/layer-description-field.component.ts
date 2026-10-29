@@ -118,7 +118,7 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
         const isImage = upload.mimeType?.startsWith('image/') ?? false;
         const textToInsert = isImage
           ? ` upload://${upload.id} `
-          : `[${upload.filename}](upload://${upload.id})`;
+          : `[${upload.description ?? upload.filename}](upload://${upload.id})`;
         const value = this.textareaControl.value || '';
         const newValue = value.substring(0, pos) + textToInsert + value.substring(pos);
         this.textareaControl.setValue(newValue);
