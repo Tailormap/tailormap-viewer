@@ -5,8 +5,8 @@
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
   "peerDependencies": {
-    "@angular/common": "^22.2.0",
-    "@angular/core": "^22.2.0",
+    "@angular/common": "^22.2.3",
+    "@angular/core": "^22.2.3",
     "rxjs": "^7.8.2",
     "@tailormap-viewer/api": "^12.9.4-rc.4"
   },
