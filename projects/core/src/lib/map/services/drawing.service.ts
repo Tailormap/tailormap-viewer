@@ -318,7 +318,7 @@ export class DrawingService {
     }
   }
 
-  private disableDrawing(disableOtherTools = true) {
+  public disableDrawing(disableOtherTools = true) {
     if (!this.drawingTool || !this.selectTool) {
       return;
     }
