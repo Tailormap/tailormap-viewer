@@ -287,6 +287,18 @@
       <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
         <source>Get objects from reference layer</source>
       </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
+        <source>Copy WKT of drawing object</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
+        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
+        <source>Failed to copy WKT to clipboard</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-not-found" datatype="html">
+        <source>No geometry found for this drawing object</source>
+      </trans-unit>
       <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
       </trans-unit>

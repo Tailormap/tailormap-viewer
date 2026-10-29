@@ -43,3 +43,8 @@ export const selectDrawingFeaturesForMapRendering = createSelector(
       };
     });
   });
+
+export const selectDrawingFeatureByFid = (fid: string) => createSelector(
+  selectDrawingFeatures,
+  features => features.find(feature => feature.__fid === fid) || null,
+);

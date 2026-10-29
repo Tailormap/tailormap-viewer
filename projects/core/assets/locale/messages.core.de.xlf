@@ -386,6 +386,22 @@
         <source>Get objects from reference layer</source>
         <target>Objekte aus Referenzschicht übernehmen</target>
       </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
+        <source>Copy WKT of drawing object</source>
+        <target>WKT des Zeichenobjekts kopieren</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
+        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+        <target>WKT des Objekts in die Zwischenablage kopiert: <x id="PH" equiv-text="displayWkt"/></target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
+        <source>Failed to copy WKT to clipboard</source>
+        <target>Kopieren der WKT in die Zwischenablage fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-not-found" datatype="html">
+        <source>No geometry found for this drawing object</source>
+        <target>Keine Geometrie für dieses Zeichenobjekt gefunden</target>
+      </trans-unit>
       <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
         <target>Gesamte Zeichnung löschen</target>
