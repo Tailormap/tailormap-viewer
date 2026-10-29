@@ -59,6 +59,9 @@
       <trans-unit id="core.attribute-list.select-row" datatype="html">
         <source>Select row</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.show-statistics-help" datatype="html">
+        <source>Show statistics help</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
       </trans-unit>
@@ -322,6 +325,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing-legend" datatype="html">
+        <source>Drawing legend</source>
       </trans-unit>
       <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
         <source>Duplicate selected drawing object</source>
@@ -959,6 +965,9 @@
       <trans-unit id="core.password-reset-form.title" datatype="html">
         <source>Reset Password</source>
       </trans-unit>
+      <trans-unit id="core.password-reset-form.token-valid-until" datatype="html">
+        <source>Reset token is valid until <x id="INTERPOLATION" equiv-text="{{ token.tokenValidUntil | date:&apos;medium&apos; }}"/></source>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.username" datatype="html">
         <source>Username</source>
       </trans-unit>
@@ -1030,6 +1039,12 @@
       </trans-unit>
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
+      </trans-unit>
+      <trans-unit id="core.print.orientation" datatype="html">
+        <source>Orientation</source>
+      </trans-unit>
+      <trans-unit id="core.print.paper-size" datatype="html">
+        <source>Paper size</source>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>

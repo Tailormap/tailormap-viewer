@@ -45,7 +45,7 @@ export class DrawingLegendPrintService {
         }
         doc.addPage('a4', 'landscape');
         doc.setFontSize(layout.fontSizeTitle);
-        doc.text('Legenda tekening', a4Width / 2, 12, { align: 'center' });
+        doc.text($localize `:@@core.drawing.drawing-legend:Drawing legend`, a4Width / 2, 12, { align: 'center' });
 
         const { fontSize, textX, startX, startY, iconSize, width, maxItemsPerColumn, columnWidth, rowWidth, iconMargin } = layout;
 

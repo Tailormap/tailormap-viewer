@@ -78,6 +78,10 @@
         <source>Select row</source>
         <target>Zeile auswählen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.show-statistics-help" datatype="html">
+        <source>Show statistics help</source>
+        <target>Hilfe zu Statistiken anzeigen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
         <target>Sortieren nach <x id="PH" equiv-text="columnLabel"/></target>
@@ -433,6 +437,10 @@
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing-legend" datatype="html">
+        <source>Drawing legend</source>
+        <target>Legende Zeichnung</target>
       </trans-unit>
       <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
         <source>Duplicate selected drawing object</source>
@@ -1282,6 +1290,10 @@
         <source>Reset Password</source>
         <target>Passwort zurücksetzen</target>
       </trans-unit>
+      <trans-unit id="core.password-reset-form.token-valid-until" datatype="html">
+        <source>Reset token is valid until <x id="INTERPOLATION" equiv-text="{{ token.tokenValidUntil | date:&apos;medium&apos; }}"/></source>
+        <target>Token zum Zurücksetzen ist gültig bis <x id="INTERPOLATION" equiv-text="{{ token.tokenValidUntil | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.username" datatype="html">
         <source>Username</source>
         <target>Benutzername</target>
@@ -1377,6 +1389,14 @@
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
         <target>Druckdialog automatisch öffnen</target>
+      </trans-unit>
+      <trans-unit id="core.print.orientation" datatype="html">
+        <source>Orientation</source>
+        <target>Ausrichtung</target>
+      </trans-unit>
+      <trans-unit id="core.print.paper-size" datatype="html">
+        <source>Paper size</source>
+        <target>Papierformat</target>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>

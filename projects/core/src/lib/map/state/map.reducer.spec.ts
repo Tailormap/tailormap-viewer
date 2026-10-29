@@ -221,6 +221,7 @@ describe('MapReducer', () => {
       service: getServiceModel({ id: 'service-2' }),
       layerTreeNode: mockGetLayerTreeNode({ id: 'node-2', appLayerId: 'layer-2', root: false }),
       siblingLayerTreeNodeId: 'node-1',
+      position: 'before',
     });
 
     const updatedState = mapReducer(initialState, action);
@@ -228,7 +229,7 @@ describe('MapReducer', () => {
     expect(updatedState.layers.map(layer => layer.id)).toEqual([ 'layer-1', 'layer-2' ]);
     expect(updatedState.layers.find(layer => layer.id === 'layer-2')?.visible).toEqual(true);
     expect(updatedState.layerTreeNodes.map(node => node.id)).toEqual([ 'root', 'level-1', 'node-1', 'node-2' ]);
-    expect(updatedState.layerTreeNodes.find(node => node.id === 'level-1')?.childrenIds).toEqual([ 'node-1', 'node-2' ]);
+    expect(updatedState.layerTreeNodes.find(node => node.id === 'level-1')?.childrenIds).toEqual([ 'node-2', 'node-1' ]);
     expect(updatedState.selectedLayer).toEqual('layer-2');
   });
 

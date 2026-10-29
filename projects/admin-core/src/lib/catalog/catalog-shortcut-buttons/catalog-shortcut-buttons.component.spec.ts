@@ -76,12 +76,12 @@ describe('CatalogShortcutButtonsComponent', () => {
 
   test('should render empty', async () => {
     await setup(undefined, undefined, undefined);
-    expect(screen.queryByLabelText('catalog shortcuts')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Catalog shortcuts')).not.toBeInTheDocument();
   });
 
   test('should render - with feature type', async () => {
     await setup(undefined, undefined, '1');
-    expect(screen.queryByLabelText('catalog shortcuts')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Catalog shortcuts')).toBeInTheDocument();
     expect(await screen.findByText('Feature type')).toBeInTheDocument();
     expect(await screen.findByText('begroeidterreindeel')).toBeInTheDocument();
     expect(screen.queryByText('Geo service')).not.toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('CatalogShortcutButtonsComponent', () => {
 
   test('should render - all', async () => {
     await setup('1', '1_1', '1');
-    expect(screen.queryByLabelText('catalog shortcuts')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Catalog shortcuts')).toBeInTheDocument();
     expect(await screen.findByText('Feature type')).toBeInTheDocument();
     expect(await screen.findByText('begroeidterreindeel')).toBeInTheDocument();
     expect(await screen.findByText('Geo service')).toBeInTheDocument();
