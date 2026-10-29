@@ -163,11 +163,8 @@ export class DrawingLegendPrintService {
 
   private addSvgIcon(doc: jsPDF, svg: string | SVGSVGElement, x: number, y: number, margin = 0): Observable<jsPDF> {
     const element = document.createElement('div');
-    if (svg instanceof SVGSVGElement) {
-      element.appendChild(svg.cloneNode(true));
-    } else {
-      element.innerHTML = SvgHelper.getCleanSvg(svg);
-    }
+    const svgContent = svg instanceof SVGSVGElement ? svg.cloneNode(true) : svg;
+    element.innerHTML = SvgHelper.getCleanSvg(svgContent);
     const svgEl = element.querySelector('svg');
     if (svgEl) {
       const viewBox = svgEl.getAttribute('viewBox');

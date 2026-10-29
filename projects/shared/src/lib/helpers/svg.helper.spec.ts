@@ -68,6 +68,81 @@ describe('SvgHelper', () => {
     expect(result).toContain('<rect');
   });
 
+  describe('with node input', () => {
+
+    const svgNs = 'http://www.w3.org/2000/svg';
+
+    const parseSvg = (svg: string): Node => {
+      return new DOMParser().parseFromString(svg, 'image/svg+xml').documentElement;
+    };
+
+    test('keeps valid svg content', () => {
+      const svg = document.createElementNS(svgNs, 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      const circle = document.createElementNS(svgNs, 'circle');
+      circle.setAttribute('r', '9');
+      circle.setAttribute('style', 'stroke: rgb(255, 0, 0);');
+      svg.appendChild(circle);
+      const result = SvgHelper.getCleanSvg(svg);
+      expect(result).toContain('<svg');
+      expect(result).toContain('viewBox="0 0 24 24"');
+      expect(result).toContain('<circle');
+      expect(result).toContain('r="9"');
+      expect(result).toContain('style="stroke: rgb(255, 0, 0);"');
+    });
+
+    test('removes script tags', () => {
+      const svg = document.createElementNS(svgNs, 'svg');
+      const script = document.createElementNS(svgNs, 'script');
+      script.textContent = 'alert(1)';
+      svg.appendChild(script);
+      svg.appendChild(document.createElementNS(svgNs, 'rect'));
+      const result = SvgHelper.getCleanSvg(svg);
+      expect(result).not.toContain('script');
+      expect(result).not.toContain('alert');
+      expect(result).toContain('<rect');
+    });
+
+    test('removes event handler attributes', () => {
+      const svg = document.createElementNS(svgNs, 'svg');
+      svg.setAttribute('onload', 'alert(1)');
+      const rect = document.createElementNS(svgNs, 'rect');
+      rect.setAttribute('onclick', 'alert(2)');
+      svg.appendChild(rect);
+      const result = SvgHelper.getCleanSvg(svg);
+      expect(result).not.toContain('onload');
+      expect(result).not.toContain('onclick');
+      expect(result).not.toContain('alert');
+    });
+
+    test('removes foreignObject and use from parsed svg', () => {
+      const svg = parseSvg('<svg xmlns="http://www.w3.org/2000/svg">'
+        + '<foreignObject><div xmlns="http://www.w3.org/1999/xhtml"><img src="x" onerror="alert(1)"/></div></foreignObject>'
+        + '<use href="data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=#x"/>'
+        + '<rect/>'
+        + '</svg>');
+      const result = SvgHelper.getCleanSvg(svg);
+      expect(result).not.toContain('foreignObject');
+      expect(result).not.toContain('<img');
+      expect(result).not.toContain('onerror');
+      expect(result).not.toContain('<use');
+      expect(result).toContain('<rect');
+    });
+
+    test('removes javascript urls', () => {
+      const svg = parseSvg('<svg xmlns="http://www.w3.org/2000/svg"><a href="javascript:alert(1)"><rect/></a></svg>');
+      expect(SvgHelper.getCleanSvg(svg)).not.toContain('javascript:');
+    });
+
+    test('does not modify the original node', () => {
+      const svg = document.createElementNS(svgNs, 'svg');
+      svg.setAttribute('onload', 'alert(1)');
+      SvgHelper.getCleanSvg(svg);
+      expect(svg.getAttribute('onload')).toEqual('alert(1)');
+    });
+
+  });
+
   test('removes script nested inside svg elements', () => {
     const result = SvgHelper.getCleanSvg('<svg><rect style="fill: red;"><script>alert(1)</script></rect></svg>');
     expect(result).not.toContain('script');

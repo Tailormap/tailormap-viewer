@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify';
 
 export class SvgHelper {
 
-  public static getCleanSvg(svg: string): string {
+  public static getCleanSvg(svg: string | Node): string {
     if (!svg || svg === '') {
       return '';
     }
