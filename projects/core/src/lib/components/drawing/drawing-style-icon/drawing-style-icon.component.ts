@@ -4,6 +4,7 @@ import { DrawingHelper, DrawingStyleSvgHelper, DrawingFeatureStyleModel, Drawing
 import { TailormapApiConstants } from '@tailormap-viewer/api';
 import { NgOptimizedImage } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
+import { SvgHelper } from '@tailormap-viewer/shared';
 
 @Component({
   selector: 'tm-drawing-style-icon',
@@ -28,12 +29,12 @@ export class DrawingStyleIconComponent {
     if (!type || !featureStyle) {
       return '';
     }
-    return this.domSanitizer.bypassSecurityTrustHtml(DrawingStyleSvgHelper.getSvg({
+    return this.domSanitizer.bypassSecurityTrustHtml(SvgHelper.getCleanSvg(DrawingStyleSvgHelper.getSvg({
       viewBoxWidth: 24,
       viewBoxHeight: 24,
       type,
       styleConfig: featureStyle,
-    }));
+    })));
   });
 
   public pointSvgIcon = computed(() => {
