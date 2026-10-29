@@ -12,6 +12,7 @@
     <button mat-stroked-button
             color="primary"
             [class.button--active]="copyFromLayerActive()"
+            [attr.aria-pressed]="copyFromLayerActive()"
             [disabled]="!selectedLayerId()"
             i18n-tmTooltip="@@core.drawing.select-objects-to-copy"
             tmTooltip="Click objects on the map to copy them to the drawing"

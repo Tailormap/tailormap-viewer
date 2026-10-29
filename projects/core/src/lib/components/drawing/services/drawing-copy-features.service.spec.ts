@@ -52,7 +52,7 @@ describe('DrawingCopyFeaturesService', () => {
   test('converts the first feature at the clicked location to a drawing feature', async () => {
     getFeaturesForLayer$.mockReturnValue(of(getResponse([ POLYGON, 'POINT(1 2)' ])));
     const result = await getDrawingFeatures();
-    expect(getFeaturesForLayer$).toHaveBeenCalledWith([ 1, 2 ], '1', undefined);
+    expect(getFeaturesForLayer$).toHaveBeenCalledWith([ 1, 2 ], '1', undefined, false);
     expect(result.features.length).toBe(1);
     expect(result.features[0].geometry).toBe(POLYGON);
     expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);

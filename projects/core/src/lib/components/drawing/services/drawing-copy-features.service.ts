@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import { DrawingToolEvent } from '@tailormap-viewer/map';
@@ -17,9 +17,7 @@ export interface CopiedDrawingFeaturesResult {
 /**
  * Fetches features from a reference layer and converts them to drawing features, so they can be added to the drawing.
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class DrawingCopyFeaturesService {
 
   private store$ = inject(Store);
@@ -44,7 +42,7 @@ export class DrawingCopyFeaturesService {
     style: DrawingFeatureStyleModel,
     existingFeatures: DrawingFeatureModel[],
   ): Observable<CopiedDrawingFeaturesResult> {
-    return this.featureInfoService.getFeaturesForLayer$(coordinates, layerId, pointerType)
+    return this.featureInfoService.getFeaturesForLayer$(coordinates, layerId, pointerType, false)
       .pipe(
         map((response): CopiedDrawingFeaturesResult => {
           if (!response) {

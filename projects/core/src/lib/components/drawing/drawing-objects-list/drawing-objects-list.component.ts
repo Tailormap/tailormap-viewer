@@ -1,7 +1,7 @@
 import { afterEveryRender, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectDrawingFeatureByFid, selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
-import { combineLatest, map, Observable, take } from 'rxjs';
+import { selectDrawingFeatures, selectSelectedDrawingFeature, updateDrawingFeatureStyle } from '../state';
+import { combineLatest, map, Observable } from 'rxjs';
 import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
 import { DrawingStyleIconComponent } from '../../../map/components/drawing-style-icon/drawing-style-icon.component';
@@ -92,24 +92,19 @@ export class DrawingObjectsListComponent {
     this.editingDescriptionForFeatureFid = null;
   }
 
-  public copyFeatureWkt(fid: string) {
-    this.store$.select(selectDrawingFeatureByFid(fid))
-      .pipe(take(1))
-      .subscribe(feature => {
-        const wkt = feature?.geometry;
-        if (!wkt) {
-          this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-not-found:No geometry found for this drawing object`);
-          return;
-        }
-        if (!this.clipboard.copy(wkt)) {
-          this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-failed:Failed to copy WKT to clipboard`);
-          return;
-        }
-        const displayWkt = wkt.length > DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE
-          ? `${wkt.substring(0, DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE)}...`
-          : wkt;
-        this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:Object WKT copied to clipboard: ${displayWkt}`);
-      });
+  public copyFeatureWkt(wkt: string | undefined) {
+    if (!wkt) {
+      this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-not-found:No geometry found for this drawing object`);
+      return;
+    }
+    if (!this.clipboard.copy(wkt)) {
+      this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-failed:Failed to copy WKT to clipboard`);
+      return;
+    }
+    const displayWkt = wkt.length > DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE
+      ? `${wkt.substring(0, DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE)}...`
+      : wkt;
+    this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:Object WKT copied to clipboard: ${displayWkt}`);
   }
 
   private showSnackbarMessage(message: string) {

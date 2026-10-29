@@ -1,6 +1,6 @@
 import { StrokeStyleModel } from '../../models';
 import { Feature } from 'ol';
-import { Geometry, Point } from 'ol/geom.js';
+import { Geometry, LineString, Point } from 'ol/geom.js';
 import { Fill, RegularShape, Stroke, Style } from 'ol/style.js';
 import { GeometryTypeHelper } from '../geometry-type.helper';
 import { forEach as forEachSegments } from 'ol/geom/flat/segments.js';
@@ -16,10 +16,14 @@ export class ArrowStyleHelper {
       return [];
     }
     const geometry = feature.getGeometry();
-    if (!geometry || !GeometryTypeHelper.isLineGeometry(geometry)) {
-      return [];
-    }
-    const arrows = [];
+    const lines = GeometryTypeHelper.isMultiLineGeometry(geometry)
+      ? geometry.getLineStrings()
+      : (GeometryTypeHelper.isLineGeometry(geometry) ? [geometry] : []);
+    return lines.flatMap(line => ArrowStyleHelper.createArrowStylesForLine(styleConfig, line, strokeStyle, zIndex));
+  }
+
+  private static createArrowStylesForLine(styleConfig: StrokeStyleModel, geometry: LineString, strokeStyle: Stroke, zIndex?: number): Style[] {
+    const arrows: Style[] = [];
     const flatCoords = geometry.getFlatCoordinates();
     let lastSegment: [ number[], number[] ] | [] = [];
     forEachSegments(flatCoords, 0, flatCoords.length, geometry.getStride(), (start, end) => {

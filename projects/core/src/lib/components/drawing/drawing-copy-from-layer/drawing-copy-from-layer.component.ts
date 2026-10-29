@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { concatMap, EMPTY, take } from 'rxjs';
+import { catchError, concatMap, EMPTY, Observable, of, take } from 'rxjs';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatButton } from '@angular/material/button';
@@ -23,7 +23,6 @@ import { addFeatures } from '../state/drawing.actions';
   selector: 'tm-drawing-copy-from-layer',
   templateUrl: './drawing-copy-from-layer.component.html',
   styleUrls: ['./drawing-copy-from-layer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormField,
     MatLabel,
@@ -43,6 +42,7 @@ export class DrawingCopyFromLayerComponent {
   private destroyRef = inject(DestroyRef);
 
   private static NO_OBJECTS_FOUND_MESSAGE = $localize `:@@core.drawing.no-objects-found:No objects found at this location`;
+  private static COPY_ERROR_MESSAGE = $localize `:@@core.drawing.copy-objects-error:Could not copy objects from the layer`;
 
   public layerControl = new FormControl<string | null>(null);
   public selectedLayerId = toSignal(this.layerControl.valueChanges, { initialValue: this.layerControl.value });
@@ -50,9 +50,9 @@ export class DrawingCopyFromLayerComponent {
   public copyFromLayerActive = this.drawingService.copyFromLayerActive.asReadonly();
 
   constructor() {
-    this.drawingCopyFeaturesService.getReferenceLayers$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(layers => {
+    effect(() => {
+      const layers = this.referenceLayers();
+      untracked(() => {
         const selectedLayerId = this.layerControl.value;
         if (selectedLayerId && !layers.some(layer => layer.id === selectedLayerId)) {
           // Selected layer is no longer available (e.g. made invisible)
@@ -60,6 +60,7 @@ export class DrawingCopyFromLayerComponent {
           this.drawingService.disableCopyFromLayer();
         }
       });
+    });
 
     this.drawingService.copyFeaturesClicked$
       .pipe(
@@ -78,7 +79,7 @@ export class DrawingCopyFromLayerComponent {
     }
   }
 
-  private copyFeaturesAt$(mapClick: MapClickEvent) {
+  private copyFeaturesAt$(mapClick: MapClickEvent): Observable<CopiedDrawingFeaturesResult> {
     const layerId = this.layerControl.value;
     if (!layerId || !this.copyFromLayerActive()) {
       return EMPTY;
@@ -93,6 +94,10 @@ export class DrawingCopyFromLayerComponent {
           this.drawingService.style(),
           existingFeatures,
         )),
+        catchError(error => {
+          console.error('[Drawing copy from layer] Error copying features from layer to the drawing', error);
+          return of({ features: [], error: DrawingCopyFromLayerComponent.COPY_ERROR_MESSAGE });
+        }),
       );
   }
 

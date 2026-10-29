@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MapClickEvent } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
@@ -80,6 +80,13 @@ describe('DrawingCopyFromLayerComponent', () => {
     expect(drawingServiceMock.disableCopyFromLayer).toHaveBeenCalled();
   });
 
+  test('exposes copy mode state with aria-pressed', async () => {
+    const { selectLayerAndStartCopying } = await setup();
+    expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'false');
+    await selectLayerAndStartCopying();
+    expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'true');
+  });
+
   test('adds copied features to the drawing on map click', async () => {
     const { drawingCopyFeaturesServiceMock, dispatch, selectLayerAndStartCopying, clickMap } = await setup();
     await selectLayerAndStartCopying();
@@ -112,6 +119,21 @@ describe('DrawingCopyFromLayerComponent', () => {
     clickMap();
     expect(openSnackBar).not.toHaveBeenCalled();
     openSnackBar.mockRestore();
+  });
+
+  test('keeps handling map clicks after an error', async () => {
+    const openSnackBar = vi.spyOn(SnackBarMessageComponent, 'open$').mockReturnValue(of());
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const { drawingCopyFeaturesServiceMock, dispatch, selectLayerAndStartCopying, clickMap } = await setup();
+    drawingCopyFeaturesServiceMock.getDrawingFeaturesAt$.mockReturnValueOnce(throwError(() => new Error('Failed')));
+    await selectLayerAndStartCopying();
+    clickMap();
+    expect(openSnackBar).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ message: 'Could not copy objects from the layer' }));
+    expect(dispatch).not.toHaveBeenCalled();
+    clickMap();
+    expect(dispatch).toHaveBeenCalledWith({ type: '[Drawing] Add Features', features: [copiedFeature] });
+    openSnackBar.mockRestore();
+    consoleError.mockRestore();
   });
 
 });
