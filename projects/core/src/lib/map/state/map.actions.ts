@@ -53,6 +53,7 @@ export const addLayerWithServicesToMap = createAction(
     layerTreeNode?: LayerTreeNodeModel;
     siblingLayerTreeNodeId?: string;
     isBaseLayerTree?: boolean;
+    position?: 'before' | 'after';
   }>(),
 );
 export const removeAppLayer = createAction(
