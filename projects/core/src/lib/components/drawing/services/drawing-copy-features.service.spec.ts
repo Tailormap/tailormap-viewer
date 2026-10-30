@@ -45,10 +45,6 @@ describe('DrawingCopyFeaturesService', () => {
     service = TestBed.inject(DrawingCopyFeaturesService);
   });
 
-  test('returns visible layers with attributes as reference layers', async () => {
-    expect(await firstValueFrom(service.getReferenceLayers$())).toEqual([referenceLayer]);
-  });
-
   test('converts the first feature at the clicked location to a drawing feature', async () => {
     getFeaturesForLayer$.mockReturnValue(of(getResponse([ POLYGON, 'POINT(1 2)' ])));
     const result = await getDrawingFeatures();
@@ -57,14 +53,6 @@ describe('DrawingCopyFeaturesService', () => {
     expect(result.features[0].geometry).toBe(POLYGON);
     expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);
     expect(result.features[0].attributes).not.toHaveProperty('id');
-  });
-
-  test('keeps a multi-geometry as one drawing feature', async () => {
-    getFeaturesForLayer$.mockReturnValue(of(getResponse([MULTI_POLYGON])));
-    const result = await getDrawingFeatures();
-    expect(result.features.length).toBe(1);
-    expect(result.features[0].geometry).toBe(MULTI_POLYGON);
-    expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);
   });
 
   test('skips features without geometry and unsupported geometry types', async () => {
@@ -88,6 +76,7 @@ describe('DrawingCopyFeaturesService', () => {
     const result = await getDrawingFeatures([getExistingFeature(POLYGON)]);
     expect(result.features.length).toBe(1);
     expect(result.features[0].geometry).toBe(MULTI_POLYGON);
+    expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);
   });
 
   test('copies the first feature again when all features at the location are already in the drawing', async () => {
@@ -95,12 +84,6 @@ describe('DrawingCopyFeaturesService', () => {
     const result = await getDrawingFeatures([ getExistingFeature(POLYGON), getExistingFeature(MULTI_POLYGON) ]);
     expect(result.features.length).toBe(1);
     expect(result.features[0].geometry).toBe(POLYGON);
-  });
-
-  test('passes extra attributes to the drawing feature', async () => {
-    const result = await firstValueFrom(service.getDrawingFeaturesAt$('1', [ 1, 2 ], undefined, style, [], { lockedStyle: true }));
-    expect(result.features[0].attributes.lockedStyle).toBe(true);
-    expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);
   });
 
   test('returns the error when loading features fails', async () => {

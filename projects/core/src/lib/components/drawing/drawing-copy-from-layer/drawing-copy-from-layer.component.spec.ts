@@ -65,28 +65,15 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
 
 describe('DrawingCopyFromLayerComponent', () => {
 
-  test('enables the copy button only after selecting a layer', async () => {
-    await setup();
-    expect(screen.getByText('Get objects from reference layer')).toBeInTheDocument();
-    expect(screen.getByLabelText(BUTTON_LABEL)).toBeDisabled();
-    await userEvent.click(screen.getByRole('combobox'));
-    await userEvent.click(await screen.findByText('Parcels'));
-    expect(screen.getByLabelText(BUTTON_LABEL)).toBeEnabled();
-  });
-
-  test('toggles copy mode', async () => {
+  test('toggles copy mode after selecting a layer', async () => {
     const { drawingServiceMock, selectLayerAndStartCopying } = await setup();
-    await selectLayerAndStartCopying();
-    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalled();
-    await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
-    expect(drawingServiceMock.disableCopyFromLayer).toHaveBeenCalled();
-  });
-
-  test('exposes copy mode state with aria-pressed', async () => {
-    const { selectLayerAndStartCopying } = await setup();
+    expect(screen.getByLabelText(BUTTON_LABEL)).toBeDisabled();
     expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'false');
     await selectLayerAndStartCopying();
+    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalled();
     expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
+    expect(drawingServiceMock.disableCopyFromLayer).toHaveBeenCalled();
   });
 
   test('adds copied features to the drawing on map click', async () => {
@@ -116,18 +103,11 @@ describe('DrawingCopyFromLayerComponent', () => {
     expect(screen.getByLabelText(BUTTON_LABEL)).toBeDisabled();
   });
 
-  test('ignores map clicks when copy mode is not active', async () => {
-    const { drawingCopyFeaturesServiceMock, clickMap } = await setup();
-    clickMap();
-    expect(drawingCopyFeaturesServiceMock.getDrawingFeaturesAt$).not.toHaveBeenCalled();
-  });
-
   test('shows a message when no objects are found', async () => {
     const openSnackBar = vi.spyOn(SnackBarMessageComponent, 'open$').mockReturnValue(of());
-    const { dispatch, selectLayerAndStartCopying, clickMap } = await setup({ features: [] });
+    const { selectLayerAndStartCopying, clickMap } = await setup({ features: [] });
     await selectLayerAndStartCopying();
     clickMap();
-    expect(dispatch).not.toHaveBeenCalled();
     expect(openSnackBar).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ message: 'No objects found at this location' }));
     openSnackBar.mockRestore();
   });

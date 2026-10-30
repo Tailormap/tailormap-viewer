@@ -35,10 +35,6 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
     initAccessibleFeaturesContainer: vi.fn(),
     destroyAccessibleFeaturesContainer: vi.fn(),
   };
-  const drawingCopyFeaturesServiceMock = {
-    getReferenceLayers$: vi.fn(() => of([])),
-    getDrawingFeaturesAt$: vi.fn(() => of({ features: [] })),
-  };
   const { container } = await render(DrawingComponent, {
     imports: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -56,7 +52,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
       { provide: DrawingAccessibleFeaturesService, useValue: drawingAccessibleFeaturesServiceMock },
-      { provide: DrawingCopyFeaturesService, useValue: drawingCopyFeaturesServiceMock },
+      { provide: DrawingCopyFeaturesService, useValue: { getReferenceLayers$: () => of([]) } },
     ],
   });
   return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };

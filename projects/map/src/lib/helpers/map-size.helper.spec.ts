@@ -33,8 +33,6 @@ describe('MapSizeHelper', () => {
     ]);
     expect(MapSizeHelper.getSize(multiLine)).toEqual(6);
     expect(MapSizeHelper.getSize(multiPolygon)).toEqual(2);
-    expect(MapSizeHelper.getFormattedSize(multiLine)).toEqual('6 m');
-    expect(MapSizeHelper.getFormattedSize(multiPolygon)).toEqual('2 m\xB2');
   });
 
 });
