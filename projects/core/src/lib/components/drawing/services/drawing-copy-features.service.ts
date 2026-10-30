@@ -1,12 +1,11 @@
 import { inject, Service } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 import { DrawingToolEvent } from '@tailormap-viewer/map';
 import { FeatureInfoService } from '../../feature-info/feature-info.service';
-import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
-import { ExtendedAppLayerModel } from '../../../map/models';
 import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../../../map/models/drawing-feature.model';
 import { DrawingHelper } from '../../../map/helpers/drawing.helper';
+import { DataSourceManagerService } from "../../../services";
+import { DataSourceLayerModel } from "../../../models";
 
 export interface CopiedDrawingFeaturesResult {
   features: DrawingFeatureModel[];
@@ -18,12 +17,11 @@ export interface CopiedDrawingFeaturesResult {
  */
 @Service()
 export class DrawingCopyFeaturesService {
-
-  private store$ = inject(Store);
   private featureInfoService = inject(FeatureInfoService);
+  private dataSourceManagerService = inject(DataSourceManagerService);
 
-  public getReferenceLayers$(): Observable<ExtendedAppLayerModel[]> {
-    return this.store$.select(selectVisibleLayersWithAttributes);
+  public getReferenceLayers$(): Observable<DataSourceLayerModel[]> {
+    return this.dataSourceManagerService.layersWithAttributes$;
   }
 
   /**
