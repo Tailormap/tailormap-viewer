@@ -77,15 +77,30 @@ describe('DrawingCopyFeaturesService', () => {
     warnSpy.mockRestore();
   });
 
-  test('skips a feature that is already in the drawing', async () => {
-    const existing: DrawingFeatureModel = {
-      __fid: 'existing',
-      geometry: POLYGON,
-      attributes: { type: DrawingFeatureTypeEnum.POLYGON, style },
-    };
-    const result = await getDrawingFeatures([existing]);
-    expect(result.features).toEqual([]);
-    expect(result.alreadyInDrawing).toBe(true);
+  const getExistingFeature = (geometry: string): DrawingFeatureModel => ({
+    __fid: `existing-${geometry}`,
+    geometry,
+    attributes: { type: DrawingFeatureTypeEnum.POLYGON, style },
+  });
+
+  test('copies the next feature at the location that is not in the drawing yet', async () => {
+    getFeaturesForLayer$.mockReturnValue(of(getResponse([ POLYGON, MULTI_POLYGON ])));
+    const result = await getDrawingFeatures([getExistingFeature(POLYGON)]);
+    expect(result.features.length).toBe(1);
+    expect(result.features[0].geometry).toBe(MULTI_POLYGON);
+  });
+
+  test('copies the first feature again when all features at the location are already in the drawing', async () => {
+    getFeaturesForLayer$.mockReturnValue(of(getResponse([ POLYGON, MULTI_POLYGON ])));
+    const result = await getDrawingFeatures([ getExistingFeature(POLYGON), getExistingFeature(MULTI_POLYGON) ]);
+    expect(result.features.length).toBe(1);
+    expect(result.features[0].geometry).toBe(POLYGON);
+  });
+
+  test('passes extra attributes to the drawing feature', async () => {
+    const result = await firstValueFrom(service.getDrawingFeaturesAt$('1', [ 1, 2 ], undefined, style, [], { lockedStyle: true }));
+    expect(result.features[0].attributes.lockedStyle).toBe(true);
+    expect(result.features[0].attributes.type).toBe(DrawingFeatureTypeEnum.POLYGON);
   });
 
   test('returns the error when loading features fails', async () => {

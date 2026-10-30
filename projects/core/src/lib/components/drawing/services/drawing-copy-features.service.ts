@@ -5,13 +5,12 @@ import { DrawingToolEvent } from '@tailormap-viewer/map';
 import { FeatureInfoService } from '../../feature-info/feature-info.service';
 import { selectVisibleLayersWithAttributes } from '../../../map/state/map.selectors';
 import { ExtendedAppLayerModel } from '../../../map/models';
-import { DrawingFeatureModel, DrawingFeatureStyleModel } from '../../../map/models/drawing-feature.model';
+import { DrawingFeatureModel, DrawingFeatureModelAttributes, DrawingFeatureStyleModel } from '../../../map/models/drawing-feature.model';
 import { DrawingHelper } from '../../../map/helpers/drawing.helper';
 
 export interface CopiedDrawingFeaturesResult {
   features: DrawingFeatureModel[];
   error?: string;
-  alreadyInDrawing?: boolean;
 }
 
 /**
@@ -31,9 +30,10 @@ export class DrawingCopyFeaturesService {
   }
 
   /**
-   * Gets the first feature of the reference layer at the given coordinates and converts it to a drawing feature.
-   * Multi-geometries are kept as a single drawing feature. A feature is skipped when the drawing already contains
-   * a feature with exactly the same geometry.
+   * Gets the first feature of the reference layer at the given coordinates that is not in the drawing yet, and converts it
+   * to a drawing feature. A feature is in the drawing when the drawing contains a feature with exactly the same geometry.
+   * Clicking repeatedly on overlapping features therefore copies them one by one. When all features at the location are
+   * already in the drawing, the first one is copied again. Multi-geometries are kept as a single drawing feature.
    */
   public getDrawingFeaturesAt$(
     layerId: string,
@@ -41,6 +41,7 @@ export class DrawingCopyFeaturesService {
     pointerType: string | undefined,
     style: DrawingFeatureStyleModel,
     existingFeatures: DrawingFeatureModel[],
+    attributes?: Partial<DrawingFeatureModelAttributes>,
   ): Observable<CopiedDrawingFeaturesResult> {
     return this.featureInfoService.getFeaturesForLayer$(coordinates, layerId, pointerType, false)
       .pipe(
@@ -52,20 +53,21 @@ export class DrawingCopyFeaturesService {
             return { features: [], error: response.error };
           }
           // TODO: let the user choose a feature when there are multiple features at the clicked location
-          const geometry = response.features.find(feature => !!feature.geometry)?.geometry;
-          if (!geometry) {
+          const geometries = response.features
+            .map(feature => feature.geometry)
+            .filter((geometry): geometry is string => !!geometry);
+          if (geometries.length === 0) {
             return { features: [] };
           }
-          if (existingFeatures.some(feature => feature.geometry === geometry)) {
-            return { features: [], alreadyInDrawing: true };
-          }
+          const existingGeometries = new Set(existingFeatures.map(feature => feature.geometry));
+          const geometry = geometries.find(g => !existingGeometries.has(g)) ?? geometries[0];
           const type = DrawingHelper.getDrawingTypeForGeometry(geometry);
           if (!type) {
             console.warn(`Cannot copy feature from layer ${layerId} to the drawing, unsupported geometry type`, geometry);
             return { features: [] };
           }
           const drawingEvent: DrawingToolEvent = { type: 'end', geometry, centerCoordinate: [], lastCoordinate: [] };
-          return { features: [DrawingHelper.getFeature(type, drawingEvent, style)] };
+          return { features: [DrawingHelper.getFeature(type, drawingEvent, style, attributes)] };
         }),
       );
   }

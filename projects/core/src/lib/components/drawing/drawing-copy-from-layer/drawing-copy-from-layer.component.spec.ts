@@ -31,6 +31,7 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
     copyFromLayerActive,
     copyFeaturesClicked$: mapClick.asObservable(),
     style: signal(DrawingHelper.getUpdatedDefaultStyle()),
+    lockedStyle: signal(false),
     enableCopyFromLayer: vi.fn(() => copyFromLayerActive.set(true)),
     disableCopyFromLayer: vi.fn(() => copyFromLayerActive.set(false)),
   };
@@ -92,8 +93,17 @@ describe('DrawingCopyFromLayerComponent', () => {
     await selectLayerAndStartCopying();
     clickMap();
     expect(drawingCopyFeaturesServiceMock.getDrawingFeaturesAt$)
-      .toHaveBeenCalledWith('1', [ 1, 2 ], 'mouse', DrawingHelper.getUpdatedDefaultStyle(), []);
+      .toHaveBeenCalledWith('1', [ 1, 2 ], 'mouse', DrawingHelper.getUpdatedDefaultStyle(), [], {});
     expect(dispatch).toHaveBeenCalledWith({ type: '[Drawing] Add Features', features: [copiedFeature] });
+  });
+
+  test('locks the style of copied features when the style is locked', async () => {
+    const { drawingServiceMock, drawingCopyFeaturesServiceMock, selectLayerAndStartCopying, clickMap } = await setup();
+    drawingServiceMock.lockedStyle.set(true);
+    await selectLayerAndStartCopying();
+    clickMap();
+    expect(drawingCopyFeaturesServiceMock.getDrawingFeaturesAt$)
+      .toHaveBeenCalledWith('1', [ 1, 2 ], 'mouse', DrawingHelper.getUpdatedDefaultStyle(), [], { lockedStyle: true });
   });
 
   test('ignores map clicks when copy mode is not active', async () => {
@@ -109,15 +119,6 @@ describe('DrawingCopyFromLayerComponent', () => {
     clickMap();
     expect(dispatch).not.toHaveBeenCalled();
     expect(openSnackBar).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ message: 'No objects found at this location' }));
-    openSnackBar.mockRestore();
-  });
-
-  test('does not show a message when the object is already in the drawing', async () => {
-    const openSnackBar = vi.spyOn(SnackBarMessageComponent, 'open$').mockReturnValue(of());
-    const { selectLayerAndStartCopying, clickMap } = await setup({ features: [], alreadyInDrawing: true });
-    await selectLayerAndStartCopying();
-    clickMap();
-    expect(openSnackBar).not.toHaveBeenCalled();
     openSnackBar.mockRestore();
   });
 

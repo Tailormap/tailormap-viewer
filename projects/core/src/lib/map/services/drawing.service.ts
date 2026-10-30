@@ -242,8 +242,17 @@ export class DrawingService {
     }
     this.featureSelected.next(null);
     this.activeToolChanged.next(this.activeDrawingTool);
+    this.resetStyleBeforeCopying();
     this.toolManager?.enableTool(this.copyFeaturesTool.id, true);
     this.copyFromLayerActive.set(true);
+  }
+
+  private resetStyleBeforeCopying() {
+    if (this.predefinedStyleSelected.value) {
+      this.style.update(style => ({ ...style, label: '', description: undefined }));
+      return;
+    }
+    this.resetBeforeDrawing();
   }
 
   public disableCopyFromLayer() {

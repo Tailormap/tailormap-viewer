@@ -14,6 +14,7 @@ import { DrawingService } from '../../../map/services/drawing.service';
 import { CopiedDrawingFeaturesResult, DrawingCopyFeaturesService } from '../services/drawing-copy-features.service';
 import { selectDrawingFeatures } from '../state/drawing.selectors';
 import { addFeatures } from '../state/drawing.actions';
+import { DrawingFeatureModelAttributes } from '../../../map/models/drawing-feature.model';
 
 /**
  * Lets the user select a reference layer and copy features from that layer to the drawing by clicking on the map.
@@ -55,7 +56,6 @@ export class DrawingCopyFromLayerComponent {
       untracked(() => {
         const selectedLayerId = this.layerControl.value;
         if (selectedLayerId && !layers.some(layer => layer.id === selectedLayerId)) {
-          // Selected layer is no longer available (e.g. made invisible)
           this.layerControl.setValue(null);
           this.drawingService.disableCopyFromLayer();
         }
@@ -64,9 +64,8 @@ export class DrawingCopyFromLayerComponent {
 
     this.drawingService.copyFeaturesClicked$
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        // Handle clicks one after another, so the check for features already in the drawing includes previously copied features
         concatMap(mapClick => this.copyFeaturesAt$(mapClick)),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(result => this.handleCopyResult(result));
   }
@@ -84,6 +83,8 @@ export class DrawingCopyFromLayerComponent {
     if (!layerId || !this.copyFromLayerActive()) {
       return EMPTY;
     }
+    // Same as for drawn features, see DrawingComponent.onDrawingAdded()
+    const attributes: Partial<DrawingFeatureModelAttributes> = this.drawingService.lockedStyle() ? { lockedStyle: true } : {};
     return this.store$.select(selectDrawingFeatures)
       .pipe(
         take(1),
@@ -93,6 +94,7 @@ export class DrawingCopyFromLayerComponent {
           mapClick.pointerType,
           this.drawingService.style(),
           existingFeatures,
+          attributes,
         )),
         catchError(error => {
           console.error('[Drawing copy from layer] Error copying features from layer to the drawing', error);
@@ -104,9 +106,6 @@ export class DrawingCopyFromLayerComponent {
   private handleCopyResult(result: CopiedDrawingFeaturesResult) {
     if (result.features.length > 0) {
       this.store$.dispatch(addFeatures({ features: result.features }));
-      return;
-    }
-    if (result.alreadyInDrawing) {
       return;
     }
     SnackBarMessageComponent.open$(this.snackBar, {
