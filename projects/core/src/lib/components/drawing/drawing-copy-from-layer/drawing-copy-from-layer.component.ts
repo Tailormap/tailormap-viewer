@@ -16,10 +16,7 @@ import { selectDrawingFeatures } from '../state/drawing.selectors';
 import { addFeatures } from '../state/drawing.actions';
 import { DrawingFeatureModelAttributes } from '../../../map/models/drawing-feature.model';
 
-/**
- * Lets the user select a reference layer and copy features from that layer to the drawing by clicking on the map.
- * Must be used inside the DrawingComponent, which provides the DrawingService.
- */
+
 @Component({
   selector: 'tm-drawing-copy-from-layer',
   templateUrl: './drawing-copy-from-layer.component.html',
@@ -84,7 +81,6 @@ export class DrawingCopyFromLayerComponent {
     if (!layerId || !this.copyFromLayerActive()) {
       return EMPTY;
     }
-    // Same as for drawn features, see DrawingComponent.onDrawingAdded()
     const attributes: Partial<DrawingFeatureModelAttributes> = this.drawingService.lockedStyle() ? { lockedStyle: true } : {};
     return this.store$.select(selectDrawingFeatures)
       .pipe(

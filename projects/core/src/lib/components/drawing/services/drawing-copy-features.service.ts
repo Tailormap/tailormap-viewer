@@ -22,9 +22,6 @@ export class DrawingCopyFeaturesService {
   private store$ = inject(Store);
   private featureInfoService = inject(FeatureInfoService);
 
-  /**
-   * Visible layers with a feature source, so the geometry of their features is available.
-   */
   public getReferenceLayers$(): Observable<ExtendedAppLayerModel[]> {
     return this.store$.select(selectVisibleLayersWithAttributes);
   }
@@ -52,7 +49,6 @@ export class DrawingCopyFeaturesService {
           if (response.error) {
             return { features: [], error: response.error };
           }
-          // TODO: let the user choose a feature when there are multiple features at the clicked location
           const geometries = response.features
             .map(feature => feature.geometry)
             .filter((geometry): geometry is string => !!geometry);
