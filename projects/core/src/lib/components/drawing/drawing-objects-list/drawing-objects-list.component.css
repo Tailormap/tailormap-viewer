@@ -95,6 +95,13 @@ mat-panel-description {
   max-height: 24px;
   padding-top: 0;
   padding-bottom: 0;
+  /* The button keeps focus after clicking; show no (oval) focus background, only an outline for keyboard focus */
+  --mat-icon-button-focus-state-layer-opacity: 0;
+}
+
+.row-copy:focus-visible {
+  outline: 2px solid var(--primary-color-0_5);
+  border-radius: 0;
 }
 
 .row-copy mat-icon,
