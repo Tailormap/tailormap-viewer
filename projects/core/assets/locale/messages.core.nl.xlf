@@ -386,6 +386,30 @@
         <source>Color</source>
         <target>Kleur</target>
       </trans-unit>
+      <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
+        <source>Copy objects from reference layer</source>
+        <target>Objecten kopiëren van referentielaag</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
+        <source>Copy WKT of drawing object</source>
+        <target>WKT van tekenobject kopiëren</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
+        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+        <target>WKT van object naar klembord gekopieerd: <x id="PH" equiv-text="displayWkt"/></target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
+        <source>Failed to copy WKT to clipboard</source>
+        <target>WKT naar klembord kopiëren mislukt</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-not-found" datatype="html">
+        <source>No geometry found for this drawing object</source>
+        <target>Geen geometrie gevonden voor dit tekenobject</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-objects-error" datatype="html">
+        <source>Could not copy objects from the layer</source>
+        <target>Kon de objecten niet uit de laag kopiëren</target>
+      </trans-unit>
       <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
         <target>Volledige tekening verwijderen</target>
@@ -482,6 +506,14 @@
         <source>The style for this drawing object cannot be changed.</source>
         <target>De stijl van dit tekenobject kan niet worden gewijzigd.</target>
       </trans-unit>
+      <trans-unit id="core.drawing.no-objects-found" datatype="html">
+        <source>No objects found at this location</source>
+        <target>Geen objecten gevonden op deze locatie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.no-reference-layers" datatype="html">
+        <source>No visible layers with available geometry</source>
+        <target>Geen zichtbare lagen met beschikbare geometrie</target>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
         <target>Objecten</target>
@@ -498,9 +530,17 @@
         <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
         <target>Breedte (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
+      <trans-unit id="core.drawing.reference-layer" datatype="html">
+        <source>Reference layer</source>
+        <target>Referentielaag</target>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Rotatie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.select-objects-to-copy" datatype="html">
+        <source>Click objects on the map to copy them to the drawing</source>
+        <target>Klik op objecten in de kaart om ze naar de tekening te kopiëren</target>
       </trans-unit>
       <trans-unit id="core.drawing.show-area-size" datatype="html">
         <source>Show area size</source>

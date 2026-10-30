@@ -287,6 +287,24 @@
       <trans-unit id="core.drawing.color" datatype="html">
         <source>Color</source>
       </trans-unit>
+      <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
+        <source>Copy objects from reference layer</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
+        <source>Copy WKT of drawing object</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
+        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
+        <source>Failed to copy WKT to clipboard</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-not-found" datatype="html">
+        <source>No geometry found for this drawing object</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-objects-error" datatype="html">
+        <source>Could not copy objects from the layer</source>
+      </trans-unit>
       <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
       </trans-unit>
@@ -359,6 +377,12 @@
       <trans-unit id="core.drawing.locked-style" datatype="html">
         <source>The style for this drawing object cannot be changed.</source>
       </trans-unit>
+      <trans-unit id="core.drawing.no-objects-found" datatype="html">
+        <source>No objects found at this location</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.no-reference-layers" datatype="html">
+        <source>No visible layers with available geometry</source>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
       </trans-unit>
@@ -371,8 +395,14 @@
       <trans-unit id="core.drawing.rectangle-width" datatype="html">
         <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
       </trans-unit>
+      <trans-unit id="core.drawing.reference-layer" datatype="html">
+        <source>Reference layer</source>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.select-objects-to-copy" datatype="html">
+        <source>Click objects on the map to copy them to the drawing</source>
       </trans-unit>
       <trans-unit id="core.drawing.show-area-size" datatype="html">
         <source>Show area size</source>

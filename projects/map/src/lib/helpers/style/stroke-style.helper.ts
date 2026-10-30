@@ -2,7 +2,7 @@ import { MapStyleModel, StrokeStyleModel } from '../../models';
 import { ColorHelper, StyleHelper } from '@tailormap-viewer/shared';
 import { Stroke, Style } from 'ol/style.js';
 import { Feature } from 'ol';
-import { Geometry, LineString } from 'ol/geom.js';
+import { Geometry, LineString, MultiLineString } from 'ol/geom.js';
 import { ArrowStyleHelper } from './arrow-style.helper';
 import { FeatureLike } from 'ol/Feature.js';
 import { Coordinate } from 'ol/coordinate.js';
@@ -71,44 +71,50 @@ export class StrokeStyleHelper {
     const offsetInMapUnits = resolution ? offsetPx * resolution : offsetPx;
     return (feature: FeatureLike) => {
       const geometry = feature.getGeometry();
-      if (!(geometry instanceof LineString)) {
-        return geometry;
+      if (geometry instanceof LineString) {
+        return new LineString(StrokeStyleHelper.getOffsetCoordinates(geometry.getCoordinates(), offsetInMapUnits));
       }
-      const coords = geometry.getCoordinates();
-      const offsetCoords: Coordinate[] = [];
-      for (let i = 0; i < coords.length; i++) {
-        const normal = [ 0, 0 ];
-        if (i > 0) {
-          const dx = coords[i][0] - coords[i - 1][0];
-          const dy = coords[i][1] - coords[i - 1][1];
-          const length = StrokeStyleHelper.calculateLength(dx, dy);
-          if (length > 0) {
-            normal[0] += -dy / length;
-            normal[1] += dx / length;
-          }
-        }
-        if (i < coords.length - 1) {
-          const dx = coords[i + 1][0] - coords[i][0];
-          const dy = coords[i + 1][1] - coords[i][1];
-          const length = StrokeStyleHelper.calculateLength(dx, dy);
-          if (length > 0) {
-            normal[0] += -dy / length;
-            normal[1] += dx / length;
-          }
-        }
-        // Average the normals for smooth offset
-        const normLength = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
-        if (normLength > 0) {
-          normal[0] /= normLength;
-          normal[1] /= normLength;
-        }
-        offsetCoords.push([
-          coords[i][0] + normal[0] * offsetInMapUnits,
-          coords[i][1] + normal[1] * offsetInMapUnits,
-        ]);
+      if (geometry instanceof MultiLineString) {
+        return new MultiLineString(geometry.getCoordinates().map(coords => StrokeStyleHelper.getOffsetCoordinates(coords, offsetInMapUnits)));
       }
-      return new LineString(offsetCoords);
+      return geometry;
     };
+  }
+
+  private static getOffsetCoordinates(coords: Coordinate[], offsetInMapUnits: number): Coordinate[] {
+    const offsetCoords: Coordinate[] = [];
+    for (let i = 0; i < coords.length; i++) {
+      const normal = [ 0, 0 ];
+      if (i > 0) {
+        const dx = coords[i][0] - coords[i - 1][0];
+        const dy = coords[i][1] - coords[i - 1][1];
+        const length = StrokeStyleHelper.calculateLength(dx, dy);
+        if (length > 0) {
+          normal[0] += -dy / length;
+          normal[1] += dx / length;
+        }
+      }
+      if (i < coords.length - 1) {
+        const dx = coords[i + 1][0] - coords[i][0];
+        const dy = coords[i + 1][1] - coords[i][1];
+        const length = StrokeStyleHelper.calculateLength(dx, dy);
+        if (length > 0) {
+          normal[0] += -dy / length;
+          normal[1] += dx / length;
+        }
+      }
+      // Average the normals for smooth offset
+      const normLength = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
+      if (normLength > 0) {
+        normal[0] /= normLength;
+        normal[1] /= normLength;
+      }
+      offsetCoords.push([
+        coords[i][0] + normal[0] * offsetInMapUnits,
+        coords[i][1] + normal[1] * offsetInMapUnits,
+      ]);
+    }
+    return offsetCoords;
   }
 
   private static calculateLength(dx: number, dy: number): number {

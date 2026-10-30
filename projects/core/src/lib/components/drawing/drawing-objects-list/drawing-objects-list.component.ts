@@ -6,6 +6,11 @@ import { DrawingFeatureModel } from '../../../map/models/drawing-feature.model';
 import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
 import { DrawingStyleIconComponent } from '../../../map/components/drawing-style-icon/drawing-style-icon.component';
 import { AsyncPipe } from '@angular/common';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { SnackBarMessageComponent, SnackBarMessageOptionsModel, TooltipDirective } from '@tailormap-viewer/shared';
 
 @Component({
     selector: 'tm-drawing-objects-list',
@@ -19,11 +24,18 @@ import { AsyncPipe } from '@angular/common';
         MatExpansionPanelDescription,
         DrawingStyleIconComponent,
         AsyncPipe,
+        MatIconButton,
+        MatIcon,
+        TooltipDirective,
     ],
 })
 export class DrawingObjectsListComponent {
   private store$ = inject(Store);
   private elRef = inject(ElementRef);
+  private clipboard = inject(Clipboard);
+  private snackBar = inject(MatSnackBar);
+
+  private static readonly MAX_WKT_LENGTH_IN_MESSAGE = 500;
 
   @Input()
   public drawingLayerId = '';
@@ -78,6 +90,31 @@ export class DrawingObjectsListComponent {
 
   public cancelDescriptionEdit() {
     this.editingDescriptionForFeatureFid = null;
+  }
+
+  public copyFeatureWkt(wkt: string | undefined) {
+    if (!wkt) {
+      this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-not-found:No geometry found for this drawing object`);
+      return;
+    }
+    if (!this.clipboard.copy(wkt)) {
+      this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-failed:Failed to copy WKT to clipboard`);
+      return;
+    }
+    const displayWkt = wkt.length > DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE
+      ? `${wkt.substring(0, DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE)}...`
+      : wkt;
+    this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:Object WKT copied to clipboard: ${displayWkt}`);
+  }
+
+  private showSnackbarMessage(message: string) {
+    const config: SnackBarMessageOptionsModel = {
+      message,
+      duration: 5000,
+      showDuration: true,
+      showCloseButton: true,
+    };
+    SnackBarMessageComponent.open$(this.snackBar, config).subscribe();
   }
 
   private srcolledToFeature: string | null = null;

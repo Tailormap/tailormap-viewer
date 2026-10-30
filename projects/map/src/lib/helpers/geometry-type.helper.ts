@@ -1,4 +1,4 @@
-import { Circle, Geometry, LineString, Point, Polygon } from 'ol/geom.js';
+import { Circle, Geometry, LineString, MultiLineString, MultiPolygon, Point, Polygon } from 'ol/geom.js';
 
 export class GeometryTypeHelper {
 
@@ -23,6 +23,14 @@ export class GeometryTypeHelper {
 
   public static isCircleGeometry(geometry?: Geometry): geometry is Circle {
     return geometry?.getType() === 'Circle';
+  }
+
+  public static isMultiLineGeometry(geometry?: Geometry): geometry is MultiLineString {
+    return geometry?.getType() === 'MultiLineString';
+  }
+
+  public static isMultiPolygonGeometry(geometry?: Geometry): geometry is MultiPolygon {
+    return geometry?.getType() === 'MultiPolygon';
   }
 
 }

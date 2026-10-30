@@ -140,6 +140,24 @@ export class DrawingHelper {
     };
   }
 
+  /**
+   * Returns the drawing feature type to use for a copied geometry, or null if the geometry type is not supported.
+   * Multi-geometries map to the type of their parts, so they can be kept as one drawing object.
+   */
+  public static getDrawingTypeForGeometry(wkt: string): DrawingFeatureTypeEnum | null {
+    const geometryType = /^\s*(?:MULTI)?(POINT|LINESTRING|POLYGON)\b/i.exec(wkt)?.[1].toUpperCase();
+    switch (geometryType) {
+      case 'POINT':
+        return DrawingFeatureTypeEnum.POINT;
+      case 'LINESTRING':
+        return DrawingFeatureTypeEnum.LINE;
+      case 'POLYGON':
+        return DrawingFeatureTypeEnum.POLYGON;
+      default:
+        return null;
+    }
+  }
+
   public static updateDefaultStyle(style: Partial<DrawingFeatureStyleModel>) {
     DrawingHelper.updatedDefaultStyle = {
       ...DrawingHelper.updatedDefaultStyle,
