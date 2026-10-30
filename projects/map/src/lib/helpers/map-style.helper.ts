@@ -173,7 +173,7 @@ export class MapStyleHelper {
           return new MultiPoint(coordinates);
         }
         if (featureGeom instanceof MultiPolygon) {
-          return new MultiPoint(featureGeom.getPolygons().flatMap(polygon => polygon.getCoordinates()[0]));
+          return new MultiPoint(featureGeom.getCoordinates().flatMap(polygon => polygon[0]));
         }
         if (featureGeom instanceof MultiLineString) {
           return new MultiPoint(featureGeom.getCoordinates().flat());

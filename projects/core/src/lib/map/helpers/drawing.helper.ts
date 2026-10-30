@@ -4,7 +4,7 @@ import {
   ImageDrawingFeatureStyleModel, LabelDrawingFeatureStyleModel, LabelStyleEnum, LineDrawingFeatureStyleModel,
   MarkerDrawingFeatureStyleModel, MarkerType, PolygonDrawingFeatureStyleModel, StrokeTypeEnum,
 } from '../models/drawing-feature.model';
-import { DrawingToolEvent, FeatureHelper, MapStyleModel } from '@tailormap-viewer/map';
+import { DrawingToolEvent, MapStyleModel } from '@tailormap-viewer/map';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationStyleService } from '../../services/application-style.service';
 import { TailormapApiConstants } from '@tailormap-viewer/api';
@@ -145,21 +145,13 @@ export class DrawingHelper {
    * Multi-geometries map to the type of their parts, so they can be kept as one drawing object.
    */
   public static getDrawingTypeForGeometry(wkt: string): DrawingFeatureTypeEnum | null {
-    let geometryType: string | undefined;
-    try {
-      geometryType = FeatureHelper.fromWKT(wkt)?.getType();
-    } catch {
-      return null;
-    }
+    const geometryType = /^\s*(?:MULTI)?(POINT|LINESTRING|POLYGON)\b/i.exec(wkt)?.[1].toUpperCase();
     switch (geometryType) {
-      case 'Point':
-      case 'MultiPoint':
+      case 'POINT':
         return DrawingFeatureTypeEnum.POINT;
-      case 'LineString':
-      case 'MultiLineString':
+      case 'LINESTRING':
         return DrawingFeatureTypeEnum.LINE;
-      case 'Polygon':
-      case 'MultiPolygon':
+      case 'POLYGON':
         return DrawingFeatureTypeEnum.POLYGON;
       default:
         return null;
