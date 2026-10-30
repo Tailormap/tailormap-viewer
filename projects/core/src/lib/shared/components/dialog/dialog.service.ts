@@ -19,6 +19,7 @@ export class DialogService {
     const id = `dialog-${++this.dialogCount}`;
     this.dialogs.push({ id, left, right });
     this.updateVisibleStack(id, left, right);
+    this.updateStyle();
     return id;
   }
 
@@ -62,10 +63,11 @@ export class DialogService {
     this.rootElement.classList.toggle('has-dialog-left', maxDialogLeftWidth > 0);
     this.rootElement.classList.toggle('has-dialog-right', maxDialogRightWidth > 0);
     this.visibleStack.forEach((id, idx) => {
-      if (!id) {
+      const dialogEl = this.rootElement.querySelector<HTMLDivElement>(`.${id}`);
+      if (!dialogEl) {
         return;
       }
-      CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, this.rootElement.querySelector<HTMLDivElement>(`.${id}`));
+      CssHelper.setCssVariableValue('--dialog-stack-index', `${idx}`, dialogEl);
     });
     this.layoutService.setLeftPadding(maxDialogLeftWidth);
     this.layoutService.setRightPadding(maxDialogRightWidth);

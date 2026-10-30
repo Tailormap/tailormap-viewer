@@ -146,6 +146,10 @@ export class DialogComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnChanges(changes: SimpleChanges): void {
     this.updateActualWidth();
+    // First ngOnChanges runs before ngOnInit, registerDialog in ngOnInit picks up the initial state
+    if (!this.dialogId) {
+      return;
+    }
     if (
       changes['hidden']?.currentValue !== changes['hidden']?.previousValue ||
       changes['open']?.currentValue !== changes['open']?.previousValue ||
