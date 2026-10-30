@@ -387,8 +387,8 @@
         <target>Farbe</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
-        <source>Get objects from reference layer</source>
-        <target>Objekte aus Referenzschicht übernehmen</target>
+        <source>Copy objects from reference layer</source>
+        <target>Objekte aus Referenzschicht kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
         <source>Copy WKT of drawing object</source>

@@ -288,7 +288,7 @@
         <source>Color</source>
       </trans-unit>
       <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
-        <source>Get objects from reference layer</source>
+        <source>Copy objects from reference layer</source>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
         <source>Copy WKT of drawing object</source>
