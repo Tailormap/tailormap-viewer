@@ -1,6 +1,6 @@
-import { Component, DestroyRef, effect, inject, untracked } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
 import { Store } from '@ngrx/store';
 import { catchError, concatMap, EMPTY, Observable, of, take } from 'rxjs';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -29,7 +29,7 @@ import { DrawingFeatureModelAttributes } from '../../../map/models/drawing-featu
     MatLabel,
     MatSelect,
     MatOption,
-    ReactiveFormsModule,
+    FormField,
     MatButton,
     MatIcon,
     TooltipDirective,
@@ -45,8 +45,9 @@ export class DrawingCopyFromLayerComponent {
   private static NO_OBJECTS_FOUND_MESSAGE = $localize `:@@core.drawing.no-objects-found:No objects found at this location`;
   private static COPY_ERROR_MESSAGE = $localize `:@@core.drawing.copy-objects-error:Could not copy objects from the layer`;
 
-  public layerControl = new FormControl<string | null>(null);
-  public selectedLayerId = toSignal(this.layerControl.valueChanges, { initialValue: this.layerControl.value });
+  private layerFormField = signal<{ layerId: string | null }>({ layerId: null });
+  public layerForm = form(this.layerFormField);
+  public selectedLayerId = computed(() => this.layerFormField().layerId);
   public referenceLayers = toSignal(this.drawingCopyFeaturesService.getReferenceLayers$(), { initialValue: [] });
   public copyFromLayerActive = this.drawingService.copyFromLayerActive.asReadonly();
 
@@ -54,9 +55,9 @@ export class DrawingCopyFromLayerComponent {
     effect(() => {
       const layers = this.referenceLayers();
       untracked(() => {
-        const selectedLayerId = this.layerControl.value;
+        const selectedLayerId = this.selectedLayerId();
         if (selectedLayerId && !layers.some(layer => layer.id === selectedLayerId)) {
-          this.layerControl.setValue(null);
+          this.layerForm.layerId().value.set(null);
           this.drawingService.disableCopyFromLayer();
         }
       });
@@ -73,13 +74,13 @@ export class DrawingCopyFromLayerComponent {
   public toggleCopyFromLayer() {
     if (this.copyFromLayerActive()) {
       this.drawingService.disableCopyFromLayer();
-    } else if (this.layerControl.value) {
+    } else if (this.selectedLayerId()) {
       this.drawingService.enableCopyFromLayer();
     }
   }
 
   private copyFeaturesAt$(mapClick: MapClickEvent): Observable<CopiedDrawingFeaturesResult> {
-    const layerId = this.layerControl.value;
+    const layerId = this.selectedLayerId();
     if (!layerId || !this.copyFromLayerActive()) {
       return EMPTY;
     }

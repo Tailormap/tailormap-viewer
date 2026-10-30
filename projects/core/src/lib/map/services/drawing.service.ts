@@ -200,10 +200,7 @@ export class DrawingService {
     if (this.extTransformTool) {
       this.toolManager?.disableTool(this.extTransformTool.id, true);
     }
-    if (this.copyFeaturesTool) {
-      this.toolManager?.disableTool(this.copyFeaturesTool.id, true);
-    }
-    this.copyFromLayerActive.set(false);
+    this.disableCopyFeaturesTool();
     this.activeDrawingTool = null;
   }
 
@@ -226,21 +223,11 @@ export class DrawingService {
     return this.activeDrawingTool;
   }
 
-  /**
-   * Enables the mode in which clicking on the map copies features from a reference layer to the drawing.
-   * All other drawing tools are disabled while this mode is active.
-   */
   public enableCopyFromLayer() {
-    if (!this.copyFeaturesTool || !this.drawingTool || !this.selectTool) {
+    if (!this.copyFeaturesTool) {
       return;
     }
-    this.activeDrawingTool = null;
-    this.toolManager?.disableTool(this.drawingTool.id, true);
-    this.toolManager?.disableTool(this.selectTool.id, true);
-    if (this.extTransformTool) {
-      this.toolManager?.disableTool(this.extTransformTool.id, true);
-    }
-    this.featureSelected.next(null);
+    this.disableDrawingTools();
     this.activeToolChanged.next(this.activeDrawingTool);
     this.resetStyleBeforeCopying();
     this.toolManager?.enableTool(this.copyFeaturesTool.id, true);

@@ -92,9 +92,6 @@ mat-panel-description {
 .row-copy {
   flex-shrink: 0;
   margin-left: auto;
-}
-
-.row-copy {
   max-height: 24px;
   padding-top: 0;
   padding-bottom: 0;

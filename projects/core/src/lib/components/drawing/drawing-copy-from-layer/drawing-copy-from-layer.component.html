@@ -2,7 +2,7 @@
 @if (referenceLayers().length > 0) {
   <mat-form-field appearance="outline" class="reference-layer">
     <mat-label i18n="@@core.drawing.reference-layer">Reference layer</mat-label>
-    <mat-select [formControl]="layerControl">
+    <mat-select [formField]="layerForm.layerId">
       @for (layer of referenceLayers(); track layer.id) {
         <mat-option [value]="layer.id">{{layer.title || layer.layerName}}</mat-option>
       }

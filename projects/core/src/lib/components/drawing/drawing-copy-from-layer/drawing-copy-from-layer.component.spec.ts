@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 import { getAppLayerModel } from '@tailormap-viewer/api';
 import { MapClickEvent } from '@tailormap-viewer/map';
 import { SnackBarMessageComponent } from '@tailormap-viewer/shared';
@@ -35,11 +35,12 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
     enableCopyFromLayer: vi.fn(() => copyFromLayerActive.set(true)),
     disableCopyFromLayer: vi.fn(() => copyFromLayerActive.set(false)),
   };
+  const referenceLayers = new BehaviorSubject([
+    getAppLayerModel({ id: '1', title: 'Parcels' }),
+    getAppLayerModel({ id: '2', title: 'Buildings' }),
+  ]);
   const drawingCopyFeaturesServiceMock = {
-    getReferenceLayers$: vi.fn(() => of([
-      getAppLayerModel({ id: '1', title: 'Parcels' }),
-      getAppLayerModel({ id: '2', title: 'Buildings' }),
-    ])),
+    getReferenceLayers$: vi.fn(() => referenceLayers.asObservable()),
     getDrawingFeaturesAt$: vi.fn(() => of(copyResult)),
   };
   await render(DrawingCopyFromLayerComponent, {
@@ -59,7 +60,7 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
     await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
   };
   const clickMap = () => mapClick.next({ mapCoordinates: [ 1, 2 ], mouseCoordinates: [ 3, 4 ], pointerType: 'mouse' });
-  return { drawingServiceMock, drawingCopyFeaturesServiceMock, dispatch, selectLayerAndStartCopying, clickMap };
+  return { drawingServiceMock, drawingCopyFeaturesServiceMock, referenceLayers, dispatch, selectLayerAndStartCopying, clickMap };
 };
 
 describe('DrawingCopyFromLayerComponent', () => {
@@ -104,6 +105,15 @@ describe('DrawingCopyFromLayerComponent', () => {
     clickMap();
     expect(drawingCopyFeaturesServiceMock.getDrawingFeaturesAt$)
       .toHaveBeenCalledWith('1', [ 1, 2 ], 'mouse', DrawingHelper.getUpdatedDefaultStyle(), [], { lockedStyle: true });
+  });
+
+  test('clears the selected layer and stops copying when the layer is no longer available', async () => {
+    const { drawingServiceMock, referenceLayers, selectLayerAndStartCopying } = await setup();
+    await selectLayerAndStartCopying();
+    referenceLayers.next([getAppLayerModel({ id: '2', title: 'Buildings' })]);
+    TestBed.tick();
+    expect(drawingServiceMock.disableCopyFromLayer).toHaveBeenCalled();
+    expect(screen.getByLabelText(BUTTON_LABEL)).toBeDisabled();
   });
 
   test('ignores map clicks when copy mode is not active', async () => {
