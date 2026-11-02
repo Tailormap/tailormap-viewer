@@ -88,3 +88,23 @@ mat-panel-description {
   flex-grow: 1;
   overflow: hidden;
 }
+
+.row-copy {
+  flex-shrink: 0;
+  margin-left: auto;
+  max-height: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+}
+
+.row-copy:focus-visible {
+  outline: 2px solid var(--primary-color-0_5);
+  border-radius: 0;
+}
+
+.row-copy mat-icon,
+.row-copy mat-icon ::ng-deep svg {
+  max-height: 20px;
+  max-width: 20px;
+}

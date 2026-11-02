@@ -30,9 +30,10 @@ const appendLayerTreeNodes = (
   nodesToAdd: LayerTreeNodeModel[],
 ): MapState['layerTreeNodes'] => [ ...layerTreeNodes, ...nodesToAdd.map(node => LayerTreeNodeHelper.getExtendedLayerTreeNode(node, false)) ];
 
-const placeNodeAfterSibling = (
+const placeNodeBeforeAfterSibling = (
   layerTreeNodes: MapState['layerTreeNodes'],
   nodeId: string,
+  position: 'before' | 'after' = 'after',
   siblingLayerTreeNodeId?: string,
 ): MapState['layerTreeNodes'] => {
   const parentNodeIndex = siblingLayerTreeNodeId
@@ -50,7 +51,7 @@ const placeNodeAfterSibling = (
       childrenIds: ChangePositionHelper.updateOrderInList(
         node.childrenIds ?? [],
         nodeId,
-        'after',
+        position,
         siblingLayerTreeNodeId,
       ),
     };
@@ -228,7 +229,7 @@ const onAddLayerWithServicesToMap = (
   const treeWithNode = appendLayerTreeNodes(state[tree], [payload.layerTreeNode]);
   const insertedNode = treeWithNode.find(node => node.id === payload.layerTreeNode?.id);
   const updatedTree = insertedNode
-    ? placeNodeAfterSibling(treeWithNode, insertedNode.id, payload.siblingLayerTreeNodeId)
+    ? placeNodeBeforeAfterSibling(treeWithNode, insertedNode.id, payload.position || 'after', payload.siblingLayerTreeNodeId)
     : treeWithNode;
 
   return {

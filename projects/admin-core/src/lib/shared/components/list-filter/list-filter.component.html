@@ -7,7 +7,7 @@
          type="text"
   />
   @if (filterControl.getRawValue()) {
-    <button (click)="clearFilter()" aria-label="Clear" mat-icon-button matSuffix>
+    <button (click)="clearFilter()" aria-label="Clear" i18n-aria-label="@@admin-core.common.clear" mat-icon-button matSuffix>
       <mat-icon svgIcon="close"></mat-icon>
     </button>
   }

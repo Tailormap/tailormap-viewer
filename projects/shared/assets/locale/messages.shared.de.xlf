@@ -221,6 +221,10 @@
         <source>Copy</source>
         <target>Kopie</target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.invalid-color" datatype="html">
+        <source>This is an invalid color. Only hexadecimal colors or rgb codes are allowed</source>
+        <target>Dies ist eine ungültige Farbe. Nur hexadezimale Farben oder RGB-Codes sind erlaubt</target>
+      </trans-unit>
       <trans-unit id="shared.color-picker.no-color" datatype="html">
         <source>No color</source>
         <target>Keine Farbe</target>
@@ -260,6 +264,10 @@
       <trans-unit id="shared.login-form.forgot-password" datatype="html">
         <source>Forgot your password?</source>
         <target>Passwort vergessen?</target>
+      </trans-unit>
+      <trans-unit id="shared.login-form.login" datatype="html">
+        <source>Login</source>
+        <target>Anmelden</target>
       </trans-unit>
       <trans-unit id="shared.login-form.password" datatype="html">
         <source>Password</source>

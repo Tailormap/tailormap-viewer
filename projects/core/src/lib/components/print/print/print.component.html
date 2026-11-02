@@ -54,13 +54,13 @@
             <div class="spaced">
               <form [formGroup]="exportPdfForm" (ngSubmit)="downloadPdf()">
                 <p class="form-field">
-                  <mat-button-toggle-group formControlName="orientation" aria-label="Orientation">
+                  <mat-button-toggle-group formControlName="orientation" aria-label="Orientation" i18n-aria-label="@@core.print.orientation">
                     <mat-button-toggle value="landscape" i18n="@@core.print.landscape">Landscape</mat-button-toggle>
                     <mat-button-toggle value="portrait" i18n="@@core.print.portrait">Portrait</mat-button-toggle>
                   </mat-button-toggle-group>
                 </p>
                 <p class="form-field">
-                  <mat-button-toggle-group formControlName="paperSize" style="margin: 3px" aria-label="Paper size">
+                  <mat-button-toggle-group formControlName="paperSize" style="margin: 3px" aria-label="Paper size" i18n-aria-label="@@core.print.paper-size">
                     <mat-button-toggle value="a4" i18n="@@core.print.a4">A4</mat-button-toggle>
                     <mat-button-toggle value="a3" i18n="@@core.print.a3">A3</mat-button-toggle>
                   </mat-button-toggle-group>

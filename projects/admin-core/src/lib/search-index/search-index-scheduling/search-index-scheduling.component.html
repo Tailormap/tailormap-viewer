@@ -3,7 +3,7 @@
 <div class="schedule-form-wrapper">
   <div class="read-only-information">
     @if (taskSchedule?.uuid; as uuid) {
-      <div class="label">Uuid</div>
+      <div class="label" i18n="@@admin-core.tasks.task-details.uuid">Uuid</div>
       <div class="uuid">{{ uuid }}</div>
     } @else {
       <span class="no-schedule" i18n="@@admin-core.search-index.no-schedule">There is no schedule for this search index yet.</span>

@@ -19,6 +19,7 @@ import { selectComponentsConfig, selectViewerLoadingState } from '../../../state
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 import { DrawingAccessibleFeaturesService } from '../services/drawing-accessible-features.service';
+import { DrawingCopyFeaturesService } from '../services/drawing-copy-features.service';
 
 const setup = async (isComponentVisible = true, selectors: any[] = []) => {
   const mapServiceMock = createMapServiceMockWithDrawingTools();
@@ -51,6 +52,7 @@ const setup = async (isComponentVisible = true, selectors: any[] = []) => {
       { provide: MenubarService, useValue: menubarServiceMock },
       { provide: ConfirmDialogService, useValue: confirmServiceMock },
       { provide: DrawingAccessibleFeaturesService, useValue: drawingAccessibleFeaturesServiceMock },
+      { provide: DrawingCopyFeaturesService, useValue: { getReferenceLayers$: () => of([]) } },
     ],
   });
   return { container, mapServiceMock, menubarServiceMock, confirmServiceMock };

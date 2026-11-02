@@ -705,6 +705,10 @@
         <source>Fill in a tileset style in json format according to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Note: The structure of the style is validated, but not the style expressions.</source>
         <target>Vul een tileset stijl in JSON-formaat in volgens de OGC <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.ogc.org/cs/22-025r4/22-025r4.html#toc45&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>OGC 3D Tiles Styling Language<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. Let op: De structuur van de stijl wordt gevalideerd, maar de stijlexpressies niet.</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.tree-node-menu" datatype="html">
+        <source>Tree node menu</source>
+        <target>Menu boomknooppunt</target>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
         <target>Toegang</target>
@@ -720,6 +724,10 @@
       <trans-unit id="admin-core.authorizations.configured-on" datatype="html">
         <source>Configured on <x id="PH" equiv-text="this.selfType"/></source>
         <target>Geconfigureerd op <x id="PH" equiv-text="this.selfType"/></target>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.delete-group-rules" datatype="html">
+        <source>Delete group rules</source>
+        <target>Groepsregels verwijderen</target>
       </trans-unit>
       <trans-unit id="admin-core.authorizations.group-name" datatype="html">
         <source>Group name</source>
@@ -760,6 +768,10 @@
       <trans-unit id="admin-core.authorizations.read" datatype="html">
         <source>Allow</source>
         <target>Toestaan</target>
+      </trans-unit>
+      <trans-unit id="admin-core.authorizations.reset-to-inherited-value" datatype="html">
+        <source>Reset to inherited value</source>
+        <target>Terugzetten naar overgenomen waarde</target>
       </trans-unit>
       <trans-unit id="admin-core.catalog.accept-header" datatype="html">
         <source>Accepted files</source>
@@ -1833,10 +1845,6 @@
         <source>Snapping tooltip</source>
         <target>Snapping tooltip</target>
       </trans-unit>
-      <trans-unit id="admin-core.components.toc-show-edit-layer-icon" datatype="html">
-        <source>Show edit layer icon</source>
-        <target>Toon icoon voor het bewerken van de laag</target>
-      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
         <target>Feature type instellingen aangepast</target>
@@ -1984,10 +1992,6 @@
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
         <target>Verplicht veld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.tab" datatype="html">
-        <source>Tab</source>
-        <target>Tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.tab-name" datatype="html">
         <source>Tab name</source>

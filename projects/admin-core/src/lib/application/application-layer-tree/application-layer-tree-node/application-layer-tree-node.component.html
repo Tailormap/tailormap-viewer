@@ -38,7 +38,8 @@
       @if (isLevel() && isNonRoot()) {
         <button mat-icon-button
           [matMenuTriggerFor]="menu"
-          aria-label="Tree node menu">
+          aria-label="Tree node menu"
+          i18n-aria-label="@@admin-core.application.tree-node-menu">
           <mat-icon svgIcon="admin_more"></mat-icon>
         </button>
       }

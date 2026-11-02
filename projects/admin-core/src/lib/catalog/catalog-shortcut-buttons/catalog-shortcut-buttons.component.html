@@ -1,5 +1,5 @@
 @if (hasShortcuts$ | async) {
-  <fieldset class="catalog-shortcuts" aria-label="catalog shortcuts">
+  <fieldset class="catalog-shortcuts" aria-label="Catalog shortcuts" i18n-aria-label="@@admin-core.catalog.catalog-shortcuts">
     <legend i18n="@@admin-core.catalog.catalog-shortcuts">Catalog shortcuts</legend>
     @if (geoService$ | async; as geoService) {
       <mat-icon svgIcon="admin_service"></mat-icon>

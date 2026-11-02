@@ -58,7 +58,7 @@ export class ColorHelper {
         return null;
       }
       return !ColorHelper.isValidColor('' + control.value, allowEmpty)
-        ? { invalidColor: { message: 'Dit is een ongeldige kleur. Alleen hexadecimale kleuren of rgb codes zijn toegestaan' } }
+        ? { invalidColor: { message: $localize `:@@shared.color-picker.invalid-color:This is an invalid color. Only hexadecimal colors or rgb codes are allowed` } }
         : null;
     };
   }

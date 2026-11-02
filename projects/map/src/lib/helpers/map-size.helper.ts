@@ -11,10 +11,10 @@ export class MapSizeHelper {
     if (projection && ProjectionsHelper.needsSphericalMeasurements(projection)) {
       return MapSizeHelper.getSphericalSize(geometry, projection);
     }
-    if (GeometryTypeHelper.isLineGeometry(geometry)) {
+    if (GeometryTypeHelper.isLineGeometry(geometry) || GeometryTypeHelper.isMultiLineGeometry(geometry)) {
       return geometry.getLength();
     }
-    if (GeometryTypeHelper.isPolygonGeometry(geometry)) {
+    if (GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isMultiPolygonGeometry(geometry)) {
       return geometry.getArea();
     }
     if (GeometryTypeHelper.isCircleGeometry(geometry)) {
@@ -24,10 +24,12 @@ export class MapSizeHelper {
   }
 
   public static getSphericalSize(geometry?: Geometry, projection?: string) {
-    if (GeometryTypeHelper.isLineGeometry(geometry)) {
+    if (GeometryTypeHelper.isLineGeometry(geometry) || GeometryTypeHelper.isMultiLineGeometry(geometry)) {
       return getSphereLength(geometry, { projection: projection ?? 'EPSG:3857' });
     }
-    if (GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isCircleGeometry(geometry)) {
+    if (GeometryTypeHelper.isPolygonGeometry(geometry)
+      || GeometryTypeHelper.isMultiPolygonGeometry(geometry)
+      || GeometryTypeHelper.isCircleGeometry(geometry)) {
       return getSphereArea(geometry, { projection: projection ?? 'EPSG:3857' });
     }
     return 0;
@@ -35,10 +37,11 @@ export class MapSizeHelper {
 
   public static getFormattedSize(geometry?: Geometry, projection?: string) {
     const size = MapSizeHelper.getSize(geometry, projection);
-    if (size && GeometryTypeHelper.isLineGeometry(geometry)) {
+    if (size && (GeometryTypeHelper.isLineGeometry(geometry) || GeometryTypeHelper.isMultiLineGeometry(geometry))) {
       return MapSizeHelper.getFormattedLength(size);
     }
-    if (size && GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isCircleGeometry(geometry)) {
+    if (size && (GeometryTypeHelper.isPolygonGeometry(geometry) || GeometryTypeHelper.isMultiPolygonGeometry(geometry))
+      || GeometryTypeHelper.isCircleGeometry(geometry)) {
       return MapSizeHelper.getFormattedArea(size);
     }
     return '';

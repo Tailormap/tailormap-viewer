@@ -88,7 +88,12 @@ export class FeatureInfoService {
       );
   }
 
-  public getFeaturesForLayer$(coordinates: [ number, number ], selectedLayer: string | null, pointerType?: string): Observable<FeatureInfoResponseModel | null> {
+  public getFeaturesForLayer$(
+    coordinates: [ number, number ],
+    selectedLayer: string | null,
+    pointerType?: string,
+    withAttachments = true,
+  ): Observable<FeatureInfoResponseModel | null> {
     return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
@@ -102,7 +107,7 @@ export class FeatureInfoService {
             return of(null);
           }
           if (layers.some(l => l.id === selectedLayer)) {
-            return this.getFeatureInfoFromApi$(selectedLayer!, coordinates, viewerId, mapViewDetails, false, pointerType);
+            return this.getFeatureInfoFromApi$(selectedLayer!, coordinates, viewerId, mapViewDetails, false, pointerType, withAttachments);
           } else if (wmsLayers.some(l => l.id === selectedLayer)) {
             return this.getWmsGetFeatureInfo$(selectedLayer!, coordinates);
           } else {
@@ -158,6 +163,7 @@ export class FeatureInfoService {
     resolutions: MapViewDetailsModel,
     geometryInAttributes = false,
     pointerType?: string,
+    withAttachments = true,
   ): Observable<FeatureInfoResponseModel> {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
     // meters per pixel * fixed value
@@ -172,7 +178,7 @@ export class FeatureInfoService {
       distance: distance,
       simplify: false,
       geometryInAttributes: geometryInAttributes,
-      withAttachments: true,
+      withAttachments,
       filter: FeaturesFilterHelper.getFilter(layerFilter) || undefined,
     }).pipe(
       map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({

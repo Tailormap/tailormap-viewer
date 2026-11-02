@@ -78,6 +78,10 @@
         <source>Select row</source>
         <target>Zeile auswählen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.show-statistics-help" datatype="html">
+        <source>Show statistics help</source>
+        <target>Hilfe zu Statistiken anzeigen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.sort-column" datatype="html">
         <source>Sort by <x id="PH" equiv-text="columnLabel"/></source>
         <target>Sortieren nach <x id="PH" equiv-text="columnLabel"/></target>
@@ -382,6 +386,30 @@
         <source>Color</source>
         <target>Farbe</target>
       </trans-unit>
+      <trans-unit id="core.drawing.copy-from-reference-layer" datatype="html">
+        <source>Copy objects from reference layer</source>
+        <target>Objekte aus Referenzschicht kopieren</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
+        <source>Copy WKT of drawing object</source>
+        <target>WKT des Zeichenobjekts kopieren</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
+        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+        <target>WKT des Objekts in die Zwischenablage kopiert: <x id="PH" equiv-text="displayWkt"/></target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
+        <source>Failed to copy WKT to clipboard</source>
+        <target>Kopieren der WKT in die Zwischenablage fehlgeschlagen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-object-wkt-not-found" datatype="html">
+        <source>No geometry found for this drawing object</source>
+        <target>Keine Geometrie für dieses Zeichenobjekt gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.copy-objects-error" datatype="html">
+        <source>Could not copy objects from the layer</source>
+        <target>Die Objekte konnten nicht aus der Ebene kopiert werden</target>
+      </trans-unit>
       <trans-unit id="core.drawing.delete-drawing" datatype="html">
         <source>Delete complete drawing</source>
         <target>Gesamte Zeichnung löschen</target>
@@ -413,6 +441,10 @@
       <trans-unit id="core.drawing.drawing" datatype="html">
         <source>Drawing</source>
         <target>Zeichnen</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.drawing-legend" datatype="html">
+        <source>Drawing legend</source>
+        <target>Legende Zeichnung</target>
       </trans-unit>
       <trans-unit id="core.drawing.duplicate-selected-drawing-object" datatype="html">
         <source>Duplicate selected drawing object</source>
@@ -474,6 +506,14 @@
         <source>The style for this drawing object cannot be changed.</source>
         <target>Der Stil für dieses Zeichenobjekt kann nicht geändert werden.</target>
       </trans-unit>
+      <trans-unit id="core.drawing.no-objects-found" datatype="html">
+        <source>No objects found at this location</source>
+        <target>Keine Objekte an dieser Stelle gefunden</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.no-reference-layers" datatype="html">
+        <source>No visible layers with available geometry</source>
+        <target>Keine sichtbaren Ebenen mit verfügbarer Geometrie</target>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
         <target>Objekte</target>
@@ -490,9 +530,17 @@
         <source>Width (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</source>
         <target>Breite (<x id="INTERPOLATION" equiv-text="{{mapUnits$ | async}}"/>)</target>
       </trans-unit>
+      <trans-unit id="core.drawing.reference-layer" datatype="html">
+        <source>Reference layer</source>
+        <target>Referenzschicht</target>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Drehung</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.select-objects-to-copy" datatype="html">
+        <source>Click objects on the map to copy them to the drawing</source>
+        <target>Klicken Sie auf Objekte in der Karte, um sie in die Zeichnung zu kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.show-area-size" datatype="html">
         <source>Show area size</source>
@@ -1246,6 +1294,10 @@
         <source>Reset Password</source>
         <target>Passwort zurücksetzen</target>
       </trans-unit>
+      <trans-unit id="core.password-reset-form.token-valid-until" datatype="html">
+        <source>Reset token is valid until <x id="INTERPOLATION" equiv-text="{{ token.tokenValidUntil | date:&apos;medium&apos; }}"/></source>
+        <target>Token zum Zurücksetzen ist gültig bis <x id="INTERPOLATION" equiv-text="{{ token.tokenValidUntil | date:&apos;medium&apos; }}"/></target>
+      </trans-unit>
       <trans-unit id="core.password-reset-form.username" datatype="html">
         <source>Username</source>
         <target>Benutzername</target>
@@ -1341,6 +1393,14 @@
       <trans-unit id="core.print.open-print-dialog" datatype="html">
         <source>Automatically open print dialog</source>
         <target>Druckdialog automatisch öffnen</target>
+      </trans-unit>
+      <trans-unit id="core.print.orientation" datatype="html">
+        <source>Orientation</source>
+        <target>Ausrichtung</target>
+      </trans-unit>
+      <trans-unit id="core.print.paper-size" datatype="html">
+        <source>Paper size</source>
+        <target>Papierformat</target>
       </trans-unit>
       <trans-unit id="core.print.pdf-document" datatype="html">
         <source>PDF document</source>
