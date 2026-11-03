@@ -1,7 +1,22 @@
 @if (node) {
   <div class="toc-node-details-in-node">
     @if ((layer?.description || node.metadata?.description); as description) {
-      <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+      @if (layer?.descriptionInPopup || node.metadata?.descriptionInPopup) {
+        <div class="toc-node-description">
+          @let layerTitle = getLayerTitle();
+          <button mat-flat-button
+                  color="primary"
+                  type="button"
+                  (click)="openDescription(description)"
+                  tmTooltip="Show information about {{ layerTitle }}"
+                  i18n-tmTooltip="@@core.toc.show-information-about-layer-tooltip"
+                  tmExplicitAriaLabel="Show information about this layer"
+                  i18n-tmExplicitAriaLabel="@@core.toc.show-layer-information"
+                  i18n="@@core.toc.show-layer-information">Show information about this layer</button>
+        </div>
+      } @else {
+        <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+      }
     }
     @if (node.metadata?.id) {
       <div class="toc-node-details-transparency">

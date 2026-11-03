@@ -15,8 +15,21 @@
       <ng-template #detailsContent></ng-template>
       @if ((node.layer?.description || node.description); as description) {
         <div class="toc-node-details-panel-section">
-          <h3 i18n="@@core.toc.description">Description</h3>
-          <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+          @if (node.layer?.descriptionInPopup) {
+            @let layerTitle = getLayerTitle();
+            <button mat-flat-button
+                    color="primary"
+                    type="button"
+                    (click)="openDescription(description)"
+                    tmTooltip="Show information about {{ layerTitle }}"
+                    i18n-tmTooltip="@@core.toc.show-information-about-layer-tooltip"
+                    tmExplicitAriaLabel="Show information about this layer"
+                    i18n-tmExplicitAriaLabel="@@core.toc.show-layer-information"
+                    i18n="@@core.toc.show-layer-information">Show information about this layer</button>
+          } @else {
+            <h3 i18n="@@core.toc.description">Description</h3>
+            <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+          }
         </div>
       }
       @if (node.appLayerId) {

@@ -1,7 +1,9 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { TocNodeDetailsComponent } from './toc-node-details.component';
-import { getAppLayerModel, getLayerTreeNode, getServiceModel } from '@tailormap-viewer/api';
+import { AppLayerModel, getAppLayerModel, getLayerTreeNode, getServiceModel } from '@tailormap-viewer/api';
+import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
+import { LayerDescriptionDialogService } from '../services/layer-description-dialog.service';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { LegendService } from '../../legend/services/legend.service';
@@ -20,10 +22,15 @@ class MockImageWithDescriptionComponent {
   public legendSettings = input<LegendImageSettingsModel | null>(null);
 }
 
-const setup = async (withLayer: boolean) => {
+const setup = async (withLayer: boolean, layerOverrides?: Partial<AppLayerModel>) => {
   const closeMock = vi.fn();
-  const node = { ...getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false }), is3dLayer: false };
-  const appLayer = getAppLayerModel({ title: 'The Layer' });
+  const appLayer = getAppLayerModel({ title: 'The Layer', ...layerOverrides });
+  const node: LayerTreeNodeWithLayerModel = {
+    ...getLayerTreeNode({ id: 'applayer-1', appLayerId: '1', name: 'The Layer', root: false }),
+    is3dLayer: false,
+    layer: appLayer,
+  };
+  const dialogServiceMock = { open: vi.fn() };
   const legendServiceMock = {
     getLegendInfo$: vi.fn(() => of([
       {
@@ -41,6 +48,7 @@ const setup = async (withLayer: boolean) => {
     providers: [
       getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },
+      { provide: LayerDescriptionDialogService, useValue: dialogServiceMock },
       provideMockStore({
         initialState: {
           map: {
@@ -53,7 +61,7 @@ const setup = async (withLayer: boolean) => {
     inputs: { node: withLayer ? node : undefined },
     on: { closeDetails: closeMock },
   });
-  return { close: closeMock };
+  return { close: closeMock, dialogServiceMock };
 };
 
 describe('LayerDetailsComponent', () => {
@@ -73,6 +81,23 @@ describe('LayerDetailsComponent', () => {
     const { close } = await setup(true);
     await userEvent.click(screen.getByLabelText('Close details'));
     expect(close).toHaveBeenCalled();
+  });
+
+  test('should render description inline', async () => {
+    await setup(true, { description: 'The layer description' });
+    expect(screen.getByRole('heading', { name: 'Description' })).toBeInTheDocument();
+    expect(screen.getByText('The layer description')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show information about this layer' })).not.toBeInTheDocument();
+  });
+
+  test('should render button to open description in a pop-up', async () => {
+    const { dialogServiceMock } = await setup(true, { description: 'The layer description', descriptionInPopup: true });
+    expect(screen.queryByText('The layer description')).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Description' })).not.toBeInTheDocument();
+    const button = screen.getByRole('button', { name: 'Show information about this layer' });
+    await vi.waitFor(() => expect(button).toHaveAccessibleDescription('Show information about The Layer'));
+    await userEvent.click(button);
+    expect(dialogServiceMock.open).toHaveBeenCalledWith('The Layer', 'The layer description');
   });
 
 });
