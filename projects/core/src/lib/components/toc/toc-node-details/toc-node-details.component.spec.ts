@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/angular';
 import { TocNodeDetailsComponent } from './toc-node-details.component';
 import { AppLayerModel, getAppLayerModel, getLayerTreeNode, getServiceModel } from '@tailormap-viewer/api';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
-import { LayerDescriptionDialogService } from '../services/layer-description-dialog.service';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { LegendService } from '../../legend/services/legend.service';
@@ -12,6 +11,8 @@ import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { Component, input } from '@angular/core';
 import { LegendImageComponent, LegendImageSettingsModel } from '@tailormap-viewer/shared';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { LayerDescriptionDialogComponent } from './layer-description-dialog/layer-description-dialog.component';
 
 @Component({
   selector: 'tm-image-with-description',
@@ -30,7 +31,7 @@ const setup = async (withLayer: boolean, layerOverrides?: Partial<AppLayerModel>
     is3dLayer: false,
     layer: appLayer,
   };
-  const dialogServiceMock = { open: vi.fn() };
+  const dialogMock = { open: vi.fn() };
   const legendServiceMock = {
     getLegendInfo$: vi.fn(() => of([
       {
@@ -48,7 +49,6 @@ const setup = async (withLayer: boolean, layerOverrides?: Partial<AppLayerModel>
     providers: [
       getMapServiceMock().provider,
       { provide: LegendService, useValue: legendServiceMock },
-      { provide: LayerDescriptionDialogService, useValue: dialogServiceMock },
       provideMockStore({
         initialState: {
           map: {
@@ -57,11 +57,12 @@ const setup = async (withLayer: boolean, layerOverrides?: Partial<AppLayerModel>
           },
         },
       }),
+      { provide: MatDialog, useValue: dialogMock },
     ],
     inputs: { node: withLayer ? node : undefined },
     on: { closeDetails: closeMock },
   });
-  return { close: closeMock, dialogServiceMock };
+  return { close: closeMock, dialogMock };
 };
 
 describe('LayerDetailsComponent', () => {
@@ -91,13 +92,15 @@ describe('LayerDetailsComponent', () => {
   });
 
   test('should render button to open description in a pop-up', async () => {
-    const { dialogServiceMock } = await setup(true, { description: 'The layer description', descriptionInPopup: true });
+    const { dialogMock } = await setup(true, { description: 'The layer description', descriptionInPopup: true });
     expect(screen.queryByText('The layer description')).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Description' })).not.toBeInTheDocument();
     const button = screen.getByRole('button', { name: 'Show information about this layer' });
     await vi.waitFor(() => expect(button).toHaveAccessibleDescription('Show information about The Layer'));
     await userEvent.click(button);
-    expect(dialogServiceMock.open).toHaveBeenCalledWith('The Layer', 'The layer description');
+    expect(dialogMock.open).toHaveBeenCalledWith(LayerDescriptionDialogComponent, expect.objectContaining({
+      data: { title: 'The Layer', description: 'The layer description' },
+    }));
   });
 
 });

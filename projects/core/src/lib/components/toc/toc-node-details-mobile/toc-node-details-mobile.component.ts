@@ -6,7 +6,10 @@ import { take } from 'rxjs';
 import { selectLayer } from '../../../map';
 import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
 import { MatButton } from '@angular/material/button';
-import { LayerDescriptionDialogService } from '../services/layer-description-dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  LayerDescriptionDialogComponent, LayerDescriptionDialogData,
+} from '../toc-node-details/layer-description-dialog/layer-description-dialog.component';
 
 @Component({
     selector: 'tm-toc-node-details-mobile',
@@ -17,7 +20,7 @@ import { LayerDescriptionDialogService } from '../services/layer-description-dia
 })
 export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);
-  private layerDescriptionDialogService = inject(LayerDescriptionDialogService);
+  private dialog = inject(MatDialog);
 
 
   public layer: AppLayerModel | null | undefined = null;
@@ -36,7 +39,13 @@ export class TocNodeDetailsMobileComponent {
   }
 
   public openDescription(description: string) {
-    this.layerDescriptionDialogService.open(this.getLayerTitle(), description);
+    return this.dialog.open<LayerDescriptionDialogComponent, LayerDescriptionDialogData>(LayerDescriptionDialogComponent, {
+      data: { title: this.getLayerTitle(), description },
+      ariaLabelledBy: LayerDescriptionDialogComponent.TITLE_ID,
+      width: '90vw',
+      maxHeight: '90vh',
+      panelClass: 'layer-description-dialog--full-height',
+    });
   }
 
 }

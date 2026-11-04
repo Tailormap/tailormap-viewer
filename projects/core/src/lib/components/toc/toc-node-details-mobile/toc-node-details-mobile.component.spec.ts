@@ -1,15 +1,16 @@
 import { describe, test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { LayerDescriptionDialogService } from '../services/layer-description-dialog.service';
 import { render, screen } from '@testing-library/angular';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { TreeModel } from '@tailormap-viewer/shared';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { TocNodeDetailsMobileComponent } from './toc-node-details-mobile.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LayerDescriptionDialogComponent } from '../toc-node-details/layer-description-dialog/layer-description-dialog.component';
 
 const setup = async (withLayer: boolean, descriptionInPopup?: boolean) => {
-  const dialogServiceMock = { open: vi.fn() };
+  const dialogMock = { open: vi.fn() };
   const node: TreeModel<AppLayerModel> = {
     id: 'applayer-1',
     label: '',
@@ -32,7 +33,6 @@ const setup = async (withLayer: boolean, descriptionInPopup?: boolean) => {
     imports: [],
     providers: [
       getMapServiceMock().provider,
-      { provide: LayerDescriptionDialogService, useValue: dialogServiceMock },
       provideMockStore({
         initialState: {
           map: {
@@ -41,10 +41,11 @@ const setup = async (withLayer: boolean, descriptionInPopup?: boolean) => {
           },
         },
       }),
+      { provide: MatDialog, useValue: dialogMock },
     ],
     inputs: { treeNode: withLayer ? node : undefined },
   });
-  return { dialogServiceMock };
+  return { dialogMock };
 };
 
 describe('TocNodeDetailsMobileComponent', () => {
@@ -61,12 +62,14 @@ describe('TocNodeDetailsMobileComponent', () => {
   });
 
   test('should render button to open description in a pop-up', async () => {
-    const { dialogServiceMock } = await setup(true, true);
+    const { dialogMock } = await setup(true, true);
     expect(screen.queryByText('layer description')).not.toBeInTheDocument();
     const button = screen.getByRole('button', { name: 'Show information about this layer' });
     await vi.waitFor(() => expect(button).toHaveAccessibleDescription('Show information about The Layer'));
     await userEvent.click(button);
-    expect(dialogServiceMock.open).toHaveBeenCalledWith('The Layer', 'layer description');
+    expect(dialogMock.open).toHaveBeenCalledWith(LayerDescriptionDialogComponent, expect.objectContaining({
+      data: { title: 'The Layer', description: 'layer description' },
+    }));
   });
 
 });

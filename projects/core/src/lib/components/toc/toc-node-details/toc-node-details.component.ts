@@ -10,7 +10,8 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { AsyncPipe } from '@angular/common';
-import { LayerDescriptionDialogService } from '../services/layer-description-dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LayerDescriptionDialogComponent, LayerDescriptionDialogData } from './layer-description-dialog/layer-description-dialog.component';
 
 @Component({
     selector: 'tm-toc-node-details',
@@ -29,9 +30,9 @@ import { LayerDescriptionDialogService } from '../services/layer-description-dia
     ],
 })
 export class TocNodeDetailsComponent implements OnInit {
-
   private tocFeatureRegistrationService = inject(TocFeatureRegistrationService);
-  private layerDescriptionDialogService = inject(LayerDescriptionDialogService);
+  private dialog = inject(MatDialog);
+
 
   private detailsContent = viewChild('detailsContent', { read: ViewContainerRef });
 
@@ -95,7 +96,13 @@ export class TocNodeDetailsComponent implements OnInit {
   }
 
   public openDescription(description: string) {
-    this.layerDescriptionDialogService.open(this.getLayerTitle(), description);
+    return this.dialog.open<LayerDescriptionDialogComponent, LayerDescriptionDialogData>(LayerDescriptionDialogComponent, {
+      data: { title: this.getLayerTitle(), description },
+      ariaLabelledBy: LayerDescriptionDialogComponent.TITLE_ID,
+      width: '600px',
+      maxWidth: '80vw',
+      maxHeight: '90vh',
+    });
   }
 
 }

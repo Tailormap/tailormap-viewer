@@ -1,7 +1,6 @@
 .layer-description-dialog-header {
   display: flex;
   align-items: center;
-  padding-right: 8px;
 }
 
 .layer-description-dialog-header h1 {
@@ -10,12 +9,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 0;
 }
 
-/*
- * The close button always receives focus when the dialog opens. Hide Material's focus state layer, so focus is only
- * shown using the :focus-visible outline, which the browser applies when the dialog was opened using the keyboard.
- */
 .close-button {
   flex-shrink: 0;
   --mat-icon-button-focus-state-layer-opacity: 0;
@@ -31,6 +27,11 @@
 
 .close-button:hover ::ng-deep svg {
   transform: rotate(90deg);
+}
+
+.layer-description {
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .layer-description ::ng-deep img {
