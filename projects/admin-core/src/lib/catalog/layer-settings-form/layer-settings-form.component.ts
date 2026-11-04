@@ -242,7 +242,6 @@ export class LayerSettingsFormComponent implements OnInit {
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
-      // Only available for a specific layer, not as a default for all layers of a service
       settings.descriptionInPopup = value.descriptionInPopup || undefined;
       settings.hiDpiMode = value.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = value.hiDpiSubstituteLayer || undefined;
@@ -285,7 +284,6 @@ export class LayerSettingsFormComponent implements OnInit {
     const comparableValues: ComparableValuesArray = [
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
-      // Compare as booleans, unchecked is sent as undefined but may be stored as false
       [ !!values.descriptionInPopup, !!this._layerSettings.descriptionInPopup ],
       [ values.attribution, this._layerSettings.attribution ],
       [ values.hiddenKeywords, this._layerSettings.hiddenKeywords ],

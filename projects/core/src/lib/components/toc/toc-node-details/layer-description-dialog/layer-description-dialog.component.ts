@@ -9,10 +9,6 @@ export interface LayerDescriptionDialogData {
   description: string;
 }
 
-/**
- * Shows the description of a layer in a dialog. Used when the layer is configured (in the catalog) to show its
- * description in a pop-up instead of inline in the layer details.
- */
 @Component({
   selector: 'tm-layer-description-dialog',
   templateUrl: './layer-description-dialog.component.html',
