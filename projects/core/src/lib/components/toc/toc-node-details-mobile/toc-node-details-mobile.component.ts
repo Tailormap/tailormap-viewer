@@ -41,7 +41,6 @@ export class TocNodeDetailsMobileComponent {
   public openDescription(description: string) {
     return this.dialog.open<LayerDescriptionDialogComponent, LayerDescriptionDialogData>(LayerDescriptionDialogComponent, {
       data: { title: this.getLayerTitle(), description },
-      ariaLabelledBy: LayerDescriptionDialogComponent.TITLE_ID,
       width: '90vw',
       maxHeight: '90vh',
       panelClass: 'layer-description-dialog--full-height',

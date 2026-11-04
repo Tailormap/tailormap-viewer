@@ -24,7 +24,5 @@ export interface LayerDescriptionDialogData {
   ],
 })
 export class LayerDescriptionDialogComponent {
-  public static readonly TITLE_ID = 'layer-description-dialog-title';
   public data = inject<LayerDescriptionDialogData>(MAT_DIALOG_DATA);
-  public titleId = LayerDescriptionDialogComponent.TITLE_ID;
 }

@@ -3,12 +3,11 @@
     @if ((layer?.description || node.metadata?.description); as description) {
       @if (layer?.descriptionInPopup || node.metadata?.descriptionInPopup) {
         <div class="toc-node-description">
-          @let layerTitle = getLayerTitle();
           <button mat-flat-button
                   color="primary"
                   type="button"
                   (click)="openDescription(description)"
-                  tmTooltip="Show information about {{ layerTitle }}"
+                  tmTooltip="Show information about {{ getLayerTitle() }}"
                   i18n-tmTooltip="@@core.toc.show-information-about-layer-tooltip"
                   tmExplicitAriaLabel="Show information about this layer"
                   i18n-tmExplicitAriaLabel="@@core.toc.show-layer-information"

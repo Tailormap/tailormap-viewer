@@ -98,7 +98,6 @@ export class TocNodeDetailsComponent implements OnInit {
   public openDescription(description: string) {
     return this.dialog.open<LayerDescriptionDialogComponent, LayerDescriptionDialogData>(LayerDescriptionDialogComponent, {
       data: { title: this.getLayerTitle(), description },
-      ariaLabelledBy: LayerDescriptionDialogComponent.TITLE_ID,
       width: '600px',
       maxWidth: '80vw',
       maxHeight: '90vh',
