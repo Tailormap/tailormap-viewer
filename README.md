@@ -147,6 +147,13 @@ advisable to only set `VERSION` to a specific version and use a tool such
 as [renovatebot](https://www.mend.io/free-developer-tools/renovate/) to automatically update your configuration when a new version is
 released.
 
+### Persistent log files
+
+Tailormap logs to stdout and to a log file in the container, which are lost when the container is recreated, for example when updating to
+a new version. If you don't send the stdout of the container to a log aggregator, you can keep the log files on a volume by adding
+`docker-compose.logs.yml` to `COMPOSE_FILE` in the `.env` file. This is not enabled by default. See the file for the log rotation settings
+and how to change them.
+
 ## Adding extra functionality
 
 See the [tailormap-starter](https://github.com/Tailormap/tailormap-starter/) and [tailormap-hello-world](https://github.com/Tailormap/tailormap-hello-world/)

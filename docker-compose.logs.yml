@@ -1,0 +1,52 @@
+# Add to COMPOSE_FILE to keep the log files of Tailormap on a volume, so they are kept when the container is recreated (for example when
+# updating to a new version). Without this file Tailormap logs to /home/cnb/tailormap.log in the container (and to stdout, see
+# `docker compose logs`), which is lost when the container is recreated.
+#
+# This is optional and not used by default. Usually a container only logs to stdout and the container runtime or orchestrator sends the
+# output to a log aggregator, so each application in a container doesn't need to write and rotate its own log files (see
+# https://12factor.net/logs). Use this file when there is no log aggregator. Spring Boot supports log files and rotation, so it only needs
+# the settings below.
+#
+# For example: COMPOSE_FILE=docker-compose.yml:docker-compose.override.yml:docker-compose.logs.yml
+#
+# Requires a Tailormap image with the /home/cnb/logs directory, which was added together with this file.
+#
+# The log files are in the tailormap-logs volume (prefixed with the project name). The image has no shell, to look at the log files copy
+# them with `docker compose cp tailormap:/home/cnb/logs .` or look in the volume directory on the Docker host (see
+# `docker volume inspect`).
+#
+# Log rotation uses the Spring Boot defaults:
+# - the log file is rotated daily and when it reaches 10 MB
+# - rotated files are compressed with gzip, named like tailormap.log.2026-11-04.0.gz
+# - rotated files are kept for 7 days, without a limit on the total size
+#
+# To change this, set these variables in the .env file:
+# - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE: maximum size of a log file before it is rotated (default 10MB)
+# - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY: number of days (or other periods, see the file name pattern) to keep rotated files
+#   (default 7)
+# - LOGGING_LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP: total size of the rotated files, the oldest are deleted when exceeded (default 0B,
+#   no limit)
+#
+# The file name pattern also determines the rotation period and compression. It is not set below because the default contains
+# ${LOG_FILE}, which Docker Compose would try to substitute. To rotate monthly without compression, add this to the environment below:
+#   - "LOGGING_LOGBACK_ROLLINGPOLICY_FILE_NAME_PATTERN=$${LOG_FILE}.%d{yyyy-MM}.%i.log"
+# and set LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY to the number of months.
+#
+# Other variables from the .env file are not passed to the container, only those in an environment entry below. See
+# https://docs.spring.io/spring-boot/appendix/application-properties/index.html#appendix.application-properties.core for other
+# logging.logback.rollingpolicy properties.
+
+volumes:
+  tailormap-logs:
+
+services:
+  tailormap:
+    environment:
+      - "LOGGING_FILE_NAME=/home/cnb/logs/tailormap.log"
+      - "LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE=${LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-10MB}"
+      - "LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY=${LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-7}"
+      - "LOGGING_LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP=${LOGGING_LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP:-0B}"
+    volumes:
+      # The /home/cnb/logs directory is created in the image owned by the user Tailormap runs as. The volume is not mounted on /home/cnb
+      # because the image contains the frontend in /home/cnb/static
+      - tailormap-logs:/home/cnb/logs
