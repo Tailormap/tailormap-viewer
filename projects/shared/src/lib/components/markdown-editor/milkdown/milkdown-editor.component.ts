@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
-import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
+import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/core';
 import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { MilkdownHelper } from './milkdown.helper';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MarkdownEditorImageUrlTransformFn, MarkdownEditorInsertUploadFn, MarkdownEditorUploadFn } from '../markdown-editor-upload.model';
 
 
 @Component({
@@ -28,11 +29,11 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLDivElement> | undefined;
 
-  @Input()
-  public templatePicklistConfig: TemplatePicklistConfig | undefined;
-
-  @Input()
-  public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
+  public templatePicklistConfig = input<TemplatePicklistConfig>();
+  public uploadService$ = input<MarkdownEditorUploadFn>();
+  public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
+  public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
+  public ariaLabelledBy = input<string>();
 
   private milkdownEditor: MilkdownEditor | undefined;
 
@@ -50,9 +51,12 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, _coreModule, listenerModule ]) => {
+        concatMap(([ crepeModule, coreModule, listenerModule ]) => {
+          const imageUrlTransform = this.imageUrlTransform();
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
+            // Only changes the displayed URL, the Markdown keeps the original URL
+            proxyDomURL: imageUrlTransform ? url => imageUrlTransform(url) : undefined,
           };
           const crepe = new crepeModule.Crepe({
             root: el,
@@ -64,7 +68,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             featureConfigs: {
               [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,
               [crepeModule.Crepe.Feature.Placeholder]: { mode: 'doc' },
-              [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig),
+              [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig(), this.insertUpload$()),
             },
           });
           crepe.editor
@@ -78,15 +82,19 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
                 }
               });
             });
-          return from(crepe.create());
+          return from(crepe.create()).pipe(map(editor => [ editor, coreModule ] as const));
         }),
       )
-      .subscribe(milkdownEditor => {
+      .subscribe(([ milkdownEditor, coreModule ]) => {
         this.milkdownEditor = milkdownEditor;
+        const ariaLabelledBy = this.ariaLabelledBy();
+        if (ariaLabelledBy) {
+          milkdownEditor.ctx.get(coreModule.editorViewCtx).dom.setAttribute('aria-labelledby', ariaLabelledBy);
+        }
       });
-    this.mdEditorService.getInsertedVariables$()
+    this.mdEditorService.getInsertedText$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => this.insertVariable(value));
+      .subscribe(inserted => this.insertText(inserted.text, inserted.markdown));
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe(content => {
@@ -102,19 +110,24 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public insertVariable(value: string) {
+  public insertText(text: string, markdown: boolean) {
     if (!this.milkdownEditor) {
       return;
     }
-    const editor = this.milkdownEditor;
-    MilkdownHelper.insertTextInEditor(editor.ctx, `{{${value}}}`);
+    const ctx = this.milkdownEditor.ctx;
+    if (markdown) {
+      MilkdownHelper.insertMarkdownInEditor(ctx, text);
+    } else {
+      MilkdownHelper.insertTextInEditor(ctx, text);
+    }
   }
 
   private handleFileUpload(file: File): Promise<string> {
-    if (!this.uploadService$) {
+    const uploadService$ = this.uploadService$();
+    if (!uploadService$) {
       return Promise.resolve('');
     }
-    const imageResult$ = this.uploadService$(file)
+    const imageResult$ = uploadService$(file)
       .pipe(
         tap(result => {
           if (result?.error) {

@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, OnInit, Output, signal, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, EventEmitter, Input, OnInit, Output, signal, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from './template-picklist.model';
 import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { MarkdownEditorService } from './markdown-editor.service';
-import { Observable, skip } from 'rxjs';
+import { skip } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
 import { MarkdownSourceEditorComponent } from './markdown-source-editor/markdown-source-editor.component';
+import { MarkdownEditorImageUrlTransformFn, MarkdownEditorInsertUploadFn, MarkdownEditorUploadFn } from './markdown-editor-upload.model';
 
 const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
 
@@ -39,7 +40,23 @@ export class MarkdownEditorComponent implements OnInit {
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
 
   @Input()
-  public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
+  public uploadService$?: MarkdownEditorUploadFn;
+
+  /**
+   * When set, the visual editor's built-in image item in the slash menu is replaced by an item which calls this
+   * function to pick an upload and inserts the returned Markdown.
+   */
+  public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
+
+  /**
+   * Transforms image URLs for display in the editor (and the source preview), the Markdown keeps the original URL.
+   */
+  public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
+
+  /**
+   * Id of the element which labels the editor, for accessibility.
+   */
+  public ariaLabelledBy = input<string>();
 
   @Input()
   public useInfoPanelWidth = false;
@@ -62,6 +79,14 @@ export class MarkdownEditorComponent implements OnInit {
 
   public insertVariable(value: string) {
     this.mdEditorService.insertVariable(value);
+  }
+
+  /**
+   * Inserts Markdown at the cursor of the active editor. The visual editor parses the Markdown (so a link or image is
+   * inserted), the source editor inserts the text as is.
+   */
+  public insertMarkdown(markdown: string) {
+    this.mdEditorService.insertText(markdown, { markdown: true });
   }
 
   public toggleEditor(editor: 'milkdown' | 'source') {

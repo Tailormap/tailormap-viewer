@@ -3,20 +3,78 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SecurityContext } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HtmlifyHelper } from './htmlify.helper';
+import type { MarkedExtension, Renderer, Tokens } from 'marked';
+
+/**
+ * Options for rendering Markdown to HTML. When no options are given, the global `marked` instance is used with its
+ * default settings.
+ */
+export interface MarkdownRenderOptions {
+  /**
+   * Render bare (auto linked) image URLs as images (wrapped in a link), like the Htmlify helper does. Markdown links with
+   * an explicit label are always rendered as links.
+   */
+  bareImageUrlsAsImages?: boolean;
+  /**
+   * Open links in a new tab (adds `target="_blank" rel="noopener noreferrer"`).
+   */
+  linksInNewTab?: boolean;
+  /**
+   * Render single newlines as `<br>` (`marked` option `breaks`).
+   */
+  breaks?: boolean;
+  /**
+   * Transform the URL of links and images before rendering, for example to resolve `upload://<id>` references.
+   */
+  urlTransform?: (url: string) => string;
+}
 
 export class MarkdownHelper {
 
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
 
-  public static getSafeHtmlForMarkdown$(md: string, sanitizer: DomSanitizer): Observable<SafeHtml> {
+  public static getSafeHtmlForMarkdown$(md: string, sanitizer: DomSanitizer, options?: MarkdownRenderOptions): Observable<SafeHtml> {
     return from(import('marked'))
       .pipe(
         take(1),
         map(markedLib => {
-          const html = sanitizer.sanitize(SecurityContext.HTML, markedLib.marked.parse(md ?? "", { async: false }));
+          // Use a dedicated instance when options are given, marked.use() would change the global instance
+          const parsed = options
+            ? new markedLib.Marked(MarkdownHelper.getMarkedExtension(options, markedLib.Renderer)).parse(md ?? "", { async: false })
+            : markedLib.marked.parse(md ?? "", { async: false });
+          const html = sanitizer.sanitize(SecurityContext.HTML, parsed);
           return sanitizer.bypassSecurityTrustHtml(html || "");
         }),
       );
+  }
+
+  private static getMarkedExtension(options: MarkdownRenderOptions, rendererClass: typeof Renderer): MarkedExtension {
+    const linkTarget = options.linksInNewTab ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return {
+      breaks: options.breaks ?? false,
+      walkTokens: token => {
+        if (options.urlTransform && (token.type === 'link' || token.type === 'image')) {
+          token.href = options.urlTransform(token.href);
+        }
+      },
+      renderer: {
+        link(token: Tokens.Link) {
+          // A bare URL (GFM autolink) has the URL as text, a Markdown link has an explicit label
+          const isBareUrl = token.autolink || token.text === token.href;
+          if (options.bareImageUrlsAsImages && isBareUrl && HtmlifyHelper.isImageUrl(token.href)) {
+            const href = HtmlifyHelper.escapeHTML(token.href);
+            return `<a href="${href}"${linkTarget}><img src="${href}" alt="${href}"></a>`;
+          }
+          if (!linkTarget) {
+            // Use the default renderer
+            return false;
+          }
+          // Call the default renderer (this has no target option) and add the target to the generated anchor
+          const html = rendererClass.prototype.link.call(this, token);
+          return html.startsWith('<a ') ? `<a${linkTarget} ${html.substring(3)}` : html;
+        },
+      },
+    };
   }
 
   public static templateParser(template: string, tokens: Map<string, string | null>) {

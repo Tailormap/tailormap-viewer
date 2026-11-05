@@ -2,8 +2,8 @@
 <div class="markdown-wrap">
   <div class="textarea-wrap">
     <mat-form-field>
-      <textarea matInput [formControl]="editorControl" cdkTextareaAutosize cdkAutosizeMinRows="6" cdkAutosizeMaxRows="30" #editor></textarea>
+      <textarea matInput [formControl]="editorControl" [attr.aria-labelledby]="ariaLabelledBy() ?? null" cdkTextareaAutosize cdkAutosizeMinRows="6" cdkAutosizeMaxRows="30" #editor></textarea>
     </mat-form-field>
   </div>
-  <div class="markdown-preview" [innerHTML]="htmlPreview$ | async" [class.info-panel-width]="useInfoPanelWidth"></div>
+  <div class="markdown-preview" [innerHTML]="htmlPreview$ | async" [class.info-panel-width]="useInfoPanelWidth()"></div>
 </div>

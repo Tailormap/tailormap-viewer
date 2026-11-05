@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormField } from '@angular/material/select';
@@ -9,6 +9,7 @@ import { concatMap, Observable, of } from 'rxjs';
 import { MarkdownHelper } from '../../../helpers';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { AsyncPipe } from '@angular/common';
+import { MarkdownEditorImageUrlTransformFn } from '../markdown-editor-upload.model';
 
 @Component({
   selector: 'tm-markdown-source-editor',
@@ -23,8 +24,9 @@ export class MarkdownSourceEditorComponent implements OnInit {
   private mdEditorService = inject(MarkdownEditorService);
 
 
-  @Input()
-  public useInfoPanelWidth = false;
+  public useInfoPanelWidth = input(false);
+  public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
+  public ariaLabelledBy = input<string>();
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
@@ -49,21 +51,23 @@ export class MarkdownSourceEditorComponent implements OnInit {
           this.editorControl.patchValue(content, { emitEvent: false });
         }
       });
-    this.mdEditorService.getInsertedVariables$()
+    this.mdEditorService.getInsertedText$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => this.insertVariable(value));
+      .subscribe(inserted => this.insertText(inserted.text));
+    const imageUrlTransform = this.imageUrlTransform();
+    const renderOptions = imageUrlTransform ? { urlTransform: imageUrlTransform } : undefined;
     this.htmlPreview$ = this.mdEditorService.getUpdatedContent$().pipe(concatMap(content => {
-      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer);
+      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer, renderOptions);
     }));
   }
 
-  public insertVariable(value: string) {
+  public insertText(text: string) {
     const el = this.editorEl?.nativeElement;
     if (!el) {
       return;
     }
     const [ start, end ] = [ el.selectionStart, el.selectionEnd ];
-    el.setRangeText(`{{${value}}}`, start, end, 'end');
+    el.setRangeText(text, start, end, 'end');
     this.editorControl.patchValue(el.value);
   }
 

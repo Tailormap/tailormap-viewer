@@ -8,6 +8,42 @@
 
 .toc-node-description ::ng-deep img {
   max-width: 100%;
+  height: auto;
+}
+
+.toc-node-description ::ng-deep :is(p, ul, ol, blockquote, pre, table) {
+  margin: 0;
+}
+
+.toc-node-description ::ng-deep :is(p, ul, ol, blockquote, pre, table, h1, h2, h3, h4, h5, h6) + :is(p, ul, ol, blockquote, pre, table, h1, h2, h3, h4, h5, h6) {
+  margin-top: 0.75em;
+}
+
+.toc-node-description ::ng-deep :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  font-size: 1em;
+}
+
+.toc-node-description ::ng-deep :is(ul, ol) {
+  padding-left: 1.5em;
+}
+
+.toc-node-description ::ng-deep blockquote {
+  border-left: 4px solid var(--border-color);
+  padding-left: 8px;
+}
+
+.toc-node-description ::ng-deep pre {
+  overflow: auto;
+}
+
+.toc-node-description ::ng-deep table {
+  border-collapse: collapse;
+}
+
+.toc-node-description ::ng-deep :is(th, td) {
+  border: 1px solid var(--border-color);
+  padding: 2px 4px;
 }
 
 .toc-node-details-transparency ::ng-deep h3 {

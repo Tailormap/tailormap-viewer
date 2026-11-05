@@ -2,7 +2,7 @@ import {
   Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewChild, ElementRef, inject, viewChild, ViewContainerRef,
   effect,
 } from '@angular/core';
-import { BrowserHelper, DynamicComponentsHelper, PanelResizerComponent, TooltipDirective, HtmlifyComponent } from '@tailormap-viewer/shared';
+import { BrowserHelper, DynamicComponentsHelper, PanelResizerComponent, TooltipDirective, MarkdownToHtmlPipe } from '@tailormap-viewer/shared';
 import { BehaviorSubject, map } from 'rxjs';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
@@ -10,6 +10,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { AsyncPipe } from '@angular/common';
+import { LAYER_DESCRIPTION_MARKDOWN_OPTIONS } from './layer-description-markdown-options';
 
 @Component({
     selector: 'tm-toc-node-details',
@@ -23,7 +24,7 @@ import { AsyncPipe } from '@angular/common';
         MatIcon,
         LayerDetailsComponent,
         AsyncPipe,
-        HtmlifyComponent,
+        MarkdownToHtmlPipe,
     ],
 })
 export class TocNodeDetailsComponent implements OnInit {
@@ -34,6 +35,8 @@ export class TocNodeDetailsComponent implements OnInit {
 
   @Input()
   public node: LayerTreeNodeWithLayerModel | null | undefined = null;
+
+  public descriptionOptions = LAYER_DESCRIPTION_MARKDOWN_OPTIONS;
 
   @Output()
   public closeDetails = new EventEmitter<void>();
