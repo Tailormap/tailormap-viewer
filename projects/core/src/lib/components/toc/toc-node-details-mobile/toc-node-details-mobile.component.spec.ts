@@ -58,14 +58,13 @@ describe('TocNodeDetailsMobileComponent', () => {
   test('should render if layer is passed', async () => {
     await setup(true);
     expect(screen.queryByText('layer description')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Show information about this layer' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show information about The Layer' })).not.toBeInTheDocument();
   });
 
   test('should render button to open description in a pop-up', async () => {
     const { dialogMock } = await setup(true, true);
     expect(screen.queryByText('layer description')).not.toBeInTheDocument();
-    const button = screen.getByRole('button', { name: 'Show information about this layer' });
-    await vi.waitFor(() => expect(button).toHaveAccessibleDescription('Show information about The Layer'));
+    const button = screen.getByRole('button', { name: 'Show information about The Layer' });
     await userEvent.click(button);
     expect(dialogMock.open).toHaveBeenCalledWith(LayerDescriptionDialogComponent, expect.objectContaining({
       data: { title: 'The Layer', description: 'layer description' },
