@@ -20,6 +20,9 @@
       }
     </tm-admin-layer-description-field-hint>
   </tm-admin-layer-description-field>
+  @if (isLayerSpecific) {
+    <mat-checkbox class="description-in-popup" formControlName="descriptionInPopup" i18n="@@admin-core.catalog.description-in-popup">Show description in a pop-up</mat-checkbox>
+  }
   <mat-form-field>
     <mat-label i18n="@@admin-core.common.attribution">Attribution</mat-label>
     <input matInput formControlName="attribution" />
