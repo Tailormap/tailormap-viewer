@@ -48,7 +48,7 @@ mat-selection-list {
   float: right;
 }
 
-tm-admin-layer-description-field:has(+ .description-in-popup) {
+tm-admin-layer-description-field + .description-in-popup {
   padding-bottom: 0;
 }
 
