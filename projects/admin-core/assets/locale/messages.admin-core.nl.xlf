@@ -1845,6 +1845,10 @@
         <source>Snapping tooltip</source>
         <target>Snapping tooltip</target>
       </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard" datatype="html">
+        <source>Copy extent to clipboard</source>
+        <target>Kopieer extent naar klembord</target>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
         <target>Feature type instellingen aangepast</target>

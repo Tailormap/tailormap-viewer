@@ -1,112 +1,108 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, forwardRef, ChangeDetectorRef, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { Component, forwardRef, inject, input, output, signal, linkedSignal, effect, untracked } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { disabled, form, FormField } from '@angular/forms/signals';
 import { BoundsModel } from '@tailormap-viewer/api';
-import { Subject, takeUntil } from 'rxjs';
 import { AdminProjectionsHelper } from '../../../application/helpers/admin-projections-helper';
-import { ClipboardHelper } from '@tailormap-viewer/shared';
+import { ClipboardHelper, TooltipDirective } from '@tailormap-viewer/shared';
 import { MatLabel, MatFormField } from '@angular/material/form-field';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { Clipboard } from '@angular/cdk/clipboard';
+
+interface BoundsFormValue {
+  minx: number | null;
+  miny: number | null;
+  maxx: number | null;
+  maxy: number | null;
+}
+
+const EMPTY_BOUNDS: BoundsFormValue = { minx: null, miny: null, maxx: null, maxy: null };
+
+const toFormValue = (bounds: BoundsModel | null): BoundsFormValue => {
+  if (!bounds) {
+    return { ...EMPTY_BOUNDS };
+  }
+  return { minx: bounds.minx, miny: bounds.miny, maxx: bounds.maxx, maxy: bounds.maxy };
+};
 
 @Component({
-    selector: 'tm-admin-bounds-form-field',
-    templateUrl: './bounds-field.component.html',
-    styleUrls: ['./bounds-field.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => BoundsFieldComponent),
-            multi: true,
-        },
-    ],
-    imports: [
-        ReactiveFormsModule,
-        MatLabel,
-        MatButton,
-        MatFormField,
-        MatInput,
-    ],
+  selector: 'tm-admin-bounds-form-field',
+  templateUrl: './bounds-field.component.html',
+  styleUrls: ['./bounds-field.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => BoundsFieldComponent),
+      multi: true,
+    },
+  ],
+  imports: [
+    FormField,
+    MatLabel,
+    MatButton,
+    MatFormField,
+    MatInput,
+    MatIcon,
+    TooltipDirective,
+  ],
 })
-export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  private cdr = inject(ChangeDetectorRef);
+export class BoundsFieldComponent implements ControlValueAccessor {
+  private clipboard = inject(Clipboard);
 
+  public bounds = input<BoundsModel | null>(null);
+  public projection = input<string | null>(null);
+  public label = input<string | null>(null);
 
-  private _bounds: BoundsModel | null = null;
-  private _projection: string | null = null;
-  private destroyed = new Subject();
+  public changed = output<BoundsModel | null>();
 
-  @Input()
-  public set bounds(bounds: BoundsModel | null) {
-    this._bounds = bounds;
-    if (bounds) {
-      this.boundsForm.patchValue(bounds, { emitEvent: false });
-    } else {
-      this.boundsForm.patchValue({ minx: null, miny: null, maxx: null, maxy: null }, { emitEvent: false });
-    }
-  }
+  public disabled = signal(false);
+  public copiedToClipboard = signal(false);
 
-  public get bounds(): BoundsModel | null {
-    return this._bounds;
-  }
+  /**
+   * The value set from outside, either through the `bounds` input or through the
+   * ControlValueAccessor `writeValue`. Changes to this value are never emitted back.
+   */
+  private externalValue = linkedSignal<BoundsFormValue>(() => toFormValue(this.bounds()));
 
-  @Input()
-  public set projection(projection: string | null) {
-    this._projection = projection;
-  }
+  /**
+   * The form model. Resets to the external value whenever that changes, and is updated by user edits.
+   */
+  private formValue = linkedSignal<BoundsFormValue>(() => this.externalValue());
 
-  public get projection(): string | null {
-    return this._projection;
-  }
-
-  @Input()
-  public label: string | null = null;
-
-  @Output()
-  public changed = new EventEmitter<BoundsModel | null>();
-
-  public disabled = false;
-  private onChange: any | null = null;
-  private onTouched: any | null = null;
-
-  public boundsForm = new FormGroup({
-    minx: new FormControl<number | null>(null),
-    miny: new FormControl<number | null>(null),
-    maxx: new FormControl<number | null>(null),
-    maxy: new FormControl<number | null>(null),
+  public boundsForm = form(this.formValue, path => {
+    disabled(path, { when: this.disabled });
   });
 
-  public ngOnInit(): void {
-    this.boundsForm.valueChanges
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(bounds => {
-        this.triggerChange(bounds);
-      });
-  }
+  private onChange: ((value: BoundsModel | null) => void) | null = null;
+  private onTouched: (() => void) | null = null;
 
-  public ngOnDestroy(): void {
-    this.destroyed.next(null);
-    this.destroyed.complete();
+  constructor() {
+    // Emit changes made in this component (typing, pasting, clearing, ...). When the form value is
+    // the exact same object as the external value, the change originated outside and is skipped.
+    effect(() => {
+      const value = this.formValue();
+      if (value === untracked(this.externalValue)) {
+        return;
+      }
+      untracked(() => this.triggerChange(value));
+    });
   }
 
   public writeValue(obj: BoundsModel | null): void {
-    this.bounds = obj;
-    this.cdr.detectChanges();
+    this.externalValue.set(toFormValue(obj));
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: BoundsModel | null) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
-  public setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-    if (isDisabled) {
-      this.boundsForm.disable();
-    }
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
   public setBoundsForProjection(projection: string | null) {
@@ -115,33 +111,7 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     }
     const bounds = AdminProjectionsHelper.find(projection)?.bounds;
     if (bounds) {
-      this.boundsForm.patchValue(bounds, { emitEvent: true });
-    }
-  }
-
-  private valueChanged(value: BoundsModel | null) {
-    if (this.onChange) {
-      this.onChange(value);
-    }
-    this.changed.emit(value);
-  }
-  private triggerChange(bounds: typeof this.boundsForm.value) {
-    if (bounds.minx === null
-      && bounds.miny === null
-      && bounds.maxx === null
-      && bounds.maxy === null) {
-      this.valueChanged(null);
-    } else if (typeof bounds.minx === 'number'
-      && typeof bounds.miny === 'number'
-      && typeof bounds.maxx === 'number'
-      && typeof bounds.maxy === 'number') {
-      this.valueChanged({
-        minx: bounds.minx,
-        miny: bounds.miny,
-        maxx: bounds.maxx,
-        maxy: bounds.maxy,
-        crs: this.projection || undefined,
-      });
+      this.formValue.set(toFormValue(bounds));
     }
   }
 
@@ -150,12 +120,56 @@ export class BoundsFieldComponent implements OnInit, OnDestroy, ControlValueAcce
     const commaListRegex = /([-0-9.e+]+)\s*,\s*([-0-9.e+]+)\s*,\s*([-0-9.e+]+)\s*,\s*([-0-9.e+]+)/;
     const values = ClipboardHelper.parsePasteEvent($event, [ bboxRegex, commaListRegex ]);
     if (values && values.length === 5) {
-      this.boundsForm.patchValue({ minx: +values[1],  miny: +values[2],  maxx: +values[3],  maxy: +values[4] });
+      this.formValue.set({ minx: +values[1], miny: +values[2], maxx: +values[3], maxy: +values[4] });
     }
   }
 
   public clear() {
-    this.boundsForm.patchValue({ minx: null, miny: null, maxx: null, maxy: null }, { emitEvent: true });
+    this.formValue.set({ ...EMPTY_BOUNDS });
+  }
+
+  public markAsTouched() {
+    this.onTouched?.();
+  }
+
+  public copyToClipboard() {
+    const bounds = this.formValue();
+    if (BoundsFieldComponent.isComplete(bounds)) {
+      this.copiedToClipboard.set(this.clipboard.copy(`${bounds.minx}, ${bounds.miny}, ${bounds.maxx}, ${bounds.maxy}`));
+      setTimeout(() => this.copiedToClipboard.set(false), 2000);
+    }
+  }
+
+  private static isComplete(bounds: BoundsFormValue): bounds is { minx: number; miny: number; maxx: number; maxy: number } {
+    return typeof bounds.minx === 'number'
+      && typeof bounds.miny === 'number'
+      && typeof bounds.maxx === 'number'
+      && typeof bounds.maxy === 'number';
+  }
+
+  private valueChanged(value: BoundsModel | null) {
+    this.onChange?.(value);
+    this.changed.emit(value);
+  }
+
+  /**
+   * Only emits when all fields are empty (null) or all fields contain a number; partially filled bounds are not emitted.
+   */
+  private triggerChange(bounds: BoundsFormValue) {
+    if (bounds.minx === null
+      && bounds.miny === null
+      && bounds.maxx === null
+      && bounds.maxy === null) {
+      this.valueChanged(null);
+    } else if (BoundsFieldComponent.isComplete(bounds)) {
+      this.valueChanged({
+        minx: bounds.minx,
+        miny: bounds.miny,
+        maxx: bounds.maxx,
+        maxy: bounds.maxy,
+        crs: this.projection() || undefined,
+      });
+    }
   }
 
 }
