@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 import { selectLayer } from '../../../map';
 import { LayerTransparencyComponent } from '../toc-node-details/layer-transparency/layer-transparency.component';
-import { LAYER_DESCRIPTION_MARKDOWN_OPTIONS } from '../toc-node-details/layer-description-markdown-options';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -19,7 +18,6 @@ export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);
 
 
-  public descriptionOptions = LAYER_DESCRIPTION_MARKDOWN_OPTIONS;
   public layer: AppLayerModel | null | undefined = null;
   public node: TreeModel<AppLayerModel> | null | undefined;
 

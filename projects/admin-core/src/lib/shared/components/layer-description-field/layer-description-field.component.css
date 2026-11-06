@@ -26,7 +26,6 @@ tm-markdown-editor {
 .layer-description-hint {
   font-size: var(--mat-form-field-subscript-text-size, 12px);
   line-height: var(--mat-form-field-subscript-text-line-height, 16px);
-  color: var(--mat-form-field-supporting-text-color, rgba(0, 0, 0, 0.6));
 }
 
 .layer-description-hint:not(:has(tm-admin-layer-description-field-hint)) {

@@ -99,13 +99,6 @@ export class HtmlifyHelper {
     return HtmlifyHelper.ALLOWED_PROTOCOLS.has(parsed.protocol) ? trimmed : null;
   }
 
-  /**
-   * Returns true when the URL points to an image, based on the file extension or known vendor specific image URLs.
-   */
-  public static isImageUrl(url: string): boolean {
-    return HtmlifyHelper.IMG_REGEXP.test(url) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(url);
-  }
-
   private static getLinkNode(match: string): HtmlifyLinkNode | null {
     if (match[0] === '[') { // safe to do since this is already matched using Regex, only MD URL will start with [
       const linkParts = HtmlifyHelper.getMarkdownLinkParts(match);
@@ -118,7 +111,8 @@ export class HtmlifyHelper {
     if (href === null) {
       return null;
     }
-    return { type: 'link', href, label: href, image: HtmlifyHelper.isImageUrl(href) };
+    const image = HtmlifyHelper.IMG_REGEXP.test(href) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(href);
+    return { type: 'link', href, label: href, image };
   }
 
   private static addTextNodes(nodes: HtmlifyNode[], text: string) {
@@ -154,7 +148,7 @@ export class HtmlifyHelper {
     }
   }
 
-  public static escapeHTML(text: string) {
+  private static escapeHTML(text: string) {
     return text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')

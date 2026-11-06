@@ -10,7 +10,6 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { AsyncPipe } from '@angular/common';
-import { LAYER_DESCRIPTION_MARKDOWN_OPTIONS } from './layer-description-markdown-options';
 
 @Component({
     selector: 'tm-toc-node-details',
@@ -35,8 +34,6 @@ export class TocNodeDetailsComponent implements OnInit {
 
   @Input()
   public node: LayerTreeNodeWithLayerModel | null | undefined = null;
-
-  public descriptionOptions = LAYER_DESCRIPTION_MARKDOWN_OPTIONS;
 
   @Output()
   public closeDetails = new EventEmitter<void>();

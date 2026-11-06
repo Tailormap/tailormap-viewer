@@ -49,7 +49,7 @@ export class MarkdownEditorComponent implements OnInit {
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
 
   /**
-   * Transforms image URLs for display in the editor (and the source preview), the Markdown keeps the original URL.
+   * Transforms image URLs for display in the visual editor, the Markdown keeps the original URL.
    */
   public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
 

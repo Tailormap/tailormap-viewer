@@ -9,7 +9,6 @@ import { concatMap, Observable, of } from 'rxjs';
 import { MarkdownHelper } from '../../../helpers';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { AsyncPipe } from '@angular/common';
-import { MarkdownEditorImageUrlTransformFn } from '../markdown-editor-upload.model';
 
 @Component({
   selector: 'tm-markdown-source-editor',
@@ -25,7 +24,6 @@ export class MarkdownSourceEditorComponent implements OnInit {
 
 
   public useInfoPanelWidth = input(false);
-  public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
   public ariaLabelledBy = input<string>();
 
   @ViewChild('editor', { read: ElementRef, static: true })
@@ -54,10 +52,8 @@ export class MarkdownSourceEditorComponent implements OnInit {
     this.mdEditorService.getInsertedText$()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(inserted => this.insertText(inserted.text));
-    const imageUrlTransform = this.imageUrlTransform();
-    const renderOptions = imageUrlTransform ? { urlTransform: imageUrlTransform } : undefined;
     this.htmlPreview$ = this.mdEditorService.getUpdatedContent$().pipe(concatMap(content => {
-      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer, renderOptions);
+      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer);
     }));
   }
 
