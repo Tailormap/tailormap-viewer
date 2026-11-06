@@ -3,26 +3,15 @@
      [class.disabled]="disabled()"
      (focusin)="onInteraction()"
      (focusout)="onFocusOut()">
-  <div class="layer-description-header">
-    <span class="layer-description-label" [id]="labelId" i18n="@@admin-core.common.description">Description</span>
-    <button type="button"
-            mat-icon-button
-            i18n-matTooltip="@@admin-core.catalog.description.insert-upload.icon-button"
-            matTooltip="Insert image or link to file"
-            i18n-aria-label="@@admin-core.catalog.description.insert-upload.icon-button"
-            aria-label="Insert image or link to file"
-            (click)="addLink()">
-      <mat-icon svgIcon="plus"></mat-icon>
-    </button>
-  </div>
-  @defer {
+  <strong class="layer-description-label" [id]="labelId" i18n="@@admin-core.common.description">Description</strong>
+  <div class="markdown-editor">
     <tm-markdown-editor [content]="content()"
                         [insertUpload$]="insertUpload$"
                         [imageUrlTransform]="imageUrlTransform"
                         [uploadService$]="uploadImage$"
                         [ariaLabelledBy]="labelId"
                         (contentChanged)="onContentChanged($event)"></tm-markdown-editor>
-  }
+  </div>
   <div class="layer-description-hint">
     <ng-content select="tm-admin-layer-description-field-hint"/>
   </div>

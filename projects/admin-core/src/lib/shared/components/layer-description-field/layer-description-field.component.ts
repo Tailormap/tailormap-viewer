@@ -4,9 +4,6 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, map, Observable, Subject, take } from 'rxjs';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 import { MarkdownEditorComponent, MarkdownHelper } from '@tailormap-viewer/shared';
@@ -46,9 +43,6 @@ let nextId = 0;
       useClass: LayerAttachedFileRemoveService },
   ],
   imports: [
-    MatIconButton,
-    MatIcon,
-    MatTooltip,
     MarkdownEditorComponent,
   ],
 })
@@ -133,16 +127,6 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
       return;
     }
     this.contentChanges.next({ content, version: this.version });
-  }
-
-  public addLink() {
-    this.selectUpload$()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(markdown => {
-        if (markdown) {
-          this.markdownEditor()?.insertMarkdown(markdown);
-        }
-      });
   }
 
   /**

@@ -4,19 +4,17 @@
   max-width: 800px;
 }
 
-.layer-description-header {
+tm-markdown-editor {
+  padding: 8px 0 0 0;
+}
+
+.layer-description-field {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  flex-direction: column;
 }
 
 .layer-description-label {
-  font-weight: 500;
-}
-
-tm-markdown-editor {
-  padding: 8px 0 0 0;
+  margin-bottom: 8px;
 }
 
 .layer-description-field.disabled {
