@@ -1364,6 +1364,12 @@
       <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
         <source>Snapping tooltip</source>
       </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard" datatype="html">
+        <source>Copy extent to clipboard</source>
+      </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard-disabled" datatype="html">
+        <source>First fill in all fields to copy the extent to the clipboard</source>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
       </trans-unit>

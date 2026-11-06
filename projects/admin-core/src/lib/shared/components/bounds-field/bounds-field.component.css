@@ -34,3 +34,8 @@ mat-form-field {
   text-align: left;
   padding: 0 16px;
 }
+
+.copy-button {
+  min-width: auto;
+  padding-right: 0;
+}
