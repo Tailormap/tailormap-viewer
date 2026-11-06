@@ -1,5 +1,6 @@
-import { describe, test, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/angular';
+import { describe, test, expect, vi, afterEach } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/angular';
+import { Clipboard } from '@angular/cdk/clipboard';
 import userEvent from '@testing-library/user-event';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -85,6 +86,109 @@ describe('BoundsFieldComponent', () => {
     await fixture.whenStable();
     expect(control.value).toEqual({ minx: 10, miny: 20, maxx: 30, maxy: 40, crs: 'EPSG:28992' });
     expect(getInputs().map(i => i.value)).toEqual([ '10', '20', '30', '40' ]);
+  });
+
+  describe('copy to clipboard', () => {
+
+    const COPY_LABEL = 'Copy extent to clipboard';
+    const COPY_DISABLED_LABEL = 'First fill in all fields to copy the extent to the clipboard';
+
+    const renderWithClipboard = async (copyResult = true) => {
+      const copy = vi.fn(() => copyResult);
+      const result = await render(HostComponent, {
+        providers: [{ provide: Clipboard, useValue: { copy } }],
+      });
+      return { ...result, copy };
+    };
+
+    const isCheckIconVisible = (button: HTMLElement) => button.querySelector('mat-icon[data-mat-icon-name="check"]') !== null;
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test('copies the bounds as comma-separated list', async () => {
+      const { copy } = await renderWithClipboard();
+      const button = screen.getByRole('button', { name: COPY_LABEL });
+      expect(button).toBeEnabled();
+      await userEvent.click(button);
+      expect(copy).toHaveBeenCalledWith('1, 2, 3, 4');
+    });
+
+    test('copies the current (edited) bounds', async () => {
+      const { copy, fixture } = await renderWithClipboard();
+      await userEvent.clear(getInputs()[2]);
+      await userEvent.type(getInputs()[2], '30');
+      await fixture.whenStable();
+      await userEvent.click(screen.getByRole('button', { name: COPY_LABEL }));
+      expect(copy).toHaveBeenCalledWith('1, 2, 30, 4');
+    });
+
+    test('is disabled when bounds are incomplete', async () => {
+      const { copy, fixture } = await renderWithClipboard();
+      await userEvent.clear(getInputs()[0]);
+      await fixture.whenStable();
+      const button = screen.getByRole('button', { name: COPY_DISABLED_LABEL });
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+      expect(copy).not.toHaveBeenCalled();
+    });
+
+    test('is disabled when bounds are empty', async () => {
+      const { fixture } = await renderWithClipboard();
+      await userEvent.click(screen.getByRole('button', { name: 'Clear' }));
+      await fixture.whenStable();
+      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toBeDisabled();
+    });
+
+    test('is disabled when the control is disabled', async () => {
+      const { fixture } = await renderWithClipboard();
+      fixture.componentInstance.control.disable();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toBeDisabled();
+    });
+
+    test('shows a check icon after copying, which disappears after 2 seconds', async () => {
+      const { fixture } = await renderWithClipboard();
+      vi.useFakeTimers();
+      const button = screen.getByRole('button', { name: COPY_LABEL });
+      expect(isCheckIconVisible(button)).toBe(false);
+      fireEvent.click(button);
+      fixture.detectChanges();
+      expect(isCheckIconVisible(button)).toBe(true);
+      vi.advanceTimersByTime(1999);
+      fixture.detectChanges();
+      expect(isCheckIconVisible(button)).toBe(true);
+      vi.advanceTimersByTime(1);
+      fixture.detectChanges();
+      expect(isCheckIconVisible(button)).toBe(false);
+    });
+
+    test('restarts the check icon timeout when copying again', async () => {
+      const { fixture } = await renderWithClipboard();
+      vi.useFakeTimers();
+      const button = screen.getByRole('button', { name: COPY_LABEL });
+      fireEvent.click(button);
+      vi.advanceTimersByTime(1500);
+      fireEvent.click(button);
+      vi.advanceTimersByTime(1500);
+      fixture.detectChanges();
+      expect(isCheckIconVisible(button)).toBe(true);
+      vi.advanceTimersByTime(500);
+      fixture.detectChanges();
+      expect(isCheckIconVisible(button)).toBe(false);
+    });
+
+    test('does not show a check icon when copying failed', async () => {
+      const { copy, fixture } = await renderWithClipboard(false);
+      const button = screen.getByRole('button', { name: COPY_LABEL });
+      fireEvent.click(button);
+      fixture.detectChanges();
+      expect(copy).toHaveBeenCalled();
+      expect(isCheckIconVisible(button)).toBe(false);
+    });
+
   });
 
 });

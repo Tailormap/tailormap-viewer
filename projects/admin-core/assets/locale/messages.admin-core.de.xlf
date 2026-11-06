@@ -1850,6 +1850,10 @@
         <source>Copy extent to clipboard</source>
         <target>Ausdehnung in die Zwischenablage kopieren</target>
       </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard-disabled" datatype="html">
+        <source>First fill in all fields to copy the extent to the clipboard</source>
+        <target>Füllen Sie zuerst alle Felder aus, um die Ausdehnung in die Zwischenablage zu kopieren</target>
+      </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
         <target>Feature-Typ-Einstellungen aktualisiert</target>

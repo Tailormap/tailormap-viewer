@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, input, output, signal, linkedSignal, effect, untracked } from '@angular/core';
+import { Component, forwardRef, inject, input, output, signal, linkedSignal, effect, untracked, computed } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { disabled, form, FormField } from '@angular/forms/signals';
 import { BoundsModel } from '@tailormap-viewer/api';
@@ -58,6 +58,12 @@ export class BoundsFieldComponent implements ControlValueAccessor {
 
   public disabled = signal(false);
   public copiedToClipboard = signal(false);
+  public disabledOrEmpty = computed(() => this.disabled() || !BoundsFieldComponent.isComplete(this.formValue()));
+  public copyTooltip = computed(() => {
+    return this.disabledOrEmpty()
+      ? $localize `:@@admin-core.copy-extent-to-clipboard-disabled:First fill in all fields to copy the extent to the clipboard`
+      : $localize `:@@admin-core.copy-extent-to-clipboard:Copy extent to clipboard`;
+  });
 
   /**
    * The value set from outside, either through the `bounds` input or through the
@@ -132,11 +138,19 @@ export class BoundsFieldComponent implements ControlValueAccessor {
     this.onTouched?.();
   }
 
+  private copiedToClipboardTimeoutId: ReturnType<typeof setTimeout> | null = null;
   public copyToClipboard() {
     const bounds = this.formValue();
     if (BoundsFieldComponent.isComplete(bounds)) {
-      this.copiedToClipboard.set(this.clipboard.copy(`${bounds.minx}, ${bounds.miny}, ${bounds.maxx}, ${bounds.maxy}`));
-      setTimeout(() => this.copiedToClipboard.set(false), 2000);
+      const copied = this.clipboard.copy(`${bounds.minx}, ${bounds.miny}, ${bounds.maxx}, ${bounds.maxy}`);
+      this.copiedToClipboard.set(copied);
+      if (this.copiedToClipboardTimeoutId) {
+        clearTimeout(this.copiedToClipboardTimeoutId);
+      }
+      this.copiedToClipboardTimeoutId = setTimeout(() => {
+        this.copiedToClipboard.set(false);
+        this.copiedToClipboardTimeoutId = null;
+      }, 2000);
     }
   }
 

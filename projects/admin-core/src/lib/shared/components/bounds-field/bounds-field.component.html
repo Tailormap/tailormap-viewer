@@ -12,7 +12,7 @@
         <button mat-stroked-button color="accent" [disabled]="disabled()" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
       }
       <button mat-stroked-button color="accent" [disabled]="disabled()" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
-      <button mat-stroked-button color="accent" class="copy-button" [disabled]="disabled()" (click)="copyToClipboard()" tmTooltip="Copy extent to clipboard" i18n-tmTooltip="@@admin-core.copy-extent-to-clipboard">
+      <button mat-stroked-button color="accent" class="copy-button" [disabled]="disabledOrEmpty()" (click)="copyToClipboard()" [tmTooltip]="copyTooltip()">
         <mat-icon svgIcon="copy"></mat-icon>
         @if (copiedToClipboard()) {
           <mat-icon svgIcon="check" color="primary"></mat-icon>
