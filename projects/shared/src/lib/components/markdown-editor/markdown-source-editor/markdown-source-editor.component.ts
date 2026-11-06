@@ -49,21 +49,21 @@ export class MarkdownSourceEditorComponent implements OnInit {
           this.editorControl.patchValue(content, { emitEvent: false });
         }
       });
-    this.mdEditorService.getInsertedText$()
+    this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(inserted => this.insertText(inserted.text));
+      .subscribe(value => this.insertVariable(value));
     this.htmlPreview$ = this.mdEditorService.getUpdatedContent$().pipe(concatMap(content => {
       return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer);
     }));
   }
 
-  public insertText(text: string) {
+  public insertVariable(value: string) {
     const el = this.editorEl?.nativeElement;
     if (!el) {
       return;
     }
     const [ start, end ] = [ el.selectionStart, el.selectionEnd ];
-    el.setRangeText(text, start, end, 'end');
+    el.setRangeText(`{{${value}}}`, start, end, 'end');
     this.editorControl.patchValue(el.value);
   }
 

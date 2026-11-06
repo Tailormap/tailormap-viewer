@@ -2,16 +2,14 @@
      [attr.inert]="disabled() ? '' : null"
      [class.disabled]="disabled()"
      (focusin)="onInteraction()"
-     (focusout)="onFocusOut()">
+     (focusout)="onTouched?.()">
   <strong class="layer-description-label" [id]="labelId" i18n="@@admin-core.common.description">Description</strong>
-  <div class="markdown-editor">
-    <tm-markdown-editor [content]="content()"
-                        [insertUpload$]="insertUpload$"
-                        [imageUrlTransform]="imageUrlTransform"
-                        [uploadService$]="uploadImage$"
-                        [ariaLabelledBy]="labelId"
-                        (contentChanged)="onContentChanged($event)"></tm-markdown-editor>
-  </div>
+  <tm-markdown-editor [content]="content()"
+                      [insertUpload$]="selectUpload$"
+                      [imageUrlTransform]="imageUrlTransform"
+                      [uploadService$]="uploadImage$"
+                      [ariaLabelledBy]="labelId"
+                      (contentChanged)="onContentChanged($event)"></tm-markdown-editor>
   <div class="layer-description-hint">
     <ng-content select="tm-admin-layer-description-field-hint"/>
   </div>

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
-import type { Editor as MilkdownEditor } from '@milkdown/core';
+import type { Editor as MilkdownEditor } from '@milkdown/kit/core';
 import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '../../snackbar-message';
@@ -52,11 +52,10 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         concatMap(([ crepeModule, coreModule, listenerModule ]) => {
-          const imageUrlTransform = this.imageUrlTransform();
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
             // Only changes the displayed URL, the Markdown keeps the original URL
-            proxyDomURL: imageUrlTransform ? url => imageUrlTransform(url) : undefined,
+            proxyDomURL: this.imageUrlTransform(),
           };
           const crepe = new crepeModule.Crepe({
             root: el,
@@ -74,6 +73,14 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           crepe.editor
             .use(listenerModule.listener)
             .config((ctx) => {
+              const ariaLabelledBy = this.ariaLabelledBy();
+              if (ariaLabelledBy) {
+                ctx.update(coreModule.editorViewOptionsCtx, options => ({
+                  ...options,
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                  attributes: { ...options.attributes, 'aria-labelledby': ariaLabelledBy },
+                }));
+              }
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
                 if (markdown !== prevMarkdown) {
@@ -82,19 +89,15 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
                 }
               });
             });
-          return from(crepe.create()).pipe(map(editor => [ editor, coreModule ] as const));
+          return from(crepe.create());
         }),
       )
-      .subscribe(([ milkdownEditor, coreModule ]) => {
+      .subscribe(milkdownEditor => {
         this.milkdownEditor = milkdownEditor;
-        const ariaLabelledBy = this.ariaLabelledBy();
-        if (ariaLabelledBy) {
-          milkdownEditor.ctx.get(coreModule.editorViewCtx).dom.setAttribute('aria-labelledby', ariaLabelledBy);
-        }
       });
-    this.mdEditorService.getInsertedText$()
+    this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(inserted => this.insertText(inserted.text, inserted.markdown));
+      .subscribe(value => this.insertVariable(value));
     this.mdEditorService.getContent$()
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe(content => {
@@ -110,16 +113,11 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public insertText(text: string, markdown: boolean) {
+  public insertVariable(value: string) {
     if (!this.milkdownEditor) {
       return;
     }
-    const ctx = this.milkdownEditor.ctx;
-    if (markdown) {
-      MilkdownHelper.insertMarkdownInEditor(ctx, text);
-    } else {
-      MilkdownHelper.insertTextInEditor(ctx, text);
-    }
+    MilkdownHelper.insertTextInEditor(this.milkdownEditor.ctx, `{{${value}}}`);
   }
 
   private handleFileUpload(file: File): Promise<string> {

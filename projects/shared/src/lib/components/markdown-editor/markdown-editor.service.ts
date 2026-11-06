@@ -1,30 +1,16 @@
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-export interface MarkdownEditorInsertedText {
-  text: string;
-  /**
-   * When true the text is Markdown which should be parsed by the visual editor (for example a link or image).
-   * When false the text is inserted literally (for example a `{{variable}}`).
-   * The source editor inserts both as raw text.
-   */
-  markdown: boolean;
-}
-
 @Injectable()
 export class MarkdownEditorService {
 
   private content = new BehaviorSubject('');
   private updatedContent = new BehaviorSubject('');
 
-  private insertedText = new Subject<MarkdownEditorInsertedText>();
+  private insertedVariables = new Subject<string>();
 
   public insertVariable(value: string) {
-    this.insertText(`{{${value}}}`);
-  }
-
-  public insertText(text: string, options?: { markdown?: boolean }) {
-    this.insertedText.next({ text, markdown: options?.markdown ?? false });
+    this.insertedVariables.next(value);
   }
 
   public resetContent(content: string) {
@@ -52,8 +38,8 @@ export class MarkdownEditorService {
     return this.updatedContent.asObservable();
   }
 
-  public getInsertedText$() {
-    return this.insertedText.asObservable();
+  public getInsertedVariables$() {
+    return this.insertedVariables.asObservable();
   }
 
 }

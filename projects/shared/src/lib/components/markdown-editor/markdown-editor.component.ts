@@ -81,14 +81,6 @@ export class MarkdownEditorComponent implements OnInit {
     this.mdEditorService.insertVariable(value);
   }
 
-  /**
-   * Inserts Markdown at the cursor of the active editor. The visual editor parses the Markdown (so a link or image is
-   * inserted), the source editor inserts the text as is.
-   */
-  public insertMarkdown(markdown: string) {
-    this.mdEditorService.insertText(markdown, { markdown: true });
-  }
-
   public toggleEditor(editor: 'milkdown' | 'source') {
     this.selectedEditor.set(editor);
     this.mdEditorService.resetContent(this.mdEditorService.getCurrentContent());

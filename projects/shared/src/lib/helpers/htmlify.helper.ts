@@ -111,8 +111,7 @@ export class HtmlifyHelper {
     if (href === null) {
       return null;
     }
-    const image = HtmlifyHelper.IMG_REGEXP.test(href) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(href);
-    return { type: 'link', href, label: href, image };
+    return { type: 'link', href, label: href, image: HtmlifyHelper.isImageUrl(href) };
   }
 
   private static addTextNodes(nodes: HtmlifyNode[], text: string) {
@@ -148,7 +147,11 @@ export class HtmlifyHelper {
     }
   }
 
-  private static escapeHTML(text: string) {
+  public static isImageUrl(url: string): boolean {
+    return HtmlifyHelper.IMG_REGEXP.test(url) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(url);
+  }
+
+  public static escapeHTML(text: string) {
     return text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
