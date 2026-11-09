@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { MarkdownEditorAppearance, MarkdownEditorComponent, MarkdownEditorMode } from './markdown-editor.component';
 import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
-import { MarkdownSourceEditorComponent } from './markdown-source-editor/markdown-source-editor.component';
 import { MarkdownEditorService } from './markdown-editor.service';
 import { TemplatePicklistConfig } from './template-picklist.model';
 
