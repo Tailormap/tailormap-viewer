@@ -59,16 +59,8 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
 
   private currentDescription: string | null = null;
 
-  /**
-   * Set on interaction with the editor and reset on writeValue(). The visual editor may emit a normalized version of
-   * a value written by the form; such changes are not changes by the user and should not mark the form as changed.
-   */
   private userInteracted = false;
 
-  /**
-   * Debounced content changes by the user. writeValue() emits null, which replaces a pending (debounced) change for
-   * the previous value so that change is dropped.
-   */
   private contentChanges = new Subject<string | null>();
 
   public imageUrlTransform = LayerDescriptionFieldComponent.getUploadDisplayUrl;
@@ -89,6 +81,9 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   }
 
   public writeValue(description: string | null): void {
+    if (description === this.currentDescription) {
+      return;
+    }
     this.contentChanges.next(null);
     this.userInteracted = false;
     this.currentDescription = description;
