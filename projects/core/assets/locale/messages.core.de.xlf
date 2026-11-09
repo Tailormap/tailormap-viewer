@@ -1564,8 +1564,8 @@
         <target>Deckkraft zurücksetzen</target>
       </trans-unit>
       <trans-unit id="core.toc.show-information-about-layer-tooltip" datatype="html">
-        <source>Show information about <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
-        <target>Informationen zu <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/> anzeigen</target>
+        <source>Show information about <x id="INTERPOLATION" equiv-text="{{ getLayerTitle() }}"/></source>
+        <target state="new">Informationen zu <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/> anzeigen</target>
       </trans-unit>
       <trans-unit id="core.toc.show-layer-information" datatype="html">
         <source>Show information about this layer</source>

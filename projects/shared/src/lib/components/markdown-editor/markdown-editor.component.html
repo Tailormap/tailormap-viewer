@@ -22,8 +22,7 @@
 @if (isMilkdownEditor()) {
   <tm-milkdown-editor [uploadService$]="uploadService$"
                       [templatePicklistConfig]="templatePicklistConfig"
-                      [insertUpload$]="insertUpload$()"
-                      [ariaLabelledBy]="ariaLabelledBy()"></tm-milkdown-editor>
+                      [insertUpload$]="insertUpload$()"></tm-milkdown-editor>
 }
 @if (isSourceEditor()) {
   <tm-markdown-source-editor [useInfoPanelWidth]="useInfoPanelWidth"

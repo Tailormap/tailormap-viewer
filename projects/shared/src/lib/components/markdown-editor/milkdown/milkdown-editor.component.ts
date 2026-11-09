@@ -32,7 +32,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   public templatePicklistConfig = input<TemplatePicklistConfig>();
   public uploadService$ = input<MarkdownEditorUploadFn>();
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
-  public ariaLabelledBy = input<string>();
 
   private milkdownEditor: MilkdownEditor | undefined;
 
@@ -50,7 +49,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, coreModule, listenerModule ]) => {
+        concatMap(([ crepeModule, _coreModule, listenerModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
           };
@@ -70,14 +69,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           crepe.editor
             .use(listenerModule.listener)
             .config((ctx) => {
-              const ariaLabelledBy = this.ariaLabelledBy();
-              if (ariaLabelledBy) {
-                ctx.update(coreModule.editorViewOptionsCtx, options => ({
-                  ...options,
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                  attributes: { ...options.attributes, 'aria-labelledby': ariaLabelledBy },
-                }));
-              }
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
                 if (markdown !== prevMarkdown) {

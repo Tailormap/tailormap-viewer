@@ -1,29 +1,25 @@
 import { combineLatest, from, take } from 'rxjs';
-import type { Ctx } from '@milkdown/kit/ctx';
+import type { Ctx } from '@milkdown/ctx';
 import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { MarkdownEditorInsertUploadFn } from '../markdown-editor-upload.model';
 
-// eslint-disable-next-line max-len
-const IMAGE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,21q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H19q0.83,0 1.41,0.59T21,5V19q0,0.82-0.59,1.41T19,21H5Zm0-2H19V5H5V19Zm1-2H18l-3.75-5l-3,4L9,13L6,17ZM5,19V5V19Z"/></svg>';
-
 export class MilkdownHelper {
 
   public static updateContent(ctx: Ctx, value: string) {
-    from(import('@milkdown/kit/utils'))
+    from(import('@milkdown/utils'))
       .pipe(take(1))
       .subscribe(utilsModule => {
         utilsModule.replaceAll(value, true)(ctx);
       });
   }
 
-  /**
-   * Inserts literal text at the cursor (the text is not parsed as Markdown), used for `{{variables}}`.
-   */
   public static insertTextInEditor(ctx: Ctx, value: string) {
-    from(import('@milkdown/kit/core'))
-      .pipe(take(1))
-      .subscribe(coreModule => {
+    combineLatest([
+      from(import('@milkdown/core')),
+      from(import('@milkdown/utils')),
+    ])
+      .subscribe(([ coreModule, _utilsModule ]) => {
         const view = ctx.get(coreModule.editorViewCtx);
         const { dispatch, state } = view;
         const { tr, selection } = state;
@@ -47,9 +43,9 @@ export class MilkdownHelper {
    */
   public static replaceCurrentBlockText(ctx: Ctx, markdown: string | null) {
     combineLatest([
-      from(import('@milkdown/kit/core')),
-      from(import('@milkdown/kit/preset/commonmark')),
-      from(import('@milkdown/kit/utils')),
+      from(import('@milkdown/core')),
+      from(import('@milkdown/preset-commonmark')),
+      from(import('@milkdown/utils')),
     ])
       .pipe(take(1))
       .subscribe(([ coreModule, commonmarkModule, utilsModule ]) => {
@@ -60,64 +56,65 @@ export class MilkdownHelper {
       });
   }
 
-  /**
-   * Returns the configuration for the block edit feature (slash menu and block handle).
-   *
-   * @param templatePicklistConfig When set, a group is added to insert template variables.
-   * @param insertUpload When set, the built-in image item is replaced by an item which uses this function to pick
-   * an upload and inserts the returned Markdown.
-   */
   public static getBlockEditConfiguration(
     templatePicklistConfig?: TemplatePicklistConfig,
     insertUpload?: MarkdownEditorInsertUploadFn,
   ): BlockEditFeatureConfig {
     return {
-      textGroup: {
-        label: $localize `:@@shared.markdown-editor.textgroup:Text`,
-        text: { label: $localize `:@@shared.markdown-editor.text:Text` },
-        h1: { label: $localize `:@@shared.markdown-editor.h1:H1` },
-        h2: { label: $localize `:@@shared.markdown-editor.h2:H2` },
-        h3: { label: $localize `:@@shared.markdown-editor.h3:H3` },
-        h4: { label: $localize `:@@shared.markdown-editor.h4:H4` },
-        h5: { label: $localize `:@@shared.markdown-editor.h5:H5` },
-        h6: { label: $localize `:@@shared.markdown-editor.h6:H6` },
-        quote: { label: $localize `:@@shared.markdown-editor.quote:Quote` },
-        divider: { label: $localize `:@@shared.markdown-editor.divider:Divider` },
-      },
-      listGroup: {
-        label: $localize `:@@shared.markdown-editor.listgroup:List`,
-        bulletList: { label: $localize `:@@shared.markdown-editor.bulletlist:Bullet List` },
-        orderedList: { label: $localize `:@@shared.markdown-editor.orderedlist:Ordered List` },
-        // Checkbox list is not used in templates
-        taskList: templatePicklistConfig ? null : undefined,
-      },
-      advancedGroup: {
-        label: $localize `:@@shared.markdown-editor.advancedgroup:Advanced`,
-        image: insertUpload ? null : { label: $localize `:@@shared.markdown-editor.image:Image` },
-        codeBlock: { label: $localize `:@@shared.markdown-editor.codeblock:Code Block` },
-        table: { label: $localize `:@@shared.markdown-editor.table:Table` },
-      },
+      // @ts-expect-error TS2353: Object literal may only specify known properties, and 'slashMenuTextGroupLabel' does not exist in type etc...
+      slashMenuTextGroupLabel: $localize `:@@shared.markdown-editor.textgroup:Text`,
+      slashMenuTextLabel: $localize `:@@shared.markdown-editor.text:Text`,
+      slashMenuH1Label: $localize `:@@shared.markdown-editor.h1:H1`,
+      slashMenuH2Label: $localize `:@@shared.markdown-editor.h2:H2`,
+      slashMenuH3Label: $localize `:@@shared.markdown-editor.h3:H3`,
+      slashMenuH4Label: $localize `:@@shared.markdown-editor.h4:H4`,
+      slashMenuH5Label: $localize `:@@shared.markdown-editor.h5:H5`,
+      slashMenuH6Label: $localize `:@@shared.markdown-editor.h6:H6`,
+      slashMenuQuoteLabel: $localize `:@@shared.markdown-editor.quote:Quote`,
+      slashMenuDividerLabel: $localize `:@@shared.markdown-editor.divider:Divider`,
+      slashMenuListGroupLabel: $localize `:@@shared.markdown-editor.listgroup:List`,
+      slashMenuBulletListLabel: $localize `:@@shared.markdown-editor.bulletlist:Bullet List`,
+      slashMenuOrderedListLabel: $localize `:@@shared.markdown-editor.orderedlist:Ordered List`,
+      slashMenuAdvancedGroupLabel: $localize `:@@shared.markdown-editor.advancedgroup:Advanced`,
+      slashMenuImageLabel: $localize `:@@shared.markdown-editor.image:Image`,
+      slashMenuCodeBlockLabel: $localize `:@@shared.markdown-editor.codeblock:Code Block`,
+      slashMenuTableLabel: $localize `:@@shared.markdown-editor.table:Table`,
       buildMenu: builder => {
         if (insertUpload) {
-          builder.getGroup('advanced').addItem('insert-upload', {
-            label: $localize `:@@shared.markdown-editor.image:Image`,
-            icon: IMAGE_ICON,
-            onRun: (ctx: Ctx) => insertUpload()
-              .pipe(take(1))
-              .subscribe(markdown => MilkdownHelper.replaceCurrentBlockText(ctx, markdown)),
-          });
-        }
-        if (templatePicklistConfig) {
-          // Add attributes to add
-          const group = builder.addGroup('att', templatePicklistConfig.shortLabel);
-          templatePicklistConfig.variables.forEach(v => {
-            group.addItem(`insert_${v.value}`, {
-              label: v.label,
-              onRun: (ctx: Ctx) => MilkdownHelper.insertTextInEditor(ctx, `{{${v.value}}}`),
-              icon: '',
+          // Replace the built-in image item with an item which uses our own upload picker
+          const advancedGroup = builder.getGroup('advanced');
+          const advancedItems = advancedGroup.group.items;
+          advancedGroup.clear();
+          advancedItems.forEach(i => {
+            if (i.key !== 'image') {
+              advancedGroup.addItem(i.key, i);
+              return;
+            }
+            advancedGroup.addItem('insert-upload', {
+              ...i,
+              onRun: (ctx: Ctx) => insertUpload()
+                .pipe(take(1))
+                .subscribe(markdown => MilkdownHelper.replaceCurrentBlockText(ctx, markdown)),
             });
           });
         }
+        if (!templatePicklistConfig) {
+          return;
+        }
+        // Remove checkbox list, not used
+        const listGroup = builder.getGroup('list');
+        const items = listGroup.group.items.filter(i => i.key !== 'todo-list');
+        listGroup.clear();
+        items.forEach(i => listGroup.addItem(i.key, i));
+        // Add attributes to add
+        const group = builder.addGroup('att', templatePicklistConfig.shortLabel);
+        templatePicklistConfig.variables.forEach(v => {
+          group.addItem(`insert_${v.value}`, {
+            label: v.label,
+            onRun: (ctx: Ctx) => MilkdownHelper.insertTextInEditor(ctx, `{{${v.value}}}`),
+            icon: '',
+          });
+        });
       },
     };
   }

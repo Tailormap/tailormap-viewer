@@ -337,10 +337,6 @@
         <source>Image</source>
         <target>Afbeelding</target>
       </trans-unit>
-      <trans-unit id="shared.markdown-editor.insert-upload" datatype="html">
-        <source>Image or file…</source>
-        <target>Afbeelding of bestand…</target>
-      </trans-unit>
       <trans-unit id="shared.markdown-editor.listgroup" datatype="html">
         <source>List</source>
         <target>Lijst</target>
