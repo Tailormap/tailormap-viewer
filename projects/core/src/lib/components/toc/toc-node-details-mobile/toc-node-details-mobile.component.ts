@@ -17,7 +17,7 @@ import {
     templateUrl: './toc-node-details-mobile.component.html',
     styleUrls: ['./toc-node-details-mobile.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ LayerTransparencyComponent, HtmlifyComponent, MatButton, TooltipDirective, MarkdownToHtmlPipe, AsyncPipe ],
+    imports: [ LayerTransparencyComponent, MatButton, TooltipDirective, MarkdownToHtmlPipe, AsyncPipe ],
 })
 export class TocNodeDetailsMobileComponent {
   private store$ = inject(Store);

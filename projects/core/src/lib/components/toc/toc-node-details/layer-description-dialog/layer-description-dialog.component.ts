@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { HtmlifyComponent, TooltipDirective } from '@tailormap-viewer/shared';
+import { MarkdownToHtmlPipe, TooltipDirective } from '@tailormap-viewer/shared';
+import { AsyncPipe } from '@angular/common';
 
 export interface LayerDescriptionDialogData {
   title: string;
@@ -20,7 +21,8 @@ export interface LayerDescriptionDialogData {
     MatIconButton,
     MatIcon,
     TooltipDirective,
-    HtmlifyComponent,
+    AsyncPipe,
+    MarkdownToHtmlPipe,
   ],
 })
 export class LayerDescriptionDialogComponent {
