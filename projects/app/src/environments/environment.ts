@@ -3,12 +3,34 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideDrawingExt } from '@tailormap-pro/drawing-ext';
+import { provideDrawingStyleLibrary } from '@tailormap-pro/drawing-style-library';
+import { provideEigendomskaart } from '@tailormap-pro/eigendomskaart';
+import { provideFmeFlow } from '@tailormap-pro/fme-flow';
+import { provideKikInzage } from '@tailormap-pro/kik-inzage';
+import { providePortal } from '@tailormap-pro/portal';
+import { provideStatistics } from '@tailormap-pro/statistics';
+import { provideStreetSmart } from '@tailormap-pro/streetsmart';
+import { provideTheme } from '@tailormap-pro/theme';
+import { provideTimeline } from '@tailormap-pro/timeline';
+import { provideStories } from '@tailormap-pro/stories';
 
 export const environment = {
   production: false,
   viewerBaseUrl: 'http://localhost:4200/app/',
   providers: [
     provideStoreDevtools({ maxAge: 25, connectInZone: true }),
+    provideDrawingExt(),
+    provideDrawingStyleLibrary(),
+    provideEigendomskaart(),
+    provideFmeFlow(),
+    provideKikInzage(),
+    providePortal(),
+    provideStatistics(),
+    provideStreetSmart(),
+    provideTheme(),
+    provideTimeline(),
+    provideStories(),
   ],
 };
 
