@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, inject } from '@angular/core';
-import { TreeModel, MarkdownToHtmlPipe, HtmlifyComponent, TooltipDirective } from '@tailormap-viewer/shared';
+import { TreeModel, MarkdownToHtmlPipe, TooltipDirective } from '@tailormap-viewer/shared';
 import { AppLayerModel } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
