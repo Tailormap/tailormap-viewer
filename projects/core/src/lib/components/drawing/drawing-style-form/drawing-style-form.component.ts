@@ -366,7 +366,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private changeLabel(key: keyof LabelDrawingFeatureStyleModel, value: StyleValue) {
-    this.styleChange.emit({ field: key, style: { [key]: value } });
+    this.styleChange.emit({ field: key, style: { [key]: value } as Partial<DrawingFeatureStyleModel> });
     this.updatedLabelStyleProps.set(key, value);
     if (this.labelDebounce) {
       window.clearTimeout(this.labelDebounce);
