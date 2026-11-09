@@ -47,3 +47,13 @@ mat-selection-list {
 .list-icon {
   float: right;
 }
+
+tm-admin-layer-description-field:has(+ .description-in-popup) {
+  padding-bottom: 0;
+}
+
+.description-in-popup {
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 0 !important;
+}

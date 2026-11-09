@@ -1563,6 +1563,14 @@
         <source>Reset opacity</source>
         <target>Deckkraft zurücksetzen</target>
       </trans-unit>
+      <trans-unit id="core.toc.show-information-about-layer-tooltip" datatype="html">
+        <source>Show information about <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
+        <target>Informationen zu <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/> anzeigen</target>
+      </trans-unit>
+      <trans-unit id="core.toc.show-layer-information" datatype="html">
+        <source>Show information about this layer</source>
+        <target>Informationen zu dieser Ebene anzeigen</target>
+      </trans-unit>
       <trans-unit id="core.toc.toggle-layers-off" datatype="html">
         <source>Toggle all layers off</source>
         <target>Alle Ebenen ausschalten</target>
