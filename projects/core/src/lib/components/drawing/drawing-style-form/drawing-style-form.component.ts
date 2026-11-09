@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, effect, input, output } from '@angular/core';
 import {
   ArrowTypeEnum, DrawingFeatureStyleModel, LabelDrawingFeatureStyleModel, LabelStyleEnum, StrokeTypeEnum,
 } from '../../../map/models/drawing-feature.model';
@@ -19,6 +19,26 @@ import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-
 import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { NgTemplateOutlet } from '@angular/common';
 
+/**
+ * A single change made in the drawing style form: the setting that was changed (`field`) and the style
+ * properties it changed (usually only that setting, but changing the line color of a line also changes
+ * its fill color).
+ */
+export interface DrawingStyleChange {
+  field: keyof DrawingFeatureStyleModel;
+  style: Partial<DrawingFeatureStyleModel>;
+}
+
+type StyleValue = string | number | null | boolean | LabelStyleEnum[] | number[];
+
+/**
+ * Form to change the style of a drawing feature of the given `type`.
+ *
+ * Changes are emitted in two ways:
+ * - `styleChange` emits every change right away, with only the properties that changed.
+ * - `styleUpdated` (for symbol, line and fill settings) and `labelStyleUpdated` (for label settings) emit
+ *   the complete updated style, with changes made in quick succession combined into one emit.
+ */
 @Component({
     selector: 'tm-drawing-style-form',
     templateUrl: './drawing-style-form.component.html',
@@ -50,43 +70,16 @@ import { NgTemplateOutlet } from '@angular/common';
     ],
 })
 export class DrawingStyleFormComponent implements OnInit, OnDestroy {
-  private cdr = inject(ChangeDetectorRef);
 
-  private _style: DrawingFeatureStyleModel = {};
+  public readonly onlyLabelSettings = input(false);
+  public readonly style = input<DrawingFeatureStyleModel>({});
+  public readonly type = input<DrawingFeatureTypeEnum>();
+  /** Whether to show the buttons to insert coordinates, length or area in the label and the checkboxes to show sizes. */
+  public readonly showMeasureSettings = input(true);
 
-  @Input()
-  public onlyLabelSettings: boolean = false;
-
-  @Input()
-  public set style (style: DrawingFeatureStyleModel) {
-    this._style = style;
-    this.labelControl.patchValue(this.style.label || '', {
-      emitEvent: false,
-    });
-    const strokeType = Array.isArray(this.style.strokeType)
-      ? this.style.strokeType.join(' ')
-      : this.style.strokeType || StrokeTypeEnum.SOLID;
-    this.strokeTypeControl.patchValue(strokeType, {
-      emitEvent: false,
-    });
-    this.arrowTypeControl.patchValue(this.style.arrowType || ArrowTypeEnum.NONE, {
-      emitEvent: false,
-    });
-    this.cdr.detectChanges();
-  }
-
-  public get style () {
-    return this._style;
-  }
-
-  @Input()
-  public type: DrawingFeatureTypeEnum | undefined;
-
-  @Output()
-  public styleUpdated: EventEmitter<DrawingFeatureStyleModel> = new EventEmitter<DrawingFeatureStyleModel>();
-
-  @Output()
-  public labelStyleUpdated: EventEmitter<LabelDrawingFeatureStyleModel> = new EventEmitter<LabelDrawingFeatureStyleModel>();
+  public readonly styleUpdated = output<DrawingFeatureStyleModel>();
+  public readonly labelStyleUpdated = output<LabelDrawingFeatureStyleModel>();
+  public readonly styleChange = output<DrawingStyleChange>();
 
   public labelControl = new FormControl('', {
     nonNullable: true,
@@ -104,9 +97,9 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public labelStyleValues = { bold: LabelStyleEnum.BOLD, italic: LabelStyleEnum.ITALIC };
 
   private debounce: number | undefined;
-  private updatedStyleProps: Map<keyof DrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[] | number[]> = new Map();
+  private updatedStyleProps: Map<keyof DrawingFeatureStyleModel, StyleValue> = new Map();
   private labelDebounce: number | undefined;
-  private updatedLabelStyleProps: Map<keyof LabelDrawingFeatureStyleModel, string | number | null | boolean | LabelStyleEnum[] | number[]> = new Map();
+  private updatedLabelStyleProps: Map<keyof LabelDrawingFeatureStyleModel, StyleValue> = new Map();
 
   private destroyed = new Subject();
 
@@ -117,6 +110,24 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   public labelLineThickness = $localize `:@@core.drawing.line-thickness:Line thickness`;
   public labelThickness = $localize `:@@core.drawing.thickness:Thickness`;
   public labelOpacity = $localize `:@@core.drawing.opacity:Opacity`;
+
+  constructor() {
+    effect(() => {
+      const style = this.style();
+      this.labelControl.patchValue(style.label || '', {
+        emitEvent: false,
+      });
+      const strokeType = Array.isArray(style.strokeType)
+        ? style.strokeType.join(' ')
+        : style.strokeType || StrokeTypeEnum.SOLID;
+      this.strokeTypeControl.patchValue(strokeType, {
+        emitEvent: false,
+      });
+      this.arrowTypeControl.patchValue(style.arrowType || ArrowTypeEnum.NONE, {
+        emitEvent: false,
+      });
+    });
+  }
 
   public ngOnInit(): void {
     this.labelControl.valueChanges
@@ -138,56 +149,63 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    window.clearTimeout(this.debounce);
+    window.clearTimeout(this.labelDebounce);
     this.destroyed.next(null);
     this.destroyed.complete();
   }
 
   public showIconSettings() {
-    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.IMAGE;
+    return !this.onlyLabelSettings() && this.type() === DrawingFeatureTypeEnum.IMAGE;
   }
 
   public showPointSettings(): boolean {
-    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.POINT;
+    return !this.onlyLabelSettings() && this.type() === DrawingFeatureTypeEnum.POINT;
   }
 
   public showLabelSettings(): boolean {
-    return !!this.type;
+    return !!this.type();
   }
 
   public isLabelType(): boolean {
-    return this.type === DrawingFeatureTypeEnum.LABEL;
+    return this.type() === DrawingFeatureTypeEnum.LABEL;
   }
 
   public showInsertCoordinates() {
-    return this.showPointSettings();
+    return this.showMeasureSettings() && this.showPointSettings();
   }
 
   public isLineType() {
-    return this.type === DrawingFeatureTypeEnum.LINE;
+    return this.type() === DrawingFeatureTypeEnum.LINE;
+  }
+
+  public showInsertLength() {
+    return this.showMeasureSettings() && this.isLineType();
   }
 
   public showInsertArea() {
-    return this.showPolygonSettings();
+    return this.showMeasureSettings() && this.showPolygonSettings();
   }
 
   public showLineSettings(): boolean {
-    return !this.onlyLabelSettings && (this.type === DrawingFeatureTypeEnum.LINE || this.showPolygonSettings());
+    return !this.onlyLabelSettings() && (this.type() === DrawingFeatureTypeEnum.LINE || this.showPolygonSettings());
   }
 
   public showPolygonSettings(): boolean {
-    return !this.onlyLabelSettings && (this.type === DrawingFeatureTypeEnum.CIRCLE
-      || this.type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS
-      || this.type === DrawingFeatureTypeEnum.POLYGON
-      || this.type === DrawingFeatureTypeEnum.RECTANGLE
-      || this.type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
-      || this.type === DrawingFeatureTypeEnum.SQUARE
-      || this.type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH
-      || this.type === DrawingFeatureTypeEnum.STAR
-      || this.type === DrawingFeatureTypeEnum.ELLIPSE);
+    const type = this.type();
+    return !this.onlyLabelSettings() && (type === DrawingFeatureTypeEnum.CIRCLE
+      || type === DrawingFeatureTypeEnum.CIRCLE_SPECIFIED_RADIUS
+      || type === DrawingFeatureTypeEnum.POLYGON
+      || type === DrawingFeatureTypeEnum.RECTANGLE
+      || type === DrawingFeatureTypeEnum.RECTANGLE_SPECIFIED_SIZE
+      || type === DrawingFeatureTypeEnum.SQUARE
+      || type === DrawingFeatureTypeEnum.SQUARE_SPECIFIED_LENGTH
+      || type === DrawingFeatureTypeEnum.STAR
+      || type === DrawingFeatureTypeEnum.ELLIPSE);
   }
 
   public showArrowSetting(): boolean {
-    return !this.onlyLabelSettings && this.type === DrawingFeatureTypeEnum.LINE;
+    return !this.onlyLabelSettings() && this.type() === DrawingFeatureTypeEnum.LINE;
   }
 
   public formatThumb(value: number) {
@@ -195,10 +213,11 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public changeStrokeColor($event: string) {
-    this.change('strokeColor', $event);
-    if (!this.showPolygonSettings()) {
-      this.change('fillColor', $event);
+    if (this.showPolygonSettings()) {
+      this.change('strokeColor', $event);
+      return;
     }
+    this.changeMultiple('strokeColor', { strokeColor: $event, fillColor: $event });
   }
 
   public changeMarkerFill($event: string) {
@@ -225,7 +244,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.change('strokeOpacity', $event);
   }
 
-  public getDashArray(strokeType: StrokeTypeEnum | string) {
+  public getDashArray(strokeType: StrokeTypeEnum | string | number[] | undefined) {
     return StyleHelper.getDashArray(strokeType, 0).join(' ');
   }
 
@@ -266,8 +285,9 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private insertText(text: string) {
-    const label = this.style.label
-      ? `${this.style.label} ${text}`
+    const currentLabel = this.style().label;
+    const label = currentLabel
+      ? `${currentLabel} ${text}`
       : text;
     this.changeLabel('label', label);
   }
@@ -285,7 +305,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public toggleStyle(style: LabelStyleEnum) {
-    const labelStyle: LabelStyleEnum[] = this.style.labelStyle || [];
+    const labelStyle: LabelStyleEnum[] = this.style().labelStyle || [];
     const idx = labelStyle.indexOf(style);
     if (idx === -1) {
       this.changeLabel('labelStyle', [ ...labelStyle, style ]);
@@ -295,7 +315,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public hasLabelStyle(style: LabelStyleEnum) {
-    return (this.style.labelStyle || []).indexOf(style) !== -1;
+    return (this.style().labelStyle || []).indexOf(style) !== -1;
   }
 
   public changeLabelRotation($event: number) {
@@ -307,7 +327,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedMarker() {
-    const marker = this.availableMarkers.find(m => m.value === this.style.marker);
+    const marker = this.availableMarkers.find(m => m.value === this.style().marker);
     if (marker) {
       return marker.icon;
     }
@@ -321,8 +341,15 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  private change(key: keyof DrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[] | number[]) {
-    this.updatedStyleProps.set(key, value);
+  private change(key: keyof DrawingFeatureStyleModel, value: StyleValue) {
+    this.changeMultiple(key, { [key]: value });
+  }
+
+  private changeMultiple(field: keyof DrawingFeatureStyleModel, style: Partial<Record<keyof DrawingFeatureStyleModel, StyleValue>>) {
+    this.styleChange.emit({ field, style: style as Partial<DrawingFeatureStyleModel> });
+    Object.entries(style).forEach(([ key, value ]) => {
+      this.updatedStyleProps.set(key as keyof DrawingFeatureStyleModel, value);
+    });
     if (this.debounce) {
       window.clearTimeout(this.debounce);
     }
@@ -330,7 +357,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private emitUpdatedStyle() {
-    let style = { ...this.style };
+    let style = { ...this.style() };
     this.updatedStyleProps.forEach((value, key) => {
       style = { ...style, [key]: value };
     });
@@ -338,7 +365,8 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
     this.updatedStyleProps.clear();
   }
 
-  private changeLabel(key: keyof LabelDrawingFeatureStyleModel, value: string | number | null | boolean | LabelStyleEnum[] | number[]) {
+  private changeLabel(key: keyof LabelDrawingFeatureStyleModel, value: StyleValue) {
+    this.styleChange.emit({ field: key, style: { [key]: value } });
     this.updatedLabelStyleProps.set(key, value);
     if (this.labelDebounce) {
       window.clearTimeout(this.labelDebounce);
@@ -347,7 +375,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private emitUpdatedLabelStyle() {
-    let style = { ...this.style };
+    let style = { ...this.style() };
     this.updatedLabelStyleProps.forEach((value, key) => {
       style = { ...style, [key]: value };
     });
