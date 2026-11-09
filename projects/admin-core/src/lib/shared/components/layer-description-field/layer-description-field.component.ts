@@ -19,11 +19,7 @@ import { AdminImageUploadService, ImageUploadResult } from '../../services/admin
 })
 export class AdminLayerDescriptionFieldHint {}
 
-/**
- * Form field to edit a layer description as Markdown. Uploads (images and files) are inserted as `upload://<id>`
- * references, which the backend replaces by the URL of the upload when serving the viewer configuration. The
- * LayerAttachedFileRemoveService also searches for these references to check whether an upload is in use.
- */
+
 @Component({
   selector: 'tm-admin-layer-description-field',
   templateUrl: './layer-description-field.component.html',
@@ -58,7 +54,7 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
 
   private contentChanges = new Subject<string | null>();
 
-  public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => this.adminImageUploadService.uploadLayerAttachedImage$(file);
+  public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => this.adminImageUploadService.uploadImage$(file);
 
   constructor() {
     this.contentChanges
