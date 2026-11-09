@@ -14,3 +14,50 @@
 .select-wrapper + .button-wrapper {
   margin-left: 16px;
 }
+
+/*
+ * Inline appearance: the visual editor looks like the surrounding page text. It takes font, color and line height from
+ * the parent of tm-markdown-editor and has no border, background or padding. Crepe's floating UI (selection toolbar,
+ * link editor, slash menu, block handle) keeps its own colors, as it is drawn on its own surface.
+ */
+.tm-markdown-editor--inline {
+  display: block;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  background: transparent;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .editor {
+  border: none;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .ProseMirror {
+  padding: 0;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .ProseMirror :is(p, h1, h2, h3, h4, h5, h6, li, blockquote) {
+  font-family: inherit;
+  color: inherit;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .ProseMirror p {
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .ProseMirror > * + * {
+  margin-top: 1em;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .ProseMirror a {
+  color: inherit;
+}
+
+.tm-markdown-editor--inline .markdown-wrap .milkdown .crepe-placeholder::before {
+  color: color-mix(in srgb, currentColor, transparent 40%);
+}
