@@ -4,6 +4,7 @@ import { AuthorizationRuleGroup } from './authorization-rules.model';
 export interface LayerSettingsModel {
   title?: string;
   description?: string;
+  descriptionInPopup?: boolean;
   hiDpiDisabled?: boolean;
   hiDpiMode?: TileLayerHiDpiModeEnum;
   hiDpiSubstituteLayer?: string;

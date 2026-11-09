@@ -1,0 +1,39 @@
+.layer-description-dialog-header {
+  display: flex;
+  align-items: center;
+}
+
+.layer-description-dialog-header h1 {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.close-button {
+  flex-shrink: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+}
+
+.close-button:focus-visible {
+  outline: 2px solid var(--primary-color-0_5);
+}
+
+.close-button mat-icon ::ng-deep svg {
+  transition: transform 250ms ease-in-out;
+}
+
+.close-button:hover ::ng-deep svg {
+  transform: rotate(90deg);
+}
+
+.layer-description {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.layer-description ::ng-deep img {
+  max-width: 100%;
+}
