@@ -48,11 +48,6 @@ export class MarkdownEditorComponent implements OnInit {
    */
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
 
-  /**
-   * Id of the element which labels the editor, for accessibility.
-   */
-  public ariaLabelledBy = input<string>();
-
   @Input()
   public useInfoPanelWidth = false;
 

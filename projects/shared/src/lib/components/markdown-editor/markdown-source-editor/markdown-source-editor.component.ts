@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormField } from '@angular/material/select';
@@ -23,8 +23,8 @@ export class MarkdownSourceEditorComponent implements OnInit {
   private mdEditorService = inject(MarkdownEditorService);
 
 
-  public useInfoPanelWidth = input(false);
-  public ariaLabelledBy = input<string>();
+  @Input()
+  public useInfoPanelWidth = false;
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
