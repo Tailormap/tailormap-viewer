@@ -8,9 +8,13 @@ const mocks = vi.hoisted(() => {
   const editorView = { focus: viewFocus };
   const editorViewCtx = Symbol('editorViewCtx');
   let resolveCreate: () => void = () => undefined;
-  const created = new Promise<void>(resolve => resolveCreate = resolve);
+  let created = Promise.resolve();
+  const resetCreate = () => {
+    created = new Promise<void>(resolve => resolveCreate = resolve);
+  };
+  resetCreate();
   const crepeOptions: Array<Record<string, unknown>> = [];
-  return { viewFocus, editorView, editorViewCtx, created, resolveCreate: () => resolveCreate(), crepeOptions };
+  return { viewFocus, editorView, editorViewCtx, get created() { return created; }, resolveCreate: () => resolveCreate(), resetCreate, crepeOptions };
 });
 
 /* eslint-disable @typescript-eslint/naming-convention -- mirrors the names of the Crepe API */
@@ -35,6 +39,8 @@ vi.mock('@milkdown/plugin-listener', () => ({ listener: {}, listenerCtx: {} }));
 describe('MilkdownEditorComponent', () => {
 
   test('focus() before the editor is created focuses it once created', async () => {
+    mocks.viewFocus.mockClear();
+    mocks.resetCreate();
     const { fixture } = await render(MilkdownEditorComponent, {
       inputs: { placeholder: 'Write something' },
       providers: [MarkdownEditorService],
@@ -47,6 +53,19 @@ describe('MilkdownEditorComponent', () => {
     expect(mocks.viewFocus).toHaveBeenCalledTimes(2);
     const featureConfigs = mocks.crepeOptions[0]['featureConfigs'] as Record<string, unknown>;
     expect(featureConfigs['placeholder']).toEqual({ mode: 'doc', text: 'Write something' });
+  });
+
+  test('destroy() prevents a pending create callback from focusing after teardown', async () => {
+    mocks.viewFocus.mockClear();
+    mocks.resetCreate();
+    const { fixture } = await render(MilkdownEditorComponent, {
+      inputs: { placeholder: 'Write something' },
+      providers: [MarkdownEditorService],
+    });
+    fixture.componentInstance.focus();
+    fixture.componentInstance.ngOnDestroy();
+    mocks.resolveCreate();
+    await vi.waitFor(() => expect(mocks.viewFocus).not.toHaveBeenCalled());
   });
 
 });

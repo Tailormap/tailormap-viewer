@@ -92,6 +92,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           return from(crepe.create()).pipe(map(editor => ({ editor, editorViewCtx: coreModule.editorViewCtx })));
         }),
       )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ editor, editorViewCtx }) => {
         this.milkdownEditor = editor;
         this.editorView = editor.ctx.get(editorViewCtx);
