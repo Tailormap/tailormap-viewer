@@ -6,7 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, map, Observable, Subject, take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
-import { MarkdownEditorComponent, MarkdownHelper } from '@tailormap-viewer/shared';
+import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
 import { UploadModel } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../select-upload/models/upload-remove-service.injection-token';
 import { LayerAttachedFileRemoveService } from '../../services/layer-attached-file-remove.service';
@@ -108,7 +108,7 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   public selectUpload$ = (): Observable<string | null> => {
     return SelectUploadDialogComponent.open(
       this.dialog,
-      { category: UploadCategoryEnum.IMAGE, uploadId: null, showDescriptionField: true, showFilesTab: false },
+      { category: UploadCategoryEnum.IMAGE, uploadId: null, showDescriptionField: false, showFilesTab: false },
       this.viewContainerRef,
     )
       .afterClosed()
@@ -121,9 +121,8 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   };
 
   public static getMarkdownForUpload(upload: UploadModel): string {
-    const label = MarkdownHelper.markdownEscape(upload.imageAltText || upload.description || upload.filename);
     const url = UploadedFileHelper.getUrlForFile(upload.id, upload.category, upload.filename);
-    return `![${label}](${url})`;
+    return `![](${url})`;
   }
 
 }
