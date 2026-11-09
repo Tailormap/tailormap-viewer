@@ -19,8 +19,6 @@ import { AdminImageUploadService, ImageUploadResult } from '../../services/admin
 })
 export class AdminLayerDescriptionFieldHint {}
 
-const UPLOAD_REFERENCE_REGEXP = /^upload:\/\/([^/\s?#]+)/;
-
 let nextId = 0;
 
 /**
@@ -62,8 +60,6 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private userInteracted = false;
 
   private contentChanges = new Subject<string | null>();
-
-  public imageUrlTransform = LayerDescriptionFieldComponent.getUploadDisplayUrl;
 
   public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => this.adminImageUploadService.uploadLayerAttachedImage$(file);
 
@@ -114,13 +110,12 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   }
 
   /**
-   * Opens the dialog to select or upload a file and returns Markdown for the selected upload: an image for images,
-   * otherwise a link. Returns null when the dialog was cancelled.
+   * Opens the dialog to select or upload a file and returns Markdown for the selected upload
    */
   public selectUpload$ = (): Observable<string | null> => {
     return SelectUploadDialogComponent.open(
       this.dialog,
-      { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false, showFilesTab: true },
+      { category: UploadCategoryEnum.IMAGE, uploadId: null, showDescriptionField: true, showFilesTab: false },
       this.viewContainerRef,
     )
       .afterClosed()
@@ -133,21 +128,9 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   };
 
   public static getMarkdownForUpload(upload: UploadModel): string {
-    const isImage = upload.mimeType?.startsWith('image/') ?? false;
-    const label = MarkdownHelper.markdownEscape(
-      (isImage ? upload.imageAltText : null) || upload.description || upload.filename,
-    );
-    return `${isImage ? '!' : ''}[${label}](upload://${upload.id})`;
+    const label = MarkdownHelper.markdownEscape(upload.imageAltText || upload.description || upload.filename);
+    const url = UploadedFileHelper.getUrlForFile(upload.id, upload.category, upload.filename);
+    return `![${label}](${url})`;
   }
 
-  /**
-   * Returns a URL the admin can load for `upload://<id>` references, other URLs are returned unchanged.
-   */
-  public static getUploadDisplayUrl(src: string): string {
-    const match = UPLOAD_REFERENCE_REGEXP.exec(src);
-    if (!match) {
-      return src;
-    }
-    return UploadedFileHelper.getAdminUrlForFile(match[1], UploadCategoryEnum.LAYER_ATTACHED_FILE);
-  }
 }

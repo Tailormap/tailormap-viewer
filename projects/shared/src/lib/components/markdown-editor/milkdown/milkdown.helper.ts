@@ -4,9 +4,8 @@ import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { MarkdownEditorInsertUploadFn } from '../markdown-editor-upload.model';
 
-// Material Symbols "attach_file"
 // eslint-disable-next-line max-len
-const ATTACH_FILE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>';
+const IMAGE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,21q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H19q0.83,0 1.41,0.59T21,5V19q0,0.82-0.59,1.41T19,21H5Zm0-2H19V5H5V19Zm1-2H18l-3.75-5l-3,4L9,13L6,17ZM5,19V5V19Z"/></svg>';
 
 export class MilkdownHelper {
 
@@ -101,8 +100,8 @@ export class MilkdownHelper {
       buildMenu: builder => {
         if (insertUpload) {
           builder.getGroup('advanced').addItem('insert-upload', {
-            label: $localize `:@@shared.markdown-editor.insert-upload:Image or file…`,
-            icon: ATTACH_FILE_ICON,
+            label: $localize `:@@shared.markdown-editor.image:Image`,
+            icon: IMAGE_ICON,
             onRun: (ctx: Ctx) => insertUpload()
               .pipe(take(1))
               .subscribe(markdown => MilkdownHelper.replaceCurrentBlockText(ctx, markdown)),

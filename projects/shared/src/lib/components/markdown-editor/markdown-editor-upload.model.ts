@@ -6,11 +6,6 @@ import { Observable } from 'rxjs';
  */
 export type MarkdownEditorInsertUploadFn = () => Observable<string | null>;
 
-/**
- * Transforms an image URL for display in the editor only, the Markdown keeps the original URL. Can be used to resolve
- * references like `upload://<id>` to a URL the browser can load.
- */
-export type MarkdownEditorImageUrlTransformFn = (src: string) => string;
 
 /**
  * Uploads a file which was pasted or dropped in the editor. Returns the URL to use in the Markdown or an error.

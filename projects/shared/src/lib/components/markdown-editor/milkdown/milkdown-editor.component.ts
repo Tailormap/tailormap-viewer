@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 import { MilkdownHelper } from './milkdown.helper';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MarkdownEditorImageUrlTransformFn, MarkdownEditorInsertUploadFn, MarkdownEditorUploadFn } from '../markdown-editor-upload.model';
+import { MarkdownEditorInsertUploadFn, MarkdownEditorUploadFn } from '../markdown-editor-upload.model';
 
 
 @Component({
@@ -32,7 +32,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   public templatePicklistConfig = input<TemplatePicklistConfig>();
   public uploadService$ = input<MarkdownEditorUploadFn>();
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
-  public imageUrlTransform = input<MarkdownEditorImageUrlTransformFn>();
   public ariaLabelledBy = input<string>();
 
   private milkdownEditor: MilkdownEditor | undefined;
@@ -54,8 +53,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
         concatMap(([ crepeModule, coreModule, listenerModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
-            // Only changes the displayed URL, the Markdown keeps the original URL
-            proxyDomURL: this.imageUrlTransform(),
           };
           const crepe = new crepeModule.Crepe({
             root: el,
