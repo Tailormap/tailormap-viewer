@@ -19,8 +19,6 @@ import { AdminImageUploadService, ImageUploadResult } from '../../services/admin
 })
 export class AdminLayerDescriptionFieldHint {}
 
-let nextId = 0;
-
 /**
  * Form field to edit a layer description as Markdown. Uploads (images and files) are inserted as `upload://<id>`
  * references, which the backend replaces by the URL of the upload when serving the viewer configuration. The
@@ -48,7 +46,6 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private viewContainerRef = inject(ViewContainerRef);
   private adminImageUploadService = inject(AdminImageUploadService);
 
-  public labelId = `tm-admin-layer-description-field-label-${nextId++}`;
   public content = signal<string>('');
   public disabled = signal(false);
 
