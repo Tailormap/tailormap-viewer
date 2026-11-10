@@ -25,6 +25,7 @@ export class MarkdownHelper {
         take(1),
         map(markedLib => {
           const markedInstance = new markedLib.Marked({
+            breaks: true,
             walkTokens: token => {
               if (resolveImageUrl && token.type === 'image') {
                 token.href = resolveImageUrl(token.href);
