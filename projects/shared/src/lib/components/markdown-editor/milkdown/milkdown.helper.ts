@@ -1,5 +1,6 @@
 import { combineLatest, from, take } from 'rxjs';
 import type { Ctx } from '@milkdown/ctx';
+import type { Node, Schema } from '@milkdown/kit/prose/model';
 import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { MarkdownEditorInsertUploadFn } from '../markdown-editor-upload.model';
@@ -69,6 +70,33 @@ export class MilkdownHelper {
           .replaceSelection(new proseModelModule.Slice(doc.content, openDepth, openDepth))
           .scrollIntoView());
       });
+  }
+
+  /**
+   * Uploads files which were dropped or pasted in the editor and creates the nodes to insert. Images become an image
+   * (block) node, other files a link with the file name as label. Files which failed to upload (empty URL) are skipped.
+   */
+  public static async createNodesForUploadedFiles(
+    files: FileList,
+    schema: Schema,
+    upload: (file: File) => Promise<string>,
+  ): Promise<Node[]> {
+    const imageNodeType = schema.nodes['image-block'] ?? schema.nodes['image'];
+    const linkMarkType = schema.marks['link'];
+    const nodes = await Promise.all(Array.from(files).map(async file => {
+      const url = await upload(file);
+      if (!url) {
+        return null;
+      }
+      if (file.type.startsWith('image/')) {
+        return imageNodeType?.createAndFill({ src: url }) ?? null;
+      }
+      if (!linkMarkType) {
+        return null;
+      }
+      return schema.text(file.name || url, [linkMarkType.create({ href: url })]);
+    }));
+    return nodes.filter((node): node is Node => node !== null);
   }
 
   public static getBlockEditConfiguration(

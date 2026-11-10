@@ -47,10 +47,11 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       from(import('@milkdown/crepe')),
       from(import('@milkdown/kit/core')),
       from(import('@milkdown/plugin-listener')),
+      from(import('@milkdown/kit/plugin/upload')),
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, _coreModule, listenerModule ]) => {
+        concatMap(([ crepeModule, _coreModule, listenerModule, uploadModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
             proxyDomURL: this.resolveImageUrl(),
@@ -70,6 +71,14 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           });
           crepe.editor
             .use(listenerModule.listener)
+            .config(ctx => {
+              // Crepe's uploader for dropped/pasted files ignores files which are not images, replace it so other files
+              // are uploaded too and inserted as a link. Registered after Crepe's own config, so this one wins.
+              ctx.update(uploadModule.uploadConfig.key, prev => ({
+                ...prev,
+                uploader: (files, schema) => MilkdownHelper.createNodesForUploadedFiles(files, schema, file => this.handleFileUpload(file)),
+              }));
+            })
             .config((ctx) => {
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
