@@ -8,8 +8,6 @@ export class MarkdownHelper {
 
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
 
-  private static IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)|getimage\.ashx/i;
-
   /**
    * Converts Markdown to sanitized HTML. Bare URLs are rendered as links opening in a new window, or as images when the
    * URL points to an image. When `resolveImageUrl` is given, the src of each Markdown image is replaced by the URL it
@@ -37,10 +35,18 @@ export class MarkdownHelper {
                 if (!isBareUrl) {
                   return markedLib.Renderer.prototype.link.call(this, token);
                 }
-                const content = MarkdownHelper.IMG_REGEXP.test(token.href)
-                  ? `<img src="${token.href}" alt="${token.href}">`
-                  : token.text;
-                return `<a href="${token.href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
+                // For bare URLs marked passes the matched text unescaped, so clean and escape it like marked's default
+                // renderer does, to prevent characters like `"` from ending the attribute early.
+                const label = HtmlifyHelper.escapeHTML(token.text);
+                const cleanedHref = MarkdownHelper.cleanUrl(token.href);
+                if (cleanedHref === null) {
+                  return label;
+                }
+                const href = HtmlifyHelper.escapeHTML(cleanedHref);
+                const content = HtmlifyHelper.isImageUrl(token.href)
+                  ? `<img src="${href}" alt="${href}">`
+                  : label;
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
               },
             },
           });
@@ -90,6 +96,18 @@ export class MarkdownHelper {
       return `${str}`;
     }
     return str.replace(MarkdownHelper.ESCAPE_REGEX, '\\$&');
+  }
+
+  /**
+   * Same as marked's internal `cleanUrl`: percent-encodes the URL without double-encoding existing escapes.
+   * Returns null for malformed URLs (e.g. containing lone surrogates) for which `encodeURI` throws.
+   */
+  private static cleanUrl(href: string): string | null {
+    try {
+      return encodeURI(href).replace(/%25/g, '%');
+    } catch {
+      return null;
+    }
   }
 
   private static replaceWhitespaceInLinks(markdown: string) {
