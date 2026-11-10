@@ -9,3 +9,8 @@
 .toc-node-details-transparency ::ng-deep h3 {
   font-size: 14px;
 }
+
+.toc-node-description ::ng-deep img {
+  max-width: 100%;
+  height: auto;
+}
