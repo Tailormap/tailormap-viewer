@@ -57,7 +57,7 @@ describe('TocNodeDetailsMobileComponent', () => {
 
   test('should render if layer is passed', async () => {
     await setup(true);
-    expect(screen.queryByText('layer description')).toBeInTheDocument();
+    expect(await screen.findByText('layer description')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Show information about The Layer' })).not.toBeInTheDocument();
   });
 

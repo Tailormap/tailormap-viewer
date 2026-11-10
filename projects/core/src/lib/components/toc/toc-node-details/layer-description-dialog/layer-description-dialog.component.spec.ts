@@ -15,7 +15,7 @@ describe('LayerDescriptionDialogComponent', () => {
       ],
     });
     expect(screen.getByRole('heading', { name: 'The Layer' })).toBeInTheDocument();
-    expect(screen.getByText('The layer description')).toBeInTheDocument();
+    expect(await screen.findByText('The layer description')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(close).toHaveBeenCalled();
   });
