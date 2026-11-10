@@ -3,15 +3,16 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime, filter, map, Observable, Subject, take } from 'rxjs';
+import { catchError, concatMap, debounceTime, filter, map, Observable, of, Subject, take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
-import { MarkdownEditorComponent } from '@tailormap-viewer/shared';
-import { UploadModel } from '@tailormap-admin/admin-api';
+import {
+  FileHelper, MarkdownEditorComponent, MarkdownEditorInsertUploadFn, MarkdownEditorResolveImageUrlFn, MarkdownEditorUploadFn,
+} from '@tailormap-viewer/shared';
+import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../select-upload/models/upload-remove-service.injection-token';
 import { LayerAttachedFileRemoveService } from '../../services/layer-attached-file-remove.service';
 import { SelectUploadDialogComponent } from '../select-upload/select-upload-dialog/select-upload-dialog.component';
-import { AdminImageUploadService, ImageUploadResult } from '../../services/admin-image-upload.service';
 
 @Component({
   selector: 'tm-admin-layer-description-field-hint',
@@ -40,7 +41,7 @@ export class AdminLayerDescriptionFieldHint {}
 export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private dialog = inject(MatDialog);
   private viewContainerRef = inject(ViewContainerRef);
-  private adminImageUploadService = inject(AdminImageUploadService);
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
   public content = signal<string>('');
   public disabled = signal(false);
@@ -55,8 +56,6 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private userInteracted = false;
 
   private contentChanges = new Subject<string | null>();
-
-  public uploadImage$ = (file: File): Observable<ImageUploadResult | null> => this.adminImageUploadService.uploadImage$(file);
 
   constructor() {
     this.contentChanges
@@ -107,7 +106,7 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   /**
    * Opens the dialog to select or upload a file and returns Markdown for the selected upload
    */
-  public selectUpload$ = (): Observable<string | null> => {
+  public selectUpload$: MarkdownEditorInsertUploadFn = (): Observable<string | null> => {
     return SelectUploadDialogComponent.open(
       this.dialog,
       { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false, showFilesTab: true },
@@ -123,18 +122,47 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   };
 
   /**
+   * Uploads a file which was dropped or pasted in the editor as a layer attached file and returns an `upload://{id}`
+   * URL, the same URL as used by {@link selectUpload$}.
+   */
+  public uploadFile$: MarkdownEditorUploadFn = (file: File) => {
+    return FileHelper.readFileContents(file)
+      .pipe(
+        concatMap(contents => {
+          if (!contents) {
+            return of({ error: $localize `:@@admin-core.layer-description.error-reading-file:Error reading file` });
+          }
+          return this.adminApiService.createUpload$({
+            content: contents.contentsBase64,
+            filename: contents.filename,
+            category: UploadCategoryEnum.LAYER_ATTACHED_FILE,
+            mimeType: contents.mimeType,
+          }).pipe(
+            take(1),
+            map(upload => ({ url: LayerDescriptionFieldComponent.getUploadUrl(upload) })),
+            catchError(() => of({ error: $localize `:@@admin-core.layer-description.error-uploading-file:Error uploading file` })),
+          );
+        }),
+      );
+  };
+
+  /**
    * Returns the admin URL for an `upload://{id}` URL, so the editor can display an uploaded image. Other URLs are
    * returned unchanged.
    */
-  public resolveImageUrl = (url: string): string => {
+  public resolveImageUrl: MarkdownEditorResolveImageUrlFn = (url: string): string => {
     const uploadId = url.startsWith(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX)
       ? url.substring(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX.length)
       : null;
     return uploadId ? UploadedFileHelper.getAdminUrlForFile(uploadId, UploadCategoryEnum.LAYER_ATTACHED_FILE) : url;
   };
 
+  public static getUploadUrl(upload: Pick<UploadModel, 'id'>): string {
+    return `${LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX}${upload.id}`;
+  }
+
   public static getMarkdownForUpload(upload: UploadModel): string {
-    const url = `${LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX}${upload.id}`;
+    const url = LayerDescriptionFieldComponent.getUploadUrl(upload);
     if (upload.mimeType?.startsWith('image/')) {
       return `![](${url})`;
     }
