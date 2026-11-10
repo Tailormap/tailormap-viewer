@@ -337,6 +337,10 @@
         <source>Image</source>
         <target>Bild</target>
       </trans-unit>
+      <trans-unit id="shared.markdown-editor.image-or-file" datatype="html">
+        <source>Image or file</source>
+        <target>Bild oder Datei</target>
+      </trans-unit>
       <trans-unit id="shared.markdown-editor.listgroup" datatype="html">
         <source>List</source>
         <target>Liste</target>

@@ -28,11 +28,31 @@ export class MarkdownHelper {
     shareReplay(1),
   );
 
-  public static getSafeHtmlForMarkdown$(md: string, sanitizer: DomSanitizer): Observable<SafeHtml> {
+  /**
+   * Converts Markdown to sanitized HTML. When `resolveImageUrl` is given, the src of each image is replaced by the URL
+   * it returns, for example to display images with an `upload://` URL.
+   */
+  public static getSafeHtmlForMarkdown$(
+    md: string,
+    sanitizer: DomSanitizer,
+    resolveImageUrl?: (url: string) => string,
+  ): Observable<SafeHtml> {
     return MarkdownHelper.marked$.pipe(
       take(1),
       map(marked => {
-        const html = sanitizer.sanitize(SecurityContext.HTML, marked.parse(md ?? "", { async: false }));
+        let parsed: string;
+        if (resolveImageUrl) {
+          const tokens = marked.lexer(md ?? "");
+          marked.walkTokens(tokens, token => {
+            if (token.type === 'image') {
+              token.href = resolveImageUrl(token.href);
+            }
+          });
+          parsed = marked.parser(tokens);
+        } else {
+          parsed = marked.parse(md ?? "", { async: false });
+        }
+        const html = sanitizer.sanitize(SecurityContext.HTML, parsed);
         return sanitizer.bypassSecurityTrustHtml(html || "");
       }),
     );

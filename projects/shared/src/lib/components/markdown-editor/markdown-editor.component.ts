@@ -7,7 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
 import { MarkdownSourceEditorComponent } from './markdown-source-editor/markdown-source-editor.component';
-import { MarkdownEditorInsertUploadFn, MarkdownEditorUploadFn } from './markdown-editor-upload.model';
+import { MarkdownEditorInsertUploadFn, MarkdownEditorResolveImageUrlFn, MarkdownEditorUploadFn } from './markdown-editor-upload.model';
 
 const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
 
@@ -47,6 +47,11 @@ export class MarkdownEditorComponent implements OnInit {
    * function to pick an upload and inserts the returned Markdown.
    */
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
+
+  /**
+   * When set, used by the visual editor and the source editor preview to get the URL to display an image.
+   */
+  public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
   @Input()
   public useInfoPanelWidth = false;

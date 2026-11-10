@@ -39,20 +39,35 @@ export class MilkdownHelper {
 
   /**
    * Removes the text in the current block (the `/` which opened the slash menu, like the built-in menu items do) and
-   * when given, parses the Markdown and inserts the result, so for example `![alt](url)` becomes an image node.
+   * when given, parses the Markdown and inserts the result, so for example `![alt](url)` becomes an image node and
+   * `[label](url)` a link in the current paragraph.
+   *
+   * The parsed nodes are inserted directly instead of using `insert()` from `@milkdown/utils`: with `inline` that
+   * round-trips through the DOM, which strips hrefs with an unknown scheme (like `upload://`) from links.
    */
   public static replaceCurrentBlockText(ctx: Ctx, markdown: string | null) {
     combineLatest([
-      from(import('@milkdown/core')),
+      from(import('@milkdown/kit/core')),
       from(import('@milkdown/preset-commonmark')),
-      from(import('@milkdown/utils')),
+      from(import('@milkdown/kit/prose/model')),
     ])
       .pipe(take(1))
-      .subscribe(([ coreModule, commonmarkModule, utilsModule ]) => {
+      .subscribe(([ coreModule, commonmarkModule, proseModelModule ]) => {
         ctx.get(coreModule.commandsCtx).call(commonmarkModule.clearTextInCurrentBlockCommand.key);
-        if (markdown) {
-          utilsModule.insert(markdown, true)(ctx);
+        if (!markdown) {
+          return;
         }
+        const doc = ctx.get(coreModule.parserCtx)(markdown);
+        if (!doc) {
+          return;
+        }
+        // A single paragraph (e.g. a link) is inserted as an open slice so its inline content is merged into the
+        // current paragraph, other content (e.g. an image block) is inserted as-is.
+        const openDepth = doc.childCount === 1 && doc.firstChild?.isTextblock ? 1 : 0;
+        const view = ctx.get(coreModule.editorViewCtx);
+        view.dispatch(view.state.tr
+          .replaceSelection(new proseModelModule.Slice(doc.content, openDepth, openDepth))
+          .scrollIntoView());
       });
   }
 
@@ -92,6 +107,7 @@ export class MilkdownHelper {
             }
             advancedGroup.addItem('insert-upload', {
               ...i,
+              label: $localize `:@@shared.markdown-editor.image-or-file:Image or file`,
               onRun: (ctx: Ctx) => insertUpload()
                 .pipe(take(1))
                 .subscribe(markdown => MilkdownHelper.replaceCurrentBlockText(ctx, markdown)),

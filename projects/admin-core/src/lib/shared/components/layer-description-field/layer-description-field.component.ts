@@ -48,6 +48,8 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private onChange: ((value: string | null) => void) | null = null;
   public onTouched: (() => void) | null = null;
 
+  private static readonly UPLOAD_URL_PREFIX = 'upload://';
+
   private currentDescription: string | null = null;
 
   private userInteracted = false;
@@ -108,7 +110,7 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   public selectUpload$ = (): Observable<string | null> => {
     return SelectUploadDialogComponent.open(
       this.dialog,
-      { category: UploadCategoryEnum.IMAGE, uploadId: null, showDescriptionField: false, showFilesTab: false },
+      { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false, showFilesTab: true },
       this.viewContainerRef,
     )
       .afterClosed()
@@ -120,9 +122,24 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
       );
   };
 
+  /**
+   * Returns the admin URL for an `upload://{id}` URL, so the editor can display an uploaded image. Other URLs are
+   * returned unchanged.
+   */
+  public resolveImageUrl = (url: string): string => {
+    const uploadId = url.startsWith(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX)
+      ? url.substring(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX.length)
+      : null;
+    return uploadId ? UploadedFileHelper.getAdminUrlForFile(uploadId, UploadCategoryEnum.LAYER_ATTACHED_FILE) : url;
+  };
+
   public static getMarkdownForUpload(upload: UploadModel): string {
-    const url = UploadedFileHelper.getUrlForFile(upload.id, upload.category, upload.filename);
-    return `![](${url})`;
+    const url = `${LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX}${upload.id}`;
+    if (upload.mimeType?.startsWith('image/')) {
+      return `![](${url})`;
+    }
+    const label = (upload.description || upload.filename).replace(/[\\[\]]/g, '\\$&');
+    return `[${label}](${url})`;
   }
 
 }

@@ -7,6 +7,7 @@
   <tm-markdown-editor [content]="content()"
                       [insertUpload$]="selectUpload$"
                       [uploadService$]="uploadImage$"
+                      [resolveImageUrl]="resolveImageUrl"
                       (contentChanged)="onContentChanged($event)"></tm-markdown-editor>
   <div class="layer-description-hint">
     <ng-content select="tm-admin-layer-description-field-hint"/>

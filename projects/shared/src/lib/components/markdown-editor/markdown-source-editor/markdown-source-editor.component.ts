@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnInit, ViewChild, inject, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormField } from '@angular/material/select';
@@ -9,6 +9,7 @@ import { concatMap, Observable, of } from 'rxjs';
 import { MarkdownHelper } from '../../../helpers';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { AsyncPipe } from '@angular/common';
+import { MarkdownEditorResolveImageUrlFn } from '../markdown-editor-upload.model';
 
 @Component({
   selector: 'tm-markdown-source-editor',
@@ -25,6 +26,8 @@ export class MarkdownSourceEditorComponent implements OnInit {
 
   @Input()
   public useInfoPanelWidth = false;
+
+  public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLTextAreaElement> | undefined;
@@ -53,7 +56,7 @@ export class MarkdownSourceEditorComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.insertVariable(value));
     this.htmlPreview$ = this.mdEditorService.getUpdatedContent$().pipe(concatMap(content => {
-      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer);
+      return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer, this.resolveImageUrl());
     }));
   }
 

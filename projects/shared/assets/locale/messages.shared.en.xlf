@@ -254,6 +254,9 @@
       <trans-unit id="shared.markdown-editor.image" datatype="html">
         <source>Image</source>
       </trans-unit>
+      <trans-unit id="shared.markdown-editor.image-or-file" datatype="html">
+        <source>Image or file</source>
+      </trans-unit>
       <trans-unit id="shared.markdown-editor.listgroup" datatype="html">
         <source>List</source>
       </trans-unit>
