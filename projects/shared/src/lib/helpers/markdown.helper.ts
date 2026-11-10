@@ -1,4 +1,4 @@
-import { defer, Observable, shareReplay, take } from 'rxjs';
+import { from, Observable, take } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SecurityContext } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -8,54 +8,45 @@ export class MarkdownHelper {
 
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
 
-  /**
-   * Lazily loads marked and creates a single configured instance, shared by all callers. Bare URLs are rendered as
-   * links opening in a new window, or as images when the URL points to an image.
-   */
-  private static marked$ = defer(() => import('marked')).pipe(
-    map(markedLib => new markedLib.Marked({
-      renderer: {
-        link(token) {
-          if (token.raw !== token.text && token.raw !== token.href) {
-            return markedLib.Renderer.prototype.link.call(this, token);
-          }
-          const href = HtmlifyHelper.escapeHTML(token.href);
-          const content = HtmlifyHelper.isImageUrl(token.href) ? `<img src="${href}" alt="${href}">` : HtmlifyHelper.escapeHTML(token.text);
-          return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
-        },
-      },
-    })),
-    shareReplay(1),
-  );
+  private static IMG_REGEXP = /\.(jpg|jpeg|png|webp|svg|gif)|getimage\.ashx/i;
 
   /**
-   * Converts Markdown to sanitized HTML. When `resolveImageUrl` is given, the src of each image is replaced by the URL
-   * it returns, for example to display images with an `upload://` URL.
+   * Converts Markdown to sanitized HTML. Bare URLs are rendered as links opening in a new window, or as images when the
+   * URL points to an image. When `resolveImageUrl` is given, the src of each Markdown image is replaced by the URL it
+   * returns, for example to display images with an `upload://` URL in the admin.
    */
   public static getSafeHtmlForMarkdown$(
     md: string,
     sanitizer: DomSanitizer,
     resolveImageUrl?: (url: string) => string,
   ): Observable<SafeHtml> {
-    return MarkdownHelper.marked$.pipe(
-      take(1),
-      map(marked => {
-        let parsed: string;
-        if (resolveImageUrl) {
-          const tokens = marked.lexer(md ?? "");
-          marked.walkTokens(tokens, token => {
-            if (token.type === 'image') {
-              token.href = resolveImageUrl(token.href);
-            }
+    return from(import('marked'))
+      .pipe(
+        take(1),
+        map(markedLib => {
+          const markedInstance = new markedLib.Marked({
+            walkTokens: token => {
+              if (resolveImageUrl && token.type === 'image') {
+                token.href = resolveImageUrl(token.href);
+              }
+            },
+            renderer: {
+              link(token) {
+                const isBareUrl = token.raw === token.text || token.raw === token.href;
+                if (!isBareUrl) {
+                  return markedLib.Renderer.prototype.link.call(this, token);
+                }
+                const content = MarkdownHelper.IMG_REGEXP.test(token.href)
+                  ? `<img src="${token.href}" alt="${token.href}">`
+                  : token.text;
+                return `<a href="${token.href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
+              },
+            },
           });
-          parsed = marked.parser(tokens);
-        } else {
-          parsed = marked.parse(md ?? "", { async: false });
-        }
-        const html = sanitizer.sanitize(SecurityContext.HTML, parsed);
-        return sanitizer.bypassSecurityTrustHtml(html || "");
-      }),
-    );
+          const html = sanitizer.sanitize(SecurityContext.HTML, markedInstance.parse(md ?? "", { async: false }));
+          return sanitizer.bypassSecurityTrustHtml(html || "");
+        }),
+      );
   }
 
   public static templateParser(template: string, tokens: Map<string, string | null>) {
