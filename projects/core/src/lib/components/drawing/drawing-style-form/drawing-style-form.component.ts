@@ -19,25 +19,13 @@ import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-
 import { MatSelect, MatSelectTrigger, MatOption } from '@angular/material/select';
 import { NgTemplateOutlet } from '@angular/common';
 
-/**
- * A single change made in the drawing style form: the setting that was changed (`field`) and the style
- * properties it changed (usually only that setting, but changing the line color of a line also changes
- * its fill color).
- */
-export interface DrawingStyleChange {
-  field: keyof DrawingFeatureStyleModel;
-  style: Partial<DrawingFeatureStyleModel>;
-}
-
 type StyleValue = string | number | null | boolean | LabelStyleEnum[] | number[];
 
 /**
  * Form to change the style of a drawing feature of the given `type`.
  *
- * Changes are emitted in two ways:
- * - `styleChange` emits every change right away, with only the properties that changed.
- * - `styleUpdated` (for symbol, line and fill settings) and `labelStyleUpdated` (for label settings) emit
- *   the complete updated style, with changes made in quick succession combined into one emit.
+ * `styleUpdated` (for symbol, line and fill settings) and `labelStyleUpdated` (for label settings) emit
+ * the complete updated style, with changes made in quick succession combined into one emit.
  */
 @Component({
     selector: 'tm-drawing-style-form',
@@ -79,8 +67,6 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
 
   public readonly styleUpdated = output<DrawingFeatureStyleModel>();
   public readonly labelStyleUpdated = output<LabelDrawingFeatureStyleModel>();
-  public readonly styleChange = output<DrawingStyleChange>();
-
   public labelControl = new FormControl('', {
     nonNullable: true,
   });
@@ -213,11 +199,10 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   public changeStrokeColor($event: string) {
-    if (this.showPolygonSettings()) {
-      this.change('strokeColor', $event);
-      return;
+    this.change('strokeColor', $event);
+    if (!this.showPolygonSettings()) {
+      this.change('fillColor', $event);
     }
-    this.changeMultiple('strokeColor', { strokeColor: $event, fillColor: $event });
   }
 
   public changeMarkerFill($event: string) {
@@ -342,14 +327,7 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private change(key: keyof DrawingFeatureStyleModel, value: StyleValue) {
-    this.changeMultiple(key, { [key]: value });
-  }
-
-  private changeMultiple(field: keyof DrawingFeatureStyleModel, style: Partial<Record<keyof DrawingFeatureStyleModel, StyleValue>>) {
-    this.styleChange.emit({ field, style: style as Partial<DrawingFeatureStyleModel> });
-    Object.entries(style).forEach(([ key, value ]) => {
-      this.updatedStyleProps.set(key as keyof DrawingFeatureStyleModel, value);
-    });
+    this.updatedStyleProps.set(key, value);
     if (this.debounce) {
       window.clearTimeout(this.debounce);
     }
@@ -366,7 +344,6 @@ export class DrawingStyleFormComponent implements OnInit, OnDestroy {
   }
 
   private changeLabel(key: keyof LabelDrawingFeatureStyleModel, value: StyleValue) {
-    this.styleChange.emit({ field: key, style: { [key]: value } as Partial<DrawingFeatureStyleModel> });
     this.updatedLabelStyleProps.set(key, value);
     if (this.labelDebounce) {
       window.clearTimeout(this.labelDebounce);

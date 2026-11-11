@@ -3,14 +3,17 @@ import { render, screen } from '@testing-library/angular';
 import { DrawingStyleFormComponent } from './drawing-style-form.component';
 import { DrawingFeatureTypeEnum } from '../../../map/models/drawing-feature-type.enum';
 const setup = async (type?: DrawingFeatureTypeEnum, showMeasureSettings = true) => {
-  const styleChange = vi.fn();
+  const styleUpdated = vi.fn();
+  const labelStyleUpdated = vi.fn();
   const { fixture } = await render(DrawingStyleFormComponent, {
     imports: [],
     inputs: type ? { type, showMeasureSettings } : {},
-    on: { styleChange },
+    on: { styleUpdated, labelStyleUpdated },
   });
-  return { component: fixture.componentInstance, styleChange };
+  return { component: fixture.componentInstance, styleUpdated, labelStyleUpdated };
 };
+// The form combines changes made within 10ms into one emit.
+const waitForDebounce = () => new Promise(resolve => window.setTimeout(resolve, 20));
 
 describe('DrawingStyleFormComponent', () => {
 
@@ -58,18 +61,20 @@ describe('DrawingStyleFormComponent', () => {
     expect(screen.queryByLabelText('Insert area as label')).not.toBeInTheDocument();
   });
 
-  test('should emit every change with the setting that changed', async () => {
-    const { component, styleChange } = await setup(DrawingFeatureTypeEnum.POLYGON);
+  test('should emit the updated style and label style', async () => {
+    const { component, styleUpdated, labelStyleUpdated } = await setup(DrawingFeatureTypeEnum.POLYGON);
     component.changeStrokeWidth(5);
-    expect(styleChange).toHaveBeenCalledWith({ field: 'strokeWidth', style: { strokeWidth: 5 } });
     component.changeLabelSize(12);
-    expect(styleChange).toHaveBeenCalledWith({ field: 'labelSize', style: { labelSize: 12 } });
+    await waitForDebounce();
+    expect(styleUpdated).toHaveBeenCalledWith(expect.objectContaining({ strokeWidth: 5 }));
+    expect(labelStyleUpdated).toHaveBeenCalledWith(expect.objectContaining({ labelSize: 12 }));
   });
 
   test('should change the fill color with the line color of a line', async () => {
-    const { component, styleChange } = await setup(DrawingFeatureTypeEnum.LINE);
+    const { component, styleUpdated } = await setup(DrawingFeatureTypeEnum.LINE);
     component.changeStrokeColor('#ff0000');
-    expect(styleChange).toHaveBeenCalledWith({ field: 'strokeColor', style: { strokeColor: '#ff0000', fillColor: '#ff0000' } });
+    await waitForDebounce();
+    expect(styleUpdated).toHaveBeenCalledWith(expect.objectContaining({ strokeColor: '#ff0000', fillColor: '#ff0000' }));
   });
 
 });
