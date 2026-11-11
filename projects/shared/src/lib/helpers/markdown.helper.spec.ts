@@ -1,4 +1,8 @@
 import { describe, test, expect } from 'vitest';
+import { firstValueFrom } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TestBed } from '@angular/core/testing';
+import { SecurityContext } from '@angular/core';
 import { MarkdownHelper } from './markdown.helper';
 
 describe('MarkdownHelper', () => {
@@ -36,6 +40,69 @@ describe('MarkdownHelper', () => {
     const result = MarkdownHelper.templateParser(template, variables);
     expect(result)
       .toEqual('Some story about Some value. Value 2 should be replaced. {{ Leave this Other one and this }}. [Do add a link though](https://www.test.nl/my%20doc.pdf)');
+  });
+
+  describe('unescaping bare (autolinked) urls', () => {
+
+    const renderLinks = async (md: string) => {
+      const sanitizer = TestBed.inject(DomSanitizer);
+      const html = await firstValueFrom(MarkdownHelper.getSafeHtmlForMarkdown$(md, sanitizer));
+      const div = document.createElement('div');
+      div.innerHTML = sanitizer.sanitize(SecurityContext.HTML, html) || '';
+      return Array.from(div.querySelectorAll('a'))
+        .map(a => ({ href: a.getAttribute('href'), text: a.textContent, target: a.getAttribute('target'), rel: a.getAttribute('rel') }));
+    };
+
+    test('escaped bare url renders the same as an escaped [label](url) link', async () => {
+      const url = MarkdownHelper.markdownEscape('https://www.b3partners.nl/some_page');
+      const links = await renderLinks(`**Link**: ${url} and [label](${url})`);
+      expect(links).toEqual([
+        { href: 'https://www.b3partners.nl/some_page', text: 'https://www.b3partners.nl/some_page', target: '_blank', rel: 'noopener noreferrer' },
+        { href: 'https://www.b3partners.nl/some_page', text: 'label', target: null, rel: null },
+      ]);
+    });
+
+    test('html-escapes bare urls so quotes cannot end the attribute', async () => {
+      const links = await renderLinks('https://example.com/a"onmouseover="alert(1)');
+      expect(links).toHaveLength(1);
+      // the whole string stays inside the href attribute instead of adding an onmouseover attribute
+      expect(links[0].href).toEqual('https://example.com/a"onmouseover="alert(1)');
+    });
+
+    test('bare url inside surrounding text is unescaped', async () => {
+      const value = MarkdownHelper.markdownEscape('See https://www.b3partners.nl/a-b_(c) for more.');
+      const links = await renderLinks(`Info: ${value}`);
+      expect(links[0].href).toEqual('https://www.b3partners.nl/a-b_(c)');
+    });
+
+    test('unescapes like marked does for [label](url) links', async () => {
+      // % and = are not escaped by markdownEscape, but are valid CommonMark escapes
+      const links = await renderLinks('https://example.com/a\\%25b?c\\=d and [label](https://example.com/a\\%25b?c\\=d)');
+      expect(links.map(l => l.href)).toEqual([ 'https://example.com/a%25b?c=d', 'https://example.com/a%25b?c=d' ]);
+    });
+
+  });
+
+  describe('markdownUnescape', () => {
+
+    test('reverses markdownEscape', () => {
+      const values = [ 'https://www.b3partners.nl/a-b_(c)?d=e#f', '* _123_ `code` [x] <y> {z} !|+', 'back\\slash \\\\ \\* \\.' ];
+      values.forEach(value => expect(MarkdownHelper.markdownUnescape(MarkdownHelper.markdownEscape(value) || '')).toEqual(value));
+    });
+
+    test('unescapes all ASCII punctuation (CommonMark backslash escapes), not only what markdownEscape escapes', () => {
+      expect(MarkdownHelper.markdownUnescape('\\%\\=\\?\\&\\/\\:\\@\\~\\$\\^\\"\\\'\\,\\;')).toEqual('%=?&/:@~$^"\',;');
+    });
+
+    test('leaves a backslash before a non-punctuation character as is', () => {
+      expect(MarkdownHelper.markdownUnescape('a\\b \\1 \\ c')).toEqual('a\\b \\1 \\ c');
+    });
+
+    test('unescapes an escaped backslash once and leaves the following character alone', () => {
+      expect(MarkdownHelper.markdownUnescape('a\\\\=b')).toEqual('a\\=b');
+      expect(MarkdownHelper.markdownUnescape('a\\\\\\.b')).toEqual('a\\.b');
+    });
+
   });
 
 });

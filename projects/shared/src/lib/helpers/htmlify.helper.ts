@@ -148,7 +148,7 @@ export class HtmlifyHelper {
     }
   }
 
-  private static escapeHTML(text: string) {
+  public static escapeHTML(text: string) {
     return text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')

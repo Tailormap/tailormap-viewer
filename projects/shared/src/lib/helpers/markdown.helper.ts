@@ -7,13 +7,28 @@ import { HtmlifyHelper } from './htmlify.helper';
 export class MarkdownHelper {
 
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
+  private static UNESCAPE_REGEX = /\\([!-/:-@[-`{-~])/g;
 
   public static getSafeHtmlForMarkdown$(md: string, sanitizer: DomSanitizer): Observable<SafeHtml> {
     return from(import('marked'))
       .pipe(
         take(1),
         map(markedLib => {
-          const html = sanitizer.sanitize(SecurityContext.HTML, markedLib.marked.parse(md ?? "", { async: false }));
+          const parser = new markedLib.Marked({
+            renderer: {
+              link(token) {
+                if (!token.autolink) {
+                  return markedLib.Renderer.prototype.link.call(this, token);
+                }
+                // Bare (GFM) URLs are not processed for backslash escapes by marked, unlike `[label](url)` links. Feature values
+                // are escaped with markdownEscape before being put in a template, so unescape them here to get the real URL.
+                const href = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.href));
+                const label = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.text));
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+              },
+            },
+          });
+          const html = sanitizer.sanitize(SecurityContext.HTML, parser.parse(md ?? "", { async: false }));
           return sanitizer.bypassSecurityTrustHtml(html || "");
         }),
       );
@@ -59,6 +74,14 @@ export class MarkdownHelper {
       return `${str}`;
     }
     return str.replace(MarkdownHelper.ESCAPE_REGEX, '\\$&');
+  }
+
+  /**
+   * Removes CommonMark backslash escapes: a backslash before any ASCII punctuation character. This is the same set marked
+   * unescapes in `[label](url)` links, and a superset of what markdownEscape escapes, so it reverses markdownEscape.
+   */
+  public static markdownUnescape(str: string): string {
+    return str.replace(MarkdownHelper.UNESCAPE_REGEX, '$1');
   }
 
   private static replaceWhitespaceInLinks(markdown: string) {
