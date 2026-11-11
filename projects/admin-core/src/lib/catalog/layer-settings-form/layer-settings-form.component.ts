@@ -19,6 +19,7 @@ import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } fr
 import { MatSelectionList, MatListItem } from '@angular/material/list';
 import { MatIcon } from '@angular/material/icon';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { FeatureTypeSelectorComponent } from '../feature-type-selector/feature-type-selector.component';
 import { BoundsFieldComponent } from '../../shared/components/bounds-field/bounds-field.component';
 import { TriStateBooleanComponent } from '../../shared/components/tri-state-boolean/tri-state-boolean.component';
@@ -50,6 +51,7 @@ import {
     MatListItem,
     MatIcon,
     MatSlideToggle,
+    MatCheckbox,
     FeatureTypeSelectorComponent,
     BoundsFieldComponent,
     TriStateBooleanComponent,
@@ -188,6 +190,7 @@ export class LayerSettingsFormComponent implements OnInit {
   public layerSettingsForm = new FormGroup({
     title: new FormControl('', { nonNullable: true }),
     description: new FormControl<string | null>(null),
+    descriptionInPopup: new FormControl<boolean>(false, { nonNullable: true }),
     attribution: new FormControl<string | null>(null),
     hiddenKeywords: new FormControl<string[] | null>(null),
     extraKeywords: new FormControl<string[] | null>(null),
@@ -239,6 +242,7 @@ export class LayerSettingsFormComponent implements OnInit {
     };
     if (this.isLayerSpecific) {
       settings.title = value.title || undefined;
+      settings.descriptionInPopup = value.descriptionInPopup || undefined;
       settings.hiDpiMode = value.hiDpiMode || undefined;
       settings.hiDpiSubstituteLayer = value.hiDpiSubstituteLayer || undefined;
       settings.authorizationRules = value?.authorizationRules ?? [];
@@ -280,6 +284,7 @@ export class LayerSettingsFormComponent implements OnInit {
     const comparableValues: ComparableValuesArray = [
       [ values.title, this._layerSettings.title ],
       [ values.description, this._layerSettings.description ],
+      [ !!values.descriptionInPopup, !!this._layerSettings.descriptionInPopup ],
       [ values.attribution, this._layerSettings.attribution ],
       [ values.hiddenKeywords, this._layerSettings.hiddenKeywords ],
       [ values.extraKeywords, this._layerSettings.extraKeywords ],
@@ -318,6 +323,7 @@ export class LayerSettingsFormComponent implements OnInit {
     const patchValue: typeof this.layerSettingsForm.value = {
       title: this.layerSettings?.title ? this.layerSettings.title : '',
       description: this.layerSettings?.description || null,
+      descriptionInPopup: this.layerSettings?.descriptionInPopup ?? false,
       attribution: this.layerSettings?.attribution || null,
       hiddenKeywords: this.layerSettings?.hiddenKeywords || [],
       extraKeywords: this.layerSettings?.extraKeywords || [],

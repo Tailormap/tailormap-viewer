@@ -6,10 +6,12 @@ import { BrowserHelper, DynamicComponentsHelper, PanelResizerComponent, TooltipD
 import { BehaviorSubject, map } from 'rxjs';
 import { LayerTreeNodeWithLayerModel } from '../../../map/models/layer-tree-node-with-layer.model';
 import { TocFeatureRegistrationService } from '../services/toc-feature-registration.service';
-import { MatIconButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LayerDetailsComponent } from './layer-details/layer-details.component';
 import { AsyncPipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { LayerDescriptionDialogComponent, LayerDescriptionDialogData } from './layer-description-dialog/layer-description-dialog.component';
 
 @Component({
     selector: 'tm-toc-node-details',
@@ -19,6 +21,7 @@ import { AsyncPipe } from '@angular/common';
     imports: [
         PanelResizerComponent,
         MatIconButton,
+        MatButton,
         TooltipDirective,
         MatIcon,
         LayerDetailsComponent,
@@ -27,8 +30,9 @@ import { AsyncPipe } from '@angular/common';
     ],
 })
 export class TocNodeDetailsComponent implements OnInit {
-
   private tocFeatureRegistrationService = inject(TocFeatureRegistrationService);
+  private dialog = inject(MatDialog);
+
 
   private detailsContent = viewChild('detailsContent', { read: ViewContainerRef });
 
@@ -85,6 +89,19 @@ export class TocNodeDetailsComponent implements OnInit {
 
   public close() {
     this.closeDetails.emit();
+  }
+
+  public getLayerTitle(): string {
+    return this.node?.layer?.title || this.node?.name || '';
+  }
+
+  public openDescription(description: string) {
+    return this.dialog.open<LayerDescriptionDialogComponent, LayerDescriptionDialogData>(LayerDescriptionDialogComponent, {
+      data: { title: this.getLayerTitle(), description },
+      width: '600px',
+      maxWidth: '80vw',
+      maxHeight: '90vh',
+    });
   }
 
 }

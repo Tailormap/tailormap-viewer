@@ -945,6 +945,10 @@
         <source>Leave empty to use the description as provided by the service</source>
         <target>Laat leeg om de beschrijving te gebruiken zoals aangeleverd door de service</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description-in-popup" datatype="html">
+        <source>Show description in a pop-up</source>
+        <target>Toon beschrijving in een pop-up</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
         <source>Insert image or link to file</source>
         <target>Voeg afbeelding of link naar bestand in</target>
@@ -1844,6 +1848,14 @@
       <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
         <source>Snapping tooltip</source>
         <target>Snapping tooltip</target>
+      </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard" datatype="html">
+        <source>Copy extent to clipboard</source>
+        <target>Kopieer extent naar klembord</target>
+      </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard-disabled" datatype="html">
+        <source>First fill in all fields to copy the extent to the clipboard</source>
+        <target>Vul eerst alle velden in om de extent naar het klembord te kopiëren</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>

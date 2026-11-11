@@ -1,36 +1,41 @@
-<div [formGroup]="boundsForm">
+<div>
   <div class="label">
     <mat-label>
-      @if (label) {
+      @if (label(); as label) {
         {{ label }}
-      }
-      @if (!label) {
+      } @else {
         <ng-container i18n="@@admin-core.common.bounds">Bounds</ng-container>
       }
     </mat-label>
     <div class="bounds-buttons">
-      @if (projection) {
-        <button mat-stroked-button color="accent" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
+      @if (projection(); as projection) {
+        <button mat-stroked-button color="accent" [disabled]="disabled()" (click)="setBoundsForProjection(projection)" i18n="@@admin-core.use-max-extent">Use projection extent</button>
       }
-      <button mat-stroked-button color="accent" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+      <button mat-stroked-button color="accent" [disabled]="disabled()" (click)="clear()" i18n="@@admin-core.common.clear">Clear</button>
+      <button mat-stroked-button color="accent" class="copy-button" [disabled]="disabledOrEmpty()" disabledInteractive (click)="copyToClipboard()" [tmTooltip]="copyTooltip()">
+        <mat-icon svgIcon="copy"></mat-icon>
+        @if (copiedToClipboard()) {
+          <mat-icon svgIcon="check" color="primary"></mat-icon>
+        }
+      </button>
     </div>
   </div>
   <div class="fields">
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.min-x">Min X</mat-label>
-      <input matInput type="number" (paste)="parseInput($event)" formControlName="minx" />
+      <input matInput type="number" (paste)="parseInput($event)" (blur)="markAsTouched()" [formField]="boundsForm.minx" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.min-y">Min Y</mat-label>
-      <input matInput type="number" (paste)="parseInput($event)" formControlName="miny" />
+      <input matInput type="number" (paste)="parseInput($event)" (blur)="markAsTouched()" [formField]="boundsForm.miny" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.max-x">Max X</mat-label>
-      <input matInput type="number" (paste)="parseInput($event)" formControlName="maxx" />
+      <input matInput type="number" (paste)="parseInput($event)" (blur)="markAsTouched()" [formField]="boundsForm.maxx" />
     </mat-form-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.max-y">Max Y</mat-label>
-      <input matInput type="number" (paste)="parseInput($event)" formControlName="maxy" />
+      <input matInput type="number" (paste)="parseInput($event)" (blur)="markAsTouched()" [formField]="boundsForm.maxy" />
     </mat-form-field>
   </div>
   <div class="hint" i18n="@@admin-core.common.bounds-hint">You can paste a comma-separated list or &lt;BoundingBox minx="" miny=.../&gt; string from capabilities in one of the fields for setting the extent</div>

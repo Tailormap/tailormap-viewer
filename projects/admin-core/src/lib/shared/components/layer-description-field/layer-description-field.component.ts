@@ -55,7 +55,7 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
 
   private textarea = viewChild<ElementRef<HTMLTextAreaElement>>('area');
 
-  public textareaControl = new FormControl('');
+  public textareaControl = new FormControl<string | null>(null);
 
   public onTouched: any | null = null;
   private onChange: any | null = null;
@@ -78,9 +78,12 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
       });
   }
 
-  public writeValue(_description: string | null): void {
-    this.currentDescription = _description;
-    this.textareaControl.setValue(_description);
+  public writeValue(description: string | null): void {
+    if (description === this.currentDescription) {
+      return;
+    }
+    this.currentDescription = description;
+    this.textareaControl.setValue(description);
   }
 
   public registerOnChange(fn: any): void {

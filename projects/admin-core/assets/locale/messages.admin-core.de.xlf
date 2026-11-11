@@ -946,6 +946,10 @@
         <source>Leave empty to use the description as provided by the service</source>
         <target>Leer lassen, um die Beschreibung zu verwenden, wie sie vom Dienst bereitgestellt wird</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.description-in-popup" datatype="html">
+        <source>Show description in a pop-up</source>
+        <target>Beschreibung in einem Pop-up anzeigen</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
         <source>Insert image or link to file</source>
         <target>Bild einfügen oder Link zur Datei hinzufügen</target>
@@ -1845,6 +1849,14 @@
       <trans-unit id="admin-core.components.snapping-tooltip" datatype="html">
         <source>Snapping tooltip</source>
         <target>Fang-Tooltip</target>
+      </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard" datatype="html">
+        <source>Copy extent to clipboard</source>
+        <target>Ausdehnung in die Zwischenablage kopieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.copy-extent-to-clipboard-disabled" datatype="html">
+        <source>First fill in all fields to copy the extent to the clipboard</source>
+        <target>Füllen Sie zuerst alle Felder aus, um die Ausdehnung in die Zwischenablage zu kopieren</target>
       </trans-unit>
       <trans-unit id="admin-core.feature-type-settings-updated" datatype="html">
         <source>Feature type settings updated</source>
