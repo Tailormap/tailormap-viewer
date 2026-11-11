@@ -122,11 +122,12 @@ jobs:
       id-token: write
       deployments: write
     runs-on: ubuntu-latest
-    # Deploy one run at a time per target: all snapshot deployments (pushes to main) use the same Docker Compose project and image
-    # tag on the same Docker host. The workflow-level concurrency group includes the commit SHA for main so tests of every commit
-    # run, but two pushes to main in quick succession (merging two PRs, or a release) would otherwise deploy in parallel and fail
-    # with Docker container conflicts. Do not cancel a running deployment, that could leave the containers half updated. When
-    # another run is already waiting, GitHub replaces it with the newer one. PR deployments each have their own Compose project.
+    # Deploy one run at a time per target: all snapshot deployments (pushes to main, and those triggered using workflow_dispatch
+    # by pushes to tailormap-api main) use the same Docker Compose project and image tag on the same Docker host. The 
+    # workflow-level concurrency group includes the commit SHA for main so tests of every commit run, but two pushes to main in
+    # quick succession (merging two PRs, or a release) would otherwise deploy in parallel and fail with Docker container conflicts.
+    # Do not cancel a running deployment, that could leave the containers half updated. When another run is already waiting, GitHub
+    # replaces it with the newer one. PR deployments each have their own Compose project.
     concurrency:
       group: deploy-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'snapshot' }}
       cancel-in-progress: false
