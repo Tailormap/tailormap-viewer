@@ -78,12 +78,12 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
       });
   }
 
-  public writeValue(_description: string | null): void {
-    if (_description === this.currentDescription) {
+  public writeValue(description: string | null): void {
+    if (description === this.currentDescription) {
       return;
     }
-    this.currentDescription = _description;
-    this.textareaControl.setValue(_description);
+    this.currentDescription = description;
+    this.textareaControl.setValue(description);
   }
 
   public registerOnChange(fn: any): void {
