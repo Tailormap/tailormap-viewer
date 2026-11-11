@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
-import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/kit/core';
-import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
+import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
 import type { EditorView } from '@milkdown/kit/prose/view';
 import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -62,7 +61,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, coreModule, listenerModule ]) => {
+        concatMap(([ crepeModule, coreModule, listenerModule, uploadModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
             proxyDomURL: this.resolveImageUrl(),
