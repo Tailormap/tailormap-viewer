@@ -129,7 +129,7 @@ describe('BoundsFieldComponent', () => {
       await userEvent.clear(getInputs()[0]);
       await fixture.whenStable();
       const button = screen.getByRole('button', { name: COPY_DISABLED_LABEL });
-      expect(button).toBeDisabled();
+      expect(button).toHaveAttribute('aria-disabled', 'true');
       fireEvent.click(button);
       expect(copy).not.toHaveBeenCalled();
     });
@@ -138,7 +138,7 @@ describe('BoundsFieldComponent', () => {
       const { fixture } = await renderWithClipboard();
       await userEvent.click(screen.getByRole('button', { name: 'Clear' }));
       await fixture.whenStable();
-      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toBeDisabled();
+      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toHaveAttribute('aria-disabled', 'true');
     });
 
     test('is disabled when the control is disabled', async () => {
@@ -146,7 +146,7 @@ describe('BoundsFieldComponent', () => {
       fixture.componentInstance.control.disable();
       fixture.detectChanges();
       await fixture.whenStable();
-      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toBeDisabled();
+      expect(screen.getByRole('button', { name: COPY_DISABLED_LABEL })).toHaveAttribute('aria-disabled', 'true');
     });
 
     test('shows a check icon after copying, which disappears after 2 seconds', async () => {
