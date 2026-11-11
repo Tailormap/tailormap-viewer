@@ -97,6 +97,7 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   }
 
   public onContentChanged(content: string) {
+    this.content.set(content);
     if (!this.userInteracted) {
       return;
     }
