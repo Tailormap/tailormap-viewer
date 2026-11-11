@@ -2,8 +2,7 @@ import {
   Component, forwardRef, inject, signal, ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, concatMap, debounceTime, filter, map, Observable, of, Subject, take } from 'rxjs';
+import { catchError, concatMap, map, Observable, of, take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
 import {
@@ -47,35 +46,18 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   public disabled = signal(false);
 
   private onChange: ((value: string | null) => void) | null = null;
-  public onTouched: (() => void) | null = null;
 
   private static readonly UPLOAD_URL_PREFIX = 'upload://';
 
+  /** The description last written to or changed in the field. */
   private currentDescription: string | null = null;
 
-  private userInteracted = false;
-
-  private contentChanges = new Subject<string | null>();
-
-  constructor() {
-    this.contentChanges
-      .pipe(
-        takeUntilDestroyed(),
-        debounceTime(250),
-        filter((content): content is string => content !== null && content !== (this.currentDescription ?? '')),
-      )
-      .subscribe(content => {
-        this.currentDescription = content;
-        this.onChange?.(content);
-      });
-  }
-
   public writeValue(description: string | null): void {
-    if (description === this.currentDescription) {
+    // The parents patch the form with the value which was just saved; don't reload the editor for that echo, which would
+    // move the cursor. The parents save an empty description as null, so null and '' are equal.
+    if ((description ?? '') === (this.currentDescription ?? '')) {
       return;
     }
-    this.contentChanges.next(null);
-    this.userInteracted = false;
     this.currentDescription = description;
     this.content.set(description ?? '');
   }
@@ -84,24 +66,23 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+  public registerOnTouched(): void {
+    // Touched state isn't used for this field
   }
 
   public setDisabledState(isDisabled: boolean): void {
     this.disabled.set(isDisabled);
   }
 
-  public onInteraction() {
-    this.userInteracted = true;
-  }
-
+  /**
+   * Called for changes made by the user only; the editor does not report content set through its `content` input.
+   * Keeps {@link content} equal to what the editor shows, so a later {@link writeValue} with another value is a change
+   * of the signal and reloads the editor.
+   */
   public onContentChanged(content: string) {
+    this.currentDescription = content;
     this.content.set(content);
-    if (!this.userInteracted) {
-      return;
-    }
-    this.contentChanges.next(content);
+    this.onChange?.(content);
   }
 
   /**

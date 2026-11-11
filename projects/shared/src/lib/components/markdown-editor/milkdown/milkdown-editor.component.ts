@@ -46,7 +46,17 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   /** Set when `focus()` is called before the (lazily loaded) editor exists, so it is focused once created. */
   private focusWhenCreated = false;
 
+  /** The Markdown the editor shows: the content last loaded into it or the last change made by the user. */
   private currentContent: string | null | undefined;
+
+  /**
+   * False after content was loaded into the editor, set by an edit gesture inside the editor (see the template). While
+   * false, Markdown updates from the listener are not reported as user changes. This drops updates caused by loading:
+   * transactions dispatched by Crepe features after loading (normalising the loaded Markdown), and a debounced update
+   * from the previous content which was still pending when new content was loaded. Gestures are used instead of focus,
+   * so reloading content while the editor has focus does not block the next edits.
+   */
+  private userEdited = false;
 
   public ngOnInit() {
     if (!this.editorEl) {
@@ -67,9 +77,11 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             proxyDomURL: this.resolveImageUrl(),
           };
           const placeholder = this.placeholder();
+          const defaultValue = this.mdEditorService.getCurrentContent() || '';
+          this.loadingContent(defaultValue);
           const crepe = new crepeModule.Crepe({
             root: el,
-            defaultValue: this.mdEditorService.getCurrentContent() || '',
+            defaultValue,
             features: {
               [crepeModule.Crepe.Feature.CodeMirror]: false,
               [crepeModule.Crepe.Feature.Latex]: false,
@@ -93,8 +105,11 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             .config((ctx) => {
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
-                if (markdown !== prevMarkdown) {
-                  this.currentContent = markdown;
+                if (markdown === prevMarkdown) {
+                  return;
+                }
+                this.currentContent = markdown;
+                if (this.userEdited) {
                   this.mdEditorService.contentChanged(markdown);
                 }
               });
@@ -118,9 +133,21 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe(content => {
         if (this.milkdownEditor && content !== this.currentContent) {
+          this.loadingContent(content);
           MilkdownHelper.updateContent(this.milkdownEditor.ctx, content || '');
         }
       });
+  }
+
+  /** Called for user input inside the editor, including Crepe's menus and toolbars, which are rendered inside it. */
+  public onEditGesture() {
+    this.userEdited = true;
+  }
+
+  /** Called before content is loaded into the editor programmatically, see {@link userEdited}. */
+  private loadingContent(content: string) {
+    this.currentContent = content;
+    this.userEdited = false;
   }
 
   /**
@@ -146,6 +173,8 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     if (!this.milkdownEditor) {
       return;
     }
+    // Inserted from the template picklist, which is outside the editor element
+    this.userEdited = true;
     MilkdownHelper.insertTextInEditor(this.milkdownEditor.ctx, `{{${value}}}`);
   }
 

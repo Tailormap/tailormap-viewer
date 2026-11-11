@@ -23,6 +23,8 @@ class MilkdownEditorStubComponent {
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
   @Input()
   public uploadService$: unknown;
+  public insertUpload$ = input<unknown>();
+  public resolveImageUrl = input<unknown>();
   public placeholder = input<string>();
   public focus = milkdownFocus;
 }
@@ -115,6 +117,24 @@ describe('MarkdownEditorComponent', () => {
     const { contentChanged } = await setup({ mode: 'source', content: '' });
     await userEvent.type(screen.getByRole('textbox'), 'Hi');
     expect(contentChanged).toHaveBeenLastCalledWith('Hi');
+  });
+
+  test('does not emit contentChanged for content set from outside or when switching editors', async () => {
+    const { fixture } = await setup({ mode: 'milkdown' });
+    const contentChanged = vi.fn();
+    fixture.componentInstance.contentChanged.subscribe(contentChanged);
+    fixture.componentRef.setInput('content', 'Other content');
+    fixture.detectChanges();
+    fixture.componentRef.setInput('mode', 'source');
+    fixture.detectChanges();
+    expect(screen.getByRole('textbox')).toHaveValue('Other content');
+    await userEvent.click(screen.getByText('Visual editor'));
+    await userEvent.click(screen.getByText('Source'));
+    expect(screen.getByRole('textbox')).toHaveValue('Other content');
+    expect(contentChanged).not.toHaveBeenCalled();
+    await userEvent.type(screen.getByRole('textbox'), '!');
+    expect(contentChanged).toHaveBeenCalledTimes(1);
+    expect(contentChanged).toHaveBeenCalledWith('Other content!');
   });
 
   test('focus() focuses the visual editor', async () => {

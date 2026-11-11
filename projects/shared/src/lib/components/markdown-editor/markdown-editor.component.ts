@@ -5,7 +5,6 @@ import {
 import { TemplatePicklistConfig } from './template-picklist.model';
 import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { MarkdownEditorService } from './markdown-editor.service';
-import { skip } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
@@ -113,8 +112,9 @@ export class MarkdownEditorComponent implements OnInit {
 
   public ngOnInit() {
     this.mdEditorService.resetContent(this.content ?? "");
-    this.mdEditorService.getUpdatedContent$()
-      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+    // Only user edits are reported; content set through the `content` input or reset when switching editors is not
+    this.mdEditorService.getUserChanges$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
         this.contentChanged.emit(content);
       });

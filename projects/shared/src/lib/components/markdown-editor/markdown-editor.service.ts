@@ -7,6 +7,8 @@ export class MarkdownEditorService {
   private content = new BehaviorSubject('');
   private updatedContent = new BehaviorSubject('');
 
+  private userChanges = new Subject<string>();
+
   private insertedVariables = new Subject<string>();
 
   public insertVariable(value: string) {
@@ -22,8 +24,13 @@ export class MarkdownEditorService {
     }
   }
 
+  /**
+   * Called by the editors for changes made by the user. Unlike {@link resetContent}, these are reported to the parent
+   * through {@link getUserChanges$}.
+   */
   public contentChanged(content: string) {
     this.updatedContent.next(content);
+    this.userChanges.next(content);
   }
 
   public getCurrentContent() {
@@ -36,6 +43,11 @@ export class MarkdownEditorService {
 
   public getUpdatedContent$() {
     return this.updatedContent.asObservable();
+  }
+
+  /** Emits only changes made by the user in one of the editors, not content set with {@link resetContent}. */
+  public getUserChanges$() {
+    return this.userChanges.asObservable();
   }
 
   public getInsertedVariables$() {

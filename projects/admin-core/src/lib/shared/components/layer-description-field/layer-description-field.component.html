@@ -1,9 +1,6 @@
 <div class="layer-description-field"
      [attr.inert]="disabled() ? '' : null"
-     [class.disabled]="disabled()"
-     (focusin)="onInteraction()"
-     (drop)="onInteraction()"
-     (focusout)="onTouched?.()">
+     [class.disabled]="disabled()">
   <strong class="layer-description-label" i18n="@@admin-core.common.description">Description</strong>
   <tm-markdown-editor [content]="content()"
                       [insertUpload$]="selectUpload$"
