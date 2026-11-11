@@ -28,6 +28,9 @@ export class MarkdownSourceEditorComponent implements OnInit {
   @Input()
   public useInfoPanelWidth = false;
 
+  /** Shown while the text is empty. */
+  public placeholder = input<string>();
+
   public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
   @ViewChild('editor', { read: ElementRef, static: true })
@@ -62,6 +65,11 @@ export class MarkdownSourceEditorComponent implements OnInit {
         return MarkdownHelper.getSafeHtmlForMarkdown$(content || '', this.sanitizer, this.resolveImageUrl());
       }),
     );
+  }
+
+  /** Moves keyboard focus into the source textarea. */
+  public focus() {
+    this.editorEl?.nativeElement.focus();
   }
 
   public insertVariable(value: string) {

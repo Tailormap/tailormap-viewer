@@ -1,30 +1,33 @@
-<div class="markdown-editor-header">
-@if (templatePicklistConfig) {
-  <div class="select-wrapper">
-    <mat-form-field>
-      <mat-label>{{templatePicklistConfig.label}}</mat-label>
-      <mat-select>
-        @for (v of templatePicklistConfig.variables; track $index) {
-          <mat-option (click)="insertVariable(v.value)">{{v.label}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+@if (!isInline()) {
+  <div class="markdown-editor-header">
+  @if (templatePicklistConfig) {
+    <div class="select-wrapper">
+      <mat-form-field>
+        <mat-label>{{templatePicklistConfig.label}}</mat-label>
+        <mat-select>
+          @for (v of templatePicklistConfig.variables; track $index) {
+            <mat-option (click)="insertVariable(v.value)">{{v.label}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+    <div class="button-wrapper">
+      <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
+        <mat-button-toggle [checked]="isMilkdownEditor()" (click)="toggleEditor('milkdown')" i18n="@@shared.markdown-editor.visual-editor">Visual editor</mat-button-toggle>
+        <mat-button-toggle [checked]="isSourceEditor()" (click)="toggleEditor('source')" i18n="@@shared.markdown-editor.source-editor">Source</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
   </div>
 }
-  <div class="button-wrapper">
-    <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
-      <mat-button-toggle [checked]="isMilkdownEditor()" (click)="toggleEditor('milkdown')" i18n="@@shared.markdown-editor.visual-editor">Visual editor</mat-button-toggle>
-      <mat-button-toggle [checked]="isSourceEditor()" (click)="toggleEditor('source')" i18n="@@shared.markdown-editor.source-editor">Source</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-</div>
 
 @if (isMilkdownEditor()) {
   <tm-milkdown-editor [uploadService$]="uploadService$"
                       [templatePicklistConfig]="templatePicklistConfig"
                       [insertUpload$]="insertUpload$()"
-                      [resolveImageUrl]="resolveImageUrl()"></tm-milkdown-editor>
+                      [resolveImageUrl]="resolveImageUrl()"
+                      [placeholder]="placeholder()"></tm-milkdown-editor>
 }
 @if (isSourceEditor()) {
-  <tm-markdown-source-editor [useInfoPanelWidth]="useInfoPanelWidth" [resolveImageUrl]="resolveImageUrl()"></tm-markdown-source-editor>
+  <tm-markdown-source-editor [useInfoPanelWidth]="useInfoPanelWidth" [resolveImageUrl]="resolveImageUrl()" [placeholder]="placeholder()"></tm-markdown-source-editor>
 }

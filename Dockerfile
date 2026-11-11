@@ -15,6 +15,8 @@ RUN npm install
 COPY . /app
 
 RUN npm run build -- --base-href=${BASE_HREF}
+# Empty directory for the log files, see below
+RUN mkdir /logs
 
 FROM ghcr.io/tailormap/tailormap-api:${API_VERSION}
 
@@ -34,3 +36,6 @@ LABEL org.opencontainers.image.authors="info@b3partners.nl" \
       tailormap-api.version="$API_VERSION"
 
 COPY --from=builder /app/dist/app /home/cnb/static/
+# Directory for the log files owned by the cnb user the application runs as, so a volume mounted on it is writable. A
+# volume mounted on a directory which does not exist in the image is owned by root. See docker-compose.logs.yml
+COPY --from=builder --chown=cnb:cnb /logs /home/cnb/logs

@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
 import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
 import type { Editor as MilkdownEditor } from '@milkdown/kit/core';
+import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
+import type { EditorView } from '@milkdown/kit/prose/view';
 import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent } from '../../snackbar-message';
@@ -34,7 +36,16 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
   public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
+  /** Shown while the editor is empty; Milkdown's own text when not set. Read once, when the editor is created. */
+  public placeholder = input<string>();
+
   private milkdownEditor: MilkdownEditor | undefined;
+
+  /** The ProseMirror view, available once Crepe has finished creating the editor. */
+  private editorView: EditorView | undefined;
+
+  /** Set when `focus()` is called before the (lazily loaded) editor exists, so it is focused once created. */
+  private focusWhenCreated = false;
 
   private currentContent: string | null | undefined;
 
@@ -51,11 +62,12 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, _coreModule, listenerModule, uploadModule ]) => {
+        concatMap(([ crepeModule, coreModule, listenerModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
             proxyDomURL: this.resolveImageUrl(),
           };
+          const placeholder = this.placeholder();
           const crepe = new crepeModule.Crepe({
             root: el,
             defaultValue: this.mdEditorService.getCurrentContent() || '',
@@ -65,7 +77,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             },
             featureConfigs: {
               [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,
-              [crepeModule.Crepe.Feature.Placeholder]: { mode: 'doc' },
+              [crepeModule.Crepe.Feature.Placeholder]: placeholder ? { mode: 'doc', text: placeholder } : { mode: 'doc' },
               [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig(), this.insertUpload$()),
             },
           });
@@ -88,11 +100,17 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
                 }
               });
             });
-          return from(crepe.create());
+          return from(crepe.create()).pipe(map(editor => ({ editor, editorViewCtx: coreModule.editorViewCtx })));
         }),
       )
-      .subscribe(milkdownEditor => {
-        this.milkdownEditor = milkdownEditor;
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ editor, editorViewCtx }) => {
+        this.milkdownEditor = editor;
+        this.editorView = editor.ctx.get(editorViewCtx);
+        if (this.focusWhenCreated) {
+          this.focusWhenCreated = false;
+          this.editorView.focus();
+        }
       });
     this.mdEditorService.getInsertedVariables$()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -106,7 +124,20 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Moves keyboard focus into the editor. The editor is created asynchronously (Milkdown is lazy loaded), so when it
+   * does not exist yet, it is focused as soon as it has been created.
+   */
+  public focus() {
+    if (this.editorView) {
+      this.editorView.focus();
+      return;
+    }
+    this.focusWhenCreated = true;
+  }
+
   public ngOnDestroy() {
+    this.focusWhenCreated = false;
     if (this.milkdownEditor) {
       this.milkdownEditor.destroy(true);
     }

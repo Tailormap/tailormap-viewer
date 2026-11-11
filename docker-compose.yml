@@ -81,7 +81,7 @@ services:
 
   solr:
     container_name: ${COMPOSE_PROJECT_NAME}-solr
-    image: ghcr.io/tailormap/solr:10.0.0
+    image: ghcr.io/tailormap/solr:10.1.0
     profiles:
       - solr
     environment:
@@ -115,7 +115,7 @@ services:
 
   prometheus:
     container_name: ${COMPOSE_PROJECT_NAME}-prometheus
-    image: prom/prometheus:v3.15.1
+    image: prom/prometheus:v3.16.0
     profiles:
       - prometheus
     environment:
