@@ -1,6 +1,22 @@
-@if (description) {
+@if (filters().length > 0) {
   <div class="form-field criteria-description">
     <label i18n="@@core.filter.summary">Summary</label>
-    <div [innerHTML]="description"></div>
+    <div>
+      @for (filter of filters(); track filter.id) {
+        @if (!$first && operator() === 'AND') {
+          &ngsp;<em i18n="@@core.filter.and">and</em>&ngsp;
+        } @else if (!$first) {
+          &ngsp;<em i18n="@@core.filter.or">or</em>&ngsp;
+        }
+        <strong>{{ filter.attribute }}</strong> {{ filter.condition }}
+        <strong>
+          @if (filter.values.length === 2) {
+            {{ filter.values[0] }} <ng-container i18n="@@core.filter.and">and</ng-container> {{ filter.values[1] }}
+          } @else {
+            {{ filter.values.join(', ') }}
+          }
+        </strong>
+      }
+    </div>
   </div>
 }

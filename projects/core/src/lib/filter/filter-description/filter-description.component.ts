@@ -1,81 +1,56 @@
-import { Component, inject, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AttributeFilterHelper } from '@tailormap-viewer/shared';
-import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
-import { BaseFilterModel, AttributeFilterModel } from '@tailormap-viewer/api';
-import { FilterTypeHelper } from '../helpers/filter-type.helper';
-import { AttributeType } from '@tailormap-viewer/api';
-import { DateTime } from 'luxon';
+import { Component, computed, inject, input } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { AttributeFilterModel, AttributeType } from '@tailormap-viewer/api';
+import { AttributeFilterHelper } from '@tailormap-viewer/shared';
+import { DateTime } from 'luxon';
+import { ExtendedFilterGroupModel } from '../models/extended-filter-group.model';
+import { FilterTypeHelper } from '../helpers/filter-type.helper';
 
+interface FilterDescriptionModel {
+  id: string;
+  attribute: string;
+  condition: string;
+  values: string[];
+}
 
 @Component({
-    selector: 'tm-filter-description',
-    templateUrl: './filter-description.component.html',
-    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-    changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrls: ['./filter-description.component.css'],
+  selector: 'tm-filter-description',
+  templateUrl: './filter-description.component.html',
+  styleUrls: ['./filter-description.component.css'],
 })
 export class FilterDescriptionComponent {
 
   private dateLocale = inject<string>(MAT_DATE_LOCALE);
-  private sanitizer = inject(DomSanitizer);
-  private AND = $localize `:@@core.filter.and:and`;
-  private OR = $localize `:@@core.filter.or:or`;
+  public filterGroup = input.required<ExtendedFilterGroupModel>();
 
-  public description: SafeHtml | null = null;
+  public filters = computed<FilterDescriptionModel[]>(() => {
+    return this.filterGroup().filters
+      .filter(FilterTypeHelper.isAttributeFilter)
+      .filter(filter => !filter.editConfiguration && !filter.generatedByFilterId)
+      .map(filter => ({
+        id: filter.id,
+        attribute: filter.attributeAlias ?? filter.attribute,
+        condition: this.getCondition(filter),
+        values: this.getValues(filter),
+      }));
+  });
 
-  // @TODO: support multiple filterGroups with parentGroups
-  @Input()
-  public set filterGroup(filterGroup: ExtendedFilterGroupModel) {
-    const queryDescription = this.convertGroupToDescription(filterGroup);
-    if (!queryDescription) {
-      this.description = null;
-      return;
-    }
-    this.description = this.sanitizer.bypassSecurityTrustHtml(queryDescription);
-  }
+  public operator = computed(() => this.filterGroup().operator);
 
-  public convertGroupToDescription(filterGroup: ExtendedFilterGroupModel) {
-    return filterGroup.filters
-      .filter(filter => FilterTypeHelper.isAttributeFilter(filter) && !filter.editConfiguration && !filter.generatedByFilterId)
-      .map(filter => this.convertFilterToDescription(filter))
-      .join(` ${this.convertOperator(filterGroup.operator)} `);
-  }
-
-  private convertFilterToDescription(filter: BaseFilterModel) {
-    if (FilterTypeHelper.isSpatialFilter(filter)) {
+  private getCondition(filter: AttributeFilterModel) {
+    const conditionType = AttributeFilterHelper.getConditionTypes(true)
+      .find(c => c.condition === filter.condition);
+    if (!conditionType) {
       return '';
     }
-    if (FilterTypeHelper.isAttributeFilter(filter)) {
-      return this.convertAttributeFilterToDescription(filter);
-    }
-    return '';
+    return filter.invertCondition ? conditionType.inverseReadableLabel : conditionType.readableLabel;
   }
 
-  private convertAttributeFilterToDescription(filter: AttributeFilterModel) {
-    let values = filter.value;
+  private getValues(filter: AttributeFilterModel) {
     if (filter.attributeType === AttributeType.DATE) {
-      values = filter.value.map(v => DateTime.fromISO(v).setLocale(this.dateLocale).toLocaleString(DateTime.DATE_MED));
+      return filter.value.map(v => DateTime.fromISO(v).setLocale(this.dateLocale).toLocaleString(DateTime.DATE_MED));
     }
-    let value = values.join(', ');
-    if (values.length === 2) {
-      value = `${values[0]} ${this.AND} ${values[1]}`;
-    }
-    return `<strong>${filter.attributeAlias ?? filter.attribute}</strong> ${this.convertCondition(filter.condition, filter.invertCondition)} <strong>${value}</strong>`;
-  }
-
-  private convertOperator(operator: 'AND' | 'OR') {
-    return `<em>${operator === 'AND' ? this.AND : this.OR}</em>`;
-  }
-
-  private convertCondition(condition: string, invertedCondition: boolean) {
-    const conditionType = AttributeFilterHelper.getConditionTypes(true)
-      .find(c => c.condition === condition);
-    if (conditionType) {
-      return invertedCondition ? conditionType.inverseReadableLabel : conditionType.readableLabel;
-    }
-    return '';
+    return filter.value;
   }
 
 }

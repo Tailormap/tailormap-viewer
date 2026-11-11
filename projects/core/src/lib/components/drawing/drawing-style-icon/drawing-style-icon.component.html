@@ -1,0 +1,11 @@
+@if (type() === 'IMAGE' && featureStyle()?.markerImage) {
+  <div style="position: relative; width: 24px; height: 24px">
+    <img [ngSrc]="styleMarkerImageUrl()" fill style="object-fit: contain" alt="" class="custom-marker-icon" />
+  </div>
+} @else if (type() === 'POINT') {
+  <mat-icon [style]="markerStyle()" [svgIcon]="pointSvgIcon()"></mat-icon>
+} @else {
+  <mat-icon>
+    <span [innerHTML]="svg()"></span>
+  </mat-icon>
+}

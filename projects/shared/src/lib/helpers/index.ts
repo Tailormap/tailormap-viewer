@@ -27,3 +27,4 @@ export * from './attribute-filter.mock';
 export * from './tileset-3d-style.helper';
 export * from './hash.helper';
 export * from './array-buffer.helper';
+export * from './svg.helper';

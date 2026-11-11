@@ -1,3 +1,3 @@
 import { TemplateRef, Type } from '@angular/core';
 
-export type PopoverContentType = TemplateRef<any> | Type<any> | string;
+export type PopoverContentType = TemplateRef<any> | Type<any>;

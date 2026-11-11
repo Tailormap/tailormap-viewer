@@ -9,7 +9,7 @@ export class HeaderHelper {
     headerContainer.id = scopeId;
     const currentCss = document.querySelector<HTMLStyleElement>('#header-component-css') || document.createElement('style');
     currentCss.id = 'header-component-css';
-    currentCss.innerHTML = CssHelper.getScopedCss(css, `#${scopeId}`);
+    currentCss.textContent = CssHelper.getScopedCss(css, `#${scopeId}`);
     if (currentCss.parentElement === null) {
       document.head.appendChild(currentCss);
     }
