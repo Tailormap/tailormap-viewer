@@ -35,14 +35,8 @@ export class MarkdownHelper {
                 if (!token.autolink) {
                   return markedLib.Renderer.prototype.link.call(this, token);
                 }
-                // For bare URLs marked passes the matched text unescaped, so clean and escape it like marked's default
-                // renderer does, to prevent characters like `"` from ending the attribute early.
                 const label = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.text));
-                const cleanedHref = MarkdownHelper.cleanUrl(MarkdownHelper.markdownUnescape(token.href));
-                if (cleanedHref === null) {
-                  return label;
-                }
-                const href = HtmlifyHelper.escapeHTML(cleanedHref);
+                const href = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.href));
                 const content = HtmlifyHelper.isImageUrl(token.href)
                   ? `<img src="${href}" alt="${label}">`
                   : label;
@@ -96,18 +90,6 @@ export class MarkdownHelper {
       return `${str}`;
     }
     return str.replace(MarkdownHelper.ESCAPE_REGEX, '\\$&');
-  }
-
-  /**
-   * Same as marked's internal `cleanUrl`: percent-encodes the URL without double-encoding existing escapes.
-   * Returns null for malformed URLs (e.g. containing lone surrogates) for which `encodeURI` throws.
-   */
-  private static cleanUrl(href: string): string | null {
-    try {
-      return encodeURI(href).replace(/%25/g, '%');
-    } catch {
-      return null;
-    }
   }
 
   /**
