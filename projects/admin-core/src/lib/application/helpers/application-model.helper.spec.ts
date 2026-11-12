@@ -8,7 +8,7 @@ describe('ApplicationModelHelper', () => {
 
   it('creates admin urls for applications and stories', () => {
     expect(ApplicationModelHelper.getApplicationUrl(getApplication({ id: '5', name: 'app' }), 'layers')).toEqual('/admin/applications/application/5/layers');
-    expect(ApplicationModelHelper.getApplicationUrl(getApplication({ id: '6', name: 'my story', applicationType: 'stories' }), 'layers')).toEqual('/stories-admin/my%20story');
+    expect(ApplicationModelHelper.getApplicationUrl(getApplication({ id: '6', name: 'my story', applicationType: 'stories' }), 'layers')).toEqual('/admin/stories/my%20story');
   });
 
   it('labels stories applications', () => {
