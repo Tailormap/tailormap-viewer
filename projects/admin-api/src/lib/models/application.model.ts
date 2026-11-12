@@ -3,9 +3,13 @@ import { AppContentModel } from './app-content.model';
 import { AppSettingsModel } from './app-settings.model';
 import { AuthorizationRuleGroup } from './authorization-rules.model';
 
+export type ApplicationType = 'application' | 'stories';
+
 export interface ApplicationModel {
   id: string;
   name: string;
+  /** Defaults to 'application' when not set */
+  applicationType?: ApplicationType;
   title?: string;
   adminComments?: string;
   previewText?: string;

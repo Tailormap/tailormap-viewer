@@ -4,6 +4,7 @@ import { ApplicationModel, GeoServiceModel } from '@tailormap-admin/admin-api';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
+import { ApplicationModelHelper } from '../../../application/helpers/application-model.helper';
 
 @Component({
     selector: 'tm-admin-geo-service-used-dialog',
@@ -24,6 +25,14 @@ export class GeoServiceUsedDialogComponent {
     applications: ApplicationModel[]; service: GeoServiceModel;
   }>(MAT_DIALOG_DATA);
   private dialogRef = inject<MatDialogRef<GeoServiceUsedDialogComponent>>(MatDialogRef);
+
+  public getLabel(app: ApplicationModel) {
+    return ApplicationModelHelper.getApplicationLabel(app);
+  }
+
+  public getUrl(app: ApplicationModel) {
+    return ApplicationModelHelper.getApplicationUrl(app);
+  }
 
   public onConfirm() {
     this.dialogRef.close(true);
