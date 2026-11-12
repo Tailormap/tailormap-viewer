@@ -28,7 +28,7 @@ export class ApplicationModelHelper {
    */
   public static getApplicationUrl(application: ApplicationModel, detailsPage?: string): string {
     if (application.applicationType === 'stories') {
-      return `/stories-admin/${encodeURIComponent(application.name)}`;
+      return `/admin/stories/${encodeURIComponent(application.name)}`;
     }
     return [
       '/admin',
