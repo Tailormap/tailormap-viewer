@@ -23,7 +23,7 @@ export class ApplicationModelHelper {
   }
 
   /**
-   * Admin URL for an application. Stories are edited in the stories editor (Tailormap Pro) at `/stories-admin/:name`,
+   * Admin URL for an application. Stories are edited in the stories editor (Tailormap Pro) at `/admin/stories/:name`,
    * which has no sub pages, so `detailsPage` (e.g. Routes.APPLICATION_DETAILS_LAYERS) is only used for normal applications.
    */
   public static getApplicationUrl(application: ApplicationModel, detailsPage?: string): string {
