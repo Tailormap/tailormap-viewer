@@ -5,8 +5,8 @@
   <ul>
     @for (app of data.applications; track app) {
       <li>
-        <a [routerLink]="'/admin/applications/application/'+app.id"
-        (click)="onConfirm()">{{app.title || app.name}}</a>
+        <a [routerLink]="getUrl(app)"
+        (click)="onConfirm()">{{getLabel(app)}}</a>
       </li>
     }
   </ul>

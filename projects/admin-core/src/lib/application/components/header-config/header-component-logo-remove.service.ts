@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { map, take } from 'rxjs';
 import { UploadInUseItem, UploadRemoveServiceModel } from '../../../shared/components';
 import { Routes } from '../../../routes';
+import { ApplicationModelHelper } from '../../helpers/application-model.helper';
 import { ApplicationService } from '../../services/application.service';
 import { BaseComponentTypeEnum, HeaderComponentConfigModel } from '@tailormap-viewer/api';
 
@@ -23,13 +24,8 @@ export class HeaderComponentLogoRemoveService implements UploadRemoveServiceMode
             })
             .map<UploadInUseItem>(app => ({
               id: app.id,
-              name: app.title || app.name,
-              url: [
-                '/admin',
-                Routes.APPLICATION,
-                Routes.APPLICATION_DETAILS.replace(':applicationId', app.id),
-                Routes.APPLICATION_DETAILS_COMPONENTS,
-              ].join('/'),
+              name: ApplicationModelHelper.getApplicationLabel(app),
+              url: ApplicationModelHelper.getApplicationUrl(app, Routes.APPLICATION_DETAILS_COMPONENTS),
             }));
         }),
       );

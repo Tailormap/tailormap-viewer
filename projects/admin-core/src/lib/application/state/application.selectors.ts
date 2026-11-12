@@ -39,7 +39,8 @@ export const isLoadingApplicationServices = createSelector(
 export const selectApplicationList = createSelector(
   selectApplications,
   selectApplicationListFilter,
-  (applications, filter) => {
+  (allApplications, filter) => {
+    const applications = allApplications.filter(application => application.applicationType !== 'stories');
     if (!filter) {
       return applications;
     }
