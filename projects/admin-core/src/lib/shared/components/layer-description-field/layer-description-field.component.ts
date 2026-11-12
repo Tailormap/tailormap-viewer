@@ -45,11 +45,11 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   public content = signal<string>('');
   public disabled = signal(false);
 
+  public onTouched: any | null = null;
   private onChange: ((value: string | null) => void) | null = null;
 
   private static readonly UPLOAD_URL_PREFIX = 'upload://';
 
-  /** The description last written to or changed in the field. */
   private currentDescription: string | null = null;
 
   public writeValue(description: string | null): void {
@@ -66,8 +66,8 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
     this.onChange = fn;
   }
 
-  public registerOnTouched(): void {
-    // Touched state isn't used for this field
+  public registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
   public setDisabledState(isDisabled: boolean): void {

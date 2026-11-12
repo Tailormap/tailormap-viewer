@@ -173,7 +173,6 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     if (!this.milkdownEditor) {
       return;
     }
-    // Inserted from the template picklist, which is outside the editor element
     this.userEdited = true;
     MilkdownHelper.insertTextInEditor(this.milkdownEditor.ctx, `{{${value}}}`);
   }
