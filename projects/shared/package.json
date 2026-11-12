@@ -1,6 +1,6 @@
 {
   "name": "@tailormap-viewer/shared",
-  "version": "12.9.4-rc.5",
+  "version": "12.9.5-rc.0",
   "publishConfig": {
     "registry": "https://repo.b3p.nl/nexus/repository/npm-public"
   },
@@ -12,8 +12,8 @@
     "@angular/material": "^22.2.5",
     "@angular/platform-browser": "^22.2.3",
     "@ctrl/tinycolor": "^4.2.1",
-    "@milkdown/core": "^7.22.1",
-    "@milkdown/crepe": "^7.22.1",
+    "@milkdown/core": "^7.23.0",
+    "@milkdown/crepe": "^7.23.0",
     "rxjs": "^7.8.2",
     "@tinyhttp/content-disposition": "^2.2.4",
     "marked": "^18.0.12"

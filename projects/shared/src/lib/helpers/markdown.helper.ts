@@ -7,6 +7,7 @@ import { HtmlifyHelper } from './htmlify.helper';
 export class MarkdownHelper {
 
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
+  private static UNESCAPE_REGEX = /\\([!-/:-@[-`{-~])/g;
 
   /**
    * Converts Markdown to sanitized HTML. Bare URLs are rendered as links opening in a new window, or as images when the
@@ -31,20 +32,19 @@ export class MarkdownHelper {
             },
             renderer: {
               link(token) {
-                const isBareUrl = token.raw === token.text || token.raw === token.href;
-                if (!isBareUrl) {
+                if (!token.autolink) {
                   return markedLib.Renderer.prototype.link.call(this, token);
                 }
                 // For bare URLs marked passes the matched text unescaped, so clean and escape it like marked's default
                 // renderer does, to prevent characters like `"` from ending the attribute early.
-                const label = HtmlifyHelper.escapeHTML(token.text);
-                const cleanedHref = MarkdownHelper.cleanUrl(token.href);
+                const label = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.text));
+                const cleanedHref = MarkdownHelper.cleanUrl(MarkdownHelper.markdownUnescape(token.href));
                 if (cleanedHref === null) {
                   return label;
                 }
                 const href = HtmlifyHelper.escapeHTML(cleanedHref);
                 const content = HtmlifyHelper.isImageUrl(token.href)
-                  ? `<img src="${href}" alt="${href}">`
+                  ? `<img src="${href}" alt="${label}">`
                   : label;
                 return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
               },
@@ -108,6 +108,14 @@ export class MarkdownHelper {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Removes CommonMark backslash escapes: a backslash before any ASCII punctuation character. This is the same set marked
+   * unescapes in `[label](url)` links, and a superset of what markdownEscape escapes, so it reverses markdownEscape.
+   */
+  public static markdownUnescape(str: string): string {
+    return str.replace(MarkdownHelper.UNESCAPE_REGEX, '$1');
   }
 
   private static replaceWhitespaceInLinks(markdown: string) {

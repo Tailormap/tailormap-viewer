@@ -2,7 +2,7 @@ import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { concatMap, forkJoin, from, map, Observable, of, tap, take } from 'rxjs';
 import { LayerModel, MapExportResult, MapExportScaleBarPosition, MapService, OlLayerFilter, OpenlayersExtent } from '@tailormap-viewer/map';
 import { HttpClient } from '@angular/common/http';
-import { IconService } from '@tailormap-viewer/shared';
+import { IconService, SvgHelper } from '@tailormap-viewer/shared';
 import type { jsPDF } from 'jspdf';
 import type { Svg2pdfOptions } from 'svg2pdf.js';
 import { LegendService } from '../../components/legend/services/legend.service';
@@ -213,7 +213,7 @@ export class MapPdfService {
     return this.httpClient.get(url, { responseType: 'text' }).pipe(
       concatMap(svg => {
         const element = document.createElement('div');
-        element.innerHTML = svg;
+        element.innerHTML = SvgHelper.getCleanSvg(svg);
         const svgEl = Array.from(element.children).find(c => c.nodeName.toLowerCase() === 'svg');
         if (!svgEl) {
           return of(doc);
