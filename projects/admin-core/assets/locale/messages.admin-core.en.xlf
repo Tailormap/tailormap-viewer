@@ -533,6 +533,9 @@
       <trans-unit id="admin-core.application.tree-node-menu" datatype="html">
         <source>Tree node menu</source>
       </trans-unit>
+      <trans-unit id="admin-core.applications.stories" datatype="html">
+        <source>Stories</source>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
       </trans-unit>
