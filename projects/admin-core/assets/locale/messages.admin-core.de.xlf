@@ -2114,6 +2114,14 @@
         <source>System group</source>
         <target>Systemgruppe</target>
       </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-reading-file" datatype="html">
+        <source>Error reading file</source>
+        <target>Fehler beim Lesen der Datei</target>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-uploading-file" datatype="html">
+        <source>Error uploading file</source>
+        <target>Fehler beim Hochladen der Datei</target>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>
         <target>Anwendungen</target>

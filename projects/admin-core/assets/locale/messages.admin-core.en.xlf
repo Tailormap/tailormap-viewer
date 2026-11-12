@@ -1565,6 +1565,12 @@
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
       </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-reading-file" datatype="html">
+        <source>Error reading file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-uploading-file" datatype="html">
+        <source>Error uploading file</source>
+      </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>
       </trans-unit>
