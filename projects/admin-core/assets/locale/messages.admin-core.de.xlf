@@ -220,7 +220,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.edit-application-layer-attributes-hint2" datatype="html">
         <source>It is advised to use the catalog for global attribute settings and only use these application layer settings in specific cases.</source>
-        <target>Es wird empfohlen, den Katalog für globale Attribut-Einstellungen zu verwenden und diese Anwendungsebenen-Einstellungen nur in speziellen Fällen zu verwenden.</target>
+        <target>Es wird empfohlen, den Katalog für globale Attribut-Einstellungen zu verwenden und diese Einstellungen der Anwendungsschicht nur in speziellen Fällen zu verwenden.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.editable" datatype="html">
         <source>Editable</source>
@@ -1982,13 +1982,25 @@
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target>Formular <x id="PH" equiv-text="createdForm.name"/> erstellt</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
-        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>Die folgenden Felder sind im Feature-Typ deaktiviert / deaktiviert für die Bearbeitung. Diese werden im Viewer nicht sichtbar sein. Aktivieren Sie sie zuerst für die Bearbeitung, um sicherzustellen, dass sie im Viewer sichtbar sind.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown" datatype="html">
+        <source>The following fields are hidden in the catalog, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>Die folgenden Felder sind im Katalog ausgeblendet oder existieren nicht mehr im Feature-Typ. Sie werden im Viewer nicht angezeigt.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
-        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>In dem ausgewählten Formular sind die folgenden Felder im Feature-Typ oder in den Einstellungen der Anwendungsebene deaktiviert / deaktiviert für die Bearbeitung. Diese werden im Viewer nicht sichtbar sein. Aktivieren Sie sie zuerst für die Bearbeitung, um sicherzustellen, dass sie im Viewer sichtbar sind.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown-application" datatype="html">
+        <source>The following fields are hidden in the catalog or application layer settings, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>Die folgenden Felder sind im Katalog oder in den Einstellungen der Anwendungsschicht ausgeblendet oder existieren nicht mehr im Feature-Typ. Sie werden im Viewer nicht angezeigt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only" datatype="html">
+        <source>The following fields are not editable in the catalog. They will be shown read-only in the viewer.</source>
+        <target>Die folgenden Felder sind im Katalog nicht bearbeitbar. Sie werden im Viewer schreibgeschützt angezeigt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only-application" datatype="html">
+        <source>The following fields are not editable in the catalog or application layer settings. They will be shown read-only in the viewer.</source>
+        <target>Die folgenden Felder sind im Katalog oder in den Einstellungen der Anwendungsschicht nicht bearbeitbar. Sie werden im Viewer schreibgeschützt angezeigt.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-required-read-only" datatype="html">
+        <source>The following fields are required in the form but cannot be edited, so new features will not get a value for them.</source>
+        <target>Die folgenden Felder sind im Formular erforderlich, können aber nicht bearbeitet werden, sodass neue Features keinen Wert dafür erhalten.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
