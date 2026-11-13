@@ -85,7 +85,7 @@ export class FormAttributeListComponent implements OnInit {
   }
 
   public addAttribute(attribute: AttributeDescriptorModel) {
-    this.store$.dispatch(draftFormAddField({ name: attribute.name, fieldType: EditFormFieldHelper.getDefaultFieldType(attribute) }));
+    this.store$.dispatch(draftFormAddField({ name: attribute.name, controlType: EditFormFieldHelper.getDefaultControlType(attribute) }));
   }
 
 }

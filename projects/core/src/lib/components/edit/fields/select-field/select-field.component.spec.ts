@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { FormFieldTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
+import { AttributeType, FormFieldControlTypeEnum, UniqueValuesService } from '@tailormap-viewer/api';
 import { SelectFieldComponent } from './select-field.component';
 import { ViewerEditFormFieldModel } from '../../models/viewer-edit-form-field.model';
 import { selectViewerId } from '../../../../state/core.selectors';
@@ -11,7 +11,8 @@ import { selectViewerId } from '../../../../state/core.selectors';
 const getItem = (overrides?: Partial<ViewerEditFormFieldModel>): ViewerEditFormFieldModel => ({
   name: 'soort',
   label: 'Soort',
-  type: FormFieldTypeEnum.SELECT,
+  controlType: FormFieldControlTypeEnum.SELECT,
+  attributeType: AttributeType.STRING,
   value: 'merel',
   valueList: [{ value: 'mus', label: 'Mus' }],
   ...overrides,

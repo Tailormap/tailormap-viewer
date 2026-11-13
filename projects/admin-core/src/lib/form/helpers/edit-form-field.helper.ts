@@ -1,88 +1,62 @@
-import { AttributeType, FormFieldModel, FormFieldTypeEnum, FormFieldTypeHelper } from '@tailormap-viewer/api';
+import { AttributeType, FormFieldModel, FormFieldControlTypeEnum, FormFieldControlTypeHelper } from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 
 export class EditFormFieldHelper {
 
-  public static fieldTypes = [
+  public static controlTypes = [
     {
       label: $localize `:@@admin-core.form.field-type-text:Text field`,
-      value: FormFieldTypeEnum.TEXT,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TEXT),
+      value: FormFieldControlTypeEnum.TEXT,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.TEXT),
     },
     {
       label: $localize `:@@admin-core.form.field-type-number:Number field`,
-      value: FormFieldTypeEnum.NUMBER,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.NUMBER),
+      value: FormFieldControlTypeEnum.NUMBER,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.NUMBER),
     },
     {
       label: $localize `:@@admin-core.form.field-type-select:Choice list`,
-      value: FormFieldTypeEnum.SELECT,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.SELECT),
+      value: FormFieldControlTypeEnum.SELECT,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.SELECT),
     },
     {
       label: $localize `:@@admin-core.form.field-type-textarea:Textarea field`,
-      value: FormFieldTypeEnum.TEXTAREA,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TEXTAREA),
+      value: FormFieldControlTypeEnum.TEXTAREA,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.TEXTAREA),
     },
     {
-      label: $localize `:@@admin-core.form.field-type-integer:Integer field`,
-      value: FormFieldTypeEnum.INTEGER,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.INTEGER),
-    },
-    {
-      label: $localize `:@@admin-core.form.field-type-boolean:Checkbox field`,
-      value: FormFieldTypeEnum.BOOLEAN,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.BOOLEAN),
+      label: $localize `:@@admin-core.form.field-type-checkbox:Checkbox`,
+      value: FormFieldControlTypeEnum.CHECKBOX,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.CHECKBOX),
     },
     {
       label: $localize `:@@admin-core.form.field-type-date:Date field`,
-      value: FormFieldTypeEnum.DATE,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.DATE),
+      value: FormFieldControlTypeEnum.DATE,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.DATE),
     },
     {
-      label: $localize `:@@admin-core.form.field-type-timestamp:Timestamp field`,
-      value: FormFieldTypeEnum.TIMESTAMP,
-      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TIMESTAMP),
+      label: $localize `:@@admin-core.form.field-type-datetime:Date and time field`,
+      value: FormFieldControlTypeEnum.DATETIME,
+      allowedForAttributeTypes: FormFieldControlTypeHelper.getAllowedAttributeTypes(FormFieldControlTypeEnum.DATETIME),
     },
   ];
 
-  public static getFormFieldType(fieldType?: string) {
-    if (fieldType === 'number') {
-      return FormFieldTypeEnum.NUMBER;
-    }
-    if (fieldType === 'integer') {
-      return FormFieldTypeEnum.INTEGER;
-    }
-    if (fieldType === 'boolean') {
-      return FormFieldTypeEnum.BOOLEAN;
-    }
-    if (fieldType === 'select') {
-      return FormFieldTypeEnum.SELECT;
-    }
-    if (fieldType === 'textarea') {
-      return FormFieldTypeEnum.TEXTAREA;
-    }
-    if (fieldType === 'date') {
-      return FormFieldTypeEnum.DATE;
-    }
-    if (fieldType === 'timestamp') {
-      return FormFieldTypeEnum.TIMESTAMP;
-    }
-    return FormFieldTypeEnum.TEXT;
+  public static getControlType(controlType?: string): FormFieldControlTypeEnum {
+    return Object.values(FormFieldControlTypeEnum).find(value => value === controlType) ?? FormFieldControlTypeEnum.TEXT;
   }
 
-  /** The field type for a newly added form field, based on the attribute type. */
-  public static getDefaultFieldType(attribute?: Pick<AttributeDescriptorModel, 'type'> | null): FormFieldTypeEnum {
-    return attribute ? FormFieldTypeHelper.getDefaultFormFieldType(attribute.type) : FormFieldTypeEnum.TEXT;
+  /** The edit control for a newly added form field, based on the attribute type. */
+  public static getDefaultControlType(attribute?: Pick<AttributeDescriptorModel, 'type'> | null): FormFieldControlTypeEnum {
+    return attribute ? FormFieldControlTypeHelper.getDefaultControlType(attribute.type) : FormFieldControlTypeEnum.TEXT;
   }
 
   /**
-   * Replaces the type of fields which is not compatible with the type of their attribute by the default type for the attribute.
-   * This happens for fields added before field types defaulted to the attribute type, or when the attribute type changed after
+   * Replaces the control of fields which is not compatible with the type of their attribute by the default control for the attribute.
+   * This happens for fields added before field controls defaulted to one based on the attribute type, or when the attribute type changed after
    * refreshing the feature source. Fields for attributes which no longer exist are left alone.
    * @returns the corrected fields, or null when no field needed correcting
    */
-  public static correctFieldTypes(
+  public static correctControlTypes(
     fields: FormFieldModel[],
     attributes: Array<{ name: string; type: AttributeType }>,
   ): FormFieldModel[] | null {
@@ -90,25 +64,25 @@ export class EditFormFieldHelper {
     let corrected = false;
     const correctedFields = fields.map(field => {
       const attributeType = attributeTypes.get(field.name);
-      if (!attributeType || FormFieldTypeHelper.isAllowedForAttributeType(field.type, attributeType)) {
+      if (!attributeType || FormFieldControlTypeHelper.isAllowedForAttributeType(field.controlType, attributeType)) {
         return field;
       }
       corrected = true;
-      return { ...field, type: FormFieldTypeHelper.getDefaultFormFieldType(attributeType) };
+      return { ...field, controlType: FormFieldControlTypeHelper.getDefaultControlType(attributeType) };
     });
     return corrected ? correctedFields : null;
   }
 
-  public static getFilteredFieldTypes(fieldName?: string, featureType?: FeatureTypeModel | null) {
+  public static getFilteredControlTypes(fieldName?: string, featureType?: FeatureTypeModel | null) {
     if (!fieldName || !featureType) {
-      return EditFormFieldHelper.fieldTypes;
+      return EditFormFieldHelper.controlTypes;
     }
     const attribute = featureType?.attributes.find(a => a.name === fieldName);
     if (!attribute) {
-      return EditFormFieldHelper.fieldTypes;
+      return EditFormFieldHelper.controlTypes;
     }
-    return EditFormFieldHelper.fieldTypes.filter(fieldType => {
-      return fieldType.allowedForAttributeTypes.includes(attribute.type);
+    return EditFormFieldHelper.controlTypes.filter(controlType => {
+      return controlType.allowedForAttributeTypes.includes(attribute.type);
     });
   }
 

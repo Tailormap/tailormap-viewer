@@ -13,7 +13,7 @@ import {
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
 import {
-  clearSelectedForm, draftFormClearSelection, draftFormCorrectFieldTypes, updateDraftForm, updateDraftFormValid,
+  clearSelectedForm, draftFormClearSelection, draftFormCorrectControlTypes, updateDraftForm, updateDraftFormValid,
 } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
@@ -96,7 +96,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
       this.store$.select(selectDraftFormValid),
       this.store$.select(selectDraftFormFieldValid),
     ]).pipe(map(([ updated, valid, fieldValid ]) => updated && valid && fieldValid));
-    // Correct stale field types (from an old admin default or a changed attribute type after refreshing the feature source), so
+    // Correct stale field controls (from an old admin default or a changed attribute type after refreshing the feature source), so
     // opening and saving the form fixes them. The draft form is marked as updated only when something was corrected.
     combineLatest([
       this.form$.pipe(map(form => form?.id), distinctUntilChanged()),
@@ -105,7 +105,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(([ formId, featureType ]) => {
         if (formId && featureType) {
-          this.store$.dispatch(draftFormCorrectFieldTypes({
+          this.store$.dispatch(draftFormCorrectControlTypes({
             attributes: featureType.attributes.map(a => ({ name: a.name, type: a.type })),
           }));
         }
