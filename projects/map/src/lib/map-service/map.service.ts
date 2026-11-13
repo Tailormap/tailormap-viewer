@@ -1,5 +1,6 @@
 import { inject, Injectable, NgZone } from '@angular/core';
 import { OpenLayersMap } from '../openlayers-map/openlayers-map';
+import { MAP_COOPERATIVE_GESTURES } from '../map/map-cooperative-gestures.injection-token';
 import { CesiumManager } from '../openlayers-map/cesium-map/cesium-manager';
 import { combineLatest, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import {
@@ -34,7 +35,7 @@ export class MapService {
   private httpXsrfTokenExtractor = inject(HttpXsrfTokenExtractor);
 
   constructor() {
-    this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor);
+    this.map = new OpenLayersMap(this.ngZone, this.httpXsrfTokenExtractor, inject(MAP_COOPERATIVE_GESTURES));
   }
 
   public initMap(options: MapViewerOptionsModel, initialOptions?: { initialCenter?: [number, number]; initialZoom?: number }) {
