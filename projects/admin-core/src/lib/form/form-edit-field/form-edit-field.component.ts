@@ -60,19 +60,19 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
 
   public field: FormFieldModel | null = null;
 
-  public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
+  public filteredControlTypes = EditFormFieldHelper.getFilteredControlTypes();
 
   public fieldForm = new FormGroup({
     label: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    type: new FormControl('', {
+    controlType: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
     required: new FormControl<boolean>(false, { nonNullable: true }),
-    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    readOnly: new FormControl<boolean>(false, { nonNullable: true }),
     autoFillUser: new FormControl<boolean>(false, { nonNullable: true }),
     autoFillDate: new FormControl<boolean>(false, { nonNullable: true }),
     uniqueValuesAsOptions: new FormControl<boolean>(false, { nonNullable: true }),
@@ -114,7 +114,7 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
         } else {
           this.clearForm();
         }
-        this.filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes(field?.name, this.featureType);
+        this.filteredControlTypes = EditFormFieldHelper.getFilteredControlTypes(field?.name, this.featureType);
         this.store$.dispatch(updateDraftFormFieldValid({ isValid: true }));
         this.cdr.detectChanges();
       });
@@ -123,9 +123,9 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private initForm(form: FormFieldModel) {
     this.fieldForm.patchValue({
       label: form.label,
-      type: form.type,
+      controlType: form.controlType,
       required: form.required,
-      disabled: form.disabled,
+      readOnly: form.readOnly,
       autoFillUser: form.autoFillUser,
       autoFillDate: form.autoFillDate,
       uniqueValuesAsOptions: form.uniqueValuesAsOptions,
@@ -147,9 +147,9 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private clearForm() {
     this.fieldForm.patchValue({
       label: '',
-      type: '',
+      controlType: '',
       required: false,
-      disabled: false,
+      readOnly: false,
       autoFillUser: false,
       autoFillDate: false,
       uniqueValuesAsOptions: false,
@@ -174,7 +174,7 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private isValidField(): boolean {
     const values = this.fieldForm.getRawValue();
     return FormHelper.isValidValue(values.label)
-      && FormHelper.isValidValue(values.type)
+      && FormHelper.isValidValue(values.controlType)
       && this.fieldForm.valid;
   }
 
@@ -220,9 +220,9 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
 
   private dispatchFieldModel(rawValue: Partial<{
     label: string;
-    type: string;
+    controlType: string;
     required: boolean;
-    disabled: boolean;
+    readOnly: boolean;
     autoFillUser: boolean;
     autoFillDate: boolean;
     uniqueValuesAsOptions: boolean;
@@ -237,10 +237,10 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
       name: field.name,
       label: rawValue.label || field.name,
       required: typeof rawValue.required === 'undefined' ? false : rawValue.required,
-      disabled: typeof rawValue.disabled === 'undefined' ? false : rawValue.disabled,
+      readOnly: typeof rawValue.readOnly === 'undefined' ? false : rawValue.readOnly,
       autoFillUser: typeof rawValue.autoFillUser === 'undefined' ? false : rawValue.autoFillUser,
       autoFillDate: typeof rawValue.autoFillDate === 'undefined' ? false : rawValue.autoFillDate,
-      type: EditFormFieldHelper.getFormFieldType(rawValue.type),
+      controlType: EditFormFieldHelper.getControlType(rawValue.controlType),
       valueList,
       uniqueValuesAsOptions: rawValue.uniqueValuesAsOptions,
       allowValueListOnly: !rawValue.allowFreeInput,

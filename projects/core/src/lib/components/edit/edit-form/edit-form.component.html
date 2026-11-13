@@ -1,7 +1,7 @@
 <ng-template #formFields let-fields>
   @for (item of fields; track item) {
     <div class="edit-form-field">
-      @if (item.type === 'text') {
+      @if (item.controlType === 'text') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
             {{ item.label }}
@@ -12,7 +12,7 @@
           <input matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label">
         </mat-form-field>
       }
-      @if (item.type === 'number' || item.type === 'integer') {
+      @if (item.controlType === 'number') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
             {{ item.label }}
@@ -23,7 +23,7 @@
           <input matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label" type="number">
         </mat-form-field>
       }
-      @if (item.type === 'date') {
+      @if (item.controlType === 'date') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
             {{ item.label }}
@@ -36,7 +36,7 @@
           <mat-datepicker #dp></mat-datepicker>
         </mat-form-field>
       }
-      @if (item.type === 'timestamp') {
+      @if (item.controlType === 'datetime') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
             {{ item.label }}
@@ -47,7 +47,7 @@
           <input matInput type="text" [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label">
         </mat-form-field>
       }
-      @if (item.type === 'textarea') {
+      @if (item.controlType === 'textarea') {
         <mat-form-field hideRequiredMarker>
           <mat-label>
             {{ item.label }}
@@ -58,14 +58,14 @@
           <textarea matInput [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label"></textarea>
         </mat-form-field>
       }
-      @if (item.type === 'select') {
+      @if (item.controlType === 'select') {
         <tm-select-field
           [formControl]="getControl(item.name)"
           [item]="item"
           [layerId]="layerId"
           (clearUniqueValueCacheAfterSave)="clearUniqueValueCacheAfterSave.emit($event)"></tm-select-field>
       }
-      @if (item.type === 'boolean') {
+      @if (item.controlType === 'checkbox') {
         <mat-checkbox [formControl]="getControl(item.name)">
           <mat-label>{{ item.label }}</mat-label>
         </mat-checkbox>
@@ -78,7 +78,7 @@
   @if (tabs.length > 1) {
     <mat-tab-group>
       @for (tab of tabs; track tab.id) {
-        <mat-tab [label]="tab.name">
+        <mat-tab [label]="tab.label">
           <ng-container *ngTemplateOutlet="formFields; context: { $implicit: formConfig.filter(f => f.tab === tab.id) }"></ng-container>
         </mat-tab>
       }

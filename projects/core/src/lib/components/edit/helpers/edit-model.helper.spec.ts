@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import {
-  AttributeModel, AttributeType, FormFieldModel, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, LayerDetailsModel,
+  AttributeModel, AttributeType, FormFieldModel, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, LayerDetailsModel,
 } from '@tailormap-viewer/api';
 import { EditModelHelper } from './edit-model.helper';
 
@@ -23,7 +23,7 @@ const attributes: AttributeModel[] = [
 const getLayerDetails = (formFields?: FormFieldModel[]): LayerDetailsModel => getLayerDetailsModel({
   editable: true,
   attributes,
-  form: formFields ? { options: { columns: 1, tabs: [] }, fields: formFields } : null,
+  form: formFields ? { options: { tabs: [] }, fields: formFields } : null,
 });
 
 const feature = getFeatureModel({
@@ -38,55 +38,65 @@ describe('EditModelHelper', () => {
 
   test('creates fields from attributes without a form', () => {
     const layerDetails = getLayerDetails();
-    expect(getField(layerDetails, 'name')).toEqual(expect.objectContaining({ type: FormFieldTypeEnum.TEXT, disabled: false, required: false }));
-    expect(getField(layerDetails, 'creationdate')).toEqual(expect.objectContaining({ type: FormFieldTypeEnum.DATE, required: true }));
-    expect(getField(layerDetails, 'eindregistratie')).toEqual(expect.objectContaining({ type: FormFieldTypeEnum.TIMESTAMP, disabled: true }));
+    expect(getField(layerDetails, 'name')).toEqual(expect.objectContaining({ controlType: FormFieldControlTypeEnum.TEXT, readOnly: false, required: false }));
+    expect(getField(layerDetails, 'creationdate')).toEqual(expect.objectContaining({ controlType: FormFieldControlTypeEnum.DATE, required: true }));
+    expect(getField(layerDetails, 'eindregistratie')).toEqual(expect.objectContaining({ controlType: FormFieldControlTypeEnum.DATETIME, readOnly: true }));
   });
 
   test('form field cannot make a non-editable attribute editable', () => {
     const layerDetails = getLayerDetails([
-      { name: 'eindregistratie', label: 'Eindregistratie', type: FormFieldTypeEnum.TIMESTAMP },
+      { name: 'eindregistratie', label: 'Eindregistratie', controlType: FormFieldControlTypeEnum.DATETIME },
     ]);
-    expect(getField(layerDetails, 'eindregistratie')).toEqual(expect.objectContaining({ label: 'Eindregistratie', disabled: true }));
+    expect(getField(layerDetails, 'eindregistratie')).toEqual(expect.objectContaining({ label: 'Eindregistratie', readOnly: true }));
   });
 
   test('form field can make an editable attribute read-only', () => {
     const layerDetails = getLayerDetails([
-      { name: 'name', label: 'Name', type: FormFieldTypeEnum.TEXT, disabled: true },
+      { name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.TEXT, readOnly: true },
     ]);
-    expect(getField(layerDetails, 'name')?.disabled).toBe(true);
+    expect(getField(layerDetails, 'name')?.readOnly).toBe(true);
+  });
+
+  test('uses a number control for an integer attribute and keeps the attribute type for validation', () => {
+    const layerDetails = getLayerDetailsModel({
+      editable: true,
+      attributes: [getAttribute({ name: 'count', type: AttributeType.INTEGER })],
+      form: null,
+    });
+    const fields = EditModelHelper.createEditModel(getFeatureModel({ attributes: { count: 1 } }), layerDetails, []);
+    expect(fields[0]).toEqual(expect.objectContaining({ controlType: FormFieldControlTypeEnum.NUMBER, attributeType: AttributeType.INTEGER }));
   });
 
   test('form field cannot make a non-nullable attribute optional', () => {
     const layerDetails = getLayerDetails([
-      { name: 'creationdate', label: 'Created', type: FormFieldTypeEnum.DATE, required: false },
+      { name: 'creationdate', label: 'Created', controlType: FormFieldControlTypeEnum.DATE, required: false },
     ]);
     expect(getField(layerDetails, 'creationdate')?.required).toBe(true);
   });
 
-  test('ignores a form field type which is incompatible with the attribute type', () => {
+  test('ignores a form field control which is incompatible with the attribute type', () => {
     const layerDetails = getLayerDetails([
-      { name: 'creationdate', label: 'Created', type: FormFieldTypeEnum.TEXT },
-      { name: 'eindregistratie', label: 'Ended', type: FormFieldTypeEnum.TEXT },
+      { name: 'creationdate', label: 'Created', controlType: FormFieldControlTypeEnum.TEXT },
+      { name: 'eindregistratie', label: 'Ended', controlType: FormFieldControlTypeEnum.TEXT },
     ]);
-    expect(getField(layerDetails, 'creationdate')).toEqual(expect.objectContaining({ label: 'Created', type: FormFieldTypeEnum.DATE }));
-    expect(getField(layerDetails, 'eindregistratie')?.type).toBe(FormFieldTypeEnum.TIMESTAMP);
+    expect(getField(layerDetails, 'creationdate')).toEqual(expect.objectContaining({ label: 'Created', controlType: FormFieldControlTypeEnum.DATE }));
+    expect(getField(layerDetails, 'eindregistratie')?.controlType).toBe(FormFieldControlTypeEnum.DATETIME);
   });
 
-  test('uses a compatible form field type and its value list', () => {
+  test('uses a compatible form field control and its value list', () => {
     const layerDetails = getLayerDetails([
-      { name: 'name', label: 'Name', type: FormFieldTypeEnum.SELECT, valueList: [{ value: 'a' }, { value: 'b', label: 'B' }] },
+      { name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: 'a' }, { value: 'b', label: 'B' }] },
     ]);
     expect(getField(layerDetails, 'name')).toEqual(expect.objectContaining({
-      type: FormFieldTypeEnum.SELECT,
+      controlType: FormFieldControlTypeEnum.SELECT,
       valueList: [{ value: 'a', label: 'a' }, { value: 'b', label: 'B' }],
     }));
   });
 
   test('only includes and orders attributes in the form', () => {
     const layerDetails = getLayerDetails([
-      { name: 'creationdate', label: 'Created', type: FormFieldTypeEnum.DATE },
-      { name: 'name', label: 'Name', type: FormFieldTypeEnum.TEXT },
+      { name: 'creationdate', label: 'Created', controlType: FormFieldControlTypeEnum.DATE },
+      { name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.TEXT },
     ]);
     expect(EditModelHelper.createEditModel(feature, layerDetails, []).map(f => f.name)).toEqual([ 'creationdate', 'name' ]);
   });
@@ -99,10 +109,10 @@ describe('EditModelHelper', () => {
         getAttribute({ name: 'flag', type: AttributeType.BOOLEAN }),
       ],
       form: {
-        options: { columns: 1, tabs: [] },
+        options: { tabs: [] },
         fields: [
-          { name: 'count', label: 'Count', type: FormFieldTypeEnum.SELECT, valueList: [{ value: '1' }, { value: 'abc' }, { value: '' }, { value: 2 }] },
-          { name: 'flag', label: 'Flag', type: FormFieldTypeEnum.SELECT, valueList: [{ value: 'true' }, { value: 'yes' }, { value: 'false', label: 'No' }] },
+          { name: 'count', label: 'Count', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: '1' }, { value: 'abc' }, { value: '' }, { value: 2 }] },
+          { name: 'flag', label: 'Flag', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: 'true' }, { value: 'yes' }, { value: 'false', label: 'No' }] },
         ],
       },
     });

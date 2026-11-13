@@ -1,5 +1,6 @@
+import { FormTabModel } from './form-tab.model';
+
 export interface FormOptionsModel {
   description?: string;
-  columns: number;
-  tabs: Array<{ id: string; name: string }>;
+  tabs: FormTabModel[];
 }

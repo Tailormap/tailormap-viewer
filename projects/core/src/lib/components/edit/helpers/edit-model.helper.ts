@@ -1,6 +1,6 @@
 import {
-  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, FormFieldModel, FormFieldTypeEnum,
-  FormFieldTypeHelper, LayerDetailsModel,
+  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, FormFieldModel, FormFieldControlTypeEnum,
+  FormFieldControlTypeHelper, LayerDetailsModel,
 } from '@tailormap-viewer/api';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { ArrayHelper } from '@tailormap-viewer/shared';
@@ -57,9 +57,10 @@ export class EditModelHelper {
       label: attribute.editAlias || alias || attribute.name,
       value,
       name: attribute.name,
+      attributeType: attribute.type,
       required: attribute.nullable === false,
-      disabled: !attribute.editable,
-      type: booleanValueList ? FormFieldTypeEnum.SELECT : FormFieldTypeHelper.getDefaultFormFieldType(attribute.type, !!attribute.valueList),
+      readOnly: !attribute.editable,
+      controlType: booleanValueList ? FormFieldControlTypeEnum.SELECT : FormFieldControlTypeHelper.getDefaultControlType(attribute.type, !!attribute.valueList),
       valueList: booleanValueList ? booleanValueList : attribute.valueList?.split(',').map(val => {
         const listValue = val.trim();
         return { value: listValue, label: listValue };
@@ -70,21 +71,22 @@ export class EditModelHelper {
   /**
    * Applies the configuration of a form field on top of the field created from the attribute. The form determines the presentation
    * (label, tab, hint, value list etc.), but cannot make an attribute editable or optional when the attribute metadata says otherwise.
-   * A configured field type which is not compatible with the attribute type (for example a text field for a date attribute, which
-   * is the default when adding a field in the admin) is ignored in favour of the type derived from the attribute.
+   * A configured control which is not compatible with the attribute type (for example a text field for a date attribute, which
+   * is the default when adding a field in the admin) is ignored in favour of the control derived from the attribute.
    */
   private static applyFormField(
     attributeField: ViewerEditFormFieldModel,
     formField: FormFieldModel,
     attribute: AttributeModel,
   ): ViewerEditFormFieldModel {
-    const useFormFieldType = FormFieldTypeHelper.isAllowedForAttributeType(formField.type, attribute.type);
+    const useFormFieldControlType = FormFieldControlTypeHelper.isAllowedForAttributeType(formField.controlType, attribute.type);
     return {
       ...formField,
       value: attributeField.value,
-      type: useFormFieldType ? formField.type : attributeField.type,
-      valueList: useFormFieldType ? EditModelHelper.parseValueList(attribute.type, formField.valueList) : attributeField.valueList,
-      disabled: !!formField.disabled || !!attributeField.disabled,
+      attributeType: attributeField.attributeType,
+      controlType: useFormFieldControlType ? formField.controlType : attributeField.controlType,
+      valueList: useFormFieldControlType ? EditModelHelper.parseValueList(attribute.type, formField.valueList) : attributeField.valueList,
+      readOnly: !!formField.readOnly || !!attributeField.readOnly,
       required: !!formField.required || !!attributeField.required,
     };
   }
