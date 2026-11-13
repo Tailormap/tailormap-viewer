@@ -9,13 +9,11 @@ export class CooperativeGesturesHelper {
 
   private overlayElement: HTMLElement | undefined;
   private overlayVisible = false;
-  private elSize = { left: 0, right: 0, top: 0, bottom: 0 };
   private autoHideTimer: number | undefined;
 
   private mouseWheelHandler = this.handleMouseWheel.bind(this);
   private touchEventHandler = this.handleTouchStart.bind(this);
   private hideOverlayHandler = this.hideOverlay.bind(this);
-  private resizeHandler = this.setElementSize.bind(this);
 
   constructor(
     private hostEl: HTMLElement,
@@ -32,8 +30,6 @@ export class CooperativeGesturesHelper {
       return;
     }
     this.overlayElement = overlayElement;
-    this.setElementSize();
-    window.addEventListener('resize', this.resizeHandler);
     this.hostEl.addEventListener('wheel', this.mouseWheelHandler);
     this.hostEl.addEventListener("touchstart", this.touchEventHandler);
     this.hostEl.addEventListener("touchend", this.hideOverlayHandler);
@@ -42,20 +38,11 @@ export class CooperativeGesturesHelper {
   }
 
   public destroy() {
-    window.removeEventListener('resize', this.resizeHandler);
     this.hostEl.removeEventListener('wheel', this.mouseWheelHandler);
     this.hostEl.removeEventListener("touchstart", this.touchEventHandler);
     this.hostEl.removeEventListener("touchend", this.hideOverlayHandler);
     this.hostEl.removeEventListener('mouseleave', this.hideOverlayHandler);
     this.hostEl.removeEventListener('mousedown', this.hideOverlayHandler);
-  }
-
-  private setElementSize() {
-    const left = this.hostEl.offsetLeft;
-    const right = left + this.hostEl.offsetWidth;
-    const top = this.hostEl.offsetTop;
-    const bottom = top + this.hostEl.offsetHeight;
-    this.elSize = { left, right, top, bottom };
   }
 
   private handleMouseWheel(e: WheelEvent) {
@@ -64,8 +51,10 @@ export class CooperativeGesturesHelper {
       this.hideOverlay();
       return;
     }
-    const withinX = (e.pageX >= this.elSize.left && e.pageX <= this.elSize.right);
-    const withinY = (e.pageY >= this.elSize.top && e.pageY <= this.elSize.bottom);
+    // Viewport coordinates: offsetTop/pageY is wrong when the page scrolls or the host has an offset parent
+    const rect = this.hostEl.getBoundingClientRect();
+    const withinX = (e.clientX >= rect.left && e.clientX <= rect.right);
+    const withinY = (e.clientY >= rect.top && e.clientY <= rect.bottom);
     const withinMap = withinX && withinY;
     if (withinMap) {
       this.showOverlay(BrowserHelper.isMac ? CooperativeGesturesHelper.MAC_MESSAGE : CooperativeGesturesHelper.WINDOWS_MESSAGE);

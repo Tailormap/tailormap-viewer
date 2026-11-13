@@ -63,6 +63,7 @@ export class OpenLayersMap implements MapViewerModel {
   constructor(
     private ngZone: NgZone,
     private httpXsrfTokenExtractor: HttpXsrfTokenExtractor,
+    private cooperativeGestures = false,
   ) {
     this.resizeObserver = new ResizeObserver(() => this.updateMapSize());
     this.made3d = false;
@@ -94,14 +95,13 @@ export class OpenLayersMap implements MapViewerModel {
       }
       return;
     }
-    const isInIframe = window.self !== window.top;
     const olMap = new OlMap({
       controls: [],
       interactions: defaultInteractions({
         altShiftDragRotate: false,
         pinchRotate: false,
-        mouseWheelZoom: !isInIframe,
-        dragPan: !isInIframe,
+        mouseWheelZoom: !this.cooperativeGestures,
+        dragPan: !this.cooperativeGestures,
       }).extend([
         new Interaction({
           handleEvent: event => {
@@ -114,7 +114,7 @@ export class OpenLayersMap implements MapViewerModel {
             return true;
           },
         }),
-        ...(isInIframe ? [
+        ...(this.cooperativeGestures ? [
           new DragPan({
             condition: function (event) {
               return event.activePointers?.length === 2 || mouseOnly(event);
