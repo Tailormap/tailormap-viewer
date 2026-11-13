@@ -1919,8 +1919,8 @@
         <target>Bearbeiten <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit-tab" datatype="html">
-        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
-        <target>Tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/> bearbeiten</target>
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></source>
+        <target>Tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/> bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
