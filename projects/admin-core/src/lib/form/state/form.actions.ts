@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { FormUpdateModel } from '../services/form-update.model';
-import { FormFieldModel } from '@tailormap-viewer/api';
+import { AttributeType, FormFieldModel, FormFieldTypeEnum } from '@tailormap-viewer/api';
 
 const formActionsPrefix = '[Admin/Form]';
 
@@ -78,7 +78,7 @@ export const draftFormUpdateFields = createAction(
 
 export const draftFormAddField = createAction(
   `${formActionsPrefix} Draft Form Add Field`,
-  props<{ name: string }>(),
+  props<{ name: string; fieldType?: FormFieldTypeEnum }>(),
 );
 
 export const draftFormSetSelectedField = createAction(
@@ -99,6 +99,17 @@ export const draftFormRemoveField = createAction(
 export const updateDraftFormValid = createAction(
   `${formActionsPrefix} Update Draft Form Valid`,
   props<{ isValid: boolean }>(),
+);
+
+export const updateDraftFormFieldValid = createAction(
+  `${formActionsPrefix} Update Draft Form Field Valid`,
+  props<{ isValid: boolean }>(),
+);
+
+/** Replaces field types which are not compatible with the (current) type of their attribute in the feature type. */
+export const draftFormCorrectFieldTypes = createAction(
+  `${formActionsPrefix} Draft Form Correct Field Types`,
+  props<{ attributes: Array<{ name: string; type: AttributeType }> }>(),
 );
 
 export const draftFormAddTab = createAction(

@@ -3,6 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of } from 'rxjs';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { FilterHelper } from '@tailormap-viewer/shared';
+import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { draftFormAddField } from '../state/form.actions';
@@ -84,7 +85,7 @@ export class FormAttributeListComponent implements OnInit {
   }
 
   public addAttribute(attribute: AttributeDescriptorModel) {
-    this.store$.dispatch(draftFormAddField({ name: attribute.name }));
+    this.store$.dispatch(draftFormAddField({ name: attribute.name, fieldType: EditFormFieldHelper.getDefaultFieldType(attribute) }));
   }
 
 }

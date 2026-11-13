@@ -21,6 +21,7 @@ export const selectDraftFormSelectedAttribute = createSelector(selectFormState, 
 export const selectDraftFormSelectedTabId = createSelector(selectFormState, state => state.draftFormSelectedTabId);
 export const selectDraftFormUpdated = createSelector(selectFormState, state => state.draftFormUpdated);
 export const selectDraftFormValid = createSelector(selectFormState, state => state.draftFormValid);
+export const selectDraftFormFieldValid = createSelector(selectFormState, state => state.draftFormFieldValid);
 
 export const selectFormsForFeatureType = (featureSourceId: string, featureTypeName?: string) => createSelector(
   selectForms,
