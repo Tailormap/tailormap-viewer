@@ -4,7 +4,7 @@ import { AdminTemplateComponent } from './admin-template.component';
 import { TAILORMAP_SECURITY_API_V1_SERVICE } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 import { APP_BASE_HREF } from '@angular/common';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 describe('AdminTemplateComponent', () => {
 

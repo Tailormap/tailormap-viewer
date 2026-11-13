@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 import { applicationStateKey, initialApplicationState } from '../state/application.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (hasApp?: boolean, addAppToState?: boolean) => {
   const onUpdate = vi.fn();

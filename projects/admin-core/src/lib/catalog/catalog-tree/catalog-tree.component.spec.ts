@@ -8,7 +8,7 @@ import { CatalogNodeModel, getCatalogTree } from '@tailormap-admin/admin-api';
 import { CatalogState, catalogStateKey, initialCatalogState } from '../state/catalog.state';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { provideHttpClient } from '@angular/common/http';
 import { CatalogService } from '../services/catalog.service';
 

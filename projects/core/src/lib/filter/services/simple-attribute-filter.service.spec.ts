@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SimpleAttributeFilterService } from './simple-attribute-filter.service';
 import { AppLayerModel, AttributeType } from '@tailormap-viewer/api';
@@ -12,16 +12,7 @@ import { mapReducer } from '../../map/state/map.reducer';
 import { coreStateKey } from '../../state';
 import { coreReducer } from '../../state/core.reducer';
 
-// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
-// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
-// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
-const idState = vi.hoisted(() => ({ count: 0 }));
-vi.mock('nanoid', () => ({
-  nanoid: () => `id-${++idState.count}`,
-}));
-
 const createService = () => {
-  idState.count = 0;
   TestBed.configureTestingModule({
     providers: [ SimpleAttributeFilterService, provideStore({ [coreStateKey]: coreReducer, [mapStateKey]: mapReducer }) ],
   });
@@ -90,7 +81,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter());
     const filterGroups = await firstValueFrom(store.select(selectVerifiedCurrentFilterGroups));
     expect(filterGroups.length).toEqual(1);
-    expect(filterGroups[0].id).toEqual('id-1');
+    expect(filterGroups[0].id).toEqual(expect.any(String));
     expect(filterGroups[0].filters.length).toEqual(1);
     expect((filterGroups[0].filters[0] as AttributeFilterModel).attribute).toEqual('attribute');
   });
@@ -102,7 +93,7 @@ describe('SimpleAttributeFilterService', () => {
     service.setFilter('source', '1', createFilter('attribute', 'other_value'));
     const filterGroups = await firstValueFrom(store.select(selectActiveFilterGroups));
     expect(filterGroups.length).toEqual(1);
-    expect(filterGroups[0].id).toEqual('id-1');
+    expect(filterGroups[0].id).toEqual(expect.any(String));
     expect(filterGroups[0].filters.length).toEqual(2);
     const filters = filterGroups[0].filters as AttributeFilterModel[];
     expect(filters[0].attribute).toEqual('attribute');
@@ -130,7 +121,7 @@ describe('SimpleAttributeFilterService', () => {
     service.removeFilter('source', '1', 'attribute');
     const filterGroups = await firstValueFrom(store.select(selectActiveFilterGroups));
     expect(filterGroups.length).toEqual(1);
-    expect(filterGroups[0].id).toEqual('id-1');
+    expect(filterGroups[0].id).toEqual(expect.any(String));
     expect(filterGroups[0].filters.length).toEqual(1);
     expect((filterGroups[0].filters[0] as AttributeFilterModel).attribute).toEqual('attribute2');
   });

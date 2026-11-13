@@ -7,10 +7,10 @@ import { TailormapAdminApiV1Service, getGeoService, AUTHORIZATION_RULE_ANONYMOUS
 import { of } from 'rxjs';
 import { GeoServiceService } from '../services/geo-service.service';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: vi.fn() };

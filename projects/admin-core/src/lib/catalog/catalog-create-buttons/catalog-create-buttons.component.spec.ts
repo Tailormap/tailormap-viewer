@@ -2,7 +2,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { CatalogCreateButtonsComponent } from './catalog-create-buttons.component';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { of } from 'rxjs';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { TailormapAdminApiV1Service, getCatalogNode, AUTHORIZATION_RULE_ANONYMOUS, AdminServerType } from '@tailormap-admin/admin-api';
@@ -13,7 +13,7 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
 
