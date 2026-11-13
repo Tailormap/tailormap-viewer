@@ -5,7 +5,7 @@ import {
   UserResponseModel,
 } from '@tailormap-viewer/api';
 import { MatDialog } from '@angular/material/dialog';
-import { Location, AsyncPipe } from '@angular/common';
+import { Location, AsyncPipe, LocationStrategy } from '@angular/common';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { PasswordResetRequestFormComponent } from './password-reset-request-form/password-reset-request-form.component';
 
@@ -31,12 +31,18 @@ export class LoginComponent implements OnInit {
   private authenticatedUserService = inject(AuthenticatedUserService);
   private dialog = inject(MatDialog);
   private location = inject(Location);
+  private locationStrategy = inject(LocationStrategy);
 
 
   public login$ = (username: string, password: string) => this.api.login$(username, password);
   public requestPasswordReset$ = (email: string):Observable<boolean> => this.api.requestPasswordReset$(email);
   public loginConfiguration$: Observable<LoginConfigurationModel>;
-  public routeBeforeLogin: string | undefined;
+  /**
+   * Router URL to return to after logging in. This is relative to the base href (for example `/app/default`), so it
+   * must be converted with `LocationStrategy.prepareExternalUrl()` before being used as a browser URL; otherwise the
+   * user ends up at the root of the host instead of the deployment path (for example a pull request deployment).
+   */
+  public routeBeforeLogin: string;
   public insufficientRightsMessage: string | undefined;
   public showPasswordResetForm = false;
 
@@ -44,7 +50,7 @@ export class LoginComponent implements OnInit {
     const routerState = this.location.getState();
     const state: RouterNavigationState = this.isRouterNavigationState(routerState) ? routerState : {};
     this.loginConfiguration$ = this.api.getLoginConfiguration$();
-    this.routeBeforeLogin = state ? state['routeBeforeLogin'] : undefined;
+    this.routeBeforeLogin = state.routeBeforeLogin || '/';
     const userLabel = state ? $localize `:@@core.login.as:as ${state['userName']}` : '';
     this.insufficientRightsMessage = state && state['hasInsufficientRights']
       // eslint-disable-next-line max-len
@@ -58,7 +64,7 @@ export class LoginComponent implements OnInit {
 
   public loggedIn($event: UserResponseModel) {
     this.authenticatedUserService.setUserDetails($event);
-    window.location.href = this.routeBeforeLogin || '/';
+    window.location.href = this.locationStrategy.prepareExternalUrl(this.routeBeforeLogin);
   }
 
   public onRequestPasswordReset() {
