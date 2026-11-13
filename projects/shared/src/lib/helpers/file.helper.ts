@@ -10,6 +10,8 @@ export interface FileContents {
 
 export class FileHelper {
 
+  public static readonly UPLOAD_URL_PREFIX = 'upload://';
+
   public static saveAsFile(data: object | Blob, filename: string) {
     const a = document.createElement('a');
     const file = FileHelper.getData(data);

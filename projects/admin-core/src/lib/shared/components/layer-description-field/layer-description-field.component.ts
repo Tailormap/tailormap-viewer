@@ -48,8 +48,6 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   public onTouched: any | null = null;
   private onChange: ((value: string | null) => void) | null = null;
 
-  private static readonly UPLOAD_URL_PREFIX = 'upload://';
-
   private currentDescription: string | null = null;
 
   public writeValue(description: string | null): void {
@@ -133,14 +131,14 @@ export class LayerDescriptionFieldComponent implements ControlValueAccessor {
    * returned unchanged.
    */
   public resolveImageUrl: MarkdownEditorResolveImageUrlFn = (url: string): string => {
-    const uploadId = url.startsWith(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX)
-      ? url.substring(LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX.length)
+    const uploadId = url.startsWith(FileHelper.UPLOAD_URL_PREFIX)
+      ? url.substring(FileHelper.UPLOAD_URL_PREFIX.length)
       : null;
     return uploadId ? UploadedFileHelper.getAdminUrlForFile(uploadId, UploadCategoryEnum.LAYER_ATTACHED_FILE) : url;
   };
 
   public static getUploadUrl(upload: Pick<UploadModel, 'id'>): string {
-    return `${LayerDescriptionFieldComponent.UPLOAD_URL_PREFIX}${upload.id}`;
+    return `${FileHelper.UPLOAD_URL_PREFIX}${upload.id}`;
   }
 
   public static getMarkdownForUpload(upload: UploadModel): string {

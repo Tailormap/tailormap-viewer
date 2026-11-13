@@ -7,6 +7,7 @@ import { ApplicationService } from '../../application/services/application.servi
 import { CatalogRouteHelper } from '../../catalog/helpers/catalog-route.helper';
 import { Routes } from '../../routes';
 import { ApplicationTreeHelper } from '../../application/helpers/application-tree.helper';
+import { FileHelper } from '@tailormap-viewer/shared';
 
 @Injectable()
 export class LayerAttachedFileRemoveService implements UploadRemoveServiceModel {
@@ -17,7 +18,7 @@ export class LayerAttachedFileRemoveService implements UploadRemoveServiceModel 
     const servicesAndLayers$ = this.geoServiceService.getGeoServicesAndLayers$();
     const applications$ = this.applicationService.getApplications$();
 
-    const search = "upload://" + fileId;
+    const search = FileHelper.UPLOAD_URL_PREFIX + fileId;
 
     return combineLatest([ servicesAndLayers$, applications$ ]).pipe(
       take(1),
