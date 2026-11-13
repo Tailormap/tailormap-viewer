@@ -14,8 +14,8 @@ import { MAP_COOPERATIVE_GESTURES } from './map-cooperative-gestures.injection-t
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   private cooperativeGesturesHelper: CooperativeGesturesHelper | undefined;
-  private el = inject( ElementRef);
-  private mapService= inject(MapService);
+  private el = inject(ElementRef);
+  private mapService = inject(MapService);
   private snackBar = inject(MatSnackBar);
 
   public cooperativeGestures = inject(MAP_COOPERATIVE_GESTURES);
