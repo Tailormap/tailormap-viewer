@@ -75,7 +75,6 @@ export class FormFormComponent implements OnInit {
       .subscribe(value => {
         const options: FormOptionsModel = {
           description: value.description || '',
-          columns: 0,
           tabs: [],
         };
         const form: Omit<FormModel, 'id'> = {

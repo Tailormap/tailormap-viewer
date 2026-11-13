@@ -32,30 +32,30 @@ export class FormEditTabComponent {
   private fields = this.store$.selectSignal(selectDraftFormField);
 
   public tabForm = new FormGroup({
-    name: new FormControl('', { nonNullable: true }),
+    label: new FormControl('', { nonNullable: true }),
   });
 
   constructor() {
     effect(() => {
       const tab = this.tab();
-      this.tabForm.reset({ name: tab?.name ?? '' }, { emitEvent: false });
+      this.tabForm.reset({ label: tab?.label ?? '' }, { emitEvent: false });
     });
 
-    this.tabForm.controls.name.valueChanges
+    this.tabForm.controls.label.valueChanges
       .pipe(
         takeUntilDestroyed(),
         debounceTime(250),
         filter(() => this.tabForm.dirty),
       )
-      .subscribe(name => this.updateName(name));
+      .subscribe(label => this.updateLabel(label));
   }
 
-  private updateName(name: string) {
+  private updateLabel(label: string) {
     const selected = this.tab();
-    if (!selected || !name) {
+    if (!selected || !label) {
       return;
     }
-    const tabs = this.tabs().map(t => t.id === selected.id ? { ...t, name } : t);
+    const tabs = this.tabs().map(t => t.id === selected.id ? { ...t, label } : t);
     this.store$.dispatch(draftFormUpdateTabs({ tabs }));
   }
 

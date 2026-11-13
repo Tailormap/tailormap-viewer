@@ -10,7 +10,7 @@ import {
   draftFormAddTab, draftFormSetSelectedField, draftFormSetSelectedTabId, draftFormUpdateFields, draftFormUpdateTabs,
 } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected, selectDraftFormSelectedTabId, selectDraftFormTabs } from '../state/form.selectors';
-import { FormFieldModel } from '@tailormap-viewer/api';
+import { FormFieldModel, FormTabModel } from '@tailormap-viewer/api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
@@ -20,11 +20,6 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { nanoid } from 'nanoid';
 import { FormAttributeListComponent } from '../form-attribute-list/form-attribute-list.component';
-
-export interface TabModel {
-  id: string;
-  name: string;
-}
 
 type FieldWithSelected = FormFieldModel & { selected?: boolean };
 type TabFieldsMap = Map<string, FieldWithSelected[]>;
@@ -57,7 +52,7 @@ export class FormFieldListComponent implements OnInit {
   public featureTypeName: string = '';
 
   public filter = new FormControl('');
-  public tabName = new FormControl<string>('');
+  public tabLabel = new FormControl<string>('');
 
   public attributeFilter = signal<string | null>(null);
   public tabs = this.store$.selectSignal(selectDraftFormTabs);
@@ -86,7 +81,7 @@ export class FormFieldListComponent implements OnInit {
   constructor() {
     effect(() => {
       if (this.tabs().length === 0) {
-        this.store$.dispatch(draftFormAddTab({ tabId: nanoid(), tabName: 'Tab 1' }));
+        this.store$.dispatch(draftFormAddTab({ tabId: nanoid(), tabLabel: 'Tab 1' }));
       }
     });
 
@@ -118,13 +113,13 @@ export class FormFieldListComponent implements OnInit {
   }
 
   public addTab(): void {
-    const tabName = this.tabName.value?.trim();
-    if (!tabName) {
+    const tabLabel = this.tabLabel.value?.trim();
+    if (!tabLabel) {
       return;
     }
     const tabId = nanoid();
-    this.store$.dispatch(draftFormAddTab({ tabId, tabName }));
-    this.tabName.setValue('');
+    this.store$.dispatch(draftFormAddTab({ tabId, tabLabel }));
+    this.tabLabel.setValue('');
   }
 
   public onFieldDrop(event: CdkDragDrop<FieldWithSelected[]>): void {
@@ -152,7 +147,7 @@ export class FormFieldListComponent implements OnInit {
         const newField: FieldWithSelected = {
           name: attribute.name,
           label: attribute.name,
-          type: EditFormFieldHelper.getDefaultFieldType(attribute),
+          controlType: EditFormFieldHelper.getDefaultControlType(attribute),
           tab: currTabId,
         };
         currList.splice(event.currentIndex, 0, newField);
@@ -169,7 +164,7 @@ export class FormFieldListComponent implements OnInit {
     this.updateFields(tabGroups, this.tabs());
   }
 
-  public onTabDrop(event: CdkDragDrop<TabModel[]>): void {
+  public onTabDrop(event: CdkDragDrop<FormTabModel[]>): void {
     if (event.previousIndex === event.currentIndex) {
       return;
     }
@@ -182,7 +177,7 @@ export class FormFieldListComponent implements OnInit {
     this.updateFields(tabGroups, tabs);
   }
 
-  private updateFields(tabGroups: TabFieldsMap, tabs: TabModel[]): void {
+  private updateFields(tabGroups: TabFieldsMap, tabs: FormTabModel[]): void {
     this.store$.dispatch(draftFormUpdateFields({
       fields: [
         ...tabs.flatMap(tab => tabGroups.get(tab.id) ?? []),

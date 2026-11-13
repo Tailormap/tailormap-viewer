@@ -1397,6 +1397,9 @@
       <trans-unit id="admin-core.form.autoFillUser" datatype="html">
         <source>Autofill Username</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.control-type" datatype="html">
+        <source>Edit control</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
       </trans-unit>
@@ -1416,7 +1419,7 @@
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.form.edit-tab" datatype="html">
-        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></source>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
@@ -1433,14 +1436,14 @@
       <trans-unit id="admin-core.form.error-updating-form" datatype="html">
         <source>Error while updating form.</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
-        <source>Checkbox field</source>
+      <trans-unit id="admin-core.form.field-type-checkbox" datatype="html">
+        <source>Checkbox</source>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
-        <source>Integer field</source>
+      <trans-unit id="admin-core.form.field-type-datetime" datatype="html">
+        <source>Date and time field</source>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
@@ -1453,9 +1456,6 @@
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
         <source>Textarea field</source>
-      </trans-unit>
-      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
-        <source>Timestamp field</source>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
@@ -1483,6 +1483,9 @@
       </trans-unit>
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.read-only" datatype="html">
+        <source>Read-only</source>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>

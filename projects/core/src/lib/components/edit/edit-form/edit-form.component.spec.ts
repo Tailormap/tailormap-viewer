@@ -2,7 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
 import {
-  AttributeType, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
+  AttributeType, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
@@ -70,12 +70,11 @@ describe('EditFormComponent', () => {
             form: {
               options: {
                 description: 'Test form',
-                columns: 0,
                 tabs: [],
               },
               fields: [
-                { name: 'prop', type: FormFieldTypeEnum.TEXT, label: 'Property', required: true },
-                { name: 'prop2', type: FormFieldTypeEnum.TEXT, label: 'Property alias', required: true, autoFillUser: true },
+                { name: 'prop', controlType: FormFieldControlTypeEnum.TEXT, label: 'Property', required: true },
+                { name: 'prop2', controlType: FormFieldControlTypeEnum.TEXT, label: 'Property alias', required: true, autoFillUser: true },
               ],
             },
           }),

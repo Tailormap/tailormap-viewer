@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
-import { AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, FormTabModel, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { DateTime } from 'luxon';
@@ -45,7 +45,7 @@ export class EditFormComponent implements OnDestroy {
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: ViewerEditFormFieldModel[] = [];
-  public tabs: Array<{ id: string; name: string }> = [];
+  public tabs: FormTabModel[] = [];
   public userDetails$: Observable<SecurityModel | null>;
 
   @Input({ required: true })
@@ -121,9 +121,9 @@ export class EditFormComponent implements OnDestroy {
             control.setValue(userDetails?.username ?? '');
           }
           if (field.autoFillDate) {
-            if (field.type === 'date') {
+            if (field.controlType === 'date') {
               control.setValue(DateTime.now().toISODate());
-            } else if (field.type === 'timestamp') {
+            } else if (field.controlType === 'datetime') {
               control.setValue(DateTime.now().toISO());
             }
           }

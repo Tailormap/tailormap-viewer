@@ -1889,6 +1889,10 @@
         <source>Autofill Username</source>
         <target>Gebruikersnaam Invullen</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.control-type" datatype="html">
+        <source>Edit control</source>
+        <target>Invoerelement</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
         <target>Formulier maken</target>
@@ -1914,8 +1918,8 @@
         <target>Bewerk <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit-tab" datatype="html">
-        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
-        <target>Bewerk tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></target>
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></source>
+        <target>Bewerk tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
@@ -1937,17 +1941,17 @@
         <source>Error while updating form.</source>
         <target>Fout bij het aanpassen van het formulier.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
-        <source>Checkbox field</source>
+      <trans-unit id="admin-core.form.field-type-checkbox" datatype="html">
+        <source>Checkbox</source>
         <target>Vinkvak</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
         <target>Datum veld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
-        <source>Integer field</source>
-        <target>Geheel getal veld</target>
+      <trans-unit id="admin-core.form.field-type-datetime" datatype="html">
+        <source>Date and time field</source>
+        <target>Datum- en tijdveld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
@@ -1964,10 +1968,6 @@
       <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
         <source>Textarea field</source>
         <target>Tekstvlak veld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
-        <source>Timestamp field</source>
-        <target>Tijdsaanduiding veld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
@@ -2004,6 +2004,10 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
         <target>Label</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.read-only" datatype="html">
+        <source>Read-only</source>
+        <target>Alleen-lezen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>

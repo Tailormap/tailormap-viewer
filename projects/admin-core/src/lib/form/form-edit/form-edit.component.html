@@ -20,7 +20,7 @@
     <aside class="edit-panel">
       <div class="edit-panel-header">
         @if (selectedTab()) {
-          <h2 i18n="@@admin-core.form.edit-tab">Edit tab {{ selectedTab()?.name }}</h2>
+          <h2 i18n="@@admin-core.form.edit-tab">Edit tab {{ selectedTab()?.label }}</h2>
         } @else if (selectedAttribute()) {
           <h2 i18n="@@admin-core.forms.edit-form-field">Edit form field {{ selectedAttribute() }}</h2>
         }

@@ -1890,6 +1890,10 @@
         <source>Autofill Username</source>
         <target>Autofill Benutzername</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.control-type" datatype="html">
+        <source>Edit control</source>
+        <target>Eingabeelement</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
         <target>Formular erstellen</target>
@@ -1915,8 +1919,8 @@
         <target>Bearbeiten <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit-tab" datatype="html">
-        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
-        <target>Tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/> bearbeiten</target>
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></source>
+        <target>Tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/> bearbeiten</target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
@@ -1938,17 +1942,17 @@
         <source>Error while updating form.</source>
         <target>Fehler beim Aktualisieren des Formulars.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
-        <source>Checkbox field</source>
-        <target>Checkbox-Feld</target>
+      <trans-unit id="admin-core.form.field-type-checkbox" datatype="html">
+        <source>Checkbox</source>
+        <target>Kontrollkästchen</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
         <target>Datum-Feld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
-        <source>Integer field</source>
-        <target>Ganzzahl-Feld</target>
+      <trans-unit id="admin-core.form.field-type-datetime" datatype="html">
+        <source>Date and time field</source>
+        <target>Datums- und Uhrzeitfeld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
@@ -1965,10 +1969,6 @@
       <trans-unit id="admin-core.form.field-type-textarea" datatype="html">
         <source>Textarea field</source>
         <target>Textarea-Feld</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
-        <source>Timestamp field</source>
-        <target>Zeitstempel-Feld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
@@ -2005,6 +2005,10 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
         <target>Bezeichnung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.read-only" datatype="html">
+        <source>Read-only</source>
+        <target>Schreibgeschützt</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
