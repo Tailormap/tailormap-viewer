@@ -22,8 +22,12 @@
 }
 
 @if (isMilkdownEditor()) {
-  <tm-milkdown-editor [uploadService$]="uploadService$" [templatePicklistConfig]="templatePicklistConfig" [placeholder]="placeholder()"></tm-milkdown-editor>
+  <tm-milkdown-editor [uploadService$]="uploadService$"
+                      [templatePicklistConfig]="templatePicklistConfig"
+                      [insertUpload$]="insertUpload$()"
+                      [resolveImageUrl]="resolveImageUrl()"
+                      [placeholder]="placeholder()"></tm-milkdown-editor>
 }
 @if (isSourceEditor()) {
-  <tm-markdown-source-editor [useInfoPanelWidth]="useInfoPanelWidth" [placeholder]="placeholder()"></tm-markdown-source-editor>
+  <tm-markdown-source-editor [useInfoPanelWidth]="useInfoPanelWidth" [resolveImageUrl]="resolveImageUrl()" [placeholder]="placeholder()"></tm-markdown-source-editor>
 }

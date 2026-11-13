@@ -1,16 +1,14 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, forwardRef, inject, OnInit, ElementRef, viewChild, ViewContainerRef,
+  Component, forwardRef, inject, signal, ViewContainerRef,
 } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { MatFormField, MatHint, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged, filter, take } from 'rxjs';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { catchError, concatMap, map, Observable, of, take } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { UploadCategoryEnum } from '@tailormap-viewer/api';
+import { UploadCategoryEnum, UploadedFileHelper } from '@tailormap-viewer/api';
+import {
+  FileHelper, MarkdownEditorComponent, MarkdownEditorInsertUploadFn, MarkdownEditorResolveImageUrlFn, MarkdownEditorUploadFn,
+} from '@tailormap-viewer/shared';
+import { TailormapAdminApiV1Service, UploadModel } from '@tailormap-admin/admin-api';
 import { UPLOAD_REMOVE_SERVICE } from '../select-upload/models/upload-remove-service.injection-token';
 import { LayerAttachedFileRemoveService } from '../../services/layer-attached-file-remove.service';
 import { SelectUploadDialogComponent } from '../select-upload/select-upload-dialog/select-upload-dialog.component';
@@ -21,11 +19,11 @@ import { SelectUploadDialogComponent } from '../select-upload/select-upload-dial
 })
 export class AdminLayerDescriptionFieldHint {}
 
+
 @Component({
   selector: 'tm-admin-layer-description-field',
   templateUrl: './layer-description-field.component.html',
   styleUrls: ['./layer-description-field.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -36,57 +34,33 @@ export class AdminLayerDescriptionFieldHint {}
       useClass: LayerAttachedFileRemoveService },
   ],
   imports: [
-    MatInput,
-    ReactiveFormsModule,
-    CdkTextareaAutosize,
-    MatLabel,
-    MatFormField,
-    MatIconButton,
-    MatIcon,
-    MatSuffix,
-    MatTooltip,
-    MatHint,
+    MarkdownEditorComponent,
   ],
 })
-export class LayerDescriptionFieldComponent implements OnInit, ControlValueAccessor {
-  private destroyRef = inject(DestroyRef);
+export class LayerDescriptionFieldComponent implements ControlValueAccessor {
   private dialog = inject(MatDialog);
   private viewContainerRef = inject(ViewContainerRef);
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
-  private textarea = viewChild<ElementRef<HTMLTextAreaElement>>('area');
-
-  public textareaControl = new FormControl<string | null>(null);
+  public content = signal<string>('');
+  public disabled = signal(false);
 
   public onTouched: any | null = null;
-  private onChange: any | null = null;
+  private onChange: ((value: string | null) => void) | null = null;
 
   private currentDescription: string | null = null;
 
-  public ngOnInit(): void {
-    this.textareaControl.valueChanges
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        distinctUntilChanged(),
-        filter(value => value !== this.currentDescription),
-        debounceTime(250),
-      )
-      .subscribe(description => {
-        this.currentDescription = description;
-        if (this.onChange) {
-          this.onChange(description);
-        }
-      });
-  }
-
   public writeValue(description: string | null): void {
-    if (description === this.currentDescription) {
+    // The parents patch the form with the value which was just saved; don't reload the editor for that echo, which would
+    // move the cursor. The parents save an empty description as null, so null and '' are equal.
+    if ((description ?? '') === (this.currentDescription ?? '')) {
       return;
     }
     this.currentDescription = description;
-    this.textareaControl.setValue(description);
+    this.content.set(description ?? '');
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (value: string | null) => void): void {
     this.onChange = fn;
   }
 
@@ -94,37 +68,86 @@ export class LayerDescriptionFieldComponent implements OnInit, ControlValueAcces
     this.onTouched = fn;
   }
 
-  public setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.textareaControl.disable();
-    } else {
-      this.textareaControl.enable();
-    }
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
-  public addLink() {
-    const pos = this.textarea()?.nativeElement.selectionStart || 0;
+  /**
+   * Called for changes made by the user only; the editor does not report content set through its `content` input.
+   * Keeps {@link content} equal to what the editor shows, so a later {@link writeValue} with another value is a change
+   * of the signal and reloads the editor.
+   */
+  public onContentChanged(content: string) {
+    this.currentDescription = content;
+    this.content.set(content);
+    this.onChange?.(content);
+  }
 
-    SelectUploadDialogComponent.open(
+  /**
+   * Opens the dialog to select or upload a file and returns Markdown for the selected upload
+   */
+  public selectUpload$: MarkdownEditorInsertUploadFn = (): Observable<string | null> => {
+    return SelectUploadDialogComponent.open(
       this.dialog,
       { category: UploadCategoryEnum.LAYER_ATTACHED_FILE, uploadId: null, showDescriptionField: false, showFilesTab: true },
       this.viewContainerRef,
     )
       .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe(selectResult => {
-        if (selectResult?.cancelled || !selectResult?.upload) {
-          return;
-        }
-        const upload = selectResult.upload;
+      .pipe(
+        take(1),
+        map(selectResult => (selectResult?.cancelled || !selectResult?.upload
+          ? null
+          : LayerDescriptionFieldComponent.getMarkdownForUpload(selectResult.upload))),
+      );
+  };
 
-        const isImage = upload.mimeType?.startsWith('image/') ?? false;
-        const textToInsert = isImage
-          ? ` upload://${upload.id} `
-          : `[${upload.description ?? upload.filename}](upload://${upload.id})`;
-        const value = this.textareaControl.value || '';
-        const newValue = value.substring(0, pos) + textToInsert + value.substring(pos);
-        this.textareaControl.setValue(newValue);
-      });
+  /**
+   * Uploads a file which was dropped or pasted in the editor as a layer attached file and returns an `upload://{id}`
+   * URL, the same URL as used by {@link selectUpload$}.
+   */
+  public uploadFile$: MarkdownEditorUploadFn = (file: File) => {
+    return FileHelper.readFileContents(file)
+      .pipe(
+        concatMap(contents => {
+          if (!contents) {
+            return of({ error: $localize `:@@admin-core.layer-description.error-reading-file:Error reading file` });
+          }
+          return this.adminApiService.createUpload$({
+            content: contents.contentsBase64,
+            filename: contents.filename,
+            category: UploadCategoryEnum.LAYER_ATTACHED_FILE,
+            mimeType: contents.mimeType,
+          }).pipe(
+            take(1),
+            map(upload => ({ url: LayerDescriptionFieldComponent.getUploadUrl(upload) })),
+            catchError(() => of({ error: $localize `:@@admin-core.layer-description.error-uploading-file:Error uploading file` })),
+          );
+        }),
+      );
+  };
+
+  /**
+   * Returns the admin URL for an `upload://{id}` URL, so the editor can display an uploaded image. Other URLs are
+   * returned unchanged.
+   */
+  public resolveImageUrl: MarkdownEditorResolveImageUrlFn = (url: string): string => {
+    const uploadId = url.startsWith(FileHelper.UPLOAD_URL_PREFIX)
+      ? url.substring(FileHelper.UPLOAD_URL_PREFIX.length)
+      : null;
+    return uploadId ? UploadedFileHelper.getAdminUrlForFile(uploadId, UploadCategoryEnum.LAYER_ATTACHED_FILE) : url;
+  };
+
+  public static getUploadUrl(upload: Pick<UploadModel, 'id'>): string {
+    return `${FileHelper.UPLOAD_URL_PREFIX}${upload.id}`;
   }
+
+  public static getMarkdownForUpload(upload: UploadModel): string {
+    const url = LayerDescriptionFieldComponent.getUploadUrl(upload);
+    if (upload.mimeType?.startsWith('image/')) {
+      return `![](${url})`;
+    }
+    const label = (upload.description || upload.filename).replace(/[\\[\]]/g, '\\$&');
+    return `[${label}](${url})`;
+  }
+
 }

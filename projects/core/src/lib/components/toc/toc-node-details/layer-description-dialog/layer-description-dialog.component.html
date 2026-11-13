@@ -11,5 +11,5 @@
 </div>
 
 <mat-dialog-content class="layer-description">
-  <tm-htmlify [text]="data.description" />
+  <div [innerHTML]="data.description | markdownToHtml | async"></div>
 </mat-dialog-content>

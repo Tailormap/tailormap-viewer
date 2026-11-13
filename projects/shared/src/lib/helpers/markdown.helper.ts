@@ -9,26 +9,42 @@ export class MarkdownHelper {
   private static ESCAPE_REGEX = /[\\`*_{}[\]<>()#+\-.!|]/g;
   private static UNESCAPE_REGEX = /\\([!-/:-@[-`{-~])/g;
 
-  public static getSafeHtmlForMarkdown$(md: string, sanitizer: DomSanitizer): Observable<SafeHtml> {
+  /**
+   * Converts Markdown to sanitized HTML. Bare URLs are rendered as links opening in a new window, or as images when the
+   * URL points to an image. When `resolveImageUrl` is given, the src of each Markdown image is replaced by the URL it
+   * returns, for example to display images with an `upload://` URL in the admin.
+   */
+  public static getSafeHtmlForMarkdown$(
+    md: string,
+    sanitizer: DomSanitizer,
+    resolveImageUrl?: (url: string) => string,
+  ): Observable<SafeHtml> {
     return from(import('marked'))
       .pipe(
         take(1),
         map(markedLib => {
-          const parser = new markedLib.Marked({
+          const markedInstance = new markedLib.Marked({
+            breaks: true,
+            walkTokens: token => {
+              if (resolveImageUrl && token.type === 'image') {
+                token.href = resolveImageUrl(token.href);
+              }
+            },
             renderer: {
               link(token) {
                 if (!token.autolink) {
                   return markedLib.Renderer.prototype.link.call(this, token);
                 }
-                // Bare (GFM) URLs are not processed for backslash escapes by marked, unlike `[label](url)` links. Feature values
-                // are escaped with markdownEscape before being put in a template, so unescape them here to get the real URL.
-                const href = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.href));
                 const label = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.text));
-                return `<a href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+                const href = HtmlifyHelper.escapeHTML(MarkdownHelper.markdownUnescape(token.href));
+                const content = HtmlifyHelper.isImageUrl(token.href)
+                  ? `<img src="${href}" alt="${label}">`
+                  : label;
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
               },
             },
           });
-          const html = sanitizer.sanitize(SecurityContext.HTML, parser.parse(md ?? "", { async: false }));
+          const html = sanitizer.sanitize(SecurityContext.HTML, markedInstance.parse(md ?? "", { async: false }));
           return sanitizer.bypassSecurityTrustHtml(html || "");
         }),
       );

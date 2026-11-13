@@ -7,7 +7,7 @@ import { MarkdownHelper } from '../helpers/markdown.helper';
 export class MarkdownToHtmlPipe implements PipeTransform {
   private sanitizer = inject(DomSanitizer);
 
-  public transform(value: string | null): Observable<SafeHtml | null> {
+  public transform(value: string | null | undefined): Observable<SafeHtml | null> {
     if (typeof value === 'string') {
       return MarkdownHelper.getSafeHtmlForMarkdown$(value, this.sanitizer);
     }

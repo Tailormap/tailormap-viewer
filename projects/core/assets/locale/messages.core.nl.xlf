@@ -1564,8 +1564,8 @@
         <target>Ondoorzichtigheid terugzetten</target>
       </trans-unit>
       <trans-unit id="core.toc.show-information-about-layer-tooltip" datatype="html">
-        <source>Show information about <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></source>
-        <target>Toon informatie over <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></target>
+        <source>Show information about <x id="INTERPOLATION" equiv-text="{{ getLayerTitle() }}"/></source>
+        <target state="new">Toon informatie over <x id="INTERPOLATION" equiv-text="{{ layerTitle }}"/></target>
       </trans-unit>
       <trans-unit id="core.toc.show-layer-information" datatype="html">
         <source>Show information about this layer</source>

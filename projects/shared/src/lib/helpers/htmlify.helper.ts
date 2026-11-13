@@ -111,8 +111,7 @@ export class HtmlifyHelper {
     if (href === null) {
       return null;
     }
-    const image = HtmlifyHelper.IMG_REGEXP.test(href) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(href);
-    return { type: 'link', href, label: href, image };
+    return { type: 'link', href, label: href, image: HtmlifyHelper.isImageUrl(href) };
   }
 
   private static addTextNodes(nodes: HtmlifyNode[], text: string) {
@@ -146,6 +145,10 @@ export class HtmlifyHelper {
         return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
       }
     }
+  }
+
+  public static isImageUrl(url: string): boolean {
+    return HtmlifyHelper.IMG_REGEXP.test(url) || HtmlifyHelper.VENDOR_SPECIFIC_IMAGE_REGEXP.test(url);
   }
 
   public static escapeHTML(text: string) {

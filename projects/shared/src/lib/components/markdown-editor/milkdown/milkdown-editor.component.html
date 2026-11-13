@@ -1,3 +1,9 @@
 <div class="markdown-wrap">
-  <div #editor></div>
+  <div #editor
+       (keydown)="onEditGesture()"
+       (beforeinput)="onEditGesture()"
+       (paste)="onEditGesture()"
+       (cut)="onEditGesture()"
+       (drop)="onEditGesture()"
+       (pointerdown)="onEditGesture()"></div>
 </div>
