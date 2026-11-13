@@ -19,7 +19,7 @@ export * from './clipboard.helper';
 export * from './filter.helper';
 export * from './markdown.helper';
 export * from './htmlify.helper';
-export * from './overlay.helper';
+export * from './cooperative-gestures.helper';
 export * from './external-libs-loader.helper';
 export * from './municipality.helper';
 export * from './attribute-filter.helper';

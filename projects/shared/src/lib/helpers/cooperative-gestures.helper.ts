@@ -1,13 +1,13 @@
 import { BrowserHelper } from './browser.helper';
 
-export class OverlayHelper {
+export class CooperativeGesturesHelper {
 
-  private static WINDOWS_MESSAGE = $localize `:@@shared.overlay-helper.windows:Use ctrl + scroll to zoom the map`;
-  private static MAC_MESSAGE = $localize `:@@shared.overlay-helper.mac:Use cmd (⌘) + scroll to zoom the map`;
-  private static TOUCH_MESSAGE = $localize `:@@shared.overlay-helper.touch:Use two fingers to move the map`;
+  private static WINDOWS_MESSAGE = $localize `:@@shared.cooperative-gestures-helper.windows:Use ctrl + scroll to zoom the map`;
+  private static MAC_MESSAGE = $localize `:@@shared.cooperative-gestures-helper.mac:Use cmd (⌘) + scroll to zoom the map`;
+  private static TOUCH_MESSAGE = $localize `:@@shared.cooperative-gestures-helper.touch:Use two fingers to move the map`;
   private static AUTO_HIDE_TIME = 3000;
 
-  private embeddedElement: HTMLElement | undefined;
+  private overlayElement: HTMLElement | undefined;
   private overlayVisible = false;
   private elSize = { left: 0, right: 0, top: 0, bottom: 0 };
   private autoHideTimer: number | undefined;
@@ -19,19 +19,19 @@ export class OverlayHelper {
 
   constructor(
     private hostEl: HTMLElement,
-    private embeddedElementClass = 'embedded-overlay',
-    private embeddedElementVisibleClass = 'embedded-overlay-visible',
-    private embeddedElementHidingClass = 'embedded-overlay-hiding',
+    private overlayElementClass = 'cooperative-gestures-overlay',
+    private overlayElementVisibleClass = 'cooperative-gestures-overlay-visible',
+    private overlayElementHidingClass = 'cooperative-gestures-overlay-hiding',
   ) {
-    this.addEmbeddedHandlers();
+    this.addEventHandlers();
   }
 
-  public addEmbeddedHandlers() {
-    const embeddedElement = this.hostEl?.querySelector<HTMLElement>(`.${this.embeddedElementClass}`);
-    if (!this.hostEl || !embeddedElement) {
+  public addEventHandlers() {
+    const overlayElement = this.hostEl?.querySelector<HTMLElement>(`.${this.overlayElementClass}`);
+    if (!this.hostEl || !overlayElement) {
       return;
     }
-    this.embeddedElement = embeddedElement;
+    this.overlayElement = overlayElement;
     this.setElementSize();
     window.addEventListener('resize', this.resizeHandler);
     this.hostEl.addEventListener('wheel', this.mouseWheelHandler);
@@ -68,7 +68,7 @@ export class OverlayHelper {
     const withinY = (e.pageY >= this.elSize.top && e.pageY <= this.elSize.bottom);
     const withinMap = withinX && withinY;
     if (withinMap) {
-      this.showOverlay(BrowserHelper.isMac ? OverlayHelper.MAC_MESSAGE : OverlayHelper.WINDOWS_MESSAGE);
+      this.showOverlay(BrowserHelper.isMac ? CooperativeGesturesHelper.MAC_MESSAGE : CooperativeGesturesHelper.WINDOWS_MESSAGE);
     } else {
       this.hideOverlay();
     }
@@ -76,7 +76,7 @@ export class OverlayHelper {
 
   private handleTouchStart(e: TouchEvent) {
     if (e.touches.length <= 1) {
-      this.showOverlay(OverlayHelper.TOUCH_MESSAGE);
+      this.showOverlay(CooperativeGesturesHelper.TOUCH_MESSAGE);
     } else {
       this.hideOverlay();
     }
@@ -88,13 +88,13 @@ export class OverlayHelper {
     }
     this.autoHideTimer = window.setTimeout(() => {
       this.hideOverlay();
-    }, OverlayHelper.AUTO_HIDE_TIME);
+    }, CooperativeGesturesHelper.AUTO_HIDE_TIME);
     if (this.overlayVisible) {
       return;
     }
     this.overlayVisible = true;
-    this.embeddedElement?.classList.add(this.embeddedElementVisibleClass);
-    const messageEl = this.embeddedElement?.querySelector<HTMLElement>('.message');
+    this.overlayElement?.classList.add(this.overlayElementVisibleClass);
+    const messageEl = this.overlayElement?.querySelector<HTMLElement>('.message');
     if (messageEl) {
       messageEl.innerText = message;
     }
@@ -106,12 +106,12 @@ export class OverlayHelper {
     }
     this.overlayVisible = false;
     const removeHidingCls = () => {
-      this.embeddedElement?.classList.remove(this.embeddedElementHidingClass);
-      this.embeddedElement?.removeEventListener('transitionend', removeHidingCls);
+      this.overlayElement?.classList.remove(this.overlayElementHidingClass);
+      this.overlayElement?.removeEventListener('transitionend', removeHidingCls);
     };
-    this.embeddedElement?.addEventListener('transitionend', removeHidingCls);
-    this.embeddedElement?.classList.add(this.embeddedElementHidingClass);
-    this.embeddedElement?.classList.remove(this.embeddedElementVisibleClass);
+    this.overlayElement?.addEventListener('transitionend', removeHidingCls);
+    this.overlayElement?.classList.add(this.overlayElementHidingClass);
+    this.overlayElement?.classList.remove(this.overlayElementVisibleClass);
   }
 
 }
