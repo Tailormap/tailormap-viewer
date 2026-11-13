@@ -3,6 +3,7 @@ import { UploadInUseItem, UploadRemoveServiceModel } from '../../shared/componen
 import { map, take } from 'rxjs';
 import { ApplicationService } from './application.service';
 import { Routes } from '../../routes';
+import { ApplicationModelHelper } from '../helpers/application-model.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -20,13 +21,8 @@ export class ApplicationImageRemoveService implements UploadRemoveServiceModel {
             .filter(application => application.styling?.logo === uploadId)
             .map<UploadInUseItem>(app => ({
               id: app.id,
-              name: app.title || app.name,
-              url: [
-                '/admin',
-                Routes.APPLICATION,
-                Routes.APPLICATION_DETAILS.replace(':applicationId', app.id),
-                Routes.APPLICATION_DETAILS_STYLING,
-              ].join('/'),
+              name: ApplicationModelHelper.getApplicationLabel(app),
+              url: ApplicationModelHelper.getApplicationUrl(app, Routes.APPLICATION_DETAILS_STYLING),
             }));
         }),
       );

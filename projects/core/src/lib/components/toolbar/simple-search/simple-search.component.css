@@ -1,4 +1,5 @@
-:host-context(.base-layout) .simple-search-container {
+:host-context(.base-layout) .simple-search-container,
+:host-context(.embedded-layout) .simple-search-container {
   justify-content: stretch;
   overflow: hidden;
   background-color: #fff;
@@ -7,14 +8,16 @@
   transition: all 0.2s ease-in-out;
 }
 
-:host-context(.base-layout) .simple-search-container--is-active {
+:host-context(.base-layout) .simple-search-container--is-active,
+:host-context(.embedded-layout) .simple-search-container--is-active {
   padding: 5px 6px 5px 0;
   width: 500px;
   height: 70px;
   max-width: var(--max-control-width);
 }
 
-:host-context(.base-layout) .simple-search-container button {
+:host-context(.base-layout) .simple-search-container button,
+:host-context(.embedded-layout) .simple-search-container button {
   border-radius: 3px;
 }
 
@@ -110,7 +113,8 @@
   flex: 1;
 }
 
-:host-context(.base-layout) .simple-search-container mat-form-field {
+:host-context(.base-layout) .simple-search-container mat-form-field,
+:host-context(.embedded-layout) .simple-search-container mat-form-field {
   width: 100%;
   padding-top: 6px;
 }
@@ -168,13 +172,15 @@
 }
 
 @media screen and (max-width: 730px) {
-  :host-context(.base-layout) .simple-search-container--is-active {
+  :host-context(.base-layout) .simple-search-container--is-active,
+  :host-context(.embedded-layout) .simple-search-container--is-active {
     padding: 0;
     width: var(--map-control-size);
     height: var(--map-control-size);
   }
 
-  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper {
+  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper,
+  :host-context(.embedded-layout) .simple-search-container.simple-search-field-wrapper {
     position: absolute;
     top: calc(var(--map-control-size) + 9px);
     left: 0;
@@ -187,7 +193,8 @@
 }
 
 @media screen and (max-width: 425px) {
-  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper {
+  :host-context(.base-layout) .simple-search-container.simple-search-field-wrapper,
+  :host-context(.embedded-layout) .simple-search-container.simple-search-field-wrapper {
     width: var(--max-control-width);
   }
 }

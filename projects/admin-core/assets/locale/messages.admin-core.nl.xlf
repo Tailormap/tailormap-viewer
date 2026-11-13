@@ -709,6 +709,10 @@
         <source>Tree node menu</source>
         <target>Menu boomknooppunt</target>
       </trans-unit>
+      <trans-unit id="admin-core.applications.stories" datatype="html">
+        <source>Stories</source>
+        <target>Stories</target>
+      </trans-unit>
       <trans-unit id="admin-core.authorizations.access" datatype="html">
         <source>Access</source>
         <target>Toegang</target>
