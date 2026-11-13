@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core';
 import { AppLayerSettingsModel, FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
 import { ErrorMessageComponent } from '@tailormap-viewer/shared';
+import { FormFieldWarnings, FormWarningHelper } from '../helpers/form-warning.helper';
 
 @Component({
     selector: 'tm-admin-form-warning-message',
@@ -20,29 +21,12 @@ export class FormWarningMessageComponent implements OnChanges {
   @Input()
   public form: FormModel | null = null;
 
-  public unavailableFields: string[] = [];
+  public warnings: FormFieldWarnings = { notShown: [], readOnly: [], requiredReadOnly: [] };
+  public hasWarnings = false;
 
   public ngOnChanges() {
-    const readOnlyFeatureTypeAttributes: string[] = this.featureType?.attributes
-      .map(a => a.name)
-      .filter(attrName => !this.featureType?.settings.editableAttributes?.includes(attrName)) || [];
-    const hiddenFeatureTypeAttributes: string[] = [
-      ...this.featureType?.settings.hideAttributes || [],
-      ...readOnlyFeatureTypeAttributes,
-    ];
-    const appLayerHiddenAttributes: string[] = [
-      ...this.applicationLayerSetting?.hideAttributes || [],
-      ...this.applicationLayerSetting?.readOnlyAttributes || [],
-    ];
-    const hiddenAttributes = new Set([
-      ...hiddenFeatureTypeAttributes,
-      ...appLayerHiddenAttributes,
-    ]);
-    this.unavailableFields = (this.form?.fields || [])
-      .filter(field => {
-        return hiddenAttributes.has(field.name);
-      })
-      .map(field => field.name);
+    this.warnings = FormWarningHelper.getFieldWarnings(this.form, this.featureType, this.applicationLayerSetting);
+    this.hasWarnings = FormWarningHelper.hasWarnings(this.warnings);
   }
 
 }
