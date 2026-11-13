@@ -10,7 +10,8 @@ import {
   draftFormAddTab, draftFormSetSelectedField, draftFormSetSelectedTabId, draftFormUpdateFields, draftFormUpdateTabs,
 } from '../state/form.actions';
 import { selectDraftFormFieldsWithSelected, selectDraftFormSelectedTabId, selectDraftFormTabs } from '../state/form.selectors';
-import { FormFieldModel, FormFieldTypeEnum } from '@tailormap-viewer/api';
+import { FormFieldModel } from '@tailormap-viewer/api';
+import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ListFilterComponent } from '../../shared/components/list-filter/list-filter.component';
 import { MatIcon } from '@angular/material/icon';
@@ -151,7 +152,7 @@ export class FormFieldListComponent implements OnInit {
         const newField: FieldWithSelected = {
           name: attribute.name,
           label: attribute.name,
-          type: FormFieldTypeEnum.TEXT,
+          type: EditFormFieldHelper.getDefaultFieldType(attribute),
           tab: currTabId,
         };
         currList.splice(event.currentIndex, 0, newField);

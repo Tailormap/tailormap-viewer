@@ -1,5 +1,5 @@
-import { AttributeType, FormFieldTypeEnum } from '@tailormap-viewer/api';
-import { FeatureTypeModel } from '@tailormap-admin/admin-api';
+import { AttributeType, FormFieldModel, FormFieldTypeEnum, FormFieldTypeHelper } from '@tailormap-viewer/api';
+import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 
 export class EditFormFieldHelper {
 
@@ -7,70 +7,42 @@ export class EditFormFieldHelper {
     {
       label: $localize `:@@admin-core.form.field-type-text:Text field`,
       value: FormFieldTypeEnum.TEXT,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TEXT),
     },
     {
       label: $localize `:@@admin-core.form.field-type-number:Number field`,
       value: FormFieldTypeEnum.NUMBER,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-        AttributeType.NUMBER,
-        AttributeType.DOUBLE,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.NUMBER),
     },
     {
       label: $localize `:@@admin-core.form.field-type-select:Choice list`,
       value: FormFieldTypeEnum.SELECT,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-        AttributeType.NUMBER,
-        AttributeType.DOUBLE,
-        AttributeType.INTEGER,
-        AttributeType.BOOLEAN,
-        AttributeType.DATE,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.SELECT),
     },
     {
       label: $localize `:@@admin-core.form.field-type-textarea:Textarea field`,
       value: FormFieldTypeEnum.TEXTAREA,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TEXTAREA),
     },
     {
       label: $localize `:@@admin-core.form.field-type-integer:Integer field`,
       value: FormFieldTypeEnum.INTEGER,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-        AttributeType.NUMBER,
-        AttributeType.DOUBLE,
-        AttributeType.INTEGER,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.INTEGER),
     },
     {
       label: $localize `:@@admin-core.form.field-type-boolean:Checkbox field`,
       value: FormFieldTypeEnum.BOOLEAN,
-      allowedForAttributeTypes: [
-        AttributeType.BOOLEAN,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.BOOLEAN),
     },
     {
       label: $localize `:@@admin-core.form.field-type-date:Date field`,
       value: FormFieldTypeEnum.DATE,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-        AttributeType.DATE,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.DATE),
     },
     {
       label: $localize `:@@admin-core.form.field-type-timestamp:Timestamp field`,
       value: FormFieldTypeEnum.TIMESTAMP,
-      allowedForAttributeTypes: [
-        AttributeType.STRING,
-        AttributeType.TIMESTAMP,
-      ],
+      allowedForAttributeTypes: FormFieldTypeHelper.getAllowedAttributeTypes(FormFieldTypeEnum.TIMESTAMP),
     },
   ];
 
@@ -97,6 +69,34 @@ export class EditFormFieldHelper {
       return FormFieldTypeEnum.TIMESTAMP;
     }
     return FormFieldTypeEnum.TEXT;
+  }
+
+  /** The field type for a newly added form field, based on the attribute type. */
+  public static getDefaultFieldType(attribute?: Pick<AttributeDescriptorModel, 'type'> | null): FormFieldTypeEnum {
+    return attribute ? FormFieldTypeHelper.getDefaultFormFieldType(attribute.type) : FormFieldTypeEnum.TEXT;
+  }
+
+  /**
+   * Replaces the type of fields which is not compatible with the type of their attribute by the default type for the attribute.
+   * This happens for fields added before field types defaulted to the attribute type, or when the attribute type changed after
+   * refreshing the feature source. Fields for attributes which no longer exist are left alone.
+   * @returns the corrected fields, or null when no field needed correcting
+   */
+  public static correctFieldTypes(
+    fields: FormFieldModel[],
+    attributes: Array<{ name: string; type: AttributeType }>,
+  ): FormFieldModel[] | null {
+    const attributeTypes = new Map(attributes.map(a => [ a.name, a.type ]));
+    let corrected = false;
+    const correctedFields = fields.map(field => {
+      const attributeType = attributeTypes.get(field.name);
+      if (!attributeType || FormFieldTypeHelper.isAllowedForAttributeType(field.type, attributeType)) {
+        return field;
+      }
+      corrected = true;
+      return { ...field, type: FormFieldTypeHelper.getDefaultFormFieldType(attributeType) };
+    });
+    return corrected ? correctedFields : null;
   }
 
   public static getFilteredFieldTypes(fieldName?: string, featureType?: FeatureTypeModel | null) {

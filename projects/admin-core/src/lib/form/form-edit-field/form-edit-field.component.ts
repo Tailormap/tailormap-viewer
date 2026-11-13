@@ -1,11 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldModel } from '@tailormap-viewer/api';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { draftFormRemoveField, draftFormUpdateField } from '../state/form.actions';
+import { draftFormRemoveField, draftFormUpdateField, updateDraftFormFieldValid } from '../state/form.actions';
 import { selectDraftFormSelectedField } from '../state/form.selectors';
 import { FeatureTypeModel } from '@tailormap-admin/admin-api';
 import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
@@ -42,7 +42,7 @@ type ValueListFormType = FormGroup<{ value: FormControl<string>; label: FormCont
         MatButton,
     ],
 })
-export class FormEditFieldComponent implements OnInit {
+export class FormEditFieldComponent implements OnInit, OnDestroy {
   private store$ = inject(Store);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
@@ -81,6 +81,14 @@ export class FormEditFieldComponent implements OnInit {
   });
 
   public ngOnInit(): void {
+    // Report validity so the form cannot be saved while this field has invalid input (which is otherwise not synced to the draft)
+    this.fieldForm.valueChanges
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map(() => this.isValidField()),
+      )
+      .subscribe(isValid => this.store$.dispatch(updateDraftFormFieldValid({ isValid })));
+
     this.fieldForm.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -107,6 +115,7 @@ export class FormEditFieldComponent implements OnInit {
           this.clearForm();
         }
         this.filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes(field?.name, this.featureType);
+        this.store$.dispatch(updateDraftFormFieldValid({ isValid: true }));
         this.cdr.detectChanges();
       });
   }
@@ -153,11 +162,19 @@ export class FormEditFieldComponent implements OnInit {
     return this.fieldForm.get('valueList') as FormArray<ValueListFormType>;
   }
 
+  public ngOnDestroy(): void {
+    // Pending invalid input is discarded when the editor closes, so it no longer blocks saving
+    this.store$.dispatch(updateDraftFormFieldValid({ isValid: true }));
+  }
+
   private isValidForm(): boolean {
+    return this.fieldForm.dirty && this.isValidField();
+  }
+
+  private isValidField(): boolean {
     const values = this.fieldForm.getRawValue();
     return FormHelper.isValidValue(values.label)
       && FormHelper.isValidValue(values.type)
-      && this.fieldForm.dirty
       && this.fieldForm.valid;
   }
 
