@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, inject, OnDestroy, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MapService } from '../map-service/map.service';
-import { OverlayHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
+import { CooperativeGesturesHelper, SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { combineLatest, take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAP_COOPERATIVE_GESTURES } from './map-cooperative-gestures.injection-token';
 
 @Component({
     selector: 'tm-map',
@@ -12,12 +13,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     styleUrl: 'map.component.css',
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
-  public inIframe = window.self !== window.top;
-  private overlayHelper: OverlayHelper | undefined;
+  private cooperativeGesturesHelper: CooperativeGesturesHelper | undefined;
   private el = inject( ElementRef);
   private mapService= inject(MapService);
   private snackBar = inject(MatSnackBar);
 
+  public cooperativeGestures = inject(MAP_COOPERATIVE_GESTURES);
   private mapContainer = viewChild<ElementRef<HTMLElement>>('mapContainer');
 
   public ngAfterViewInit() {
@@ -27,8 +28,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.mapService.render(mapContainer);
-    if (this.inIframe && nativeEl) {
-      this.overlayHelper = new OverlayHelper(nativeEl);
+    if (this.cooperativeGestures && nativeEl) {
+      this.cooperativeGesturesHelper = new CooperativeGesturesHelper(nativeEl);
     }
     this.mapService.getCesiumManager$()
       .pipe(take(1))
@@ -41,8 +42,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.overlayHelper) {
-      this.overlayHelper.destroy();
+    if (this.cooperativeGesturesHelper) {
+      this.cooperativeGesturesHelper.destroy();
     }
   }
 
