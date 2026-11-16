@@ -3,6 +3,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, UploadModel, FormSummaryModel, FormModel, SearchIndexModel,
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
+  CadastralMunicipalityModel,
 } from '../models';
 import { AttributeStatisticsResponseModel, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -83,4 +84,6 @@ export interface TailormapAdminApiV1ServiceModel {
   }): Observable<AttributeStatisticsResponseModel>;
 
   getServerConfig$(): Observable<AdminServerConfigModel>;
+
+  getCadastralMunicipalities$(): Observable<CadastralMunicipalityModel[]>;
 }

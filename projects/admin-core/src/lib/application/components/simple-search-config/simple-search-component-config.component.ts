@@ -3,10 +3,9 @@ import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewe
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
-import { BehaviorSubject, filter, Observable, startWith } from 'rxjs';
-import {
-  CadastralMunicipalityHelper, CadastralMunicipalityModel, MunicipalityHelper, MunicipalityModel,
-} from '@tailormap-viewer/shared';
+import { BehaviorSubject, catchError, combineLatest, defer, filter, Observable, of, shareReplay, startWith } from 'rxjs';
+import { MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
+import { CadastralMunicipalityModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
@@ -19,11 +18,21 @@ import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autoc
 import { MatOption } from '@angular/material/select';
 import { AsyncPipe } from '@angular/common';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 interface CadastralMunicipalityOptionModel {
-  municipality: CadastralMunicipalityModel;
+  /** AKR code (kadastrale gemeentecode), e.g. "ASD05". */
+  code: string;
+  /** Label for the option and the selected entry, e.g. "Amsterdam (ASD05)". */
   label: string;
+  /** Lower case name and code, to filter on. */
+  searchText: string;
 }
+
+type CadastralMunicipalitiesState =
+  | { status: 'loading' }
+  | { status: 'error' }
+  | { status: 'loaded'; options: CadastralMunicipalityOptionModel[] };
 
 @Component({
     selector: 'tm-admin-simple-search-config',
@@ -46,11 +55,13 @@ interface CadastralMunicipalityOptionModel {
         MatOption,
         AsyncPipe,
         MatSlideToggle,
+        MatProgressSpinner,
     ],
 })
 export class SimpleSearchComponentConfigComponent implements ConfigurationComponentModel<SimpleSearchConfigModel> {
   private componentConfigService = inject(ComponentConfigurationService);
   private destroyRef = inject(DestroyRef);
+  private adminApiService = inject(TailormapAdminApiV1Service);
 
 
   @Input()
@@ -81,6 +92,13 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
 
   /** Stored AKR codes (kadastrale gemeentecodes) of the selected kadastrale gemeenten. */
   private cadastralMunicipalitiesSubject = new BehaviorSubject<string[]>([]);
+
+  /**
+   * The list of kadastrale gemeenten from tailormap-api. It is fetched once, on the first subscription. The template
+   * only subscribes when the cadastral parcels toggle is on, so the list is not requested for admins who never use it.
+   */
+  public cadastralMunicipalitiesState$: Observable<CadastralMunicipalitiesState>;
+  /** Selected kadastrale gemeenten. Codes not in the fetched list (or while the list is not available) get their bare code as label. */
   public cadastralMunicipalities$: Observable<CadastralMunicipalityOptionModel[]>;
 
   public cadastralMunicipalityControl = new FormControl<string | CadastralMunicipalityOptionModel>('', { nonNullable: true });
@@ -122,49 +140,53 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
         this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'searchCadastralParcels', value);
       });
 
-    const cadastralMunicipalities = CadastralMunicipalityHelper.getCadastralMunicipalities()
-      .map(municipality => ({ municipality, label: SimpleSearchComponentConfigComponent.getCadastralMunicipalityLabel(municipality) }));
-    this.filteredCadastralMunicipalityOptions$ = this.cadastralMunicipalityControl.valueChanges
+    this.cadastralMunicipalitiesState$ = defer(() => this.adminApiService.getCadastralMunicipalities$())
       .pipe(
-        startWith(''),
-        filter(str => typeof str === 'string'),
-        map(term => {
+        map((list): CadastralMunicipalitiesState => ({
+          status: 'loaded',
+          options: SimpleSearchComponentConfigComponent.toCadastralMunicipalityOptions(list),
+        })),
+        catchError(() => of<CadastralMunicipalitiesState>({ status: 'error' })),
+        startWith<CadastralMunicipalitiesState>({ status: 'loading' }),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
+    this.filteredCadastralMunicipalityOptions$ = combineLatest([
+      this.cadastralMunicipalitiesState$,
+      this.cadastralMunicipalityControl.valueChanges.pipe(startWith(''), filter(str => typeof str === 'string')),
+      this.cadastralMunicipalitiesSubject,
+    ])
+      .pipe(
+        map(([ state, term, selectedCodes ]) => {
+          if (state.status !== 'loaded') {
+            return [];
+          }
           const lowerTerm = term.toLowerCase();
-          const selected = new Set(this.cadastralMunicipalitiesSubject.value);
-          return cadastralMunicipalities.filter(o => {
-            return !o.municipality.akrCodes.some(code => selected.has(code))
-              && (o.municipality.name.toLowerCase().includes(lowerTerm)
-                || o.municipality.akrCodes.some(code => code.toLowerCase().includes(lowerTerm)));
-          });
+          const selected = new Set(selectedCodes);
+          return state.options.filter(o => !selected.has(o.code) && o.searchText.includes(lowerTerm));
         }),
       );
-    this.cadastralMunicipalities$ = this.cadastralMunicipalitiesSubject.asObservable()
+    this.cadastralMunicipalities$ = combineLatest([ this.cadastralMunicipalitiesState$, this.cadastralMunicipalitiesSubject ])
       .pipe(
-        map(selectedCodes => {
-          const selected = new Set(selectedCodes);
-          return cadastralMunicipalities.filter(o => o.municipality.akrCodes.some(code => selected.has(code)));
+        map(([ state, selectedCodes ]) => {
+          const optionsByCode = new Map(state.status === 'loaded' ? state.options.map(o => [ o.code, o ]) : []);
+          return selectedCodes.map(code => optionsByCode.get(code) ?? { code, label: code, searchText: code.toLowerCase() });
         }),
       );
     this.cadastralMunicipalityControl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        filter((value): value is CadastralMunicipalityOptionModel => typeof value !== 'string'
-          && CadastralMunicipalityHelper.isCadastralMunicipalityModel(value.municipality)),
+        filter((value): value is CadastralMunicipalityOptionModel => typeof value !== 'string'),
       )
       .subscribe(value => {
-        this.addCadastralMunicipality(value.municipality);
+        this.addCadastralMunicipality(value.code);
       });
   }
 
-  /**
-   * Label for a kadastrale gemeente, e.g. "Aalten (ATN02)". Kadastrale gemeenten with many AKR codes are shortened
-   * to the first and last code, e.g. "Amsterdam (ASD02 … ASD43)".
-   */
-  private static getCadastralMunicipalityLabel(municipality: CadastralMunicipalityModel): string {
-    const codes = municipality.akrCodes.length > 2
-      ? `${municipality.akrCodes[0]} … ${municipality.akrCodes[municipality.akrCodes.length - 1]}`
-      : municipality.akrCodes.join(', ');
-    return codes ? `${municipality.name} (${codes})` : municipality.name;
+  /** One option per AKR code, labelled e.g. "Amsterdam (ASD05)", sorted by name and then by code. */
+  private static toCadastralMunicipalityOptions(list: CadastralMunicipalityModel[]): CadastralMunicipalityOptionModel[] {
+    return [...list]
+      .sort((a, b) => a.name.localeCompare(b.name, 'nl') || a.code.localeCompare(b.code))
+      .map(m => ({ code: m.code, label: `${m.name} (${m.code})`, searchText: `${m.name} ${m.code}`.toLowerCase() }));
   }
 
   public displayCadastralMunicipality(value: string | CadastralMunicipalityOptionModel | null): string {
@@ -180,18 +202,18 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     this.saveConfig([...this.municipalitiesSubject.value].filter(m => m !== code));
   }
 
-  public addCadastralMunicipality(municipality: CadastralMunicipalityModel) {
-    const codes = new Set([ ...this.cadastralMunicipalitiesSubject.value, ...municipality.akrCodes ]);
-    this.saveCadastralMunicipalities(Array.from(codes));
+  public addCadastralMunicipality(code: string) {
+    if (!this.cadastralMunicipalitiesSubject.value.includes(code)) {
+      this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, code ]);
+    }
     this.cadastralMunicipalityControl.patchValue('', { emitEvent: false });
   }
 
-  public deleteCadastralMunicipality(municipality: CadastralMunicipalityModel) {
-    const codes = new Set(municipality.akrCodes);
-    this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(code => !codes.has(code)));
+  public deleteCadastralMunicipality(code: string) {
+    this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(c => c !== code));
   }
 
-  /** Stores the flattened list of AKR codes, so the viewer can use them directly in the Locatieserver filter. */
+  /** Stores the list of AKR codes, so the viewer can use them directly in the Locatieserver filter. */
   private saveCadastralMunicipalities(akrCodes: string[]) {
     this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'cadastralMunicipalities', akrCodes);
   }

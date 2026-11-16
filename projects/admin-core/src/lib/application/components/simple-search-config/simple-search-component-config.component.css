@@ -32,3 +32,17 @@ h3 {
   display: block;
   margin: 0 0 16px 8px;
 }
+
+.message {
+  margin: 0 0 16px 8px;
+}
+
+.message.loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message.error {
+  color: var(--error-color);
+}

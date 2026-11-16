@@ -6,6 +6,7 @@ import {
   CatalogNodeModel, GeoServiceModel, GeoServiceWithLayersModel, GroupModel, FeatureSourceModel, UserModel, ApplicationModel, ConfigModel,
   OIDCConfigurationModel, FeatureTypeModel, FormSummaryModel, FormModel, UploadModel, SearchIndexModel,
   SearchIndexPingResponseModel, TaskModel, TaskDetailsModel, AdminServerConfigModel,
+  CadastralMunicipalityModel,
 } from '../models';
 import { AttributeStatisticsResponseModel, UniqueValuesResponseModel } from '@tailormap-viewer/api';
 
@@ -254,5 +255,9 @@ export class TailormapAdminApiV1MockService implements TailormapAdminApiV1Servic
 
   public getServerConfig$(): Observable<AdminServerConfigModel> {
     return of({ multipart: { maxFileSize: 15728640, maxRequestSize: 15728640 } });
+  }
+
+  public getCadastralMunicipalities$(): Observable<CadastralMunicipalityModel[]> {
+    return of(mockData.getCadastralMunicipalities());
   }
 }

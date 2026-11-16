@@ -22,7 +22,6 @@ export * from './htmlify.helper';
 export * from './cooperative-gestures.helper';
 export * from './external-libs-loader.helper';
 export * from './municipality.helper';
-export * from './cadastral-municipality.helper';
 export * from './attribute-filter.helper';
 export * from './attribute-filter.mock';
 export * from './tileset-3d-style.helper';
