@@ -1818,9 +1818,25 @@
         <source>Map CRS</source>
         <target>Karten-CRS</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-cadastral-municipality" datatype="html">
+        <source>Add cadastral municipality</source>
+        <target>Gemarkung hinzufügen</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
         <target>Gemeinde hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality" datatype="html">
+        <source>Cadastral municipality</source>
+        <target>Gemarkung</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality-filter" datatype="html">
+        <source>Cadastral municipality filter</source>
+        <target>Gemarkung filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-parcels" datatype="html">
+        <source>Search cadastral parcels (kadastrale percelen)</source>
+        <target>Flurstücke suchen (kadastrale percelen)</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
         <source>Municipality</source>
@@ -1829,6 +1845,10 @@
       <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
         <source>Municipality filter</source>
         <target>Gemeinde filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter-not-for-parcels" datatype="html">
+        <source>The municipality filter does not apply to cadastral parcels.</source>
+        <target>Der Gemeinde filter gilt nicht für Flurstücke.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
         <source>PDOK Location search settings</source>

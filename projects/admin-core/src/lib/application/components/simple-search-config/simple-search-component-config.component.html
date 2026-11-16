@@ -10,7 +10,7 @@
         <mat-panel-title i18n="@@admin-core.components.simple-search-municipality-filter">Municipality filter</mat-panel-title>
       </mat-expansion-panel-header>
       <div class="selected-municipality">
-        @for(m of municipalities$ | async; track m.municipalityCode; let i = $index) {
+        @for(m of municipalities$ | async; track m.municipalityCode) {
             <div class="label">{{m.municipality}}</div>
             <div class="button-wrapper">
               <button mat-icon-button (click)="deleteMunicipality(m.municipalityCode)">
@@ -31,5 +31,38 @@
         </mat-autocomplete>
       </mat-form-field>
     </mat-expansion-panel>
+    <p class="hint" i18n="@@admin-core.components.simple-search-municipality-filter-not-for-parcels">The municipality filter does not apply to cadastral parcels.</p>
+    <mat-slide-toggle class="cadastral-parcels-toggle"
+                      [formControl]="searchCadastralParcelsControl"
+                      i18n="@@admin-core.components.simple-search-cadastral-parcels">Search cadastral parcels (kadastrale percelen)</mat-slide-toggle>
+    @if (searchCadastralParcelsControl.value) {
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title i18n="@@admin-core.components.simple-search-cadastral-municipality-filter">Cadastral municipality filter</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="selected-municipality">
+          @for(m of cadastralMunicipalities$ | async; track m.municipality.code) {
+            <div class="label">{{m.label}}</div>
+            <div class="button-wrapper">
+              <button mat-icon-button (click)="deleteCadastralMunicipality(m.municipality)">
+                <mat-icon svgIcon="trash_filled"></mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+        <h2 i18n="@@admin-core.components.simple-search-add-cadastral-municipality">Add cadastral municipality</h2>
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.components.simple-search-cadastral-municipality">Cadastral municipality</mat-label>
+          <input matInput type="text" [formControl]="cadastralMunicipalityControl" [matAutocomplete]="cadastralAuto" />
+          <mat-autocomplete #cadastralAuto="matAutocomplete"
+                            [displayWith]="displayCadastralMunicipality"
+                            autoActiveFirstOption>
+            @for(option of filteredCadastralMunicipalityOptions$ | async; track option.municipality.code) {
+              <mat-option [value]="option">{{option.label}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </mat-expansion-panel>
+    }
   </div>
 </tm-admin-base-component-config>

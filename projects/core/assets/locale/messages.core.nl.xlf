@@ -1454,6 +1454,10 @@
         <source>Logout</source>
         <target>Uitloggen</target>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Kadastrale percelen</target>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
         <target>Locatie</target>
@@ -1626,6 +1630,10 @@
       <trans-unit id="core.toolbar.open-streetview" datatype="html">
         <source>Open Streetview</source>
         <target>Open Streetview</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-cadastral-parcels-pdok-attribution" datatype="html">
+        <source>Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</source>
+        <target>Gegevens van [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</target>
       </trans-unit>
       <trans-unit id="core.toolbar.search-location" datatype="html">
         <source>Search location</source>

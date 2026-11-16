@@ -1343,14 +1343,29 @@
       <trans-unit id="admin-core.components.mouse-coordinates-map-crs" datatype="html">
         <source>Map CRS</source>
       </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-cadastral-municipality" datatype="html">
+        <source>Add cadastral municipality</source>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality" datatype="html">
+        <source>Cadastral municipality</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality-filter" datatype="html">
+        <source>Cadastral municipality filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-parcels" datatype="html">
+        <source>Search cadastral parcels (kadastrale percelen)</source>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
         <source>Municipality</source>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
         <source>Municipality filter</source>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter-not-for-parcels" datatype="html">
+        <source>The municipality filter does not apply to cadastral parcels.</source>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
         <source>PDOK Location search settings</source>

@@ -22,3 +22,13 @@ h3 {
   min-height: 40px;
   align-items: center;
 }
+
+.hint {
+  margin: 8px 0 16px 8px;
+  font-size: 12px;
+}
+
+.cadastral-parcels-toggle {
+  display: block;
+  margin: 0 0 16px 8px;
+}
