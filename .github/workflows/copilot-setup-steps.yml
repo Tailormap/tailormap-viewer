@@ -21,7 +21,7 @@ jobs:
       - name: "Set up Node.js"
         uses: actions/setup-node@v7
         with:
-          node-version: "lts/Krypton"
+          node-version: "lts/Lithium"
           cache: "npm"
 
       - name: "Install JavaScript dependencies"
