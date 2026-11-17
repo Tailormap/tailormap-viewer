@@ -1905,6 +1905,14 @@
         <source>Edit control</source>
         <target>Invoerelement</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.copy-form" datatype="html">
+        <source>Copy form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/></source>
+        <target>Formulier <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> kopiëren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.copy-of" datatype="html">
+        <source>Copy of <x id="PH" equiv-text="this.data.formName"/></source>
+        <target>Kopie van <x id="PH" equiv-text="this.data.formName"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
         <target>Formulier maken</target>
@@ -1989,6 +1997,10 @@
         <source>Filter forms</source>
         <target>Filter formulieren</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-copied" datatype="html">
+        <source>Form <x id="PH" equiv-text="copiedForm.name"/> copied</source>
+        <target>Formulier <x id="PH" equiv-text="copiedForm.name"/> gekopieerd</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target>Formulier <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
@@ -2028,6 +2040,18 @@
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
         <target>Label</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.make-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopiëren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.name-required" datatype="html">
+        <source>Name is required</source>
+        <target>Naam is verplicht</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.non-unique-name-error" datatype="html">
+        <source>A form with this name already exists for this feature type.</source>
+        <target>Er bestaat al een formulier met deze naam voor dit feature type.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.read-only" datatype="html">
         <source>Read-only</source>

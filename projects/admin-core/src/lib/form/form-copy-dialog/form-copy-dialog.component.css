@@ -1,0 +1,11 @@
+mat-form-field {
+  width: 100%;
+}
+
+.error-message {
+  color: var(--mat-sys-error);
+}
+
+mat-hint.error {
+  color: var(--mat-sys-error);
+}

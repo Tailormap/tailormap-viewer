@@ -5,7 +5,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
   selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid, selectDraftFormTabs,
@@ -29,6 +29,8 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { FormCopyDialogComponent } from '../form-copy-dialog/form-copy-dialog.component';
 
 @Component({
     selector: 'tm-admin-form-edit',
@@ -49,6 +51,7 @@ import { MatIcon } from '@angular/material/icon';
         FormEditTabComponent,
         MatIcon,
         MatIconButton,
+        SpinnerButtonComponent,
     ],
 })
 export class FormEditComponent implements OnInit, OnDestroy {
@@ -59,10 +62,14 @@ export class FormEditComponent implements OnInit, OnDestroy {
   private formService = inject(FormService);
   private featureSourceService = inject(FeatureSourceService);
   private adminSnackbarService = inject(AdminSnackbarService);
+  private dialog = inject(MatDialog);
 
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  private makingCopySubject = new BehaviorSubject(false);
+  public makingCopy$ = this.makingCopySubject.asObservable();
 
   private destroyed = new Subject();
   public form$: Observable<FormModel | null> = of(null);
@@ -169,6 +176,24 @@ export class FormEditComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.form.form-removed:Form ${title} removed`);
         this.router.navigateByUrl('/admin/forms');
+      });
+  }
+
+  public copy(form: FormModel) {
+    this.makingCopySubject.next(true);
+    FormCopyDialogComponent.open(this.dialog, {
+      formId: form.id,
+      formName: form.name,
+      featureSourceId: form.featureSourceId,
+      featureTypeName: form.featureTypeName,
+    }).afterClosed()
+      .pipe(take(1))
+      .subscribe(copiedForm => {
+        if (copiedForm) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.form.form-copied:Form ${copiedForm.name} copied`);
+          this.router.navigateByUrl('/admin/forms/form/' + copiedForm.id);
+        }
+        this.makingCopySubject.next(false);
       });
   }
 
