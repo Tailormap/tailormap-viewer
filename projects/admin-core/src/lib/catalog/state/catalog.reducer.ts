@@ -241,22 +241,25 @@ const onUpdateFeatureType = (
   state: CatalogState,
   payload: ReturnType<typeof CatalogActions.updateFeatureType>,
 ): CatalogState => {
-  const idx = state.featureTypes.findIndex(f => f.originalId === payload.featureType.id);
-  if (idx === -1) {
-    return state;
-  }
-  const summary = ExtendedCatalogModelHelper.getFeatureTypeSummaryModel(payload.featureType);
-  const draftFeatureSource = state.draftFeatureSource ? { ...state.draftFeatureSource } : null;
-  if (draftFeatureSource) {
-    const ftIndex = draftFeatureSource.featureTypes.findIndex(ft => ft.id === payload.featureType.id);
-    if (ftIndex !== -1) {
-      draftFeatureSource.featureTypes = [
+  // Update the full feature type in the draft feature source (used by the form editor among others), also when the
+  // feature type is not (yet) in the catalog feature types list
+  let draftFeatureSource = state.draftFeatureSource;
+  const ftIndex = draftFeatureSource ? draftFeatureSource.featureTypes.findIndex(ft => ft.id === payload.featureType.id) : -1;
+  if (draftFeatureSource && ftIndex !== -1) {
+    draftFeatureSource = {
+      ...draftFeatureSource,
+      featureTypes: [
         ...draftFeatureSource.featureTypes.slice(0, ftIndex),
         payload.featureType,
         ...draftFeatureSource.featureTypes.slice(ftIndex + 1),
-      ];
-    }
+      ],
+    };
   }
+  const idx = state.featureTypes.findIndex(f => f.originalId === payload.featureType.id);
+  if (idx === -1) {
+    return draftFeatureSource === state.draftFeatureSource ? state : { ...state, draftFeatureSource };
+  }
+  const summary = ExtendedCatalogModelHelper.getFeatureTypeSummaryModel(payload.featureType);
   return {
     ...state,
     featureTypes: [
