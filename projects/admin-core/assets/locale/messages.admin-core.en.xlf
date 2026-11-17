@@ -1488,7 +1488,7 @@
         <source>Tab name</source>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this column as options</source>
+        <source>Use unique values from this attribute as options</source>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
