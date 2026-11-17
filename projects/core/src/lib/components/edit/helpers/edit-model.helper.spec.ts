@@ -142,4 +142,25 @@ describe('EditModelHelper', () => {
     expect(getField(layerDetails, 'flag')?.choiceList?.values).toEqual([{ value: true, label: 'true' }, { value: false, label: 'No' }]);
   });
 
+  test('an editable primary key is only editable for a new feature', () => {
+    const layerDetails = getLayerDetailsModel({
+      editable: true,
+      attributes: [getAttribute({ name: 'id', type: AttributeType.INTEGER, primaryKey: true, nullable: false })],
+      form: null,
+    });
+    const getIdField = (isNewFeature: boolean) => EditModelHelper.createEditModel(feature, layerDetails, [], isNewFeature).find(f => f.name === 'id');
+    expect(getIdField(true)?.readOnly).toBe(false);
+    expect(getIdField(false)?.readOnly).toBe(true);
+  });
+
+  test('form field cannot make the primary key of an existing feature editable', () => {
+    const layerDetails = getLayerDetailsModel({
+      editable: true,
+      attributes: [getAttribute({ name: 'id', type: AttributeType.INTEGER, primaryKey: true })],
+      form: { options: { tabs: [] }, fields: [{ name: 'id', label: 'ID', controlType: FormFieldControlTypeEnum.NUMBER }] },
+    });
+    expect(EditModelHelper.createEditModel(feature, layerDetails, [], false).find(f => f.name === 'id')?.readOnly).toBe(true);
+    expect(EditModelHelper.createEditModel(feature, layerDetails, [], true).find(f => f.name === 'id')?.readOnly).toBe(false);
+  });
+
 });

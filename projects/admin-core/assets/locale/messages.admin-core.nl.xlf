@@ -1233,6 +1233,10 @@
         <source>Primary key</source>
         <target>Primaire sleutel</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key-editable" datatype="html">
+        <source>The primary key can only be entered when adding a feature, it cannot be changed afterwards. Leave this off when the database generates the primary key.</source>
+        <target>De primaire sleutel kan alleen ingevuld worden bij het toevoegen van een feature en kan daarna niet meer aangepast worden. Laat dit uit als de database de primaire sleutel genereert.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
         <target>Protocol</target>

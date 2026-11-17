@@ -926,6 +926,9 @@
       <trans-unit id="admin-core.catalog.primary-key" datatype="html">
         <source>Primary key</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key-editable" datatype="html">
+        <source>The primary key can only be entered when adding a feature, it cannot be changed afterwards. Leave this off when the database generates the primary key.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
       </trans-unit>
