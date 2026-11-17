@@ -2049,10 +2049,6 @@
         <source>Forms</source>
         <target>Formulieren</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.label-list-label" datatype="html">
-        <source>Label</source>
-        <target>Label</target>
-      </trans-unit>
       <trans-unit id="admin-core.form.make-copy" datatype="html">
         <source>Copy</source>
         <target>Kopiëren</target>

@@ -1517,9 +1517,6 @@
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.label-list-label" datatype="html">
-        <source>Label</source>
-      </trans-unit>
       <trans-unit id="admin-core.form.make-copy" datatype="html">
         <source>Copy</source>
       </trans-unit>

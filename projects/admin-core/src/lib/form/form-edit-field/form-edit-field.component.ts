@@ -242,7 +242,7 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
     // Values are kept when another source is chosen, so they are not lost when switching back to the list
     const choiceList: ChoiceListModel | undefined = controlType === FormFieldControlTypeEnum.SELECT ? {
       source: rawValue.choiceListSource ?? ChoiceListSourceEnum.LIST,
-      values: (rawValue.valueList || []).map(v => ({ label: v.label || v.value || '', value: v.value || '' })),
+      values: EditFormFieldHelper.getValueList(rawValue.valueList || []),
       allowFreeInput: !!rawValue.allowFreeInput,
     } : undefined;
     const fieldModel: FormFieldModel = {

@@ -1,4 +1,6 @@
-import { AttributeType, FormFieldModel, FormFieldControlTypeEnum, FormFieldControlTypeHelper } from '@tailormap-viewer/api';
+import {
+  AttributeType, ChoiceListValueModel, FormFieldModel, FormFieldControlTypeEnum, FormFieldControlTypeHelper,
+} from '@tailormap-viewer/api';
 import { AttributeDescriptorModel, FeatureTypeModel } from '@tailormap-admin/admin-api';
 
 export class EditFormFieldHelper {
@@ -71,6 +73,18 @@ export class EditFormFieldHelper {
       return { ...field, controlType: FormFieldControlTypeHelper.getDefaultControlType(attributeType) };
     });
     return corrected ? correctedFields : null;
+  }
+
+  /**
+   * Converts the values as edited in the admin to the values of the choice list of a form field. A label is only stored when it differs
+   * from the value: the viewer shows the value when there is no label, so a copy of the value only makes the form config
+   * larger, and would keep showing the old value after the value is changed.
+   */
+  public static getValueList(valueList: Array<Partial<{ value: string; label: string }>>): ChoiceListValueModel[] {
+    return valueList.map(item => {
+      const value = item.value || '';
+      return item.label && item.label !== value ? { value, label: item.label } : { value };
+    });
   }
 
   public static getFilteredControlTypes(fieldName?: string, featureType?: FeatureTypeModel | null) {
