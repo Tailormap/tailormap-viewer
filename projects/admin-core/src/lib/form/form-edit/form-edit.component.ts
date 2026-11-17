@@ -31,6 +31,7 @@ import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { FormCopyDialogComponent } from '../form-copy-dialog/form-copy-dialog.component';
+import { FormUsedDialogComponent, FormUsedDialogData } from '../form-used-dialog/form-used-dialog.component';
 
 @Component({
     selector: 'tm-admin-form-edit',
@@ -163,12 +164,20 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   public delete(form: FormModel) {
     const title = form.name;
-    this.confirmDelete.confirm$(
-      $localize `:@@admin-core.form.delete-form:Delete form ${title}`,
-      $localize `:@@admin-core.form.delete-form-message:Are you sure you want to delete form ${title}? This action cannot be undone.`,
-      true,
-    )
+    this.formService.getAppLayersUsingForm$(form.id)
       .pipe(
+        take(1),
+        switchMap(usages => {
+          if (usages.length > 0) {
+            const data: FormUsedDialogData = { formName: title, usages };
+            return this.dialog.open(FormUsedDialogComponent, { data }).afterClosed().pipe(map(() => false));
+          }
+          return this.confirmDelete.confirm$(
+            $localize `:@@admin-core.form.delete-form:Delete form ${title}`,
+            $localize `:@@admin-core.form.delete-form-message:Are you sure you want to delete form ${title}? This action cannot be undone.`,
+            true,
+          );
+        }),
         take(1),
         filter(answer => answer),
         switchMap(() => this.formService.deleteForm$(form.id)),

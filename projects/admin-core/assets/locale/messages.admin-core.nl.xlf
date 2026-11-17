@@ -517,6 +517,10 @@
         <source>Folder name</source>
         <target>Mapnaam</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.form-not-found" datatype="html">
+        <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
+        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of "Geen formulier".</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Verberg taalkeuzemenu in viewer</target>
@@ -2033,6 +2037,14 @@
         <source>Form updated</source>
         <target>Formulier aangepast</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-used" datatype="html">
+        <source>Form is used in layers</source>
+        <target>Formulier wordt gebruikt in lagen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-used-body" datatype="html">
+        <source>The form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> is used in the following application layers.</source>
+        <target>Het formulier <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> wordt gebruikt in de volgende applicatielagen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
         <target>Formulieren</target>
@@ -2056,6 +2068,10 @@
       <trans-unit id="admin-core.form.read-only" datatype="html">
         <source>Read-only</source>
         <target>Alleen-lezen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.remove-form-from-layers-first" datatype="html">
+        <source>Please select another form or no form for these layers first.</source>
+        <target>Kies eerst een ander formulier of geen formulier voor deze lagen.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
