@@ -421,9 +421,9 @@ const onLoadDraftFeatureSourceSuccess = (state: CatalogState, payload: ReturnTyp
   draftFeatureSource: payload.featureSource,
 });
 
+// Keep draftFeatureSourceId so FeatureSourceService.getDraftFeatureSource$ can tell which feature source failed to load
 const onLoadDraftFeatureSourceFailed = (state: CatalogState): CatalogState => ({
   ...state,
-  draftFeatureSourceId: null,
   draftFeatureSourceLoadStatus: LoadingStateEnum.FAILED,
   draftFeatureSource: null,
 });

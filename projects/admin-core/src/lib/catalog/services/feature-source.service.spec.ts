@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideStore, Store } from '@ngrx/store';
 import { FeatureTypeModel, getFeatureSource, getFeatureType, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
+import { throwError } from 'rxjs';
 import { FeatureSourceService } from './feature-source.service';
 import { CatalogService } from './catalog.service';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
@@ -11,15 +12,15 @@ import { catalogReducer } from '../state/catalog.reducer';
 import { catalogStateKey, CatalogState, initialCatalogState } from '../state/catalog.state';
 import { loadDraftFeatureSourceSuccess, updateFeatureType } from '../state/catalog.actions';
 
-const setup = (catalogState: Partial<CatalogState>) => {
+const setup = (catalogState: Partial<CatalogState>, adminApiService: Partial<TailormapAdminApiV1Service> = {}, useRealCatalogService = false) => {
   const loadDraftFeatureSource = vi.fn();
   TestBed.configureTestingModule({
     providers: [
       provideStore({ [catalogStateKey]: catalogReducer }, { initialState: { [catalogStateKey]: { ...initialCatalogState, ...catalogState } } }),
-      { provide: TailormapAdminApiV1Service, useValue: {} },
+      { provide: TailormapAdminApiV1Service, useValue: adminApiService },
       { provide: AdminSnackbarService, useValue: { showMessage: vi.fn() } },
       { provide: AdminSseService, useValue: {} },
-      { provide: CatalogService, useValue: { loadDraftFeatureSource } },
+      useRealCatalogService ? CatalogService : { provide: CatalogService, useValue: { loadDraftFeatureSource } },
     ],
   });
   return {
@@ -85,6 +86,28 @@ describe('FeatureSourceService', () => {
     });
     const emitted: Array<FeatureTypeModel | null> = [];
     const subscription = service.getDraftFeatureTypeByName$('table1', '1').subscribe(ft => emitted.push(ft));
+    expect(emitted).toEqual([null]);
+    subscription.unsubscribe();
+  });
+
+  test('getDraftFeatureTypeByName$ does not emit null for a failed load of another feature source', () => {
+    const { service, loadDraftFeatureSource } = setup({
+      draftFeatureSourceId: '5',
+      draftFeatureSourceLoadStatus: LoadingStateEnum.FAILED,
+    });
+    const emitted: Array<FeatureTypeModel | null> = [];
+    const subscription = service.getDraftFeatureTypeByName$('table1', '1').subscribe(ft => emitted.push(ft));
+    expect(loadDraftFeatureSource).toHaveBeenCalledWith('1');
+    expect(emitted).toEqual([]);
+    subscription.unsubscribe();
+  });
+
+  test('getDraftFeatureTypeByName$ does not retry a failed load', () => {
+    const getFeatureSource$ = vi.fn(() => throwError(() => new Error('not found')));
+    const { service } = setup({}, { getFeatureSource$ }, true);
+    const emitted: Array<FeatureTypeModel | null> = [];
+    const subscription = service.getDraftFeatureTypeByName$('table1', '1').subscribe(ft => emitted.push(ft));
+    expect(getFeatureSource$).toHaveBeenCalledTimes(1);
     expect(emitted).toEqual([null]);
     subscription.unsubscribe();
   });
