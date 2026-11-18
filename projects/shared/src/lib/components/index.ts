@@ -22,3 +22,4 @@ export * from './image-with-description/image-with-description.component';
 export * from './htmlify/htmlify.component';
 export * from './popover/popover.component';
 export * from './popover/popover-position.enum';
+export * from './datetime-field/datetime-field.component';

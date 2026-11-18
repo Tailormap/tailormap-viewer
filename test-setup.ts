@@ -63,6 +63,7 @@ Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
 Object.defineProperty(window, 'sessionStorage', { value: mockSessionStorage });
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
+Element.prototype.scrollIntoView = Element.prototype.scrollIntoView || (() => {});
 
 // Registers a fake MatIconRegistry for every test so `<mat-icon svgIcon="...">` never tries to
 // fetch a real SVG over HttpClient (which logs a "Error retrieving icon" console error for any
