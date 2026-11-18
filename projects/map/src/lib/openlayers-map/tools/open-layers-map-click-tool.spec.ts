@@ -4,7 +4,7 @@ import { ToolTypeEnum } from '../../models';
 import { OpenLayersEventManager } from '../open-layers-event-manager';
 import { firstValueFrom, of } from 'rxjs';
 import { CesiumEventManager } from '../cesium-map/cesium-event-manager';
-import { getMapClickMock } from '../open-layers-tool-manager.spec';
+import { getMapClickMock } from '../map-click.mock';
 
 describe('OpenLayersMapClickTool', () => {
 

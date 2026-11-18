@@ -40,6 +40,12 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
 
   private milkdownEditor: MilkdownEditor | undefined;
 
+  /**
+   * The editor from the moment it is constructed, so it is destroyed even when this component is destroyed while
+   * `crepe.create()` is still pending (Milkdown's `destroy` waits for creation). Otherwise its document listeners leak.
+   */
+  private constructedEditor: MilkdownEditor | undefined;
+
   /** The ProseMirror view, available once Crepe has finished creating the editor. */
   private editorView: EditorView | undefined;
 
@@ -114,6 +120,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
                 }
               });
             });
+          this.constructedEditor = crepe.editor;
           return from(crepe.create()).pipe(map(editor => ({ editor, editorViewCtx: coreModule.editorViewCtx })));
         }),
       )
@@ -164,9 +171,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.focusWhenCreated = false;
-    if (this.milkdownEditor) {
-      this.milkdownEditor.destroy(true);
-    }
+    this.constructedEditor?.destroy(true);
   }
 
   public insertVariable(value: string) {

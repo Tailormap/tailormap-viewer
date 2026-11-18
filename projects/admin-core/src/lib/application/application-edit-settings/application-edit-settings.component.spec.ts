@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { ConfigService } from '../../config/services/config.service';
 import userEvent from '@testing-library/user-event';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { TailormapApiConstants } from '@tailormap-viewer/api';

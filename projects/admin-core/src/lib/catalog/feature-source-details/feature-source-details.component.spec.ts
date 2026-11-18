@@ -9,8 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureSourceService } from '../services/feature-source.service';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async (protocol: FeatureSourceProtocolEnum) => {
   const activeRoute = {

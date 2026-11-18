@@ -6,7 +6,7 @@ import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import userEvent from '@testing-library/user-event';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
 
 const setup = async (isValidPassword: boolean) => {

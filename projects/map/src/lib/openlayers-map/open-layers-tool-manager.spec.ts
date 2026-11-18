@@ -4,25 +4,10 @@ import { MapClickToolModel, ToolTypeEnum } from '../models';
 import { OpenLayersEventManager } from './open-layers-event-manager';
 import { CesiumEventManager } from './cesium-map/cesium-event-manager';
 import { OpenLayersSnappingManager } from './openlayers-snapping-manager';
-import { firstValueFrom, of } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { getMapClickMock } from './map-click.mock';
 
 const mockNgZone = { run: (cb: () => void) => cb() } as any;
-
-export const getMapClickMock = () => {
-  return vi.fn(() => of({
-    coordinate: [ 1, 2 ],
-    pixel: [ 2, 3 ],
-    map: {
-      getView: () => ({
-        getResolution: () => 0.1,
-        getProjection: () => ({
-          getMetersPerUnit: () => 2,
-        }),
-      }),
-    },
-    originalEvent: { pointerType: 'mouse' },
-  }));
-};
 
 describe('OpenLayersToolManager', () => {
 

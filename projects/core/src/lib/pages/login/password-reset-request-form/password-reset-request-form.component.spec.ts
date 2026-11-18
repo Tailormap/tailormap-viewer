@@ -14,7 +14,7 @@ describe('PasswordResetRequestFormComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [ReactiveFormsModule], declarations: [AutoFocusDirective],
     });
     expect(screen.getByText('Email'));
-    expect(screen.findByRole('button', { name: /request password reset/i }));
+    expect(await screen.findByRole('button', { name: /request password reset/i })).toBeInTheDocument();
   });
 
   test('triggers requestReset method', async () => {

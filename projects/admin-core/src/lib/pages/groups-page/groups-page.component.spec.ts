@@ -4,7 +4,7 @@ import { GroupsPageComponent } from './groups-page.component';
 import { MatListModule } from '@angular/material/list';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { provideHttpClient } from '@angular/common/http';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
 

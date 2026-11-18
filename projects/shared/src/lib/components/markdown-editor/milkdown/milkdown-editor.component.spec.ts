@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => {
   };
   resetCreate();
   const crepeOptions: Array<Record<string, unknown>> = [];
+  const editorDestroy = vi.fn();
   const listenerCtx = Symbol('listenerCtx');
   /** The callback registered with the listener plugin's `markdownUpdated`, captured by the fake ctx below. */
   let markdownUpdated: MarkdownUpdatedFn | undefined;
@@ -34,15 +35,20 @@ const mocks = vi.hoisted(() => {
   };
   return {
     viewFocus, editorView, editorViewCtx, get created() { return created; }, resolveCreate: () => resolveCreate(), resetCreate, crepeOptions,
-    listenerCtx, ctx, get markdownUpdated() { return markdownUpdated; },
+    listenerCtx, ctx, get markdownUpdated() { return markdownUpdated; }, editorDestroy,
   };
 });
 
+// Crepe does not run in jsdom. These mocks hold with `isolate: false`: this spec passes whether or not
+// markdown-editor.component.spec.ts (which loads the real editor) ran first in the same worker.
+/* eslint-disable @vitest/no-restricted-vi-methods */
 /* eslint-disable @typescript-eslint/naming-convention -- mirrors the names of the Crepe API */
 vi.mock('@milkdown/crepe', () => {
   class Crepe {
     public static Feature = { CodeMirror: 'code-mirror', Latex: 'latex', ImageBlock: 'image-block', Placeholder: 'placeholder', BlockEdit: 'block-edit' };
     public editor = {
+      ctx: mocks.ctx,
+      destroy: mocks.editorDestroy,
       use: () => this.editor,
       config: (fn: (ctx: unknown) => void) => {
         fn(mocks.ctx);
@@ -54,7 +60,7 @@ vi.mock('@milkdown/crepe', () => {
     }
     public async create() {
       await mocks.created;
-      return { ctx: mocks.ctx, destroy: vi.fn() };
+      return this.editor;
     }
   }
   return { Crepe };
@@ -62,6 +68,7 @@ vi.mock('@milkdown/crepe', () => {
 /* eslint-enable @typescript-eslint/naming-convention */
 vi.mock('@milkdown/kit/core', () => ({ editorViewCtx: mocks.editorViewCtx }));
 vi.mock('@milkdown/plugin-listener', () => ({ listener: {}, listenerCtx: mocks.listenerCtx }));
+/* eslint-enable @vitest/no-restricted-vi-methods */
 
 /** Renders the editor and waits until the (mocked) Crepe editor has been created. */
 const setupCreatedEditor = async () => {
@@ -113,6 +120,19 @@ describe('MilkdownEditorComponent', () => {
     fixture.componentInstance.ngOnDestroy();
     mocks.resolveCreate();
     await vi.waitFor(() => expect(mocks.viewFocus).not.toHaveBeenCalled());
+  });
+
+  test('destroying the component while the editor is being created still destroys the editor', async () => {
+    mocks.resetCreate();
+    mocks.editorDestroy.mockClear();
+    const crepeCount = mocks.crepeOptions.length;
+    const { fixture } = await render(MilkdownEditorComponent, {
+      providers: [MarkdownEditorService],
+    });
+    await vi.waitFor(() => expect(mocks.crepeOptions.length).toBe(crepeCount + 1));
+    fixture.destroy();
+    expect(mocks.editorDestroy).toHaveBeenCalledWith(true);
+    mocks.resolveCreate();
   });
 
   test('does not report Markdown updates after loading content as user changes', async () => {

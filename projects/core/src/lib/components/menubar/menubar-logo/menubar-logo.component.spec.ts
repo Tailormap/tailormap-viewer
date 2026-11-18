@@ -6,6 +6,7 @@ import { CoreState, coreStateKey, initialCoreState } from '../../../state/core.s
 import { MatIconModule } from '@angular/material/icon';
 import { ImageWithDescriptionComponent } from '@tailormap-viewer/shared';
 import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('MenubarLogoComponent', () => {
 
@@ -34,6 +35,7 @@ describe('MenubarLogoComponent', () => {
       providers: [
         provideMockStore({ initialState: { [coreStateKey]: stateWithLogo } }),
         provideHttpClient(),
+        provideHttpClientTesting(),
       ],
       declarations: [ImageWithDescriptionComponent],
     });

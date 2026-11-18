@@ -30,7 +30,7 @@ describe('LoginFormComponent', () => {
     });
     expect(screen.getByText('Username'));
     expect(screen.getByText('Password'));
-    expect(screen.findByRole('button', { name: /login/i }));
+    expect(await screen.findByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
   test('triggers login method', async () => {
