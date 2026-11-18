@@ -17,6 +17,9 @@ const mocks = vi.hoisted(() => {
   return { viewFocus, editorView, editorViewCtx, get created() { return created; }, resolveCreate: () => resolveCreate(), resetCreate, crepeOptions };
 });
 
+// Crepe does not run in jsdom. These mocks hold with `isolate: false`: this spec passes whether or not
+// markdown-editor.component.spec.ts (which loads the real editor) ran first in the same worker.
+/* eslint-disable @vitest/no-restricted-vi-methods */
 /* eslint-disable @typescript-eslint/naming-convention -- mirrors the names of the Crepe API */
 vi.mock('@milkdown/crepe', () => {
   class Crepe {
@@ -35,6 +38,7 @@ vi.mock('@milkdown/crepe', () => {
 /* eslint-enable @typescript-eslint/naming-convention */
 vi.mock('@milkdown/kit/core', () => ({ editorViewCtx: mocks.editorViewCtx }));
 vi.mock('@milkdown/plugin-listener', () => ({ listener: {}, listenerCtx: {} }));
+/* eslint-enable @vitest/no-restricted-vi-methods */
 
 describe('MilkdownEditorComponent', () => {
 

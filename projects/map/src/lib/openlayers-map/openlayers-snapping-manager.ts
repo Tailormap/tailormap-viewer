@@ -1,5 +1,6 @@
 import { Feature, Map as OlMap } from 'ol';
 import { Snap } from 'ol/interaction.js';
+import type { Options as SnapOptions } from 'ol/interaction/Snap.js';
 import { LayerTypesEnum, OlMapStyleType } from '../models';
 import { Vector as VectorLayer, Vector } from 'ol/layer.js';
 import { Vector as VectorSource } from 'ol/source.js';
@@ -172,7 +173,7 @@ export class OpenLayersSnappingManager {
         if (!source) {
           return;
         }
-        this.snappingInteraction.next(new Snap({
+        this.snappingInteraction.next(this.createSnap({
           source,
           pixelTolerance: snapOptions?.pixelTolerance ?? 10,
         }));
@@ -197,6 +198,11 @@ export class OpenLayersSnappingManager {
         this.snapInitializing = false;
         this.snapInitialized = true;
       });
+  }
+
+  // Separate method so specs can stub it with vi.spyOn; module mocks are unreliable with `isolate: false`.
+  protected createSnap(options: SnapOptions): Snap {
+    return new Snap(options);
   }
 
 }

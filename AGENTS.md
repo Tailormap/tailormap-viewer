@@ -141,13 +141,14 @@ Viewer UI is organized as feature component groups under `projects/core/src/lib/
 
 Tests run on **Vitest** via Angular's `@angular/build:unit-test` builder (`ng test <project>`), configured per library in `angular.json`; there is no Jest anymore. Shared config:
 
-- `vitest-base.config.ts` — workspace Vitest config (`isolate: true`, global setup in `test-globals.ts`, which forces `TZ=UTC`).
-- `test-setup.ts` — runs before every spec file: loads polyfills + `zone.js/testing`, registers `@testing-library/jest-dom` matchers, stubs `ResizeObserver` / `IntersectionObserver` / `EventSource` / `localStorage` / `sessionStorage` / `scrollTo`, mocks `jsts` WKT/buffer modules, and in a global `beforeEach` adds `MatIconTestingModule` and disables Material animations. Specs therefore don't need to import `MatIconTestingModule` or set up these stubs themselves.
+- `vitest-base.config.ts` — workspace Vitest config (global setup in `test-globals.ts`, which forces `TZ=UTC`). It sets `isolate: false` on purpose: spec files share one module graph and one set of globals per worker, which halves the test run. Keep it that way; when a spec only passes in isolation, fix the spec so it leaves no state behind for the next file. The spec-file lint rules in `eslint.config.js` flag the known ways a spec leaks state.
+- `test-setup.ts` — runs before every spec file: loads polyfills + `zone.js/testing`, registers `@testing-library/jest-dom` matchers, stubs `ResizeObserver` / `IntersectionObserver` / `EventSource` / `localStorage` / `sessionStorage` / `scrollTo`, mocks `jsts` WKT/buffer modules, in a global `beforeEach` adds `MatIconTestingModule` and disables Material animations, and in a global `afterEach` restores real timers and resets every selector a `MockStore` overrode. Specs therefore don't need to import `MatIconTestingModule` or set up these stubs themselves.
 
 Conventions:
 
 - Specs live next to the code as `*.spec.ts`. Import test APIs explicitly: `import { describe, test, expect, vi } from 'vitest';` (globals are typed but the codebase imports them).
-- Use `vi.fn()`, `vi.spyOn()`, `vi.mock()`, `vi.useFakeTimers()` — never `jest.*`.
+- Use `vi.fn()`, `vi.spyOn()`, `vi.useFakeTimers()` — never `jest.*`. Stub dependencies through DI providers or `vi.spyOn`; a module mock (`vi.mock`) is skipped when another spec in the same worker loaded that module first.
+- Put helpers shared between specs in a `*.mock.ts` or `*.helper.ts` file, and stub globals with `Object.defineProperty(..., { configurable: true })` so later specs can stub them again.
 - **Components**: render with `render(Component, { imports, providers, inputs, configureTestBed })` from `@testing-library/angular`, query via `screen` (prefer `getByRole` / `findByRole` / `getByText`) and assert with jest-dom matchers (`toBeInTheDocument`, `toHaveTextContent`, ...). Simulate interaction with `await userEvent.click(...)` / `await userEvent.type(...)` from `@testing-library/user-event`; use `await waitFor(...)` or `findBy*` for async updates. To shallow-render, use `configureTestBed: tb => tb.overrideComponent(Comp, { set: { imports: [...], schemas: [NO_ERRORS_SCHEMA] } })`.
 - **Services / effects**: use `TestBed.configureTestingModule` + `TestBed.inject(...)`. For HTTP services use `provideHttpClient()` + `provideHttpClientTesting()` and `HttpTestingController`.
 
