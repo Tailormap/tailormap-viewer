@@ -9,9 +9,12 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
   selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid, selectDraftFormTabs,
+  selectDraftFormFieldValid,
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
-import { clearSelectedForm, draftFormClearSelection, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
+import {
+  clearSelectedForm, draftFormClearSelection, draftFormCorrectFieldTypes, updateDraftForm, updateDraftFormValid,
+} from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catalog-model.helper';
@@ -91,7 +94,22 @@ export class FormEditComponent implements OnInit, OnDestroy {
     this.canSave$ = combineLatest([
       this.store$.select(selectDraftFormUpdated),
       this.store$.select(selectDraftFormValid),
-    ]).pipe(map(([ updated, valid ]) => updated && valid));
+      this.store$.select(selectDraftFormFieldValid),
+    ]).pipe(map(([ updated, valid, fieldValid ]) => updated && valid && fieldValid));
+    // Correct stale field types (from an old admin default or a changed attribute type after refreshing the feature source), so
+    // opening and saving the form fixes them. The draft form is marked as updated only when something was corrected.
+    combineLatest([
+      this.form$.pipe(map(form => form?.id), distinctUntilChanged()),
+      this.featureType$,
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([ formId, featureType ]) => {
+        if (formId && featureType) {
+          this.store$.dispatch(draftFormCorrectFieldTypes({
+            attributes: featureType.attributes.map(a => ({ name: a.name, type: a.type })),
+          }));
+        }
+      });
     this.form$
       .pipe(
         takeUntil(this.destroyed),
