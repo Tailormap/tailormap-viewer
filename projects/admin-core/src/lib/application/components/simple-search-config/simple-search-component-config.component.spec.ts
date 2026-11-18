@@ -4,32 +4,25 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { CadastralMunicipalityModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
-import { Observable, of, Subject, throwError } from 'rxjs';
+import { CadastralMunicipalityHelper, CadastralMunicipalityModel } from '@tailormap-viewer/shared';
 
 const cadastralMunicipalities: CadastralMunicipalityModel[] = [
-  { code: 'ABG00', name: 'Aalburg' },
-  { code: 'ASD02', name: 'Amsterdam' },
-  { code: 'ASD05', name: 'Amsterdam' },
-  { code: 'ASD12', name: 'Amsterdam' },
-  { code: 'ATN01', name: 'Asten' },
-  { code: 'ATN02', name: 'Aalten' },
+  { name: 'Aalburg', codes: ['ABG00'] },
+  { name: 'Amsterdam', codes: [ 'ASD12', 'ASD02', 'ASD05' ] },
+  { name: 'Asten', codes: ['ATN01'] },
+  { name: 'Aalten', codes: ['ATN02'] },
 ];
 
-const setup = async (
-  config: SimpleSearchConfigModel = { enabled: true },
-  cadastralMunicipalities$: Observable<CadastralMunicipalityModel[]> = of(cadastralMunicipalities),
-) => {
+const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
+  vi.spyOn(CadastralMunicipalityHelper, 'getCadastralMunicipalities').mockReturnValue(cadastralMunicipalities);
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
-  const adminApiService = { getCadastralMunicipalities$: vi.fn(() => cadastralMunicipalities$) };
   await render(SimpleSearchComponentConfigComponent, {
     inputs: { type: BaseComponentTypeEnum.SIMPLE_SEARCH, label: 'Search', config },
     providers: [
       { provide: ComponentConfigurationService, useValue: componentConfigService },
-      { provide: TailormapAdminApiV1Service, useValue: adminApiService },
     ],
   });
-  return { updateConfigForKey: componentConfigService.updateConfigForKey, getCadastralMunicipalities$: adminApiService.getCadastralMunicipalities$ };
+  return { updateConfigForKey: componentConfigService.updateConfigForKey };
 };
 
 const getDeleteButton = (label: string) => {
@@ -40,16 +33,14 @@ const getDeleteButton = (label: string) => {
 
 describe('SimpleSearchComponentConfigComponent', () => {
 
-  test('saves the search cadastral parcels toggle, defaults to off, and only fetches the list when on', async () => {
-    const { updateConfigForKey, getCadastralMunicipalities$ } = await setup();
+  test('saves the search cadastral parcels toggle and defaults to off', async () => {
+    const { updateConfigForKey } = await setup();
     const toggle = screen.getByRole('switch', { name: /Search cadastral parcels/ });
     expect(toggle).not.toBeChecked();
     expect(screen.queryByText('Cadastral municipality filter')).not.toBeInTheDocument();
-    expect(getCadastralMunicipalities$).not.toHaveBeenCalled();
     await userEvent.click(toggle);
     expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'searchCadastralParcels', true);
     expect(await screen.findByText('Cadastral municipality filter')).toBeInTheDocument();
-    expect(getCadastralMunicipalities$).toHaveBeenCalledTimes(1);
   });
 
   test('shows the selected kadastrale gemeenten and deletes only one code', async () => {
@@ -77,7 +68,7 @@ describe('SimpleSearchComponentConfigComponent', () => {
     expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['ATN02']);
   });
 
-  test('autocomplete has one option per code, matches on name and code and excludes selected entries', async () => {
+  test('autocomplete has one option per code (also for a name with several codes), matches on name and code and excludes selected entries', async () => {
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
@@ -100,28 +91,6 @@ describe('SimpleSearchComponentConfigComponent', () => {
       .toEqual([ 'Amsterdam (ASD02)', 'Amsterdam (ASD05)', 'Amsterdam (ASD12)' ]));
     await userEvent.click(screen.getByRole('option', { name: 'Amsterdam (ASD05)' }));
     expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'ABG00', 'ASD05' ]);
-  });
-
-  test('shows a loading message until the list arrives', async () => {
-    const list$ = new Subject<CadastralMunicipalityModel[]>();
-    await setup({ enabled: true, searchCadastralParcels: true }, list$);
-    expect(await screen.findByText('Loading cadastral municipalities…')).toBeInTheDocument();
-    expect(screen.queryByRole('combobox', { name: 'Cadastral municipality' })).not.toBeInTheDocument();
-    list$.next(cadastralMunicipalities);
-    list$.complete();
-    expect(await screen.findByRole('combobox', { name: 'Cadastral municipality' })).toBeInTheDocument();
-    expect(screen.queryByText('Loading cadastral municipalities…')).not.toBeInTheDocument();
-  });
-
-  test('shows an error message when the list cannot be loaded, selected codes can still be deleted', async () => {
-    const { updateConfigForKey } = await setup(
-      { enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'ATN02', 'ABG00' ] },
-      throwError(() => new Error('503')),
-    );
-    expect(await screen.findByText('Could not load the list of cadastral municipalities.')).toBeInTheDocument();
-    expect(screen.queryByRole('combobox', { name: 'Cadastral municipality' })).not.toBeInTheDocument();
-    await userEvent.click(getDeleteButton('ATN02'));
-    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['ABG00']);
   });
 
 });

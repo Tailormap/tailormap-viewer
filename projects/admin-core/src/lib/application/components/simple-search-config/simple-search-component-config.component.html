@@ -51,30 +51,17 @@
           }
         </div>
         <h2 i18n="@@admin-core.components.simple-search-add-cadastral-municipality">Add cadastral municipality</h2>
-        @switch ((cadastralMunicipalitiesState$ | async)?.status) {
-          @case ('loaded') {
-            <mat-form-field>
-              <mat-label i18n="@@admin-core.components.simple-search-cadastral-municipality">Cadastral municipality</mat-label>
-              <input matInput type="text" [formControl]="cadastralMunicipalityControl" [matAutocomplete]="cadastralAuto" />
-              <mat-autocomplete #cadastralAuto="matAutocomplete"
-                                [displayWith]="displayCadastralMunicipality"
-                                autoActiveFirstOption>
-                @for(option of filteredCadastralMunicipalityOptions$ | async; track option.code) {
-                  <mat-option [value]="option">{{option.label}}</mat-option>
-                }
-              </mat-autocomplete>
-            </mat-form-field>
-          }
-          @case ('error') {
-            <p class="message error" i18n="@@admin-core.components.simple-search-cadastral-municipalities-error">Could not load the list of cadastral municipalities.</p>
-          }
-          @default {
-            <div class="message loading">
-              <mat-spinner diameter="20" mode="indeterminate"></mat-spinner>
-              <span i18n="@@admin-core.components.simple-search-cadastral-municipalities-loading">Loading cadastral municipalities…</span>
-            </div>
-          }
-        }
+        <mat-form-field>
+          <mat-label i18n="@@admin-core.components.simple-search-cadastral-municipality">Cadastral municipality</mat-label>
+          <input matInput type="text" [formControl]="cadastralMunicipalityControl" [matAutocomplete]="cadastralAuto" />
+          <mat-autocomplete #cadastralAuto="matAutocomplete"
+                            [displayWith]="displayCadastralMunicipality"
+                            autoActiveFirstOption>
+            @for(option of filteredCadastralMunicipalityOptions$ | async; track option.code) {
+              <mat-option [value]="option">{{option.label}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
       </mat-expansion-panel>
     }
   </div>

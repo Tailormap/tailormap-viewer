@@ -1,5 +1,5 @@
 import {
-  AdminServerType, CadastralMunicipalityModel,
+  AdminServerType,
   ApplicationModel,
   CatalogItemKindEnum, CatalogNodeModel, ConfigModel, FeatureSourceModel, FeatureSourceProtocolEnum, FeatureTypeModel,
   FeatureTypeSummaryModel, GeoServiceLayerModel,
@@ -240,12 +240,3 @@ export const getUniqueValues = (): UniqueValuesResponseModel => ({
 export const getAttributeStatistics = (): AttributeStatisticsResponseModel => ({
   filterApplied: false, min: 1, max: 10, count: 10, sum: 55, avg: 5.5,
 });
-
-export const getCadastralMunicipalities = (): CadastralMunicipalityModel[] => [
-  { code: 'ABG00', name: 'Aalburg' },
-  { code: 'ASD02', name: 'Amsterdam' },
-  { code: 'ASD05', name: 'Amsterdam' },
-  { code: 'ASD12', name: 'Amsterdam' },
-  { code: 'ATN01', name: 'Asten' },
-  { code: 'ATN02', name: 'Aalten' },
-];
