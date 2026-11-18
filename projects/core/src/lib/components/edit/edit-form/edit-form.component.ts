@@ -11,6 +11,7 @@ import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field'
 import { MatInput } from '@angular/material/input';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { SelectFieldComponent } from '../fields/select-field/select-field.component';
+import { DatetimeFieldComponent } from '../fields/datetime-field/datetime-field.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { NgTemplateOutlet } from '@angular/common';
@@ -31,6 +32,7 @@ import { NgTemplateOutlet } from '@angular/common';
     MatSuffix,
     MatDatepicker,
     SelectFieldComponent,
+    DatetimeFieldComponent,
     MatCheckbox,
     MatTabGroup,
     MatTab,

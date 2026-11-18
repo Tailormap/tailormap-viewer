@@ -7,6 +7,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 
 describe('EditFormComponent', () => {
 
@@ -87,5 +88,35 @@ describe('EditFormComponent', () => {
       { attribute: 'prop', value: '123', invalid: false },
     ));
     expect(await screen.getByPlaceholderText('Property alias')).toHaveValue("editor");
+  });
+
+  test('should render a date and time picker for a timestamp attribute', async () => {
+    const featureAttributeChanged = vi.fn();
+    const feature = getFeatureModel();
+    await render(EditFormComponent, {
+      providers: [
+        AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
+        provideLuxonDateAdapter(),
+      ],
+      inputs: { input: {
+          feature: {
+            feature: { ...feature, layerId: 'layer-1', attributes: { ...feature.attributes, ts: '2026-10-21T10:30:00.000Z' } },
+            columnMetadata: [{ name: 'ts', alias: 'Timestamp', type: AttributeType.TIMESTAMP, layerId: 'layer-1' }],
+          },
+          details: getLayerDetailsModel({
+            editable: true,
+            attributes: [{ id: 1, type: AttributeType.TIMESTAMP, name: 'ts', editable: true, nullable: null }],
+          }),
+        } },
+      on: { featureAttributeChanged: featureAttributeChanged },
+    });
+    expect(await screen.findByRole('group', { name: 'Timestamp' })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Timestamp')).toHaveValue('10/21/2026');
+    const timeInput = screen.getByRole('combobox', { name: 'Time' });
+    await userEvent.clear(timeInput);
+    await userEvent.type(timeInput, '2:15 PM');
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
+      { attribute: 'ts', value: '2026-10-21T14:15:00.000+00:00', invalid: false },
+    ));
   });
 });
