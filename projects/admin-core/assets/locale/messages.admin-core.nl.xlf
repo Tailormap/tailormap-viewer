@@ -953,10 +953,6 @@
         <source>Show description in a pop-up</source>
         <target>Toon beschrijving in een pop-up</target>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
-        <source>Insert image or link to file</source>
-        <target>Voeg afbeelding of link naar bestand in</target>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
         <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
@@ -2120,6 +2116,14 @@
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
         <target>Systeemgroep</target>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-reading-file" datatype="html">
+        <source>Error reading file</source>
+        <target>Fout bij het lezen van bestand</target>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-uploading-file" datatype="html">
+        <source>Error uploading file</source>
+        <target>Fout bij het uploaden van bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>

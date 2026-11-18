@@ -13,7 +13,8 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { MilkdownEditorComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {
   const activeRoute = {
@@ -37,6 +38,7 @@ const setup = async () => {
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
+    configureTestBed: testBed => testBed.overrideComponent(MilkdownEditorComponent, { set: { template: '' } }),
   });
   return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, refreshGeoService$, geoServiceModel };
 };

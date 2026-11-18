@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject, input } from '@angular/core';
 import { TemplatePicklistConfig } from '../template-picklist.model';
-import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, Observable, take, tap } from 'rxjs';
-import type { Editor as MilkdownEditor } from '@milkdown/core';
+import type { Editor as MilkdownEditor } from '@milkdown/kit/core';
+import { combineLatest, concatMap, distinctUntilChanged, from, lastValueFrom, take, tap } from 'rxjs';
 import type { EditorView } from '@milkdown/kit/prose/view';
 import { ImageBlockFeatureConfig } from '@milkdown/crepe/feature/image-block';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { MilkdownHelper } from './milkdown.helper';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MarkdownEditorInsertUploadFn, MarkdownEditorResolveImageUrlFn, MarkdownEditorUploadFn } from '../markdown-editor-upload.model';
 
 
 @Component({
@@ -29,11 +30,10 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   @ViewChild('editor', { read: ElementRef, static: true })
   public editorEl: ElementRef<HTMLDivElement> | undefined;
 
-  @Input()
-  public templatePicklistConfig: TemplatePicklistConfig | undefined;
-
-  @Input()
-  public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
+  public templatePicklistConfig = input<TemplatePicklistConfig>();
+  public uploadService$ = input<MarkdownEditorUploadFn>();
+  public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
+  public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
   /** Shown while the editor is empty; Milkdown's own text when not set. Read once, when the editor is created. */
   public placeholder = input<string>();
@@ -46,7 +46,17 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
   /** Set when `focus()` is called before the (lazily loaded) editor exists, so it is focused once created. */
   private focusWhenCreated = false;
 
+  /** The Markdown the editor shows: the content last loaded into it or the last change made by the user. */
   private currentContent: string | null | undefined;
+
+  /**
+   * False after content was loaded into the editor, set by an edit gesture inside the editor (see the template). While
+   * false, Markdown updates from the listener are not reported as user changes. This drops updates caused by loading:
+   * transactions dispatched by Crepe features after loading (normalising the loaded Markdown), and a debounced update
+   * from the previous content which was still pending when new content was loaded. Gestures are used instead of focus,
+   * so reloading content while the editor has focus does not block the next edits.
+   */
+  private userEdited = false;
 
   public ngOnInit() {
     if (!this.editorEl) {
@@ -57,17 +67,21 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       from(import('@milkdown/crepe')),
       from(import('@milkdown/kit/core')),
       from(import('@milkdown/plugin-listener')),
+      from(import('@milkdown/kit/plugin/upload')),
     ])
       .pipe(
         take(1),
-        concatMap(([ crepeModule, coreModule, listenerModule ]) => {
+        concatMap(([ crepeModule, coreModule, listenerModule, uploadModule ]) => {
           const imageConfig: ImageBlockFeatureConfig = {
             onUpload: file => this.handleFileUpload(file),
+            proxyDomURL: this.resolveImageUrl(),
           };
           const placeholder = this.placeholder();
+          const defaultValue = this.mdEditorService.getCurrentContent() || '';
+          this.loadingContent(defaultValue);
           const crepe = new crepeModule.Crepe({
             root: el,
-            defaultValue: this.mdEditorService.getCurrentContent() || '',
+            defaultValue,
             features: {
               [crepeModule.Crepe.Feature.CodeMirror]: false,
               [crepeModule.Crepe.Feature.Latex]: false,
@@ -75,16 +89,27 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
             featureConfigs: {
               [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,
               [crepeModule.Crepe.Feature.Placeholder]: placeholder ? { mode: 'doc', text: placeholder } : { mode: 'doc' },
-              [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig),
+              [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig(), this.insertUpload$()),
             },
           });
           crepe.editor
             .use(listenerModule.listener)
+            .config(ctx => {
+              // Crepe's uploader for dropped/pasted files ignores files which are not images, replace it so other files
+              // are uploaded too and inserted as a link. Registered after Crepe's own config, so this one wins.
+              ctx.update(uploadModule.uploadConfig.key, prev => ({
+                ...prev,
+                uploader: (files, schema) => MilkdownHelper.createNodesForUploadedFiles(files, schema, file => this.handleFileUpload(file)),
+              }));
+            })
             .config((ctx) => {
               const listener = ctx.get(listenerModule.listenerCtx);
               listener.markdownUpdated((_ctx, markdown, prevMarkdown) => {
-                if (markdown !== prevMarkdown) {
-                  this.currentContent = markdown;
+                if (markdown === prevMarkdown) {
+                  return;
+                }
+                this.currentContent = markdown;
+                if (this.userEdited) {
                   this.mdEditorService.contentChanged(markdown);
                 }
               });
@@ -108,9 +133,21 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef), distinctUntilChanged())
       .subscribe(content => {
         if (this.milkdownEditor && content !== this.currentContent) {
+          this.loadingContent(content);
           MilkdownHelper.updateContent(this.milkdownEditor.ctx, content || '');
         }
       });
+  }
+
+  /** Called for user input inside the editor, including Crepe's menus and toolbars, which are rendered inside it. */
+  public onEditGesture() {
+    this.userEdited = true;
+  }
+
+  /** Called before content is loaded into the editor programmatically, see {@link userEdited}. */
+  private loadingContent(content: string) {
+    this.currentContent = content;
+    this.userEdited = false;
   }
 
   /**
@@ -136,15 +173,16 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     if (!this.milkdownEditor) {
       return;
     }
-    const editor = this.milkdownEditor;
-    MilkdownHelper.insertTextInEditor(editor.ctx, `{{${value}}}`);
+    this.userEdited = true;
+    MilkdownHelper.insertTextInEditor(this.milkdownEditor.ctx, `{{${value}}}`);
   }
 
   private handleFileUpload(file: File): Promise<string> {
-    if (!this.uploadService$) {
+    const uploadService$ = this.uploadService$();
+    if (!uploadService$) {
       return Promise.resolve('');
     }
-    const imageResult$ = this.uploadService$(file)
+    const imageResult$ = uploadService$(file)
       .pipe(
         tap(result => {
           if (result?.error) {
