@@ -4,17 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { CadastralMunicipalityHelper, CadastralMunicipalityModel } from '@tailormap-viewer/shared';
-
-const cadastralMunicipalities: CadastralMunicipalityModel[] = [
-  { name: 'Aalburg', codes: ['ABG00'] },
-  { name: 'Amsterdam', codes: [ 'ASD12', 'ASD02', 'ASD05' ] },
-  { name: 'Asten', codes: ['ATN01'] },
-  { name: 'Aalten', codes: ['ATN02'] },
-];
+import { CADASTRAL_MUNICIPALITY_LIST } from '@tailormap-viewer/shared';
 
 const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
-  vi.spyOn(CadastralMunicipalityHelper, 'getCadastralMunicipalities').mockReturnValue(cadastralMunicipalities);
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
   await render(SimpleSearchComponentConfigComponent, {
     inputs: { type: BaseComponentTypeEnum.SIMPLE_SEARCH, label: 'Search', config },
@@ -61,10 +53,10 @@ describe('SimpleSearchComponentConfigComponent', () => {
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: [ 'ATN02', 'BWW00' ],
+      cadastralMunicipalities: [ 'ATN02', 'XXX99' ],
     });
     expect(await screen.findByText('Aalten (ATN02)')).toBeInTheDocument();
-    await userEvent.click(getDeleteButton('BWW00'));
+    await userEvent.click(getDeleteButton('XXX99'));
     expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['ATN02']);
   });
 
@@ -87,8 +79,9 @@ describe('SimpleSearchComponentConfigComponent', () => {
     expect(screen.getAllByRole('option')).toHaveLength(1);
     await userEvent.clear(input);
     await userEvent.type(input, 'Amsterdam');
+    const amsterdamCodes = CADASTRAL_MUNICIPALITY_LIST.find(m => m.name === 'Amsterdam')?.codes ?? [];
     await vi.waitFor(() => expect(screen.getAllByRole('option').map(o => o.textContent?.trim()))
-      .toEqual([ 'Amsterdam (ASD02)', 'Amsterdam (ASD05)', 'Amsterdam (ASD12)' ]));
+      .toEqual([...amsterdamCodes].sort().map(code => `Amsterdam (${code})`)));
     await userEvent.click(screen.getByRole('option', { name: 'Amsterdam (ASD05)' }));
     expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'ABG00', 'ASD05' ]);
   });

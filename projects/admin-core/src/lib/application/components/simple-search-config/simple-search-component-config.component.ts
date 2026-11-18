@@ -5,7 +5,7 @@ import { ComponentConfigurationService } from '../../services/component-configur
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { BehaviorSubject, combineLatest, filter, Observable, startWith } from 'rxjs';
 import {
-  CadastralMunicipalityHelper, CadastralMunicipalityModel, MunicipalityHelper, MunicipalityModel,
+  CADASTRAL_MUNICIPALITY_LIST, CadastralMunicipalityModel, MunicipalityHelper, MunicipalityModel,
 } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -128,7 +128,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
       });
 
     const cadastralMunicipalityOptions = SimpleSearchComponentConfigComponent.toCadastralMunicipalityOptions(
-      CadastralMunicipalityHelper.getCadastralMunicipalities(),
+      CADASTRAL_MUNICIPALITY_LIST,
     );
     const cadastralMunicipalityOptionsByCode = new Map(cadastralMunicipalityOptions.map(o => [ o.code, o ]));
     this.filteredCadastralMunicipalityOptions$ = combineLatest([
