@@ -953,10 +953,6 @@
         <source>Show description in a pop-up</source>
         <target>Toon beschrijving in een pop-up</target>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
-        <source>Insert image or link to file</source>
-        <target>Voeg afbeelding of link naar bestand in</target>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
         <target>Bewerken van <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></target>
@@ -2001,13 +1997,25 @@
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target>Formulier <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
-        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown" datatype="html">
+        <source>The following fields are hidden in the catalog, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>De volgende velden zijn verborgen in de catalogus, of bestaan niet meer in het feature type. Ze worden niet getoond in de viewer.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
-        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown-application" datatype="html">
+        <source>The following fields are hidden in the catalog or application layer settings, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>De volgende velden zijn verborgen in de catalogus of de applicatielaag-instellingen, of bestaan niet meer in het feature type. Ze worden niet getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only" datatype="html">
+        <source>The following fields are not editable in the catalog. They will be shown read-only in the viewer.</source>
+        <target>De volgende velden zijn niet bewerkbaar in de catalogus. Ze worden alleen-lezen getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only-application" datatype="html">
+        <source>The following fields are not editable in the catalog or application layer settings. They will be shown read-only in the viewer.</source>
+        <target>De volgende velden zijn niet bewerkbaar in de catalogus of de applicatielaag-instellingen. Ze worden alleen-lezen getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-required-read-only" datatype="html">
+        <source>The following fields are required in the form but cannot be edited, so new features will not get a value for them.</source>
+        <target>De volgende velden zijn verplicht in het formulier maar kunnen niet bewerkt worden, waardoor nieuwe features hiervoor geen waarde krijgen.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
@@ -2034,8 +2042,8 @@
         <target>Naam tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this column as options</source>
-        <target>Gebruik de unieke waarden uit deze kolom als opties</target>
+        <source>Use unique values from this attribute as options</source>
+        <target>Gebruik de unieke waarden van dit attribuut als opties</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
@@ -2140,6 +2148,14 @@
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
         <target>Systeemgroep</target>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-reading-file" datatype="html">
+        <source>Error reading file</source>
+        <target>Fout bij het lezen van bestand</target>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-uploading-file" datatype="html">
+        <source>Error uploading file</source>
+        <target>Fout bij het uploaden van bestand</target>
       </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>

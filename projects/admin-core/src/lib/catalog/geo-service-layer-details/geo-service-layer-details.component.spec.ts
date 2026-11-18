@@ -10,7 +10,7 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 const setup = async () => {
   const activeRoute = {
     paramMap: of({

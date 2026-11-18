@@ -7,6 +7,8 @@ export class MarkdownEditorService {
   private content = new BehaviorSubject('');
   private updatedContent = new BehaviorSubject('');
 
+  private userChanges = new Subject<string>();
+
   private insertedVariables = new Subject<string>();
 
   public insertVariable(value: string) {
@@ -24,6 +26,7 @@ export class MarkdownEditorService {
 
   public contentChanged(content: string) {
     this.updatedContent.next(content);
+    this.userChanges.next(content);
   }
 
   public getCurrentContent() {
@@ -36,6 +39,10 @@ export class MarkdownEditorService {
 
   public getUpdatedContent$() {
     return this.updatedContent.asObservable();
+  }
+
+  public getUserChanges$() {
+    return this.userChanges.asObservable();
   }
 
   public getInsertedVariables$() {

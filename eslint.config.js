@@ -164,6 +164,30 @@ module.exports = tseslint.config(
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@vitest/prefer-importing-vitest-globals': 'error',
+      // Specs run with `isolate: false` (vitest-base.config.ts) and share one module graph per worker, so
+      // a `vi.mock` is ignored when another spec loaded the module first. Mock via DI / `vi.spyOn` instead.
+      '@vitest/no-restricted-vi-methods': ['error', {
+        mock: 'Module mocks are unreliable with `isolate: false`; use DI or vi.spyOn. Only if the spec passes in every file order, disable this rule with a reason.',
+        doMock: 'Module mocks are unreliable with `isolate: false`; use DI or vi.spyOn.',
+      }],
+      'no-restricted-syntax': ['error',
+        {
+          // An un-awaited findBy* checks nothing and rejects later, while another spec is running.
+          selector: 'CallExpression[callee.name="expect"] > CallExpression.arguments[callee.property.name=/^find(All)?By/]',
+          message: 'Await findBy* queries: `expect(await screen.findBy...(...))`.',
+        },
+        {
+          // A spec imported by another spec has its tests registered only once, so the importing file loses them.
+          selector: 'ImportDeclaration[source.value=/\\.spec$/]',
+          message: 'Do not import from a spec file; move shared helpers to a *.mock.ts or *.helper.ts file.',
+        },
+        {
+          // Globals stubbed with defineProperty stay for later spec files; non-configurable ones cannot be stubbed again.
+          selector: 'CallExpression[callee.object.name="Object"][callee.property.name="defineProperty"]'
+            + '[arguments.0.type!="ObjectExpression"]:not(:has(Property[key.name="configurable"]))',
+          message: 'Pass `configurable: true` when stubbing a global with Object.defineProperty (specs share globals with `isolate: false`).',
+        },
+      ],
     },
   },
   {

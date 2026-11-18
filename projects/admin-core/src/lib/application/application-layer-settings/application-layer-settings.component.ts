@@ -331,7 +331,9 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
             if (!form || !layerSetting || !featureSourceType?.featureType) {
               return of(null);
             }
-            return this.featureSourceService.loadFeatureType$(featureSourceType.featureType.name, featureSourceType.featureSource.id)
+            // Follow the feature type in the store so the warning is updated after the feature type settings are changed
+            // (for example by making attributes editable via the catalog shortcut button)
+            return this.featureSourceService.getDraftFeatureTypeByName$(featureSourceType.featureType.name, `${featureSourceType.featureSource.id}`)
               .pipe(
                 map((featureType) => {
                   if (!featureType) {

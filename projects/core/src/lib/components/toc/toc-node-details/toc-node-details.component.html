@@ -25,7 +25,7 @@
                     i18n="@@core.toc.show-layer-information">Show information about this layer</button>
           } @else {
             <h3 i18n="@@core.toc.description">Description</h3>
-            <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+            <div class="toc-node-description" [innerHTML]="description | markdownToHtml | async"></div>
           }
         </div>
       }

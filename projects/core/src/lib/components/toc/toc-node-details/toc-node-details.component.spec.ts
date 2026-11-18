@@ -87,7 +87,7 @@ describe('LayerDetailsComponent', () => {
   test('should render description inline', async () => {
     await setup(true, { description: 'The layer description' });
     expect(screen.getByRole('heading', { name: 'Description' })).toBeInTheDocument();
-    expect(screen.getByText('The layer description')).toBeInTheDocument();
+    expect(await screen.findByText('The layer description')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Show information about The Layer' })).not.toBeInTheDocument();
   });
 

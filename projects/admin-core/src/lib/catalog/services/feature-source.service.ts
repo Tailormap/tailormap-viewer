@@ -6,14 +6,14 @@ import {
   TailormapAdminApiV1Service,
 } from '@tailormap-admin/admin-api';
 import { CatalogService } from './catalog.service';
-import { catchError, concatMap, filter, map, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
+import { catchError, combineLatest, concatMap, filter, map, merge, MonoTypeOperatorFunction, Observable, of, pipe, switchMap, take, tap, timer } from 'rxjs';
 import {
   addFeatureSources, deleteFeatureSource, updateFeatureSource, updateFeatureType,
 } from '../state/catalog.actions';
 import { FeatureSourceCreateModel, FeatureSourceUpdateModel, FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
   selectCatalogLoadStatus,
-  selectDraftFeatureSource, selectDraftFeatureSourceLoadStatus,
+  selectDraftFeatureSource, selectDraftFeatureSourceId, selectDraftFeatureSourceLoadStatus,
   selectFeatureSourceById, selectFeatureTypes, selectFeatureTypesForSource, selectGeoServiceLayers,
 } from '../state/catalog.selectors';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
@@ -48,21 +48,47 @@ export class FeatureSourceService {
       );
   }
 
-  public getDraftFeatureSource$(id: string) {
-      return this.store$.select(selectDraftFeatureSource)
-        .pipe(
-          tap(draftFeatureSource => {
-            if (draftFeatureSource?.id !== id) {
-              this.catalogService.loadDraftFeatureSource(id);
-            }
-          }),
-          switchMap(() => this.store$.select(selectDraftFeatureSourceLoadStatus)),
-          filter(loadStatus => loadStatus === LoadingStateEnum.LOADED),
-          switchMap(() => this.store$.select(selectDraftFeatureSource)),
-        );
+  /**
+   * Get the draft feature source with the given id from the store, loading it if another (or no) draft feature source
+   * is loaded. Only emits once the draft feature source in the store is the requested one, so a previously loaded draft
+   * feature source with another id is never emitted. Emits null if loading the requested feature source failed.
+   *
+   * The store has a single draft feature source slot. Do not have two active subscriptions for different feature source
+   * ids at the same time (for example two components on the same page): each loads its own feature source when it sees
+   * the other one in the slot, so they keep replacing each other's draft and may never emit. Different feature types of
+   * the same feature source are fine. Make sure subscriptions end when the component is destroyed (for example put
+   * `takeUntil` after any `switchMap` to this observable), otherwise they keep reloading their draft on other pages.
+   */
+  public getDraftFeatureSource$(id: string): Observable<FeatureSourceModel | null> {
+    // Only the draft feature source triggers a (re)load, not the load status: on a failed load the draft stays null so
+    // this does not emit again, which would otherwise retry the failing request endlessly
+    const loaded$ = this.store$.select(selectDraftFeatureSource)
+      .pipe(
+        tap(draftFeatureSource => {
+          if (`${draftFeatureSource?.id}` !== `${id}`) {
+            this.catalogService.loadDraftFeatureSource(id);
+          }
+        }),
+        filter((draftFeatureSource): draftFeatureSource is FeatureSourceModel => `${draftFeatureSource?.id}` === `${id}`),
+      );
+    // The draft feature source id is kept on failure, so a failed load of another feature source is not reported
+    const failed$ = combineLatest([
+      this.store$.select(selectDraftFeatureSourceId),
+      this.store$.select(selectDraftFeatureSourceLoadStatus),
+    ])
+      .pipe(
+        filter(([ draftFeatureSourceId, loadStatus ]) => `${draftFeatureSourceId}` === `${id}` && loadStatus === LoadingStateEnum.FAILED),
+        map(() => null),
+      );
+    return merge(loaded$, failed$);
   }
 
-  public getDraftFeatureType$(id: string, featureSourceId: string) {
+  /**
+   * Get a feature type by id from the draft feature source. Emits null if the feature source failed to load or the
+   * feature type was not found. See {@link getDraftFeatureSource$} for the restriction on subscribing for different
+   * feature sources at the same time.
+   */
+  public getDraftFeatureType$(id: string, featureSourceId: string): Observable<FeatureTypeModel | null> {
     return this.getDraftFeatureSource$(featureSourceId)
       .pipe(
         map(featureSource => featureSource?.featureTypes.find(f => `${f.id}` === `${id}`) || null),
@@ -77,6 +103,21 @@ export class FeatureSourceService {
         map(featureSource => {
           return featureSource?.featureTypes.find(f => f.name === featureTypeName) || null;
         }),
+      );
+  }
+
+  /**
+   * Get a feature type by name from the draft feature source in the store, loading the draft feature source if needed.
+   * Unlike {@link loadFeatureType$} this emits again when the feature type is updated (for example by the feature type
+   * settings dialog or an SSE event), so the caller sees changes to settings such as editable attributes.
+   * Emits null if the feature source failed to load or the feature type was not found.
+   * Uses the single draft feature source slot, see {@link getDraftFeatureSource$} for the restriction on subscribing for
+   * different feature sources at the same time.
+   */
+  public getDraftFeatureTypeByName$(featureTypeName: string, featureSourceId: string): Observable<FeatureTypeModel | null> {
+    return this.getDraftFeatureSource$(featureSourceId)
+      .pipe(
+        map(featureSource => featureSource?.featureTypes.find(f => f.name === featureTypeName) || null),
       );
   }
 

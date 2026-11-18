@@ -10,10 +10,11 @@ import { GeoServiceService } from '../services/geo-service.service';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
 import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
+import { MilkdownEditorComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {
   const activeRoute = {
@@ -37,6 +38,7 @@ const setup = async () => {
       { provide: TailormapAdminApiV1Service, useValue: { getGroups$: vi.fn(() => of([])) } },
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
     ],
+    configureTestBed: testBed => testBed.overrideComponent(MilkdownEditorComponent, { set: { template: '' } }),
   });
   return { updateGeoServiceDetails, updateGeoServiceSettings, updateGeoService$, refreshGeoService$, geoServiceModel };
 };

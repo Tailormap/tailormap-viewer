@@ -5,11 +5,11 @@ import {
 import { TemplatePicklistConfig } from './template-picklist.model';
 import { MatFormField, MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { MarkdownEditorService } from './markdown-editor.service';
-import { Observable, skip } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MilkdownEditorComponent } from './milkdown/milkdown-editor.component';
 import { MarkdownSourceEditorComponent } from './markdown-source-editor/markdown-source-editor.component';
+import { MarkdownEditorInsertUploadFn, MarkdownEditorResolveImageUrlFn, MarkdownEditorUploadFn } from './markdown-editor-upload.model';
 
 const LOCALSTORAGE_EDITOR_KEY = 'tm-markdown-editor-pick';
 
@@ -57,7 +57,18 @@ export class MarkdownEditorComponent implements OnInit {
   public templatePicklistConfig: TemplatePicklistConfig | undefined;
 
   @Input()
-  public uploadService$?: (file: File) => Observable<{ error?: string; url?: string } | null>;
+  public uploadService$?: MarkdownEditorUploadFn;
+
+  /**
+   * When set, the visual editor's built-in image item in the slash menu is replaced by an item which calls this
+   * function to pick an upload and inserts the returned Markdown.
+   */
+  public insertUpload$ = input<MarkdownEditorInsertUploadFn>();
+
+  /**
+   * When set, used by the visual editor and the source editor preview to get the URL to display an image.
+   */
+  public resolveImageUrl = input<MarkdownEditorResolveImageUrlFn>();
 
   @Input()
   public useInfoPanelWidth = false;
@@ -101,8 +112,9 @@ export class MarkdownEditorComponent implements OnInit {
 
   public ngOnInit() {
     this.mdEditorService.resetContent(this.content ?? "");
-    this.mdEditorService.getUpdatedContent$()
-      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+    // Only user edits are reported; content set through the `content` input or reset when switching editors is not
+    this.mdEditorService.getUserChanges$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(content => {
         this.contentChanged.emit(content);
       });

@@ -12,7 +12,7 @@
                   i18n="@@core.toc.show-layer-information">Show information about this layer</button>
         </div>
       } @else {
-        <div class="toc-node-description"><tm-htmlify [text]="description" /></div>
+        <div class="toc-node-description" [innerHTML]="description | markdownToHtml | async"></div>
       }
     }
     @if (node.metadata?.id) {

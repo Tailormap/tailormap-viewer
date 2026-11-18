@@ -716,9 +716,6 @@
       <trans-unit id="admin-core.catalog.description-in-popup" datatype="html">
         <source>Show description in a pop-up</source>
       </trans-unit>
-      <trans-unit id="admin-core.catalog.description.insert-upload.icon-button" datatype="html">
-        <source>Insert image or link to file</source>
-      </trans-unit>
       <trans-unit id="admin-core.catalog.edit-feature-source" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ featureSource.title }}"/></source>
       </trans-unit>
@@ -1481,11 +1478,20 @@
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
-        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+      <trans-unit id="admin-core.form.form-fields-not-shown" datatype="html">
+        <source>The following fields are hidden in the catalog, or no longer exist in the feature type. They will not be shown in the viewer.</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
-        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
+      <trans-unit id="admin-core.form.form-fields-not-shown-application" datatype="html">
+        <source>The following fields are hidden in the catalog or application layer settings, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only" datatype="html">
+        <source>The following fields are not editable in the catalog. They will be shown read-only in the viewer.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only-application" datatype="html">
+        <source>The following fields are not editable in the catalog or application layer settings. They will be shown read-only in the viewer.</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-required-read-only" datatype="html">
+        <source>The following fields are required in the form but cannot be edited, so new features will not get a value for them.</source>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
@@ -1506,7 +1512,7 @@
         <source>Tab name</source>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this column as options</source>
+        <source>Use unique values from this attribute as options</source>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
@@ -1585,6 +1591,12 @@
       </trans-unit>
       <trans-unit id="admin-core.groups.system-group" datatype="html">
         <source>System group</source>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-reading-file" datatype="html">
+        <source>Error reading file</source>
+      </trans-unit>
+      <trans-unit id="admin-core.layer-description.error-uploading-file" datatype="html">
+        <source>Error uploading file</source>
       </trans-unit>
       <trans-unit id="admin-core.navigation.applications" datatype="html">
         <source>Applications</source>

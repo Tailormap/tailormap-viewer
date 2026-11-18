@@ -9,7 +9,7 @@ import { ApplicationService } from '../services/application.service';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { RouterModule } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';

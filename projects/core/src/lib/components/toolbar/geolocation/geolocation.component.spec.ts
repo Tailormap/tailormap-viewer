@@ -29,7 +29,7 @@ describe('GeolocationComponent', () => {
         return 1;
     });
 
-    Object.defineProperty(global.navigator, 'geolocation', { value: { watchPosition } });
+    Object.defineProperty(global.navigator, 'geolocation', { value: { watchPosition }, configurable: true });
 
     await render(GeolocationComponent, {
       providers: [

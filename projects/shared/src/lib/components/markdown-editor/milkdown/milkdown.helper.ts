@@ -1,7 +1,9 @@
 import { combineLatest, from, take } from 'rxjs';
 import type { Ctx } from '@milkdown/ctx';
+import type { Node, Schema } from '@milkdown/kit/prose/model';
 import { BlockEditFeatureConfig } from '@milkdown/crepe/feature/block-edit';
 import { TemplatePicklistConfig } from '../template-picklist.model';
+import { MarkdownEditorInsertUploadFn } from '../markdown-editor-upload.model';
 
 export class MilkdownHelper {
 
@@ -36,7 +38,71 @@ export class MilkdownHelper {
       });
   }
 
-  public static getBlockEditConfiguration(templatePicklistConfig?: TemplatePicklistConfig): BlockEditFeatureConfig {
+  /**
+   * Removes the text in the current block (the `/` which opened the slash menu, like the built-in menu items do) and
+   * when given, parses the Markdown and inserts the result, so for example `![alt](url)` becomes an image node and
+   * `[label](url)` a link in the current paragraph.
+   *
+   * The parsed nodes are inserted directly instead of using `insert()` from `@milkdown/utils`: with `inline` that
+   * round-trips through the DOM, which strips hrefs with an unknown scheme (like `upload://`) from links.
+   */
+  public static replaceCurrentBlockText(ctx: Ctx, markdown: string | null) {
+    combineLatest([
+      from(import('@milkdown/kit/core')),
+      from(import('@milkdown/preset-commonmark')),
+      from(import('@milkdown/kit/prose/model')),
+    ])
+      .pipe(take(1))
+      .subscribe(([ coreModule, commonmarkModule, proseModelModule ]) => {
+        ctx.get(coreModule.commandsCtx).call(commonmarkModule.clearTextInCurrentBlockCommand.key);
+        if (!markdown) {
+          return;
+        }
+        const doc = ctx.get(coreModule.parserCtx)(markdown);
+        if (!doc) {
+          return;
+        }
+        // A single paragraph (e.g. a link) is inserted as an open slice so its inline content is merged into the
+        // current paragraph, other content (e.g. an image block) is inserted as-is.
+        const openDepth = doc.childCount === 1 && doc.firstChild?.isTextblock ? 1 : 0;
+        const view = ctx.get(coreModule.editorViewCtx);
+        view.dispatch(view.state.tr
+          .replaceSelection(new proseModelModule.Slice(doc.content, openDepth, openDepth))
+          .scrollIntoView());
+      });
+  }
+
+  /**
+   * Uploads files which were dropped or pasted in the editor and creates the nodes to insert. Images become an image
+   * (block) node, other files a link with the file name as label. Files which failed to upload (empty URL) are skipped.
+   */
+  public static async createNodesForUploadedFiles(
+    files: FileList,
+    schema: Schema,
+    upload: (file: File) => Promise<string>,
+  ): Promise<Node[]> {
+    const imageNodeType = schema.nodes['image-block'] ?? schema.nodes['image'];
+    const linkMarkType = schema.marks['link'];
+    const nodes = await Promise.all(Array.from(files).map(async file => {
+      const url = await upload(file);
+      if (!url) {
+        return null;
+      }
+      if (file.type.startsWith('image/')) {
+        return imageNodeType?.createAndFill({ src: url }) ?? null;
+      }
+      if (!linkMarkType) {
+        return null;
+      }
+      return schema.text(file.name || url, [linkMarkType.create({ href: url })]);
+    }));
+    return nodes.filter((node): node is Node => node !== null);
+  }
+
+  public static getBlockEditConfiguration(
+    templatePicklistConfig?: TemplatePicklistConfig,
+    insertUpload?: MarkdownEditorInsertUploadFn,
+  ): BlockEditFeatureConfig {
     return {
       // @ts-expect-error TS2353: Object literal may only specify known properties, and 'slashMenuTextGroupLabel' does not exist in type etc...
       slashMenuTextGroupLabel: $localize `:@@shared.markdown-editor.textgroup:Text`,
@@ -57,6 +123,25 @@ export class MilkdownHelper {
       slashMenuCodeBlockLabel: $localize `:@@shared.markdown-editor.codeblock:Code Block`,
       slashMenuTableLabel: $localize `:@@shared.markdown-editor.table:Table`,
       buildMenu: builder => {
+        if (insertUpload) {
+          // Replace the built-in image item with an item which uses our own upload picker
+          const advancedGroup = builder.getGroup('advanced');
+          const advancedItems = advancedGroup.group.items;
+          advancedGroup.clear();
+          advancedItems.forEach(i => {
+            if (i.key !== 'image') {
+              advancedGroup.addItem(i.key, i);
+              return;
+            }
+            advancedGroup.addItem('insert-upload', {
+              ...i,
+              label: $localize `:@@shared.markdown-editor.image-or-file:Image or file`,
+              onRun: (ctx: Ctx) => insertUpload()
+                .pipe(take(1))
+                .subscribe(markdown => MilkdownHelper.replaceCurrentBlockText(ctx, markdown)),
+            });
+          });
+        }
         if (!templatePicklistConfig) {
           return;
         }

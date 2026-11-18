@@ -14,14 +14,6 @@ import { selectLayers } from '../../../map';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { DataSourceManagerService } from '../../../services';
 
-// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
-// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
-// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
-const idState = vi.hoisted(() => ({ count: 0 }));
-vi.mock('nanoid', () => ({
-  nanoid: () => `id-${++idState.count}`,
-}));
-
 const selectedGroup = getSpatialFilterGroup(['CIRCLE(1 2 3)'], [{ layerId: '1', column: ['geom'] }]);
 
 const setup = (
@@ -29,7 +21,6 @@ const setup = (
   hasSelectedLayers?: boolean,
   overrideGroup?: FilterGroupModel<SpatialFilterModel>,
 ) => {
-  idState.count = 0;
   const mockStore = provideMockStore({
     initialState: {},
     selectors: [
@@ -106,9 +97,9 @@ describe('SpatialFilterCrudService', () => {
     );
     const createdGroup: FilterGroupModel<SpatialFilterModel> = {
       ...spatialGroup,
-      id: 'id-2',
+      id: expect.any(String),
       source: 'SPATIAL_FILTER_FORM',
-      filters: spatialGroup.filters.map((filter) => ({ ...filter, id: 'id-1' })),
+      filters: spatialGroup.filters.map((filter) => ({ ...filter, id: expect.any(String) })),
     };
     expect(dispatch).toHaveBeenNthCalledWith(1, addFilterGroup({ filterGroup: createdGroup }));
     expect(dispatch).toHaveBeenNthCalledWith(2, setSelectedFilterGroup({ filterGroup: createdGroup }));

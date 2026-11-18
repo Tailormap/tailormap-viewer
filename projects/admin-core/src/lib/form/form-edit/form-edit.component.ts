@@ -9,9 +9,12 @@ import { ConfirmDialogService } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
   selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid, selectDraftFormTabs,
+  selectDraftFormFieldValid,
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
-import { clearSelectedForm, draftFormClearSelection, updateDraftForm, updateDraftFormValid } from '../state/form.actions';
+import {
+  clearSelectedForm, draftFormClearSelection, draftFormCorrectFieldTypes, updateDraftForm, updateDraftFormValid,
+} from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
 import { ExtendedCatalogModelHelper } from '../../catalog/helpers/extended-catalog-model.helper';
@@ -91,27 +94,45 @@ export class FormEditComponent implements OnInit, OnDestroy {
     this.canSave$ = combineLatest([
       this.store$.select(selectDraftFormUpdated),
       this.store$.select(selectDraftFormValid),
-    ]).pipe(map(([ updated, valid ]) => updated && valid));
+      this.store$.select(selectDraftFormFieldValid),
+    ]).pipe(map(([ updated, valid, fieldValid ]) => updated && valid && fieldValid));
+    // Correct stale field types (from an old admin default or a changed attribute type after refreshing the feature source), so
+    // opening and saving the form fixes them. The draft form is marked as updated only when something was corrected.
+    combineLatest([
+      this.form$.pipe(map(form => form?.id), distinctUntilChanged()),
+      this.featureType$,
+    ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(([ formId, featureType ]) => {
+        if (formId && featureType) {
+          this.store$.dispatch(draftFormCorrectFieldTypes({
+            attributes: featureType.attributes.map(a => ({ name: a.name, type: a.type })),
+          }));
+        }
+      });
     this.form$
       .pipe(
-        takeUntil(this.destroyed),
         distinctUntilChanged((f1, f2) => {
           return f1?.featureTypeName === f2?.featureTypeName && f1?.featureSourceId === f2?.featureSourceId;
         }),
+        // Keep following the feature type in the store so changes made via the feature type settings dialog (for
+        // example making attributes editable) are reflected in the warnings and attribute list
+        switchMap(form => {
+          if (!form?.featureTypeName) {
+            return of({ form, featureType: null });
+          }
+          this.loadingFeatureTypeSubject$.next(true);
+          return this.featureSourceService.getDraftFeatureTypeByName$(form.featureTypeName, `${form.featureSourceId}`)
+            .pipe(map(featureType => ({ form, featureType })));
+        }),
+        // Must be after switchMap to also stop following the draft feature type in the store, otherwise it keeps
+        // reloading this feature source as the draft when another page loads a different draft feature source
+        takeUntil(this.destroyed),
       )
-      .subscribe(form => {
-        if (!form?.featureTypeName) {
-          this.featureTypeSubject$.next(null);
-          return;
-        }
-        this.loadingFeatureTypeSubject$.next(true);
-        this.featureSourceService.loadFeatureType$(form.featureTypeName, `${form.featureSourceId}`)
-          .pipe(take(1))
-          .subscribe(featureType => {
-            this.featureTypeSubject$.next(featureType);
-            this.extendedFeatureTypeSubject$.next(featureType ? ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, `${form.featureSourceId}`) : null);
-            this.loadingFeatureTypeSubject$.next(false);
-          });
+      .subscribe(({ form, featureType }) => {
+        this.featureTypeSubject$.next(featureType);
+        this.extendedFeatureTypeSubject$.next(featureType && form ? ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, `${form.featureSourceId}`) : null);
+        this.loadingFeatureTypeSubject$.next(false);
       });
   }
 

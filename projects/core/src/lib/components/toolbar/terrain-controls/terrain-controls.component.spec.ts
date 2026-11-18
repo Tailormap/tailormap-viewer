@@ -39,8 +39,8 @@ describe('TerrainControlsComponent', () => {
         }),
       ],
     });
-    expect(screen.findByText('Opacity'));
-    expect(screen.findByText('Model'));
+    expect(await screen.findByText('Terrain opacity')).toBeInTheDocument();
+    expect(await screen.findByText('Terrain model')).toBeInTheDocument();
   });
 
 });

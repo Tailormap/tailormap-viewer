@@ -7,14 +7,6 @@ import { SpatialFilterCrudService } from '../services/spatial-filter-crud.servic
 import { of } from 'rxjs';
 import { createMapServiceMockWithDrawingTools } from '../../../test-helpers/map-service.mock';
 
-// `vi.mock` factories are hoisted above the rest of the file, so a plain outer `let` they close
-// over is not reliably connected to the factory (Vitest only special-cases `mock`-prefixed
-// bindings, or ones declared through `vi.hoisted`) - use `vi.hoisted` to share the counter safely.
-const idState = vi.hoisted(() => ({ count: 0 }));
-vi.mock('nanoid', () => ({
-  nanoid: () => `id-${++idState.count}`,
-}));
-
 const setup = async () => {
   const store = { dispatch: vi.fn(), select: vi.fn(() => of(null)) };
   const mapServiceMock = createMapServiceMockWithDrawingTools();
@@ -37,7 +29,7 @@ const setup = async () => {
 describe('SpatialFilterFormDrawGeometriesComponent', () => {
 
   test('should render and handle add drawing event', async () => {
-    const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: 'id-1' };
+    const expectedGeom = { geometry: 'CIRCLE(1,2,3)', id: expect.any(String) };
     const { addDrawingEvent, addGeometry } = await setup();
     await userEvent.click(screen.getByLabelText('Draw circle'));
     addDrawingEvent({ type: 'end', geometry: expectedGeom.geometry });

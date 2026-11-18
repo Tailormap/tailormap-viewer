@@ -68,10 +68,11 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   public formControl = new FormControl<string | number | boolean>('');
 
   public ngOnInit() {
-    const value = this.item?.value || '';
-    this.options = [{ value }];
-    if (!this.item?.uniqueValuesAsOptions) {
-      this.options = this.item?.valueList || [];
+    const value = this.item?.value ?? '';
+    if (this.item?.uniqueValuesAsOptions) {
+      this.options = SelectFieldComponent.withCurrentValue([], value);
+    } else {
+      this.options = SelectFieldComponent.withCurrentValue(this.item?.valueList || [], value);
       this.optionsLoaded = true;
     }
     if (this.item?.required) {
@@ -83,6 +84,21 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
       .subscribe(formValue => {
         this.valueChanged(formValue);
       });
+  }
+
+  /**
+   * Adds the current value of the feature as an option if it is not one of the options. Otherwise, a value that is not in the configured
+   * choices (for example existing data or an incomplete form configuration) would be shown as empty and could not be selected again after
+   * changing it, making it look like editing the feature clears the value.
+   */
+  private static withCurrentValue(
+    options: FormFieldValueListItemModel[],
+    value: string | number | boolean | null | undefined,
+  ): FormFieldValueListItemModel[] {
+    if (value === null || typeof value === 'undefined' || value === '' || options.some(o => o.value === value)) {
+      return options;
+    }
+    return [{ value }, ...options ];
   }
 
   public displayLabel = (result: string | number | boolean): string => {
@@ -147,7 +163,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
         })),
       )
       .subscribe(response => {
-        this.options = response.values.map(v => ({ value: v }));
+        this.options = SelectFieldComponent.withCurrentValue(response.values.map(v => ({ value: v })), this.item?.value);
         this.loading = false;
         this.optionsLoaded = true;
         this.cdr.detectChanges();
