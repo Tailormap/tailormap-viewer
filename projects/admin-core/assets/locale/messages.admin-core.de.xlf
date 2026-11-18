@@ -1886,6 +1886,18 @@
         <source>Autofill Username</source>
         <target>Autofill Benutzername</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source" datatype="html">
+        <source>Choices</source>
+        <target>Auswahl</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source-list" datatype="html">
+        <source>Values from the list</source>
+        <target>Werte aus der Liste</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source-unique-values" datatype="html">
+        <source>Unique values of the attribute</source>
+        <target>Eindeutige Werte des Attributs</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.control-type" datatype="html">
         <source>Edit control</source>
         <target>Eingabeelement</target>
@@ -2025,10 +2037,6 @@
       <trans-unit id="admin-core.form.tab-name" datatype="html">
         <source>Tab name</source>
         <target>Tab name</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this attribute as options</source>
-        <target>Eindeutige Werte aus diesem Attribut als Optionen verwenden</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>

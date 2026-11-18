@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, forwardRef, DestroyRef, OnInit, Output, EventEmitter, ChangeDetectorRef, inject } from '@angular/core';
 import { ViewerEditFormFieldModel } from '../../models/viewer-edit-form-field.model';
-import { FormFieldValueListItemModel, UniqueValuesService } from '@tailormap-viewer/api';
+import { ChoiceListSourceEnum, ChoiceListValueModel, UniqueValuesService } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../../../state/core.selectors';
 import { filter, take } from 'rxjs';
@@ -58,8 +58,11 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
   public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
 
   public loading = false;
-  public options: FormFieldValueListItemModel[] = [];
+  public options: ChoiceListValueModel[] = [];
   private optionsLoaded = false;
+  /** The user can enter a value which is not one of the options. */
+  public allowFreeInput = false;
+  private useUniqueValues = false;
 
   public disabled = false;
   private onChange: any | null = null;
@@ -69,10 +72,12 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
 
   public ngOnInit() {
     const value = this.item?.value ?? '';
-    if (this.item?.uniqueValuesAsOptions) {
+    this.allowFreeInput = !!this.item?.choiceList?.allowFreeInput;
+    this.useUniqueValues = this.item?.choiceList?.source === ChoiceListSourceEnum.UNIQUE_VALUES;
+    if (this.useUniqueValues) {
       this.options = SelectFieldComponent.withCurrentValue([], value);
     } else {
-      this.options = SelectFieldComponent.withCurrentValue(this.item?.valueList || [], value);
+      this.options = SelectFieldComponent.withCurrentValue(this.item?.choiceList?.values || [], value);
       this.optionsLoaded = true;
     }
     if (this.item?.required) {
@@ -92,9 +97,9 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
    * changing it, making it look like editing the feature clears the value.
    */
   private static withCurrentValue(
-    options: FormFieldValueListItemModel[],
+    options: ChoiceListValueModel[],
     value: string | number | boolean | null | undefined,
-  ): FormFieldValueListItemModel[] {
+  ): ChoiceListValueModel[] {
     if (value === null || typeof value === 'undefined' || value === '' || options.some(o => o.value === value)) {
       return options;
     }
@@ -132,8 +137,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
       return;
     }
     const isOption = this.options.findIndex(o => o.value === value) !== -1;
-    const allowToChangeOptions = !this.item.allowValueListOnly;
-    if (!allowToChangeOptions && !isOption && typeof this.item.value !== 'undefined') {
+    if (!this.allowFreeInput && !isOption && typeof this.item.value !== 'undefined') {
       value = this.item.value;
       this.formControl.patchValue(value, { emitEvent: false });
       return;
@@ -142,7 +146,7 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
       this.onChange(value);
     }
     this.changed.emit(value);
-    this.checkUniqueValueCache(isOption, allowToChangeOptions);
+    this.checkUniqueValueCache(isOption);
   }
 
   public loadUniqueValues() {
@@ -170,8 +174,8 @@ export class SelectFieldComponent implements OnInit, ControlValueAccessor {
       });
   }
 
-  private checkUniqueValueCache(isOption: boolean, allowToChangeOptions: boolean) {
-    if (isOption || !allowToChangeOptions || !this.item?.uniqueValuesAsOptions) {
+  private checkUniqueValueCache(isOption: boolean) {
+    if (isOption || !this.allowFreeInput || !this.useUniqueValues) {
       return;
     }
     this.store$.select(selectViewerId)

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import {
-  AttributeModel, AttributeType, FormFieldModel, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, LayerDetailsModel,
+  AttributeModel, AttributeType, ChoiceListSourceEnum, FormFieldModel, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, LayerDetailsModel,
 } from '@tailormap-viewer/api';
 import { EditModelHelper } from './edit-model.helper';
 
@@ -10,7 +10,6 @@ const getAttribute = (overrides: Partial<AttributeModel>): AttributeModel => ({
   type: AttributeType.STRING,
   editable: true,
   nullable: true,
-  allowValueListOnly: false,
   ...overrides,
 });
 
@@ -83,13 +82,34 @@ describe('EditModelHelper', () => {
     expect(getField(layerDetails, 'eindregistratie')?.controlType).toBe(FormFieldControlTypeEnum.DATETIME);
   });
 
-  test('uses a compatible form field control and its value list', () => {
+  test('uses a compatible form field control and its choice list', () => {
     const layerDetails = getLayerDetails([
-      { name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: 'a' }, { value: 'b', label: 'B' }] },
+      {
+        name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.SELECT,
+        choiceList: { source: ChoiceListSourceEnum.LIST, values: [{ value: 'a' }, { value: 'b', label: 'B' }], allowFreeInput: true },
+      },
     ]);
     expect(getField(layerDetails, 'name')).toEqual(expect.objectContaining({
       controlType: FormFieldControlTypeEnum.SELECT,
-      valueList: [{ value: 'a', label: 'a' }, { value: 'b', label: 'B' }],
+      choiceList: { source: ChoiceListSourceEnum.LIST, values: [{ value: 'a', label: 'a' }, { value: 'b', label: 'B' }], allowFreeInput: true },
+    }));
+  });
+
+  test('keeps the unique values source of a choice list', () => {
+    const layerDetails = getLayerDetails([
+      { name: 'name', label: 'Name', controlType: FormFieldControlTypeEnum.SELECT, choiceList: { source: ChoiceListSourceEnum.UNIQUE_VALUES } },
+    ]);
+    expect(getField(layerDetails, 'name')?.choiceList).toEqual({ source: ChoiceListSourceEnum.UNIQUE_VALUES, values: [] });
+  });
+
+  test('uses a choice list for a boolean attribute which is not nullable', () => {
+    const layerDetails = getLayerDetailsModel({
+      editable: true,
+      attributes: [getAttribute({ name: 'flag', type: AttributeType.BOOLEAN, nullable: false })],
+    });
+    expect(getField(layerDetails, 'flag')).toEqual(expect.objectContaining({
+      controlType: FormFieldControlTypeEnum.SELECT,
+      choiceList: { source: ChoiceListSourceEnum.LIST, values: [{ value: true, label: 'True' }, { value: false, label: 'False' }] },
     }));
   });
 
@@ -101,7 +121,7 @@ describe('EditModelHelper', () => {
     expect(EditModelHelper.createEditModel(feature, layerDetails, []).map(f => f.name)).toEqual([ 'creationdate', 'name' ]);
   });
 
-  test('leaves out value list items which cannot be parsed to the attribute type', () => {
+  test('leaves out choice list values which cannot be parsed to the attribute type', () => {
     const layerDetails = getLayerDetailsModel({
       editable: true,
       attributes: [
@@ -111,13 +131,15 @@ describe('EditModelHelper', () => {
       form: {
         options: { tabs: [] },
         fields: [
-          { name: 'count', label: 'Count', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: '1' }, { value: 'abc' }, { value: '' }, { value: 2 }] },
-          { name: 'flag', label: 'Flag', controlType: FormFieldControlTypeEnum.SELECT, valueList: [{ value: 'true' }, { value: 'yes' }, { value: 'false', label: 'No' }] },
+          { name: 'count', label: 'Count', controlType: FormFieldControlTypeEnum.SELECT,
+            choiceList: { source: ChoiceListSourceEnum.LIST, values: [{ value: '1' }, { value: 'abc' }, { value: '' }, { value: '2' }] } },
+          { name: 'flag', label: 'Flag', controlType: FormFieldControlTypeEnum.SELECT,
+            choiceList: { source: ChoiceListSourceEnum.LIST, values: [{ value: 'true' }, { value: 'yes' }, { value: 'false', label: 'No' }] } },
         ],
       },
     });
-    expect(getField(layerDetails, 'count')?.valueList).toEqual([{ value: 1, label: '1' }, { value: 2, label: '2' }]);
-    expect(getField(layerDetails, 'flag')?.valueList).toEqual([{ value: true, label: 'true' }, { value: false, label: 'No' }]);
+    expect(getField(layerDetails, 'count')?.choiceList?.values).toEqual([{ value: 1, label: '1' }, { value: 2, label: '2' }]);
+    expect(getField(layerDetails, 'flag')?.choiceList?.values).toEqual([{ value: true, label: 'true' }, { value: false, label: 'No' }]);
   });
 
 });

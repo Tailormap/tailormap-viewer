@@ -31,14 +31,8 @@ export class FormFieldControlTypeHelper {
     return FormFieldControlTypeHelper.getAllowedAttributeTypes(controlType).includes(attributeType);
   }
 
-  /**
-   * The edit control to use for an attribute when no (compatible) type is configured. A configured value list on the
-   * attribute always results in a choice list.
-   */
-  public static getDefaultControlType(attributeType: AttributeType, hasValueList?: boolean): FormFieldControlTypeEnum {
-    if (hasValueList) {
-      return FormFieldControlTypeEnum.SELECT;
-    }
+  /** The edit control to use for an attribute when no (compatible) type is configured. */
+  public static getDefaultControlType(attributeType: AttributeType): FormFieldControlTypeEnum {
     switch (attributeType) {
       case AttributeType.BOOLEAN:
         return FormFieldControlTypeEnum.CHECKBOX;
