@@ -134,7 +134,11 @@ Viewer UI is organized as feature component groups under `projects/core/src/lib/
 - **Naming**: `kebab-case` filenames, `PascalCase` class names. Selector prefixes per library (see table above).
 - **Do not import OpenLayers outside the `map` library**; wrap it instead.
 - **Do not import `@angular/localize/init` / `$localize`** — it is provided once in `polyfills.ts`.
-- **i18n**: locale messages are extracted with `npm run extract-locale`. The default build is English; `nl`/`de` are localized configurations.
+- **i18n**: locale messages are extracted with `npm run extract-locale` (or `extract-locale-shared|core|admin-core` for one library). The default build is English; `nl`/`de` are localized configurations.
+  - The extraction (`tm-extract-i18n` from tailormap-tools) temporarily rewrites `angular.json` (unformatted, so far fewer lines) and saves the original as `angular.json.orig`; on success it restores `angular.json` itself. If extraction fails, both stay behind: run `mv angular.json.orig angular.json` before doing anything else, and never commit the rewritten `angular.json` or the `.orig` file.
+  - A failure is not always tooling trouble: extraction does a strict AOT build that type-checks templates. Neither `tsc --noEmit` nor the Vitest tests catch template errors (e.g. a renamed model property still used in an `.html` template), so run the extraction after renaming properties used in templates, and read the error output. A successful run prints "adding/removing ids" lines.
+  - Changes the extraction makes to `.xlf` files of libraries you didn't touch (drift such as a changed `equiv-text`) are unrelated to your change; don't commit them with it.
+  - When a source string or its interpolation changes, the `nl`/`de` targets get `state="new"`. Update the translation and remove `state="new"`.
 - **Scaffolding**: `npm run ng -- generate component components/[name] --project core|map`. For an HTTP service: `npm run ng -- generate service services/[name] --project core|map --http-service`.
 
 ## Testing Patterns
