@@ -112,24 +112,27 @@ export class FormEditComponent implements OnInit, OnDestroy {
       });
     this.form$
       .pipe(
-        takeUntil(this.destroyed),
         distinctUntilChanged((f1, f2) => {
           return f1?.featureTypeName === f2?.featureTypeName && f1?.featureSourceId === f2?.featureSourceId;
         }),
+        // Keep following the feature type in the store so changes made via the feature type settings dialog (for
+        // example making attributes editable) are reflected in the warnings and attribute list
+        switchMap(form => {
+          if (!form?.featureTypeName) {
+            return of({ form, featureType: null });
+          }
+          this.loadingFeatureTypeSubject$.next(true);
+          return this.featureSourceService.getDraftFeatureTypeByName$(form.featureTypeName, `${form.featureSourceId}`)
+            .pipe(map(featureType => ({ form, featureType })));
+        }),
+        // Must be after switchMap to also stop following the draft feature type in the store, otherwise it keeps
+        // reloading this feature source as the draft when another page loads a different draft feature source
+        takeUntil(this.destroyed),
       )
-      .subscribe(form => {
-        if (!form?.featureTypeName) {
-          this.featureTypeSubject$.next(null);
-          return;
-        }
-        this.loadingFeatureTypeSubject$.next(true);
-        this.featureSourceService.loadFeatureType$(form.featureTypeName, `${form.featureSourceId}`)
-          .pipe(take(1))
-          .subscribe(featureType => {
-            this.featureTypeSubject$.next(featureType);
-            this.extendedFeatureTypeSubject$.next(featureType ? ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, `${form.featureSourceId}`) : null);
-            this.loadingFeatureTypeSubject$.next(false);
-          });
+      .subscribe(({ form, featureType }) => {
+        this.featureTypeSubject$.next(featureType);
+        this.extendedFeatureTypeSubject$.next(featureType && form ? ExtendedCatalogModelHelper.getExtendedFeatureTypeId(featureType.id, `${form.featureSourceId}`) : null);
+        this.loadingFeatureTypeSubject$.next(false);
       });
   }
 
