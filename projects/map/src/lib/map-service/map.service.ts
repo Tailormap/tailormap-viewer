@@ -295,8 +295,8 @@ export class MapService {
     this.map.zoomToScale(scale);
   }
 
-  public disableMouseWheelZoom() {
-    this.map.disableMouseWheelZoom();
+  public setMapGesturesEnabled(enabled: boolean) {
+    this.map.setMapGesturesEnabled(enabled);
   }
 
   public setLayerSwipe(swipe: LayerSwipeModel | null) {
