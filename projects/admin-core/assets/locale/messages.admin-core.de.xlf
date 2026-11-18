@@ -2023,8 +2023,8 @@
         <target>Tab name</target>
       </trans-unit>
       <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this column as options</source>
-        <target>Eindeutige Werte aus dieser Spalte als Optionen verwenden</target>
+        <source>Use unique values from this attribute as options</source>
+        <target>Eindeutige Werte aus diesem Attribut als Optionen verwenden</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>
