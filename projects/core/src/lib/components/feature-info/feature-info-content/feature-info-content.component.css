@@ -15,9 +15,10 @@ tm-error-message {
 }
 
 .content {
-  flex: 1;
-  overflow: auto;
   min-height: 150px;
+  /* The 48px touch target of the filter button on the last row sticks out a few px below the list, which would make
+     the wrapper scrollable even when all attributes fit. Clip vertically only so nothing is cut off horizontally. */
+  overflow-y: clip;
 }
 
 .content h2 {
@@ -174,5 +175,5 @@ tm-error-message {
 }
 
 .feature-info-wrapper {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
