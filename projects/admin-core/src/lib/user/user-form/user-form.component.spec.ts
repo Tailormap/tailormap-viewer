@@ -8,6 +8,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
 import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { TailormapSecurityApiV1Service } from '@tailormap-viewer/api';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 
 const setup = async (isValidPassword: boolean) => {
   const mockAdminApiService = {
@@ -26,6 +27,7 @@ const setup = async (isValidPassword: boolean) => {
       { provide: TailormapSecurityApiV1Service, useValue: mockApiService },
       provideMockStore({ initialState: { [userStateKey]: initialUserState } }),
       AuthenticatedUserTestHelper.provideAuthenticatedUserServiceWithAdminUser(),
+      provideLuxonDateAdapter(),
     ],
   });
   return { userUpdated, mockApiService };
@@ -63,6 +65,22 @@ describe('UserFormComponent', () => {
     await vi.waitFor(() => {
       expect(mockApiService.validatePasswordStrength$).toHaveBeenCalled();
       expect(screen.getByText('Password too short or too easily guessable')).toBeInTheDocument();
+    });
+  });
+
+  test('sets valid until with the date and time picker', async () => {
+    const { userUpdated } = await setup(true);
+    await userEvent.type(screen.getByLabelText('Username'), 'user1');
+    await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
+    await userEvent.type(screen.getByLabelText('Confirm password'), 'secret-secret');
+    expect(screen.getByRole('group', { name: 'Valid until' })).toBeInTheDocument();
+    await userEvent.type(screen.getByRole('textbox', { name: 'Valid until' }), '12/31/2026');
+    await userEvent.type(screen.getByRole('combobox', { name: 'Time' }), '11:30 PM');
+    await vi.waitFor(() => {
+      expect(userUpdated).toHaveBeenLastCalledWith(expect.objectContaining({
+        username: 'user1',
+        validUntil: new Date('2026-12-31T23:30:00.000Z'),
+      }));
     });
   });
 

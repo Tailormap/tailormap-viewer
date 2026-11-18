@@ -518,9 +518,6 @@
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
       </trans-unit>
-      <trans-unit id="core.edit.time" datatype="html">
-        <source>Time</source>
-      </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
       </trans-unit>
