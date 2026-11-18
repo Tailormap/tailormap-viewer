@@ -53,7 +53,7 @@ describe('TailormapAdminApiV1Service', () => {
 
   test('queries API for getCadastralMunicipalities$', () => {
     service.getCadastralMunicipalities$().subscribe();
-    const req = httpController.expectOne({ url: '/api/admin/pdok/cadastral-municipalities', method: 'GET' });
+    const req = httpController.expectOne({ url: '/api/admin/cadastral-municipalities', method: 'GET' });
     req.flush([]);
   });
 

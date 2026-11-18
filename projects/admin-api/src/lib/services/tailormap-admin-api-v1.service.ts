@@ -474,8 +474,8 @@ export class TailormapAdminApiV1Service implements TailormapAdminApiV1ServiceMod
     return this.httpClient.get<AdminServerConfigModel>(`${TailormapAdminApiV1Service.BASE_URL}/server/config`);
   }
 
-  /** Kadastrale gemeenten (one entry per AKR code, sorted by code), built and cached by tailormap-api from PDOK. */
+  /** Kadastrale gemeenten (one entry per AKR code, sorted by code), from the Kadaster IMKAD waardelijst, cached by tailormap-api. */
   public getCadastralMunicipalities$(): Observable<CadastralMunicipalityModel[]> {
-    return this.httpClient.get<CadastralMunicipalityModel[]>(`${TailormapAdminApiV1Service.BASE_URL}/pdok/cadastral-municipalities`);
+    return this.httpClient.get<CadastralMunicipalityModel[]>(`${TailormapAdminApiV1Service.BASE_URL}/cadastral-municipalities`);
   }
 }
