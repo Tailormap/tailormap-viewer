@@ -13,7 +13,7 @@ import { createGeoServiceMock } from '../helpers/mocks/geo-service.service.mock'
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { MilkdownEditorComponent } from '@tailormap-viewer/shared';
 
 const setup = async () => {

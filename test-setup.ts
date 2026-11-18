@@ -90,6 +90,8 @@ MockStore.prototype.overrideSelector = function (this: MockStore, ...args: Param
 
 afterEach(() => {
   vi.useRealTimers();
+  // Undo vi.spyOn on shared objects (e.g. static helpers) so stubs do not leak into later spec files.
+  vi.restoreAllMocks();
   overriddenSelectors.forEach(selector => {
     selector.release();
     selector.clearResult();
