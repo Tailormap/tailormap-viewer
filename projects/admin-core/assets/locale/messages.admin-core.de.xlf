@@ -2034,9 +2034,9 @@
         <source>Required field</source>
         <target>Pflichtfeld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.tab-name" datatype="html">
-        <source>Tab name</source>
-        <target>Tab name</target>
+      <trans-unit id="admin-core.form.tab-label" datatype="html">
+        <source>Tab label</source>
+        <target>Tab-Bezeichnung</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>

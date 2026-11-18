@@ -69,7 +69,6 @@ describe('EditFormComponent', () => {
             ],
             form: {
               options: {
-                description: 'Test form',
                 tabs: [],
               },
               fields: [

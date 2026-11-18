@@ -2033,9 +2033,9 @@
         <source>Required field</source>
         <target>Verplicht veld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.tab-name" datatype="html">
-        <source>Tab name</source>
-        <target>Naam tabblad</target>
+      <trans-unit id="admin-core.form.tab-label" datatype="html">
+        <source>Tab label</source>
+        <target>Label tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>

@@ -1505,8 +1505,8 @@
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
       </trans-unit>
-      <trans-unit id="admin-core.form.tab-name" datatype="html">
-        <source>Tab name</source>
+      <trans-unit id="admin-core.form.tab-label" datatype="html">
+        <source>Tab label</source>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>

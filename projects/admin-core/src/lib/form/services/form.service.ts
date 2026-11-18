@@ -143,7 +143,7 @@ export class FormService {
               fields: form.fields,
               options: {
                 tabs: form.options.tabs,
-                description: form.options.description,
+                adminComments: form.options.adminComments,
               },
             };
             return this.updateForm$(draftForm.id, draftForm);
