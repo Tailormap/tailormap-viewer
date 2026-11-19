@@ -9,7 +9,6 @@ import { ExtendedAppLayerModel } from '../../../map/models';
 import { selectViewerId } from '../../../state/core.selectors';
 import { take } from 'rxjs/operators';
 import { selectSearchableLayers } from '../../../map/state/map.selectors';
-import { CadastralParcelSearchHelper } from './cadastral-parcel-search.helper';
 import { CADASTRAL_MUNICIPALITY_LIST } from '@tailormap-viewer/shared';
 
 @Injectable({
@@ -155,7 +154,7 @@ export class SimpleSearchService {
     }
     return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
-        q: CadastralParcelSearchHelper.toParcelQuery(searchTerm),
+        q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
         fl: 'id,weergavenaam,geometrie_rd,centroide_rd',
         fq: filter,
@@ -168,7 +167,7 @@ export class SimpleSearchService {
         attribution: $localize `:@@core.toolbar.search-cadastral-parcels-pdok-attribution:Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
           id: doc.id,
-          label: CadastralParcelSearchHelper.toLabel(doc.weergavenaam),
+          label: SimpleSearchService.toLabel(doc.weergavenaam),
           geometry: doc.geometrie_rd || doc.centroide_rd,
           projectionCode: ProjectionCodesEnum.RD,
         })),
@@ -179,6 +178,14 @@ export class SimpleSearchService {
   /** Looks up the AKR codes of kadastrale gemeente names. Unknown names are ignored. */
   private static toCadastralMunicipalityCodes(names: string[]): string[] {
     return [...new Set(names.flatMap(name => SimpleSearchService.CADASTRAL_CODES_BY_NAME.get(name) ?? []))];
+  }
+
+  /**
+   * Removes the "Perceel " prefix from a Locatieserver `weergavenaam`, because the result group already says the
+   * results are parcels. "Perceel Aalten (ATN02) K 2838" -> "Aalten (ATN02) K 2838".
+   */
+  private static toLabel(weergavenaam: string): string {
+    return weergavenaam.replace(/^Perceel\s+/i, '');
   }
 
 }
