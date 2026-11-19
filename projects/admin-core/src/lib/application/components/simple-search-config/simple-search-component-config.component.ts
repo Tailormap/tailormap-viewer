@@ -74,7 +74,6 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
 
   public searchCadastralParcelsControl = new FormControl<boolean>(false, { nonNullable: true });
 
-  /** Stored names of the selected kadastrale gemeenten. */
   private cadastralMunicipalitiesSubject = new BehaviorSubject<string[]>([]);
   public cadastralMunicipalities$ = this.cadastralMunicipalitiesSubject.asObservable();
 
@@ -139,7 +138,6 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     this.saveConfig([...this.municipalitiesSubject.value].filter(m => m !== code));
   }
 
-  /** Adds the kadastrale gemeente selected in the autocomplete. Only names from the list can be added. */
   public addCadastralMunicipality(name: string) {
     if (SimpleSearchComponentConfigComponent.CADASTRAL_MUNICIPALITY_NAMES.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
       this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, name ]);
@@ -151,10 +149,6 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(n => n !== name));
   }
 
-  /**
-   * Stores the names rather than the AKR codes: names are what the admin selects and they stay readable in the config.
-   * The viewer looks up the codes for the Locatieserver filter.
-   */
   private saveCadastralMunicipalities(names: string[]) {
     this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'cadastralMunicipalities', names);
   }

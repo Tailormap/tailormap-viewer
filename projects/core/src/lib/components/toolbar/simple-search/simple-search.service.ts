@@ -133,14 +133,10 @@ export class SimpleSearchService {
   }
 
   /**
-   * Searches the PDOK Locatieserver for kadastrale percelen. Parcels are not returned by the default type filter of
-   * the suggest endpoint, so they are requested explicitly with `fq=type:perceel`. Parcels have no `gemeentecode`,
-   * so the municipality filter does not apply.
-   *
+   * Searches the PDOK Locatieserver for kadastrale percelen.
    * The configured kadastrale gemeenten are stored by name, but the filter uses their AKR codes on
    * `kadastrale_gemeentecode`: `kadastrale_gemeentenaam` is tokenized, so a name filter also matches longer names
-   * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly. When none of the
-   * configured names is known (anymore), no parcels are searched rather than searching without a restriction.
+   * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly.
    */
   private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel | null> {
     const filter = ['type:perceel'];
