@@ -134,21 +134,28 @@ export class SimpleSearchService {
   /**
    * Searches the PDOK Locatieserver for kadastrale percelen. Parcels are not returned by the default type filter of
    * the suggest endpoint, so they are requested explicitly with `fq=type:perceel`. Parcels have no `gemeentecode`,
-   * so the municipality filter does not apply; they can be restricted on `kadastrale_gemeentecode` instead.
+   * so the municipality filter does not apply; they can be restricted on `kadastrale_gemeentenaam` instead.
+   *
+   * `kadastrale_gemeentenaam` is a tokenized field, so a quoted name also matches longer names containing it (e.g.
+   * "Alphen" matches "Alphen aan den Rijn"). Results are therefore also filtered on an exact name match.
    */
   private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel> {
     const filter = ['type:perceel'];
-    if (config.cadastralMunicipalities && config.cadastralMunicipalities.length > 0) {
-      filter.push(`kadastrale_gemeentecode:(${config.cadastralMunicipalities.join(' OR ')})`);
+    const names = new Set(config.cadastralMunicipalities ?? []);
+    if (names.size > 0) {
+      filter.push(`kadastrale_gemeentenaam:(${[...names].map(SimpleSearchService.toSolrPhrase).join(' OR ')})`);
     }
     return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
         q: CadastralParcelSearchHelper.toParcelQuery(searchTerm),
         rows: SimpleSearchService.MAX_RESULTS.toString(),
-        fl: 'id,weergavenaam,geometrie_rd,centroide_rd',
+        fl: 'id,weergavenaam,geometrie_rd,centroide_rd,kadastrale_gemeentenaam',
         fq: filter,
       },
     }).pipe(
+      map(result => names.size === 0 ? result : {
+        response: { docs: result.response.docs.filter(doc => names.has(doc.kadastrale_gemeentenaam ?? '')) },
+      }),
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
         id: 'pdok-cadastral-parcels',
@@ -162,6 +169,11 @@ export class SimpleSearchService {
         })),
       })),
     );
+  }
+
+  /** Quotes a value as a Solr phrase, escaping backslashes and double quotes. */
+  private static toSolrPhrase(value: string): string {
+    return `"${value.replace(/[\\"]/g, '\\$&')}"`;
   }
 
 }

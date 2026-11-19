@@ -35,55 +35,48 @@ describe('SimpleSearchComponentConfigComponent', () => {
     expect(await screen.findByText('Cadastral municipality filter')).toBeInTheDocument();
   });
 
-  test('shows the selected kadastrale gemeenten and deletes only one code', async () => {
+  test('shows the selected kadastrale gemeenten and deletes one', async () => {
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: [ 'ATN02', 'ASD02', 'ASD05' ],
+      cadastralMunicipalities: [ 'Aalten', "'s-Gravenhage", 'Amsterdam' ],
     });
     expect(screen.getByRole('switch', { name: /Search cadastral parcels/ })).toBeChecked();
-    expect(await screen.findByText('Aalten (ATN02)')).toBeInTheDocument();
-    expect(screen.getByText('Amsterdam (ASD02)')).toBeInTheDocument();
-    expect(screen.getByText('Amsterdam (ASD05)')).toBeInTheDocument();
-    await userEvent.click(getDeleteButton('Amsterdam (ASD05)'));
-    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'ATN02', 'ASD02' ]);
+    expect(await screen.findByText('Aalten')).toBeInTheDocument();
+    expect(screen.getByText("'s-Gravenhage")).toBeInTheDocument();
+    expect(screen.getByText('Amsterdam')).toBeInTheDocument();
+    await userEvent.click(getDeleteButton('Amsterdam'));
+    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'Aalten', "'s-Gravenhage" ]);
   });
 
-  test('shows selected codes that are not in the list as bare code', async () => {
+  test('shows and deletes selected names that are not in the list', async () => {
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: [ 'ATN02', 'XXX99' ],
+      cadastralMunicipalities: [ 'Aalten', 'ATN02' ],
     });
-    expect(await screen.findByText('Aalten (ATN02)')).toBeInTheDocument();
-    await userEvent.click(getDeleteButton('XXX99'));
-    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['ATN02']);
+    expect(await screen.findByText('ATN02')).toBeInTheDocument();
+    await userEvent.click(getDeleteButton('ATN02'));
+    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['Aalten']);
   });
 
-  test('autocomplete has one option per code (also for a name with several codes), matches on name and code and excludes selected entries', async () => {
+  test('autocomplete matches on name, excludes selected names and saves the chosen name', async () => {
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: ['ABG00'],
+      cadastralMunicipalities: ['Aalburg'],
     });
+    expect(CADASTRAL_MUNICIPALITY_LIST).toContain('Aalburg');
     const input = await screen.findByRole('combobox', { name: 'Cadastral municipality' });
-    await userEvent.type(input, 'atn');
-    expect(await screen.findByRole('option', { name: 'Aalten (ATN02)' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Asten (ATN01)' })).toBeInTheDocument();
+    await userEvent.type(input, 'aal');
+    expect(await screen.findByRole('option', { name: 'Aalten' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Aalburg' })).not.toBeInTheDocument();
     await userEvent.clear(input);
-    await userEvent.type(input, 'aalburg');
-    await vi.waitFor(() => expect(screen.queryByRole('option', { name: 'Aalburg (ABG00)' })).not.toBeInTheDocument());
-    await userEvent.clear(input);
-    await userEvent.type(input, 'asd05');
-    expect(await screen.findByRole('option', { name: 'Amsterdam (ASD05)' })).toBeInTheDocument();
-    expect(screen.getAllByRole('option')).toHaveLength(1);
-    await userEvent.clear(input);
-    await userEvent.type(input, 'Amsterdam');
-    const amsterdamCodes = CADASTRAL_MUNICIPALITY_LIST.find(m => m.name === 'Amsterdam')?.codes ?? [];
-    await vi.waitFor(() => expect(screen.getAllByRole('option').map(o => o.textContent?.trim()))
-      .toEqual([...amsterdamCodes].sort().map(code => `Amsterdam (${code})`)));
-    await userEvent.click(screen.getByRole('option', { name: 'Amsterdam (ASD05)' }));
-    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'ABG00', 'ASD05' ]);
+    await userEvent.type(input, 'amsterdam');
+    await vi.waitFor(() => expect(screen.getAllByRole('option').map(o => o.textContent?.trim())).toEqual(['Amsterdam']));
+    await userEvent.click(screen.getByRole('option', { name: 'Amsterdam' }));
+    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'Aalburg', 'Amsterdam' ]);
+    expect(input).toHaveValue('');
   });
 
 });

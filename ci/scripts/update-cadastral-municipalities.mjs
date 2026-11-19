@@ -4,8 +4,8 @@
  * "KadastraleGemeente". Run by hand (npm run update-cadastral-municipalities) when Kadaster publishes a waardelijsten
  * release that changes KadastraleGemeente, then review the printed summary and the git diff, and commit.
  *
- * The output holds one entry per kadastrale gemeente name with its AKR codes (column "Toelichting"). Expired rows
- * (DatumTot on or before today) are left out. The file is only written when the result passes validation, so a broken
+ * The output is the sorted list of unique kadastrale gemeente names (column "Waarde"), as used in the PDOK Locatieserver
+ * field `kadastrale_gemeentenaam`. Expired rows (DatumTot on or before today) are left out. The file is only written when the result passes validation, so a broken
  * download never overwrites good data.
  *
  * Plain Node >= 24, no dependencies.
@@ -15,8 +15,7 @@ import { fileURLToPath } from 'node:url';
 
 const SOURCE_URL = 'https://developer.kadaster.nl/schemas/waardelijsten/KadastraleGemeente/KadastraleGemeente.csv';
 const OUTPUT_FILE = fileURLToPath(new URL('../../projects/shared/src/lib/helpers/cadastral-municipality-list.ts', import.meta.url));
-const AKR_CODE = /^[A-Z]{3}\d{2}$/;
-const MIN_CODES = 1000;
+const MIN_NAMES = 500;
 
 /** Parses RFC 4180 CSV: quoted fields, "" escapes, separators and line breaks inside quotes, CRLF or LF. */
 function parseCsv(text, separator = ',') {
@@ -81,7 +80,7 @@ async function download() {
   return (await response.text()).replace(/^﻿/, '');
 }
 
-function toEntries(rows, today) {
+function toNames(rows, today) {
   const [ header, ...data ] = rows;
   const column = name => {
     const index = header.findIndex(h => h.trim() === name);
@@ -92,9 +91,8 @@ function toEntries(rows, today) {
   };
   const nameColumn = column('Waarde');
   const dateUntilColumn = column('DatumTot');
-  const codesColumn = column('Toelichting');
 
-  const codesByName = new Map();
+  const names = new Set();
   let expired = 0;
   for (const row of data) {
     const name = (row[nameColumn] ?? '').trim();
@@ -103,93 +101,62 @@ function toEntries(rows, today) {
       expired++;
       continue;
     }
-    const codes = (row[codesColumn] ?? '').split(';').map(c => c.trim()).filter(c => AKR_CODE.test(c));
     if (name === '') {
       fail(`Row without a name: ${row.join(',')}`);
     }
-    if (codes.length === 0) {
-      console.warn(`Skipped "${name}": no valid AKR code in "${row[codesColumn] ?? ''}"`);
-      continue;
-    }
-    codesByName.set(name, [ ...(codesByName.get(name) ?? []), ...codes ]);
+    names.add(name);
   }
-
-  const entries = [...codesByName]
-    .map(([ name, codes ]) => ({ name, codes: [...new Set(codes)].sort() }))
-    .sort((a, b) => a.name.localeCompare(b.name, 'nl'));
-  return { entries, expired };
+  if (names.size < MIN_NAMES) {
+    fail(`Only ${names.size} kadastrale gemeenten found, expected more than ${MIN_NAMES}`);
+  }
+  return { names: [...names].sort((a, b) => a.localeCompare(b, 'nl')), expired };
 }
 
-function validate(entries) {
-  const nameByCode = new Map();
-  for (const entry of entries) {
-    for (const code of entry.codes) {
-      if (nameByCode.has(code)) {
-        fail(`AKR code ${code} occurs for both "${nameByCode.get(code)}" and "${entry.name}"`);
-      }
-      nameByCode.set(code, entry.name);
-    }
-  }
-  if (nameByCode.size < MIN_CODES) {
-    fail(`Only ${nameByCode.size} AKR codes found, expected more than ${MIN_CODES}`);
-  }
-  return nameByCode;
-}
-
-/** Reads the current data file, if any, to report what changed. */
+/** Reads the current data file, if any, to report what changed. Entries of the old format ({ name, codes }) are read as their name. */
 async function readPrevious() {
   try {
     const text = await readFile(OUTPUT_FILE, 'utf8');
     const json = text.match(/=\s*(\[.*\]);\s*$/m)?.[1];
-    return json ? JSON.parse(json) : [];
+    return json ? JSON.parse(json).map(e => typeof e === 'string' ? e : e.name) : [];
   } catch {
     return [];
   }
 }
 
-function printSummary(previous, entries, nameByCode, expired) {
-  const previousNames = new Set(previous.map(e => e.name));
-  const names = new Set(entries.map(e => e.name));
-  const previousNameByCode = new Map(previous.flatMap(e => e.codes.map(c => [ c, e.name ])));
+function printSummary(previous, names, expired) {
   const list = items => items.length === 0 ? '-' : items.join(', ');
-
-  console.log(`${entries.length} kadastrale gemeenten with ${nameByCode.size} AKR codes (${expired} expired rows skipped).`);
+  console.log(`${names.length} kadastrale gemeenten (${expired} expired rows skipped).`);
   if (previous.length === 0) {
     console.log('No previous list found, nothing to compare with.');
     return;
   }
-  console.log(`Added names:   ${list([...names].filter(n => !previousNames.has(n)))}`);
-  console.log(`Removed names: ${list([...previousNames].filter(n => !names.has(n)))}`);
-  console.log(`Added codes:   ${list([...nameByCode.keys()].filter(c => !previousNameByCode.has(c)).sort())}`);
-  console.log(`Removed codes: ${list([...previousNameByCode.keys()].filter(c => !nameByCode.has(c)).sort())}`);
-  const moved = [...nameByCode]
-    .filter(([ code, name ]) => previousNameByCode.has(code) && previousNameByCode.get(code) !== name)
-    .map(([ code, name ]) => `${code} (${previousNameByCode.get(code)} -> ${name})`);
-  console.log(`Moved codes:   ${list(moved)}`);
+  const previousNames = new Set(previous);
+  const current = new Set(names);
+  console.log(`Added names:   ${list(names.filter(n => !previousNames.has(n)))}`);
+  console.log(`Removed names: ${list(previous.filter(n => !current.has(n)))}`);
 }
 
-function render(entries) {
+function render(names) {
   return [
     '// Generated by ci/scripts/update-cadastral-municipalities.mjs, do not edit.',
     `// Source: ${SOURCE_URL}`,
-    "import type { CadastralMunicipalityModel } from './cadastral-municipality.model';",
     '',
     '/**',
-    ' * Source: Kadaster IMKAD waardelijst "KadastraleGemeente". The CSV column "Waarde" is mapped to `name` and',
-    ' * "Toelichting" (semicolon separated) to `codes`. Expired entries (a "DatumTot" on or before the day the list was',
-    ' * generated) are left out, because the PDOK Locatieserver contains no parcels for them.',
+    ' * Names of the kadastrale gemeenten (cadastral municipalities), as used in the PDOK Locatieserver field',
+    ' * `kadastrale_gemeentenaam`. Source: Kadaster IMKAD waardelijst "KadastraleGemeente", column "Waarde". Expired entries',
+    ' * (a "DatumTot" on or before the day the list was generated) are left out, because the PDOK Locatieserver contains no',
+    ' * parcels for them.',
     ' *',
     ' * To update this list, run `npm run update-cadastral-municipalities`, review the summary and the diff, and commit.',
     ' */',
-    '// eslint-disable-next-line max-len, object-curly-spacing, comma-spacing, array-bracket-spacing',
-    `export const CADASTRAL_MUNICIPALITY_LIST: CadastralMunicipalityModel[] = ${JSON.stringify(entries)};`,
+    '// eslint-disable-next-line max-len, comma-spacing, array-bracket-spacing',
+    `export const CADASTRAL_MUNICIPALITY_LIST: string[] = ${JSON.stringify(names)};`,
     '',
   ].join('\n');
 }
 
 const rows = parseCsv(await download());
-const { entries, expired } = toEntries(rows, todayInAmsterdam());
-const nameByCode = validate(entries);
-printSummary(await readPrevious(), entries, nameByCode, expired);
-await writeFile(OUTPUT_FILE, render(entries));
+const { names, expired } = toNames(rows, todayInAmsterdam());
+printSummary(await readPrevious(), names, expired);
+await writeFile(OUTPUT_FILE, render(names));
 console.log(`Wrote ${OUTPUT_FILE}`);

@@ -41,10 +41,10 @@
           <mat-panel-title i18n="@@admin-core.components.simple-search-cadastral-municipality-filter">Cadastral municipality filter</mat-panel-title>
         </mat-expansion-panel-header>
         <div class="selected-municipality">
-          @for(m of cadastralMunicipalities$ | async; track m.code) {
-            <div class="label">{{m.label}}</div>
+          @for(name of cadastralMunicipalities$ | async; track name) {
+            <div class="label">{{name}}</div>
             <div class="button-wrapper">
-              <button mat-icon-button (click)="deleteCadastralMunicipality(m.code)">
+              <button mat-icon-button (click)="deleteCadastralMunicipality(name)">
                 <mat-icon svgIcon="trash_filled"></mat-icon>
               </button>
             </div>
@@ -55,10 +55,10 @@
           <mat-label i18n="@@admin-core.components.simple-search-cadastral-municipality">Cadastral municipality</mat-label>
           <input matInput type="text" [formControl]="cadastralMunicipalityControl" [matAutocomplete]="cadastralAuto" />
           <mat-autocomplete #cadastralAuto="matAutocomplete"
-                            [displayWith]="displayCadastralMunicipality"
+                            (optionSelected)="addCadastralMunicipality($event.option.value)"
                             autoActiveFirstOption>
-            @for(option of filteredCadastralMunicipalityOptions$ | async; track option.code) {
-              <mat-option [value]="option">{{option.label}}</mat-option>
+            @for(name of filteredCadastralMunicipalityOptions$ | async; track name) {
+              <mat-option [value]="name">{{name}}</mat-option>
             }
           </mat-autocomplete>
         </mat-form-field>

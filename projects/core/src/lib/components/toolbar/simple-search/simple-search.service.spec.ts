@@ -105,9 +105,30 @@ describe('SimpleSearchService', () => {
     }]);
   });
 
-  test('filters parcels on kadastrale gemeenten', async () => {
-    const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'ATN02', 'ASD04' ] });
-    expect(parcelRequests[0].request.params.getAll('fq')).toEqual([ 'type:perceel', 'kadastrale_gemeentecode:(ATN02 OR ASD04)' ]);
+  test('filters parcels on kadastrale gemeente names', async () => {
+    const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'Aalten', "'s-Gravenhage", 'Bergen (NH)' ] });
+    expect(parcelRequests[0].request.params.getAll('fq'))
+      .toEqual([ 'type:perceel', 'kadastrale_gemeentenaam:("Aalten" OR "\'s-Gravenhage" OR "Bergen (NH)")' ]);
+    expect(parcelRequests[0].request.params.get('fl')).toContain('kadastrale_gemeentenaam');
+  });
+
+  test('drops parcels of a longer kadastrale gemeente name that contains a selected name', async () => {
+    const { service, httpTestingController } = setup();
+    const result$ = firstValueFrom(service.search$(ProjectionCodesEnum.RD, 'Alphen', {
+      enabled: true, searchCadastralParcels: true, cadastralMunicipalities: ['Alphen'],
+    }));
+    const requests = httpTestingController.match(() => true);
+    requests.filter(req => !isParcelRequest(req)).forEach(req => req.flush(locationResponse));
+    requests.filter(isParcelRequest).forEach(req => req.flush({
+      response: {
+        docs: [
+          { ...parcelResponse.response.docs[0], id: 'p-1', weergavenaam: 'Perceel Alphen (APH00) A 1', kadastrale_gemeentenaam: 'Alphen' },
+          { ...parcelResponse.response.docs[0], id: 'p-2', weergavenaam: 'Perceel Alphen aan den Rijn (APN00) A 1', kadastrale_gemeentenaam: 'Alphen aan den Rijn' },
+        ],
+      },
+    }));
+    const results = await result$;
+    expect(results[1].results.map(r => r.id)).toEqual(['p-1']);
   });
 
   test('does not apply the municipality filter to parcels', async () => {
