@@ -5,8 +5,6 @@ export interface LocationServerResponseModel {
       weergavenaam: string;
       geometrie_rd: string;
       centroide_rd: string;
-      /** Only requested for kadastrale percelen. */
-      kadastrale_gemeentenaam?: string;
     }>;
   };
 }

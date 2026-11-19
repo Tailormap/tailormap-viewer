@@ -66,7 +66,7 @@ describe('SimpleSearchComponentConfigComponent', () => {
       searchCadastralParcels: true,
       cadastralMunicipalities: ['Aalburg'],
     });
-    expect(CADASTRAL_MUNICIPALITY_LIST).toContain('Aalburg');
+    expect(CADASTRAL_MUNICIPALITY_LIST.map(m => m.name)).toContain('Aalburg');
     const input = await screen.findByRole('combobox', { name: 'Cadastral municipality' });
     await userEvent.type(input, 'aal');
     expect(await screen.findByRole('option', { name: 'Aalten' })).toBeInTheDocument();

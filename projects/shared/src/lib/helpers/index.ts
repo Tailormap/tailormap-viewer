@@ -22,6 +22,7 @@ export * from './htmlify.helper';
 export * from './cooperative-gestures.helper';
 export * from './external-libs-loader.helper';
 export * from './municipality.helper';
+export * from './cadastral-municipality.model';
 export * from './cadastral-municipality-list';
 export * from './attribute-filter.helper';
 export * from './attribute-filter.mock';

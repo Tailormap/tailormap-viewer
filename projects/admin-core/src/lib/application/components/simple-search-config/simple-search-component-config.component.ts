@@ -42,6 +42,8 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
     ],
 })
 export class SimpleSearchComponentConfigComponent implements ConfigurationComponentModel<SimpleSearchConfigModel> {
+  private static readonly CADASTRAL_MUNICIPALITY_NAMES = CADASTRAL_MUNICIPALITY_LIST.map(m => m.name);
+
   private componentConfigService = inject(ComponentConfigurationService);
   private destroyRef = inject(DestroyRef);
 
@@ -122,7 +124,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
         map(([ term, selectedNames ]) => {
           const lowerTerm = term.toLowerCase();
           const selected = new Set(selectedNames);
-          return CADASTRAL_MUNICIPALITY_LIST.filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
+          return SimpleSearchComponentConfigComponent.CADASTRAL_MUNICIPALITY_NAMES.filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
         }),
       );
   }
@@ -138,7 +140,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
 
   /** Adds the kadastrale gemeente selected in the autocomplete. Only names from the list can be added. */
   public addCadastralMunicipality(name: string) {
-    if (CADASTRAL_MUNICIPALITY_LIST.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
+    if (SimpleSearchComponentConfigComponent.CADASTRAL_MUNICIPALITY_NAMES.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
       this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, name ]);
     }
     this.cadastralMunicipalityControl.setValue('');
@@ -148,7 +150,10 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(n => n !== name));
   }
 
-  /** Stores the names, so the viewer can use them directly in the Locatieserver filter on `kadastrale_gemeentenaam`. */
+  /**
+   * Stores the names rather than the AKR codes: names are what the admin selects and they stay readable in the config.
+   * The viewer looks up the codes for the Locatieserver filter.
+   */
   private saveCadastralMunicipalities(names: string[]) {
     this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'cadastralMunicipalities', names);
   }

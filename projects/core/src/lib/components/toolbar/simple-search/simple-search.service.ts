@@ -10,6 +10,7 @@ import { selectViewerId } from '../../../state/core.selectors';
 import { take } from 'rxjs/operators';
 import { selectSearchableLayers } from '../../../map/state/map.selectors';
 import { CadastralParcelSearchHelper } from './cadastral-parcel-search.helper';
+import { CADASTRAL_MUNICIPALITY_LIST } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class SimpleSearchService {
   private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
   private static readonly CADASTRAL_PARCELS_LABEL = $localize `:@@core.search.cadastral-parcels:Cadastral parcels`;
   private static readonly MAX_RESULTS = 5;
+  private static readonly CADASTRAL_CODES_BY_NAME = new Map(CADASTRAL_MUNICIPALITY_LIST.map(m => [ m.name, m.codes ]));
   private static readonly PDOK_LOCATION_SERVER_SUGGEST_URL = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest';
 
   public search$(projection: string, searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel[]> {
@@ -134,28 +136,31 @@ export class SimpleSearchService {
   /**
    * Searches the PDOK Locatieserver for kadastrale percelen. Parcels are not returned by the default type filter of
    * the suggest endpoint, so they are requested explicitly with `fq=type:perceel`. Parcels have no `gemeentecode`,
-   * so the municipality filter does not apply; they can be restricted on `kadastrale_gemeentenaam` instead.
+   * so the municipality filter does not apply.
    *
-   * `kadastrale_gemeentenaam` is a tokenized field, so a quoted name also matches longer names containing it (e.g.
-   * "Alphen" matches "Alphen aan den Rijn"). Results are therefore also filtered on an exact name match.
+   * The configured kadastrale gemeenten are stored by name, but the filter uses their AKR codes on
+   * `kadastrale_gemeentecode`: `kadastrale_gemeentenaam` is tokenized, so a name filter also matches longer names
+   * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly. When none of the
+   * configured names is known (anymore), no parcels are searched rather than searching without a restriction.
    */
-  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel> {
+  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel | null> {
     const filter = ['type:perceel'];
-    const names = new Set(config.cadastralMunicipalities ?? []);
-    if (names.size > 0) {
-      filter.push(`kadastrale_gemeentenaam:(${[...names].map(SimpleSearchService.toSolrPhrase).join(' OR ')})`);
+    const names = config.cadastralMunicipalities ?? [];
+    if (names.length > 0) {
+      const codes = SimpleSearchService.toCadastralMunicipalityCodes(names);
+      if (codes.length === 0) {
+        return of(null);
+      }
+      filter.push(`kadastrale_gemeentecode:(${codes.join(' OR ')})`);
     }
     return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
         q: CadastralParcelSearchHelper.toParcelQuery(searchTerm),
         rows: SimpleSearchService.MAX_RESULTS.toString(),
-        fl: 'id,weergavenaam,geometrie_rd,centroide_rd,kadastrale_gemeentenaam',
+        fl: 'id,weergavenaam,geometrie_rd,centroide_rd',
         fq: filter,
       },
     }).pipe(
-      map(result => names.size === 0 ? result : {
-        response: { docs: result.response.docs.filter(doc => names.has(doc.kadastrale_gemeentenaam ?? '')) },
-      }),
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
         id: 'pdok-cadastral-parcels',
@@ -171,9 +176,9 @@ export class SimpleSearchService {
     );
   }
 
-  /** Quotes a value as a Solr phrase, escaping backslashes and double quotes. */
-  private static toSolrPhrase(value: string): string {
-    return `"${value.replace(/[\\"]/g, '\\$&')}"`;
+  /** Looks up the AKR codes of kadastrale gemeente names. Unknown names are ignored. */
+  private static toCadastralMunicipalityCodes(names: string[]): string[] {
+    return [...new Set(names.flatMap(name => SimpleSearchService.CADASTRAL_CODES_BY_NAME.get(name) ?? []))];
   }
 
 }
