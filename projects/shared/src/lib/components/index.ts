@@ -20,3 +20,5 @@ export * from './markdown-editor';
 export * from './attribute-filter/attribute-filter.component';
 export * from './image-with-description/image-with-description.component';
 export * from './htmlify/htmlify.component';
+export * from './popover/popover.component';
+export * from './popover/popover-position.enum';

@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, Optional, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
-import { PopoverService } from '../../services/popover/popover.service';
-import { OverlayRef } from '../../services/overlay/overlay-ref';
+import { Component, EventEmitter, Input, Optional, Output, ChangeDetectionStrategy } from '@angular/core';
+import { CdkOverlayOrigin } from '@angular/cdk/overlay';
+import { PopoverComponent } from '../popover/popover.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -10,18 +10,9 @@ import { MatIcon } from '@angular/material/icon';
     styleUrls: ['./icon-picker.component.css'],
     // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ MatButton, MatIcon ],
+    imports: [ MatButton, MatIcon, CdkOverlayOrigin, PopoverComponent ],
 })
 export class IconPickerComponent {
-  private popper = inject(PopoverService);
-
-
-  @ViewChild('iconPickerButton', { static: false, read: ElementRef })
-  private iconPickerButton: ElementRef<HTMLButtonElement> | undefined;
-
-  @ViewChild('iconPickerContent', { static: false, read: TemplateRef })
-  private iconPickerContent: TemplateRef<any> | undefined;
-
   @Input()
   public icons: string[] = [];
 
@@ -39,25 +30,8 @@ export class IconPickerComponent {
 
   public pickerOpen = false;
 
-  private popoverRef: OverlayRef | undefined;
-
-  public openPicker() {
-    if (this.popoverRef) {
-      this.popoverRef.close();
-    }
-    if (!this.iconPickerButton || !this.iconPickerContent) {
-      return;
-    }
-    const ICON_SIZE = 24;
-    const PADDING = 10;
-    const TOGGLE_WIDTH = 51;
-    this.popoverRef = this.popper.open({
-      origin: this.iconPickerButton.nativeElement,
-      content: this.iconPickerContent,
-      height: ((ICON_SIZE + PADDING) * this.icons.length) + PADDING,
-      width: TOGGLE_WIDTH,
-      closeOnClickOutside: true,
-    });
+  public togglePicker() {
+    this.pickerOpen = !this.pickerOpen;
   }
 
   public getClass() {
@@ -71,7 +45,6 @@ export class IconPickerComponent {
   public selectIcon(icon: string) {
     this.pickerOpen = false;
     this.iconChange.emit(icon);
-    this.popoverRef?.close();
   }
 
   public getIconColor() {

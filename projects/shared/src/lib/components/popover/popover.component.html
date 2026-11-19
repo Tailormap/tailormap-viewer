@@ -1,0 +1,29 @@
+<ng-template cdkConnectedOverlay
+             [cdkConnectedOverlayOrigin]="origin()"
+             [cdkConnectedOverlayOpen]="true"
+             [cdkConnectedOverlayPositions]="positions()"
+             [cdkConnectedOverlayPush]="true"
+             [cdkConnectedOverlayViewportMargin]="8"
+             cdkConnectedOverlayPanelClass="tm-popover-panel"
+             (overlayOutsideClick)="onOutsideClick($event)"
+             (overlayKeydown)="onKeydown($event)"
+             (attach)="onAttach()"
+             (detach)="onDetach()">
+  <div class="popover" role="dialog" [style.width.px]="width()"
+       [class.popover--titled]="title()"
+       [attr.aria-labelledby]="title() ? titleId : null"
+       [attr.aria-label]="title() ? null : ariaLabel()"
+       cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+    @if (title()) {
+      <div class="popover__header">
+        <h2 class="popover__title" [id]="titleId">{{ title() }}</h2>
+        <button mat-icon-button type="button" class="popover__close" (click)="close()" [tmTooltip]="closeLabel" [attr.aria-label]="closeLabel">
+          <mat-icon svgIcon="close"></mat-icon>
+        </button>
+      </div>
+    }
+    <div class="popover__content">
+      <ng-content />
+    </div>
+  </div>
+</ng-template>

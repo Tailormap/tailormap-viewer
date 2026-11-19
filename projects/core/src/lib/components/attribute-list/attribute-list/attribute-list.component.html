@@ -38,4 +38,14 @@
     <tm-attribute-list-tab [id]="selectedTab()"></tm-attribute-list-tab>
   }
 
+  @if (columnSelection(); as columnSelection) {
+    <tm-popover [origin]="columnSelection.origin"
+                [width]="300"
+                i18n-ariaLabel="@@core.attribute-list.column-settings"
+                ariaLabel="Column settings"
+                (closed)="closeColumnSelection()">
+      <tm-attribute-list-column-selection [dataId]="columnSelection.dataId" (closed)="closeColumnSelection()"></tm-attribute-list-column-selection>
+    </tm-popover>
+  }
+
 </tm-bottom-panel>

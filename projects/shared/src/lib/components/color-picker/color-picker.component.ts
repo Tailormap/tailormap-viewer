@@ -1,12 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, TemplateRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Subscription, takeUntil } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ColorHelper } from '../../helpers/color.helper';
-import { PopoverService } from '../../services/popover/popover.service';
-import { OverlayRef } from '../../services/overlay/overlay-ref';
 import { BrowserHelper } from '../../helpers';
-import { PopoverPositionEnum } from '../../services';
+import { PopoverPositionEnum } from '../popover/popover-position.enum';
+import { PopoverComponent } from '../popover/popover.component';
+import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatError, MatSuffix } from '@angular/material/form-field';
@@ -83,18 +83,11 @@ const colorLabels = new Map<string, string>(colorDefinitions);
         MatSuffix,
         MatIconButton,
         TooltipDirective,
+        PopoverComponent,
+        CdkOverlayOrigin,
     ],
 })
 export class ColorPickerComponent implements OnInit, OnDestroy {
-  private popper = inject(PopoverService);
-
-
-  @ViewChild('colorPickerButton', { static: false, read: ElementRef })
-  private colorPickerButton: ElementRef<HTMLButtonElement> | null = null;
-
-  @ViewChild('colorPickerContent', { static: false, read: TemplateRef })
-  private colorPickerContent: TemplateRef<any> | null = null;
-
   @Input()
   public color: string | undefined;
 
@@ -111,7 +104,7 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
   public allowEmptyColor = false;
 
   @Input()
-  public dropdownPosition: PopoverPositionEnum | undefined;
+  public dropdownPosition: PopoverPositionEnum = PopoverPositionEnum.TOP_LEFT_UP;
 
   public pickerOpen = false;
 
@@ -120,8 +113,6 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   public formControl = new FormControl('', { nonNullable: true });
-
-  private popoverRef: OverlayRef | undefined;
 
   private preferredWindowWidth = 515;
 
@@ -185,37 +176,12 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     return this.formControl.errors ? !!this.formControl.errors['required'] : false;
   }
 
-  public openPicker() {
-    if (this.popoverRef) {
-      this.popoverRef.close();
-    }
-    if (!this.colorPickerButton || !this.colorPickerContent) {
-      return;
-    }
-    this.popoverRef = this.popper.open({
-      origin: this.colorPickerButton.nativeElement,
-      content: this.colorPickerContent,
-      position: this.dropdownPosition || PopoverPositionEnum.TOP_LEFT_UP,
-      height: 235,
-      width: Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith()),
-      closeOnClickOutside: true,
-    });
-    const overlayKeydownSub = this.popoverRef.overlay.keydownEvents()
-      .pipe(takeUntil(this.popoverRef.afterClosed$))
-      .subscribe((ev: KeyboardEvent) => {
-        if (ev.key === 'Escape' || ev.key === 'Esc') {
-          ev.preventDefault();
-          ev.stopPropagation();
-          this.popoverRef?.close();
-        }
-      });
-    this.subscription.add(overlayKeydownSub);
-    setTimeout(() => {
-      const firstBtn: HTMLButtonElement | null = document.querySelector('.color-picker__color');
-      if (firstBtn) {
-        firstBtn.focus();
-      }
-    });
+  public togglePicker() {
+    this.pickerOpen = !this.pickerOpen;
+  }
+
+  public getPopoverWidth() {
+    return Math.min(this.preferredWindowWidth, BrowserHelper.getScreenWith());
   }
 
   public getClass() {
@@ -233,7 +199,6 @@ export class ColorPickerComponent implements OnInit, OnDestroy {
     this.formControl.setValue(color || '');
     this.pickerOpen = false;
     this.colorChange.emit(color);
-    this.popoverRef?.close();
   }
 
   public hasInvalidColorError() {

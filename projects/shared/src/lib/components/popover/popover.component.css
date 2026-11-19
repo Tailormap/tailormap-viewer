@@ -1,0 +1,51 @@
+/* The popover itself is rendered in an overlay, outside this element. */
+:host {
+  display: none;
+}
+
+.popover {
+  box-sizing: border-box;
+  max-width: calc(100vw - 16px);
+  max-height: min(70vh, 600px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--dark-primary-text);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.popover__header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 0 16px;
+}
+
+.popover__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.popover__close {
+  --mat-icon-button-state-layer-size: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+}
+
+.popover__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.popover--titled .popover__content {
+  padding: 4px 16px 16px;
+}

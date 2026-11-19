@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AttributeListState } from '../state/attribute-list.state';
 import {
@@ -17,7 +17,7 @@ import { FeatureStylingHelper } from '../../../shared/helpers/feature-styling.he
 import { MapService } from '@tailormap-viewer/map';
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
-import { OverlayRef, PopoverPositionEnum, PopoverService, TooltipDirective } from '@tailormap-viewer/shared';
+import { PopoverComponent, TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListColumnSelectionComponent } from '../attribute-list-column-selection/attribute-list-column-selection.component';
 import { BottomPanelComponent } from '../../../shared/components/bottom-panel/bottom-panel.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -43,13 +43,14 @@ import { AsyncPipe } from '@angular/common';
         MatIcon,
         AttributeListTabComponent,
         AsyncPipe,
+        PopoverComponent,
+        AttributeListColumnSelectionComponent,
     ],
 })
 export class AttributeListComponent implements OnInit, OnDestroy {
   private store$ = inject<Store<AttributeListState>>(Store);
   private menubarService = inject(MenubarService);
   private mapService = inject(MapService);
-  private popoverService = inject(PopoverService);
   public isLoadingTabs$ = inject(AttributeListManagerService).isLoadingTabs$();
 
   public isVisible$: Observable<boolean>;
@@ -60,7 +61,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public selectedTab = this.store$.selectSignal(selectAttributeListSelectedTab);
   public title$: Observable<string> = of('');
 
-  private columnSelectionOverlayRef: OverlayRef | undefined;
+  public columnSelection = signal<{ origin: HTMLElement; dataId: string } | null>(null);
 
   constructor() {
     this.isVisible$ = this.store$.select(selectAttributeListVisible);
@@ -83,9 +84,6 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.menubarService.deregisterComponent(BaseComponentTypeEnum.ATTRIBUTE_LIST);
     this.store$.dispatch(setAttributeListVisibility({ visible: false }));
-    if (this.columnSelectionOverlayRef) {
-      this.columnSelectionOverlayRef.close();
-    }
     this.destroyed.next(null);
     this.destroyed.complete();
   }
@@ -95,6 +93,7 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   }
 
   public onSelectedTabChange($event: MatTabChangeEvent): void {
+    this.closeColumnSelection();
     this.store$.dispatch(setSelectedTab({ tabId: this.tabs()[$event.index].id }));
   }
 
@@ -105,21 +104,15 @@ export class AttributeListComponent implements OnInit, OnDestroy {
   public openColumnSelection($event: MouseEvent, tab: AttributeListTabModel) {
     $event.preventDefault();
     $event.stopPropagation();
-    if (this.columnSelectionOverlayRef && this.columnSelectionOverlayRef.isOpen) {
-      this.columnSelectionOverlayRef.close();
+    if (this.columnSelection()) {
+      this.closeColumnSelection();
       return;
     }
-    const WINDOW_WIDTH = 300;
-    this.columnSelectionOverlayRef = this.popoverService.open({
-      origin: $event.currentTarget as HTMLElement,
-      content: AttributeListColumnSelectionComponent,
-      data: { dataId: tab.selectedDataId },
-      height: 250,
-      width: Math.min(WINDOW_WIDTH, window.innerWidth),
-      closeOnClickOutside: true,
-      position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
-      positionOffset: 10,
-    });
+    this.columnSelection.set({ origin: $event.currentTarget as HTMLElement, dataId: tab.selectedDataId });
+  }
+
+  public closeColumnSelection() {
+    this.columnSelection.set(null);
   }
 
 }
