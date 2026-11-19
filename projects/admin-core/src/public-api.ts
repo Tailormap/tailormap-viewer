@@ -15,6 +15,7 @@ export * from './lib/application/components/configuration-component.model';
 export * from './lib/application/components/base-component-config/base-component-config.component';
 export * from './lib/application/state';
 export * from './lib/application/models';
+export * from './lib/application/helpers/application-model.helper';
 export * from './lib/user';
 export * from './lib/shared/services/admin-field-registration.service';
 export * from './lib/shared/services/admin-snackbar.service';
