@@ -93,7 +93,7 @@ describe('SimpleSearchService', () => {
     expect(parcelRequests.length).toBe(1);
     const params = parcelRequests[0].request.params;
     expect(parcelRequests[0].request.url).toBe(SUGGEST_URL);
-    expect(params.get('q')).toBe('ATN02 K 2838');
+    expect(params.get('q')).toBe('ATN02K02838');
     expect(params.getAll('fq')).toEqual(['type:perceel']);
     expect(results.map(r => r.id)).toEqual([ 'pdok-locatie-server', 'pdok-cadastral-parcels' ]);
     expect(results[1].name).toBe('Cadastral parcels');
