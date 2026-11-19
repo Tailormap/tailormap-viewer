@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormHelper } from '../helpers/form.helper';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, merge, Observable, Subscription, take } from 'rxjs';
-import { AuthenticatedUserService, SecurityModel } from '@tailormap-viewer/api';
+import { AuthenticatedUserService, FormTabModel, SecurityModel } from '@tailormap-viewer/api';
 import { EditModelHelper } from '../helpers/edit-model.helper';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { DateTime } from 'luxon';
@@ -11,6 +11,7 @@ import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field'
 import { MatInput } from '@angular/material/input';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { SelectFieldComponent } from '../fields/select-field/select-field.component';
+import { DatetimeFieldComponent } from '../fields/datetime-field/datetime-field.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { NgTemplateOutlet } from '@angular/common';
@@ -31,6 +32,7 @@ import { NgTemplateOutlet } from '@angular/common';
     MatSuffix,
     MatDatepicker,
     SelectFieldComponent,
+    DatetimeFieldComponent,
     MatCheckbox,
     MatTabGroup,
     MatTab,
@@ -45,7 +47,7 @@ export class EditFormComponent implements OnDestroy {
 
   private currentFormSubscription: Subscription | undefined;
   public formConfig: ViewerEditFormFieldModel[] = [];
-  public tabs: Array<{ id: string; name: string }> = [];
+  public tabs: FormTabModel[] = [];
   public userDetails$: Observable<SecurityModel | null>;
 
   @Input({ required: true })
@@ -121,9 +123,9 @@ export class EditFormComponent implements OnDestroy {
             control.setValue(userDetails?.username ?? '');
           }
           if (field.autoFillDate) {
-            if (field.type === 'date') {
+            if (field.controlType === 'date') {
               control.setValue(DateTime.now().toISODate());
-            } else if (field.type === 'timestamp') {
+            } else if (field.controlType === 'datetime') {
               control.setValue(DateTime.now().toISO());
             }
           }

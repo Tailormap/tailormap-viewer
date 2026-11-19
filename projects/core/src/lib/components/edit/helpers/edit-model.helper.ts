@@ -1,6 +1,6 @@
 import {
-  AttributeModel, AttributeType, AttributeTypeHelper, ColumnMetadataModel, FeatureModel, FormFieldModel, FormFieldTypeEnum,
-  FormFieldTypeHelper, LayerDetailsModel,
+  AttributeModel, AttributeType, AttributeTypeHelper, ChoiceListModel, ChoiceListSourceEnum, ChoiceListValueModel, ColumnMetadataModel, FeatureModel, FormFieldModel,
+  FormFieldControlTypeEnum, FormFieldControlTypeHelper, LayerDetailsModel,
 } from '@tailormap-viewer/api';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
 import { ArrayHelper } from '@tailormap-viewer/shared';
@@ -51,64 +51,61 @@ export class EditModelHelper {
     // Do not display a required boolean as a checkbox but as a select, because a checkbox can't show whether it is null or false so
     // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
     // difference between a null and a false boolean.
-    const booleanValueList = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable)  ?
-      [{ value: true, label: $localize `:@@core.edit.true:True` }, { value: false, label: $localize `:@@core.edit.false:False` }] : null;
+    const booleanChoiceList: ChoiceListModel | undefined = (attribute.type === AttributeType.BOOLEAN && !attribute.nullable) ? {
+      source: ChoiceListSourceEnum.LIST,
+      values: [{ value: true, label: $localize `:@@core.edit.true:True` }, { value: false, label: $localize `:@@core.edit.false:False` }],
+    } : undefined;
     return {
       label: attribute.editAlias || alias || attribute.name,
       value,
       name: attribute.name,
+      attributeType: attribute.type,
       required: attribute.nullable === false,
-      disabled: !attribute.editable,
-      type: booleanValueList ? FormFieldTypeEnum.SELECT : FormFieldTypeHelper.getDefaultFormFieldType(attribute.type, !!attribute.valueList),
-      valueList: booleanValueList ? booleanValueList : attribute.valueList?.split(',').map(val => {
-        const listValue = val.trim();
-        return { value: listValue, label: listValue };
-      }),
+      readOnly: !attribute.editable,
+      controlType: booleanChoiceList ? FormFieldControlTypeEnum.SELECT : FormFieldControlTypeHelper.getDefaultControlType(attribute.type),
+      choiceList: booleanChoiceList,
     };
   }
 
   /**
    * Applies the configuration of a form field on top of the field created from the attribute. The form determines the presentation
-   * (label, tab, hint, value list etc.), but cannot make an attribute editable or optional when the attribute metadata says otherwise.
-   * A configured field type which is not compatible with the attribute type (for example a text field for a date attribute, which
-   * is the default when adding a field in the admin) is ignored in favour of the type derived from the attribute.
+   * (label, tab, hint, choice list etc.), but cannot make an attribute editable or optional when the attribute metadata says otherwise.
+   * A configured control which is not compatible with the attribute type (for example a text field for a date attribute, which
+   * is the default when adding a field in the admin) is ignored in favour of the control derived from the attribute.
    */
   private static applyFormField(
     attributeField: ViewerEditFormFieldModel,
     formField: FormFieldModel,
     attribute: AttributeModel,
   ): ViewerEditFormFieldModel {
-    const useFormFieldType = FormFieldTypeHelper.isAllowedForAttributeType(formField.type, attribute.type);
+    const useFormFieldControlType = FormFieldControlTypeHelper.isAllowedForAttributeType(formField.controlType, attribute.type);
     return {
       ...formField,
       value: attributeField.value,
-      type: useFormFieldType ? formField.type : attributeField.type,
-      valueList: useFormFieldType ? EditModelHelper.parseValueList(attribute.type, formField.valueList) : attributeField.valueList,
-      disabled: !!formField.disabled || !!attributeField.disabled,
+      attributeType: attributeField.attributeType,
+      controlType: useFormFieldControlType ? formField.controlType : attributeField.controlType,
+      choiceList: useFormFieldControlType ? EditModelHelper.parseChoiceList(attribute.type, formField.choiceList) : attributeField.choiceList,
+      readOnly: !!formField.readOnly || !!attributeField.readOnly,
       required: !!formField.required || !!attributeField.required,
     };
   }
 
   /**
-   * Parses the value list of a form field to values of the attribute type. Items with a value which can't be parsed to the
-   * attribute type are left out. This happens when the attribute type changed after the form was configured.
+   * Parses the configured values of the choice list of a form field to values of the attribute type. Values which can't be parsed
+   * to the attribute type are left out. This happens when the attribute type changed after the form was configured.
    */
-  private static parseValueList(
-    type: AttributeType,
-    valueList?: Array<{ value: string | number | boolean; label?: string }>,
-  ): Array<{ value: string | number | boolean; label: string }> | undefined {
-    if (!valueList) {
+  private static parseChoiceList(type: AttributeType, choiceList?: ChoiceListModel): ChoiceListModel | undefined {
+    if (!choiceList) {
       return undefined;
     }
-    return valueList
-      .map(item => {
-        const value = EditModelHelper.parseValue(type, item.value);
-        return value === null ? null : { value, label: item.label || `${item.value}` };
-      })
-      .filter((item): item is { value: string | number | boolean; label: string } => item !== null);
+    const values = (choiceList.values || []).flatMap<ChoiceListValueModel>(item => {
+      const value = EditModelHelper.parseValue(type, item.value);
+      return value === null ? [] : [{ value, label: item.label || `${item.value}` }];
+    });
+    return { ...choiceList, values };
   }
 
-  private static parseValue(type: AttributeType, value: string | number | boolean): string | number | boolean | null {
+  private static parseValue(type: AttributeType, value: ChoiceListValueModel['value']): ChoiceListValueModel['value'] | null {
     if (typeof value !== 'string') {
       return value;
     }

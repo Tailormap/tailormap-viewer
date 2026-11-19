@@ -50,7 +50,7 @@ export class FormFormComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    description: new FormControl(''),
+    adminComments: new FormControl(''),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
   });
@@ -74,8 +74,7 @@ export class FormFormComponent implements OnInit {
       )
       .subscribe(value => {
         const options: FormOptionsModel = {
-          description: value.description || '',
-          columns: 0,
+          adminComments: value.adminComments || '',
           tabs: [],
         };
         const form: Omit<FormModel, 'id'> = {
@@ -106,7 +105,7 @@ export class FormFormComponent implements OnInit {
   private initForm(form: FormModel | null) {
     this.formForm.patchValue({
       name: form ? form.name : '',
-      description: form && form.options ? form.options.description : '',
+      adminComments: form && form.options ? form.options.adminComments : '',
       featureSourceId: form ? form.featureSourceId : null,
       featureTypeName: form ? form.featureTypeName : '',
     }, { emitEvent: false });

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
-import { FormFieldTypeEnum } from '@tailormap-viewer/api';
+import { FormFieldControlTypeEnum } from '@tailormap-viewer/api';
 import { FormModel, getAttributeDescriptor, getFeatureType } from '@tailormap-admin/admin-api';
 import { FormWarningMessageComponent } from './form-warning-message.component';
 
@@ -14,8 +14,8 @@ const form: FormModel = {
   name: 'form',
   featureSourceId: 1,
   featureTypeName: 'table1',
-  options: { columns: 1, tabs: [] },
-  fields: [ 'name', 'eindregistratie', 'optalud' ].map(name => ({ name, label: name, type: FormFieldTypeEnum.TEXT })),
+  options: { tabs: [] },
+  fields: [ 'name', 'eindregistratie', 'optalud' ].map(name => ({ name, label: name, controlType: FormFieldControlTypeEnum.TEXT })),
 };
 
 describe('FormWarningMessageComponent', () => {

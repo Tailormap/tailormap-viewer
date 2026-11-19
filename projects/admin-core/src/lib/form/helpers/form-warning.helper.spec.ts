@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { FormFieldTypeEnum } from '@tailormap-viewer/api';
+import { FormFieldControlTypeEnum } from '@tailormap-viewer/api';
 import { FormModel, getAttributeDescriptor, getFeatureType } from '@tailormap-admin/admin-api';
 import { FormWarningHelper } from './form-warning.helper';
 
@@ -16,12 +16,12 @@ const getForm = (fields: FormModel['fields']): FormModel => ({
   name: 'form',
   featureSourceId: 1,
   featureTypeName: 'table1',
-  options: { columns: 1, tabs: [] },
+  options: { tabs: [] },
   fields,
 });
 
 const field = (name: string, overrides?: Partial<FormModel['fields'][number]>) => ({
-  name, label: name, type: FormFieldTypeEnum.TEXT, ...overrides,
+  name, label: name, controlType: FormFieldControlTypeEnum.TEXT, ...overrides,
 });
 
 describe('FormWarningHelper', () => {
@@ -49,15 +49,15 @@ describe('FormWarningHelper', () => {
     expect(warnings).toEqual({ notShown: ['app_hidden'], readOnly: ['app_readonly'], requiredReadOnly: [] });
   });
 
-  test('does not warn about a read-only attribute when the form field is disabled too', () => {
-    const form = getForm([field('readonly', { disabled: true })]);
+  test('does not warn about a read-only attribute when the form field is read-only too', () => {
+    const form = getForm([field('readonly', { readOnly: true })]);
     expect(FormWarningHelper.hasWarnings(FormWarningHelper.getFieldWarnings(form, featureType))).toBe(false);
   });
 
   test('warns about required fields which cannot be edited', () => {
     const form = getForm([
       field('readonly', { required: true }),
-      field('name', { required: true, disabled: true }),
+      field('name', { required: true, readOnly: true }),
       field('app_readonly', { required: true }),
     ]);
     expect(FormWarningHelper.getFieldWarnings(form, featureType).requiredReadOnly).toEqual([ 'readonly', 'name' ]);

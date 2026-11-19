@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, Input, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FormFieldModel } from '@tailormap-viewer/api';
+import { ChoiceListModel, ChoiceListSourceEnum, FormFieldControlTypeEnum, FormFieldModel } from '@tailormap-viewer/api';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -60,22 +60,29 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
 
   public field: FormFieldModel | null = null;
 
-  public filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes();
+  public filteredControlTypes = EditFormFieldHelper.getFilteredControlTypes();
+
+  public choiceListSources = [
+    { value: ChoiceListSourceEnum.LIST, label: $localize `:@@admin-core.form.choice-list-source-list:Values from the list` },
+    { value: ChoiceListSourceEnum.UNIQUE_VALUES, label: $localize `:@@admin-core.form.choice-list-source-unique-values:Unique values of the attribute` },
+  ];
+
+  public readonly choiceListSourceList = ChoiceListSourceEnum.LIST;
 
   public fieldForm = new FormGroup({
     label: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    type: new FormControl('', {
+    controlType: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
     required: new FormControl<boolean>(false, { nonNullable: true }),
-    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    readOnly: new FormControl<boolean>(false, { nonNullable: true }),
     autoFillUser: new FormControl<boolean>(false, { nonNullable: true }),
     autoFillDate: new FormControl<boolean>(false, { nonNullable: true }),
-    uniqueValuesAsOptions: new FormControl<boolean>(false, { nonNullable: true }),
+    choiceListSource: new FormControl<ChoiceListSourceEnum>(ChoiceListSourceEnum.LIST, { nonNullable: true }),
     valueList: new FormArray<ValueListFormType>([]),
     allowFreeInput: new FormControl<boolean>(false, { nonNullable: true }),
   });
@@ -114,7 +121,7 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
         } else {
           this.clearForm();
         }
-        this.filteredFieldTypes = EditFormFieldHelper.getFilteredFieldTypes(field?.name, this.featureType);
+        this.filteredControlTypes = EditFormFieldHelper.getFilteredControlTypes(field?.name, this.featureType);
         this.store$.dispatch(updateDraftFormFieldValid({ isValid: true }));
         this.cdr.detectChanges();
       });
@@ -123,18 +130,18 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private initForm(form: FormFieldModel) {
     this.fieldForm.patchValue({
       label: form.label,
-      type: form.type,
+      controlType: form.controlType,
       required: form.required,
-      disabled: form.disabled,
+      readOnly: form.readOnly,
       autoFillUser: form.autoFillUser,
       autoFillDate: form.autoFillDate,
-      uniqueValuesAsOptions: form.uniqueValuesAsOptions,
-      allowFreeInput: form.allowValueListOnly === false,
+      choiceListSource: form.choiceList?.source ?? ChoiceListSourceEnum.LIST,
+      allowFreeInput: !!form.choiceList?.allowFreeInput,
     }, { emitEvent: false });
     const valueList = this.getValueListFormArray();
     valueList.clear({ emitEvent: false });
-    if (form.valueList) {
-      (form.valueList || []).forEach(v => {
+    if (form.choiceList?.values) {
+      form.choiceList.values.forEach(v => {
         const valueForm = new FormGroup({
           label: new FormControl<string>(v.label || '', { nonNullable: true }),
           value: new FormControl<string>(typeof v.value === 'undefined' ? '' : `${v.value}`, { nonNullable: true }),
@@ -147,12 +154,12 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private clearForm() {
     this.fieldForm.patchValue({
       label: '',
-      type: '',
+      controlType: '',
       required: false,
-      disabled: false,
+      readOnly: false,
       autoFillUser: false,
       autoFillDate: false,
-      uniqueValuesAsOptions: false,
+      choiceListSource: ChoiceListSourceEnum.LIST,
       allowFreeInput: false,
     }, { emitEvent: false });
     this.getValueListFormArray().clear({ emitEvent: false });
@@ -174,7 +181,7 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
   private isValidField(): boolean {
     const values = this.fieldForm.getRawValue();
     return FormHelper.isValidValue(values.label)
-      && FormHelper.isValidValue(values.type)
+      && FormHelper.isValidValue(values.controlType)
       && this.fieldForm.valid;
   }
 
@@ -220,30 +227,33 @@ export class FormEditFieldComponent implements OnInit, OnDestroy {
 
   private dispatchFieldModel(rawValue: Partial<{
     label: string;
-    type: string;
+    controlType: string;
     required: boolean;
-    disabled: boolean;
+    readOnly: boolean;
     autoFillUser: boolean;
     autoFillDate: boolean;
-    uniqueValuesAsOptions: boolean;
+    choiceListSource: ChoiceListSourceEnum;
     valueList: Partial<{
       value: string; label: string;
     }>[];
     allowFreeInput: boolean;
   }>, field: FormFieldModel) {
-    const valueList = (rawValue.valueList || [])
-      .map(v => ({ label: v.label || v.value || '', value: v.value || '' }));
+    const controlType = EditFormFieldHelper.getControlType(rawValue.controlType);
+    // Values are kept when another source is chosen, so they are not lost when switching back to the list
+    const choiceList: ChoiceListModel | undefined = controlType === FormFieldControlTypeEnum.SELECT ? {
+      source: rawValue.choiceListSource ?? ChoiceListSourceEnum.LIST,
+      values: (rawValue.valueList || []).map(v => ({ label: v.label || v.value || '', value: v.value || '' })),
+      allowFreeInput: !!rawValue.allowFreeInput,
+    } : undefined;
     const fieldModel: FormFieldModel = {
       name: field.name,
       label: rawValue.label || field.name,
       required: typeof rawValue.required === 'undefined' ? false : rawValue.required,
-      disabled: typeof rawValue.disabled === 'undefined' ? false : rawValue.disabled,
+      readOnly: typeof rawValue.readOnly === 'undefined' ? false : rawValue.readOnly,
       autoFillUser: typeof rawValue.autoFillUser === 'undefined' ? false : rawValue.autoFillUser,
       autoFillDate: typeof rawValue.autoFillDate === 'undefined' ? false : rawValue.autoFillDate,
-      type: EditFormFieldHelper.getFormFieldType(rawValue.type),
-      valueList,
-      uniqueValuesAsOptions: rawValue.uniqueValuesAsOptions,
-      allowValueListOnly: !rawValue.allowFreeInput,
+      controlType,
+      choiceList,
       tab: field.tab,
     };
     this.store$.dispatch(draftFormUpdateField({ field: fieldModel }));

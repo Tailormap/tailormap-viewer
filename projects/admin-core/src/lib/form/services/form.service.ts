@@ -142,9 +142,8 @@ export class FormService {
               featureTypeName: form.featureTypeName,
               fields: form.fields,
               options: {
-                columns: form.options.columns,
                 tabs: form.options.tabs,
-                description: form.options.description,
+                adminComments: form.options.adminComments,
               },
             };
             return this.updateForm$(draftForm.id, draftForm);
