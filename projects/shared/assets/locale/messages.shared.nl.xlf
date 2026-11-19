@@ -233,6 +233,10 @@
         <source>Pick <x id="PH" equiv-text="colorLabel"/></source>
         <target>Kies <x id="PH" equiv-text="colorLabel"/></target>
       </trans-unit>
+      <trans-unit id="shared.color-picker.picker" datatype="html">
+        <source>Color picker</source>
+        <target>Kleurkiezer</target>
+      </trans-unit>
       <trans-unit id="shared.common.close" datatype="html">
         <source>Close</source>
         <target>Sluiten</target>
@@ -256,6 +260,10 @@
       <trans-unit id="shared.cooperative-gestures-helper.windows" datatype="html">
         <source>Use ctrl + scroll to zoom the map</source>
         <target>Gebruik ctrl + scroll om in te zoomen op de kaart.</target>
+      </trans-unit>
+      <trans-unit id="shared.icon-picker.picker" datatype="html">
+        <source>Icon picker</source>
+        <target>Icoonkiezer</target>
       </trans-unit>
       <trans-unit id="shared.language.dutch" datatype="html">
         <source>Dutch</source>
@@ -448,6 +456,10 @@
       <trans-unit id="shared.password-reset-request-form.title" datatype="html">
         <source>Reset Password</source>
         <target>Wachtwoord opnieuw instellen</target>
+      </trans-unit>
+      <trans-unit id="shared.popover.close" datatype="html">
+        <source>Close</source>
+        <target>Sluiten</target>
       </trans-unit>
       <trans-unit id="shared.split-button.cycle-aria-label" datatype="html">
         <source>Showing <x id="PH" equiv-text="this.getLabel()"/> – click to switch to <x id="PH_1" equiv-text="nextLabel"/></source>

@@ -6,14 +6,13 @@
         <em i18n="@@core.common.required">(required)</em>
       }
     </mat-label>
-    @if (item.allowValueListOnly === false) {
+    @if (allowFreeInput) {
       <input type="text"
              [placeholder]="item.placeholder || item.label"
              matInput
              [formControl]="formControl"
              [matAutocomplete]="auto">
-      <mat-autocomplete [requireSelection]="item.allowValueListOnly"
-                        [displayWith]="displayLabel"
+      <mat-autocomplete [displayWith]="displayLabel"
                         #auto="matAutocomplete">
         @if (loading) {
           <mat-option><mat-spinner color="primary" diameter="20"></mat-spinner></mat-option>

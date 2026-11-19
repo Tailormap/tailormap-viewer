@@ -42,23 +42,28 @@ export class ApplicationModelHelper {
     return application.contentRoot || { layerNodes: [], baseLayerNodes: [], terrainLayerNodes: [] };
   }
 
+  /**
+   * A free id for a new app layer node: `lyr:<service id>:<layer name>`, or with `_1`, `_2`, … added when
+   * that's already in `usedIds`. The one place this rule lives, also used by Tailormap Pro (stories).
+   */
+  public static createLayerNodeId(layer: { serviceId: string; layerName: string }, usedIds: ReadonlySet<string>): string {
+    const baseId = `lyr:${layer.serviceId}:${layer.layerName}`;
+    let idx = 0;
+    let id = baseId;
+    while (usedIds.has(id)) {
+      id = `${baseId}_${++idx}`;
+    }
+    return id;
+  }
+
   public static newApplicationTreeLayerNode(
     layer: ExtendedGeoServiceLayerModel,
     applicationNodes: AppTreeNodeModel[],
   ): AppTreeLayerNodeModel {
-    const existingLayers = applicationNodes.filter(node => {
-      if (!ApplicationModelHelper.isLayerTreeNode(node)) {
-        return false;
-      }
-      return node.serviceId === layer.serviceId && node.layerName === layer.name;
-    });
-    const existingLayerIds = new Set(existingLayers.map(node => node.id));
-    const baseId = `lyr:${layer.serviceId}:${layer.name}`;
-    let idx = 0;
-    let id = baseId;
-    while (existingLayerIds.has(id)) {
-      id = `${baseId}_${++idx}`;
-    }
+    const id = ApplicationModelHelper.createLayerNodeId(
+      { serviceId: layer.serviceId, layerName: layer.name },
+      new Set(applicationNodes.map(node => node.id)),
+    );
     return {
       id,
       description: '',

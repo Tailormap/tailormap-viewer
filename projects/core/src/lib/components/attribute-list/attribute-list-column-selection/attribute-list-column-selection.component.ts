@@ -1,11 +1,12 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragPlaceholder, CdkDragPreview, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { changeColumnPosition, toggleAllColumnsVisible, toggleColumnVisible } from '../state/attribute-list.actions';
-import { OVERLAY_DATA, OverlayRef, TooltipDirective } from '@tailormap-viewer/shared';
+import { TooltipDirective } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { selectColumnsForData } from '../state/attribute-list.selectors';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -33,14 +34,14 @@ import { AsyncPipe } from '@angular/common';
 export class AttributeListColumnSelectionComponent {
 
   private store$ = inject(Store);
-  private overlayRef = inject(OverlayRef);
-  private data = inject(OVERLAY_DATA) as { dataId: string };
-  public columns$ = this.store$.select(selectColumnsForData(this.data.dataId));
+  public dataId = input.required<string>();
+  public closed = output<void>();
+  public columns$ = toObservable(this.dataId).pipe(switchMap(dataId => this.store$.select(selectColumnsForData(dataId))));
   public allColumnsVisible$ = this.columns$.pipe(map(columns => columns.length > 0 && columns.every(column => column.visible)));
   public someColumnsVisible$ = this.columns$.pipe(map(columns => columns.some(column => column.visible)));
 
   public closeOverlay() {
-    this.overlayRef.close();
+    this.closed.emit();
   }
 
   public trackByColumnId(index: number, column: AttributeListColumnModel) {
@@ -49,7 +50,7 @@ export class AttributeListColumnSelectionComponent {
 
   public toggleVisible(column: AttributeListColumnModel) {
     this.store$.dispatch(toggleColumnVisible({
-      dataId: this.data.dataId,
+      dataId: this.dataId(),
       columnId: column.id,
     }));
   }
@@ -59,14 +60,14 @@ export class AttributeListColumnSelectionComponent {
     moveItemInArray(tempColumns, $event.previousIndex, $event.currentIndex);
     const prevItem = $event.currentIndex === 0 ? null : tempColumns[$event.currentIndex - 1].id;
     this.store$.dispatch(changeColumnPosition({
-      dataId: this.data.dataId,
+      dataId: this.dataId(),
       columnId: $event.item.data.id,
       previousColumn: prevItem,
     }));
   }
 
   public toggleSelectAll() {
-    this.store$.dispatch(toggleAllColumnsVisible({ dataId: this.data.dataId }));
+    this.store$.dispatch(toggleAllColumnsVisible({ dataId: this.dataId() }));
   }
 
 }

@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild, ViewContainerRef, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, viewChild, ViewContainerRef, effect, signal } from '@angular/core';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
-import { PopoverService, OverlayRef, PopoverPositionEnum, BrowserHelper, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
+import { PopoverComponent, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
 import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
 import {
   selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
@@ -42,11 +42,12 @@ import { AsyncPipe } from '@angular/common';
         TooltipDirective,
         MatPaginator,
         AsyncPipe,
+        PopoverComponent,
+        AttributeListPagingDialogComponent,
     ],
 })
-export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
+export class AttributeListTabToolbarComponent implements OnInit {
   private store$ = inject(Store);
-  private popoverService = inject(PopoverService);
   private attributeListStateService = inject(AttributeListStateService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
   private attributeListFeatureRegistrationService = inject(AttributeListFeatureRegistrationService);
@@ -57,7 +58,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
 
   public columns: AttributeListColumnModel[] = [];
 
-  private pagingPopover: OverlayRef | null = null;
+  public pagingPopoverOrigin = signal<HTMLElement | null>(null);
   public loadingData$: Observable<boolean> = of(false);
   public pagingData$: Observable<AttributeListPagingDataType | null> = of(null);
   public hasFilters$: Observable<boolean> = of(false);
@@ -112,12 +113,6 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       );
   }
 
-  public ngOnDestroy() {
-    if (this.pagingPopover) {
-      this.pagingPopover.close();
-    }
-  }
-
   public onPageChange($event: PageEvent): void {
     this.attributeListStateService.executeActionForCurrentData(dataId => {
       this.attributeListDataService.updatePage(dataId, $event.pageIndex + 1);
@@ -129,20 +124,7 @@ export class AttributeListTabToolbarComponent implements OnInit, OnDestroy {
       return;
     }
     if ($event.target.className.indexOf('paginator-range-label') !== -1) {
-      if (this.pagingPopover && this.pagingPopover.isOpen) {
-        this.pagingPopover.close();
-        return;
-      }
-      const WINDOW_WIDTH = 150;
-      this.pagingPopover = this.popoverService.open({
-        origin: $event.target,
-        content: AttributeListPagingDialogComponent,
-        height: 80,
-        width: Math.min(WINDOW_WIDTH, BrowserHelper.getScreenWith()),
-        closeOnClickOutside: true,
-        position: PopoverPositionEnum.BOTTOM_RIGHT_DOWN,
-        positionOffset: 10,
-      });
+      this.pagingPopoverOrigin.set(this.pagingPopoverOrigin() ? null : $event.target);
     }
   }
 

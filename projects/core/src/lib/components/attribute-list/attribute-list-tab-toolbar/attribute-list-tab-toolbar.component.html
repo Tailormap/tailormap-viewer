@@ -36,4 +36,14 @@
     </div>
   }
 
+  @if (pagingPopoverOrigin(); as origin) {
+    <tm-popover [origin]="origin"
+                [width]="150"
+                i18n-ariaLabel="@@core.attribute-list.go-to-page"
+                ariaLabel="Go to page"
+                (closed)="pagingPopoverOrigin.set(null)">
+      <tm-attribute-list-paging-dialog></tm-attribute-list-paging-dialog>
+    </tm-popover>
+  }
+
 </mat-toolbar>

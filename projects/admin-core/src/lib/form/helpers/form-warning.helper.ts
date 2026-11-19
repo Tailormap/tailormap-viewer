@@ -3,7 +3,7 @@ import { AppLayerSettingsModel, FeatureTypeModel, FormModel } from '@tailormap-a
 export interface FormFieldWarnings {
   /** Fields not shown in the viewer: the attribute is hidden or no longer exists in the feature type */
   notShown: string[];
-  /** Fields shown read-only in the viewer because the attribute is not editable, while the form field is not disabled */
+  /** Fields shown read-only in the viewer because the attribute is not editable, while the form field is not read-only */
   readOnly: string[];
   /** Fields marked required in the form which can't be edited, so a new feature can't get a value */
   requiredReadOnly: string[];
@@ -38,9 +38,9 @@ export class FormWarningHelper {
         return;
       }
       const editable = catalogEditable.has(field.name) && !appLayerReadOnly.has(field.name);
-      if (field.required && (!editable || field.disabled)) {
+      if (field.required && (!editable || field.readOnly)) {
         warnings.requiredReadOnly.push(field.name);
-      } else if (!editable && !field.disabled) {
+      } else if (!editable && !field.readOnly) {
         warnings.readOnly.push(field.name);
       }
     });

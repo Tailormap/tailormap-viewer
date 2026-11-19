@@ -5,7 +5,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeatureTypeModel, FormModel } from '@tailormap-admin/admin-api';
-import { ConfirmDialogService } from '@tailormap-viewer/shared';
+import { ConfirmDialogService, SpinnerButtonComponent } from '@tailormap-viewer/shared';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import {
   selectDraftFormSelectedAttribute, selectDraftFormSelectedTab, selectDraftFormUpdated, selectDraftFormValid, selectDraftFormTabs,
@@ -13,7 +13,7 @@ import {
 } from '../state/form.selectors';
 import { FormService } from '../services/form.service';
 import {
-  clearSelectedForm, draftFormClearSelection, draftFormCorrectFieldTypes, updateDraftForm, updateDraftFormValid,
+  clearSelectedForm, draftFormClearSelection, draftFormCorrectControlTypes, updateDraftForm, updateDraftFormValid,
 } from '../state/form.actions';
 import { FormUpdateModel } from '../services/form-update.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
@@ -29,6 +29,9 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { FormEditTabComponent } from '../form-edit-tab/form-edit-tab.component';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { FormCopyDialogComponent } from '../form-copy-dialog/form-copy-dialog.component';
+import { FormUsedDialogComponent, FormUsedDialogData } from '../form-used-dialog/form-used-dialog.component';
 
 @Component({
     selector: 'tm-admin-form-edit',
@@ -49,6 +52,7 @@ import { MatIcon } from '@angular/material/icon';
         FormEditTabComponent,
         MatIcon,
         MatIconButton,
+        SpinnerButtonComponent,
     ],
 })
 export class FormEditComponent implements OnInit, OnDestroy {
@@ -59,10 +63,14 @@ export class FormEditComponent implements OnInit, OnDestroy {
   private formService = inject(FormService);
   private featureSourceService = inject(FeatureSourceService);
   private adminSnackbarService = inject(AdminSnackbarService);
+  private dialog = inject(MatDialog);
 
 
   private savingSubject = new BehaviorSubject(false);
   public saving$ = this.savingSubject.asObservable();
+
+  private makingCopySubject = new BehaviorSubject(false);
+  public makingCopy$ = this.makingCopySubject.asObservable();
 
   private destroyed = new Subject();
   public form$: Observable<FormModel | null> = of(null);
@@ -96,7 +104,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
       this.store$.select(selectDraftFormValid),
       this.store$.select(selectDraftFormFieldValid),
     ]).pipe(map(([ updated, valid, fieldValid ]) => updated && valid && fieldValid));
-    // Correct stale field types (from an old admin default or a changed attribute type after refreshing the feature source), so
+    // Correct stale field controls (from an old admin default or a changed attribute type after refreshing the feature source), so
     // opening and saving the form fixes them. The draft form is marked as updated only when something was corrected.
     combineLatest([
       this.form$.pipe(map(form => form?.id), distinctUntilChanged()),
@@ -105,7 +113,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed))
       .subscribe(([ formId, featureType ]) => {
         if (formId && featureType) {
-          this.store$.dispatch(draftFormCorrectFieldTypes({
+          this.store$.dispatch(draftFormCorrectControlTypes({
             attributes: featureType.attributes.map(a => ({ name: a.name, type: a.type })),
           }));
         }
@@ -156,12 +164,20 @@ export class FormEditComponent implements OnInit, OnDestroy {
 
   public delete(form: FormModel) {
     const title = form.name;
-    this.confirmDelete.confirm$(
-      $localize `:@@admin-core.form.delete-form:Delete form ${title}`,
-      $localize `:@@admin-core.form.delete-form-message:Are you sure you want to delete form ${title}? This action cannot be undone.`,
-      true,
-    )
+    this.formService.getAppLayersUsingForm$(form.id)
       .pipe(
+        take(1),
+        switchMap(usages => {
+          if (usages.length > 0) {
+            const data: FormUsedDialogData = { formName: title, usages };
+            return this.dialog.open(FormUsedDialogComponent, { data }).afterClosed().pipe(map(() => false));
+          }
+          return this.confirmDelete.confirm$(
+            $localize `:@@admin-core.form.delete-form:Delete form ${title}`,
+            $localize `:@@admin-core.form.delete-form-message:Are you sure you want to delete form ${title}? This action cannot be undone.`,
+            true,
+          );
+        }),
         take(1),
         filter(answer => answer),
         switchMap(() => this.formService.deleteForm$(form.id)),
@@ -169,6 +185,24 @@ export class FormEditComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.adminSnackbarService.showMessage($localize `:@@admin-core.form.form-removed:Form ${title} removed`);
         this.router.navigateByUrl('/admin/forms');
+      });
+  }
+
+  public copy(form: FormModel) {
+    this.makingCopySubject.next(true);
+    FormCopyDialogComponent.open(this.dialog, {
+      formId: form.id,
+      formName: form.name,
+      featureSourceId: form.featureSourceId,
+      featureTypeName: form.featureTypeName,
+    }).afterClosed()
+      .pipe(take(1))
+      .subscribe(copiedForm => {
+        if (copiedForm) {
+          this.adminSnackbarService.showMessage($localize `:@@admin-core.form.form-copied:Form ${copiedForm.name} copied`);
+          this.router.navigateByUrl('/admin/forms/form/' + copiedForm.id);
+        }
+        this.makingCopySubject.next(false);
       });
   }
 

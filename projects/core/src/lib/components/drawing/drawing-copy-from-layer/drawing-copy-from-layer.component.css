@@ -6,18 +6,25 @@
   margin-bottom: 0;
 }
 
-.reference-layer {
-  width: 100%;
-  margin-top: 8px;
+.copy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
 }
 
-.copy-buttons .mat-mdc-outlined-button {
+.reference-layer {
+  flex: 1;
+  min-width: 0;
+}
+
+.copy-row .mat-mdc-outlined-button {
   min-width: 40px;
   padding: 0 8px;
   border-radius: 3px;
 }
 
-.copy-buttons .mat-mdc-outlined-button mat-icon {
+.copy-row .mat-mdc-outlined-button mat-icon {
   margin: 0;
   min-height: auto;
 }

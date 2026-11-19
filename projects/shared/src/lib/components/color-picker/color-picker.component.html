@@ -1,8 +1,9 @@
 <div [class]="getClass()">
   <button
     mat-flat-button
-    (click)="openPicker()"
-    #colorPickerButton
+    (click)="togglePicker()"
+    cdkOverlayOrigin
+    #colorPickerButton="cdkOverlayOrigin"
     class="color-picker__button"
     aria-label="open color picker"
     i18n-aria-label="@@core.color-picker.open-picker">
@@ -24,8 +25,14 @@
   </button>
 </div>
 
-<ng-template #colorPickerContent>
-  <div class="color-picker__picker mat-elevation-z4">
+@if (pickerOpen) {
+  <tm-popover [origin]="colorPickerButton"
+              [position]="dropdownPosition"
+              [width]="getPopoverWidth()"
+              ariaLabel="Color picker"
+              i18n-ariaLabel="@@shared.color-picker.picker"
+              (closed)="pickerOpen = false">
+  <div class="color-picker__picker">
 
     <div class="color-picker__colors">
 
@@ -67,4 +74,5 @@
     </div>
 
   </div>
-</ng-template>
+  </tm-popover>
+}

@@ -2,11 +2,12 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
 import {
-  AttributeType, FormFieldTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
+  AttributeType, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
 } from '@tailormap-viewer/api';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 
 describe('EditFormComponent', () => {
 
@@ -33,8 +34,8 @@ describe('EditFormComponent', () => {
         details: getLayerDetailsModel({
           editable: true,
           attributes: [
-            { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-            { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+            { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null },
+            { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null },
           ],
         }),
       } },
@@ -64,18 +65,16 @@ describe('EditFormComponent', () => {
           details: getLayerDetailsModel({
             editable: true,
             attributes: [
-              { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null, allowValueListOnly: false },
-              { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null, allowValueListOnly: false },
+              { id: 1, type: AttributeType.STRING, name: 'prop', editable: true, nullable: null },
+              { id: 2, type: AttributeType.STRING, name: 'prop2', editable: true, nullable: null },
             ],
             form: {
               options: {
-                description: 'Test form',
-                columns: 0,
                 tabs: [],
               },
               fields: [
-                { name: 'prop', type: FormFieldTypeEnum.TEXT, label: 'Property', required: true },
-                { name: 'prop2', type: FormFieldTypeEnum.TEXT, label: 'Property alias', required: true, autoFillUser: true },
+                { name: 'prop', controlType: FormFieldControlTypeEnum.TEXT, label: 'Property', required: true },
+                { name: 'prop2', controlType: FormFieldControlTypeEnum.TEXT, label: 'Property alias', required: true, autoFillUser: true },
               ],
             },
           }),
@@ -89,5 +88,35 @@ describe('EditFormComponent', () => {
       { attribute: 'prop', value: '123', invalid: false },
     ));
     expect(await screen.getByPlaceholderText('Property alias')).toHaveValue("editor");
+  });
+
+  test('should render a date and time picker for a timestamp attribute', async () => {
+    const featureAttributeChanged = vi.fn();
+    const feature = getFeatureModel();
+    await render(EditFormComponent, {
+      providers: [
+        AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
+        provideLuxonDateAdapter(),
+      ],
+      inputs: { input: {
+          feature: {
+            feature: { ...feature, layerId: 'layer-1', attributes: { ...feature.attributes, ts: '2026-10-21T10:30:00.000Z' } },
+            columnMetadata: [{ name: 'ts', alias: 'Timestamp', type: AttributeType.TIMESTAMP, layerId: 'layer-1' }],
+          },
+          details: getLayerDetailsModel({
+            editable: true,
+            attributes: [{ id: 1, type: AttributeType.TIMESTAMP, name: 'ts', editable: true, nullable: null }],
+          }),
+        } },
+      on: { featureAttributeChanged: featureAttributeChanged },
+    });
+    expect(await screen.findByRole('group', { name: 'Timestamp' })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Timestamp')).toHaveValue('10/21/2026');
+    const timeInput = screen.getByRole('combobox', { name: 'Time' });
+    await userEvent.clear(timeInput);
+    await userEvent.type(timeInput, '2:15 PM');
+    await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
+      { attribute: 'ts', value: '2026-10-21T14:15:00.000+00:00', invalid: false },
+    ));
   });
 });

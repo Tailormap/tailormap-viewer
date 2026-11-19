@@ -1,0 +1,22 @@
+<h2 mat-dialog-title i18n="@@admin-core.form.copy-form">Copy form {{ data.formName }}</h2>
+<mat-dialog-content>
+  <form (submit)="$event.preventDefault(); save()">
+    <mat-form-field>
+      <mat-label i18n="@@admin-core.common.name">Name</mat-label>
+      <input matInput tmAutoFocus [formField]="copyForm.name" />
+      @if (copyForm.name().invalid()) {
+        <mat-error i18n="@@admin-core.form.name-required">Name is required</mat-error>
+      }
+      @if (nameTaken()) {
+        <mat-hint class="error" i18n="@@admin-core.form.non-unique-name-error">A form with this name already exists for this feature type.</mat-hint>
+      }
+    </mat-form-field>
+  </form>
+  @if (errorMessage(); as message) {
+    <p class="error-message" role="alert">{{ message }}</p>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button type="button" (click)="cancel()" i18n="@@admin-core.catalog.common.cancel">Cancel</button>
+  <tm-admin-save-button [saving$]="saving$" [disabled]="!valid()" (save)="save()"></tm-admin-save-button>
+</mat-dialog-actions>

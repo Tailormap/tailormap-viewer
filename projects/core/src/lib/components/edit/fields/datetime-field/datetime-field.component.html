@@ -1,0 +1,26 @@
+<div class="datetime-field" role="group" [attr.aria-label]="item().label">
+  <mat-form-field class="date" hideRequiredMarker>
+    <mat-label>
+      {{ item().label }}
+      @if (item().required) {
+        <em i18n="@@core.common.required">(required)</em>
+      }
+    </mat-label>
+    <input matInput
+           [matDatepicker]="dp"
+           [formControl]="dateControl"
+           [placeholder]="item().placeholder || item().label"
+           (blur)="markAsTouched()" />
+    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp (closed)="markAsTouched()"></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="time" hideRequiredMarker>
+    <mat-label i18n="@@core.edit.time">Time</mat-label>
+    <input matInput
+           [matTimepicker]="tp"
+           [formControl]="timeControl"
+           (blur)="markAsTouched()" />
+    <mat-timepicker-toggle matSuffix [for]="tp"></mat-timepicker-toggle>
+    <mat-timepicker #tp></mat-timepicker>
+  </mat-form-field>
+</div>
