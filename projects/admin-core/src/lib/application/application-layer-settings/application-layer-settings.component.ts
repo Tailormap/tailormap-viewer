@@ -18,7 +18,7 @@ import {
 } from '../application-layer-attribute-settings/application-layer-attribute-settings.component';
 import { ExtendedFeatureSourceModel } from '../../catalog/models/extended-feature-source.model';
 import { FeatureSourceService } from '../../catalog/services/feature-source.service';
-import { selectFormsForFeatureType, selectFormsLoadStatus } from '../../form/state/form.selectors';
+import { selectForms, selectFormsForFeatureType, selectFormsLoadStatus } from '../../form/state/form.selectors';
 import { FormService } from '../../form/services/form.service';
 import { selectSearchIndexesForFeatureType, selectSearchIndexesLoadStatus } from '../../search-index/state/search-index.selectors';
 import { SearchIndexService } from '../../search-index/services/search-index.service';
@@ -93,6 +93,8 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
   private destroyed = new Subject();
   private layerSettingsSubject = new BehaviorSubject<Record<string, AppLayerSettingsModel>>({});
   private layerSettings: Record<string, AppLayerSettingsModel> = {};
+  private forms = this.store$.selectSignal(selectForms);
+  private formsLoadStatus = this.store$.selectSignal(selectFormsLoadStatus);
   // eslint-disable-next-line max-len
   private editingDisabledTooltip = $localize `:@@admin-core.application.layer-not-editable:This layer cannot be edited because there is no writeable feature source / type configured for this layer`;
   public layerTitle = '';
@@ -201,6 +203,17 @@ export class ApplicationLayerSettingsComponent implements OnInit, OnDestroy {
     } else {
       return formValue;
     }
+  }
+
+  /**
+   * Whether the layer references a form that no longer exists. Deleting a form used by an app layer is blocked in the admin,
+   * but older references can exist.
+   */
+  public isMissingForm(): boolean {
+    const formId = this.layerSettingsForm.get('formId')?.value;
+    return !!formId
+      && this.formsLoadStatus() === LoadingStateEnum.LOADED
+      && !this.forms().some(form => form.id === formId);
   }
 
   public ngOnInit(): void {

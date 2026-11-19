@@ -389,6 +389,9 @@
       <trans-unit id="admin-core.application.folder-name" datatype="html">
         <source>Folder name</source>
       </trans-unit>
+      <trans-unit id="admin-core.application.form-not-found" datatype="html">
+        <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
+      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
       </trans-unit>
@@ -926,6 +929,9 @@
       <trans-unit id="admin-core.catalog.primary-key" datatype="html">
         <source>Primary key</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key-editable" datatype="html">
+        <source>The primary key can only be entered when adding a feature, it cannot be changed afterwards. Leave this off when the database generates the primary key.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
       </trans-unit>
@@ -1406,6 +1412,12 @@
       <trans-unit id="admin-core.form.control-type" datatype="html">
         <source>Edit control</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.copy-form" datatype="html">
+        <source>Copy form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/></source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.copy-of" datatype="html">
+        <source>Copy of <x id="PH" equiv-text="this.data.formName"/></source>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
       </trans-unit>
@@ -1469,6 +1481,9 @@
       <trans-unit id="admin-core.form.filter-forms" datatype="html">
         <source>Filter forms</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-copied" datatype="html">
+        <source>Form <x id="PH" equiv-text="copiedForm.name"/> copied</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
       </trans-unit>
@@ -1493,14 +1508,32 @@
       <trans-unit id="admin-core.form.form-updated" datatype="html">
         <source>Form updated</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-used" datatype="html">
+        <source>Form is used in layers</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-used-body" datatype="html">
+        <source>The form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> is used in the following application layers.</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
       </trans-unit>
       <trans-unit id="admin-core.form.label-list-label" datatype="html">
         <source>Label</source>
       </trans-unit>
+      <trans-unit id="admin-core.form.make-copy" datatype="html">
+        <source>Copy</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.name-required" datatype="html">
+        <source>Name is required</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.non-unique-name-error" datatype="html">
+        <source>A form with this name already exists for this feature type.</source>
+      </trans-unit>
       <trans-unit id="admin-core.form.read-only" datatype="html">
         <source>Read-only</source>
+      </trans-unit>
+      <trans-unit id="admin-core.form.remove-form-from-layers-first" datatype="html">
+        <source>Please select another form or no form for these layers first.</source>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>

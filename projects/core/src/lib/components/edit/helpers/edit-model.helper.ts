@@ -31,7 +31,7 @@ export class EditModelHelper {
         const attributeValue = feature.attributes[attribute.name];
         const fieldValue = isNewFeature ? attributeValue || attribute.defaultValue || '' : attributeValue;
         const metadata = columnMetadata.find(c => c.name === attribute.name);
-        const attributeField = EditModelHelper.createAttributeField(attribute, fieldValue, metadata?.alias);
+        const attributeField = EditModelHelper.createAttributeField(attribute, fieldValue, metadata?.alias, isNewFeature);
         const formField = formFields?.get(attribute.name);
         return formField
           ? EditModelHelper.applyFormField(attributeField, formField, attribute)
@@ -41,12 +41,14 @@ export class EditModelHelper {
 
   /**
    * Creates the edit field from the attribute metadata of the layer only. The attribute metadata includes the catalog and
-   * application layer settings (such as read-only attributes) and the database column constraints.
+   * application layer settings (such as read-only attributes) and the database column constraints. An editable primary key can only
+   * be set for a new feature, the primary key of an existing feature can't be changed.
    */
   private static createAttributeField(
     attribute: AttributeModel,
     value: ViewerEditFormFieldModel['value'],
     alias?: string,
+    isNewFeature?: boolean,
   ): ViewerEditFormFieldModel {
     // Do not display a required boolean as a checkbox but as a select, because a checkbox can't show whether it is null or false so
     // a user must touch it to make the form valid. For nullable booleans just keep the checkbox and do not bother the user with the
@@ -61,7 +63,7 @@ export class EditModelHelper {
       name: attribute.name,
       attributeType: attribute.type,
       required: attribute.nullable === false,
-      readOnly: !attribute.editable,
+      readOnly: !attribute.editable || (!!attribute.primaryKey && !isNewFeature),
       controlType: booleanChoiceList ? FormFieldControlTypeEnum.SELECT : FormFieldControlTypeHelper.getDefaultControlType(attribute.type),
       choiceList: booleanChoiceList,
     };

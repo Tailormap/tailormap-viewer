@@ -1,5 +1,5 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { catchError, combineLatest, concatMap, filter, map, of, switchMap, take, tap } from 'rxjs';
+import { catchError, combineLatest, concatMap, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { DebounceHelper, LoadingStateEnum } from '@tailormap-viewer/shared';
 import {
   selectDraftForm, selectDraftFormId, selectDraftFormLoadStatus, selectFormsLoadStatus,
@@ -13,6 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminSnackbarService } from '../../shared/services/admin-snackbar.service';
 import { ApiResponseHelper, FormModel, TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { AdminSseService, EventType } from '../../shared/services/admin-sse.service';
+import { ApplicationService } from '../../application/services/application.service';
+import { FormUsageHelper, FormUsageModel } from '../helpers/form-usage.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,7 @@ export class FormService {
   private adminApiService = inject(TailormapAdminApiV1Service);
   private adminSnackbarService = inject(AdminSnackbarService);
   private sseService = inject(AdminSseService);
+  private applicationService = inject(ApplicationService);
 
 
   public listenForApplicationChanges() {
@@ -167,6 +170,17 @@ export class FormService {
           }
           return null;
         }),
+      );
+  }
+
+  /**
+   * The app layers using the form, see {@link FormUsageHelper.getAppLayersUsingForm}.
+   */
+  public getAppLayersUsingForm$(formId: number): Observable<FormUsageModel[]> {
+    return this.applicationService.getApplications$()
+      .pipe(
+        take(1),
+        map(applications => FormUsageHelper.getAppLayersUsingForm(applications, formId)),
       );
   }
 

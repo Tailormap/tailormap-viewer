@@ -518,6 +518,10 @@
         <source>Folder name</source>
         <target>Ordnername</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.form-not-found" datatype="html">
+        <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
+        <target>Das Formular dieses Layers wurde gelöscht. Bearbeiten erfolgt ohne Formular. Wählen Sie ein anderes Formular oder "Kein Formular".</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Sprachumschalter im Viewer ausblenden</target>
@@ -1234,6 +1238,10 @@
         <source>Primary key</source>
         <target>Primärschlüssel</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key-editable" datatype="html">
+        <source>The primary key can only be entered when adding a feature, it cannot be changed afterwards. Leave this off when the database generates the primary key.</source>
+        <target>Der Primärschlüssel kann nur beim Hinzufügen eines Features eingegeben und danach nicht mehr geändert werden. Lassen Sie dies deaktiviert, wenn die Datenbank den Primärschlüssel generiert.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
         <target>Protokoll</target>
@@ -1902,6 +1910,14 @@
         <source>Edit control</source>
         <target>Eingabeelement</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.copy-form" datatype="html">
+        <source>Copy form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/></source>
+        <target>Formular <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> kopieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.copy-of" datatype="html">
+        <source>Copy of <x id="PH" equiv-text="this.data.formName"/></source>
+        <target>Kopie von <x id="PH" equiv-text="this.data.formName"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
         <target>Formular erstellen</target>
@@ -1986,6 +2002,10 @@
         <source>Filter forms</source>
         <target>Formulare filtern</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-copied" datatype="html">
+        <source>Form <x id="PH" equiv-text="copiedForm.name"/> copied</source>
+        <target>Formular <x id="PH" equiv-text="copiedForm.name"/> kopiert</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target>Formular <x id="PH" equiv-text="createdForm.name"/> erstellt</target>
@@ -2018,6 +2038,14 @@
         <source>Form updated</source>
         <target>Formular aktualisiert</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-used" datatype="html">
+        <source>Form is used in layers</source>
+        <target>Formular wird in Layern verwendet</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-used-body" datatype="html">
+        <source>The form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> is used in the following application layers.</source>
+        <target>Das Formular <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> wird in den folgenden Anwendungslayern verwendet.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
         <target>Formulare</target>
@@ -2026,9 +2054,25 @@
         <source>Label</source>
         <target>Bezeichnung</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.make-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopieren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.name-required" datatype="html">
+        <source>Name is required</source>
+        <target>Name ist erforderlich</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.non-unique-name-error" datatype="html">
+        <source>A form with this name already exists for this feature type.</source>
+        <target>Für diesen Feature-Typ gibt es bereits ein Formular mit diesem Namen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.read-only" datatype="html">
         <source>Read-only</source>
         <target>Schreibgeschützt</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.remove-form-from-layers-first" datatype="html">
+        <source>Please select another form or no form for these layers first.</source>
+        <target>Bitte wählen Sie zuerst ein anderes oder kein Formular für diese Layer.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
