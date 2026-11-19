@@ -42,10 +42,11 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
     ],
 })
 export class SimpleSearchComponentConfigComponent implements ConfigurationComponentModel<SimpleSearchConfigModel> {
-  private static readonly CADASTRAL_MUNICIPALITY_NAMES = CADASTRAL_MUNICIPALITY_LIST.map(m => m.name);
-
   private componentConfigService = inject(ComponentConfigurationService);
   private destroyRef = inject(DestroyRef);
+
+
+  private static readonly CADASTRAL_MUNICIPALITY_NAMES = CADASTRAL_MUNICIPALITY_LIST.map(m => m.name);
 
   @Input()
   public type: BaseComponentTypeEnum | undefined;

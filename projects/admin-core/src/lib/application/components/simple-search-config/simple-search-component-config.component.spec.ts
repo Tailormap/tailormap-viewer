@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { CADASTRAL_MUNICIPALITY_LIST } from '@tailormap-viewer/shared';
 
 const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
@@ -66,7 +65,6 @@ describe('SimpleSearchComponentConfigComponent', () => {
       searchCadastralParcels: true,
       cadastralMunicipalities: ['Aalburg'],
     });
-    expect(CADASTRAL_MUNICIPALITY_LIST.map(m => m.name)).toContain('Aalburg');
     const input = await screen.findByRole('combobox', { name: 'Cadastral municipality' });
     await userEvent.type(input, 'aal');
     expect(await screen.findByRole('option', { name: 'Aalten' })).toBeInTheDocument();

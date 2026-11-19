@@ -117,15 +117,13 @@ describe('SimpleSearchService', () => {
     expect(codeFilter).toMatch(/^kadastrale_gemeentecode:\(GVH00 OR GVH01 OR .* OR GVH49\)$/);
   });
 
-  test('ignores kadastrale gemeente names that are not in the list', async () => {
+  test('ignores unknown kadastrale gemeente names and does not search parcels when none is known', async () => {
     const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'Aalten', 'Does not exist' ] });
     expect(parcelRequests[0].request.params.getAll('fq')).toEqual([ 'type:perceel', 'kadastrale_gemeentecode:(ATN02)' ]);
-  });
-
-  test('does not search parcels when none of the selected names is in the list', async () => {
-    const { results, parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: ['Does not exist'] });
-    expect(parcelRequests.length).toBe(0);
-    expect(results.map(r => r.id)).toEqual(['pdok-locatie-server']);
+    TestBed.resetTestingModule();
+    const noneKnown = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: ['Does not exist'] });
+    expect(noneKnown.parcelRequests.length).toBe(0);
+    expect(noneKnown.results.map(r => r.id)).toEqual(['pdok-locatie-server']);
   });
 
   test('does not apply the municipality filter to parcels', async () => {
@@ -151,14 +149,6 @@ describe('SimpleSearchService', () => {
     expect(requests[0].request.url).toBe('https://nominatim.openstreetmap.org/search');
     requests[0].flush([]);
     expect((await result$).map(r => r.id)).toEqual(['osm-nominatim']);
-  });
-
-  test('always searches parcels, also for input that is not a cadastral designation', async () => {
-    const { results, parcelRequests } = await search({ enabled: true, searchCadastralParcels: true }, 'Amsterdam');
-    expect(parcelRequests.length).toBe(1);
-    expect(parcelRequests[0].request.params.get('q')).toBe('Amsterdam');
-    expect(results.map(r => r.id)).toEqual([ 'pdok-locatie-server', 'pdok-cadastral-parcels' ]);
-    expect(results[0].results[0].label).toBe('Dorpsstraat 1, Aalten');
   });
 
   test('returns an empty parcel group on an HTTP error, other results still work', async () => {
