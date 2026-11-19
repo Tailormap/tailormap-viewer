@@ -6,7 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CatalogService } from '../services/catalog.service';
 import { getCatalogNode } from '@tailormap-admin/admin-api';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 
 const setup = async (editMode = false) => {
   const dialogRefMock = { close: vi.fn() };

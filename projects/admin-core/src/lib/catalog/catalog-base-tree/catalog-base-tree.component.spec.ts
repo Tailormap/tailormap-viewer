@@ -12,7 +12,7 @@ import { ExtendedCatalogNodeModel } from '../models/extended-catalog-node.model'
 import { TestBed } from '@angular/core/testing';
 import { CatalogTreeHelper } from '../helpers/catalog-tree.helper';
 import { CatalogExtendedTypeEnum } from '../models/catalog-extended.model';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { CatalogService } from '../services/catalog.service';
 
 const setup = async (state: Partial<CatalogState> = {}) => {

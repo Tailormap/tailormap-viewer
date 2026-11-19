@@ -1,6 +1,7 @@
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { ViewerEditFormFieldModel } from '../models/viewer-edit-form-field.model';
+import { AttributeType, FormFieldControlTypeEnum } from '@tailormap-viewer/api';
 
 export class FormHelper {
 
@@ -11,25 +12,25 @@ export class FormHelper {
     const form = new FormGroup({});
     fields.forEach(field => {
       const validators: ValidatorFn[] = [];
-      if (field.required && field.type !== 'boolean') {
+      if (field.required && field.controlType !== FormFieldControlTypeEnum.CHECKBOX) {
         validators.push(Validators.required);
       }
-      if (field.type === 'number') {
+      if (field.controlType === FormFieldControlTypeEnum.NUMBER) {
         validators.push(control=>
           // XXX i18n - only supports point as decimal separator (form control does not allow comma's anyway)
           (isNaN(control?.value) ? { number: true } : null));
       }
-      if (field.type === 'integer') {
+      if (field.controlType === FormFieldControlTypeEnum.NUMBER && field.attributeType === AttributeType.INTEGER) {
         validators.push(Validators.pattern(FormHelper.INTEGER_VALIDATOR_PATTERN));
       }
-      if (field.type === 'date') {
+      if (field.controlType === FormFieldControlTypeEnum.DATE) {
         validators.push(FormHelper.dateValidator());
       }
       const control = new FormControl(field.value, {
         validators,
         nonNullable: field.required,
       });
-      if (field.disabled) {
+      if (field.readOnly) {
         control.disable();
       } else {
         control.enable();

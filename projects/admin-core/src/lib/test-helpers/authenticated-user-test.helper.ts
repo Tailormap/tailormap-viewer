@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { vi } from 'vitest';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { of } from 'rxjs';
 
@@ -20,10 +20,3 @@ export class AuthenticatedUserTestHelper {
   }
 
 }
-
-// Dummy test to prevent "Your test suite must contain at least one test." error
-describe('AuthenticatedUserTestHelper', () => {
-  test('provideAuthenticatedUserServiceWithUser', () => {
-    expect(1).toEqual(1);
-  });
-});

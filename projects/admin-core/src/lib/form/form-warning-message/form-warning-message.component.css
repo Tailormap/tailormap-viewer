@@ -1,3 +1,8 @@
-.msg {
-  padding-bottom: 16px;
+.msg + .msg {
+  padding-top: 16px;
+}
+
+ul {
+  margin: 4px 0 0;
+  padding-left: 20px;
 }

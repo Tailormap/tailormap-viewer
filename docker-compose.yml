@@ -60,6 +60,9 @@ services:
       - "SOURCE_MAP_AUTH=${SOURCE_MAP_AUTH:-}"
       # Session timeout can be changed. Default is 30 minutes. You can use values like "60m" or "4h".
       - "SERVER_SERVLET_SESSION_TIMEOUT=${SERVER_SERVLET_SESSION_TIMEOUT:-}"
+      # Disable the JVM Base64 intrinsics as mitigation for CVE-2026-114938 (Java4Shell), memory corruption in the
+      # AVX-512 Base64 decoder on x86-64. The image appends its own JVM options to this variable, so those are kept.
+      - "JAVA_TOOL_OPTIONS=-XX:-UseBASE64Intrinsics"
     restart: unless-stopped
     depends_on:
       - db
@@ -91,7 +94,7 @@ services:
       # for setting up a production-ready instance
       # default is 512m
       # SOLR_HEAP: 512m
-      SOLR_OPTS: '${SOLR_OPTS:-} -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
+      SOLR_OPTS: '${SOLR_OPTS:-} -XX:-UseBASE64Intrinsics -Dsolr.environment=prod,label=Tailormap+Solr,color=#6236FF'
       SOLR_CLOUD_STARTUP_DELETE_UNKNOWN_CORES_ENABLED: true
       SOLR_MODE: user-managed
     mem_swappiness: 0

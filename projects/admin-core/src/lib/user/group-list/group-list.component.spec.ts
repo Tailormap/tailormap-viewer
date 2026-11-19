@@ -6,7 +6,7 @@ import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
 import { MatListModule } from '@angular/material/list';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 
 const setup = async () => {
   const mockApiService = {

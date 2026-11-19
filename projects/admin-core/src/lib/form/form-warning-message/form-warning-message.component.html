@@ -1,15 +1,40 @@
-<tm-error-message [friendlyError]="true" [message]="unavailableFields.length > 0 ? ' ' : ''">
-  <div class="msg">
-    @if (!applicationLayerSetting) {
-      <ng-container
-      i18n="@@admin-core.form.form-fields-unavailable">The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</ng-container>
-    }
-    @if (applicationLayerSetting) {
-      <ng-container
-      i18n="@@admin-core.form.form-fields-unavailable-application">In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</ng-container>
-    }
-  </div>
-  @for (field of unavailableFields; track $index) {
-    <div>- {{field}}</div>
+<tm-error-message [friendlyError]="true" [show]="hasWarnings">
+  @if (warnings.notShown.length > 0) {
+    <div class="msg">
+      @if (applicationLayerSetting) {
+        <ng-container i18n="@@admin-core.form.form-fields-not-shown-application">The following fields are hidden in the catalog or application layer settings, or no longer exist in the feature type. They will not be shown in the viewer.</ng-container>
+      } @else {
+        <ng-container i18n="@@admin-core.form.form-fields-not-shown">The following fields are hidden in the catalog, or no longer exist in the feature type. They will not be shown in the viewer.</ng-container>
+      }
+      <ul>
+        @for (field of warnings.notShown; track field) {
+          <li>{{field}}</li>
+        }
+      </ul>
+    </div>
+  }
+  @if (warnings.readOnly.length > 0) {
+    <div class="msg">
+      @if (applicationLayerSetting) {
+        <ng-container i18n="@@admin-core.form.form-fields-read-only-application">The following fields are not editable in the catalog or application layer settings. They will be shown read-only in the viewer.</ng-container>
+      } @else {
+        <ng-container i18n="@@admin-core.form.form-fields-read-only">The following fields are not editable in the catalog. They will be shown read-only in the viewer.</ng-container>
+      }
+      <ul>
+        @for (field of warnings.readOnly; track field) {
+          <li>{{field}}</li>
+        }
+      </ul>
+    </div>
+  }
+  @if (warnings.requiredReadOnly.length > 0) {
+    <div class="msg">
+      <ng-container i18n="@@admin-core.form.form-fields-required-read-only">The following fields are required in the form but cannot be edited, so new features will not get a value for them.</ng-container>
+      <ul>
+        @for (field of warnings.requiredReadOnly; track field) {
+          <li>{{field}}</li>
+        }
+      </ul>
+    </div>
   }
 </tm-error-message>

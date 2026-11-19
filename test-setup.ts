@@ -2,8 +2,9 @@ import './projects/app/src/polyfills';
 import 'zone.js/testing';
 import '@testing-library/jest-dom/vitest';
 import { TextEncoder, TextDecoder } from 'util';
-import { vi, beforeEach } from "vitest";
+import { vi, beforeEach, afterEach } from "vitest";
 import { TestBed } from '@angular/core/testing';
+import { MockStore } from '@ngrx/store/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 
@@ -74,6 +75,28 @@ beforeEach(() => {
     imports: [MatIconTestingModule],
     providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }],
   });
+});
+
+// Tests share one module graph per worker (`isolate: false`), so fake timers left on by a spec would leak into the next file.
+// `MockStore.overrideSelector` mutates the module-level selector itself (`setResult`), and stores created
+// with `createMockStore` are never reset. Track every overridden selector and reset it after each test.
+const overriddenSelectors = new Set<ReturnType<MockStore['overrideSelector']>>();
+const originalOverrideSelector = MockStore.prototype.overrideSelector;
+MockStore.prototype.overrideSelector = function (this: MockStore, ...args: Parameters<MockStore['overrideSelector']>) {
+  const selector = originalOverrideSelector.apply(this, args);
+  overriddenSelectors.add(selector);
+  return selector;
+} as MockStore['overrideSelector'];
+
+afterEach(() => {
+  vi.useRealTimers();
+  // Undo vi.spyOn on shared objects (e.g. static helpers) so stubs do not leak into later spec files.
+  vi.restoreAllMocks();
+  overriddenSelectors.forEach(selector => {
+    selector.release();
+    selector.clearResult();
+  });
+  overriddenSelectors.clear();
 });
 
 vi.mock('jsts/org/locationtech/jts/io', () => ({

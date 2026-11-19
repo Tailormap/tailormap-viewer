@@ -694,6 +694,10 @@
         <source>Select layer to edit</source>
         <target>Laag om te bewerken</target>
       </trans-unit>
+      <trans-unit id="core.edit.time" datatype="html">
+        <source>Time</source>
+        <target>Tijd</target>
+      </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
         <target>Waar</target>

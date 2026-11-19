@@ -6,7 +6,7 @@ import { getGroup } from '@tailormap-admin/admin-api';
 import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 import { OIDCConfigurationService } from '../../oidc/services/oidc-configuration.service';
 
 const setup = async (hasGroup?: boolean) => {

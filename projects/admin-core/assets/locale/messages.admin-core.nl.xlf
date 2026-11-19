@@ -517,6 +517,10 @@
         <source>Folder name</source>
         <target>Mapnaam</target>
       </trans-unit>
+      <trans-unit id="admin-core.application.form-not-found" datatype="html">
+        <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
+        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of "Geen formulier".</target>
+      </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
         <target>Verberg taalkeuzemenu in viewer</target>
@@ -1233,6 +1237,10 @@
         <source>Primary key</source>
         <target>Primaire sleutel</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.primary-key-editable" datatype="html">
+        <source>The primary key can only be entered when adding a feature, it cannot be changed afterwards. Leave this off when the database generates the primary key.</source>
+        <target>De primaire sleutel kan alleen ingevuld worden bij het toevoegen van een feature en kan daarna niet meer aangepast worden. Laat dit uit als de database de primaire sleutel genereert.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.protocol" datatype="html">
         <source>Protocol</source>
         <target>Protocol</target>
@@ -1885,6 +1893,30 @@
         <source>Autofill Username</source>
         <target>Gebruikersnaam Invullen</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source" datatype="html">
+        <source>Choices</source>
+        <target>Keuzes</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source-list" datatype="html">
+        <source>Values from the list</source>
+        <target>Waarden uit de lijst</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.choice-list-source-unique-values" datatype="html">
+        <source>Unique values of the attribute</source>
+        <target>Unieke waarden van het attribuut</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.control-type" datatype="html">
+        <source>Edit control</source>
+        <target>Invoerelement</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.copy-form" datatype="html">
+        <source>Copy form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/></source>
+        <target>Formulier <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> kopiëren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.copy-of" datatype="html">
+        <source>Copy of <x id="PH" equiv-text="this.data.formName"/></source>
+        <target>Kopie van <x id="PH" equiv-text="this.data.formName"/></target>
+      </trans-unit>
       <trans-unit id="admin-core.form.create-form" datatype="html">
         <source>Create form</source>
         <target>Formulier maken</target>
@@ -1910,8 +1942,8 @@
         <target>Bewerk <x id="INTERPOLATION" equiv-text="{{ form.name }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.edit-tab" datatype="html">
-        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></source>
-        <target>Bewerk tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.name }}"/></target>
+        <source>Edit tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></source>
+        <target>Bewerk tab <x id="INTERPOLATION" equiv-text="{{ selectedTab()?.label }}"/></target>
       </trans-unit>
       <trans-unit id="admin-core.form.error-creating-form" datatype="html">
         <source>Error while creating form.</source>
@@ -1933,17 +1965,17 @@
         <source>Error while updating form.</source>
         <target>Fout bij het aanpassen van het formulier.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-boolean" datatype="html">
-        <source>Checkbox field</source>
+      <trans-unit id="admin-core.form.field-type-checkbox" datatype="html">
+        <source>Checkbox</source>
         <target>Vinkvak</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-date" datatype="html">
         <source>Date field</source>
         <target>Datum veld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-integer" datatype="html">
-        <source>Integer field</source>
-        <target>Geheel getal veld</target>
+      <trans-unit id="admin-core.form.field-type-datetime" datatype="html">
+        <source>Date and time field</source>
+        <target>Datum- en tijdveld</target>
       </trans-unit>
       <trans-unit id="admin-core.form.field-type-number" datatype="html">
         <source>Number field</source>
@@ -1961,10 +1993,6 @@
         <source>Textarea field</source>
         <target>Tekstvlak veld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.field-type-timestamp" datatype="html">
-        <source>Timestamp field</source>
-        <target>Tijdsaanduiding veld</target>
-      </trans-unit>
       <trans-unit id="admin-core.form.filter-fields" datatype="html">
         <source>Filter fields</source>
         <target>Filter velden</target>
@@ -1973,17 +2001,33 @@
         <source>Filter forms</source>
         <target>Filter formulieren</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-copied" datatype="html">
+        <source>Form <x id="PH" equiv-text="copiedForm.name"/> copied</source>
+        <target>Formulier <x id="PH" equiv-text="copiedForm.name"/> gekopieerd</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.form-created" datatype="html">
         <source>Form <x id="PH" equiv-text="createdForm.name"/> created</source>
         <target>Formulier <x id="PH" equiv-text="createdForm.name"/> aangemaakt</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable" datatype="html">
-        <source>The following fields are disabled / disabled for editing in the feature type. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>De volgende velden zijn uitgeschakeld / uitgeschakeld voor bewerken in het feature type. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown" datatype="html">
+        <source>The following fields are hidden in the catalog, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>De volgende velden zijn verborgen in de catalogus, of bestaan niet meer in het feature type. Ze worden niet getoond in de viewer.</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.form-fields-unavailable-application" datatype="html">
-        <source>In the selected form the following fields are disabled / disabled for editing in the feature type or application layer settings. These will not be visible in the viewer. First enable them for editing to make sure they are visible in the viewer.</source>
-        <target>In het geselecteerde formulier zijn de volgende velden uitgeschakeld / uitgeschakeld voor bewerken in het feature type of de applicatielaag-instellingen. Deze zullen niet zichtbaar zijn in de viewer. Schakel deze attributen in voor bewerken om ze zichtbaar te maken in de viewer.</target>
+      <trans-unit id="admin-core.form.form-fields-not-shown-application" datatype="html">
+        <source>The following fields are hidden in the catalog or application layer settings, or no longer exist in the feature type. They will not be shown in the viewer.</source>
+        <target>De volgende velden zijn verborgen in de catalogus of de applicatielaag-instellingen, of bestaan niet meer in het feature type. Ze worden niet getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only" datatype="html">
+        <source>The following fields are not editable in the catalog. They will be shown read-only in the viewer.</source>
+        <target>De volgende velden zijn niet bewerkbaar in de catalogus. Ze worden alleen-lezen getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-read-only-application" datatype="html">
+        <source>The following fields are not editable in the catalog or application layer settings. They will be shown read-only in the viewer.</source>
+        <target>De volgende velden zijn niet bewerkbaar in de catalogus of de applicatielaag-instellingen. Ze worden alleen-lezen getoond in de viewer.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-fields-required-read-only" datatype="html">
+        <source>The following fields are required in the form but cannot be edited, so new features will not get a value for them.</source>
+        <target>De volgende velden zijn verplicht in het formulier maar kunnen niet bewerkt worden, waardoor nieuwe features hiervoor geen waarde krijgen.</target>
       </trans-unit>
       <trans-unit id="admin-core.form.form-removed" datatype="html">
         <source>Form <x id="PH" equiv-text="title"/> removed</source>
@@ -1993,6 +2037,14 @@
         <source>Form updated</source>
         <target>Formulier aangepast</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.form-used" datatype="html">
+        <source>Form is used in layers</source>
+        <target>Formulier wordt gebruikt in lagen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.form-used-body" datatype="html">
+        <source>The form <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> is used in the following application layers.</source>
+        <target>Het formulier <x id="INTERPOLATION" equiv-text="{{ data.formName }}"/> wordt gebruikt in de volgende applicatielagen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.forms" datatype="html">
         <source>Forms</source>
         <target>Formulieren</target>
@@ -2001,17 +2053,33 @@
         <source>Label</source>
         <target>Label</target>
       </trans-unit>
+      <trans-unit id="admin-core.form.make-copy" datatype="html">
+        <source>Copy</source>
+        <target>Kopiëren</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.name-required" datatype="html">
+        <source>Name is required</source>
+        <target>Naam is verplicht</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.non-unique-name-error" datatype="html">
+        <source>A form with this name already exists for this feature type.</source>
+        <target>Er bestaat al een formulier met deze naam voor dit feature type.</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.read-only" datatype="html">
+        <source>Read-only</source>
+        <target>Alleen-lezen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.form.remove-form-from-layers-first" datatype="html">
+        <source>Please select another form or no form for these layers first.</source>
+        <target>Kies eerst een ander formulier of geen formulier voor deze lagen.</target>
+      </trans-unit>
       <trans-unit id="admin-core.form.required-field" datatype="html">
         <source>Required field</source>
         <target>Verplicht veld</target>
       </trans-unit>
-      <trans-unit id="admin-core.form.tab-name" datatype="html">
-        <source>Tab name</source>
-        <target>Naam tabblad</target>
-      </trans-unit>
-      <trans-unit id="admin-core.form.unique-values-as-options" datatype="html">
-        <source>Use unique values from this column as options</source>
-        <target>Gebruik de unieke waarden uit deze kolom als opties</target>
+      <trans-unit id="admin-core.form.tab-label" datatype="html">
+        <source>Tab label</source>
+        <target>Label tabblad</target>
       </trans-unit>
       <trans-unit id="admin-core.form.value-list-label" datatype="html">
         <source>Label</source>

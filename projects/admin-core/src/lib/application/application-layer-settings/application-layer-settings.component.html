@@ -88,7 +88,7 @@
     </span>
         @if (layerSettingsForm.get('editable')?.value) {
           <div class="form-selection-and-message">
-            @if ((selectableForms$ | async)?.length) {
+            @if ((selectableForms$ | async)?.length || isMissingForm()) {
               <mat-form-field>
                 <mat-label i18n="@@admin-core.application.select-form">Select (optional) form</mat-label>
                 <mat-select formControlName="formId">
@@ -98,6 +98,9 @@
                   }
                 </mat-select>
               </mat-form-field>
+              @if (isMissingForm()) {
+                <tm-error-message [friendlyError]="true" [show]="true"><span i18n="@@admin-core.application.form-not-found">The form for this layer has been deleted. Editing uses no form. Select another form or "No form".</span></tm-error-message>
+              }
 
               @if (formWarningMessageData$ | async; as formWarningMessageData) {
                 <tm-admin-form-warning-message [featureType]="formWarningMessageData.featureType"

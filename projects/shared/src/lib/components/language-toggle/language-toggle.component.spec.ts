@@ -22,6 +22,8 @@ const setup = async (baseHref: string, locale: string, currentHref?: string) => 
 
 describe('LanguageToggleComponent', () => {
 
+  const originalLocation = window.location;
+
   beforeAll(() => {
     // @ts-expect-error deleting location is allowed in testing env, restored after tests
     delete window.location;
@@ -34,7 +36,7 @@ describe('LanguageToggleComponent', () => {
 
   afterAll(() => {
     // @ts-expect-error restoring the original location object after overwriting it above
-    window.location = location;
+    window.location = originalLocation;
   });
 
   beforeEach(() => {

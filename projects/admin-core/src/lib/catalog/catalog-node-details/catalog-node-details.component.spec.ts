@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CatalogService } from '../services/catalog.service';
 import userEvent from '@testing-library/user-event';
-import { TestSaveHelper } from '../../test-helpers/test-save.helper.spec';
+import { TestSaveHelper } from '../../test-helpers/test-save.helper';
 
 const setup = async () => {
   const updateCatalogNodeMock = vi.fn(() => of(true));

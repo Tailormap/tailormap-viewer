@@ -7,7 +7,7 @@ import { GeoServiceProtocolEnum, TailormapAdminApiV1Service } from '@tailormap-a
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialUserState, userStateKey } from '../../user/state/user.state';
-import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper.spec';
+import { AuthenticatedUserTestHelper } from '../../test-helpers/authenticated-user-test.helper';
 import { catalogStateKey, initialCatalogState } from '../state/catalog.state';
 
 describe('LayerSettingsFormComponent', () => {

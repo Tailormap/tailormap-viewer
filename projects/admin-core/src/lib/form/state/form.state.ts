@@ -15,6 +15,7 @@ export interface FormState {
   draftFormSelectedTabId: string | null;
   draftFormUpdated: boolean;
   draftFormValid: boolean;
+  draftFormFieldValid: boolean;
 }
 
 export const initialFormState: FormState = {
@@ -27,4 +28,5 @@ export const initialFormState: FormState = {
   draftFormSelectedTabId: null,
   draftFormUpdated: false,
   draftFormValid: true,
+  draftFormFieldValid: true,
 };

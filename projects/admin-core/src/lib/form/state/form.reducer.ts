@@ -3,7 +3,8 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { FormState, initialFormState } from './form.state';
 import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
-import { FormFieldTypeEnum } from '@tailormap-viewer/api';
+import { FormFieldControlTypeEnum } from '@tailormap-viewer/api';
+import { EditFormFieldHelper } from '../helpers/edit-form-field.helper';
 
 const summaryFromForm = (form: FormModel): FormSummaryModel => ({
   id: form.id,
@@ -78,6 +79,7 @@ const onLoadDraftFormSuccess = (state: FormState, payload: ReturnType<typeof For
   draftFormSelectedTabId: null,
   draftForm: payload.form,
   draftFormValid: true,
+  draftFormFieldValid: true,
   draftFormUpdated: false,
 });
 
@@ -183,7 +185,7 @@ const onDraftFormAddField = (
       ...state.draftForm,
       fields: [
         ...state.draftForm.fields,
-        { name: payload.name, type: FormFieldTypeEnum.TEXT, label: payload.name },
+        { name: payload.name, controlType: payload.controlType || FormFieldControlTypeEnum.TEXT, label: payload.name },
       ],
     },
     draftFormSelectedAttribute: payload.name,
@@ -293,6 +295,32 @@ const onUpdateDraftFormValid = (
   draftFormValid: payload.isValid,
 });
 
+const onUpdateDraftFormFieldValid = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.updateDraftFormFieldValid>,
+): FormState => ({
+  ...state,
+  draftFormFieldValid: payload.isValid,
+});
+
+const onDraftFormCorrectControlTypes = (
+  state: FormState,
+  payload: ReturnType<typeof FormActions.draftFormCorrectControlTypes>,
+): FormState => {
+  if (!state.draftForm) {
+    return state;
+  }
+  const correctedFields = EditFormFieldHelper.correctControlTypes(state.draftForm.fields, payload.attributes);
+  if (!correctedFields) {
+    return state;
+  }
+  return {
+    ...state,
+    draftForm: { ...state.draftForm, fields: correctedFields },
+    draftFormUpdated: true,
+  };
+};
+
 const onDraftFormAddTab = (
   state: FormState,
   payload: ReturnType<typeof FormActions.draftFormAddTab>,
@@ -302,7 +330,7 @@ const onDraftFormAddTab = (
   }
 
   const tabs = state.draftForm.options?.tabs || [];
-  const tabExists = tabs.some(tab => tab.id === payload.tabId || tab.name === payload.tabName);
+  const tabExists = tabs.some(tab => tab.id === payload.tabId || tab.label === payload.tabLabel);
 
   if (tabExists) {
     return state;
@@ -317,7 +345,7 @@ const onDraftFormAddTab = (
         ...state.draftForm.options,
         tabs: [
           ...tabs,
-          { id: payload.tabId, name: payload.tabName },
+          { id: payload.tabId, label: payload.tabLabel },
         ],
       },
     },
@@ -372,6 +400,8 @@ const formReducerImpl = createReducer<FormState>(
   on(FormActions.draftFormUpdateField, onDraftFormUpdateField),
   on(FormActions.draftFormRemoveField, onDraftFormRemoveField),
   on(FormActions.updateDraftFormValid, onUpdateDraftFormValid),
+  on(FormActions.updateDraftFormFieldValid, onUpdateDraftFormFieldValid),
+  on(FormActions.draftFormCorrectControlTypes, onDraftFormCorrectControlTypes),
   on(FormActions.draftFormAddTab, onDraftFormAddTab),
   on(FormActions.draftFormUpdateTabs, onDraftFormUpdateTabs),
 );

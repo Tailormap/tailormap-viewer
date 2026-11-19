@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { FormUpdateModel } from '../services/form-update.model';
-import { FormFieldModel } from '@tailormap-viewer/api';
+import { AttributeType, FormFieldModel, FormFieldControlTypeEnum, FormTabModel } from '@tailormap-viewer/api';
 
 const formActionsPrefix = '[Admin/Form]';
 
@@ -78,7 +78,7 @@ export const draftFormUpdateFields = createAction(
 
 export const draftFormAddField = createAction(
   `${formActionsPrefix} Draft Form Add Field`,
-  props<{ name: string }>(),
+  props<{ name: string; controlType?: FormFieldControlTypeEnum }>(),
 );
 
 export const draftFormSetSelectedField = createAction(
@@ -101,14 +101,25 @@ export const updateDraftFormValid = createAction(
   props<{ isValid: boolean }>(),
 );
 
+export const updateDraftFormFieldValid = createAction(
+  `${formActionsPrefix} Update Draft Form Field Valid`,
+  props<{ isValid: boolean }>(),
+);
+
+/** Replaces form field controls which are not compatible with the (current) type of their attribute in the feature type. */
+export const draftFormCorrectControlTypes = createAction(
+  `${formActionsPrefix} Draft Form Correct Control Types`,
+  props<{ attributes: Array<{ name: string; type: AttributeType }> }>(),
+);
+
 export const draftFormAddTab = createAction(
   `${formActionsPrefix} Draft Form Add Tab`,
-  props<{ tabId: string; tabName: string }>(),
+  props<{ tabId: string; tabLabel: string }>(),
 );
 
 export const draftFormUpdateTabs = createAction(
   `${formActionsPrefix} Draft Form Update Tabs`,
-  props<{ tabs: Array<{ id: string; name: string }> }>(),
+  props<{ tabs: FormTabModel[] }>(),
 );
 
 export const draftFormSetSelectedTabId = createAction(

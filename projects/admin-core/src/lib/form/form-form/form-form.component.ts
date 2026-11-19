@@ -1,12 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, DestroyRef, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FormModel } from '@tailormap-admin/admin-api';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormModel, FormSummaryModel } from '@tailormap-admin/admin-api';
 import { debounceTime, filter, map, distinctUntilChanged } from 'rxjs';
 import { FormHelper } from '../../helpers/form.helper';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TypesHelper, AutoFocusDirective } from '@tailormap-viewer/shared';
 import { FormOptionsModel } from '@tailormap-viewer/api';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { Store } from '@ngrx/store';
+import { selectForms } from '../state/form.selectors';
+import { FormService } from '../services/form.service';
+import { FormNameHelper } from '../helpers/form-name.helper';
 import { MatInput } from '@angular/material/input';
 import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selector/feature-type-selector.component';
 
@@ -19,6 +23,7 @@ import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selecto
         ReactiveFormsModule,
         MatFormField,
         MatLabel,
+        MatHint,
         MatInput,
         AutoFocusDirective,
         FeatureTypeSelectorComponent,
@@ -26,6 +31,10 @@ import { FeatureTypeSelectorComponent } from '../../catalog/feature-type-selecto
 })
 export class FormFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private store$ = inject(Store);
+  private formService = inject(FormService);
+
+  private forms: FormSummaryModel[] = [];
 
 
   private _form: FormModel | null = null;
@@ -50,12 +59,19 @@ export class FormFormComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    description: new FormControl(''),
+    adminComments: new FormControl(''),
     featureSourceId: new FormControl<number | null>(null),
     featureTypeName: new FormControl<string | null>(null),
-  });
+  }, { validators: control => this.isUniqueFormName(control) });
 
   public ngOnInit(): void {
+    this.formService.loadForms();
+    this.store$.select(selectForms)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(forms => {
+        this.forms = forms;
+        this.formForm.updateValueAndValidity({ emitEvent: false });
+      });
     this.formForm.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -74,8 +90,7 @@ export class FormFormComponent implements OnInit {
       )
       .subscribe(value => {
         const options: FormOptionsModel = {
-          description: value.description || '',
-          columns: 0,
+          adminComments: value.adminComments || '',
           tabs: [],
         };
         const form: Omit<FormModel, 'id'> = {
@@ -103,10 +118,20 @@ export class FormFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Group validator, because the name only has to be unique for the selected feature source and feature type.
+   */
+  private isUniqueFormName(control: AbstractControl): ValidationErrors | null {
+    const value = control.value as { name?: string; featureSourceId?: number | null; featureTypeName?: string | null };
+    return FormNameHelper.isNameTaken(this.forms || [], value.name, value.featureSourceId, value.featureTypeName, this._form?.id)
+      ? { nonUniqueName: true }
+      : null;
+  }
+
   private initForm(form: FormModel | null) {
     this.formForm.patchValue({
       name: form ? form.name : '',
-      description: form && form.options ? form.options.description : '',
+      adminComments: form && form.options ? form.options.adminComments : '',
       featureSourceId: form ? form.featureSourceId : null,
       featureTypeName: form ? form.featureTypeName : '',
     }, { emitEvent: false });
