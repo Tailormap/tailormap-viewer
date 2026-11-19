@@ -10,7 +10,7 @@
         <mat-panel-title i18n="@@admin-core.components.simple-search-municipality-filter">Municipality filter</mat-panel-title>
       </mat-expansion-panel-header>
       <div class="selected-municipality">
-        @for(m of municipalities$ | async; track m.municipalityCode) {
+        @for(m of municipalities$ | async; track m.municipalityCode; let i = $index) {
             <div class="label">{{m.municipality}}</div>
             <div class="button-wrapper">
               <button mat-icon-button (click)="deleteMunicipality(m.municipalityCode)">
@@ -26,7 +26,7 @@
         <mat-autocomplete #auto="matAutocomplete"
                           autoActiveFirstOption>
           @for(option of filteredMunicipalityOptions$ | async; track option.municipalityCode) {
-            <mat-option [value]="option">{{option.municipality}}</mat-option>
+            <mat-option class="municipality-option" [value]="option">{{option.municipality}}</mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>
@@ -58,7 +58,7 @@
                             (optionSelected)="addCadastralMunicipality($event.option.value)"
                             autoActiveFirstOption>
             @for(name of filteredCadastralMunicipalityOptions$ | async; track name) {
-              <mat-option [value]="name">{{name}}</mat-option>
+              <mat-option class="municipality-option" [value]="name">{{name}}</mat-option>
             }
           </mat-autocomplete>
         </mat-form-field>
