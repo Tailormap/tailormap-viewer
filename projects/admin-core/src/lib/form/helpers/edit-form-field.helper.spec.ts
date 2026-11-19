@@ -49,4 +49,20 @@ describe('EditFormFieldHelper', () => {
     expect(EditFormFieldHelper.correctControlTypes(fields, [{ name: 'name', type: AttributeType.STRING }])).toBeNull();
   });
 
+  test('stores a choice list label only when it differs from the value', () => {
+    expect(EditFormFieldHelper.getValueList([
+      { value: 'Ja', label: '' },
+      { value: 'Nee', label: 'Nee' },
+      { value: '2001', label: 'SIKB 2001' },
+      { value: 'x' },
+      {},
+    ])).toEqual([
+      { value: 'Ja' },
+      { value: 'Nee' },
+      { value: '2001', label: 'SIKB 2001' },
+      { value: 'x' },
+      { value: '' },
+    ]);
+  });
+
 });

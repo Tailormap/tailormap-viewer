@@ -66,12 +66,12 @@
                         formControlName="value"
                         />
                     </mat-form-field>
-                    <mat-form-field>
+                    <mat-form-field floatLabel="always">
                       <mat-label i18n="@@admin-core.form.value-list-label">Label</mat-label>
+                      <!-- Without a label the viewer shows the value, so show the value as placeholder -->
                       <input matInput
-                        placeholder="Label"
+                        [placeholder]="valueForm.controls.value.value"
                         (keydown.enter)="stopEnter($event, true, i)"
-                        i18n-placeholder="@@admin-core.form.label-list-label"
                         formControlName="label"
                         />
                     </mat-form-field>
