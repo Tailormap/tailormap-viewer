@@ -1,14 +1,14 @@
 <p class="label" i18n="@@core.drawing.copy-from-reference-layer">Copy objects from reference layer</p>
 @if (referenceLayers().length > 0) {
-  <mat-form-field appearance="outline" class="reference-layer">
-    <mat-label i18n="@@core.drawing.reference-layer">Reference layer</mat-label>
-    <mat-select [formField]="layerForm.layerId">
-      @for (layer of referenceLayers(); track layer.id) {
-        <mat-option [value]="layer.id">{{layer.title || layer.layerName}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  <div class="copy-buttons">
+  <div class="copy-row">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="reference-layer">
+      <mat-label i18n="@@core.drawing.reference-layer">Reference layer</mat-label>
+      <mat-select [formField]="layerForm.layerId">
+        @for (layer of referenceLayers(); track layer.id) {
+          <mat-option [value]="layer.id">{{layer.title || layer.layerName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
     <button mat-stroked-button
             color="primary"
             [class.button--active]="copyFromLayerActive()"

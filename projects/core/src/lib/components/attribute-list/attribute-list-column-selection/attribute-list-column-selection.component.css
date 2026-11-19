@@ -1,8 +1,5 @@
 .column-selection {
-  width: 300px;
-  max-width: 100vw;
-  height: 100%;
-  background-color: #fff;
+  max-height: 300px;
   overflow: auto;
   display: flex;
   flex-direction: column;
