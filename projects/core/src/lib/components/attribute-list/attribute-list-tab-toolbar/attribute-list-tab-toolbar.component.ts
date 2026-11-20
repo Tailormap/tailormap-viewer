@@ -16,7 +16,7 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { BaseComponentTypeEnum } from '@tailormap-viewer/api';
 import { AttributeListFeatureRegistrationService } from '../services/attribute-list-feature-registration.service';
 import { MapService } from '@tailormap-viewer/map';
-import { selectCQLFilters, selectViewerId } from '../../../state';
+import { selectCQLFilters, selectEnabledFilterGroups, selectViewerId } from '../../../state';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
 import { map } from 'rxjs/operators';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -158,15 +158,16 @@ export class AttributeListTabToolbarComponent implements OnInit {
       this.store$.select(selectSelectedTab),
       this.store$.select(selectViewerId),
       this.store$.select(selectCQLFilters),
+      this.store$.select(selectEnabledFilterGroups),
     ])
       .pipe(
         take(1),
-        switchMap(([ tab, applicationId, filters ]) => {
+        switchMap(([ tab, applicationId, filters, filterGroups ]) => {
           if (!tab?.layerId || !applicationId) {
             return of(null);
           }
           const filter = filters.get(tab.layerId);
-          return this.attributeListApiService.retrieveZoomToExtentBounds$(tab.tabSourceId, { applicationId, layerId: tab.layerId, filter });
+          return this.attributeListApiService.retrieveZoomToExtentBounds$(tab.tabSourceId, { applicationId, layerId: tab.layerId, filter, filterGroups });
       }))
       .subscribe(bounds => {
         if (!bounds) {

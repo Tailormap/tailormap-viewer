@@ -95,9 +95,8 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    // because we have a mocked=up JSTS BufferOp that returns the input
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
-      .toBe('INTERSECTS(the_geom, SRID=4326;POINT(1 2))');
+      .toMatch(/^INTERSECTS\(the_geom, SRID=4326;POLYGON \(\(11 2, .* 11 2\)\)\)$/);
   });
 
   test('should create a spatial filter for a circle with buffer', () => {

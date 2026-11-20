@@ -16,6 +16,7 @@ import {
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { selectViewerId } from '../../../state/core.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { FilterService } from '../../../filter/services/filter.service';
@@ -206,19 +207,20 @@ export class AttributeListDataService implements OnDestroy {
     }
     const start = selectedData.pageIndex;
     const layerFilter = this.filterService.getFilterForLayer(layerId);
-    return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))) ])
+    return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))), this.store$.select(selectEnabledFilterGroups) ])
       .pipe(
-        filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]> ] => {
+        filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]>, typeof result[2] ] => {
           const [ applicationId, layer ] = result;
           return TypesHelper.isDefined(applicationId) && TypesHelper.isDefined(layer);
         }),
         take(1),
-        switchMap(([ applicationId, layer ]) => this.api.getFeatures$(tab.tabSourceId, {
+        switchMap(([ applicationId, layer, filterGroups ]) => this.api.getFeatures$(tab.tabSourceId, {
           layerId,
           applicationId: applicationId,
           layerName: layer.layerName,
           page: start,
           filter: layerFilter,
+          filterGroups,
           sortBy: selectedData.sortedColumn,
           sortOrder: selectedData.sortDirection === 'desc'
             ? Sortorder.DESC

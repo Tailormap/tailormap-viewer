@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/cor
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogActions } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
 import { BaseComponentTypeEnum, AttributeType } from '@tailormap-viewer/api';
-import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel } from '@tailormap-viewer/api';
+import { FilterConditionEnum, FilterTypeEnum, AttributeFilterModel, FilterGroupModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
 import { AttributeFilterHelper, AttributeFilterComponent } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from '../services/attribute-list-manager.service';
@@ -15,6 +15,7 @@ export interface FilterDialogData {
   filter: AttributeFilterModel | null;
   columnType: AttributeType;
   cqlFilters?: Map<string | symbol, string>;
+  filterGroups?: FilterGroupModel[];
   applicationId: string;
   attributeAlias?: string;
   featureType?: string;
@@ -88,6 +89,7 @@ export class AttributeListFilterComponent implements OnInit {
       attribute: this.data.columnName,
       layerId: this.data.layerId,
       filter: this.data.cqlFilters,
+      filterGroups: this.data.filterGroups,
       applicationId: this.data.applicationId,
     })
       .pipe(

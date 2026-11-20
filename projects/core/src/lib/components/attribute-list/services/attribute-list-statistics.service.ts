@@ -4,7 +4,7 @@ import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectAttributeListTabs, selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { catchError, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { selectViewerId } from '../../../state';
+import { selectEnabledFilterGroups, selectViewerId } from '../../../state';
 import { GetStatisticResponse, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticColumnModel } from '../models/attribute-list-statistic-column.model';
 import { FilterService, LayerFeaturesFilters } from '../../../filter';
@@ -173,13 +173,16 @@ export class AttributeListStatisticsService {
 
   private fetchStatistic$(loadParams: LoadStatisticParams, selectedTab: AttributeListTabModel) {
     const filter = this.filterService.getFilterForLayer(loadParams.layerId);
-    return this.attributeListManagerService.getStatistic$(selectedTab.tabSourceId, {
-      applicationId: loadParams.applicationId,
-      layerId: loadParams.layerId,
-      statistics: loadParams.statistics,
-      filter,
-    })
+    return this.store$.select(selectEnabledFilterGroups)
       .pipe(
+        take(1),
+        switchMap(filterGroups => this.attributeListManagerService.getStatistic$(selectedTab.tabSourceId, {
+          applicationId: loadParams.applicationId,
+          layerId: loadParams.layerId,
+          statistics: loadParams.statistics,
+          filter,
+          filterGroups,
+        })),
         take(1),
         map(response => ({ response, applicationId: loadParams.applicationId, layerId: loadParams.layerId  })),
         catchError(() => of({ response: null, applicationId: loadParams.applicationId, layerId: loadParams.layerId  })),
@@ -194,16 +197,19 @@ export class AttributeListStatisticsService {
     statistics: AttributeListStatisticColumnModel[];
     filter: LayerFeaturesFilters | null | undefined;
   }) {
-    return this.attributeListManagerService.getStatistic$(params.tabSourceId, {
-      applicationId: params.viewerId,
-      layerId: params.layerId,
-      statistics: params.statistics.map(s => ({
-        column: s.columnName,
-        type: s.type,
-      })),
-      filter: params.filter,
-    })
+    return this.store$.select(selectEnabledFilterGroups)
       .pipe(
+        take(1),
+        switchMap(filterGroups => this.attributeListManagerService.getStatistic$(params.tabSourceId, {
+          applicationId: params.viewerId,
+          layerId: params.layerId,
+          statistics: params.statistics.map(s => ({
+            column: s.columnName,
+            type: s.type,
+          })),
+          filter: params.filter,
+          filterGroups,
+        })),
         take(1),
         catchError(() => of(null)),
       )

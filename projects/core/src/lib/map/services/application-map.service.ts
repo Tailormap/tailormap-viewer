@@ -2,7 +2,7 @@ import { Injectable, LOCALE_ID, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   LayerModel, LayerTypesEnum, MapService, OgcHelper, ServiceLayerModel, WMSLayerModel, WMTSLayerModel, XyzLayerModel, Tiles3dLayerModel,
-  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D, MapViewerOptionsModel,
+  TerrainLayerModel, PROJECTION_REQUIRED_FOR_3D, MapViewerOptionsModel, VectorLayerModel,
 } from '@tailormap-viewer/map';
 import { ServerType, ServiceModel, ServiceProtocol } from '@tailormap-viewer/api';
 import {
@@ -13,7 +13,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ArrayHelper, HtmlifyHelper, Tileset3dStyleHelper } from '@tailormap-viewer/shared';
 import {
-  selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayersWithServices, select3DLayers, selectIn3dView,
+  selectMapOptions, selectOrderedVisibleBackgroundLayers, selectOrderedVisibleLayers, select3DLayers, selectIn3dView,
 } from '../state/map.selectors';
 import { ExtendedAppLayerModel } from '../models';
 import { selectCQLFilters } from '../../state/filter-state/filter.selectors';
@@ -127,7 +127,7 @@ export class ApplicationMapService implements OnDestroy {
 
   public selectOrderedVisibleLayersWithFilters$() {
     return combineLatest([
-      this.store$.select(selectOrderedVisibleLayersWithServices),
+      this.store$.select(selectOrderedVisibleLayers),
       this.store$.select(selectCQLFilters),
     ]).pipe(
       map(([ layers, filters ]) => {
@@ -163,6 +163,17 @@ export class ApplicationMapService implements OnDestroy {
   }
 
   public convertAppLayerToMapLayer$(extendedAppLayer: ExtendedAppLayerModel): Observable<LayerModel | null> {
+    if (extendedAppLayer.origin === 'user') {
+      // A stub so the layer manager knows the position of this layer. The owner of the layer creates the vector layer itself.
+      const layer: VectorLayerModel = {
+        id: extendedAppLayer.id,
+        name: extendedAppLayer.title || extendedAppLayer.layerName,
+        layerType: LayerTypesEnum.Vector,
+        visible: extendedAppLayer.visible,
+        followsLayerOrder: true,
+      };
+      return of(layer);
+    }
     if (!extendedAppLayer.service) {
       return of(null);
     }
