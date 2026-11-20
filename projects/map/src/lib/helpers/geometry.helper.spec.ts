@@ -11,16 +11,14 @@ describe('GeometryHelper', () => {
       const pointWKT = 'POINT(0 0)';
       const bufferDistance = 1;
       const result = GeometryHelper.bufferWktGeometry(pointWKT, bufferDistance);
-      // because we have a mocked-up JSTS BufferOp that returns the input we cannot check if the returned is actually a polygon
-      expect(result).toBeTruthy();
+      expect(result).toContain('POLYGON');
     });
 
     it('should buffer a linestring geometry', () => {
       const linestringWKT = 'LINESTRING(0 0, 1 1, 2 0)';
       const bufferDistance = 0.5;
       const result = GeometryHelper.bufferWktGeometry(linestringWKT, bufferDistance);
-      // because we have a mocked=up JSTS BufferOp that returns the input we cannot check if the returned is actually a polygon
-      expect(result).toBeTruthy();
+      expect(result).toContain('POLYGON');
     });
 
     it('should buffer a polygon geometry', () => {
@@ -114,6 +112,35 @@ describe('GeometryHelper', () => {
       const result2 = GeometryHelper.getCircleQueryWKT(circleWKT, 2);
 
       expect(result1).not.toEqual(result2);
+    });
+  });
+
+  describe('intersects', () => {
+    const square = 'POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))';
+
+    it('should test geometries against prepared geometries', () => {
+      const intersects = GeometryHelper.intersects([ square, 'POINT(100 100)' ]);
+      expect(intersects('POINT(5 5)')).toBe(true);
+      expect(intersects('POINT(100 100)')).toBe(true);
+      expect(intersects('LINESTRING(-5 5, 5 5)')).toBe(true);
+      expect(intersects('POINT(20 20)')).toBe(false);
+      expect(intersects('POLYGON((11 11, 12 11, 12 12, 11 12, 11 11))')).toBe(false);
+    });
+
+    it('should not intersect when the extents overlap but the geometries do not', () => {
+      const intersects = GeometryHelper.intersects(['LINESTRING(0 0, 10 10)']);
+      expect(intersects('POINT(1 9)')).toBe(false);
+      expect(intersects('LINESTRING(0 10, 10 0)')).toBe(true);
+    });
+
+    it('should support geometry collections and treat invalid WKT as not intersecting', () => {
+      const intersects = GeometryHelper.intersects(['GEOMETRYCOLLECTION(POINT(50 50),' + square + ')']);
+      expect(intersects('POINT(50 50)')).toBe(true);
+      expect(intersects('not a geometry')).toBe(false);
+    });
+
+    it('should not intersect anything without geometries', () => {
+      expect(GeometryHelper.intersects([])('POINT(5 5)')).toBe(false);
     });
   });
 });

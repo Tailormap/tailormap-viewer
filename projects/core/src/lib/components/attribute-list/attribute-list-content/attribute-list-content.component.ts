@@ -156,6 +156,7 @@ export class AttributeListContentComponent implements OnInit {
           filter: attributeFilterModel,
           columnType: $event.attributeType,
           cqlFilters: filtersForLayer,
+          filterGroups: otherFilters,
           applicationId,
           attributeAlias,
           featureType: selectedData?.featureType,

@@ -10,22 +10,7 @@ export class CqlSpatialFilterHelper {
     const srid = filter.projectionCode?.startsWith('EPSG:') ? Number.parseInt(filter.projectionCode.slice('EPSG:'.length), 10) : Number.NaN;
     const sridPrefix = Number.isFinite(srid) ? `SRID=${srid};` : '';
 
-    const { baseGeometries, circles } = this.categorizeGeometries(filter.geometries.map(g => g.geometry));
-    const filterGeometries: string[] = [];
-    if (baseGeometries.length > 0) {
-      const baseGeom = baseGeometries.length === 1 ?
-        `${baseGeometries[0]}` :
-        `GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
-      if (filter.buffer) {
-        const bufferedGeom = GeometryHelper.bufferWktGeometry(baseGeom, filter.buffer);
-        filterGeometries.push(`${sridPrefix}${bufferedGeom}`);
-      } else {
-        filterGeometries.push(`${sridPrefix}${baseGeom}`);
-      }
-    }
-    if (circles.length > 0) {
-      filterGeometries.push(...circles.map(circle => `${sridPrefix}${GeometryHelper.getCircleQueryWKT(circle, filter.buffer)}`));
-    }
+    const filterGeometries = CqlSpatialFilterHelper.getFilterGeometries(filter).map(geometry => `${sridPrefix}${geometry}`);
 
     const geometryColumnsForLayer = filter.geometryColumns.find(gc => gc.layerId === layerId);
     if (!geometryColumnsForLayer) {
@@ -43,6 +28,26 @@ export class CqlSpatialFilterHelper {
     return geometryColumnClauses.length === 1
       ? geometryColumnClauses[0]
       : `(` + geometryColumnClauses.join(' OR ') + `)`;
+  }
+
+  /**
+   * Returns the WKT geometries a spatial filter tests against: the base geometries (as one geometry collection when
+   * there are several) with the buffer applied, and each circle as a polygon with the buffer added to its radius.
+   * Shared by the CQL output and the feature predicate so both use the same geometries.
+   */
+  public static getFilterGeometries(filter: SpatialFilterModel): string[] {
+    const { baseGeometries, circles } = this.categorizeGeometries(filter.geometries.map(g => g.geometry));
+    const filterGeometries: string[] = [];
+    if (baseGeometries.length > 0) {
+      const baseGeom = baseGeometries.length === 1 ?
+        `${baseGeometries[0]}` :
+        `GEOMETRYCOLLECTION(` + baseGeometries.map(geom => `${geom}`).join(',') + ')';
+      filterGeometries.push(filter.buffer ? GeometryHelper.bufferWktGeometry(baseGeom, filter.buffer) : baseGeom);
+    }
+    if (circles.length > 0) {
+      filterGeometries.push(...circles.map(circle => GeometryHelper.getCircleQueryWKT(circle, filter.buffer)));
+    }
+    return filterGeometries;
   }
 
   private static categorizeGeometries(geometries: string[]): { baseGeometries: string[]; circles: string[] } {

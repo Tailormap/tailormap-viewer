@@ -1,5 +1,5 @@
 import {
-  LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel, BoundsModel,
+  LayerExtractCapabilitiesModel, Sortorder, UniqueValuesResponseModel, LayerExtractResponseModel, BoundsModel, FilterGroupModel,
 } from '@tailormap-viewer/api';
 import { Observable } from 'rxjs';
 import { GetFeaturesApiModel } from '../../../models/get-features-api.model';
@@ -112,6 +112,11 @@ export interface GetUniqueValuesParams {
    * @example new Map([['featureTypeName', 'attribute > 100']])
    */
   filter?: Map<string | symbol, string> | null;
+  /**
+   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
+   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   */
+  filterGroups?: FilterGroupModel[];
 }
 
 export interface ZoomToExtentBoundsParams {
@@ -130,6 +135,11 @@ export interface ZoomToExtentBoundsParams {
    * @example new Map([['featureTypeName', 'attribute > 100']])
    */
   filter?: Map<string | symbol, string> | null;
+  /**
+   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
+   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   */
+  filterGroups?: FilterGroupModel[];
 }
 
 export interface CanExpandRowParams {
@@ -213,6 +223,11 @@ export interface GetStatisticParams {
    * @example new Map([['featureTypeName', 'attribute > 100']])
    */
   filter?: Map<string | symbol, string> | null;
+  /**
+   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
+   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   */
+  filterGroups?: FilterGroupModel[];
 }
 
 export interface GetStatisticResponse {

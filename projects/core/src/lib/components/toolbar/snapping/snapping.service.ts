@@ -10,7 +10,7 @@ import { MapService } from '@tailormap-viewer/map';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, TypesHelper } from '@tailormap-viewer/shared';
 import { DataSourceManagerService } from '../../../services';
-import { DataSourceLayerModel } from '../../../models';
+import { DataSourceLayerModel, GetFeaturesParams } from '../../../models';
 
 
 interface SnappingFeature {
@@ -154,7 +154,8 @@ export class SnappingService {
           }
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(layer.id, loadedKey);
-            this.loadGeometries(layer, updateFilter);
+            const bbox: GetFeaturesParams['bbox'] = mapExtent !== null ? [ mapExtent[0], mapExtent[1], mapExtent[2], mapExtent[3] ] : undefined;
+            this.loadGeometries(layer, updateFilter, bbox);
           }
         });
       });
@@ -199,9 +200,9 @@ export class SnappingService {
     this.snappingActive.next(false);
   }
 
-  private loadGeometries(layer: DataSourceLayerModel, filters: LayerFeaturesFilters | null): void {
+  private loadGeometries(layer: DataSourceLayerModel, filters: LayerFeaturesFilters | null, bbox?: GetFeaturesParams['bbox']): void {
     this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value + 1);
-    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, filters)
+    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, filters, bbox)
       .pipe(take(1))
       .subscribe(response => {
         this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value - 1);

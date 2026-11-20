@@ -9,7 +9,7 @@ import { map, Observable } from 'rxjs';
 import { FeaturesFilterHelper } from '../filter/helpers/features-filter.helper';
 import { GetLayerDetailsParams } from '../models/get-layer-details-param.model';
 import { DataSourceManagerService } from './index';
-import { DataSourceApiServiceModel, DataSourceLayerModel } from '../models';
+import { DataSourceApiServiceModel, DataSourceLayerModel, DEFAULT_DATA_SOURCE_ID } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
 
   public initDefaultDataSource(): void {
     this.dataSourceManager.addSource({
-      id: 'tm-default-layers',
+      id: DEFAULT_DATA_SOURCE_ID,
       availableLayers$: this.store$.select(selectOrderedVisibleLayersWithServices)
         .pipe(map(DefaultDataSourceApiService.mapLayersToDataSourceLayer)),
       dataLoader: this,
@@ -60,6 +60,7 @@ export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
       layerName: l.layerName,
       filterable: l.service?.serverType === ServerType.GEOSERVER && l.hasAttributes,
       hasAttributes: l.hasAttributes,
+      // Never set featureInfo: FeatureInfoService already queries backend layers through the tailormap-api, so they would be queried twice
     })).filter(layer => layer.filterable || layer.hasAttributes);
   }
 
