@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { BehaviorSubject, combineLatest, filter, Observable, startWith } from 'rxjs';
-import { CADASTRAL_MUNICIPALITY_LIST, MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
+import { loadCadastralMunicipalityList, MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
@@ -45,9 +45,6 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   private componentConfigService = inject(ComponentConfigurationService);
   private destroyRef = inject(DestroyRef);
 
-
-  private static readonly CADASTRAL_MUNICIPALITY_NAMES = CADASTRAL_MUNICIPALITY_LIST.map(m => m.name);
-
   @Input()
   public type: BaseComponentTypeEnum | undefined;
 
@@ -75,6 +72,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   public searchCadastralParcelsControl = new FormControl<boolean>(false, { nonNullable: true });
 
   private cadastralMunicipalitiesSubject = new BehaviorSubject<string[]>([]);
+  private cadastralMunicipalityNamesSubject = new BehaviorSubject<string[]>([]);
   public cadastralMunicipalities$ = this.cadastralMunicipalitiesSubject.asObservable();
 
   public cadastralMunicipalityControl = new FormControl<string>('', { nonNullable: true });
@@ -116,15 +114,17 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
         this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'searchCadastralParcels', value);
       });
 
+    loadCadastralMunicipalityList().then(list => this.cadastralMunicipalityNamesSubject.next(list.map(m => m.name)));
     this.filteredCadastralMunicipalityOptions$ = combineLatest([
+      this.cadastralMunicipalityNamesSubject,
       this.cadastralMunicipalityControl.valueChanges.pipe(startWith('')),
       this.cadastralMunicipalitiesSubject,
     ])
       .pipe(
-        map(([ term, selectedNames ]) => {
+        map(([ allNames, term, selectedNames ]) => {
           const lowerTerm = term.toLowerCase();
           const selected = new Set(selectedNames);
-          return SimpleSearchComponentConfigComponent.CADASTRAL_MUNICIPALITY_NAMES.filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
+          return allNames.filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
         }),
       );
   }
@@ -139,7 +139,7 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   }
 
   public addCadastralMunicipality(name: string) {
-    if (SimpleSearchComponentConfigComponent.CADASTRAL_MUNICIPALITY_NAMES.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
+    if (this.cadastralMunicipalityNamesSubject.value.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
       this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, name ]);
     }
     this.cadastralMunicipalityControl.setValue('');

@@ -10,6 +10,7 @@ import { SimpleSearchService } from './simple-search.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { selectSearchableLayers } from '../../../map/state/map.selectors';
 import { SearchResultModel } from './models';
+import { loadCadastralMunicipalityList } from '@tailormap-viewer/shared';
 
 const SUGGEST_URL = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest';
 
@@ -68,7 +69,10 @@ const search = async (
   parcelError = false,
 ) => {
   const { service, httpTestingController } = setup();
+  // The cadastral codes are loaded asynchronously: load the module up front and let the promise resolve
+  await loadCadastralMunicipalityList();
   const result$ = firstValueFrom(service.search$(projection, searchTerm, config));
+  await new Promise(resolve => setTimeout(resolve));
   const requests = httpTestingController.match(() => true);
   requests.forEach(req => {
     if (isParcelRequest(req) && parcelError) {
