@@ -3,11 +3,13 @@ import { AdditionalPropertyModel, GroupModel, UserModel } from '@tailormap-admin
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../services/group.service';
-import { formatDate, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
+import { DateTime } from 'luxon';
 import { UserService } from '../services/user.service';
 import { UserAddUpdateModel } from '../models/user-add-update.model';
 import { AdminFieldLocation, AdminFieldModel, AdminFieldRegistrationService } from '../../shared/services/admin-field-registration.service';
 import { ValidatorsHelper } from '@tailormap-viewer/api';
+import { DatetimeFieldComponent } from '@tailormap-viewer/shared';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { PasswordFieldComponent } from '../../shared/components/password-field/password-field.component';
@@ -36,6 +38,7 @@ import { AdminFieldsRendererComponent } from '../../shared/components/admin-fiel
         MatSelectionList,
         MatListOption,
         AdminFieldsRendererComponent,
+        DatetimeFieldComponent,
         AsyncPipe,
     ],
 })
@@ -83,8 +86,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       name: user ? user.name : '',
       organisation: user ? user.organisation : '',
       enabled: user ? user.enabled : true,
-      // HTML input expects 2023-10-27T01:22:00.000, it seems problematic to set a Date object
-      validUntil: (user && user.validUntil) ? formatDate(user.validUntil, 'yyyy-MM-ddTHH:mm:ss', 'en') : null,
+      validUntil: user?.validUntil ? DateTime.fromJSDate(new Date(user.validUntil)).toISO() : null,
       notes: user ? user.notes : null,
       groups: user ? user.groupNames : [],
     });

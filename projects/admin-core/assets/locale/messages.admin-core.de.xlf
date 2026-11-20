@@ -520,7 +520,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.form-not-found" datatype="html">
         <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
-        <target>Das Formular dieses Layers wurde gelöscht. Bearbeiten erfolgt ohne Formular. Wählen Sie ein anderes Formular oder "Kein Formular".</target>
+        <target>Das Formular dieses Layers wurde gelöscht. Bearbeiten erfolgt ohne Formular. Wählen Sie ein anderes Formular oder &quot;Kein Formular&quot;.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>

@@ -1,24 +1,22 @@
-<div class="datetime-field" role="group" [attr.aria-label]="item().label">
-  <mat-form-field class="date" hideRequiredMarker>
-    <mat-label>
-      {{ item().label }}
-      @if (item().required) {
-        <em i18n="@@core.common.required">(required)</em>
-      }
-    </mat-label>
+<div class="datetime-field" role="group" [attr.aria-labelledby]="labelId">
+  <mat-form-field class="date" [hideRequiredMarker]="hideRequiredMarker()">
+    <mat-label [id]="labelId"><ng-content></ng-content></mat-label>
     <input matInput
            [matDatepicker]="dp"
            [formControl]="dateControl"
-           [placeholder]="item().placeholder || item().label"
+           [required]="isRequired()"
+           [errorStateMatcher]="dateErrorStateMatcher"
+           [placeholder]="placeholder()"
            (blur)="markAsTouched()" />
     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
     <mat-datepicker #dp (closed)="markAsTouched()"></mat-datepicker>
   </mat-form-field>
-  <mat-form-field class="time" hideRequiredMarker>
-    <mat-label i18n="@@core.edit.time">Time</mat-label>
+  <mat-form-field class="time" [hideRequiredMarker]="hideRequiredMarker()">
+    <mat-label i18n="@@shared.datetime-field.time">Time</mat-label>
     <input matInput
            [matTimepicker]="tp"
            [formControl]="timeControl"
+           [errorStateMatcher]="timeErrorStateMatcher"
            (blur)="markAsTouched()" />
     <mat-timepicker-toggle matSuffix [for]="tp"></mat-timepicker-toggle>
     <mat-timepicker #tp></mat-timepicker>

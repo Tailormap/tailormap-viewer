@@ -4,6 +4,7 @@ import { UserCreateComponent } from './user-create.component';
 import { UserService } from '../services/user.service';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { Component } from '@angular/core';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 
 @Component({
   selector: 'tm-admin-user-form',
@@ -19,6 +20,7 @@ describe('UserCreateComponent', () => {
         { replace: UserFormComponent, with: MockUserFormComponent },
       ],
       providers: [
+        provideLuxonDateAdapter(),
         { provide: UserService, useValue: {} },
       ],
     });
