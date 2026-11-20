@@ -1458,6 +1458,10 @@
         <source>Logout</source>
         <target>Abmelden</target>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Flurstücke</target>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
         <target>Ort</target>
@@ -1630,6 +1634,10 @@
       <trans-unit id="core.toolbar.open-streetview" datatype="html">
         <source>Open Streetview</source>
         <target>Streetview öffnen</target>
+      </trans-unit>
+      <trans-unit id="core.toolbar.search-cadastral-parcels-pdok-attribution" datatype="html">
+        <source>Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</source>
+        <target>Daten von [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</target>
       </trans-unit>
       <trans-unit id="core.toolbar.search-location" datatype="html">
         <source>Search location</source>

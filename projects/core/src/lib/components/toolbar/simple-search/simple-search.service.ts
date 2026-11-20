@@ -20,7 +20,9 @@ export class SimpleSearchService {
 
 
   private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
+  private static readonly CADASTRAL_PARCELS_LABEL = $localize `:@@core.search.cadastral-parcels:Cadastral parcels`;
   private static readonly MAX_RESULTS = 5;
+  private static readonly PDOK_LOCATION_SERVER_SUGGEST_URL = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest';
 
   public search$(projection: string, searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel[]> {
     return combineLatest([
@@ -37,6 +39,9 @@ export class SimpleSearchService {
             ? this.searchRd$(searchTerm, config)
             : this.searchOSMNominatim$(searchTerm);
           const searches$: Array<Observable<SearchResultModel | null>> = [locationSearch$];
+          if (projection === ProjectionCodesEnum.RD && config?.searchCadastralParcels === true) {
+            searches$.push(this.searchCadastralParcels$(searchTerm, config));
+          }
           searchableLayers.forEach(layer => {
             searches$.push(this.searchLayer$(viewerId, layer, searchTerm));
           });
@@ -102,7 +107,7 @@ export class SimpleSearchService {
     if (config && config.municipalities && config.municipalities.length > 0) {
       filter.push(`gemeentecode:(${config.municipalities.join(' OR ')})`);
     }
-    return this.httpClient.get<LocationServerResponseModel>(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest`, {
+    return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
         q: searchTerm,
         rows: SimpleSearchService.MAX_RESULTS.toString(),
@@ -124,4 +129,48 @@ export class SimpleSearchService {
       })),
     );
   }
+
+  /**
+   * Searches the PDOK Locatieserver for kadastrale percelen.
+   * The configured kadastrale gemeenten are saved with their AKR codes and the filter uses those codes on
+   * `kadastrale_gemeentecode`: `kadastrale_gemeentenaam` is tokenized, so a name filter also matches longer names
+   * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly.
+   */
+  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel> {
+    const filter = ['type:perceel'];
+    const codes = (config.cadastralMunicipalities ?? []).flatMap(m => m.codes);
+    if (codes.length > 0) {
+      filter.push(`kadastrale_gemeentecode:(${codes.join(' OR ')})`);
+    }
+    return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
+      params: {
+        q: searchTerm,
+        rows: SimpleSearchService.MAX_RESULTS.toString(),
+        fl: 'id,weergavenaam,geometrie_rd,centroide_rd',
+        fq: filter,
+      },
+    }).pipe(
+      catchError(() => of({ response: { docs: [] } })),
+      map(result => ({
+        id: 'pdok-cadastral-parcels',
+        name: SimpleSearchService.CADASTRAL_PARCELS_LABEL,
+        attribution: $localize `:@@core.toolbar.search-cadastral-parcels-pdok-attribution:Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)`,
+        results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
+          id: doc.id,
+          label: SimpleSearchService.toLabel(doc.weergavenaam),
+          geometry: doc.geometrie_rd || doc.centroide_rd,
+          projectionCode: ProjectionCodesEnum.RD,
+        })),
+      })),
+    );
+  }
+
+  /**
+   * Removes the "Perceel " prefix from a Locatieserver `weergavenaam`, because the result group already says the
+   * results are parcels. "Perceel Aalten (ATN02) K 2838" -> "Aalten (ATN02) K 2838".
+   */
+  private static toLabel(weergavenaam: string): string {
+    return weergavenaam.replace(/^Perceel\s+/i, '');
+  }
+
 }
