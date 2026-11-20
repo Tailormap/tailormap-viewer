@@ -3,6 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { MilkdownEditorComponent } from './milkdown-editor.component';
 import { MarkdownEditorService } from '../markdown-editor.service';
 import { MilkdownHelper } from './milkdown.helper';
+import { placeholder } from '@milkdown/crepe/feature/placeholder';
 
 type MarkdownUpdatedFn = (ctx: unknown, markdown: string, prevMarkdown: string) => void;
 
@@ -17,6 +18,7 @@ const mocks = vi.hoisted(() => {
   };
   resetCreate();
   const crepeOptions: Array<Record<string, unknown>> = [];
+  const crepeBuilders: Array<{ features: Array<{ feature: unknown; config: unknown }> }> = [];
   const editorDestroy = vi.fn();
   const listenerCtx = Symbol('listenerCtx');
   /** The callback registered with the listener plugin's `markdownUpdated`, captured by the fake ctx below. */
@@ -34,7 +36,7 @@ const mocks = vi.hoisted(() => {
     },
   };
   return {
-    viewFocus, editorView, editorViewCtx, get created() { return created; }, resolveCreate: () => resolveCreate(), resetCreate, crepeOptions,
+    viewFocus, editorView, editorViewCtx, get created() { return created; }, resolveCreate: () => resolveCreate(), resetCreate, crepeOptions, crepeBuilders,
     listenerCtx, ctx, get markdownUpdated() { return markdownUpdated; }, editorDestroy,
   };
 });
@@ -43,9 +45,9 @@ const mocks = vi.hoisted(() => {
 // markdown-editor.component.spec.ts (which loads the real editor) ran first in the same worker.
 /* eslint-disable @vitest/no-restricted-vi-methods */
 /* eslint-disable @typescript-eslint/naming-convention -- mirrors the names of the Crepe API */
-vi.mock('@milkdown/crepe', () => {
-  class Crepe {
-    public static Feature = { CodeMirror: 'code-mirror', Latex: 'latex', ImageBlock: 'image-block', Placeholder: 'placeholder', BlockEdit: 'block-edit' };
+vi.mock('@milkdown/crepe/builder', () => {
+  class CrepeBuilder {
+    public features: Array<{ feature: unknown; config: unknown }> = [];
     public editor = {
       ctx: mocks.ctx,
       destroy: mocks.editorDestroy,
@@ -57,13 +59,18 @@ vi.mock('@milkdown/crepe', () => {
     };
     constructor(options: Record<string, unknown>) {
       mocks.crepeOptions.push(options);
+      mocks.crepeBuilders.push(this);
+    }
+    public addFeature(feature: unknown, config?: unknown) {
+      this.features.push({ feature, config });
+      return this;
     }
     public async create() {
       await mocks.created;
       return this.editor;
     }
   }
-  return { Crepe };
+  return { CrepeBuilder };
 });
 /* eslint-enable @typescript-eslint/naming-convention */
 vi.mock('@milkdown/kit/core', () => ({ editorViewCtx: mocks.editorViewCtx }));
@@ -105,8 +112,9 @@ describe('MilkdownEditorComponent', () => {
     await vi.waitFor(() => expect(mocks.viewFocus).toHaveBeenCalledTimes(1));
     fixture.componentInstance.focus();
     expect(mocks.viewFocus).toHaveBeenCalledTimes(2);
-    const featureConfigs = mocks.crepeOptions[0]['featureConfigs'] as Record<string, unknown>;
-    expect(featureConfigs['placeholder']).toEqual({ mode: 'doc', text: 'Write something' });
+    const features = mocks.crepeBuilders[mocks.crepeBuilders.length - 1].features;
+    expect(features.find(f => f.feature === placeholder)?.config).toEqual({ mode: 'doc', text: 'Write something' });
+    expect(features).toHaveLength(8);
   });
 
   test('destroy() prevents a pending create callback from focusing after teardown', async () => {
