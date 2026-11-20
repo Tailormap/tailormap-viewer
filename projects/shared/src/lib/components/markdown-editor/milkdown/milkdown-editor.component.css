@@ -13,9 +13,7 @@
 @import "@milkdown/crepe/theme/common/placeholder.css";
 @import "@milkdown/crepe/theme/common/toolbar.css";
 @import "@milkdown/crepe/theme/common/table.css";
-@import "@milkdown/crepe/theme/common/top-bar.css";
 @import "@milkdown/crepe/theme/common/diff.css";
-@import "@milkdown/crepe/theme/common/ai.css";
 @import "@milkdown/crepe/theme/frame.css";
 
 .markdown-wrap .milkdown .editor {

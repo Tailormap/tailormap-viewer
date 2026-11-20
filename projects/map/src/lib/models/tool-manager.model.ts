@@ -1,6 +1,6 @@
 import { ToolConfigModel } from './tools/tool-config.model';
 import { ToolModel } from './tools/tool.model';
-import { Scene } from 'cesium';
+import type { Scene } from 'cesium';
 import { Observable } from 'rxjs';
 import { ToolsStatusModel } from './tools-status.model';
 

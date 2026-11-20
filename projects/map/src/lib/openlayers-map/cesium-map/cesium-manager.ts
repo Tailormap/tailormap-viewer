@@ -4,7 +4,7 @@ import { LayerTypesHelper } from '../../helpers/layer-types.helper';
 import { NgZone } from '@angular/core';
 import type OLCesium from 'olcs';
 import { BehaviorSubject, filter, from, map, Observable, take } from 'rxjs';
-import { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, EllipsoidTerrainProvider, PostProcessStage, Scene } from 'cesium';
+import type { Cesium3DTileset, Cesium3DTileStyle, CesiumTerrainProvider, PostProcessStage, Scene } from 'cesium';
 import { ArrayHelper, CssHelper, ExternalLibsLoaderHelper } from '@tailormap-viewer/shared';
 import { LayerTypesEnum } from '../../models/layer-types.enum';
 import { CesiumEventManager } from './cesium-event-manager';
@@ -219,7 +219,7 @@ export class CesiumManager {
 
   private setEllipsoidTerrain() {
     this.executeScene3dAction(scene3d => {
-      scene3d.setTerrain(new Cesium.Terrain(new EllipsoidTerrainProvider()));
+      scene3d.setTerrain(new Cesium.Terrain(new Cesium.EllipsoidTerrainProvider()));
     });
     this.currentTerrainLayerId = CesiumManager.ELLIPSOID_TERRAIN_ID;
   }
