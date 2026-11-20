@@ -1,4 +1,4 @@
-import type { CadastralMunicipalityModel } from './cadastral-municipality.model';
+import type { CadastralMunicipalityModel } from '@tailormap-viewer/api';
 
 /** Loads the list of kadastrale gemeenten with a dynamic import, so the large list is in a separate chunk. */
 export const loadCadastralMunicipalityList = (): Promise<CadastralMunicipalityModel[]> =>

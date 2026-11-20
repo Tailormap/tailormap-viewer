@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { catchError, combineLatest, forkJoin, from, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, combineLatest, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProjectionCodesEnum } from '@tailormap-viewer/map';
 import { Store } from '@ngrx/store';
@@ -9,7 +9,6 @@ import { ExtendedAppLayerModel } from '../../../map/models';
 import { selectViewerId } from '../../../state/core.selectors';
 import { take } from 'rxjs/operators';
 import { selectSearchableLayers } from '../../../map/state/map.selectors';
-import { loadCadastralMunicipalityList } from '@tailormap-viewer/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +17,6 @@ export class SimpleSearchService {
   private httpClient = inject(HttpClient);
   private store$ = inject(Store);
   private api = inject(TAILORMAP_API_V1_SERVICE);
-  private cadastralCodesByName: Promise<Map<string, string[]>> | null = null;
 
 
   private static readonly LOCATION_LABEL = $localize `:@@core.search.location:Location`;
@@ -134,37 +132,16 @@ export class SimpleSearchService {
 
   /**
    * Searches the PDOK Locatieserver for kadastrale percelen.
-   * The configured kadastrale gemeenten are stored by name, but the filter uses their AKR codes on
+   * The configured kadastrale gemeenten are saved with their AKR codes and the filter uses those codes on
    * `kadastrale_gemeentecode`: `kadastrale_gemeentenaam` is tokenized, so a name filter also matches longer names
    * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly.
    */
-  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel | null> {
-    const names = config.cadastralMunicipalities ?? [];
-    if (names.length === 0) {
-      return this.searchCadastralParcelsWithFilter$(searchTerm, ['type:perceel']);
+  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel> {
+    const filter = ['type:perceel'];
+    const codes = (config.cadastralMunicipalities ?? []).flatMap(m => m.codes);
+    if (codes.length > 0) {
+      filter.push(`kadastrale_gemeentecode:(${codes.join(' OR ')})`);
     }
-    return from(this.getCadastralCodesByName()).pipe(
-      switchMap(codesByName => {
-        const codes = names.flatMap(name => codesByName.get(name) ?? []);
-        if (codes.length === 0) {
-          return of(null);
-        }
-        return this.searchCadastralParcelsWithFilter$(searchTerm, [ 'type:perceel', `kadastrale_gemeentecode:(${codes.join(' OR ')})` ]);
-      }),
-      catchError(() => of(null)),
-    );
-  }
-
-  /** Loads the AKR codes by kadastrale gemeente name on first use and keeps them. */
-  private getCadastralCodesByName(): Promise<Map<string, string[]>> {
-    if (!this.cadastralCodesByName) {
-      this.cadastralCodesByName = loadCadastralMunicipalityList()
-        .then(list => new Map(list.map(m => [ m.name, m.codes ])));
-    }
-    return this.cadastralCodesByName;
-  }
-
-  private searchCadastralParcelsWithFilter$(searchTerm: string, filter: string[]): Observable<SearchResultModel> {
     return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
         q: searchTerm,

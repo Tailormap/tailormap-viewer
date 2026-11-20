@@ -41,10 +41,10 @@
           <mat-panel-title i18n="@@admin-core.components.simple-search-cadastral-municipality-filter">Cadastral municipality filter</mat-panel-title>
         </mat-expansion-panel-header>
         <div class="selected-municipality">
-          @for(name of cadastralMunicipalities$ | async; track name) {
-            <div class="label">{{name}}</div>
+          @for(municipality of cadastralMunicipalities$ | async; track municipality.name) {
+            <div class="label">{{municipality.name}}</div>
             <div class="button-wrapper">
-              <button mat-icon-button (click)="deleteCadastralMunicipality(name)">
+              <button mat-icon-button (click)="deleteCadastralMunicipality(municipality.name)">
                 <mat-icon svgIcon="trash_filled"></mat-icon>
               </button>
             </div>

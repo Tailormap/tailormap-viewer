@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
+import { loadCadastralMunicipalityList } from '@tailormap-viewer/shared';
 
 const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
@@ -35,35 +36,26 @@ describe('SimpleSearchComponentConfigComponent', () => {
   });
 
   test('shows the selected kadastrale gemeenten and deletes one', async () => {
+    const aalten = { name: 'Aalten', codes: ['ATN02'] };
+    const amsterdam = { name: 'Amsterdam', codes: [ 'ASD02', 'ASD03' ] };
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: [ 'Aalten', "'s-Gravenhage", 'Amsterdam' ],
+      cadastralMunicipalities: [ aalten, amsterdam ],
     });
     expect(screen.getByRole('switch', { name: /Search cadastral parcels/ })).toBeChecked();
     expect(await screen.findByText('Aalten')).toBeInTheDocument();
-    expect(screen.getByText("'s-Gravenhage")).toBeInTheDocument();
     expect(screen.getByText('Amsterdam')).toBeInTheDocument();
     await userEvent.click(getDeleteButton('Amsterdam'));
-    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'Aalten', "'s-Gravenhage" ]);
+    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [aalten]);
   });
 
-  test('shows and deletes selected names that are not in the list', async () => {
+  test('autocomplete matches on name, excludes selected names and saves the chosen name with its codes', async () => {
+    const aalburg = { name: 'Aalburg', codes: ['ABG00'] };
     const { updateConfigForKey } = await setup({
       enabled: true,
       searchCadastralParcels: true,
-      cadastralMunicipalities: [ 'Aalten', 'ATN02' ],
-    });
-    expect(await screen.findByText('ATN02')).toBeInTheDocument();
-    await userEvent.click(getDeleteButton('ATN02'));
-    expect(updateConfigForKey).toHaveBeenCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', ['Aalten']);
-  });
-
-  test('autocomplete matches on name, excludes selected names and saves the chosen name', async () => {
-    const { updateConfigForKey } = await setup({
-      enabled: true,
-      searchCadastralParcels: true,
-      cadastralMunicipalities: ['Aalburg'],
+      cadastralMunicipalities: [aalburg],
     });
     const input = await screen.findByRole('combobox', { name: 'Cadastral municipality' });
     await userEvent.type(input, 'aal');
@@ -73,7 +65,9 @@ describe('SimpleSearchComponentConfigComponent', () => {
     await userEvent.type(input, 'amsterdam');
     await vi.waitFor(() => expect(screen.getAllByRole('option').map(o => o.textContent?.trim())).toEqual(['Amsterdam']));
     await userEvent.click(screen.getByRole('option', { name: 'Amsterdam' }));
-    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ 'Aalburg', 'Amsterdam' ]);
+    const amsterdam = (await loadCadastralMunicipalityList()).find(m => m.name === 'Amsterdam');
+    expect(amsterdam?.codes).toContain('ASD02');
+    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ aalburg, amsterdam ]);
     expect(input).toHaveValue('');
   });
 

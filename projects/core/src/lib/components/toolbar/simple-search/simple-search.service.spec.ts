@@ -10,7 +10,6 @@ import { SimpleSearchService } from './simple-search.service';
 import { selectViewerId } from '../../../state/core.selectors';
 import { selectSearchableLayers } from '../../../map/state/map.selectors';
 import { SearchResultModel } from './models';
-import { loadCadastralMunicipalityList } from '@tailormap-viewer/shared';
 
 const SUGGEST_URL = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest';
 
@@ -69,10 +68,7 @@ const search = async (
   parcelError = false,
 ) => {
   const { service, httpTestingController } = setup();
-  // The cadastral codes are loaded asynchronously: load the module up front and let the promise resolve
-  await loadCadastralMunicipalityList();
   const result$ = firstValueFrom(service.search$(projection, searchTerm, config));
-  await new Promise(resolve => setTimeout(resolve));
   const requests = httpTestingController.match(() => true);
   requests.forEach(req => {
     if (isParcelRequest(req) && parcelError) {
@@ -109,25 +105,16 @@ describe('SimpleSearchService', () => {
     }]);
   });
 
-  test('filters parcels on the AKR codes of the selected kadastrale gemeente names', async () => {
-    const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'Aalten', 'Alphen' ] });
-    // Filtering on the code is exact: "Alphen" must not also match "Alphen aan den Rijn" (APN01) or "Alphen en Riel" (APN03).
-    expect(parcelRequests[0].request.params.getAll('fq')).toEqual([ 'type:perceel', 'kadastrale_gemeentecode:(ATN02 OR APN02)' ]);
-  });
-
-  test('includes all AKR codes of a kadastrale gemeente that has several', async () => {
-    const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: ["'s-Gravenhage"] });
-    const codeFilter = parcelRequests[0].request.params.getAll('fq')?.[1] ?? '';
-    expect(codeFilter).toMatch(/^kadastrale_gemeentecode:\(GVH00 OR GVH01 OR .* OR GVH49\)$/);
-  });
-
-  test('ignores unknown kadastrale gemeente names and does not search parcels when none is known', async () => {
-    const { parcelRequests } = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: [ 'Aalten', 'Does not exist' ] });
-    expect(parcelRequests[0].request.params.getAll('fq')).toEqual([ 'type:perceel', 'kadastrale_gemeentecode:(ATN02)' ]);
-    TestBed.resetTestingModule();
-    const noneKnown = await search({ enabled: true, searchCadastralParcels: true, cadastralMunicipalities: ['Does not exist'] });
-    expect(noneKnown.parcelRequests.length).toBe(0);
-    expect(noneKnown.results.map(r => r.id)).toEqual(['pdok-locatie-server']);
+  test('filters parcels on the saved AKR codes of the selected kadastrale gemeenten', async () => {
+    const { parcelRequests } = await search({
+      enabled: true,
+      searchCadastralParcels: true,
+      cadastralMunicipalities: [
+        { name: 'Aalten', codes: ['ATN02'] },
+        { name: "'s-Gravenhage", codes: [ 'GVH00', 'GVH01' ] },
+      ],
+    });
+    expect(parcelRequests[0].request.params.getAll('fq')).toEqual([ 'type:perceel', 'kadastrale_gemeentecode:(ATN02 OR GVH00 OR GVH01)' ]);
   });
 
   test('does not apply the municipality filter to parcels', async () => {

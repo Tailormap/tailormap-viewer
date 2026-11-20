@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, Input, inject } from '@angular/core';
-import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
+import { BaseComponentTypeEnum, CadastralMunicipalityModel, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
@@ -71,8 +71,9 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
 
   public searchCadastralParcelsControl = new FormControl<boolean>(false, { nonNullable: true });
 
-  private cadastralMunicipalitiesSubject = new BehaviorSubject<string[]>([]);
-  private cadastralMunicipalityNamesSubject = new BehaviorSubject<string[]>([]);
+  private cadastralMunicipalitiesSubject = new BehaviorSubject<CadastralMunicipalityModel[]>([]);
+  /** All kadastrale gemeenten, loaded lazily because the list is large. */
+  private allCadastralMunicipalitiesSubject = new BehaviorSubject<CadastralMunicipalityModel[]>([]);
   public cadastralMunicipalities$ = this.cadastralMunicipalitiesSubject.asObservable();
 
   public cadastralMunicipalityControl = new FormControl<string>('', { nonNullable: true });
@@ -114,17 +115,19 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
         this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'searchCadastralParcels', value);
       });
 
-    loadCadastralMunicipalityList().then(list => this.cadastralMunicipalityNamesSubject.next(list.map(m => m.name)));
+    loadCadastralMunicipalityList().then(list => this.allCadastralMunicipalitiesSubject.next(list));
     this.filteredCadastralMunicipalityOptions$ = combineLatest([
-      this.cadastralMunicipalityNamesSubject,
+      this.allCadastralMunicipalitiesSubject,
       this.cadastralMunicipalityControl.valueChanges.pipe(startWith('')),
       this.cadastralMunicipalitiesSubject,
     ])
       .pipe(
-        map(([ allNames, term, selectedNames ]) => {
+        map(([ all, term, selectedMunicipalities ]) => {
           const lowerTerm = term.toLowerCase();
-          const selected = new Set(selectedNames);
-          return allNames.filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
+          const selected = new Set(selectedMunicipalities.map(m => m.name));
+          return all
+            .map(m => m.name)
+            .filter(name => !selected.has(name) && name.toLowerCase().includes(lowerTerm));
         }),
       );
   }
@@ -138,19 +141,21 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
     this.saveConfig([...this.municipalitiesSubject.value].filter(m => m !== code));
   }
 
+  /** Saves the kadastrale gemeente with its AKR codes, so the viewer can filter on the codes without the full list. */
   public addCadastralMunicipality(name: string) {
-    if (this.cadastralMunicipalityNamesSubject.value.includes(name) && !this.cadastralMunicipalitiesSubject.value.includes(name)) {
-      this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, name ]);
+    const municipality = this.allCadastralMunicipalitiesSubject.value.find(m => m.name === name);
+    if (municipality && !this.cadastralMunicipalitiesSubject.value.some(m => m.name === name)) {
+      this.saveCadastralMunicipalities([ ...this.cadastralMunicipalitiesSubject.value, municipality ]);
     }
     this.cadastralMunicipalityControl.setValue('');
   }
 
   public deleteCadastralMunicipality(name: string) {
-    this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(n => n !== name));
+    this.saveCadastralMunicipalities(this.cadastralMunicipalitiesSubject.value.filter(m => m.name !== name));
   }
 
-  private saveCadastralMunicipalities(names: string[]) {
-    this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'cadastralMunicipalities', names);
+  private saveCadastralMunicipalities(municipalities: CadastralMunicipalityModel[]) {
+    this.componentConfigService.updateConfigForKey<SimpleSearchConfigModel>(this.type, 'cadastralMunicipalities', municipalities);
   }
 
   private saveConfig(municipalities: string[] = []) {
