@@ -69,7 +69,7 @@ services:
 
   db:
     container_name: ${COMPOSE_PROJECT_NAME}-db
-    image: postgis/postgis:18-3.6-alpine
+    image: postgis/postgis:18-3.7-alpine
     environment:
       POSTGRES_PASSWORD: ${TAILORMAP_DB_PASSWORD:-tailormap}
       POSTGRES_USER: tailormap
