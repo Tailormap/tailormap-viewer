@@ -145,7 +145,7 @@ export class SimpleSearchService {
     }
     return from(this.getCadastralCodesByName()).pipe(
       switchMap(codesByName => {
-        const codes = [...new Set(names.flatMap(name => codesByName.get(name) ?? []))];
+        const codes = names.flatMap(name => codesByName.get(name) ?? []);
         if (codes.length === 0) {
           return of(null);
         }
