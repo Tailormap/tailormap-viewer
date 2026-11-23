@@ -1,3 +1,7 @@
+:host {
+  position: relative;
+}
+
 .table-container {
   max-width: 100%;
   overflow: auto;
@@ -17,6 +21,22 @@ tm-error-message {
   display: inline-block;
 }
 
-mat-spinner {
-  margin: 16px;
+/*
+ * Overlay the progress bar on the top of the table so showing it does not shift the layout. It only becomes visible after a short
+ * delay, so a fast page load does not flash it.
+ */
+.loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  opacity: 0;
+  animation: show-loading 0s 300ms forwards;
+}
+
+@keyframes show-loading {
+  to {
+    opacity: 1;
+  }
 }

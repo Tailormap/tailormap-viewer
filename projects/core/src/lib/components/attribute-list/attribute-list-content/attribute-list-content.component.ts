@@ -29,6 +29,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 import { MatButton } from '@angular/material/button';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { AsyncPipe } from '@angular/common';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
     selector: 'tm-attribute-list-content',
@@ -40,6 +41,7 @@ import { AsyncPipe } from '@angular/common';
         MatButton,
         AttributeListTableComponent,
         AsyncPipe,
+        MatProgressBar,
     ],
 })
 export class AttributeListContentComponent implements OnInit {
@@ -54,7 +56,7 @@ export class AttributeListContentComponent implements OnInit {
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
-  public notLoadingData$: Observable<boolean> = of(false);
+  public loadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public filters$: Observable<AttributeFilterModel[]> = of([]);
   public selectedRowId$: Observable<string | undefined> = of(undefined);
@@ -79,7 +81,7 @@ export class AttributeListContentComponent implements OnInit {
     this.hasRows$ = this.store$.select(selectRowCountForSelectedTab).pipe(map(rowCount => rowCount > 0));
     this.hasNoRows$ = this.store$.select(selectHasNoRowsForSelectedTab);
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
-    this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
+    this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
     this.filters$ = combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),

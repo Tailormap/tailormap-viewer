@@ -22,7 +22,6 @@ import { map } from 'rxjs/operators';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButton } from '@angular/material/button';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AsyncPipe } from '@angular/common';
 
 
@@ -38,7 +37,6 @@ import { AsyncPipe } from '@angular/common';
         MatToolbar,
         MatButton,
         AttributeListExportButtonComponent,
-        MatProgressSpinner,
         TooltipDirective,
         MatPaginator,
         AsyncPipe,

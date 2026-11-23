@@ -58,6 +58,10 @@
         <source>Go to page</source>
         <target>Ga naar pagina</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-data" datatype="html">
+        <source>Loading data</source>
+        <target>Gegevens laden</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
         <target>Geen lagen met administratieve gegevens gevonden</target>

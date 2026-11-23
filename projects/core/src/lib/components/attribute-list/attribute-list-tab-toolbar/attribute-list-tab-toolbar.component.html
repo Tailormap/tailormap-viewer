@@ -9,9 +9,6 @@
     }
     <ng-template #attributeListFeaturesContainer></ng-template>
     <tm-attribute-list-export-button></tm-attribute-list-export-button>
-    @if (loadingData$ | async) {
-      <mat-spinner color="primary" mode="indeterminate" diameter="20"></mat-spinner>
-    }
     @if (showZoomToButton$ | async) {
       <button mat-flat-button
               color="primary"
