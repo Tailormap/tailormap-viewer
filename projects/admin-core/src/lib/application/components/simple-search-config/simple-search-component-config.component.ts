@@ -75,7 +75,6 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   public searchCadastralParcelsControl = new FormControl<boolean>(false, { nonNullable: true });
 
   private cadastralMunicipalitiesSubject = new BehaviorSubject<CadastralMunicipalityModel[]>([]);
-  /** All kadastrale gemeenten, loaded lazily because the list is large. */
   private allCadastralMunicipalitiesSubject = new BehaviorSubject<CadastralMunicipalityModel[]>([]);
   public cadastralMunicipalities$ = this.cadastralMunicipalitiesSubject.asObservable();
 
