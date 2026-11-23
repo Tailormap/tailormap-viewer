@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regenerates projects/shared/src/lib/helpers/cadastral-municipality-list.ts from the Kadaster IMKAD waardelijst
+ * Regenerates projects/admin-core/src/lib/helpers/cadastral-municipality-list.ts from the Kadaster IMKAD waardelijst
  * "KadastraleGemeente". Run by hand (npm run update-cadastral-municipalities) when Kadaster publishes a waardelijsten
  * release that changes KadastraleGemeente, then review the printed summary and the git diff, and commit.
  *
@@ -14,7 +14,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const SOURCE_URL = 'https://developer.kadaster.nl/schemas/waardelijsten/KadastraleGemeente/KadastraleGemeente.csv';
-const OUTPUT_FILE = fileURLToPath(new URL('../../projects/shared/src/lib/helpers/cadastral-municipality-list.ts', import.meta.url));
+const OUTPUT_FILE = fileURLToPath(new URL('../../projects/admin-core/src/lib/helpers/cadastral-municipality-list.ts', import.meta.url));
 const AKR_CODE = /^[A-Z]{3}\d{2}$/;
 const MIN_CODES = 1000;
 

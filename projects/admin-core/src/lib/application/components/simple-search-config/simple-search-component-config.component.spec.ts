@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { loadCadastralMunicipalityList } from '@tailormap-viewer/shared';
+import { loadCadastralMunicipalityList } from '../../../helpers/cadastral-municipality.loader';
 
 const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
