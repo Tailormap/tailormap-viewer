@@ -23,7 +23,8 @@
     "extract-locale-core": "tm-extract-i18n --library=core",
     "extract-locale-admin-core": "tm-extract-i18n --library=admin-core",
     "link-libraries": "tm-link-libraries",
-    "update-cadastral-municipalities": "node ci/scripts/update-cadastral-municipalities.mjs"
+    "update-cadastral-municipalities": "node ci/scripts/update-cadastral-municipalities.mjs",
+    "update-municipalities": "node ci/scripts/update-municipalities.mjs"
   },
   "private": true,
   "dependencies": {

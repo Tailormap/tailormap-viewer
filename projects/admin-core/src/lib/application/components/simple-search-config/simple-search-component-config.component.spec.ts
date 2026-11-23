@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BaseComponentTypeEnum, SimpleSearchConfigModel } from '@tailormap-viewer/api';
 import { SimpleSearchComponentConfigComponent } from './simple-search-component-config.component';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
-import { loadCadastralMunicipalityList } from '../../../helpers/cadastral-municipality.loader';
+import { loadCadastralMunicipalityList } from '../../../helpers/municipality-list.loader';
 
 const setup = async (config: SimpleSearchConfigModel = { enabled: true }) => {
   const componentConfigService = { updateConfigForKey: vi.fn(), updateConfig: vi.fn() };
@@ -69,6 +69,22 @@ describe('SimpleSearchComponentConfigComponent', () => {
     expect(amsterdam?.codes).toContain('ASD02');
     expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'cadastralMunicipalities', [ aalburg, amsterdam ]);
     expect(input).toHaveValue('');
+  });
+
+  test('shows the selected municipalities by code and saves a chosen municipality by its code', async () => {
+    const { updateConfigForKey } = await setup({ enabled: true, municipalities: ['0197'] });
+    expect(await screen.findByText('Aalten')).toBeInTheDocument();
+    const input = screen.getByRole('combobox', { name: 'Municipality' });
+    await userEvent.type(input, 'aal');
+    expect(await screen.findByRole('option', { name: 'Aalsmeer' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Aalten' })).not.toBeInTheDocument();
+    await userEvent.clear(input);
+    await userEvent.type(input, 'amsterdam');
+    await userEvent.click(await screen.findByRole('option', { name: 'Amsterdam' }));
+    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'municipalities', [ '0197', '0363' ]);
+    // The mocked service does not feed the saved config back, so deleting starts from the initial config again
+    await userEvent.click(getDeleteButton('Aalten'));
+    expect(updateConfigForKey).toHaveBeenLastCalledWith(BaseComponentTypeEnum.SIMPLE_SEARCH, 'municipalities', []);
   });
 
 });

@@ -4,8 +4,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentConfigurationService } from '../../services/component-configuration.service';
 import { ConfigurationComponentModel } from '../configuration-component.model';
 import { BehaviorSubject, combineLatest, filter, Observable, startWith } from 'rxjs';
-import { MunicipalityHelper, MunicipalityModel } from '@tailormap-viewer/shared';
-import { loadCadastralMunicipalityList } from '../../../helpers/cadastral-municipality.loader';
+import { isMunicipalityModel, MunicipalityModel } from '../../../helpers/municipality.model';
+import { loadCadastralMunicipalityList, loadMunicipalityList } from '../../../helpers/municipality-list.loader';
 import { map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponentConfigComponent } from '../base-component-config/base-component-config.component';
@@ -65,6 +65,8 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   private _config: SimpleSearchConfigModel | undefined;
 
   private municipalitiesSubject = new BehaviorSubject<string[]>([]);
+  /** All gemeenten, loaded lazily like the kadastrale gemeenten. */
+  private allMunicipalitiesSubject = new BehaviorSubject<MunicipalityModel[]>([]);
   public municipalities$: Observable<MunicipalityModel[]>;
 
   public municipalityControl = new FormControl<string | MunicipalityModel>('', { nonNullable: true });
@@ -81,30 +83,31 @@ export class SimpleSearchComponentConfigComponent implements ConfigurationCompon
   public filteredCadastralMunicipalityOptions$: Observable<string[]>;
 
   constructor() {
-    const municipalities = MunicipalityHelper.getDutchMunicipalities();
-    this.filteredMunicipalityOptions$ = this.municipalityControl.valueChanges
+    loadMunicipalityList().then(list => this.allMunicipalitiesSubject.next(list));
+    this.filteredMunicipalityOptions$ = combineLatest([
+      this.allMunicipalitiesSubject,
+      this.municipalityControl.valueChanges.pipe(startWith(''), filter(str => typeof str === 'string')),
+      this.municipalitiesSubject,
+    ])
       .pipe(
-        startWith(''),
-        filter(str => typeof str === 'string'),
-        map(term => {
-          const selected = new Set(this.municipalitiesSubject.value);
-          return municipalities.filter(o => {
-            return !selected.has(o.municipalityCode) && o.municipality.toLowerCase().includes(term.toLowerCase());
-          });
+        map(([ all, term, selectedMunicipalities ]) => {
+          const lowerTerm = term.toLowerCase();
+          const selected = new Set(selectedMunicipalities);
+          return all.filter(o => !selected.has(o.municipalityCode) && o.municipality.toLowerCase().includes(lowerTerm));
         }),
       );
-    this.municipalities$ = this.municipalitiesSubject.asObservable()
+    this.municipalities$ = combineLatest([ this.allMunicipalitiesSubject, this.municipalitiesSubject ])
       .pipe(
-        map(selectedMunicipalities => {
+        map(([ all, selectedMunicipalities ]) => {
           return selectedMunicipalities
-            .map(m => municipalities.find(mo => mo.municipalityCode === m))
+            .map(m => all.find(mo => mo.municipalityCode === m))
             .filter(mo => !!mo);
         }),
       );
     this.municipalityControl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        filter(MunicipalityHelper.isMunicipalityModel),
+        filter(isMunicipalityModel),
       )
       .subscribe(value => {
         this.addMunicipality(value.municipalityCode);
