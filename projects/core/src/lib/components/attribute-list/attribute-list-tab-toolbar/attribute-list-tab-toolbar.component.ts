@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, viewChild, ViewCont
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverComponent, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
-import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
+import { Observable, of, switchMap, take, combineLatest, tap } from 'rxjs';
 import {
   selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
   selectPagingDataSelectedTab, selectSelectedTab,
@@ -32,7 +32,8 @@ import { AsyncPipe } from '@angular/common';
     styleUrls: ['./attribute-list-tab-toolbar.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
+        I18nPaginatorIntl,
+        { provide: MatPaginatorIntl, useExisting: I18nPaginatorIntl },
     ],
     imports: [
         MatToolbar,
@@ -54,6 +55,7 @@ export class AttributeListTabToolbarComponent implements OnInit {
   private attributeListDataService = inject(AttributeListDataService);
   private mapService = inject(MapService);
   private attributeListApiService = inject(AttributeListManagerService);
+  private paginatorIntl = inject(I18nPaginatorIntl);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
 
   public columns: AttributeListColumnModel[] = [];
@@ -86,7 +88,8 @@ export class AttributeListTabToolbarComponent implements OnInit {
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
-    this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
+    this.pagingData$ = this.store$.select(selectPagingDataSelectedTab)
+      .pipe(tap(pagingData => this.paginatorIntl.setTotalUnknown(pagingData.knownTotalCount === null)));
     this.hasFilters$ = combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),

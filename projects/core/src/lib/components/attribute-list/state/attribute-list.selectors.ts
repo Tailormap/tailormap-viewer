@@ -9,6 +9,7 @@ import { selectComponentTitle } from '../../../state/core.selectors';
 import { BaseComponentTypeEnum, HiddenLayerFunctionality } from '@tailormap-viewer/api';
 import { selectVisibleLayersWithAttributes } from '../../../map';
 import { AttributeListInitialDataSortModelWithoutSource } from '../models/attribute-list-initial-data-sort.model';
+import { AttributeListPagingHelper } from '../helpers/attribute-list-paging.helper';
 
 const selectAttributeListState = createFeatureSelector<AttributeListState>(attributeListStateKey);
 
@@ -214,11 +215,12 @@ export const selectSortForSelectedTab = createSelector(
 
 export const selectPagingDataSelectedTab = createSelector(
   selectDataForSelectedTab,
-  (data: AttributeListDataModel | null): AttributeListPagingDataType => {
+  selectLoadingDataSelectedTab,
+  (data: AttributeListDataModel | null, loading: boolean): AttributeListPagingDataType => {
     if (!data) {
-      return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0 };
+      return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0, knownTotalCount: 0, paginatorLength: 0 };
     }
-    return { id: data.id, totalCount: data.totalCount, pageIndex: data.pageIndex, pageSize: data.pageSize };
+    return AttributeListPagingHelper.getPagingData(data.id, data.totalCount, data.pageIndex, data.pageSize, data.rows.length, loading);
   },
 );
 

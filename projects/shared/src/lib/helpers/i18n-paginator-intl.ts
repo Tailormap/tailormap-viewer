@@ -9,12 +9,32 @@ export class I18nPaginatorIntl extends MatPaginatorIntl {
   public override previousPageLabel = $localize`:@@shared.paginator.previous-page:Previous page`;
   public override itemsPerPageLabel = $localize`:@@shared.paginator.items-per-page:Items per page`;
 
+  private totalUnknown = false;
+
+  /**
+   * Set whether the total is unknown. The range label then shows "of unknown" instead of the length given to the paginator,
+   * which is only used to determine whether there is a next page.
+   */
+  public setTotalUnknown(totalUnknown: boolean) {
+    if (this.totalUnknown === totalUnknown) {
+      return;
+    }
+    this.totalUnknown = totalUnknown;
+    this.changes.next();
+  }
+
   public override getRangeLabel = (page: number, pageSize: number, length: number) => {
+    const start = page * pageSize + 1;
+    const end = Math.min((page + 1) * pageSize, length);
+    if (this.totalUnknown) {
+      if (end < start) {
+        return $localize`:@@shared.paginator.range-label-empty-unknown:0 of unknown`;
+      }
+      return $localize`:@@shared.paginator.range-label-unknown:${start} - ${end} of unknown`;
+    }
     if (length === 0) {
       return $localize`:@@shared.paginator.range-label-empty:0 of 0`;
     }
-    const start = page * pageSize + 1;
-    const end = Math.min((page + 1) * pageSize, length);
     return $localize`:@@shared.paginator.range-label:${start} - ${end} of ${length}`;
   };
 }

@@ -26,10 +26,10 @@
     <div class="paging">
       <mat-paginator [pageSize]="pagingData.pageSize"
         [pageIndex]="pagingData.pageIndex - 1"
-        [length]="pagingData.totalCount || 0"
+        [length]="pagingData.paginatorLength"
         [hidePageSize]="true"
         [disabled]="loadingData$ | async"
-        [showFirstLastButtons]="true"
+        [showFirstLastButtons]="pagingData.knownTotalCount !== null"
         (click)="showJumpToPage($event)"
         (page)="onPageChange($event)">
       </mat-paginator>
