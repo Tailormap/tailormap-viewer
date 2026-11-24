@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { concatMap, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
+import { concatMap, distinctUntilChanged, filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { forkJoin, Observable, of, pipe, take, combineLatest, merge } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
@@ -10,12 +10,13 @@ import {
   selectColumnsForSelectedTab, selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadErrorForSelectedTab,
   selectLoadingDataSelectedTab, selectPagingDataSelectedTab,
   selectRowCountForSelectedTab,
-  selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
+  selectRowsForSelectedTab, selectSelectedRowIdForSelectedTab, selectSelectedTab, selectSelectedTabLayerId, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
 import { AttributeListStateService } from '../services/attribute-list-state.service';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
 import { BaseComponentTypeEnum, AttributeType, AttributeFilterModel } from '@tailormap-viewer/api';
 import { SimpleAttributeFilterService } from '../../../filter/services/simple-attribute-filter.service';
+import { FilterService } from '../../../filter/services/filter.service';
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
@@ -50,6 +51,7 @@ export class AttributeListContentComponent implements OnInit {
   private attributeListFeatureDetailsService = inject(AttributeListFeatureDetailsService);
   private attributeListStatisticsService = inject(AttributeListStatisticsService);
   private simpleAttributeFilterService = inject(SimpleAttributeFilterService);
+  private filterService = inject(FilterService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -76,7 +78,7 @@ export class AttributeListContentComponent implements OnInit {
   private tableContainer = viewChild<ElementRef<HTMLElement>>('tableContainer');
 
   constructor() {
-    this.scrollToTopOnPageOrSortChange();
+    this.scrollToTopOnNewRows();
   }
 
   public ngOnInit(): void {
@@ -101,16 +103,23 @@ export class AttributeListContentComponent implements OnInit {
   }
 
   /**
-   * The table container keeps its scroll position when the rows are replaced. When going to another page (or changing the sort or
-   * switching tabs) while scrolled down, the first rows would not be visible, so scroll back to the top.
+   * The table container keeps its scroll position when the rows are replaced. When going to another page, changing the sort or
+   * filter, or switching tabs while scrolled down, the first rows would not be visible, so scroll back to the top.
+   *
+   * A filter change resets the page to 1, which only changes the page index when not already on page 1, so listen for filter changes
+   * on the layer of the selected tab as well. Other reloads (for example after editing a feature) keep the scroll position.
    */
-  private scrollToTopOnPageOrSortChange(): void {
-    this.store$.select(selectDataForSelectedTab)
-      .pipe(
-        map(data => data ? [ data.id, data.pageIndex, data.sortedColumn, data.sortDirection ].join('|') : ''),
-        distinctUntilChanged(),
-        takeUntilDestroyed(),
-      )
+  private scrollToTopOnNewRows(): void {
+    const pageOrSortChanged$ = this.store$.select(selectDataForSelectedTab).pipe(
+      map(data => data ? [ data.id, data.pageIndex, data.sortedColumn, data.sortDirection ].join('|') : ''),
+      distinctUntilChanged(),
+    );
+    const filterChanged$ = this.filterService.getChangedFilters$().pipe(
+      withLatestFrom(this.store$.select(selectSelectedTabLayerId)),
+      filter(([ changedFilters, layerId ]) => !!layerId && changedFilters.has(layerId)),
+    );
+    merge(pageOrSortChanged$, filterChanged$)
+      .pipe(takeUntilDestroyed())
       .subscribe(() => {
         const container = this.tableContainer()?.nativeElement;
         if (container) {

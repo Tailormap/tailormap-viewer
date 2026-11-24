@@ -7,6 +7,9 @@ import { attributeListStateKey } from '../state/attribute-list.state';
 import { AttributeListContentComponent } from './attribute-list-content.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TestBed } from '@angular/core/testing';
+import { Subject } from 'rxjs';
+import { FilterService } from '../../../filter/services/filter.service';
+import { LayerFeaturesFilters } from '../../../filter/models/feature-filter.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { MatTableModule } from '@angular/material/table';
@@ -91,7 +94,8 @@ describe('AttributeListContent', () => {
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
   });
 
-  it('scrolls the table to the top when the page or sort changes', async () => {
+  it('scrolls the table to the top when the page, sort or filter changes', async () => {
+    const changedFilters$ = new Subject<Map<string, LayerFeaturesFilters | null>>();
     const state = {
       ...getLoadedStoreWithRows(),
       core: {
@@ -106,6 +110,7 @@ describe('AttributeListContent', () => {
         { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
         getMapServiceMock().provider,
         provideMockStore({ initialState: state }),
+        { provide: FilterService, useValue: { getChangedFilters$: () => changedFilters$.asObservable(), getFilterForLayer: () => undefined } },
       ],
     });
     const store = TestBed.inject(MockStore);
@@ -130,6 +135,13 @@ describe('AttributeListContent', () => {
 
     tableContainer.scrollTop = 200;
     setData({ selectedRowId: '2', pageIndex: 2, sortedColumn: 'attribute1', sortDirection: 'asc' });
+    expect(tableContainer.scrollTop).toBe(0);
+
+    tableContainer.scrollTop = 200;
+    changedFilters$.next(new Map([[ 'other-layer', null ]]));
+    expect(tableContainer.scrollTop).toBe(200);
+
+    changedFilters$.next(new Map([[ '1', null ]]));
     expect(tableContainer.scrollTop).toBe(0);
   });
 
