@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, booleanAttribute, computed, effect, forwardRef, inject, input } from '@angular/core';
+import { Component, booleanAttribute, computed, effect, forwardRef, inject, input } from '@angular/core';
 import {
   AbstractControl, ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, Validator,
 } from '@angular/forms';
@@ -59,7 +59,6 @@ let nextId = 0;
   ],
 })
 export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
-  private cdr = inject(ChangeDetectorRef);
   private defaultErrorStateMatcher = inject(ErrorStateMatcher);
 
   public placeholder = input<string>('');
@@ -95,11 +94,14 @@ export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
     });
   }
 
+  /**
+   * No `markForCheck()` is needed here or in `setDisabledState()`: the Material inputs of the internal controls emit state
+   * changes, on which their form field marks itself and this component for check.
+   */
   public writeValue(value: unknown): void {
     const dateTime = DatetimeFieldComponent.parseValue(value);
     this.dateControl.setValue(dateTime, { emitEvent: false });
     this.timeControl.setValue(dateTime, { emitEvent: false });
-    this.cdr.markForCheck();
   }
 
   public registerOnChange(fn: (value: string | null) => void): void {
@@ -118,7 +120,6 @@ export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
       this.dateControl.enable({ emitEvent: false });
       this.timeControl.enable({ emitEvent: false });
     }
-    this.cdr.markForCheck();
   }
 
   /**

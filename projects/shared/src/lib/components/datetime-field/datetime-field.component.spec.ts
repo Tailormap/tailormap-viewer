@@ -125,4 +125,26 @@ describe('DatetimeFieldComponent', () => {
     expect(dateInput).toBeDisabled();
     expect(timeInput).toBeDisabled();
   });
+
+  test('updates when the parent sets a value or disables the control', async () => {
+    const control = new FormControl<string | null>(null);
+    await render(
+      `<button (click)="control.setValue(value)">Set</button>
+       <button (click)="control.disable()">Disable</button>
+       <tm-datetime-field [formControl]="control">Timestamp</tm-datetime-field>`,
+      {
+        imports: [ DatetimeFieldComponent, ReactiveFormsModule ],
+        providers: [provideLuxonDateAdapter()],
+        componentProperties: { control, value: '2026-10-21T10:30:00.000Z' },
+      },
+    );
+    const dateInput = screen.getByRole('textbox', { name: /Timestamp/ });
+    const formField = dateInput.closest('mat-form-field');
+    await userEvent.click(screen.getByRole('button', { name: 'Set' }));
+    expect(dateInput).toHaveValue('10/21/2026');
+    expect(formField?.querySelector('.mdc-floating-label')).toHaveClass('mdc-floating-label--float-above');
+    await userEvent.click(screen.getByRole('button', { name: 'Disable' }));
+    expect(dateInput).toBeDisabled();
+    expect(formField).toHaveClass('mat-form-field-disabled');
+  });
 });
