@@ -395,8 +395,8 @@
         <target>WKT des Zeichenobjekts kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
-        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
-        <target>WKT des Objekts in die Zwischenablage kopiert: <x id="PH" equiv-text="displayWkt"/></target>
+        <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
+        <target><x id="PH" equiv-text="label"/> WKT in die Zwischenablage kopiert</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -513,6 +513,10 @@
       <trans-unit id="core.drawing.no-reference-layers" datatype="html">
         <source>No visible layers with available geometry</source>
         <target>Keine sichtbaren Ebenen mit verfügbarer Geometrie</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.object" datatype="html">
+        <source>Object</source>
+        <target>Objekt</target>
       </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>

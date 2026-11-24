@@ -34,7 +34,7 @@
         <button mat-icon-button
                 type="button"
                 class="row-copy"
-                (click)="copyFeatureWkt(feature.geometry)"
+                (click)="copyFeatureWkt(feature.geometry, feature.attributes.style.description)"
                 i18n-tmTooltip="@@core.drawing.copy-object-wkt"
                 tmTooltip="Copy WKT of drawing object">
           <mat-icon svgIcon="copy"></mat-icon>

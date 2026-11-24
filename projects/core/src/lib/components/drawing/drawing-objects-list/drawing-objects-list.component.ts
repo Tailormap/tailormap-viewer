@@ -35,7 +35,6 @@ export class DrawingObjectsListComponent {
   private clipboard = inject(Clipboard);
   private snackBar = inject(MatSnackBar);
 
-  private static readonly MAX_WKT_LENGTH_IN_MESSAGE = 500;
 
   @Input()
   public drawingLayerId = '';
@@ -92,7 +91,7 @@ export class DrawingObjectsListComponent {
     this.editingDescriptionForFeatureFid = null;
   }
 
-  public copyFeatureWkt(wkt: string | undefined) {
+  public copyFeatureWkt(wkt: string | undefined, objectDescription?: string) {
     if (!wkt) {
       this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-not-found:No geometry found for this drawing object`);
       return;
@@ -101,10 +100,8 @@ export class DrawingObjectsListComponent {
       this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-failed:Failed to copy WKT to clipboard`);
       return;
     }
-    const displayWkt = wkt.length > DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE
-      ? `${wkt.substring(0, DrawingObjectsListComponent.MAX_WKT_LENGTH_IN_MESSAGE)}...`
-      : wkt;
-    this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:Object WKT copied to clipboard: ${displayWkt}`);
+    const label = objectDescription ? `${objectDescription}` : $localize `:@@core.drawing.object:Object`;
+    this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:${label} WKT copied to clipboard`);
   }
 
   private showSnackbarMessage(message: string) {
