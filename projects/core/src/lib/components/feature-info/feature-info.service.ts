@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
   AttributeType, FeaturesResponseModel, TAILORMAP_API_V1_SERVICE, FeatureModel, ApiHelper, FeatureModelAttributes, HiddenLayerFunctionality,
+  AppLayerModel,
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
@@ -52,14 +53,20 @@ export class FeatureInfoService {
     ])
       .pipe(
         take(1),
-        tap(([ layers, wmsLayers, cesiumLayer, mapViewDetails ]) => {
-          const allLayers = [ ...layers, ...wmsLayers ];
-          if (cesiumLayer) {
-            allLayers.push(cesiumLayer);
-          }
-          const featureInfoLayers = allLayers
-            .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
-            .filter(l => ScaleHelper.isInScale(mapViewDetails.scale, l.minScale, l.maxScale))
+        map(([ layers, wmsLayers, cesiumLayer, mapViewDetails, viewerId ]) => {
+          const isHidden = (l: AppLayerModel) => !!l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo);
+          const isFeatureInfoLayer = (l: AppLayerModel) => !isHidden(l) && ScaleHelper.isInScale(mapViewDetails.scale, l.minScale, l.maxScale);
+          return {
+            layers: layers.filter(isFeatureInfoLayer),
+            wmsLayers: wmsLayers.filter(isFeatureInfoLayer),
+            cesiumLayer: cesiumLayer && isFeatureInfoLayer(cesiumLayer) ? cesiumLayer : null,
+            cesiumHidden: !!cesiumLayer && isHidden(cesiumLayer),
+            mapViewDetails,
+            viewerId,
+          };
+        }),
+        tap(({ layers, wmsLayers, cesiumLayer }) => {
+          const featureInfoLayers = [ ...layers, ...wmsLayers, ...(cesiumLayer ? [cesiumLayer] : []) ]
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
               id: l.id,
@@ -68,7 +75,7 @@ export class FeatureInfoService {
             }));
           this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
         }),
-        mergeMap(([ layers, wmsLayers, _cesiumLayer, mapViewDetails, viewerId ]) => {
+        mergeMap(({ layers, wmsLayers, cesiumHidden, mapViewDetails, viewerId }) => {
           if (!viewerId) {
             return [];
           }
@@ -76,7 +83,7 @@ export class FeatureInfoService {
             ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails, false, pointerType)),
             ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
           ];
-          if (cesiumFeatureInfo) {
+          if (cesiumFeatureInfo && !cesiumHidden) {
             requests$.push(of(this.featureInfo3DToResponse(cesiumFeatureInfo)));
           }
           if (requests$.length === 0) {

@@ -2,7 +2,7 @@ import { describe, beforeEach, test, expect, vi } from 'vitest';
 import { FeatureInfoService } from './feature-info.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  getAppLayerModel, getFeaturesResponseModel, getServiceModel, TAILORMAP_API_V1_SERVICE, TailormapApiConstants,
+  getAppLayerModel, getFeaturesResponseModel, getServiceModel, HiddenLayerFunctionality, TAILORMAP_API_V1_SERVICE, TailormapApiConstants,
 } from '@tailormap-viewer/api';
 import { firstValueFrom, of } from 'rxjs';
 import { selectViewerId } from '../../state/core.selectors';
@@ -21,7 +21,7 @@ describe('FeatureInfoService', () => {
     filter: '',
   };
   const response = getFeaturesResponseModel();
-  const getFeatures$ = () => of(response);
+  const getFeatures$ = vi.fn(() => of(response));
   const getFeatureInfoForLayers$ = vi.fn(() => of(response.features));
 
   let store: MockStore;
@@ -88,6 +88,19 @@ describe('FeatureInfoService', () => {
     const featureInfo = await firstValueFrom(service.fetchFeatures$([ 1, 2 ], [ 1, 2 ]));
     expect(featureInfo?.layerId).toEqual(appLayer.id);
     expect(getFeatureInfoForLayers$).toHaveBeenCalledWith('1', [ 1, 2 ], httpClient);
+  });
+
+  test('does not request features for layers with feature info hidden', async () => {
+    const hiddenLayer = { ...appLayer, hiddenFunctionality: [HiddenLayerFunctionality.featureInfo] };
+    getFeatures$.mockClear();
+    getFeatureInfoForLayers$.mockClear();
+    store.overrideSelector(selectVisibleLayersWithAttributes, [hiddenLayer]);
+    store.overrideSelector(selectVisibleWMSLayersWithoutAttributes, [hiddenLayer]);
+    store.overrideSelector(selectViewerId, '1');
+    const featureInfo = await firstValueFrom(service.fetchFeatures$([ 1, 2 ], [ 1, 2 ]));
+    expect(featureInfo).toBe(null);
+    expect(getFeatures$).not.toHaveBeenCalled();
+    expect(getFeatureInfoForLayers$).not.toHaveBeenCalled();
   });
 
 });
