@@ -540,7 +540,7 @@
       </trans-unit>
       <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
         <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
-        <target>Wählen Sie <x id="LAYER" equiv-text="label"/>, und starten Sie das Kopieren von Objekten aus der Karte</target>
+        <target>Wählen Sie <x id="PH" equiv-text="label"/>, und starten Sie das Kopieren von Objekten aus der Karte</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
