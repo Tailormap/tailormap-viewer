@@ -1,8 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
-import { getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
+import {
+  createDummyAttributeListData, createDummyRows, getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore,
+} from '../state/mocks/attribute-list-state-test-data';
+import { attributeListStateKey } from '../state/attribute-list.state';
 import { AttributeListContentComponent } from './attribute-list-content.component';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { TestBed } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { MatTableModule } from '@angular/material/table';
@@ -85,6 +89,48 @@ describe('AttributeListContent', () => {
     expect(await screen.findByText('Attribute 1')).toBeInTheDocument();
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
+  });
+
+  it('scrolls the table to the top when the page or sort changes', async () => {
+    const state = {
+      ...getLoadedStoreWithRows(),
+      core: {
+        loadStatus: 'LOADED',
+        filters: { currentFilterGroups: [] },
+      },
+      map: { layers: [] },
+    };
+    const { container, fixture } = await render(AttributeListContentComponent, {
+      imports: [ MatDialogModule, MatSnackBarModule ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
+        provideMockStore({ initialState: state }),
+      ],
+    });
+    const store = TestBed.inject(MockStore);
+    const tableContainer = container.querySelector('.table-container') as HTMLElement;
+    const setData = (overrides: Parameters<typeof createDummyAttributeListData>[0]) => {
+      store.setState({
+        ...state,
+        [attributeListStateKey]: {
+          ...state[attributeListStateKey],
+          data: [createDummyAttributeListData({ rows: createDummyRows(10), ...overrides })],
+        },
+      });
+      fixture.detectChanges();
+    };
+
+    tableContainer.scrollTop = 200;
+    setData({ selectedRowId: '2' });
+    expect(tableContainer.scrollTop).toBe(200);
+
+    setData({ selectedRowId: '2', pageIndex: 2 });
+    expect(tableContainer.scrollTop).toBe(0);
+
+    tableContainer.scrollTop = 200;
+    setData({ selectedRowId: '2', pageIndex: 2, sortedColumn: 'attribute1', sortDirection: 'asc' });
+    expect(tableContainer.scrollTop).toBe(0);
   });
 
 });

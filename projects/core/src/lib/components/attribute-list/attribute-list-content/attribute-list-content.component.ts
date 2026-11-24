@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { concatMap, map, switchMap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { concatMap, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { forkJoin, Observable, of, pipe, take, combineLatest } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
@@ -72,6 +73,12 @@ export class AttributeListContentComponent implements OnInit {
   public showStatistics$ = this.attributeListStatisticsService.canLoadStatistics$;
   public statistics$ = this.attributeListStatisticsService.statistics$;
 
+  private tableContainer = viewChild<ElementRef<HTMLElement>>('tableContainer');
+
+  constructor() {
+    this.scrollToTopOnPageOrSortChange();
+  }
+
   public ngOnInit(): void {
     this.errorMessage$ = this.store$.select(selectLoadErrorForSelectedTab);
     this.rows$ = this.store$.select(selectRowsForSelectedTab);
@@ -91,6 +98,25 @@ export class AttributeListContentComponent implements OnInit {
         return this.simpleAttributeFilterService.getFilters$(BaseComponentTypeEnum.ATTRIBUTE_LIST, tab.layerId, data?.featureType);
       }));
     this.selectedRowId$ = this.store$.select(selectSelectedRowIdForSelectedTab);
+  }
+
+  /**
+   * The table container keeps its scroll position when the rows are replaced. When going to another page (or changing the sort or
+   * switching tabs) while scrolled down, the first rows would not be visible, so scroll back to the top.
+   */
+  private scrollToTopOnPageOrSortChange(): void {
+    this.store$.select(selectDataForSelectedTab)
+      .pipe(
+        map(data => data ? [ data.id, data.pageIndex, data.sortedColumn, data.sortDirection ].join('|') : ''),
+        distinctUntilChanged(),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        const container = this.tableContainer()?.nativeElement;
+        if (container) {
+          container.scrollTop = 0;
+        }
+      });
   }
 
   public onSelectRow(row: { id: string; selected: boolean }): void {
