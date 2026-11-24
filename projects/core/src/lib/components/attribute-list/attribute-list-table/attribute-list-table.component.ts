@@ -223,7 +223,9 @@ export class AttributeListTableComponent {
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
-  public onSortClick(columnId: string): void {
+  public onSortClick(columnId: string, $event?: MouseEvent): void {
+    // The sort button is inside the header cell which also handles clicks, don't let the click bubble up and toggle twice
+    $event?.stopPropagation();
     if (this.isResizing) {
       return;
     }
