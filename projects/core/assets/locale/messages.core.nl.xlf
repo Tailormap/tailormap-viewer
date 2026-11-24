@@ -534,6 +534,10 @@
         <source>Reference layer</source>
         <target>Referentielaag</target>
       </trans-unit>
+      <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
+        <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
+        <target>Selecteer <x id="LAYER" equiv-text="label"/>, en start met kopiëren van objecten uit de kaart</target>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
         <target>Rotatie</target>

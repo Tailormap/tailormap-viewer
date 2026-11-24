@@ -54,10 +54,10 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
   });
   const store = TestBed.inject(MockStore);
   const dispatch = vi.spyOn(store, 'dispatch');
-  const selectLayerAndStartCopying = async () => {
+  const selectLayerAndStartCopying = async (title = 'Parcels') => {
     await userEvent.click(screen.getByRole('combobox'));
-    await userEvent.click(await screen.findByText('Parcels'));
-    await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
+    await userEvent.click(await screen.findByText(title));
+    TestBed.tick();
   };
   const clickMap = () => mapClick.next({ mapCoordinates: [ 1, 2 ], mouseCoordinates: [ 3, 4 ], pointerType: 'mouse' });
   return { drawingServiceMock, drawingCopyFeaturesServiceMock, referenceLayers, dispatch, selectLayerAndStartCopying, clickMap };
@@ -65,15 +65,29 @@ const setup = async (copyResult: CopiedDrawingFeaturesResult = { features: [copi
 
 describe('DrawingCopyFromLayerComponent', () => {
 
-  test('toggles copy mode after selecting a layer', async () => {
+  test('enables copy mode when a layer is selected and toggles it with the button', async () => {
     const { drawingServiceMock, selectLayerAndStartCopying } = await setup();
     expect(screen.getByLabelText(BUTTON_LABEL)).toBeDisabled();
     expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'false');
+    expect(drawingServiceMock.enableCopyFromLayer).not.toHaveBeenCalled();
     await selectLayerAndStartCopying();
-    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalled();
+    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalledTimes(1);
     expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'true');
     await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
     expect(drawingServiceMock.disableCopyFromLayer).toHaveBeenCalled();
+    expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
+    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalledTimes(2);
+  });
+
+  test('enables copy mode again when selecting another layer after it was turned off', async () => {
+    const { drawingServiceMock, selectLayerAndStartCopying } = await setup();
+    await selectLayerAndStartCopying('Parcels');
+    await userEvent.click(screen.getByLabelText(BUTTON_LABEL));
+    expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'false');
+    await selectLayerAndStartCopying('Buildings');
+    expect(drawingServiceMock.enableCopyFromLayer).toHaveBeenCalledTimes(2);
+    expect(screen.getByLabelText(BUTTON_LABEL)).toHaveAttribute('aria-pressed', 'true');
   });
 
   test('adds copied features to the drawing on map click', async () => {

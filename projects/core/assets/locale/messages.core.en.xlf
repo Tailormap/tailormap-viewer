@@ -398,6 +398,9 @@
       <trans-unit id="core.drawing.reference-layer" datatype="html">
         <source>Reference layer</source>
       </trans-unit>
+      <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
+        <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
+      </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
       </trans-unit>
