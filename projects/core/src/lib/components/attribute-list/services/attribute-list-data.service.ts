@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, inject } from '@angular/core';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { catchError, switchMap, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import {
-  combineLatest, debounceTime, filter, groupBy, mergeMap, Observable, of, Subject,
+  BehaviorSubject, combineLatest, debounceTime, defer, EMPTY, filter, finalize, groupBy, mergeMap, Observable, of, Subject,
 } from 'rxjs';
 import { AttributeListRowModel } from '../models/attribute-list-row.model';
 import { Store } from '@ngrx/store';
@@ -38,6 +38,16 @@ export class AttributeListDataService implements OnDestroy {
 
   private destroyed = new Subject();
   private reloadTabSubject = new Subject<string>();
+  /**
+   * Emits the selected row, or null when a row is deselected. Loading the feature of a selected row can be slow (for example for a WFS
+   * source), so a new selection cancels the request for the previous one; otherwise quickly selecting several rows queues up requests and
+   * the map zooms to each feature in turn when their responses come in.
+   */
+  private rowSelectedSubject = new Subject<{ dataId: string; rowId: string } | null>();
+  private loadingSelectedRowSubject = new BehaviorSubject<{ dataId: string; rowId: string } | null>(null);
+
+  /** The selected row for which the feature to highlight on the map is being loaded, to show a loading indicator on that row. */
+  public loadingSelectedRow$ = this.loadingSelectedRowSubject.asObservable();
 
   public static DEFAULT_ERROR_MESSAGE = $localize `:@@core.attribute-list.failed-loading-data:Failed to load attribute list data`;
   private static FILTER_GEOMETRY_COLUMNS = true;
@@ -73,6 +83,12 @@ export class AttributeListDataService implements OnDestroy {
         this.store$.dispatch(AttributeListActions.loadDataSuccess({ tabId, data: result }));
       }
     });
+    this.rowSelectedSubject.pipe(
+      takeUntil(this.destroyed),
+      switchMap(selected => selected ? this.loadSelectedRowFeature$(selected.dataId, selected.rowId) : EMPTY),
+    ).subscribe(feature => {
+      this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature }));
+    });
   }
 
   public ngOnDestroy() {
@@ -97,9 +113,7 @@ export class AttributeListDataService implements OnDestroy {
 
   public updateRowSelected(dataId: string, rowId: string, selected: boolean): void {
     this.store$.dispatch(AttributeListActions.updateRowSelected({ dataId, rowId, selected }));
-    if (selected) {
-      this.notifyRowSelected(dataId, rowId);
-    }
+    this.rowSelectedSubject.next(selected ? { dataId, rowId } : null);
   }
 
   public updateRowChecked(tabId: string, dataId: string, rowId: string, checked: boolean): void {
@@ -131,8 +145,21 @@ export class AttributeListDataService implements OnDestroy {
       });
   }
 
-  private notifyRowSelected(dataId: string, rowId: string): void {
-    combineLatest([
+  /**
+   * Loads the feature for a selected row, to highlight it on the map. Emits nothing when the row is no longer selected by the time the
+   * feature is loaded, or when loading fails.
+   */
+  private loadSelectedRowFeature$(dataId: string, rowId: string): Observable<FeatureModel & { tabId: string } | null> {
+    // When a new selection cancels this one, switchMap unsubscribes (finalize) before subscribing to the new one (defer), so the loading
+    // row is always the latest selected row
+    return defer(() => {
+      this.loadingSelectedRowSubject.next({ dataId, rowId });
+      return this.loadFeatureForRow$(dataId, rowId);
+    }).pipe(finalize(() => this.loadingSelectedRowSubject.next(null)));
+  }
+
+  private loadFeatureForRow$(dataId: string, rowId: string): Observable<FeatureModel & { tabId: string } | null> {
+    return combineLatest([
       this.store$.select(selectAttributeListTabForDataId(dataId)),
       this.store$.select(selectAttributeListRow(dataId, rowId)),
       this.store$.select(selectViewerId),
@@ -141,22 +168,29 @@ export class AttributeListDataService implements OnDestroy {
       take(1),
       switchMap(([ tab, row, applicationId ]) => this.store$.select(selectLayer(tab?.layerId || ''))
         .pipe(take(1), map(layer => ({ tab, row, applicationId, layer })))),
-    ).subscribe(({ tab, row, applicationId, layer }) => {
-      if (!tab || !row || !row.__fid || !tab.layerId || applicationId === null || !layer) {
-        return;
-      }
-      this.api.getFeatures$(tab.tabSourceId, {
-        applicationId,
-        layerId: tab.layerId,
-        layerName: layer.layerName || '',
-        __fid: row.__fid,
-      }).pipe(take(1)).subscribe(result => {
-        const feature = result.features && result.features.length > 0
-          ? { ...result.features[0], tabId: tab.id }
-          : null;
-        this.store$.dispatch(AttributeListActions.setHighlightedFeature({ feature }));
-      });
-    });
+      switchMap(({ tab, row, applicationId, layer }) => {
+        if (!tab || !row || !row.__fid || !tab.layerId || applicationId === null || !layer) {
+          return EMPTY;
+        }
+        return this.api.getFeatures$(tab.tabSourceId, {
+          applicationId,
+          layerId: tab.layerId,
+          layerName: layer.layerName || '',
+          __fid: row.__fid,
+        }).pipe(
+          take(1),
+          map(result => result.features && result.features.length > 0
+            ? { ...result.features[0], tabId: tab.id }
+            : null),
+          catchError(() => EMPTY),
+        );
+      }),
+      switchMap(feature => this.store$.select(selectAttributeListDataForId(dataId)).pipe(
+        take(1),
+        filter(data => data?.selectedRowId === rowId),
+        map(() => feature),
+      )),
+    );
   }
 
   private notifyCheckedRowsChanged(dataId: string): void {

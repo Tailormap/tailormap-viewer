@@ -14,6 +14,8 @@ import { getMockApiService } from '../../../services/load-viewer.service.mock';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
+import { of } from 'rxjs';
 
 describe('AttributeListContent', () => {
 
@@ -85,6 +87,34 @@ describe('AttributeListContent', () => {
     expect(await screen.findByText('Attribute 1')).toBeInTheDocument();
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
+  });
+
+  it('marks the row whose feature is loading after selecting it as busy', async () => {
+    const store = getLoadedStoreWithRows();
+    await render(AttributeListContentComponent, {
+      imports: [ MatTableModule, MatIconModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        { provide: AttributeListDataService, useValue: { loadingSelectedRow$: of({ dataId: '1', rowId: '2' }) } },
+        getMapServiceMock().provider,
+        provideMockStore({
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
+        }),
+      ],
+    });
+    const loadingRow = (await screen.findByText('2: Test')).closest('mat-row');
+    expect(loadingRow).toHaveClass('loading_row');
+    expect(loadingRow).toHaveAttribute('aria-busy', 'true');
+    const otherRow = screen.getByText('1: Test').closest('mat-row');
+    expect(otherRow).not.toHaveClass('loading_row');
+    expect(otherRow).not.toHaveAttribute('aria-busy');
   });
 
 });

@@ -86,6 +86,8 @@ export class AttributeListTableComponent {
   public showStatistics = input<boolean | null>(false);
   public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
   public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
+  /** The row for which the feature is being loaded after selecting it, to show a loading indicator on that row. */
+  public loadingSelectedRowId = input<string | null>(null);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();

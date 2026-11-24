@@ -158,6 +158,8 @@
     tabindex="0"
     [class.even_row]="dataIndex % 2 === 1"
     [class.selected_row]="isSelected(row)"
+    [class.loading_row]="loadingSelectedRowId() === row.id"
+    [attr.aria-busy]="loadingSelectedRowId() === row.id ? true : null"
     [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>
 
   <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"

@@ -26,6 +26,7 @@
       [showStatistics]="showStatistics$ | async"
       [statistics]="statistics$ | async"
       [pagingDataSelectedTab]="pagingDataSelectedTab$ | async"
+      [loadingSelectedRowId]="loadingSelectedRowId$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"
