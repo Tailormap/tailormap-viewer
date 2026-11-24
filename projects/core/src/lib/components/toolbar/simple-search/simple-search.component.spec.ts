@@ -1,7 +1,7 @@
 import { vi, describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import { SimpleSearchComponent } from './simple-search.component';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SimpleSearchService } from './simple-search.service';
@@ -13,7 +13,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { coreStateKey, initialCoreState } from '../../../state/core.state';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
-const setup = async () => {
+const setup = async (renderFeatures$?: () => Observable<unknown>) => {
   const mockedSearchService = {
     search$: vi.fn(() => of<SearchResultModel[]>([{
       id: 'test',
@@ -25,7 +25,7 @@ const setup = async () => {
       attribution: 'Some Random Data Provider',
     }])),
   };
-  const mockedMapService = getMapServiceMock(null, 'EPSG:28992');
+  const mockedMapService = getMapServiceMock(null, 'EPSG:28992', renderFeatures$ ? { renderFeatures$: vi.fn(renderFeatures$) } : undefined);
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(SimpleSearchComponent, {
     imports: [],
@@ -69,6 +69,50 @@ describe('SimpleSearchComponent', () => {
     const renderFeaturesCall = (mapService.renderFeatures$ as Mock).mock.calls[0];
     expect(renderFeaturesCall[0]).toEqual('search-result-highlight');
     vi.useRealTimers();
+  });
+
+  const searchAndSelect = async (ue: ReturnType<typeof userEvent.setup>, label: string) => {
+    await ue.clear(await screen.findByRole('combobox'));
+    await ue.type(await screen.findByRole('combobox'), 'Street');
+    await vi.advanceTimersByTimeAsync(1500);
+    await ue.click(await screen.findByText(label));
+  };
+
+  /** Mimics MapService.renderFeatures$, which keeps the highlight layer on the map while subscribed */
+  const createRenderFeaturesTracker = () => {
+    const tracker = { activeHighlights: 0 };
+    const renderFeatures$ = () => new Observable<unknown>(() => {
+      tracker.activeHighlights++;
+      return () => tracker.activeHighlights--;
+    });
+    return { tracker, renderFeatures$ };
+  };
+
+  test('removes the previous highlight when another result is selected', async () => {
+    vi.useFakeTimers();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const { tracker, renderFeatures$ } = createRenderFeaturesTracker();
+    const { mapService } = await setup(renderFeatures$);
+    await ue.click(await screen.findByLabelText('Search location'));
+    await searchAndSelect(ue, 'Some result');
+    expect(tracker.activeHighlights).toBe(1);
+    await searchAndSelect(ue, 'Better result');
+    expect(mapService.renderFeatures$).toHaveBeenCalledTimes(2);
+    expect(tracker.activeHighlights).toBe(1);
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(tracker.activeHighlights).toBe(0);
+  });
+
+  test('removes the highlight when the search is closed', async () => {
+    vi.useFakeTimers();
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const { tracker, renderFeatures$ } = createRenderFeaturesTracker();
+    await setup(renderFeatures$);
+    await ue.click(await screen.findByLabelText('Search location'));
+    await searchAndSelect(ue, 'Better result');
+    expect(tracker.activeHighlights).toBe(1);
+    await ue.click(screen.getByRole('button', { name: 'Search location' }));
+    expect(tracker.activeHighlights).toBe(0);
   });
 
 });
