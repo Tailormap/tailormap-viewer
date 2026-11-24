@@ -4,8 +4,8 @@
     <input matInput
            [matDatepicker]="dp"
            [formControl]="dateControl"
-           [required]="isRequired()"
-           [errorStateMatcher]="dateErrorStateMatcher"
+           [required]="required()"
+           [errorStateMatcher]="fieldErrorStateMatcher()"
            [placeholder]="placeholder()"
            (blur)="markAsTouched()" />
     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
@@ -16,7 +16,7 @@
     <input matInput
            [matTimepicker]="tp"
            [formControl]="timeControl"
-           [errorStateMatcher]="timeErrorStateMatcher"
+           [errorStateMatcher]="fieldErrorStateMatcher()"
            (blur)="markAsTouched()" />
     <mat-timepicker-toggle matSuffix [for]="tp"></mat-timepicker-toggle>
     <mat-timepicker #tp></mat-timepicker>

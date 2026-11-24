@@ -37,7 +37,8 @@
         </mat-form-field>
       }
       @if (item.controlType === 'datetime') {
-        <tm-datetime-field [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label" hideRequiredMarker>
+        <tm-datetime-field [formControl]="getControl(item.name)" [placeholder]="item.placeholder || item.label"
+                           [required]="item.required" [errorStateMatcher]="showErrorsImmediately" hideRequiredMarker>
           {{ item.label }}
           @if (item.required) {
             <em i18n="@@core.common.required">(required)</em>

@@ -119,4 +119,27 @@ describe('EditFormComponent', () => {
       { attribute: 'ts', value: '2026-10-21T14:15:00.000+00:00', invalid: false },
     ));
   });
+
+  test('shows the error of a required timestamp attribute immediately', async () => {
+    const feature = getFeatureModel();
+    await render(EditFormComponent, {
+      providers: [
+        AuthenticatedUserTestHelper.provideAuthenticatedUserService(true, ['editors'], 'editor'),
+        provideLuxonDateAdapter(),
+      ],
+      inputs: { input: {
+          feature: {
+            feature: { ...feature, layerId: 'layer-1', attributes: { ...feature.attributes, ts: null } },
+            columnMetadata: [{ name: 'ts', alias: 'Timestamp', type: AttributeType.TIMESTAMP, layerId: 'layer-1' }],
+          },
+          details: getLayerDetailsModel({
+            editable: true,
+            attributes: [{ id: 1, type: AttributeType.TIMESTAMP, name: 'ts', editable: true, nullable: false }],
+          }),
+        } },
+    });
+    const dateInput = await screen.findByPlaceholderText('Timestamp');
+    expect(dateInput).toBeRequired();
+    expect(dateInput.closest('mat-form-field')).toHaveClass('mat-form-field-invalid');
+  });
 });

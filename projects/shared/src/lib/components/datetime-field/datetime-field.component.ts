@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, Injector, booleanAttribute, forwardRef, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, booleanAttribute, computed, effect, forwardRef, inject, input } from '@angular/core';
 import {
-  AbstractControl, ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors,
-  Validator, Validators,
+  AbstractControl, ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ReactiveFormsModule, ValidationErrors, Validator,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { merge } from 'rxjs';
@@ -31,8 +30,11 @@ let nextId = 0;
  * `2026-11-18T14:30:00.000+01:00`), or `null` when no date is entered. Values written to the control can be ISO 8601 strings,
  * JavaScript `Date` objects or Luxon `DateTime` objects.
  *
- * The field is shown as required when the form control has the `Validators.required` validator. Text which can't be parsed as
- * a date or time makes the form control invalid with the `invalidDateTime` error.
+ * With the `required` input the date is required: the form control has the `required` error when no date is entered. Text
+ * which can't be parsed as a date or time makes the form control invalid with the `invalidDateTime` error.
+ *
+ * Errors are shown on the date and time fields themselves, by default (like other Material inputs) when that field is touched
+ * or the form is submitted. Pass an `errorStateMatcher` to change that, for example to show errors immediately.
  */
 @Component({
   selector: 'tm-datetime-field',
@@ -57,36 +59,40 @@ let nextId = 0;
   ],
 })
 export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
-  private injector = inject(Injector);
   private cdr = inject(ChangeDetectorRef);
+  private defaultErrorStateMatcher = inject(ErrorStateMatcher);
 
   public placeholder = input<string>('');
   public hideRequiredMarker = input(false, { transform: booleanAttribute });
+  public required = input(false, { transform: booleanAttribute });
+  /** Decides when errors are shown on the date and time fields. When not set, the default Material behavior is used. */
+  public errorStateMatcher = input<ErrorStateMatcher | null>(null);
+  public fieldErrorStateMatcher = computed(() => this.errorStateMatcher() ?? this.defaultErrorStateMatcher);
 
   public labelId = `tm-datetime-field-label-${nextId++}`;
 
   public dateControl = new FormControl<DateTime | null>(null);
   public timeControl = new FormControl<DateTime | null>(null);
 
-  /** Also shows the errors of the outer form control (such as required) on the date field. */
-  public dateErrorStateMatcher: ErrorStateMatcher = {
-    isErrorState: control => this.isErrorState(control, true),
-  };
-  public timeErrorStateMatcher: ErrorStateMatcher = {
-    isErrorState: control => this.isErrorState(control, false),
-  };
-
   private onChange: ((value: string | null) => void) | null = null;
   private onTouched: (() => void) | null = null;
+  private onValidatorChange: (() => void) | null = null;
 
   constructor() {
     merge(this.dateControl.valueChanges, this.timeControl.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.onChange?.(this.getValue()));
-  }
 
-  public isRequired(): boolean {
-    return !!this.getOuterControl()?.hasValidator(Validators.required);
+    // Revalidate the form control when the required input changes. The first run is skipped: the form control is validated
+    // when it is set up, and revalidating also emits a value change.
+    let firstRun = true;
+    effect(() => {
+      this.required();
+      if (!firstRun) {
+        this.onValidatorChange?.();
+      }
+      firstRun = false;
+    });
   }
 
   public writeValue(value: unknown): void {
@@ -117,7 +123,8 @@ export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
 
   /**
    * Reports the errors of the internal controls. Without this, text which can't be parsed as a date or time would result in a
-   * valid `null` value for an optional field.
+   * valid `null` value for an optional field. The required error is derived from the `required` input instead of from the
+   * internal date control, because the form control is validated before the required validator of the date input is set up.
    */
   public validate(_control: AbstractControl): ValidationErrors | null {
     if (this.dateControl.disabled) {
@@ -125,28 +132,18 @@ export class DatetimeFieldComponent implements ControlValueAccessor, Validator {
     }
     const errors = { ...this.dateControl.errors, ...this.timeControl.errors };
     delete errors['required'];
-    return Object.keys(errors).length > 0 ? { [INVALID_DATE_TIME_ERROR]: true } : null;
+    if (Object.keys(errors).length > 0) {
+      return { [INVALID_DATE_TIME_ERROR]: true };
+    }
+    return this.required() && !this.dateControl.value ? { required: true } : null;
+  }
+
+  public registerOnValidatorChange(fn: () => void): void {
+    this.onValidatorChange = fn;
   }
 
   public markAsTouched(): void {
     this.onTouched?.();
-  }
-
-  /**
-   * The form control directive on this element. It is looked up lazily, because injecting it in the constructor is a circular
-   * dependency (the directive injects this component as its value accessor and validator).
-   */
-  private getOuterControl(): AbstractControl | null {
-    return this.injector.get(NgControl, null, { self: true, optional: true })?.control ?? null;
-  }
-
-  private isErrorState(control: AbstractControl | null, includeOuterErrors: boolean): boolean {
-    const outerControl = this.getOuterControl();
-    const outerErrors = includeOuterErrors
-      ? Object.keys(outerControl?.errors ?? {}).filter(key => key !== INVALID_DATE_TIME_ERROR)
-      : [];
-    const invalid = !!control?.invalid || outerErrors.length > 0;
-    return invalid && (!!control?.touched || !!outerControl?.touched);
   }
 
   private getValue(): string | null {

@@ -9,6 +9,7 @@ import { DateTime } from 'luxon';
 import { EditFormInput } from '../models/edit-form-input.model';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { SelectFieldComponent } from '../fields/select-field/select-field.component';
 import { DatetimeFieldComponent } from '@tailormap-viewer/shared';
@@ -67,6 +68,14 @@ export class EditFormComponent implements OnDestroy {
   public clearUniqueValueCacheAfterSave = new EventEmitter<string>();
 
   public form: FormGroup = new FormGroup({});
+
+  /**
+   * All controls of this form are marked as touched so errors are shown immediately. The internal fields of the datetime field
+   * aren't touched by that, so show their errors immediately as well.
+   */
+  public showErrorsImmediately: ErrorStateMatcher = {
+    isErrorState: control => !!control?.invalid,
+  };
 
   public layerId: string = '';
 
