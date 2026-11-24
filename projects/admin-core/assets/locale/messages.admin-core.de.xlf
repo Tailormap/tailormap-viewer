@@ -571,8 +571,8 @@
         <target>In Objektinformationen anzeigen</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
-        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
-        <target>Hinweis: Das Deaktivieren dieser Kontrollkästchen blendet nur die Benutzeroberflächensteuerungen aus. Daten sind weiterhin über die API zugänglich.</target>
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API. Other functionality can still use the layer, such as a reference layer for spatial filtering or copying geometries when drawing or editing.</source>
+        <target>Hinweis: Das Deaktivieren dieser Kontrollkästchen blendet nur die Benutzeroberflächensteuerungen aus. Daten sind weiterhin über die API zugänglich. Andere Funktionen können die Ebene weiterhin verwenden, z. B. als Referenzebene für räumliche Filter oder zum Kopieren von Geometrien beim Zeichnen oder Bearbeiten.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
