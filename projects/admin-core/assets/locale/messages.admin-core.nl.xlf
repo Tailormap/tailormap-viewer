@@ -519,7 +519,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.form-not-found" datatype="html">
         <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
-        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of "Geen formulier".</target>
+        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of &quot;Geen formulier&quot;.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
