@@ -95,7 +95,7 @@
         <button mat-icon-button
                 [tmTooltip]="getColumnSortLabel(col.label)"
                 class="sort-button"
-                (click)="onSortClick(col.id)">
+                (click)="onSortClick(col.id, $event)">
           <mat-icon class="sort"
                     [class.sort-active]="sort?.column === col.id"
                     [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'">

@@ -81,6 +81,10 @@ mat-table.loading mat-row {
   left: 1px;
 }
 
+.header-cell--with-sort {
+  cursor: pointer;
+}
+
 .header-cell--with-sort .sort {
   cursor: pointer;
   visibility: hidden;
