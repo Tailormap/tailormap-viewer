@@ -311,16 +311,15 @@ describe('AttributeListStatisticsService', () => {
       expect(afterRefresh[0].value).toBe(99);
     });
 
-    it('should pass the filter from the changed filters map to getStatistic$', () => {
+    it('should pass the enabled filter groups to getStatistic$', () => {
       const { service, managerService, changedFilters$ } = setup();
-      const filter: LayerFeaturesFilters = new Map();
 
       service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
 
-      changedFilters$.next(new Map([[ 'layer1', filter ]]));
+      changedFilters$.next(new Map([[ 'layer1', new Map() ]]));
 
       const refreshCall = managerService.getStatistic$.mock.calls[1];
-      expect(refreshCall[1].filter).toBe(filter);
+      expect(refreshCall[1]).not.toHaveProperty('filter');
       expect(refreshCall[1].filterGroups).toEqual(filterGroups);
       expect(managerService.getStatistic$.mock.calls[0][1].filterGroups).toEqual(filterGroups);
     });

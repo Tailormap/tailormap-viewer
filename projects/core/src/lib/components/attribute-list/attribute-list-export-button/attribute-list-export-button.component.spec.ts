@@ -9,7 +9,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { AttributeListExportService, SupportedExtractFormats } from '../services/attribute-list-export.service';
 import userEvent from '@testing-library/user-event';
 import { FileHelper } from '@tailormap-viewer/shared';
-import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { DownloadLayerExtractResponse } from '../models/attribute-list-api-service.model';
 import { LayerExtractResponseModel } from '@tailormap-viewer/api';
@@ -26,7 +26,7 @@ const setup = async (
       { selector: selectLayers, value: [{ id: '2', hiddenFunctionality: ['export'] }] },
       { selector: selectSelectedTabLayerId, value: layerId },
       { selector: selectSelectedTab, value: layerId ? { layerId, label: 'Some layer' } : null },
-      { selector: selectCQLFilters, value: new Map() },
+      { selector: selectEnabledFilterGroups, value: [] },
       { selector: selectColumnsForSelectedTab, value: [] },
       { selector: selectSortForSelectedTab, value: null },
     ],
@@ -81,7 +81,7 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.getByText('Excel')).toBeInTheDocument();
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('CSV'));
-    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'csv', filter: undefined, sort: null, attributes: [] });
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'csv', filterGroups: [], sort: null, attributes: [] });
   });
 
   test('should render button for selected layer and supported formats, CSV, XLSX, DFX', async () => {
@@ -93,7 +93,7 @@ describe('AttributeListExportButtonComponent', () => {
     expect(screen.getByText('DXF')).toBeInTheDocument();
     expect(screen.queryByText('GeoPackage')).not.toBeInTheDocument();
     await userEvent.click(screen.getByText('DXF'));
-    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'dxf', filter: undefined, sort: null, attributes: [] });
+    expect(exportService.export$).toHaveBeenCalledWith({ layerId: '1', serviceLayerName: 'Some layer', format: 'dxf', filterGroups: [], sort: null, attributes: [] });
   });
 
   it('should show spinner when progress is 0 and export is started', async () => {

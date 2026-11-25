@@ -48,12 +48,10 @@ export interface GetLayerExtractParams {
    */
   outputFormat: string;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
-  filter?: Map<string | symbol, string> | null;
+  filterGroups?: FilterGroupModel[];
   /**
    * Optional attribute name to sort by.
    */
@@ -106,15 +104,8 @@ export interface GetUniqueValuesParams {
    */
   attribute: string;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
-   */
-  filter?: Map<string | symbol, string> | null;
-  /**
-   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
-   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
   filterGroups?: FilterGroupModel[];
 }
@@ -129,15 +120,8 @@ export interface ZoomToExtentBoundsParams {
    */
   layerId: string;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
-   */
-  filter?: Map<string | symbol, string> | null;
-  /**
-   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
-   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
   filterGroups?: FilterGroupModel[];
 }
@@ -217,15 +201,8 @@ export interface GetStatisticParams {
     type: StatisticType;
   }>;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
-   */
-  filter?: Map<string | symbol, string> | null;
-  /**
-   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
-   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
   filterGroups?: FilterGroupModel[];
 }

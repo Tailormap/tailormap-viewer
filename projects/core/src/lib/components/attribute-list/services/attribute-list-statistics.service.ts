@@ -7,7 +7,7 @@ import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { selectEnabledFilterGroups, selectViewerId } from '../../../state';
 import { GetStatisticResponse, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListStatisticColumnModel } from '../models/attribute-list-statistic-column.model';
-import { FilterService, LayerFeaturesFilters } from '../../../filter';
+import { FilterService } from '../../../filter';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -80,7 +80,6 @@ export class AttributeListStatisticsService {
             return;
           }
           const key = this.getStatisticsKey(viewerId, layerId);
-          const filter = changedFilters.get(layerId);
           const currentStatistics = this.statistics.value.get(key) || [];
           if (currentStatistics.length === 0) {
             return;
@@ -92,7 +91,7 @@ export class AttributeListStatisticsService {
           const updatedMap = new Map(this.statistics.value);
           updatedMap.set(key, updatedStatistics);
           this.statistics.next(updatedMap);
-          this.refreshStatistics$({ key, viewerId, layerId, tabSourceId: tab.tabSourceId, statistics: currentStatistics, filter });
+          this.refreshStatistics$({ key, viewerId, layerId, tabSourceId: tab.tabSourceId, statistics: currentStatistics });
         });
       });
   }
@@ -172,7 +171,6 @@ export class AttributeListStatisticsService {
   }
 
   private fetchStatistic$(loadParams: LoadStatisticParams, selectedTab: AttributeListTabModel) {
-    const filter = this.filterService.getFilterForLayer(loadParams.layerId);
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(
         take(1),
@@ -180,7 +178,6 @@ export class AttributeListStatisticsService {
           applicationId: loadParams.applicationId,
           layerId: loadParams.layerId,
           statistics: loadParams.statistics,
-          filter,
           filterGroups,
         })),
         take(1),
@@ -195,7 +192,6 @@ export class AttributeListStatisticsService {
     layerId: string;
     tabSourceId: string;
     statistics: AttributeListStatisticColumnModel[];
-    filter: LayerFeaturesFilters | null | undefined;
   }) {
     return this.store$.select(selectEnabledFilterGroups)
       .pipe(
@@ -207,7 +203,6 @@ export class AttributeListStatisticsService {
             column: s.columnName,
             type: s.type,
           })),
-          filter: params.filter,
           filterGroups,
         })),
         take(1),

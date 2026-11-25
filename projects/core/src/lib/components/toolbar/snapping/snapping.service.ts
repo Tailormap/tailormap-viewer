@@ -3,7 +3,7 @@ import { BaseComponentTypeEnum, SnappingComponentConfigModel } from '@tailormap-
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
 import { selectComponentsConfigForType, selectCQLFilters, selectViewerId } from '../../../state';
 import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take, debounceTime, filter } from 'rxjs';
-import { FeaturesFilterHelper, LayerFeaturesFilters } from '../../../filter';
+import { FeaturesFilterHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapService } from '@tailormap-viewer/map';
@@ -131,31 +131,11 @@ export class SnappingService {
           if (!detail?.geometryAttribute) {
             return;
           }
-          const extentFilter = mapExtent !== null
-            ? `BBOX(${detail.geometryAttribute}, ${mapExtent.join(',')})`
-            : '';
-          const filters = [];
-          if (cqlFilter) {
-            filters.push(`(${cqlFilter})`);
-          }
-          if (extentFilter) {
-            filters.push(`(${extentFilter})`);
-          }
-          const combinedFilter = filters.join(' AND ');
-          const updateFilter = FeaturesFilterHelper.updateFilter(combinedFilter, layerFilter);
-          let loadedKey = `${layer.id}-${combinedFilter}`;
-          if (updateFilter.size > 1) {
-            Array.from(updateFilter.entries()).forEach(([ key, value ]) => {
-              if (typeof key === 'symbol') {
-                return;
-              }
-              loadedKey += `-${key}:${value}`;
-            });
-          }
+          const bbox: GetFeaturesParams['bbox'] = mapExtent !== null ? [ mapExtent[0], mapExtent[1], mapExtent[2], mapExtent[3] ] : undefined;
+          const loadedKey = `${layer.id}-${cqlFilter}-${bbox?.join(',') ?? ''}`;
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(layer.id, loadedKey);
-            const bbox: GetFeaturesParams['bbox'] = mapExtent !== null ? [ mapExtent[0], mapExtent[1], mapExtent[2], mapExtent[3] ] : undefined;
-            this.loadGeometries(layer, updateFilter, bbox);
+            this.loadGeometries(layer, bbox);
           }
         });
       });
@@ -200,9 +180,9 @@ export class SnappingService {
     this.snappingActive.next(false);
   }
 
-  private loadGeometries(layer: DataSourceLayerModel, filters: LayerFeaturesFilters | null, bbox?: GetFeaturesParams['bbox']): void {
+  private loadGeometries(layer: DataSourceLayerModel, bbox?: GetFeaturesParams['bbox']): void {
     this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value + 1);
-    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, filters, bbox)
+    this.loadFeaturesService.loadGeometries$(SnappingService.MAX_SNAPPING_FEATURES, layer.id, layer.layerName, bbox)
       .pipe(take(1))
       .subscribe(response => {
         this.pendingGeometriesLoads.next(this.pendingGeometriesLoads.value - 1);

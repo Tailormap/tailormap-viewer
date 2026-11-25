@@ -263,7 +263,6 @@ export class FeatureInfoService {
         x: coordinates[0],
         y: coordinates[1],
         distance: FeatureInfoService.getDistance(resolutions, pointerType),
-        filter: this.filterService.getFilterForLayer(layer.id),
         filterGroups,
       })),
       map(response => FeatureInfoService.featuresResponseToFeatureInfoResponse(response, layer.id)),

@@ -131,8 +131,7 @@ describe('AttributeListDataService', () => {
       layerName: 'layer1',
       applicationId: '1',
       page: 0,
-      filter: undefined,
-      filterGroups: [getFilterGroup()],
+      filter: "(attribute ILIKE '%value%')",
       sortBy: undefined,
       sortOrder: undefined,
     });

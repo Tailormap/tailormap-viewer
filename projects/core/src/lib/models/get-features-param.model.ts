@@ -21,20 +21,12 @@ export interface GetFeaturesParams {
    */
   __fid?: string;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
-   */
-  filter?: Map<string | symbol, string> | null;
-  /**
-   * Optional filter groups the CQL in `filter` was built from, for data loaders that filter features client-side
-   * (see ClientSideFilterHelper.getFeaturePredicate). Backend data loaders use `filter` and ignore this.
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
   filterGroups?: FilterGroupModel[];
   /**
-   * Optional extent [minx, miny, maxx, maxy] in the map projection to limit the features to. When set, `filter`
-   * also contains the matching CQL BBOX, so backend data loaders can ignore this.
+   * Optional extent [minx, miny, maxx, maxy] in the map projection to limit the features to.
    */
   bbox?: [ number, number, number, number ];
   /**

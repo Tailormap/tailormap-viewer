@@ -18,7 +18,6 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
-import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper, SnackBarMessageComponent, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -148,14 +147,12 @@ export class AttributeListContentComponent implements OnInit {
         if (applicationId === null || !selectedTab.layerId) {
           return;
         }
-        const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
         const data: FilterDialogData = {
           tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
           layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilters: filtersForLayer,
           filterGroups: otherFilters,
           applicationId,
           attributeAlias,

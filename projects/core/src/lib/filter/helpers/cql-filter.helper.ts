@@ -59,6 +59,23 @@ export class CqlFilterHelper {
     return CqlFilterHelper.traverseFilterGroups(filterGroups, layerId, CqlFilterHelper.CQL_OUTPUT);
   }
 
+  /**
+   * Returns the CQL filter for the layer itself (not for related feature types), for sending to the tailormap-api.
+   * @param filterGroups the filter groups, groups for other layers are ignored
+   * @param layerId the layer to get the filter for
+   * @param extraFilters extra CQL filters, combined with AND (empty strings are ignored)
+   */
+  public static getCqlFilterForLayer(filterGroups: FilterGroupModel[] | null | undefined, layerId: string, ...extraFilters: string[]): string | undefined {
+    const layerFilter = filterGroups
+      ? FeaturesFilterHelper.getFilter(CqlFilterHelper.getFilterForLayer(filterGroups.filter(g => g.layerIds.includes(layerId)), layerId))
+      : null;
+    const filters = [ layerFilter, ...extraFilters ].filter((f): f is string => !!f);
+    if (filters.length <= 1) {
+      return filters[0];
+    }
+    return filters.map(f => `(${f})`).join(' AND ');
+  }
+
   public static getFilterForGroup(filterGroup: FilterGroupModel, allFilterGroups: FilterGroupModel[], layerId: string): LayerFeaturesFilters {
     return CqlFilterHelper.traverseFilterGroup(filterGroup, allFilterGroups, layerId, CqlFilterHelper.CQL_OUTPUT);
   }

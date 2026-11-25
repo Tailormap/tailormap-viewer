@@ -386,4 +386,13 @@ describe('CQLFilterHelper', () => {
     expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00.000Z AND 2020-01-01T23:59:59.999Z) ' +
       'AND (attribute4 IS NOT NULL))');
   });
+
+  test('getCqlFilterForLayer returns the layer CQL combined with extra filters', () => {
+    const groups = [ getFilterGroup(), { ...getFilterGroup(), id: 'other', layerIds: ['2'] }];
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '1')).toBe('(attribute ILIKE \'%value%\')');
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '1', 'BBOX(geom, 0,0,1,1)', ''))
+      .toBe('((attribute ILIKE \'%value%\')) AND (BBOX(geom, 0,0,1,1))');
+    expect(CqlFilterHelper.getCqlFilterForLayer(undefined, '1', 'BBOX(geom, 0,0,1,1)')).toBe('BBOX(geom, 0,0,1,1)');
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '3')).toBeUndefined();
+  });
 });

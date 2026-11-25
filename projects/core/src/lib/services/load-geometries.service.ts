@@ -5,7 +5,6 @@ import { selectEnabledFilterGroups, selectViewerId } from '../state';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { DataSourceManagerService } from '../services';
-import { LayerFeaturesFilters } from '../filter';
 import { GetFeaturesParams } from '../models/get-features-param.model';
 
 interface LoadFeaturesResponse {
@@ -35,7 +34,6 @@ export class LoadGeometriesService {
     maxFeatures: number,
     layerId: string,
     layerName: string,
-    filters?: LayerFeaturesFilters | null,
     bbox?: GetFeaturesParams['bbox'],
   ): Observable<LoadedFeaturesResponse> {
     return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectEnabledFilterGroups) ])
@@ -49,7 +47,6 @@ export class LoadGeometriesService {
             layerName,
             page: 1,
             pageSize: maxFeatures,
-            filter: filters,
             filterGroups,
             bbox,
             includeGeometry: true,

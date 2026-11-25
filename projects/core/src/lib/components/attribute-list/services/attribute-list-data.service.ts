@@ -206,7 +206,6 @@ export class AttributeListDataService implements OnDestroy {
       return of(AttributeListDataService.getErrorResult(dataId));
     }
     const start = selectedData.pageIndex;
-    const layerFilter = this.filterService.getFilterForLayer(layerId);
     return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectLayer((layerId))), this.store$.select(selectEnabledFilterGroups) ])
       .pipe(
         filter((result): result is [ NonNullable<typeof result[0]>, NonNullable<typeof result[1]>, typeof result[2] ] => {
@@ -219,7 +218,6 @@ export class AttributeListDataService implements OnDestroy {
           applicationId: applicationId,
           layerName: layer.layerName,
           page: start,
-          filter: layerFilter,
           filterGroups,
           sortBy: selectedData.sortedColumn,
           sortOrder: selectedData.sortDirection === 'desc'

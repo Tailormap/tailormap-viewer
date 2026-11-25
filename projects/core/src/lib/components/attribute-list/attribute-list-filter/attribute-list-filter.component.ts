@@ -14,7 +14,6 @@ export interface FilterDialogData {
   layerId: string;
   filter: AttributeFilterModel | null;
   columnType: AttributeType;
-  cqlFilters?: Map<string | symbol, string>;
   filterGroups?: FilterGroupModel[];
   applicationId: string;
   attributeAlias?: string;
@@ -88,7 +87,6 @@ export class AttributeListFilterComponent implements OnInit {
     return this.managerService.getUniqueValues$(this.data.tabSourceId, {
       attribute: this.data.columnName,
       layerId: this.data.layerId,
-      filter: this.data.cqlFilters,
       filterGroups: this.data.filterGroups,
       applicationId: this.data.applicationId,
     })
