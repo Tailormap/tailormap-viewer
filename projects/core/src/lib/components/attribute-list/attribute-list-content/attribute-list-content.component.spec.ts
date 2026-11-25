@@ -1,9 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/angular';
-import { getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
+import {
+  createDummyAttributeListData, createDummyRows, getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore,
+} from '../state/mocks/attribute-list-state-test-data';
+import { attributeListStateKey } from '../state/attribute-list.state';
 import { AttributeListContentComponent } from './attribute-list-content.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TestBed } from '@angular/core/testing';
+import { of, Subject } from 'rxjs';
+import { FilterService } from '../../../filter/services/filter.service';
+import { LayerFeaturesFilters } from '../../../filter/models/feature-filter.model';
 import userEvent from '@testing-library/user-event';
 import { createDummyAttributeListTab } from '../state/mocks/attribute-list-state-test-data';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -18,7 +24,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { AttributeListDataService } from '../services/attribute-list-data.service';
-import { of } from 'rxjs';
 
 describe('AttributeListContent', () => {
 
@@ -90,6 +95,57 @@ describe('AttributeListContent', () => {
     expect(await screen.findByText('Attribute 1')).toBeInTheDocument();
     expect(await screen.findByText('1: Test')).toBeInTheDocument();
     expect(await screen.findByText('10: Test')).toBeInTheDocument();
+  });
+
+  it('scrolls the table to the top when the page, sort or filter changes', async () => {
+    const changedFilters$ = new Subject<Map<string, LayerFeaturesFilters | null>>();
+    const state = {
+      ...getLoadedStoreWithRows(),
+      core: {
+        loadStatus: 'LOADED',
+        filters: { currentFilterGroups: [] },
+      },
+      map: { layers: [] },
+    };
+    const { container, fixture } = await render(AttributeListContentComponent, {
+      imports: [ MatDialogModule, MatSnackBarModule ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
+        provideMockStore({ initialState: state }),
+        { provide: FilterService, useValue: { getChangedFilters$: () => changedFilters$.asObservable(), getFilterForLayer: () => undefined } },
+      ],
+    });
+    const store = TestBed.inject(MockStore);
+    const tableContainer = container.querySelector('.table-container') as HTMLElement;
+    const setData = (overrides: Parameters<typeof createDummyAttributeListData>[0]) => {
+      store.setState({
+        ...state,
+        [attributeListStateKey]: {
+          ...state[attributeListStateKey],
+          data: [createDummyAttributeListData({ rows: createDummyRows(10), ...overrides })],
+        },
+      });
+      fixture.detectChanges();
+    };
+
+    tableContainer.scrollTop = 200;
+    setData({ selectedRowId: '2' });
+    expect(tableContainer.scrollTop).toBe(200);
+
+    setData({ selectedRowId: '2', pageIndex: 2 });
+    expect(tableContainer.scrollTop).toBe(0);
+
+    tableContainer.scrollTop = 200;
+    setData({ selectedRowId: '2', pageIndex: 2, sortedColumn: 'attribute1', sortDirection: 'asc' });
+    expect(tableContainer.scrollTop).toBe(0);
+
+    tableContainer.scrollTop = 200;
+    changedFilters$.next(new Map([[ 'other-layer', null ]]));
+    expect(tableContainer.scrollTop).toBe(200);
+
+    changedFilters$.next(new Map([[ '1', null ]]));
+    expect(tableContainer.scrollTop).toBe(0);
   });
 
   it('marks the row whose feature is loading after selecting it as busy', async () => {

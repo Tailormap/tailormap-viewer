@@ -5,7 +5,7 @@
                     i18n-aria-label="@@core.attribute-list.loading-data"></mat-progress-bar>
 }
 
-<div class="table-container">
+<div class="table-container" #tableContainer>
 
   @if (errorMessage$ | async; as errorMessage) {
     <div class="table-container-error-message">
