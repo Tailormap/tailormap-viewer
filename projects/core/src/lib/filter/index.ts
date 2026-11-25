@@ -3,6 +3,7 @@ export * from './services/filter.service';
 export * from './filter-description/filter-description.component';
 export * from './helpers/cql-filter.helper';
 export * from './helpers/cql-spatial-filter.helper';
+export * from './helpers/client-side-filter.helper';
 export * from './helpers/features-filter.helper';
 export * from './helpers/filter-type.helper';
 export * from './filter.providers';

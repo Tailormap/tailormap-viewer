@@ -9,9 +9,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarMessageComponent, SnackBarMessageOptionsModel } from '@tailormap-viewer/shared';
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import {
-  ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder, ExtractProgressEventModel,
+  ExtractProgressEventsService, EventType, LayerExtractResponseModel, Sortorder, ExtractProgressEventModel, FilterGroupModel,
 } from '@tailormap-viewer/api';
-import { LayerFeaturesFilters } from '../../../filter';
 import { DownloadLayerExtractResponse } from '../models/attribute-list-api-service.model';
 
 export enum SupportedExtractFormats {
@@ -54,7 +53,7 @@ export class AttributeListExportService {
     layerId: string;
     serviceLayerName: string;
     format: SupportedExtractFormats;
-    filter: LayerFeaturesFilters | undefined;
+    filterGroups: FilterGroupModel[];
     sort: { column: string; direction: string } | null;
     attributes: string[];
   }): Observable<LayerExtractResponseModel | DownloadLayerExtractResponse | null> {
@@ -78,7 +77,7 @@ export class AttributeListExportService {
           applicationId,
           layerId: params.layerId,
           outputFormat,
-          filter: params.filter,
+          filterGroups: params.filterGroups,
           sortBy: params.sort ? params.sort.column : undefined,
           sortOrder: params.sort ? sortOrder : undefined,
           attributes: params.attributes,

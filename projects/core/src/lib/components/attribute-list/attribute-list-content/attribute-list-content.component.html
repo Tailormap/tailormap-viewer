@@ -1,3 +1,10 @@
+@if (loadingData$ | async) {
+  <mat-progress-bar class="loading-bar"
+                    mode="indeterminate"
+                    aria-label="Loading data"
+                    i18n-aria-label="@@core.attribute-list.loading-data"></mat-progress-bar>
+}
+
 <div class="table-container" #tableContainer>
 
   @if (errorMessage$ | async; as errorMessage) {
@@ -26,6 +33,7 @@
       [showStatistics]="showStatistics$ | async"
       [statistics]="statistics$ | async"
       [pagingDataSelectedTab]="pagingDataSelectedTab$ | async"
+      [loading]="loadingData$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
       (setFilter)="onSetFilter($event)"

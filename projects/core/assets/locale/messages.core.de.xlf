@@ -58,6 +58,10 @@
         <source>Go to page</source>
         <target>Zur Seite gehen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-data" datatype="html">
+        <source>Loading data</source>
+        <target>Daten werden geladen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
         <target>Keine Layer mit administrativen Daten gefunden</target>
@@ -693,10 +697,6 @@
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
         <target>Wähle die zu bearbeitende Layer aus</target>
-      </trans-unit>
-      <trans-unit id="core.edit.time" datatype="html">
-        <source>Time</source>
-        <target>Uhrzeit</target>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
@@ -1458,6 +1458,10 @@
         <source>Logout</source>
         <target>Abmelden</target>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Flurstücke</target>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
         <target>Ort</target>
@@ -1481,6 +1485,10 @@
       <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
         <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
         <target>Im Fang-Layer <x id="PH_1" equiv-text="layerTitle"/> sind mehr als <x id="PH" equiv-text="maxFeatures"/> Objekte verfügbar. Das Maximum beträgt <x id="PH_2" equiv-text="maxFeatures"/>. Wenden Sie Filter an oder zoomen Sie heran, um die Auswahl einzuschränken.</target>
+      </trans-unit>
+      <trans-unit id="core.snapping.no-visible-layers" datatype="html">
+        <source>There are no visible layers to snap to. Make a layer visible to snap to it.</source>
+        <target>Es gibt keine sichtbaren Layer zum Fangen. Machen Sie einen Layer sichtbar, um daran zu fangen.</target>
       </trans-unit>
       <trans-unit id="core.snapping.tooltip" datatype="html">
         <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>

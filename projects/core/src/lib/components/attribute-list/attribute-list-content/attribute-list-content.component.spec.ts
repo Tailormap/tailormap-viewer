@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/angular';
 import {
   createDummyAttributeListData, createDummyRows, getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore,
@@ -10,6 +10,8 @@ import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { FilterService } from '../../../filter/services/filter.service';
 import { LayerFeaturesFilters } from '../../../filter/models/feature-filter.model';
+import userEvent from '@testing-library/user-event';
+import { createDummyAttributeListTab } from '../state/mocks/attribute-list-state-test-data';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { MatTableModule } from '@angular/material/table';
@@ -143,6 +145,52 @@ describe('AttributeListContent', () => {
 
     changedFilters$.next(new Map([[ '1', null ]]));
     expect(tableContainer.scrollTop).toBe(0);
+  });
+
+  const renderWithRows = async (loadingData: boolean) => {
+    const store = getLoadedStoreWithRows({
+      tabs: [createDummyAttributeListTab({ loadingData, initialDataLoaded: true })],
+    });
+    await render(AttributeListContentComponent, {
+      imports: [ MatTableModule, MatIconModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        getMapServiceMock().provider,
+        provideMockStore({
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
+        }),
+      ],
+    });
+    const mockStore = TestBed.inject(MockStore);
+    const dispatch = vi.spyOn(mockStore, 'dispatch');
+    return { dispatch };
+  };
+
+  it('shows a progress bar and ignores row clicks while loading a page', async () => {
+    const { dispatch } = await renderWithRows(true);
+    expect(await screen.findByRole('progressbar', { name: 'Loading data' })).toBeInTheDocument();
+    const table = screen.getByRole('table', { name: 'Attribute list' });
+    expect(table).toHaveAttribute('aria-busy', 'true');
+    expect(table).toHaveClass('loading');
+    await userEvent.click(screen.getByText('1: Test'));
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it('shows no progress bar and selects a clicked row when not loading', async () => {
+    const { dispatch } = await renderWithRows(false);
+    await userEvent.click(await screen.findByText('1: Test'));
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    const table = screen.getByRole('table', { name: 'Attribute list' });
+    expect(table).not.toHaveAttribute('aria-busy');
+    expect(table).not.toHaveClass('loading');
+    expect(dispatch).toHaveBeenCalled();
   });
 
 });

@@ -17,3 +17,4 @@ export * from './lib/helpers/coordinate.helper';
 export * from './lib/helpers/feature.helper';
 export * from './lib/helpers/map-cursor.helper';
 export * from './lib/helpers/geometry.helper';
+export { registerProjection } from './lib/helpers/projections.helper';

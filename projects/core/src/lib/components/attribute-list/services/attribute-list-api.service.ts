@@ -9,7 +9,7 @@ import {
 } from '@tailormap-viewer/api';
 import { catchError, map, Observable, of, timeout } from 'rxjs';
 import { FileHelper } from '@tailormap-viewer/shared';
-import { FeaturesFilterHelper } from '../../../filter';
+import { CqlFilterHelper } from '../../../filter';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
 import { Store } from '@ngrx/store';
 import { AttributeListManagerService } from './attribute-list-manager.service';
@@ -36,13 +36,8 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   }
 
   public getFeatures$(params: GetFeaturesParams): Observable<FeaturesResponseModel> {
-    const { filter, ...getFeatureParams } = params;
-    // Convert filter to CQL
-    // Currently TM only supports filters on the layer itself, not related feature types
-    const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(filter) || undefined
-      : undefined;
-    return this.api.getFeatures$({ ...getFeatureParams, filter: cqlFilter })
+    const { filterGroups, ...getFeatureParams } = params;
+    return this.api.getFeatures$({ ...getFeatureParams, filter: CqlFilterHelper.getCqlFilterForLayer(filterGroups, params.layerId) })
       .pipe(map((response): FeaturesResponseModel => {
         return {
           ...response,
@@ -56,11 +51,9 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   }
 
   public startLayerExtract$(params: GetLayerExtractParams): Observable<LayerExtractResponseModel> {
-    const { sortBy, sortOrder, filter, ...exportParams } = params;
+    const { sortBy, sortOrder, filterGroups, ...exportParams } = params;
     const sort = sortBy && sortOrder ? { column: sortBy, direction: sortOrder } : null;
-    // Convert filter to CQL
-    const cqlFilter = filter ? FeaturesFilterHelper.getFilter(filter) || undefined : undefined;
-    return this.api.requestLayerExtract$({ ...exportParams, sort, filter: cqlFilter })
+    return this.api.requestLayerExtract$({ ...exportParams, sort, filter: CqlFilterHelper.getCqlFilterForLayer(filterGroups, params.layerId) })
       .pipe(map(response => {
         return response;
       }));
@@ -78,19 +71,13 @@ export class AttributeListApiService implements AttributeListApiServiceModel {
   }
 
   public getUniqueValues$(params: GetUniqueValuesParams) {
-    const { filter, ...getUniqueValueParams } = params;
-    // Convert filter to CQL
-    // Currently TM only supports filters on the layer itself, not related feature types
-    const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(filter) || undefined
-      : undefined;
-    return this.uniqueValuesService.getUniqueValues$({ ...getUniqueValueParams, filter: cqlFilter });
+    const { filterGroups, ...getUniqueValueParams } = params;
+    return this.uniqueValuesService.getUniqueValues$({ ...getUniqueValueParams, filter: CqlFilterHelper.getCqlFilterForLayer(filterGroups, params.layerId) });
   }
 
   public retrieveZoomToExtentBounds$(params: ZoomToExtentBoundsParams): Observable<BoundsModel | null> {
-    const { filter, ...zoomParams } = params;
-    const cqlFilter = filter ? FeaturesFilterHelper.getFilter(filter) || undefined : undefined;
-    return this.api.retrieveZoomToExtentBounds$({ ...zoomParams, filter: cqlFilter })
+    const { filterGroups, ...zoomParams } = params;
+    return this.api.retrieveZoomToExtentBounds$({ ...zoomParams, filter: CqlFilterHelper.getCqlFilterForLayer(filterGroups, params.layerId) })
       .pipe(
         timeout(30000),
         map(bounds => bounds ?? null),
