@@ -4,7 +4,7 @@ import { LegendComponent } from './legend.component';
 import { MenubarService } from '../../menubar';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
 import { BaseComponentTypeEnum, getAppLayerModel, getServiceModel } from '@tailormap-viewer/api';
 import { TestBed } from '@angular/core/testing';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
@@ -31,7 +31,7 @@ const createMockStore = () => {
   ];
   return provideMockStore({
     selectors: [
-      { selector: selectOrderedVisibleLayersWithServices, value: layersAndServices },
+      { selector: selectOrderedVisibleLayers, value: layersAndServices },
     ],
   });
 };

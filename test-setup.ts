@@ -99,31 +99,3 @@ afterEach(() => {
   });
   overriddenSelectors.clear();
 });
-
-vi.mock('jsts/org/locationtech/jts/io', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  WKTReader: class MockedWKTReader {
-    public read(input: string) {
-      return input;
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  WKTWriter: class MockedWKTWriter {
-    public write(input: string) {
-      return input;
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  OL3Parser: class MockedParser {
-    public inject() {/*empty*/}
-    public read(input: any) { return input; }
-    public write(input: any) { return input; }
-  },
-}));
-
-vi.mock('jsts/org/locationtech/jts/operation/buffer', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  BufferOp: {
-    bufferOp: (input: any) => input,
-  },
-}));

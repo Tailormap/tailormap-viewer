@@ -25,6 +25,10 @@ export class OpenLayersLayerManager implements LayerManagerModel {
 
   private prevBackgroundLayerIds: string[] = [];
   private prevLayerIdentifiers: string[] = [];
+  // Ids from the last setLayers call, reversed so a layer's index is the zIndex updateLayers gives it. Used to position an ordered vector layer that is added after setLayers ran.
+  private layerOrder: string[] = [];
+  // Vector layers with followsLayerOrder: they get a zIndex among the service layers instead of on top of them
+  private orderedVectorLayerIds = new Set<string>();
 
   private currentBackgroundLayerProjection: Projection;
   private currentBaseLayerProjection: Projection;
@@ -44,6 +48,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     this.layers = new Map();
     this.backgroundLayers = new Map();
     this.vectorLayers = new Map();
+    this.orderedVectorLayerIds = new Set();
+    this.layerOrder = [];
     this.olMap.removeLayer(this.backgroundLayerGroup);
     this.olMap.removeLayer(this.baseLayerGroup);
     this.olMap.removeLayer(this.vectorLayerGroup);
@@ -86,6 +92,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   public setLayers(layers: LayerModel[], useProjection?: string) {
+    this.layerOrder = layers.map(layer => layer.id).reverse();
     this.prevLayerIdentifiers = this.updateLayers(
       layers,
       this.layers,
@@ -96,6 +103,8 @@ export class OpenLayersLayerManager implements LayerManagerModel {
       this.baseLayerGroup,
       useProjection,
     );
+    // Ordered vector layers in the list may have moved service layers above the drawing layers
+    this.moveDrawingLayersToTop();
   }
 
   private updateLayers(
@@ -134,6 +143,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     layers
       .forEach(layer => {
         const zIndex = layerOrder.indexOf(layer.id);
+        if (LayerTypesHelper.isVectorLayer(layer) && layer.followsLayerOrder) {
+          // Only position it: the owner creates an ordered vector layer (with MapService.renderFeatures$), it is never created here
+          if (this.orderedVectorLayerIds.has(layer.id)) {
+            this.vectorLayers.get(layer.id)?.setZIndex(getZIndexForLayer(zIndex));
+          }
+          return;
+        }
         const existingLayer = currentLayerMap.get(layer.id);
         if (existingLayer) {
           this.updatePropertiesIfChanged(layer, existingLayer);
@@ -152,6 +168,13 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     }
     OlLayerHelper.setLayerProps(layer, olLayer);
     this.addLayerToMap(olLayer);
+    if (LayerTypesHelper.isVectorLayer(layer) && layer.followsLayerOrder) {
+      this.orderedVectorLayerIds.add(layer.id);
+      const positionInOrder = this.layerOrder.indexOf(layer.id);
+      if (zIndex === undefined && positionInOrder !== -1) {
+        zIndex = positionInOrder;
+      }
+    }
     olLayer.setZIndex(this.getZIndexForLayer(zIndex));
     this.moveDrawingLayersToTop();
     if (!LayerTypesHelper.isVectorLayer(layer)) {
@@ -261,10 +284,15 @@ export class OpenLayersLayerManager implements LayerManagerModel {
   }
 
   private moveDrawingLayersToTop() {
-    let zIndex = this.backgroundLayerGroup.getLayers().getLength() + this.baseLayerGroup.getLayers().getLength();
-    this.vectorLayerGroup.getLayers().forEach(layer => {
-      layer.setZIndex(++zIndex);
-    });
+    const vectorLayers = this.vectorLayerGroup.getLayers().getArray();
+    const isOrdered = (layer: { get: (key: string) => string }) => this.orderedVectorLayerIds.has(layer.get('id'));
+    // Start above every layer that follows the layer order: service layers and ordered vector layers
+    let zIndex = Math.max(
+      this.backgroundLayerGroup.getLayers().getLength() + this.baseLayerGroup.getLayers().getLength(),
+      this.getMaxZIndex(),
+      ...vectorLayers.filter(isOrdered).map(layer => layer.getZIndex() ?? 0),
+    );
+    vectorLayers.filter(layer => !isOrdered(layer)).forEach(layer => layer.setZIndex(++zIndex));
   }
 
   public refreshLayer(layerId: string) {
@@ -351,6 +379,7 @@ export class OpenLayersLayerManager implements LayerManagerModel {
     vectorLayers.remove(layer);
     this.vectorLayerGroup.setLayers(vectorLayers);
     this.vectorLayers.delete(layerId);
+    this.orderedVectorLayerIds.delete(layerId);
     return;
   }
 

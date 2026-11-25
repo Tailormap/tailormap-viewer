@@ -118,6 +118,9 @@ export class MapBookmarkHelper {
 
     if (!checkInitialValues) {
       layers.forEach(currentLayer => {
+        if (currentLayer.origin === 'user') {
+          return;
+        }
         const id = currentLayer.id;
         const layer = fragment?.find(l => l.id === id);
         const initialVisible = currentLayer.initialValues?.visible ?? true;
@@ -151,6 +154,9 @@ export class MapBookmarkHelper {
   public static fragmentFromLayerSettings(layers: AppLayerStateModel[]): LayerSettingsBookmarkFragment | undefined {
     const bookmarkData = new Array<BookmarkLayerSettings>();
     for (const layer of layers) {
+      if (layer.origin === 'user') {
+        continue;
+      }
       const info: BookmarkLayerSettings = { id: layer.id };
       let changed = false;
 
@@ -177,12 +183,28 @@ export class MapBookmarkHelper {
     return bookmarkData.length === 0 ? undefined : bookmarkData;
   }
 
-  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[]): LayerTreeOrderBookmarkFragment | undefined {
+  /**
+   * Nodes for user layers (origin 'user') and nodes added after the map loaded (such as a level holding user layers) are left out,
+   * also from the child lists of other nodes, so they never make a node differ from its initial children. Restoring a bookmark
+   * skips unknown ids anyway.
+   */
+  public static fragmentFromLayerTreeOrder(tree: ExtendedLayerTreeNodeModel[], layers: AppLayerStateModel[] = []): LayerTreeOrderBookmarkFragment | undefined {
     const layerOrderBookmark: LayerTreeOrderBookmarkFragment = [];
+    const userLayerIds = new Set(layers.filter(l => l.origin === 'user').map(l => l.id));
+    const initialNodeIds = new Set(tree.flatMap(node => node.initialChildren));
+    const isBookmarkedNode = (node: ExtendedLayerTreeNodeModel) => {
+      const isUserLayerNode = !!node.appLayerId && userLayerIds.has(node.appLayerId);
+      return !isUserLayerNode && (node.root || initialNodeIds.has(node.id));
+    };
+    const bookmarkedNodeIds = new Set(tree.filter(isBookmarkedNode).map(node => node.id));
 
     for (const layer of tree) {
-      if (!ArrayHelper.arrayEquals(layer.initialChildren, layer.childrenIds ?? [])) {
-        layerOrderBookmark.push({ id: layer.id, c: layer.childrenIds ?? [] });
+      if (!bookmarkedNodeIds.has(layer.id)) {
+        continue;
+      }
+      const children = (layer.childrenIds ?? []).filter(id => bookmarkedNodeIds.has(id));
+      if (!ArrayHelper.arrayEquals(layer.initialChildren, children)) {
+        layerOrderBookmark.push({ id: layer.id, c: children });
       }
     }
 

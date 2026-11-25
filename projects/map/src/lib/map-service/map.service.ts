@@ -159,6 +159,7 @@ export class MapService {
       zoomToFeature?: boolean | (() => boolean);
       centerFeature?: boolean | (() => boolean);
       updateWhileAnimating?: boolean;
+      followsLayerOrder?: boolean;
     },
   ): Observable<VectorLayer | null> {
     return combineLatest([
@@ -168,6 +169,7 @@ export class MapService {
         layerType: LayerTypesEnum.Vector,
         visible: true,
         updateWhileAnimating: config?.updateWhileAnimating,
+        followsLayerOrder: config?.followsLayerOrder,
       }, vectorLayerStyle),
       featureGeometry$,
     ])
