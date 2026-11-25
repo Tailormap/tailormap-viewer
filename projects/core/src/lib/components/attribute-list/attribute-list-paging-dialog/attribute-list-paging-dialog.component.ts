@@ -8,6 +8,7 @@ import { AttributeListDataService } from '../services/attribute-list-data.servic
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AutoFocusDirective } from '@tailormap-viewer/shared';
+import { AttributeListPagingDataType } from '../models/attribute-list-paging-data.type';
 
 @Component({
     selector: 'tm-attribute-list-paging-dialog',
@@ -43,8 +44,9 @@ export class AttributeListPagingDialogComponent implements OnDestroy {
             Validators.min(1),
             Validators.pattern(/[1-9][0-9]*/),
           ];
-          if (pagingData.totalCount) {
-            validators.push(Validators.max(Math.floor(pagingData.totalCount / pagingData.pageSize)));
+          const maxPage = AttributeListPagingDialogComponent.getMaxPage(pagingData);
+          if (maxPage !== null) {
+            validators.push(Validators.max(maxPage));
           }
           this.formControl.setValidators(validators);
         }
@@ -57,20 +59,29 @@ export class AttributeListPagingDialogComponent implements OnDestroy {
       )
       .subscribe(([ value, pagingData ]) => {
         let page = value === null ? 1 : +value;
-        if (pagingData.totalCount) {
-          const max = Math.floor(pagingData.totalCount / pagingData.pageSize);
-          if (page > max) {
-            page = max;
-          }
+        const maxPage = AttributeListPagingDialogComponent.getMaxPage(pagingData);
+        if (maxPage !== null && page > maxPage) {
+          page = maxPage;
         }
-        if (page < 0) {
-          page = 0;
+        if (page < 1) {
+          page = 1;
         }
         if (page === pagingData.pageIndex) {
           return;
         }
         this.attributeListDataService.updatePage(pagingData.id, page);
       });
+  }
+
+  /**
+   * The last page number, or null when the total is unknown (any page may be requested, the source returns an empty page when
+   * past the last page).
+   */
+  private static getMaxPage(pagingData: AttributeListPagingDataType): number | null {
+    if (pagingData.knownTotalCount === null || pagingData.pageSize <= 0) {
+      return null;
+    }
+    return Math.max(1, Math.ceil(pagingData.knownTotalCount / pagingData.pageSize));
   }
 
   public ngOnDestroy() {

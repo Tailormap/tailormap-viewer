@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, viewChild, ViewCont
 import { AttributeListColumnModel } from '../models/attribute-list-column.model';
 import { Store } from '@ngrx/store';
 import { PopoverComponent, I18nPaginatorIntl, TooltipDirective } from '@tailormap-viewer/shared';
-import { Observable, of, switchMap, take, combineLatest } from 'rxjs';
+import { Observable, of, switchMap, take, combineLatest, tap } from 'rxjs';
 import {
   selectDataForSelectedTab, selectHasNoRowsForSelectedTab, selectLoadingDataSelectedTab,
   selectPagingDataSelectedTab, selectSelectedTab,
@@ -31,7 +31,8 @@ import { AsyncPipe } from '@angular/common';
     styleUrls: ['./attribute-list-tab-toolbar.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        { provide: MatPaginatorIntl, useClass: I18nPaginatorIntl },
+        I18nPaginatorIntl,
+        { provide: MatPaginatorIntl, useExisting: I18nPaginatorIntl },
     ],
     imports: [
         MatToolbar,
@@ -52,7 +53,9 @@ export class AttributeListTabToolbarComponent implements OnInit {
   private attributeListDataService = inject(AttributeListDataService);
   private mapService = inject(MapService);
   private attributeListApiService = inject(AttributeListManagerService);
+  private paginatorIntl = inject(I18nPaginatorIntl);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
+  private paginator = viewChild(MatPaginator);
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -84,7 +87,8 @@ export class AttributeListTabToolbarComponent implements OnInit {
 
   public ngOnInit() {
     this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
-    this.pagingData$ = this.store$.select(selectPagingDataSelectedTab);
+    this.pagingData$ = this.store$.select(selectPagingDataSelectedTab)
+      .pipe(tap(pagingData => this.paginatorIntl.setTotalUnknown(pagingData.knownTotalCount === null)));
     this.hasFilters$ = combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),
@@ -112,6 +116,12 @@ export class AttributeListTabToolbarComponent implements OnInit {
   }
 
   public onPageChange($event: PageEvent): void {
+    // The paginator already changed its page index, but it should show the page the rows are from until the requested page is
+    // loaded. The page index input does not change while loading, so it does not reset the paginator: set it back here.
+    const paginator = this.paginator();
+    if (paginator) {
+      paginator.pageIndex = $event.previousPageIndex ?? paginator.pageIndex;
+    }
     this.attributeListStateService.executeActionForCurrentData(dataId => {
       this.attributeListDataService.updatePage(dataId, $event.pageIndex + 1);
     });

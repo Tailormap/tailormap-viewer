@@ -20,10 +20,10 @@
   </div>
 
   @if (pagingData$ | async; as pagingData) {
-    <div class="paging">
+    <div class="paging" [class.unknown-total]="pagingData.knownTotalCount === null" [class.hide-range-label]="!pagingData.pageLoaded || pagingData.knownTotalCount === 0">
       <mat-paginator [pageSize]="pagingData.pageSize"
         [pageIndex]="pagingData.pageIndex - 1"
-        [length]="pagingData.totalCount || 0"
+        [length]="pagingData.paginatorLength"
         [hidePageSize]="true"
         [disabled]="loadingData$ | async"
         [showFirstLastButtons]="true"

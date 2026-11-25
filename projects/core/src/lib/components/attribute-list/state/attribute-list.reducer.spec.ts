@@ -269,6 +269,19 @@ describe('AttributeListReducer', () => {
       expect(result.data[0].totalCount).toBe(1);
     });
 
+    test('sets the loaded page index', () => {
+      const state = createState({
+        tabs: [createTab({ id: 'tab-1' })],
+        data: [createData({ id: 'data-1', tabId: 'tab-1', pageIndex: 3, loadedPageIndex: 1 })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.loadDataSuccess({
+        tabId: 'tab-1',
+        data: { id: 'data-1', success: true, totalCount: 500, columns: [], rows: [], pageSize: 100, pageIndex: 3 },
+      }));
+      expect(result.data[0].pageIndex).toBe(3);
+      expect(result.data[0].loadedPageIndex).toBe(3);
+    });
+
     test('uses loaded columns only when data has no existing columns', () => {
       const existingColumns = [createColumn({ id: 'col-existing' })];
       const loadedColumns = [createColumn({ id: 'col-loaded' })];
@@ -364,10 +377,11 @@ describe('AttributeListReducer', () => {
     test('updates pageIndex and sets loadingData on tab', () => {
       const state = createState({
         tabs: [createTab({ id: 'tab-1', loadingData: false })],
-        data: [createData({ id: 'data-1', tabId: 'tab-1', pageIndex: 0 })],
+        data: [createData({ id: 'data-1', tabId: 'tab-1', pageIndex: 1, loadedPageIndex: 1 })],
       });
       const result = attributeListReducer(state, AttributeListActions.updatePage({ dataId: 'data-1', page: 3 }));
       expect(result.data[0].pageIndex).toBe(3);
+      expect(result.data[0].loadedPageIndex).toBe(1);
       expect(result.tabs[0].loadingData).toBe(true);
     });
 

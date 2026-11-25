@@ -151,6 +151,15 @@ export class AttributeListTableComponent {
     ));
   });
 
+  /** The total number of rows for aria-rowcount, -1 when unknown (see ARIA spec) */
+  public ariaRowCount = computed(() => {
+    const paging = this.pagingDataSelectedTab();
+    if (!paging) {
+      return null;
+    }
+    return paging.knownTotalCount ?? -1;
+  });
+
   public rowIndexMap = computed(() => {
     const paging = this.pagingDataSelectedTab();
     const pageOffset = paging ? (paging.pageIndex - 1) * paging.pageSize : 0;

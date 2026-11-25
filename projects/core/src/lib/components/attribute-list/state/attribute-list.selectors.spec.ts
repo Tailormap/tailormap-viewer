@@ -8,6 +8,7 @@ import {
   selectAttributeListTabData,
   selectCheckedFeaturesForSelectedTab,
   selectCurrentlyVisibleCheckedFeaturesForSelectedTab,
+  selectPagingDataSelectedTab,
 } from './attribute-list.selectors';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
@@ -345,6 +346,35 @@ describe('AttributeListSelectors', () => {
 
     test('returns an empty array when there is no data for the selected tab', () => {
       expect(projector(null)).toEqual([]);
+    });
+  });
+
+  describe('selectPagingDataSelectedTab', () => {
+    const rows = Array.from({ length: 42 }, (_, i) => ({ id: `r${i}`, __fid: `${i}`, attributes: {} }));
+    const projector = selectPagingDataSelectedTab.projector;
+
+    test('shows the paging of the loaded page while another page loads', () => {
+      // Went from page 4 (the last page, 42 rows) to page 2: the rows are still those of page 4 until loaded
+      const data = createData({ pageSize: 100, pageIndex: 2, loadedPageIndex: 4, totalCount: -1, rows });
+      const paging = projector(data, true);
+      expect(paging.pageIndex).toBe(4);
+      expect(paging.knownTotalCount).toBe(342);
+    });
+
+    test('shows the paging of the requested page when not loading', () => {
+      const data = createData({ pageSize: 100, pageIndex: 2, loadedPageIndex: 2, totalCount: 500, rows });
+      expect(projector(data, false).pageIndex).toBe(2);
+      // For example after a failed load the rows are not of the loaded page, use the requested page
+      expect(projector({ ...data, loadedPageIndex: 1 }, false).pageIndex).toBe(2);
+    });
+
+    test('uses the requested page while loading the first page', () => {
+      const data = createData({ pageSize: 100, pageIndex: 1, totalCount: null });
+      const paging = projector(data, true);
+      expect(paging.pageIndex).toBe(1);
+      expect(paging.pageLoaded).toBe(false);
+      expect(projector({ ...data, loadedPageIndex: 1 }, false).pageLoaded).toBe(true);
+      expect(projector(null, true).pageLoaded).toBe(false);
     });
   });
 

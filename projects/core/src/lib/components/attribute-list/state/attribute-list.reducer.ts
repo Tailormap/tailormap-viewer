@@ -85,16 +85,20 @@ const onLoadDataSuccess = (
     data: AttributeListStateHelper.updateData(
       state.data,
       payload.data.id,
-      data => ({
-        ...data,
-        errorMessage: payload.data.errorMessage,
-        totalCount: payload.data.totalCount,
-        pageSize: payload.data.pageSize,
-        pageIndex: typeof payload.data.pageIndex !== 'undefined' ? payload.data.pageIndex : data.pageIndex,
-        rows: payload.data.rows,
-        columns: data.columns.length > 0 ? data.columns : payload.data.columns,
-        selectedRowId: undefined,
-      }),
+      data => {
+        const pageIndex = typeof payload.data.pageIndex !== 'undefined' ? payload.data.pageIndex : data.pageIndex;
+        return {
+          ...data,
+          errorMessage: payload.data.errorMessage,
+          totalCount: payload.data.totalCount,
+          pageSize: payload.data.pageSize,
+          pageIndex,
+          loadedPageIndex: pageIndex,
+          rows: payload.data.rows,
+          columns: data.columns.length > 0 ? data.columns : payload.data.columns,
+          selectedRowId: undefined,
+        };
+      },
     ),
   };
 };

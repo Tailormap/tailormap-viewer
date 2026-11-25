@@ -320,6 +320,12 @@
       <trans-unit id="shared.paginator.range-label-empty" datatype="html">
         <source>0 of 0</source>
       </trans-unit>
+      <trans-unit id="shared.paginator.range-label-empty-page" datatype="html">
+        <source>Page <x id="PH" equiv-text="pageNumber"/> is empty</source>
+      </trans-unit>
+      <trans-unit id="shared.paginator.range-label-unknown" datatype="html">
+        <source><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> of unknown</source>
+      </trans-unit>
       <trans-unit id="shared.panel-resizer.aria-label-default-horizontal" datatype="html">
         <source>Resize panel, use up and down arrow keys</source>
       </trans-unit>

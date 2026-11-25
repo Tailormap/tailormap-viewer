@@ -39,6 +39,18 @@
   padding: 0;
 }
 
+/* With an unknown total there is no last page to go to, but the first page button is still useful (for example after going
+   to a page past the last page) */
+.paging.unknown-total ::ng-deep .mat-mdc-paginator-navigation-last {
+  display: none;
+}
+
+/* No range label ("0 of 0") until the first page is loaded or when there are no features. Hidden with visibility so the
+   buttons don't move. */
+.paging.hide-range-label ::ng-deep .mat-mdc-paginator-range-label {
+  visibility: hidden;
+}
+
 .paging ::ng-deep .mat-mdc-paginator-container .mat-mdc-icon-button,
 .paging ::ng-deep .mat-paginator-container .mat-mdc-paginator-range-label {
   border-radius: 0;

@@ -21,7 +21,7 @@
   aria-label="Attribute list"
   i18n-aria-label="@@core.attribute-list.attribute-list"
   [attr.aria-colcount]="columns()?.length"
-  [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount"
+  [attr.aria-rowcount]="ariaRowCount()"
   [attr.aria-busy]="loading() ? true : null"
   [class.loading]="loading()">
 
