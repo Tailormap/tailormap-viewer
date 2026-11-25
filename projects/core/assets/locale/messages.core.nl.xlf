@@ -1635,10 +1635,6 @@
         <source>Open Streetview</source>
         <target>Open Streetview</target>
       </trans-unit>
-      <trans-unit id="core.toolbar.search-cadastral-parcels-pdok-attribution" datatype="html">
-        <source>Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</source>
-        <target>Gegevens van [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</target>
-      </trans-unit>
       <trans-unit id="core.toolbar.search-location" datatype="html">
         <source>Search location</source>
         <target>Zoeken</target>

@@ -1224,9 +1224,6 @@
       <trans-unit id="core.toolbar.open-streetview" datatype="html">
         <source>Open Streetview</source>
       </trans-unit>
-      <trans-unit id="core.toolbar.search-cadastral-parcels-pdok-attribution" datatype="html">
-        <source>Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)</source>
-      </trans-unit>
       <trans-unit id="core.toolbar.search-location" datatype="html">
         <source>Search location</source>
       </trans-unit>
