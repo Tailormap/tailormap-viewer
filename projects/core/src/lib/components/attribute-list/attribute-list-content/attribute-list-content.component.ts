@@ -67,6 +67,10 @@ export class AttributeListContentComponent implements OnInit {
   public hasNoRows$: Observable<boolean> = of(true);
   public pagingDataSelectedTab$: Observable<AttributeListPagingDataType> = this.store$.select(selectPagingDataSelectedTab);
   public checkedRows$ = this.store$.select(selectCheckedRowsForSelectedTab);
+  public loadingSelectedRowId$: Observable<string | null> = combineLatest([
+    this.store$.select(selectDataForSelectedTab),
+    this.attributeListDataService.loadingSelectedRow$,
+  ]).pipe(map(([ data, loadingRow ]) => data && loadingRow?.dataId === data.id ? loadingRow.rowId : null));
 
   public canExpandRows$ = this.attributeListFeatureDetailsService.canExpandRows$;
   public canCheckRows$ = this.attributeListFeatureDetailsService.canCheckRows$;

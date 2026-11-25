@@ -62,6 +62,10 @@
         <source>Loading data</source>
         <target>Gegevens laden</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-feature" datatype="html">
+        <source>Loading feature</source>
+        <target>Object laden</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
         <target>Geen lagen met administratieve gegevens gevonden</target>

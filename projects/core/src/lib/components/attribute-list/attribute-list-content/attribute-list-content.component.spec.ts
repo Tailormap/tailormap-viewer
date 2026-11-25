@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import {
   createDummyAttributeListData, createDummyRows, getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore,
 } from '../state/mocks/attribute-list-state-test-data';
@@ -7,7 +7,7 @@ import { attributeListStateKey } from '../state/attribute-list.state';
 import { AttributeListContentComponent } from './attribute-list-content.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { FilterService } from '../../../filter/services/filter.service';
 import { LayerFeaturesFilters } from '../../../filter/models/feature-filter.model';
 import userEvent from '@testing-library/user-event';
@@ -23,6 +23,7 @@ import { getMockApiService } from '../../../services/load-viewer.service.mock';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
+import { AttributeListDataService } from '../services/attribute-list-data.service';
 
 describe('AttributeListContent', () => {
 
@@ -145,6 +146,34 @@ describe('AttributeListContent', () => {
 
     changedFilters$.next(new Map([[ '1', null ]]));
     expect(tableContainer.scrollTop).toBe(0);
+  });
+
+  it('marks the row whose feature is loading after selecting it as busy', async () => {
+    const store = getLoadedStoreWithRows();
+    await render(AttributeListContentComponent, {
+      imports: [ MatTableModule, MatIconModule, MatDialogModule, MatMenuModule, MatSnackBarModule ],
+      providers: [
+        { provide: TAILORMAP_API_V1_SERVICE, useValue: getMockApiService() },
+        { provide: AttributeListDataService, useValue: { loadingSelectedRow$: of({ dataId: '1', rowId: '2' }) } },
+        getMapServiceMock().provider,
+        provideMockStore({
+          initialState: {
+            ...store,
+            core: {
+              loadStatus: 'LOADED',
+              filters: { currentFilterGroups: [] },
+            },
+            map: { layers: [] },
+          },
+        }),
+      ],
+    });
+    const loadingRow = (await screen.findByText('2: Test')).closest('mat-row') as HTMLElement;
+    expect(loadingRow).toHaveAttribute('aria-busy', 'true');
+    expect(within(loadingRow).getByRole('progressbar', { name: 'Loading feature' })).toBeInTheDocument();
+    expect(screen.getAllByRole('progressbar')).toHaveLength(1);
+    const otherRow = screen.getByText('1: Test').closest('mat-row');
+    expect(otherRow).not.toHaveAttribute('aria-busy');
   });
 
   const renderWithRows = async (loadingData: boolean) => {

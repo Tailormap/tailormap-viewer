@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FeatureInfo3DModel, MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
-import { combineLatest, concatMap, filter, Observable, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { MapClickToolConfigModel, MapClickToolModel, MapService, ToolTypeEnum } from '@tailormap-viewer/map';
+import { combineLatest, concatMap, EMPTY, filter, map, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { featureInfoLoaded } from '../state/feature-info.actions';
 import {
@@ -58,10 +58,19 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroyed),
         tap(({ tool }) => this.tool = tool.id),
-        switchMap(({ tool }) => tool?.mapClick$ || of(null)),
+        switchMap(({ tool }) => tool?.mapClick$ || EMPTY),
+        concatMap(mapClick => this.hasFeatureInfoLayers$().pipe(filter(hasLayers => hasLayers), map(() => mapClick))),
+        // A new click cancels the requests of the previous click, so slow responses for an earlier click do not end up in the feature info
+        // of the new click. Clicks without layers to query are filtered out before this, so they do not cancel anything.
+        switchMap(mapClick => this.featureInfoService.fetchFeatures$(
+          mapClick.mapCoordinates, mapClick.mouseCoordinates, mapClick.cesiumFeatureInfo, mapClick.pointerType,
+        )),
       )
-      .subscribe(mapClick => {
-        this.handleMapClick(mapClick);
+      .subscribe(response => {
+        if (response === null) {
+          return;
+        }
+        this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
       });
 
     this.mapService.renderFeatures$(
@@ -90,10 +99,8 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  private handleMapClick(evt: {
-    mapCoordinates: [number, number]; mouseCoordinates: [number, number]; cesiumFeatureInfo?: FeatureInfo3DModel; pointerType?: string;
-  }) {
-    combineLatest([
+  private hasFeatureInfoLayers$(): Observable<boolean> {
+    return combineLatest([
       this.store$.select(selectVisibleLayersWithAttributes),
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(select3dTilesLayers),
@@ -101,22 +108,13 @@ export class FeatureInfoComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         take(1),
-        filter(([ layers, wmsLayers, tiles3dLayers, in3DView ]) => {
+        map(([ layers, wmsLayers, tiles3dLayers, in3DView ]) => {
           if (in3DView) {
             return layers.length > 0 || wmsLayers.length > 0 || tiles3dLayers.length > 0;
           }
           return layers.length > 0 || wmsLayers.length > 0;
         }),
-        concatMap(() => {
-          return this.featureInfoService.fetchFeatures$(evt.mapCoordinates, evt.mouseCoordinates, evt.cesiumFeatureInfo, evt.pointerType);
-        }),
-      )
-      .subscribe(response => {
-        if (response === null) {
-          return;
-        }
-        this.store$.dispatch(featureInfoLoaded({ featureInfo: response }));
-      });
+      );
   }
 
 }

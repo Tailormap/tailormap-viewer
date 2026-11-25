@@ -17,6 +17,7 @@ import {
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressBar } from '@angular/material/progress-bar';
 import { AttributeListFeatureDetailsComponent } from '../attribute-list-feature-details/attribute-list-feature-details.component';
 import { NgClass } from '@angular/common';
 import { TooltipDirective, PanelResizerComponent } from '@tailormap-viewer/shared';
@@ -47,6 +48,7 @@ const DEFAULT_COLUMN_WIDTH = 170;
     PanelResizerComponent,
     MatMenuTrigger,
     MatProgressSpinner,
+    MatProgressBar,
     AttributeListFeatureDetailsComponent,
     MatHeaderRowDef,
     MatHeaderRow,
@@ -86,6 +88,8 @@ export class AttributeListTableComponent {
   public showStatistics = input<boolean | null>(false);
   public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
   public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
+  /** The row for which the feature is being loaded after selecting it, to show a loading indicator on that row. */
+  public loadingSelectedRowId = input<string | null>(null);
   /**
    * While loading a page the rows are still those of the previous page. Dim them and ignore row selection, so a user does not select a
    * feature that is not on the page being loaded.
