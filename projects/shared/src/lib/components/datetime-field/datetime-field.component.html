@@ -1,0 +1,20 @@
+<mat-form-field class="datetime-field" [hideRequiredMarker]="hideRequiredMarker()">
+  <mat-label><ng-content></ng-content></mat-label>
+  <input #nativeInput
+         matInput
+         type="datetime-local"
+         [formControl]="inputControl"
+         [required]="required()"
+         [errorStateMatcher]="fieldErrorStateMatcher()"
+         (blur)="markAsTouched()" />
+  <button mat-icon-button
+          matSuffix
+          type="button"
+          class="picker-toggle"
+          [disabled]="inputControl.disabled"
+          (click)="openPicker(nativeInput)"
+          i18n-aria-label="@@shared.datetime-field.open-picker"
+          aria-label="Open date and time picker">
+    <mat-icon svgIcon="calendar"></mat-icon>
+  </button>
+</mat-form-field>

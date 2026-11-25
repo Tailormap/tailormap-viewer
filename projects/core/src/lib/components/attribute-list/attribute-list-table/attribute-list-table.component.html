@@ -21,7 +21,9 @@
   aria-label="Attribute list"
   i18n-aria-label="@@core.attribute-list.attribute-list"
   [attr.aria-colcount]="columns()?.length"
-  [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount">
+  [attr.aria-rowcount]="pagingDataSelectedTab()?.totalCount"
+  [attr.aria-busy]="loading() ? true : null"
+  [class.loading]="loading()">
 
   <ng-container [matColumnDef]="CHECK_ROW_COLUMN_NAME">
     <mat-header-cell class="column_checkbox" *matHeaderCellDef>
@@ -93,7 +95,7 @@
         <button mat-icon-button
                 [tmTooltip]="getColumnSortLabel(col.label)"
                 class="sort-button"
-                (click)="onSortClick(col.id)">
+                (click)="onSortClick(col.id, $event)">
           <mat-icon class="sort"
                     [class.sort-active]="sort?.column === col.id"
                     [svgIcon]="sort?.direction === 'desc' ? 'drop_top' : 'drop_down'">

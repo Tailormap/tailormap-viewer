@@ -90,6 +90,11 @@ export class AttributeListTableComponent {
   public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
   /** The row for which the feature is being loaded after selecting it, to show a loading indicator on that row. */
   public loadingSelectedRowId = input<string | null>(null);
+  /**
+   * While loading a page the rows are still those of the previous page. Dim them and ignore row selection, so a user does not select a
+   * feature that is not on the page being loaded.
+   */
+  public loading = input<boolean | null>(false);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
@@ -218,16 +223,24 @@ export class AttributeListTableComponent {
 
   public onRowClick($event: MouseEvent, row: AttributeListRowModel): void {
     $event.stopPropagation();
+    if (this.loading()) {
+      return;
+    }
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
   public onRowKeydown($event: Event, row: AttributeListRowModel): void {
     $event.stopPropagation();
     $event.preventDefault();
+    if (this.loading()) {
+      return;
+    }
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
-  public onSortClick(columnId: string): void {
+  public onSortClick(columnId: string, $event?: MouseEvent): void {
+    // The sort button is inside the header cell which also handles clicks, don't let the click bubble up and toggle twice
+    $event?.stopPropagation();
     if (this.isResizing) {
       return;
     }

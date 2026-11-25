@@ -6,6 +6,12 @@ mat-table {
   min-width: min-content;
 }
 
+/* Dim the rows of the previous page while the next page loads; delayed like the progress bar so fast loads do not flicker */
+mat-table.loading mat-row {
+  opacity: .5;
+  transition: opacity 150ms 300ms;
+}
+
 .column_small {
   flex: none !important;
   width: 40px !important;
@@ -73,6 +79,10 @@ mat-table {
   transform-origin: 100% 0;
   top: 4px;
   left: 1px;
+}
+
+.header-cell--with-sort {
+  cursor: pointer;
 }
 
 .header-cell--with-sort .sort {

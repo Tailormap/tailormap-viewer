@@ -519,7 +519,7 @@
       </trans-unit>
       <trans-unit id="admin-core.application.form-not-found" datatype="html">
         <source>The form for this layer has been deleted. Editing uses no form. Select another form or &quot;No form&quot;.</source>
-        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of "Geen formulier".</target>
+        <target>Het formulier van deze laag is verwijderd. Bewerken gebeurt zonder formulier. Kies een ander formulier of &quot;Geen formulier&quot;.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.hide-language-switcher" datatype="html">
         <source>Hide language switcher in viewer</source>
@@ -570,8 +570,8 @@
         <target>Toon in objectinformatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
-        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
-        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API.</target>
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API. Other functionality can still use the layer, such as a reference layer for spatial filtering or copying geometries when drawing or editing.</source>
+        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API. Andere functionaliteit kan de laag nog steeds gebruiken, bijvoorbeeld als referentielaag voor ruimtelijk filteren of voor het kopiëren van geometrieën bij tekenen of bewerken.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
@@ -1821,9 +1821,25 @@
         <source>Map CRS</source>
         <target>Kaart-CRS</target>
       </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-add-cadastral-municipality" datatype="html">
+        <source>Add cadastral municipality</source>
+        <target>Kadastrale gemeente toevoegen</target>
+      </trans-unit>
       <trans-unit id="admin-core.components.simple-search-add-municipality" datatype="html">
         <source>Add municipality</source>
         <target>Gemeente toevoegen</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality" datatype="html">
+        <source>Cadastral municipality</source>
+        <target>Kadastrale gemeente</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-municipality-filter" datatype="html">
+        <source>Cadastral municipality filter</source>
+        <target>Kadastrale gemeente filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-cadastral-parcels" datatype="html">
+        <source>Search cadastral parcels (kadastrale percelen)</source>
+        <target>Zoeken naar kadastrale percelen</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-municipality" datatype="html">
         <source>Municipality</source>
@@ -1832,6 +1848,10 @@
       <trans-unit id="admin-core.components.simple-search-municipality-filter" datatype="html">
         <source>Municipality filter</source>
         <target>Gemeente filter</target>
+      </trans-unit>
+      <trans-unit id="admin-core.components.simple-search-municipality-filter-not-for-parcels" datatype="html">
+        <source>The municipality filter does not apply to cadastral parcels.</source>
+        <target>Het gemeente filter geldt niet voor kadastrale percelen.</target>
       </trans-unit>
       <trans-unit id="admin-core.components.simple-search-pdok-settings" datatype="html">
         <source>PDOK Location search settings</source>

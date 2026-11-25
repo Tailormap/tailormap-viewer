@@ -1,0 +1,15 @@
+.datetime-field {
+  width: 100%;
+}
+
+/* Same color as the toggle of the Material datepicker */
+.picker-toggle:not(:disabled) {
+  color: var(--mat-datepicker-toggle-icon-color, var(--mat-sys-on-surface-variant));
+}
+
+/* Firefox shows a picker button of its own, which can't be hidden or styled, so hide ours. Only Firefox has -moz-appearance */
+@supports (-moz-appearance: none) {
+  .picker-toggle {
+    display: none;
+  }
+}

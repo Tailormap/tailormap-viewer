@@ -233,6 +233,23 @@ describe('MapReducer', () => {
     expect(updatedState.selectedLayer).toEqual('layer-2');
   });
 
+  test('handles MapActions.addLayerWithServicesToMap - user layer without service', () => {
+    const initialState: MapState = {
+      ...initialMapState,
+      layerTreeNodes: [getLayerTreeNode({ id: 'root', root: true, childrenIds: [] })],
+    };
+    const action = MapActions.addLayerWithServicesToMap({
+      appLayer: { ...getAppLayerModel({ id: 'user-1', serviceId: '', visible: false }), origin: 'user' },
+      layerTreeNode: mockGetLayerTreeNode({ id: 'user-node-1', appLayerId: 'user-1', root: false }),
+    });
+
+    const updatedState = mapReducer(initialState, action);
+    expect(updatedState.services).toEqual([]);
+    expect(updatedState.layers).toEqual([expect.objectContaining({ id: 'user-1', origin: 'user', visible: true })]);
+    expect(updatedState.layerTreeNodes.map(node => node.id)).toEqual([ 'root', 'user-node-1' ]);
+    expect(updatedState.layerTreeNodes[0].childrenIds).toEqual(['user-node-1']);
+  });
+
   test('handles MapActions.addLayerWithServicesToMap - existing layer is ignored', () => {
     const initialState: MapState = {
       ...initialMapState,

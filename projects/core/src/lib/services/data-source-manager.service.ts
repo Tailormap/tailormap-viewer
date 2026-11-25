@@ -29,6 +29,7 @@ export class DataSourceManagerService {
 
   public filterableLayers$: Observable<DataSourceLayerModel[]> = this.getLayers$(l => l.filterable);
   public layersWithAttributes$: Observable<DataSourceLayerModel[]> = this.getLayers$(l => l.hasAttributes);
+  public featureInfoLayers$: Observable<DataSourceLayerModel[]> = this.getLayers$(l => !!l.featureInfo);
 
   public addSource(source: DataSourceModel): void {
     this.sources$.next([

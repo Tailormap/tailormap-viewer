@@ -58,6 +58,10 @@
         <source>Go to page</source>
         <target>Zur Seite gehen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-data" datatype="html">
+        <source>Loading data</source>
+        <target>Daten werden geladen</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.loading-feature" datatype="html">
         <source>Loading feature</source>
         <target>Objekt laden</target>
@@ -697,10 +701,6 @@
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
         <target>Wähle die zu bearbeitende Layer aus</target>
-      </trans-unit>
-      <trans-unit id="core.edit.time" datatype="html">
-        <source>Time</source>
-        <target>Uhrzeit</target>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
@@ -1461,6 +1461,10 @@
       <trans-unit id="core.profile.logout" datatype="html">
         <source>Logout</source>
         <target>Abmelden</target>
+      </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Flurstücke</target>
       </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>

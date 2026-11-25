@@ -7,6 +7,8 @@ import {
   selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible, selectInitialDataSort,
 } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
   AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
@@ -52,6 +54,7 @@ const setup = (
       { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
       { selector: selectInitialDataSort, value: [] },
       { selector: selectLayers, value: [{ id: '1', layerName: 'layer1', title: '' }, { id: '2', layerName: 'layer2', title: '' }] },
+      { selector: selectEnabledFilterGroups, value: [getFilterGroup()] },
     ],
   }) as Store;
 
@@ -128,7 +131,7 @@ describe('AttributeListDataService', () => {
       layerName: 'layer1',
       applicationId: '1',
       page: 0,
-      filter: undefined,
+      filter: "(attribute ILIKE '%value%')",
       sortBy: undefined,
       sortOrder: undefined,
     });

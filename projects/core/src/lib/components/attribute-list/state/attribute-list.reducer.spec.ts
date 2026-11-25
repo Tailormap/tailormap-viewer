@@ -403,6 +403,15 @@ describe('AttributeListReducer', () => {
       expect(result.data[0].sortDirection).toBe('');
     });
 
+    test('resets page index to the first page', () => {
+      const state = createState({
+        tabs: [createTab({ id: 'tab-1' })],
+        data: [createData({ id: 'data-1', tabId: 'tab-1', pageIndex: 5 })],
+      });
+      const result = attributeListReducer(state, AttributeListActions.updateSort({ dataId: 'data-1', column: 'name', direction: 'desc' }));
+      expect(result.data[0].pageIndex).toBe(1);
+    });
+
     test('returns unchanged state when dataId not found', () => {
       const state = createState({
         data: [createData({ id: 'data-1', tabId: 'tab-1' })],

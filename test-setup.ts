@@ -63,6 +63,7 @@ Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
 Object.defineProperty(window, 'sessionStorage', { value: mockSessionStorage });
 
 Element.prototype.scrollTo = Element.prototype.scrollTo || (() => {});
+Element.prototype.scrollIntoView = Element.prototype.scrollIntoView || (() => {});
 
 // Registers a fake MatIconRegistry for every test so `<mat-icon svgIcon="...">` never tries to
 // fetch a real SVG over HttpClient (which logs a "Error retrieving icon" console error for any
@@ -98,31 +99,3 @@ afterEach(() => {
   });
   overriddenSelectors.clear();
 });
-
-vi.mock('jsts/org/locationtech/jts/io', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  WKTReader: class MockedWKTReader {
-    public read(input: string) {
-      return input;
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  WKTWriter: class MockedWKTWriter {
-    public write(input: string) {
-      return input;
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  OL3Parser: class MockedParser {
-    public inject() {/*empty*/}
-    public read(input: any) { return input; }
-    public write(input: any) { return input; }
-  },
-}));
-
-vi.mock('jsts/org/locationtech/jts/operation/buffer', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  BufferOp: {
-    bufferOp: (input: any) => input,
-  },
-}));

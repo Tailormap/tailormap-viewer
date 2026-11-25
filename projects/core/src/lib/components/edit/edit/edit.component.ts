@@ -11,7 +11,7 @@ import {
   setSelectedEditLayer,
 } from '../state/edit.actions';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { selectEditableLayers, selectOrderedVisibleLayersWithServices } from '../../../map/state/map.selectors';
+import { selectEditableLayers, selectOrderedVisibleLayers } from '../../../map/state/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, withLatestFrom } from 'rxjs/operators';
 import { hideFeatureInfoDialog } from '../../feature-info/state/feature-info.actions';
@@ -128,14 +128,14 @@ export class EditComponent implements OnInit, OnDestroy {
     );
 
     combineLatest([ this.store$.select(selectSelectedEditLayer),
-      this.store$.select(selectOrderedVisibleLayersWithServices),
+      this.store$.select(selectOrderedVisibleLayers),
       this.mapService.getMapViewDetails$() ]).pipe(
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(([ selectedEditLayerId, visibleLayers, mapViewDetails ]) => {
       const layers = selectedEditLayerId === null ? [] : visibleLayers.filter(layer =>
         layer.id !== selectedEditLayerId
         && ScaleHelper.isInScale(mapViewDetails.scale, layer.minScale, layer.maxScale)
-        && (this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id)));
+        && (layer.origin === 'user' || this.selectedCopyLayerIds.length == 0 || this.selectedCopyLayerIds.includes(layer.id)));
       this.layersToCreateNewFeaturesFrom.set(layers);
     });
 

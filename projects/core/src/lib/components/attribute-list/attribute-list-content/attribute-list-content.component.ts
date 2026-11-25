@@ -18,7 +18,6 @@ import { SimpleAttributeFilterService } from '../../../filter/services/simple-at
 import { AttributeListFilterComponent, FilterDialogData } from '../attribute-list-filter/attribute-list-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { selectViewerId } from '../../../state/core.selectors';
-import { CqlFilterHelper } from '../../../filter/helpers/cql-filter.helper';
 import { CssHelper, SnackBarMessageComponent, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { AttributeListFeatureDetailsService } from '../services/attribute-list-feature-details.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,6 +28,7 @@ import { AttributeListPagingDataType } from '../models/attribute-list-paging-dat
 import { MatButton } from '@angular/material/button';
 import { AttributeListTableComponent } from '../attribute-list-table/attribute-list-table.component';
 import { AsyncPipe } from '@angular/common';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
     selector: 'tm-attribute-list-content',
@@ -40,6 +40,7 @@ import { AsyncPipe } from '@angular/common';
         MatButton,
         AttributeListTableComponent,
         AsyncPipe,
+        MatProgressBar,
     ],
 })
 export class AttributeListContentComponent implements OnInit {
@@ -54,7 +55,7 @@ export class AttributeListContentComponent implements OnInit {
 
   public rows$: Observable<AttributeListRowModel[]> = of([]);
   public columns$: Observable<AttributeListColumnModel[]> = of([]);
-  public notLoadingData$: Observable<boolean> = of(false);
+  public loadingData$: Observable<boolean> = of(false);
   public sort$: Observable<{ column: string; direction: string } | null> = of(null);
   public filters$: Observable<AttributeFilterModel[]> = of([]);
   public selectedRowId$: Observable<string | undefined> = of(undefined);
@@ -83,7 +84,7 @@ export class AttributeListContentComponent implements OnInit {
     this.hasRows$ = this.store$.select(selectRowCountForSelectedTab).pipe(map(rowCount => rowCount > 0));
     this.hasNoRows$ = this.store$.select(selectHasNoRowsForSelectedTab);
     this.columns$ = this.store$.select(selectColumnsForSelectedTab);
-    this.notLoadingData$ = this.store$.select(selectLoadingDataSelectedTab).pipe(map(loading => !loading));
+    this.loadingData$ = this.store$.select(selectLoadingDataSelectedTab);
     this.filters$ = combineLatest([
       this.store$.select(selectSelectedTab),
       this.store$.select(selectDataForSelectedTab),
@@ -152,14 +153,13 @@ export class AttributeListContentComponent implements OnInit {
         if (applicationId === null || !selectedTab.layerId) {
           return;
         }
-        const filtersForLayer = CqlFilterHelper.getFilters(otherFilters).get(selectedTab.layerId);
         const data: FilterDialogData = {
           tabSourceId: selectedTab.tabSourceId,
           columnName: $event.columnId,
           layerId: selectedTab.layerId,
           filter: attributeFilterModel,
           columnType: $event.attributeType,
-          cqlFilters: filtersForLayer,
+          filterGroups: otherFilters,
           applicationId,
           attributeAlias,
           featureType: selectedData?.featureType,

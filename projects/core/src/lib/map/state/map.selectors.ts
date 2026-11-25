@@ -102,7 +102,11 @@ export const selectOrderedBackgroundLayerIds = createSelector(
   baseLayerTreeNodes => LayerTreeNodeHelper.getAppLayerIds(baseLayerTreeNodes, baseLayerTreeNodes.find(l => l.root)),
 );
 
-export const selectOrderedVisibleLayersWithServices = createSelector(
+/**
+ * Visible layers in layer tree order, including layers without a backend service (origin 'user'). Use this only where such layers
+ * belong, like the map and the legend; selectOrderedVisibleLayersWithServices leaves them out.
+ */
+export const selectOrderedVisibleLayers = createSelector(
   selectVisibleLayersWithServices,
   selectOrderedLayerIds,
   (layers, orderedLayerIds) => {
@@ -110,6 +114,11 @@ export const selectOrderedVisibleLayersWithServices = createSelector(
       .filter(l => orderedLayerIds.includes(l.id))
       .sort(ArrayHelper.getArraySorter('id', orderedLayerIds));
   },
+);
+
+export const selectOrderedVisibleLayersWithServices = createSelector(
+  selectOrderedVisibleLayers,
+  layers => layers.filter(l => l.origin !== 'user'),
 );
 
 export const selectVisibleLayersWithAttributes = createSelector(
@@ -145,7 +154,7 @@ export const selectSomeLayersVisible = createSelector(
 // Only layers for which a legend can be shown at the moment: has a legendImageUrl set or is a WMS/WMTS layer
 // In the future, more layer types could be added but without immediate legend support.
 export const selectOrderedVisibleLayersWithLegend = createSelector(
-  selectOrderedVisibleLayersWithServices,
+  selectOrderedVisibleLayers,
   (layers) => layers.filter(layer => layer.legendImageUrl || layer.service && [ ServiceProtocol.WMS, ServiceProtocol.WMTS ].includes(layer.service.protocol)),
 );
 

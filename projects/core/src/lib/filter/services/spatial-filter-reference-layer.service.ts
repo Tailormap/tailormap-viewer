@@ -7,7 +7,6 @@ import { SpatialFilterGeometry, SpatialFilterModel, FilterGroupModel } from '@ta
 import { updateFilterGroup } from '../../state/filter-state/filter.actions';
 import { FeaturesFilterHelper } from '../helpers/features-filter.helper';
 import { LoadGeometriesService } from '../../services/load-geometries.service';
-import { LayerFeaturesFilters } from '../models/feature-filter.model';
 import { selectLayer } from '../../map';
 import { TypesHelper } from '@tailormap-viewer/shared';
 
@@ -45,7 +44,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
           const loadedKey = `${referenceLayer}-${cqlFilter}`;
           if (currentLoadedKey !== loadedKey) {
             this.geometriesLoaded.set(group.id, loadedKey);
-            this.loadGeometries(group, referenceLayer, cqlFilter, allFilters.get(referenceLayer));
+            this.loadGeometries(group, referenceLayer);
           }
         });
       });
@@ -58,8 +57,6 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
   private loadGeometries(
     group: FilterGroupModel<SpatialFilterModel>,
     referenceLayer: string,
-    cqlFilter: string,
-    filters?: LayerFeaturesFilters | null,
   ): void {
     this.loadingGeometries.next([ ...this.loadingGeometries.value, group.id ]);
     this.store$.select(selectLayer(referenceLayer))
@@ -67,7 +64,7 @@ export class SpatialFilterReferenceLayerService implements OnDestroy {
         filter(layer => TypesHelper.isDefined(layer)),
         take(1),
         switchMap(layer => {
-          return this.loadFeaturesService.loadGeometries$(SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES, referenceLayer, layer.layerName, filters)
+          return this.loadFeaturesService.loadGeometries$(SpatialFilterReferenceLayerService.MAX_REFERENCE_FEATURES, referenceLayer, layer.layerName)
             .pipe(take(1));
         }),
       )
