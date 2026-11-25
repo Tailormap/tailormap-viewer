@@ -21,12 +21,11 @@ const mockLayer = {
   searchIndex: null,
 };
 
-const setup = async (snappingActive = false) => {
+const setup = async (snappingActive = false, hasSnappingLayers = true, selectableLayers = [mockLayer]) => {
   const mapServiceMock = {
     setSnappingTolerance: vi.fn(),
     setSnappingLayerStyle: vi.fn(),
     setSnappingFeatures: vi.fn(),
-    allowSnapping: vi.fn(),
   };
 
   const snappingServiceMock = {
@@ -34,8 +33,8 @@ const setup = async (snappingActive = false) => {
     snappingGeometries$: new BehaviorSubject([]),
     snappingActive$: of(snappingActive),
     isSnappingActive: vi.fn(() => snappingActive),
-    hasSelectableLayers$: of(true),
-    selectableLayers$: of([mockLayer]),
+    hasSnappingLayers: vi.fn(() => hasSnappingLayers),
+    selectableLayers$: of(selectableLayers),
     toggleLayer: vi.fn(),
     enableSnapping: vi.fn(),
     disableSnapping: vi.fn(),
@@ -70,18 +69,27 @@ describe('SnappingComponent', () => {
   });
 
   test('should enable snapping when toggle button is clicked', async () => {
-    const { mapServiceMock, snappingServiceMock } = await setup();
+    const { snappingServiceMock } = await setup();
     await userEvent.click(screen.getAllByRole('presentation')[0]);
-    expect(mapServiceMock.allowSnapping).toHaveBeenCalledWith(true);
     expect(snappingServiceMock.enableSnapping).toHaveBeenCalled();
   });
 
-  test('should disable snapping when toggle button is clicked a second time', async () => {
-    const { mapServiceMock, snappingServiceMock } = await setup(true);
-    const toggleBtn = screen.getAllByRole('presentation')[0];
-    await userEvent.click(toggleBtn);
-    await userEvent.click(toggleBtn);
-    expect(mapServiceMock.allowSnapping).toHaveBeenLastCalledWith(false);
+  test('should open layer menu instead of enabling snapping when no snapping layers are selected', async () => {
+    const { snappingServiceMock } = await setup(false, false);
+    await userEvent.click(screen.getAllByRole('presentation')[0]);
+    expect(snappingServiceMock.enableSnapping).not.toHaveBeenCalled();
+    expect(await screen.findByText('Layer One')).toBeInTheDocument();
+  });
+
+  test('should show tool with message when there are no visible layers', async () => {
+    await setup(false, false, []);
+    await userEvent.click(screen.getAllByRole('presentation')[1]);
+    expect(await screen.findByText(/There are no visible layers to snap to/)).toBeInTheDocument();
+  });
+
+  test('should disable snapping when toggle button is clicked while active', async () => {
+    const { snappingServiceMock } = await setup(true);
+    await userEvent.click(screen.getAllByRole('presentation')[0]);
     expect(snappingServiceMock.disableSnapping).toHaveBeenCalled();
   });
 
