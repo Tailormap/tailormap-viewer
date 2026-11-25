@@ -11,7 +11,7 @@ export class ExternalLibsLoaderHelper {
 
   public static loadScript$(url: string): Observable<boolean> {
     const scriptUrl = ExternalLibsLoaderHelper.baseHref + url;
-    const current = ExternalLibsLoaderHelper.loadedScripts.get(url);
+    const current = ExternalLibsLoaderHelper.loadedScripts.get(scriptUrl);
     if (current) {
       return current.asObservable();
     }
