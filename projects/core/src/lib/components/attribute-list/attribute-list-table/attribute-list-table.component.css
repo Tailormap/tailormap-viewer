@@ -237,6 +237,18 @@ mat-table.loading mat-row {
   background-color: var(--primary-color-0_1);
 }
 
+/* Progress bar along the bottom of a row while its feature loads after selecting it, see the first data cell in the template */
+.loading_row {
+  position: relative;
+}
+
+.row-loading-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .selected_row .mat-mdc-cell {
   color: var(--primary-color);
 }

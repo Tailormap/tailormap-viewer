@@ -113,6 +113,13 @@
                 [attr.aria-rowindex]="rowIndexMap().get(currRow.id)">
         <div class="cell-content"
         [title]="currRow.attributes[col.id]">{{currRow.attributes[col.id]}}</div>
+        <!-- MatRow does not project content, so render the row loading bar in the first data cell; it is positioned against the row -->
+        @if ($first && loadingSelectedRowId() === currRow.id) {
+          <mat-progress-bar class="row-loading-bar"
+                            mode="indeterminate"
+                            aria-label="Loading feature"
+                            i18n-aria-label="@@core.attribute-list.loading-feature"></mat-progress-bar>
+        }
       </mat-cell>
       @if (showStatistics()) {
         <mat-footer-cell *matFooterCellDef class="statistics-footer-cell"
@@ -160,6 +167,8 @@
     tabindex="0"
     [class.even_row]="dataIndex % 2 === 1"
     [class.selected_row]="isSelected(row)"
+    [class.loading_row]="loadingSelectedRowId() === row.id"
+    [attr.aria-busy]="loadingSelectedRowId() === row.id ? true : null"
     [attr.aria-rowindex]="rowIndexMap().get(row.id)"></mat-row>
 
   <mat-row *matRowDef="let row; columns: [EXPAND_DETAILS_ROW_NAME]" class="details-row"

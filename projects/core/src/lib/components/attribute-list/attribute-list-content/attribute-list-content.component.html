@@ -33,6 +33,7 @@
       [showStatistics]="showStatistics$ | async"
       [statistics]="statistics$ | async"
       [pagingDataSelectedTab]="pagingDataSelectedTab$ | async"
+      [loadingSelectedRowId]="loadingSelectedRowId$ | async"
       [loading]="loadingData$ | async"
       (selectRow)="onSelectRow($event)"
       (setSort)="onSortClick($event)"
