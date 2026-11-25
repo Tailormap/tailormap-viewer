@@ -1458,6 +1458,10 @@
         <source>Logout</source>
         <target>Uitloggen</target>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Kadastrale percelen</target>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
         <target>Locatie</target>

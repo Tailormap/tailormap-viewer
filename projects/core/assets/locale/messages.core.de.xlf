@@ -1458,6 +1458,10 @@
         <source>Logout</source>
         <target>Abmelden</target>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+        <target>Flurstücke</target>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
         <target>Ort</target>
