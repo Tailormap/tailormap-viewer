@@ -429,7 +429,7 @@
         <source>Show in object information</source>
       </trans-unit>
       <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
-        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API. Other functionality can still use the layer, such as a reference layer for spatial filtering or copying geometries when drawing or editing.</source>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>

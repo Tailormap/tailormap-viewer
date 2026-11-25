@@ -570,8 +570,8 @@
         <target>Toon in objectinformatie</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layerFunctionality.warning" datatype="html">
-        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</source>
-        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API.</target>
+        <source>Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API. Other functionality can still use the layer, such as a reference layer for spatial filtering or copying geometries when drawing or editing.</source>
+        <target>Opmerking: deze selectievakjes verbergen alleen gebruikersinterface-elementen. Gegevens zijn nog steeds toegankelijk via de API. Andere functionaliteit kan de laag nog steeds gebruiken, bijvoorbeeld als referentielaag voor ruimtelijk filteren of voor het kopiëren van geometrieën bij tekenen of bewerken.</target>
       </trans-unit>
       <trans-unit id="admin-core.application.layers" datatype="html">
         <source>Layers</source>
