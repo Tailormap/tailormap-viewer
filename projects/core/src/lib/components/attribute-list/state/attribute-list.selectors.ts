@@ -218,9 +218,12 @@ export const selectPagingDataSelectedTab = createSelector(
   selectLoadingDataSelectedTab,
   (data: AttributeListDataModel | null, loading: boolean): AttributeListPagingDataType => {
     if (!data) {
-      return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0, knownTotalCount: 0, paginatorLength: 0 };
+      return { id: '', totalCount: 0, pageIndex: 0, pageSize: 0, knownTotalCount: 0, paginatorLength: 0, pageLoaded: false };
     }
-    return AttributeListPagingHelper.getPagingData(data.id, data.totalCount, data.pageIndex, data.pageSize, data.rows.length, loading);
+    // While another page loads, show the paging of the page the rows are from, so the paginator only reflects a response
+    const pageIndex = loading ? data.loadedPageIndex ?? data.pageIndex : data.pageIndex;
+    const pageLoaded = typeof data.loadedPageIndex !== 'undefined';
+    return AttributeListPagingHelper.getPagingData(data.id, data.totalCount, pageIndex, data.pageSize, data.rows.length, pageLoaded);
   },
 );
 

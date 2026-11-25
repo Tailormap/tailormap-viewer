@@ -23,13 +23,13 @@
   </div>
 
   @if (pagingData$ | async; as pagingData) {
-    <div class="paging">
+    <div class="paging" [class.unknown-total]="pagingData.knownTotalCount === null" [class.page-not-loaded]="!pagingData.pageLoaded">
       <mat-paginator [pageSize]="pagingData.pageSize"
         [pageIndex]="pagingData.pageIndex - 1"
         [length]="pagingData.paginatorLength"
         [hidePageSize]="true"
         [disabled]="loadingData$ | async"
-        [showFirstLastButtons]="pagingData.knownTotalCount !== null"
+        [showFirstLastButtons]="true"
         (click)="showJumpToPage($event)"
         (page)="onPageChange($event)">
       </mat-paginator>

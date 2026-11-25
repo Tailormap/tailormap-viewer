@@ -14,7 +14,7 @@ describe('I18nPaginatorIntl', () => {
     const intl = new I18nPaginatorIntl();
     intl.setTotalUnknown(true);
     expect(intl.getRangeLabel(0, 100, 101)).toBe('1 - 100 of unknown');
-    expect(intl.getRangeLabel(4, 100, 400)).toBe('0 of unknown');
+    expect(intl.getRangeLabel(4, 100, 400)).toBe('Page 5 is empty');
   });
 
   test('emits changes only when the unknown total flag changes', () => {

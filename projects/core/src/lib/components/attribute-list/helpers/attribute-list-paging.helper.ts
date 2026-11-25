@@ -10,9 +10,9 @@ export class AttributeListPagingHelper {
    * @param totalCount The total as reported by the source
    * @param pageIndex The 1-based page index
    * @param pageSize The page size
-   * @param rowCount The number of rows on the current page
-   * @param loading Whether a page is loading. The page index is updated before loading, but the rows are still those of the
-   * previous page, so the rows can not be used to derive the total.
+   * @param rowCount The number of rows on the current page. The page index must be the page these rows are from, also while
+   * another page is loading, otherwise the total derived from the rows is wrong.
+   * @param pageLoaded Whether a page has been loaded
    */
   public static getPagingData(
     id: string,
@@ -20,18 +20,15 @@ export class AttributeListPagingHelper {
     pageIndex: number,
     pageSize: number,
     rowCount: number,
-    loading = false,
+    pageLoaded = true,
   ): AttributeListPagingDataType {
-    if (loading && !AttributeListPagingHelper.isTotalCountKnown(totalCount)) {
-      return { id, totalCount, pageIndex, pageSize, knownTotalCount: null, paginatorLength: Math.max(pageIndex, 0) * pageSize };
-    }
     const knownTotalCount = AttributeListPagingHelper.getKnownTotalCount(totalCount, pageIndex, pageSize, rowCount);
     let paginatorLength = knownTotalCount;
     if (paginatorLength === null) {
       const offset = Math.max(pageIndex - 1, 0) * pageSize;
       paginatorLength = offset + rowCount + (rowCount >= pageSize ? 1 : 0);
     }
-    return { id, totalCount, pageIndex, pageSize, knownTotalCount, paginatorLength };
+    return { id, totalCount, pageIndex, pageSize, knownTotalCount, paginatorLength, pageLoaded };
   }
 
   private static isTotalCountKnown(totalCount: number | null): totalCount is number {

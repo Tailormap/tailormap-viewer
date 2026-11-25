@@ -57,6 +57,7 @@ export class AttributeListTabToolbarComponent implements OnInit {
   private attributeListApiService = inject(AttributeListManagerService);
   private paginatorIntl = inject(I18nPaginatorIntl);
   private attributeListFeaturesContainer = viewChild('attributeListFeaturesContainer', { read: ViewContainerRef });
+  private paginator = viewChild(MatPaginator);
 
   public columns: AttributeListColumnModel[] = [];
 
@@ -117,6 +118,12 @@ export class AttributeListTabToolbarComponent implements OnInit {
   }
 
   public onPageChange($event: PageEvent): void {
+    // The paginator already changed its page index, but it should show the page the rows are from until the requested page is
+    // loaded. The page index input does not change while loading, so it does not reset the paginator: set it back here.
+    const paginator = this.paginator();
+    if (paginator) {
+      paginator.pageIndex = $event.previousPageIndex ?? paginator.pageIndex;
+    }
     this.attributeListStateService.executeActionForCurrentData(dataId => {
       this.attributeListDataService.updatePage(dataId, $event.pageIndex + 1);
     });

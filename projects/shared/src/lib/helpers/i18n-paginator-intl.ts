@@ -28,7 +28,9 @@ export class I18nPaginatorIntl extends MatPaginatorIntl {
     const end = Math.min((page + 1) * pageSize, length);
     if (this.totalUnknown) {
       if (end < start) {
-        return $localize`:@@shared.paginator.range-label-empty-unknown:0 of unknown`;
+        // Only happens for a page past the last page, for example after going to a page number that is too high
+        const pageNumber = page + 1;
+        return $localize`:@@shared.paginator.range-label-empty-page:Page ${pageNumber} is empty`;
       }
       return $localize`:@@shared.paginator.range-label-unknown:${start} - ${end} of unknown`;
     }

@@ -18,14 +18,14 @@ import { AttributeListManagerService } from '../services/attribute-list-manager.
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { AttributeListExportButtonComponent } from '../attribute-list-export-button/attribute-list-export-button.component';
 
-const setup = async (totalCount: number | null, pageIndex: number, rowCount: number) => {
+const setup = async (totalCount: number | null, pageIndex: number, rowCount: number, pageLoaded = true) => {
   const updatePage = vi.fn();
   await render(AttributeListTabToolbarComponent, {
     providers: [
       provideMockStore({
         selectors: [
           { selector: selectLoadingDataSelectedTab, value: false },
-          { selector: selectPagingDataSelectedTab, value: AttributeListPagingHelper.getPagingData('data-1', totalCount, pageIndex, 100, rowCount) },
+          { selector: selectPagingDataSelectedTab, value: AttributeListPagingHelper.getPagingData('data-1', totalCount, pageIndex, 100, rowCount, pageLoaded) },
           { selector: selectSelectedTab, value: null },
           { selector: selectDataForSelectedTab, value: null },
           { selector: selectHasNoRowsForSelectedTab, value: false },
@@ -49,21 +49,29 @@ const setup = async (totalCount: number | null, pageIndex: number, rowCount: num
 // The paginator buttons use disabledInteractive, so they are disabled with aria-disabled instead of the disabled attribute.
 describe('AttributeListTabToolbarComponent', () => {
 
+  test('shows no range label before the first page is loaded', async () => {
+    await setup(null, 1, 0, false);
+    expect(await screen.findByText('0 of 0')).not.toBeVisible();
+  });
+
   test('shows the total when known', async () => {
     await setup(250, 1, 100);
-    expect(await screen.findByText('1 - 100 of 250')).toBeInTheDocument();
+    expect(await screen.findByText('1 - 100 of 250')).toBeVisible();
     expect(screen.getByRole('button', { name: 'Next page' })).not.toHaveAttribute('aria-disabled', 'true');
-    expect(screen.getByRole('button', { name: 'Last page' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Last page' })).toBeVisible();
   });
 
   test('allows the next page when the total is unknown and the page is full', async () => {
     const { updatePage } = await setup(-1, 1, 100);
     expect(await screen.findByText('1 - 100 of unknown')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Last page' })).not.toBeInTheDocument();
+    // Hidden with CSS, as the paginator can only show both the first and last page buttons
+    expect(screen.getByLabelText('Last page')).not.toBeVisible();
     const next = screen.getByRole('button', { name: 'Next page' });
     expect(next).not.toHaveAttribute('aria-disabled', 'true');
     await userEvent.click(next);
     expect(updatePage).toHaveBeenCalledWith('data-1', 2);
+    // Until the requested page is loaded the paginator shows the page the rows are from
+    expect(screen.getByText('1 - 100 of unknown')).toBeInTheDocument();
   });
 
   test('shows the derived total on the last page when the total is unknown', async () => {
@@ -71,6 +79,18 @@ describe('AttributeListTabToolbarComponent', () => {
     expect(await screen.findByText('201 - 242 of 242')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next page' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('button', { name: 'Previous page' })).not.toHaveAttribute('aria-disabled', 'true');
+  });
+
+  test('allows going to the first page from an empty page past the last page when the total is unknown', async () => {
+    const { updatePage } = await setup(-1, 396, 0);
+    expect(await screen.findByText('Page 396 is empty')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next page' })).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByLabelText('Last page')).not.toBeVisible();
+    const first = screen.getByRole('button', { name: 'First page' });
+    expect(first).toBeVisible();
+    expect(first).not.toHaveAttribute('aria-disabled', 'true');
+    await userEvent.click(first);
+    expect(updatePage).toHaveBeenCalledWith('data-1', 1);
   });
 
 });

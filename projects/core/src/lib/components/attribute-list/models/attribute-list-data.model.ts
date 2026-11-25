@@ -10,7 +10,13 @@ export interface AttributeListDataModel {
   checkedRows: { id: string; __fid: string }[];
   selectedRowId?: string;
   pageSize: number;
+  /** 1-based index of the page to show. Updated when another page is requested, before it is loaded. */
   pageIndex: number;
+  /**
+   * 1-based index of the page the rows are from. While another page loads, the rows (and the paginator showing them) are still
+   * those of this page. Undefined before the first page is loaded.
+   */
+  loadedPageIndex?: number;
   totalCount: number | null;
   sortedColumn?: string;
   sortDirection: 'asc' | 'desc' | '';

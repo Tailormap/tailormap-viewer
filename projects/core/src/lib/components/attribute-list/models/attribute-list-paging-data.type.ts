@@ -18,4 +18,6 @@ export type AttributeListPagingDataType = {
    * features up to and including the current page, so the paginator allows going to the next page.
    */
   paginatorLength: number;
+  /** Whether a page has been loaded. Before that (initial load) there is nothing to show a range label for. */
+  pageLoaded: boolean;
 };

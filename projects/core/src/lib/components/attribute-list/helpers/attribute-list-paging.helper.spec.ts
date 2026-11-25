@@ -5,7 +5,7 @@ describe('AttributeListPagingHelper', () => {
 
   test('uses the total from the source when known', () => {
     const paging = AttributeListPagingHelper.getPagingData('1', 250, 1, 100, 100);
-    expect(paging).toEqual({ id: '1', totalCount: 250, pageIndex: 1, pageSize: 100, knownTotalCount: 250, paginatorLength: 250 });
+    expect(paging).toEqual({ id: '1', totalCount: 250, pageIndex: 1, pageSize: 100, knownTotalCount: 250, paginatorLength: 250, pageLoaded: true });
   });
 
   test('uses a total of 0 from the source', () => {
@@ -42,19 +42,6 @@ describe('AttributeListPagingHelper', () => {
     const paging = AttributeListPagingHelper.getPagingData('1', -1, 5, 100, 0);
     expect(paging.knownTotalCount).toBeNull();
     expect(paging.paginatorLength).toBe(400);
-  });
-
-  test('does not derive the total from the rows of the previous page while loading', () => {
-    // Jumped from page 4 (42 rows) to page 2: the rows are still those of page 4 until loaded
-    const paging = AttributeListPagingHelper.getPagingData('1', -1, 2, 100, 42, true);
-    expect(paging.knownTotalCount).toBeNull();
-    expect(paging.paginatorLength).toBe(200);
-  });
-
-  test('uses the total from the source while loading', () => {
-    const paging = AttributeListPagingHelper.getPagingData('1', 250, 2, 100, 100, true);
-    expect(paging.knownTotalCount).toBe(250);
-    expect(paging.paginatorLength).toBe(250);
   });
 
   test('uses the row count when there is no page size', () => {

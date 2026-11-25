@@ -421,9 +421,9 @@
         <source>0 of 0</source>
         <target>0 van de 0</target>
       </trans-unit>
-      <trans-unit id="shared.paginator.range-label-empty-unknown" datatype="html">
-        <source>0 of unknown</source>
-        <target>0 van onbekend</target>
+      <trans-unit id="shared.paginator.range-label-empty-page" datatype="html">
+        <source>Page <x id="PH" equiv-text="pageNumber"/> is empty</source>
+        <target>Pagina <x id="PH" equiv-text="pageNumber"/> is leeg</target>
       </trans-unit>
       <trans-unit id="shared.paginator.range-label-unknown" datatype="html">
         <source><x id="PH" equiv-text="start"/> - <x id="PH_1" equiv-text="end"/> of unknown</source>
