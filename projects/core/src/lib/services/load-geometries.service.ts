@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { FeatureModel } from '@tailormap-viewer/api';
-import { catchError, filter, map, Observable, of, switchMap, take } from 'rxjs';
-import { selectViewerId } from '../state';
+import { FeatureModel, FilterGroupModel } from '@tailormap-viewer/api';
+import { catchError, combineLatest, filter, map, Observable, of, switchMap, take } from 'rxjs';
+import { selectEnabledFilterGroups, selectViewerId } from '../state';
 import { TypesHelper } from '@tailormap-viewer/shared';
 import { Store } from '@ngrx/store';
 import { DataSourceManagerService } from '../services';
-import { LayerFeaturesFilters } from '../filter';
+import { GetFeaturesParams } from '../models/get-features-param.model';
 
 interface LoadFeaturesResponse {
   features: FeatureModel[];
@@ -34,20 +34,21 @@ export class LoadGeometriesService {
     maxFeatures: number,
     layerId: string,
     layerName: string,
-    filters?: LayerFeaturesFilters | null,
+    bbox?: GetFeaturesParams['bbox'],
   ): Observable<LoadedFeaturesResponse> {
-    return this.store$.select(selectViewerId)
+    return combineLatest([ this.store$.select(selectViewerId), this.store$.select(selectEnabledFilterGroups) ])
       .pipe(
-        filter(TypesHelper.isDefined),
+        filter((result): result is [ string, FilterGroupModel[] ] => TypesHelper.isDefined(result[0])),
         take(1),
-        switchMap(applicationId => {
+        switchMap(([ applicationId, filterGroups ]) => {
           return this.dataSourceManagerService.getFeatures$({
             layerId,
             applicationId,
             layerName,
             page: 1,
             pageSize: maxFeatures,
-            filter: filters,
+            filterGroups,
+            bbox,
             includeGeometry: true,
           }).pipe(
             map((response): LoadFeaturesResponse => ({

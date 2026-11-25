@@ -10,6 +10,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-bottom: 0;
+  line-height: 1.2;
 }
 
 .close-button {
@@ -30,6 +31,7 @@
 }
 
 .layer-description {
+  padding-top: 0 !important;
   max-height: 100%;
   max-width: 100%;
 }

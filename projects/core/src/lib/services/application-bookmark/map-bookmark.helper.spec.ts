@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { MapBookmarkHelper } from './map-bookmark.helper';
 import { AppLayerModel, getAppLayerModel } from '@tailormap-viewer/api';
 import { MapViewDetailsModel, MapUnitEnum } from '@tailormap-viewer/map';
-import { AppLayerStateModel } from '../../map';
+import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../../map';
 
 const getAppLayerWithInitialValuesModel =
   (partial: Partial<AppLayerModel>, initialVisibility?: boolean, initialOpacity?: number, initialStyle?: string): AppLayerStateModel => {
@@ -171,5 +171,62 @@ describe('MapBookmarkHelper', () => {
       { id: '256', v: 0 },
       { id: '512', v: 1 },
     ]);
+  });
+
+  test('fragmentFromLayerSettings skips user layers', () => {
+    const userLayer: AppLayerStateModel = { ...getAppLayerWithInitialValuesModel({ id: 'user-1', visible: true }, false, 50), origin: 'user' };
+    expect(MapBookmarkHelper.fragmentFromLayerSettings([ ...twoFlippedLayers, userLayer ])).toEqual([
+      { id: '1', v: 1 },
+      { id: '2', v: 0 },
+    ]);
+  });
+
+  test('layerSettingsFromFragment does not reset user layers', () => {
+    const userLayer: AppLayerStateModel = { ...getAppLayerWithInitialValuesModel({ id: 'user-1', visible: true }, false), origin: 'user' };
+    expect(MapBookmarkHelper.layerSettingsFromFragment([], [userLayer], false))
+      .toEqual({ visibilityChanges: [], opacityChanges: [], styleChanges: [] });
+  });
+
+  describe('fragmentFromLayerTreeOrder', () => {
+    const node = (id: string, childrenIds: string[] = [], initialChildren = childrenIds, appLayerId?: string): ExtendedLayerTreeNodeModel => ({
+      id, name: id, root: id === 'root', childrenIds, initialChildren, appLayerId, description: '',
+    });
+    const serviceLayers = [ getAppLayerWithInitialValuesModel({ id: 'a' }), getAppLayerWithInitialValuesModel({ id: 'b' }) ];
+    const userLayers: AppLayerStateModel[] = [
+      { ...getAppLayerWithInitialValuesModel({ id: 'u1' }), origin: 'user' },
+      { ...getAppLayerWithInitialValuesModel({ id: 'u2' }), origin: 'user' },
+    ];
+    const layers = [ ...serviceLayers, ...userLayers ];
+    // A user layers level is added at runtime: its id is in nobody's initialChildren
+    const userLevel = node('user-level', [ 'node-u2', 'node-u1' ], [ 'node-u1', 'node-u2' ]);
+    const userNodes = [ node('node-u1', [], [], 'u1'), node('node-u2', [], [], 'u2') ];
+    const serviceNodes = [ node('level-1', [ 'node-a', 'node-b' ]), node('node-a', [], [], 'a'), node('node-b', [], [], 'b') ];
+
+    test('a user layers level under the root does not produce a fragment', () => {
+      const tree = [ node('root', [ 'user-level', 'level-1' ], ['level-1']), userLevel, ...userNodes, ...serviceNodes ];
+      expect(MapBookmarkHelper.fragmentFromLayerTreeOrder(tree, layers)).toBeUndefined();
+    });
+
+    test('user layer nodes are dropped from service levels', () => {
+      const tree = [
+        node('root', [ 'user-level', 'level-1' ], ['level-1']),
+        node('user-level', ['node-u2'], ['node-u1']),
+        ...userNodes,
+        node('level-1', [ 'node-b', 'node-u1', 'node-a' ], [ 'node-a', 'node-b' ]),
+        ...serviceNodes.slice(1),
+      ];
+      expect(MapBookmarkHelper.fragmentFromLayerTreeOrder(tree, layers)).toEqual([{ id: 'level-1', c: [ 'node-b', 'node-a' ] }]);
+    });
+
+    test('order changes of service nodes are still serialized', () => {
+      const tree = [
+        node('root', [ 'level-1', 'user-level' ], ['level-1']),
+        userLevel,
+        ...userNodes,
+        node('level-1', [ 'node-b', 'node-a' ], [ 'node-a', 'node-b' ]),
+        ...serviceNodes.slice(1),
+      ];
+      expect(MapBookmarkHelper.fragmentFromLayerTreeOrder(tree, layers)).toEqual([{ id: 'level-1', c: [ 'node-b', 'node-a' ] }]);
+    });
   });
 });

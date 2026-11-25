@@ -1,4 +1,19 @@
-@import "@milkdown/crepe/theme/common/style.css";
+/*
+ * The files from "@milkdown/crepe/theme/common/style.css", except latex.css and code-mirror.css: those Crepe features
+ * are disabled in the component. latex.css imports the KaTeX CSS, whose fonts ng-packagr would inline as base64 data
+ * URIs (about 3 MB) in the published library.
+ */
+@import "@milkdown/crepe/theme/common/prosemirror.css";
+@import "@milkdown/crepe/theme/common/reset.css";
+@import "@milkdown/crepe/theme/common/block-edit.css";
+@import "@milkdown/crepe/theme/common/cursor.css";
+@import "@milkdown/crepe/theme/common/image-block.css";
+@import "@milkdown/crepe/theme/common/link-tooltip.css";
+@import "@milkdown/crepe/theme/common/list-item.css";
+@import "@milkdown/crepe/theme/common/placeholder.css";
+@import "@milkdown/crepe/theme/common/toolbar.css";
+@import "@milkdown/crepe/theme/common/table.css";
+@import "@milkdown/crepe/theme/common/diff.css";
 @import "@milkdown/crepe/theme/frame.css";
 
 .markdown-wrap .milkdown .editor {

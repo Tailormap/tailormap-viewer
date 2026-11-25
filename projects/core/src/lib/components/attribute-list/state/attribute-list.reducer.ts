@@ -172,6 +172,8 @@ const onUpdateSort = (
         ...d,
         sortedColumn: payload.direction !== '' ? payload.column : '',
         sortDirection: payload.direction,
+        // The rows on the current page are arbitrary after a re-sort, go back to the first page
+        pageIndex: 1,
       }),
     ),
   };

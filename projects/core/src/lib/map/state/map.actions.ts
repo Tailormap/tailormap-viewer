@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { AppLayerModel, LayerDetailsModel, LayerTreeNodeModel, ServiceModel } from '@tailormap-viewer/api';
 import { ExtendedMapResponseModel } from '../models/extended-map-response.model';
-import { ExtendedLayerTreeNodeModel } from '../models';
+import { AppLayerStateModel, ExtendedLayerTreeNodeModel } from '../models';
 
 const mapActionsPrefix = '[Map]';
 
@@ -48,7 +48,7 @@ export const addLayerTreeNodes = createAction(
 export const addLayerWithServicesToMap = createAction(
   `${mapActionsPrefix} Add Layer with Services To Map`,
   props<{
-    appLayer: AppLayerModel;
+    appLayer: AppLayerStateModel;
     service?: ServiceModel;
     layerTreeNode?: LayerTreeNodeModel;
     siblingLayerTreeNodeId?: string;

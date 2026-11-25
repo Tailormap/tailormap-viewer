@@ -4,10 +4,11 @@ import {
 } from '@tailormap-viewer/api';
 import { Store } from '@ngrx/store';
 import { selectViewerId } from '../../state/core.selectors';
+import { selectEnabledFilterGroups } from '../../state/filter-state/filter.selectors';
 import { catchError, combineLatest, concatMap, forkJoin, map, mergeMap, Observable, of, switchMap, take, tap } from 'rxjs';
 import { emptyFeaturesResponse, FeatureInfoResponseModel } from './models/feature-info-response.model';
 import {
-  selectEditableLayers, selectLayer, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
+  selectEditableLayers, selectLayer, selectLayers, selectVisibleLayersWithAttributes, selectVisibleWMSLayersWithoutAttributes,
 } from '../../map/state/map.selectors';
 import { FeatureInfo3DModel, MapService, MapViewDetailsModel, ScaleHelper } from '@tailormap-viewer/map';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -17,6 +18,8 @@ import { LoadingStateEnum } from '@tailormap-viewer/shared';
 import { loadFeatureInfo, updateFeatureInFeatureInfo } from './state/feature-info.actions';
 import { FeatureInfoFeatureModel } from './models/feature-info-feature.model';
 import { FeaturesFilterHelper } from '../../filter';
+import { DataSourceManagerService } from '../../services/data-source-manager.service';
+import { DataSourceLayerModel } from '../../models/data-source.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +39,7 @@ export class FeatureInfoService {
   private httpService = inject(HttpClient);
   private apiService = inject(TAILORMAP_API_V1_SERVICE);
   private filterService = inject(FilterService);
+  private dataSourceManager = inject(DataSourceManagerService);
 
   public fetchFeatures$(
     mapCoordinates: [number, number],
@@ -49,17 +53,21 @@ export class FeatureInfoService {
       cesiumFeatureInfo?.layerId ? this.store$.select(selectLayer(cesiumFeatureInfo.layerId)) : of(null),
       this.mapService.getMapViewDetails$(),
       this.store$.select(selectViewerId),
+      this.getFeatureInfoDataSourceLayers$(),
     ])
       .pipe(
         take(1),
-        tap(([ layers, wmsLayers, cesiumLayer, mapViewDetails ]) => {
+        tap(([ layers, wmsLayers, cesiumLayer, mapViewDetails, _viewerId, dataSourceLayers ]) => {
           const allLayers = [ ...layers, ...wmsLayers ];
           if (cesiumLayer) {
             allLayers.push(cesiumLayer);
           }
-          const featureInfoLayers = allLayers
-            .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
-            .filter(l => ScaleHelper.isInScale(mapViewDetails.scale, l.minScale, l.maxScale))
+          const featureInfoLayers = [
+            ...allLayers
+              .filter(l => !l.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo))
+              .filter(l => ScaleHelper.isInScale(mapViewDetails.scale, l.minScale, l.maxScale)),
+            ...dataSourceLayers,
+          ]
             .sort((l1, l2) => l1.title.localeCompare(l2.title))
             .map<FeatureInfoLayerModel>(l => ({
               id: l.id,
@@ -68,13 +76,14 @@ export class FeatureInfoService {
             }));
           this.store$.dispatch(loadFeatureInfo({ mapCoordinates, mouseCoordinates, layers: featureInfoLayers }));
         }),
-        mergeMap(([ layers, wmsLayers, _cesiumLayer, mapViewDetails, viewerId ]) => {
+        mergeMap(([ layers, wmsLayers, _cesiumLayer, mapViewDetails, viewerId, dataSourceLayers ]) => {
           if (!viewerId) {
             return [];
           }
           const requests$ = [
             ...layers.map(l => this.getFeatureInfoFromApi$(l.id, mapCoordinates, viewerId, mapViewDetails, false, pointerType)),
             ...wmsLayers.map(l => this.getWmsGetFeatureInfo$(l.id, mapCoordinates)),
+            ...dataSourceLayers.map(l => this.getFeatureInfoFromDataSource$(l, mapCoordinates, viewerId, mapViewDetails, pointerType)),
           ];
           if (cesiumFeatureInfo) {
             requests$.push(of(this.featureInfo3DToResponse(cesiumFeatureInfo)));
@@ -99,10 +108,11 @@ export class FeatureInfoService {
       this.store$.select(selectVisibleWMSLayersWithoutAttributes),
       this.store$.select(selectViewerId),
       this.mapService.getMapViewDetails$(),
+      this.getFeatureInfoDataSourceLayers$(),
     ])
       .pipe(
         take(1),
-        switchMap(([ layers, wmsLayers, viewerId, mapViewDetails ]) => {
+        switchMap(([ layers, wmsLayers, viewerId, mapViewDetails, dataSourceLayers ]) => {
           if (!viewerId) {
             return of(null);
           }
@@ -110,6 +120,10 @@ export class FeatureInfoService {
             return this.getFeatureInfoFromApi$(selectedLayer!, coordinates, viewerId, mapViewDetails, false, pointerType, withAttachments);
           } else if (wmsLayers.some(l => l.id === selectedLayer)) {
             return this.getWmsGetFeatureInfo$(selectedLayer!, coordinates);
+          }
+          const dataSourceLayer = dataSourceLayers.find(l => l.id === selectedLayer);
+          if (dataSourceLayer) {
+            return this.getFeatureInfoFromDataSource$(dataSourceLayer, coordinates, viewerId, mapViewDetails, pointerType);
           } else {
             return of(null);
           }
@@ -166,10 +180,7 @@ export class FeatureInfoService {
     withAttachments = true,
   ): Observable<FeatureInfoResponseModel> {
     const layerFilter = this.filterService.getFilterForLayer(layerId);
-    // meters per pixel * fixed value
-    const distance = pointerType === 'touch'
-      ? resolutions.resolution * FeatureInfoService.TOUCH_DISTANCE
-      : resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE;
+    const distance = FeatureInfoService.getDistance(resolutions, pointerType);
     return this.apiService.getFeatures$({
       layerId,
       applicationId,
@@ -181,21 +192,81 @@ export class FeatureInfoService {
       withAttachments,
       filter: FeaturesFilterHelper.getFilter(layerFilter) || undefined,
     }).pipe(
-      map((featureInfoResult: FeaturesResponseModel): FeatureInfoResponseModel => ({
-        features: (featureInfoResult.features || []).map(feature => ({ ...feature, layerId })),
-        columnMetadata: (featureInfoResult.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
-        attachmentMetadata: (featureInfoResult.attachmentMetadata || []).map(metadata=> ({ ...metadata, layerId })),
-        template: featureInfoResult.template,
-        layerId,
+      map(response => FeatureInfoService.featuresResponseToFeatureInfoResponse(response, layerId)),
+      catchError((response: HttpErrorResponse) => of(FeatureInfoService.getErrorResponse(response, layerId))),
+    );
+  }
+
+  /**
+   * Maps a features response (backend API or data source) to a feature info response, tagging features and metadata with the layer id.
+   */
+  public static featuresResponseToFeatureInfoResponse(response: FeaturesResponseModel, layerId: string): FeatureInfoResponseModel {
+    return {
+      features: (response.features || []).map(feature => ({ ...feature, layerId })),
+      columnMetadata: (response.columnMetadata || []).map(metadata => ({ ...metadata, layerId })),
+      attachmentMetadata: (response.attachmentMetadata || []).map(metadata => ({ ...metadata, layerId })),
+      template: response.template,
+      layerId,
+    };
+  }
+
+  private static getErrorResponse(response: HttpErrorResponse, layerId: string): FeatureInfoResponseModel {
+    const error = response.error?.message ? response.error.message : null;
+    return {
+      ...emptyFeaturesResponse,
+      layerId,
+      error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
+    };
+  }
+
+  /**
+   * Search distance in map units: meters per pixel * fixed number of pixels.
+   */
+  private static getDistance(resolutions: MapViewDetailsModel, pointerType?: string): number {
+    return pointerType === 'touch'
+      ? resolutions.resolution * FeatureInfoService.TOUCH_DISTANCE
+      : resolutions.resolution * FeatureInfoService.DEFAULT_DISTANCE;
+  }
+
+  /**
+   * Data source layers (non-backend, e.g. user layers) that have feature info enabled. When the layer is also in map state,
+   * apply the same visibility, scale and hiddenFunctionality checks as for backend layers.
+   */
+  private getFeatureInfoDataSourceLayers$(): Observable<DataSourceLayerModel[]> {
+    return combineLatest([
+      this.dataSourceManager.featureInfoLayers$,
+      this.store$.select(selectLayers),
+      this.mapService.getMapViewDetails$(),
+    ]).pipe(
+      map(([ dataSourceLayers, appLayers, mapViewDetails ]) => dataSourceLayers.filter(layer => {
+        const appLayer = appLayers.find(l => l.id === layer.id);
+        return !appLayer || (appLayer.visible
+          && !appLayer.hiddenFunctionality?.includes(HiddenLayerFunctionality.featureInfo)
+          && ScaleHelper.isInScale(mapViewDetails.scale, appLayer.minScale, appLayer.maxScale));
       })),
-      catchError((response: HttpErrorResponse): Observable<FeatureInfoResponseModel> => {
-        const error = response.error?.message ? response.error.message : null;
-        return of({
-          ...emptyFeaturesResponse,
-          layerId,
-          error: error || FeatureInfoService.LOAD_FEATURE_INFO_ERROR,
-        });
-      }),
+    );
+  }
+
+  private getFeatureInfoFromDataSource$(
+    layer: DataSourceLayerModel,
+    coordinates: [ number, number ],
+    applicationId: string,
+    resolutions: MapViewDetailsModel,
+    pointerType?: string,
+  ): Observable<FeatureInfoResponseModel> {
+    return this.store$.select(selectEnabledFilterGroups).pipe(
+      take(1),
+      switchMap(filterGroups => this.dataSourceManager.getFeatures$({
+        applicationId,
+        layerId: layer.id,
+        layerName: layer.layerName,
+        x: coordinates[0],
+        y: coordinates[1],
+        distance: FeatureInfoService.getDistance(resolutions, pointerType),
+        filterGroups,
+      })),
+      map(response => FeatureInfoService.featuresResponseToFeatureInfoResponse(response, layer.id)),
+      catchError((response: HttpErrorResponse) => of(FeatureInfoService.getErrorResponse(response, layer.id))),
     );
   }
 

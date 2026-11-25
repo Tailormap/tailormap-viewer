@@ -68,7 +68,7 @@
           <mat-checkbox formControlName="showExport">
             <span i18n="@@admin-core.application.layerFunctionality.export">Show export button in attribute list</span>
           </mat-checkbox>
-          <p i18n="@@admin-core.application.layerFunctionality.warning">Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API.</p>
+          <p i18n="@@admin-core.application.layerFunctionality.warning">Note: unchecking these checkboxes only hides user interface controls. Data is still accessible via the API. Other functionality can still use the layer, such as a reference layer for spatial filtering or copying geometries when drawing or editing.</p>
         </fieldset>
         @if (featureSourceAndType$ | async; as featureSourceAndType) {
           @if (featureSourceAndType.featureType?.hasAttributes) {

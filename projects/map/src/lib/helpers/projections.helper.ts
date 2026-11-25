@@ -48,3 +48,9 @@ export class ProjectionsHelper {
   }
 
 }
+
+/**
+ * Register a projection definition (proj4 string or WKT) with proj4 and OpenLayers, so features can be transformed from and to it.
+ * An already registered code keeps its existing definition.
+ */
+export const registerProjection = (code: string, definition: string) => ProjectionsHelper.initProjection(code, definition);

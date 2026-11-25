@@ -22,7 +22,9 @@
     "extract-locale-shared": "tm-extract-i18n --library=shared",
     "extract-locale-core": "tm-extract-i18n --library=core",
     "extract-locale-admin-core": "tm-extract-i18n --library=admin-core",
-    "link-libraries": "tm-link-libraries"
+    "link-libraries": "tm-link-libraries",
+    "update-cadastral-municipalities": "node ci/scripts/update-cadastral-municipalities.mjs",
+    "update-municipalities": "node ci/scripts/update-municipalities.mjs"
   },
   "private": true,
   "dependencies": {
@@ -87,9 +89,9 @@
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
     "@typescript-eslint/utils": "^8.70.0",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "@vitest/eslint-plugin": "^1.6.27",
-    "@vitest/ui": "^4.1.11",
+    "@vitest/ui": "^4.1.12",
     "angular-eslint": "^22.5.0",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
@@ -103,9 +105,12 @@
     "tsutils-etc": "^1.4.2",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "engines": {
     "node": ">=24"
+  },
+  "overrides": {
+    "katex": "^0.19.1"
   }
 }

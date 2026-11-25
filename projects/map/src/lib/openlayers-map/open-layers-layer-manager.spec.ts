@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { OpenLayersLayerManager } from './open-layers-layer-manager';
-import { LayerTypesEnum, WMSLayerModel } from '../models';
+import { LayerTypesEnum, VectorLayerModel, WMSLayerModel } from '../models';
 import { ServerType } from '@tailormap-viewer/api';
 
 const mockNgZone = { run: (cb: () => void) => cb(), runOutsideAngular: (cb: () => void) => cb() } as any;
@@ -114,6 +114,67 @@ describe('OpenLayersLayerManager - updatePropertiesIfChanged', () => {
 
     expect(updateParamsSpy).toHaveBeenCalledTimes(1);
     expect(updateParamsSpy).toHaveBeenCalledWith(expect.objectContaining({ CQL_FILTER: 'prop=2' }));
+  });
+
+});
+
+describe('OpenLayersLayerManager - ordered vector layers', () => {
+
+  const vectorLayer = (id: string, followsLayerOrder?: boolean): VectorLayerModel => ({
+    id, name: id, layerType: LayerTypesEnum.Vector, visible: true, followsLayerOrder,
+  });
+  const orderedStub = (id: string) => vectorLayer(id, true);
+
+  const createManager = () => {
+    const manager = new OpenLayersLayerManager(createMockOlMap(), mockNgZone, mockHttpXsrfTokenExtractor);
+    manager.init();
+    return manager;
+  };
+  const zIndex = (manager: OpenLayersLayerManager, id: string) => manager.getLayer(id)?.getZIndex();
+
+  test('ordered vector layer added before setLayers gets its position from setLayers', () => {
+    const manager = createManager();
+    manager.addLayer(vectorLayer('user-1', true));
+    manager.setLayers([ createWmsLayer({ id: 'wms-1' }), orderedStub('user-1'), createWmsLayer({ id: 'wms-2' }) ]);
+    expect(zIndex(manager, 'wms-1')).toBe(2);
+    expect(zIndex(manager, 'user-1')).toBe(1);
+    expect(zIndex(manager, 'wms-2')).toBe(0);
+  });
+
+  test('ordered vector layer added after setLayers gets its remembered position', () => {
+    const manager = createManager();
+    manager.setLayers([ createWmsLayer({ id: 'wms-1' }), orderedStub('user-1'), createWmsLayer({ id: 'wms-2' }) ]);
+    manager.addLayer(vectorLayer('user-1', true));
+    expect(zIndex(manager, 'user-1')).toBe(1);
+  });
+
+  test('setLayers never creates an ordered vector layer', () => {
+    const manager = createManager();
+    manager.setLayers([ orderedStub('user-1'), createWmsLayer({ id: 'wms-1' }) ]);
+    expect(manager.getLayer('user-1')).toBeUndefined();
+  });
+
+  test('ordered vector layer moves among WMS layers', () => {
+    const manager = createManager();
+    manager.addLayer(vectorLayer('user-1', true));
+    manager.setLayers([ createWmsLayer({ id: 'wms-1' }), createWmsLayer({ id: 'wms-2' }), orderedStub('user-1') ]);
+    expect(zIndex(manager, 'user-1')).toBe(0);
+    manager.setLayers([ orderedStub('user-1'), createWmsLayer({ id: 'wms-1' }), createWmsLayer({ id: 'wms-2' }) ]);
+    expect(zIndex(manager, 'user-1')).toBe(2);
+    expect(zIndex(manager, 'wms-1')).toBe(1);
+    expect(zIndex(manager, 'wms-2')).toBe(0);
+  });
+
+  test('unordered vector layers stay above service and ordered vector layers', () => {
+    const manager = createManager();
+    manager.addLayer(vectorLayer('drawing'));
+    manager.addLayer(vectorLayer('user-1', true));
+    manager.setLayers([ orderedStub('user-1'), createWmsLayer({ id: 'wms-1' }), orderedStub('user-2') ]);
+    manager.addLayer(vectorLayer('user-2', true));
+    expect(zIndex(manager, 'user-1')).toBe(2);
+    expect(zIndex(manager, 'wms-1')).toBe(1);
+    expect(zIndex(manager, 'user-2')).toBe(0);
+    expect(zIndex(manager, 'drawing')).toBe(3);
   });
 
 });

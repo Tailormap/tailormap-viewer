@@ -95,9 +95,8 @@ describe('CQLFilterHelper', () => {
   test('should create a spatial filter with buffer', () => {
     const filterGroup = getSpatialFilterGroup(['POINT(1 2)'], undefined, 10);
     const filters = CqlFilterHelper.getFilters([filterGroup]);
-    // because we have a mocked=up JSTS BufferOp that returns the input
     expect(filters.get('1')?.get(FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME))
-      .toBe('INTERSECTS(the_geom, SRID=4326;POINT(1 2))');
+      .toMatch(/^INTERSECTS\(the_geom, SRID=4326;POLYGON \(\(11 2, .* 11 2\)\)\)$/);
   });
 
   test('should create a spatial filter for a circle with buffer', () => {
@@ -386,5 +385,14 @@ describe('CQLFilterHelper', () => {
       'AND (attribute2 = true))');
     expect(filters.get('1')?.get('related')).toBe('((attribute3 BETWEEN 2020-01-01T00:00:00.000Z AND 2020-01-01T23:59:59.999Z) ' +
       'AND (attribute4 IS NOT NULL))');
+  });
+
+  test('getCqlFilterForLayer returns the layer CQL combined with extra filters', () => {
+    const groups = [ getFilterGroup(), { ...getFilterGroup(), id: 'other', layerIds: ['2'] }];
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '1')).toBe('(attribute ILIKE \'%value%\')');
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '1', 'BBOX(geom, 0,0,1,1)', ''))
+      .toBe('((attribute ILIKE \'%value%\')) AND (BBOX(geom, 0,0,1,1))');
+    expect(CqlFilterHelper.getCqlFilterForLayer(undefined, '1', 'BBOX(geom, 0,0,1,1)')).toBe('BBOX(geom, 0,0,1,1)');
+    expect(CqlFilterHelper.getCqlFilterForLayer(groups, '3')).toBeUndefined();
   });
 });

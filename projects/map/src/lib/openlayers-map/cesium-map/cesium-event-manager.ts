@@ -1,4 +1,4 @@
-import { Cartesian3, Cartographic, Cesium3DTileFeature, Math, PostProcessStage, Scene, Camera, Cartesian2 } from 'cesium';
+import type { Cartesian3, Cartographic, Cesium3DTileFeature, PostProcessStage, Scene, Camera, Cartesian2 } from 'cesium';
 import { Selection3dModel } from '../../models/selection3d.model';
 import { Observable, Subject } from 'rxjs';
 import { AttributeType } from '@tailormap-viewer/api';

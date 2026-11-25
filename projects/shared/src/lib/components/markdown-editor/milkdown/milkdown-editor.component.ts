@@ -70,7 +70,7 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
     }
     const el = this.editorEl.nativeElement;
     combineLatest([
-      from(import('@milkdown/crepe')),
+      from(import('./crepe-features')),
       from(import('@milkdown/kit/core')),
       from(import('@milkdown/plugin-listener')),
       from(import('@milkdown/kit/plugin/upload')),
@@ -85,19 +85,16 @@ export class MilkdownEditorComponent implements OnInit, OnDestroy {
           const placeholder = this.placeholder();
           const defaultValue = this.mdEditorService.getCurrentContent() || '';
           this.loadingContent(defaultValue);
-          const crepe = new crepeModule.Crepe({
-            root: el,
-            defaultValue,
-            features: {
-              [crepeModule.Crepe.Feature.CodeMirror]: false,
-              [crepeModule.Crepe.Feature.Latex]: false,
-            },
-            featureConfigs: {
-              [crepeModule.Crepe.Feature.ImageBlock]: imageConfig,
-              [crepeModule.Crepe.Feature.Placeholder]: placeholder ? { mode: 'doc', text: placeholder } : { mode: 'doc' },
-              [crepeModule.Crepe.Feature.BlockEdit]: MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig(), this.insertUpload$()),
-            },
-          });
+          // Crepe's default features (same order), without CodeMirror and LaTeX
+          const crepe = new crepeModule.CrepeBuilder({ root: el, defaultValue })
+            .addFeature(crepeModule.cursor)
+            .addFeature(crepeModule.listItem)
+            .addFeature(crepeModule.linkTooltip)
+            .addFeature(crepeModule.imageBlock, imageConfig)
+            .addFeature(crepeModule.blockEdit, MilkdownHelper.getBlockEditConfiguration(this.templatePicklistConfig(), this.insertUpload$()))
+            .addFeature(crepeModule.placeholder, placeholder ? { mode: 'doc', text: placeholder } : { mode: 'doc' })
+            .addFeature(crepeModule.toolbar)
+            .addFeature(crepeModule.table);
           crepe.editor
             .use(listenerModule.listener)
             .config(ctx => {

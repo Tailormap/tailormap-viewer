@@ -1,12 +1,14 @@
 import { vi, describe, afterEach, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom, of } from 'rxjs';
+import { finalize, firstValueFrom, of, Subject, throwError } from 'rxjs';
 import type { Mock } from 'vitest';
 import { createMockStore, MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   selectAttributeListData, selectAttributeListTabs, selectAttributeListVisible, selectInitialDataSort,
 } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 import { AttributeListDataService } from './attribute-list-data.service';
 import {
   AttributeType, FeaturesResponseModel, getColumnMetadataModel, getFeatureModel, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
@@ -52,6 +54,7 @@ const setup = (
       { selector: selectVisibleLayersWithAttributes, value: [{ id: '1', title: '' }, { id: '2', title: '' }] },
       { selector: selectInitialDataSort, value: [] },
       { selector: selectLayers, value: [{ id: '1', layerName: 'layer1', title: '' }, { id: '2', layerName: 'layer2', title: '' }] },
+      { selector: selectEnabledFilterGroups, value: [getFilterGroup()] },
     ],
   }) as Store;
 
@@ -128,7 +131,7 @@ describe('AttributeListDataService', () => {
       layerName: 'layer1',
       applicationId: '1',
       page: 0,
-      filter: undefined,
+      filter: "(attribute ILIKE '%value%')",
       sortBy: undefined,
       sortOrder: undefined,
     });
@@ -286,6 +289,141 @@ describe('AttributeListDataService - reload triggers', () => {
       expect(notifyCheckedRowsChanged).not.toHaveBeenCalled();
     });
 
+  });
+
+});
+
+describe('AttributeListDataService - row selection', () => {
+
+  const getStateWithSelectedRow = (selectedRowId?: string) => getLoadedStoreWithMultipleTabs({
+    data: [createDummyAttributeListData({ id: '1', tabId: '1', rows: createDummyRows(10), selectedRowId })],
+  });
+
+  /** Each getFeatures$ call returns a subject the test resolves itself; records when a request is cancelled (unsubscribed). */
+  const setupRowSelectionTest = () => {
+    const responses = new Map<string, Subject<FeaturesResponseModel>>();
+    const cancelled: string[] = [];
+    const getFeatures$ = vi.fn((_tabSourceId: string, params: { __fid: string }) => {
+      const response = new Subject<FeaturesResponseModel>();
+      responses.set(params.__fid, response);
+      let completed = false;
+      return response.pipe(finalize(() => {
+        if (!completed && !response.closed) {
+          cancelled.push(params.__fid);
+        }
+        completed = true;
+      }));
+    });
+    TestBed.configureTestingModule({
+      providers: [
+        AttributeListDataService,
+        provideMockStore({
+          initialState: getStateWithSelectedRow(),
+          selectors: [
+            { selector: selectViewerId, value: 'app1' },
+            { selector: selectLayers, value: [{ id: '1', layerName: 'layer1', title: '' }] },
+          ],
+        }),
+        { provide: FilterService, useValue: { getChangedFilters$: () => of(new Map()), getFilterForLayer: () => undefined } },
+        { provide: FeatureUpdatedService, useValue: { featureUpdated$: of() } },
+        { provide: AttributeListManagerService, useValue: { notifyCheckedRowsChanged: vi.fn(), getFeatures$ } },
+        getMapServiceMock().provider,
+      ],
+    });
+    const service = TestBed.inject(AttributeListDataService);
+    const store = TestBed.inject(MockStore);
+    const highlighted: unknown[] = [];
+    vi.spyOn(store as unknown as { dispatch: (action: unknown) => void }, 'dispatch').mockImplementation(action => {
+      if ((action as { type: string }).type === AttributeListActions.setHighlightedFeature.type) {
+        highlighted.push((action as ReturnType<typeof AttributeListActions.setHighlightedFeature>).feature);
+      }
+    });
+    /** Selects a row like the reducer would, then lets the service react to it. */
+    const selectRow = (rowId: string, selected = true) => {
+      store.setState(getStateWithSelectedRow(selected ? rowId : undefined));
+      service.updateRowSelected('1', rowId, selected);
+    };
+    const respond = (fid: string) => {
+      const response = responses.get(fid);
+      response?.next({ features: [getFeatureModel({ __fid: fid })], columnMetadata: [], template: null, page: null, pageSize: null, total: null });
+      response?.complete();
+    };
+    const loadingRows: Array<{ dataId: string; rowId: string } | null> = [];
+    service.loadingSelectedRow$.subscribe(row => loadingRows.push(row));
+    return { getFeatures$, cancelled, highlighted, selectRow, respond, loadingRows };
+  };
+
+  it('highlights the feature of the selected row', () => {
+    const { getFeatures$, highlighted, selectRow, respond } = setupRowSelectionTest();
+    selectRow('1');
+    expect(getFeatures$).toHaveBeenCalledWith(ATTRIBUTE_LIST_DEFAULT_SOURCE, expect.objectContaining({ __fid: '1', layerName: 'layer1' }));
+    respond('1');
+    expect(highlighted).toEqual([expect.objectContaining({ __fid: '1', tabId: '1' })]);
+  });
+
+  it('cancels the request for the previous row when quickly selecting another row', () => {
+    const { getFeatures$, cancelled, highlighted, selectRow, respond } = setupRowSelectionTest();
+    selectRow('1');
+    selectRow('2');
+    selectRow('3');
+    expect(getFeatures$).toHaveBeenCalledTimes(3);
+    expect(cancelled).toEqual([ '1', '2' ]);
+    respond('3');
+    expect(highlighted).toEqual([expect.objectContaining({ __fid: '3' })]);
+  });
+
+  it('cancels the request when the row is deselected', () => {
+    const { cancelled, highlighted, selectRow } = setupRowSelectionTest();
+    selectRow('1');
+    selectRow('1', false);
+    expect(cancelled).toEqual(['1']);
+    expect(highlighted).toEqual([]);
+  });
+
+  it('does not highlight a feature for a row that is no longer selected', () => {
+    const { highlighted, selectRow, respond } = setupRowSelectionTest();
+    selectRow('1');
+    // Selection changed without going through the service, for example by changing the page
+    TestBed.inject(MockStore).setState(getStateWithSelectedRow(undefined));
+    respond('1');
+    expect(highlighted).toEqual([]);
+  });
+
+  it('keeps handling selections after a request fails', () => {
+    const { getFeatures$, highlighted, selectRow, respond } = setupRowSelectionTest();
+    getFeatures$.mockImplementationOnce(() => throwError(() => new Error('failed')));
+    selectRow('1');
+    expect(highlighted).toEqual([]);
+    selectRow('2');
+    respond('2');
+    expect(highlighted).toEqual([expect.objectContaining({ __fid: '2' })]);
+  });
+
+  it('marks the selected row as loading until its feature is loaded', () => {
+    const { selectRow, respond, loadingRows } = setupRowSelectionTest();
+    selectRow('1');
+    expect(loadingRows.at(-1)).toEqual({ dataId: '1', rowId: '1' });
+    respond('1');
+    expect(loadingRows.at(-1)).toBeNull();
+  });
+
+  it('marks only the latest selected row as loading', () => {
+    const { selectRow, respond, loadingRows } = setupRowSelectionTest();
+    selectRow('1');
+    selectRow('2');
+    expect(loadingRows).toEqual([ null, { dataId: '1', rowId: '1' }, null, { dataId: '1', rowId: '2' }]);
+    respond('2');
+    expect(loadingRows.at(-1)).toBeNull();
+  });
+
+  it('clears the loading row when the row is deselected or loading fails', () => {
+    const { getFeatures$, selectRow, loadingRows } = setupRowSelectionTest();
+    selectRow('1');
+    selectRow('1', false);
+    expect(loadingRows.at(-1)).toBeNull();
+    getFeatures$.mockImplementationOnce(() => throwError(() => new Error('failed')));
+    selectRow('2');
+    expect(loadingRows.at(-1)).toBeNull();
   });
 
 });

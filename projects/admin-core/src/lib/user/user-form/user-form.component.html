@@ -49,10 +49,7 @@
       </mat-autocomplete>
     </mat-form-field>
     <mat-checkbox formControlName="enabled" i18n="@@admin-core.common.enabled" labelPosition="before">Enabled</mat-checkbox>
-    <mat-form-field>
-      <mat-label i18n="@@admin-core.users.valid-until">Valid until</mat-label>
-      <input formControlName="validUntil" matInput type="datetime-local">
-    </mat-form-field>
+    <tm-datetime-field formControlName="validUntil"><span i18n="@@admin-core.users.valid-until">Valid until</span></tm-datetime-field>
     <mat-form-field>
       <mat-label i18n="@@admin-core.common.notes">Notes</mat-label>
       <textarea formControlName="notes" matInput type="text" maxLength="10000"></textarea>

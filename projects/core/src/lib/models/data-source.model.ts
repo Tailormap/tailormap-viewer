@@ -8,7 +8,16 @@ export interface DataSourceLayerModel {
   title: string;
   filterable: boolean;
   hasAttributes: boolean;
+  /**
+   * When set, feature info queries this layer through its data loader with a point query (`x`, `y`, `distance`).
+   */
+  featureInfo?: boolean;
 }
+
+/**
+ * Id of the data source for layers of the tailormap-api backend.
+ */
+export const DEFAULT_DATA_SOURCE_ID = 'tm-default-layers';
 
 export interface DataSourceApiServiceModel
   extends GetFeaturesApiModel, GetLayerDetailsApiModel {
