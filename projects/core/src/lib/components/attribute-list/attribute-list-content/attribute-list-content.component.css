@@ -31,12 +31,4 @@ tm-error-message {
   left: 0;
   right: 0;
   z-index: 200;
-  opacity: 0;
-  animation: show-loading 0s 300ms forwards;
-}
-
-@keyframes show-loading {
-  to {
-    opacity: 1;
-  }
 }
