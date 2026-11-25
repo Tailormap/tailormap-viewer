@@ -1,4 +1,4 @@
-import { Sortorder } from '@tailormap-viewer/api';
+import { FilterGroupModel, Sortorder } from '@tailormap-viewer/api';
 
 /**
  * Parameters for fetching features from a specific layer.
@@ -21,12 +21,14 @@ export interface GetFeaturesParams {
    */
   __fid?: string;
   /**
-   * Optional filters to apply when fetching features, grouped by feature type.
-   * Map keys are feature type names, and values are CQL filter strings.
-   * Filter for the layer is behind the symbol FeaturesFilterHelper.DEFAULT_FEATURE_TYPE_NAME.
-   * @example new Map([['featureTypeName', 'attribute > 100']])
+   * Optional filter groups to apply. Groups for other layers are ignored. Backend data loaders convert these to CQL
+   * (see CqlFilterHelper.getCqlFilterForLayer), client-side data loaders to a predicate (see ClientSideFilterHelper.getFeaturePredicate).
    */
-  filter?: Map<string | symbol, string> | null;
+  filterGroups?: FilterGroupModel[];
+  /**
+   * Optional extent [minx, miny, maxx, maxy] in the map projection to limit the features to.
+   */
+  bbox?: [ number, number, number, number ];
   /**
    * Optional page number for paginated results (1, 2, 3, ...).
    */
@@ -47,4 +49,16 @@ export interface GetFeaturesParams {
    * Whether to include geometry in the response.
    */
   includeGeometry?: boolean;
+  /**
+   * Optional point query (feature info): x coordinate in the map projection. Used together with `y` and `distance`.
+   */
+  x?: number;
+  /**
+   * Optional point query (feature info): y coordinate in the map projection.
+   */
+  y?: number;
+  /**
+   * Optional point query (feature info): search distance around the point, in map units.
+   */
+  distance?: number;
 }
