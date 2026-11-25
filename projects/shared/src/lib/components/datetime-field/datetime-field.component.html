@@ -1,24 +1,20 @@
-<div class="datetime-field" role="group" [attr.aria-labelledby]="labelId">
-  <mat-form-field class="date" [hideRequiredMarker]="hideRequiredMarker()">
-    <mat-label [id]="labelId"><ng-content></ng-content></mat-label>
-    <input matInput
-           [matDatepicker]="dp"
-           [formControl]="dateControl"
-           [required]="required()"
-           [errorStateMatcher]="fieldErrorStateMatcher()"
-           [placeholder]="placeholder()"
-           (blur)="markAsTouched()" />
-    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-    <mat-datepicker #dp (closed)="markAsTouched()"></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field class="time" [hideRequiredMarker]="hideRequiredMarker()">
-    <mat-label i18n="@@shared.datetime-field.time">Time</mat-label>
-    <input matInput
-           [matTimepicker]="tp"
-           [formControl]="timeControl"
-           [errorStateMatcher]="fieldErrorStateMatcher()"
-           (blur)="markAsTouched()" />
-    <mat-timepicker-toggle matSuffix [for]="tp"></mat-timepicker-toggle>
-    <mat-timepicker #tp></mat-timepicker>
-  </mat-form-field>
-</div>
+<mat-form-field class="datetime-field" [hideRequiredMarker]="hideRequiredMarker()">
+  <mat-label><ng-content></ng-content></mat-label>
+  <input #nativeInput
+         matInput
+         type="datetime-local"
+         [formControl]="inputControl"
+         [required]="required()"
+         [errorStateMatcher]="fieldErrorStateMatcher()"
+         (blur)="markAsTouched()" />
+  <button mat-icon-button
+          matSuffix
+          type="button"
+          class="picker-toggle"
+          [disabled]="inputControl.disabled"
+          (click)="openPicker(nativeInput)"
+          i18n-aria-label="@@shared.datetime-field.open-picker"
+          aria-label="Open date and time picker">
+    <mat-icon svgIcon="calendar"></mat-icon>
+  </button>
+</mat-form-field>

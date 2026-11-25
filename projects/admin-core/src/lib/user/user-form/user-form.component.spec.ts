@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { UserFormComponent } from './user-form.component';
 import { of } from 'rxjs';
 import { TailormapAdminApiV1Service } from '@tailormap-admin/admin-api';
@@ -68,14 +68,13 @@ describe('UserFormComponent', () => {
     });
   });
 
-  test('sets valid until with the date and time picker', async () => {
+  test('sets valid until with the datetime input', async () => {
     const { userUpdated } = await setup(true);
     await userEvent.type(screen.getByLabelText('Username'), 'user1');
     await userEvent.type(screen.getByLabelText('Password'), 'secret-secret');
     await userEvent.type(screen.getByLabelText('Confirm password'), 'secret-secret');
-    expect(screen.getByRole('group', { name: 'Valid until' })).toBeInTheDocument();
-    await userEvent.type(screen.getByRole('textbox', { name: 'Valid until' }), '12/31/2026');
-    await userEvent.type(screen.getByRole('combobox', { name: 'Time' }), '11:30 PM');
+    // userEvent.type() can't type in a datetime-local input, so set the value as the browser picker would
+    fireEvent.input(screen.getByLabelText('Valid until'), { target: { value: '2026-12-31T23:30' } });
     await vi.waitFor(() => {
       expect(userUpdated).toHaveBeenLastCalledWith(expect.objectContaining({
         username: 'user1',

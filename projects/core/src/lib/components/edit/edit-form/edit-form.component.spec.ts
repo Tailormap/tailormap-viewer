@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { EditFormComponent } from './edit-form.component';
 import {
   AttributeType, FormFieldControlTypeEnum, getFeatureModel, getLayerDetailsModel, TAILORMAP_SECURITY_API_V1_SERVICE,
@@ -90,7 +90,7 @@ describe('EditFormComponent', () => {
     expect(await screen.getByPlaceholderText('Property alias')).toHaveValue("editor");
   });
 
-  test('should render a date and time picker for a timestamp attribute', async () => {
+  test('should render a datetime input for a timestamp attribute', async () => {
     const featureAttributeChanged = vi.fn();
     const feature = getFeatureModel();
     await render(EditFormComponent, {
@@ -110,11 +110,10 @@ describe('EditFormComponent', () => {
         } },
       on: { featureAttributeChanged: featureAttributeChanged },
     });
-    expect(await screen.findByRole('group', { name: 'Timestamp' })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Timestamp')).toHaveValue('10/21/2026');
-    const timeInput = screen.getByRole('combobox', { name: 'Time' });
-    await userEvent.clear(timeInput);
-    await userEvent.type(timeInput, '2:15 PM');
+    const input = await screen.findByLabelText('Timestamp');
+    expect(input).toHaveValue('2026-10-21T10:30');
+    // userEvent.type() can't type in a datetime-local input, so set the value as the browser picker would
+    fireEvent.input(input, { target: { value: '2026-10-21T14:15' } });
     await vi.waitFor(() => expect(featureAttributeChanged).toHaveBeenCalledWith(
       { attribute: 'ts', value: '2026-10-21T14:15:00.000+00:00', invalid: false },
     ));
@@ -138,8 +137,8 @@ describe('EditFormComponent', () => {
           }),
         } },
     });
-    const dateInput = await screen.findByPlaceholderText('Timestamp');
-    expect(dateInput).toBeRequired();
-    expect(dateInput.closest('mat-form-field')).toHaveClass('mat-form-field-invalid');
+    const input = await screen.findByLabelText(/Timestamp/);
+    expect(input).toBeRequired();
+    expect(input.closest('mat-form-field')).toHaveClass('mat-form-field-invalid');
   });
 });
