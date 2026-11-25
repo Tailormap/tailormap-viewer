@@ -36,11 +36,11 @@ export class SimpleSearchService {
             return of([]);
           }
           const locationSearch$ = projection === ProjectionCodesEnum.RD
-            ? this.searchRd$(searchTerm, config)
+            ? this.searchPdokLocationServer$(searchTerm, config, false)
             : this.searchOSMNominatim$(searchTerm);
           const searches$: Array<Observable<SearchResultModel | null>> = [locationSearch$];
           if (projection === ProjectionCodesEnum.RD && config?.searchCadastralParcels === true) {
-            searches$.push(this.searchCadastralParcels$(searchTerm, config));
+            searches$.push(this.searchPdokLocationServer$(searchTerm, config, true));
           }
           searchableLayers.forEach(layer => {
             searches$.push(this.searchLayer$(viewerId, layer, searchTerm));
@@ -102,45 +102,27 @@ export class SimpleSearchService {
     );
   }
 
-  private searchRd$(searchTerm: string, config: SimpleSearchConfigModel | undefined): Observable<SearchResultModel> {
-    const filter = [];
-    if (config && config.municipalities && config.municipalities.length > 0) {
-      filter.push(`gemeentecode:(${config.municipalities.join(' OR ')})`);
-    }
-    return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
-      params: {
-        q: searchTerm,
-        rows: SimpleSearchService.MAX_RESULTS.toString(),
-        fl: 'weergavenaam,centroide_rd,geometrie_rd,id',
-        fq: filter,
-      },
-    }).pipe(
-      catchError(() => of({ response: { docs: [] } })),
-      map(result => ({
-        id: 'pdok-locatie-server',
-        name: SimpleSearchService.LOCATION_LABEL,
-        attribution: $localize `:@@core.toolbar.search-location-pdok-attribution:Data by [PDOK](https://pdok.nl)`,
-        results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
-          id: doc.id,
-          label: doc.weergavenaam,
-          geometry: doc.geometrie_rd || doc.centroide_rd,
-          projectionCode: ProjectionCodesEnum.RD,
-        })),
-      })),
-    );
-  }
-
   /**
-   * Searches the PDOK Locatieserver for kadastrale percelen.
-   * The configured kadastrale gemeenten are saved with their AKR codes and the filter uses those codes on
-   * `kadastrale_gemeentecode`: `kadastrale_gemeentenaam` is tokenized, so a name filter also matches longer names
-   * containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly.
+   * Searches the PDOK Locatieserver for locations or, when `cadastralParcels` is true, for kadastrale percelen (parcels).
+   * Parcels are filtered on `kadastrale_gemeentecode`. `kadastrale_gemeentenaam` is tokenized, so a name filter also matches
+   * longer names containing it (e.g. "Alphen" matches "Alphen aan den Rijn"), while the code field matches exactly.
+   * The "Perceel " prefix is removed from parcel labels because the result group already says the results are parcels:
+   * "Perceel Aalten (ATN02) K 2838" -> "Aalten (ATN02) K 2838".
    */
-  private searchCadastralParcels$(searchTerm: string, config: SimpleSearchConfigModel): Observable<SearchResultModel> {
-    const filter = ['type:perceel'];
-    const codes = (config.cadastralMunicipalities ?? []).flatMap(m => m.codes);
-    if (codes.length > 0) {
-      filter.push(`kadastrale_gemeentecode:(${codes.join(' OR ')})`);
+  private searchPdokLocationServer$(
+    searchTerm: string,
+    config: SimpleSearchConfigModel | undefined,
+    cadastralParcels: boolean,
+  ): Observable<SearchResultModel> {
+    const filter: string[] = [];
+    if (cadastralParcels) {
+      filter.push('type:perceel');
+      const codes = (config?.cadastralMunicipalities ?? []).flatMap(m => m.codes);
+      if (codes.length > 0) {
+        filter.push(`kadastrale_gemeentecode:(${codes.join(' OR ')})`);
+      }
+    } else if (config?.municipalities && config.municipalities.length > 0) {
+      filter.push(`gemeentecode:(${config.municipalities.join(' OR ')})`);
     }
     return this.httpClient.get<LocationServerResponseModel>(SimpleSearchService.PDOK_LOCATION_SERVER_SUGGEST_URL, {
       params: {
@@ -152,25 +134,19 @@ export class SimpleSearchService {
     }).pipe(
       catchError(() => of({ response: { docs: [] } })),
       map(result => ({
-        id: 'pdok-cadastral-parcels',
-        name: SimpleSearchService.CADASTRAL_PARCELS_LABEL,
-        attribution: $localize `:@@core.toolbar.search-cadastral-parcels-pdok-attribution:Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)`,
+        id: cadastralParcels ? 'pdok-cadastral-parcels' : 'pdok-locatie-server',
+        name: cadastralParcels ? SimpleSearchService.CADASTRAL_PARCELS_LABEL : SimpleSearchService.LOCATION_LABEL,
+        attribution: cadastralParcels
+          ? $localize `:@@core.toolbar.search-cadastral-parcels-pdok-attribution:Data by [PDOK](https://pdok.nl) / [Kadaster](https://www.kadaster.nl)`
+          : $localize `:@@core.toolbar.search-location-pdok-attribution:Data by [PDOK](https://pdok.nl)`,
         results: result.response.docs.slice(0, SimpleSearchService.MAX_RESULTS).map(doc => ({
           id: doc.id,
-          label: SimpleSearchService.toLabel(doc.weergavenaam),
+          label: cadastralParcels ? doc.weergavenaam.replace(/^Perceel\s+/i, '') : doc.weergavenaam,
           geometry: doc.geometrie_rd || doc.centroide_rd,
           projectionCode: ProjectionCodesEnum.RD,
         })),
       })),
     );
-  }
-
-  /**
-   * Removes the "Perceel " prefix from a Locatieserver `weergavenaam`, because the result group already says the
-   * results are parcels. "Perceel Aalten (ATN02) K 2838" -> "Aalten (ATN02) K 2838".
-   */
-  private static toLabel(weergavenaam: string): string {
-    return weergavenaam.replace(/^Perceel\s+/i, '');
   }
 
 }
