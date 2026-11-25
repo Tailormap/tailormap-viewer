@@ -86,6 +86,11 @@ export class AttributeListTableComponent {
   public showStatistics = input<boolean | null>(false);
   public statistics = input<AttributeListStatisticColumnModel[] | null>([]);
   public pagingDataSelectedTab = input<AttributeListPagingDataType | null>(null);
+  /**
+   * While loading a page the rows are still those of the previous page. Dim them and ignore row selection, so a user does not select a
+   * feature that is not on the page being loaded.
+   */
+  public loading = input<boolean | null>(false);
 
   @Output()
   public selectRow = new EventEmitter<{ id: string; selected: boolean }>();
@@ -214,12 +219,18 @@ export class AttributeListTableComponent {
 
   public onRowClick($event: MouseEvent, row: AttributeListRowModel): void {
     $event.stopPropagation();
+    if (this.loading()) {
+      return;
+    }
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
   public onRowKeydown($event: Event, row: AttributeListRowModel): void {
     $event.stopPropagation();
     $event.preventDefault();
+    if (this.loading()) {
+      return;
+    }
     this.selectRow.emit({ id: row.id, selected: !this.isSelected(row) });
   }
 
