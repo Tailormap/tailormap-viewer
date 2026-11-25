@@ -44,6 +44,9 @@
       <trans-unit id="core.attribute-list.go-to-page" datatype="html">
         <source>Go to page</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-data" datatype="html">
+        <source>Loading data</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
       </trans-unit>
@@ -517,9 +520,6 @@
       </trans-unit>
       <trans-unit id="core.edit.select-layer" datatype="html">
         <source>Select layer to edit</source>
-      </trans-unit>
-      <trans-unit id="core.edit.time" datatype="html">
-        <source>Time</source>
       </trans-unit>
       <trans-unit id="core.edit.true" datatype="html">
         <source>True</source>
@@ -1091,6 +1091,9 @@
       <trans-unit id="core.profile.logout" datatype="html">
         <source>Logout</source>
       </trans-unit>
+      <trans-unit id="core.search.cadastral-parcels" datatype="html">
+        <source>Cadastral parcels</source>
+      </trans-unit>
       <trans-unit id="core.search.location" datatype="html">
         <source>Location</source>
       </trans-unit>
@@ -1108,6 +1111,9 @@
       </trans-unit>
       <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
         <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
+      </trans-unit>
+      <trans-unit id="core.snapping.no-visible-layers" datatype="html">
+        <source>There are no visible layers to snap to. Make a layer visible to snap to it.</source>
       </trans-unit>
       <trans-unit id="core.snapping.tooltip" datatype="html">
         <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>

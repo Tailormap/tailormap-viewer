@@ -8,6 +8,7 @@ import { GroupService } from '../services/group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import userEvent from '@testing-library/user-event';
 import { TestSaveHelper } from '../../test-helpers/test-save.helper';
+import { provideLuxonDateAdapter } from '@angular/material-luxon-adapter';
 const setup = async (hasUser?: boolean) => {
   const activeRoute = {
     paramMap: of({ get: () => 'user1' }),
@@ -28,6 +29,7 @@ const setup = async (hasUser?: boolean) => {
   await render(UserEditComponent, {
     imports: [],
     providers: [
+      provideLuxonDateAdapter(),
       { provide: ActivatedRoute, useValue: activeRoute },
       { provide: UserService, useValue: userService },
       { provide: GroupService, useValue: groupService },

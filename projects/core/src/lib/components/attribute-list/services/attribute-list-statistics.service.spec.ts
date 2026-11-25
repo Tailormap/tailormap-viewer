@@ -9,11 +9,15 @@ import { FilterService } from '../../../filter/services/filter.service';
 import { LayerFeaturesFilters } from '../../../filter';
 import { selectAttributeListTabs, selectDataForSelectedTab, selectSelectedTab } from '../state/attribute-list.selectors';
 import { selectViewerId } from '../../../state/core.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
+import { getFilterGroup } from '@tailormap-viewer/shared';
 import { GetStatisticParams, StatisticType } from '../models/attribute-list-api-service.model';
 import { AttributeListTabModel } from '../models/attribute-list-tab.model';
 import { AttributeListDataModel } from '../models/attribute-list-data.model';
 import { AttributeListStatisticColumnModel } from '../models/attribute-list-statistic-column.model';
 import { ATTRIBUTE_LIST_DEFAULT_SOURCE } from '../models/attribute-list-default-source.const';
+
+const filterGroups = [getFilterGroup()];
 
 const createMockTab = (layerId: string): AttributeListTabModel => ({
   id: '1',
@@ -85,6 +89,7 @@ const setup = (options: {
           { selector: selectSelectedTab, value: tab },
           { selector: selectAttributeListTabs, value: [tab] },
           { selector: selectDataForSelectedTab, value: data },
+          { selector: selectEnabledFilterGroups, value: filterGroups },
         ],
       }),
       { provide: AttributeListManagerService, useValue: managerService },
@@ -306,16 +311,17 @@ describe('AttributeListStatisticsService', () => {
       expect(afterRefresh[0].value).toBe(99);
     });
 
-    it('should pass the filter from the changed filters map to getStatistic$', () => {
+    it('should pass the enabled filter groups to getStatistic$', () => {
       const { service, managerService, changedFilters$ } = setup();
-      const filter: LayerFeaturesFilters = new Map();
 
       service.loadStatistics({ type: StatisticType.SUM, columnName: 'amount', dataType: 'integer' });
 
-      changedFilters$.next(new Map([[ 'layer1', filter ]]));
+      changedFilters$.next(new Map([[ 'layer1', new Map() ]]));
 
       const refreshCall = managerService.getStatistic$.mock.calls[1];
-      expect(refreshCall[1].filter).toBe(filter);
+      expect(refreshCall[1]).not.toHaveProperty('filter');
+      expect(refreshCall[1].filterGroups).toEqual(filterGroups);
+      expect(managerService.getStatistic$.mock.calls[0][1].filterGroups).toEqual(filterGroups);
     });
 
     it('should refresh statistics for each changed layer independently', () => {

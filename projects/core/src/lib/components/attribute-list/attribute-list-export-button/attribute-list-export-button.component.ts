@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import {
   selectColumnsForSelectedTab, selectSelectedTab, selectSortForSelectedTab,
 } from '../state/attribute-list.selectors';
-import { selectCQLFilters } from '../../../state/filter-state/filter.selectors';
+import { selectEnabledFilterGroups } from '../../../state/filter-state/filter.selectors';
 import { selectLayers } from '../../../map/state/map.selectors';
 import { HiddenLayerFunctionality } from '@tailormap-viewer/api';
 import { FileHelper } from '@tailormap-viewer/shared';
@@ -81,18 +81,17 @@ export class AttributeListExportButtonComponent implements OnDestroy {
     this.store$.select(selectSelectedTab)
       .pipe(
         withLatestFrom(
-          this.store$.select(selectCQLFilters),
+          this.store$.select(selectEnabledFilterGroups),
           this.store$.select(selectSortForSelectedTab),
           this.store$.select(selectColumnsForSelectedTab),
         ),
         take(1),
-        concatMap(([ tab, filters, sort, columns ]) => {
+        concatMap(([ tab, filterGroups, sort, columns ]) => {
           if (tab === null || typeof tab.layerId === 'undefined') {
             return of(null);
           }
-          const filter = filters.get(tab.layerId);
           const attributes = columns.filter(c => c.visible).map(c => c.id);
-          return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filter, sort, attributes });
+          return this.exportService.export$({ tabSourceId: tab.tabSourceId, layerId: tab.layerId, serviceLayerName: tab.label, format, filterGroups, sort, attributes });
         }),
         finalize(() => {
           this.isExportingSubject.next(false);

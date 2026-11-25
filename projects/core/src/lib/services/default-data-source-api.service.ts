@@ -5,11 +5,11 @@ import {
   DescribeAppLayerService, FeaturesResponseModel, ServerType, TAILORMAP_API_V1_SERVICE, TailormapApiV1ServiceModel,
 } from '@tailormap-viewer/api';
 import { GetFeaturesParams } from '../models/get-features-param.model';
-import { map, Observable } from 'rxjs';
-import { FeaturesFilterHelper } from '../filter/helpers/features-filter.helper';
+import { map, Observable, of, switchMap } from 'rxjs';
+import { CqlFilterHelper } from '../filter/helpers/cql-filter.helper';
 import { GetLayerDetailsParams } from '../models/get-layer-details-param.model';
 import { DataSourceManagerService } from './index';
-import { DataSourceApiServiceModel, DataSourceLayerModel } from '../models';
+import { DataSourceApiServiceModel, DataSourceLayerModel, DEFAULT_DATA_SOURCE_ID } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
 
   public initDefaultDataSource(): void {
     this.dataSourceManager.addSource({
-      id: 'tm-default-layers',
+      id: DEFAULT_DATA_SOURCE_ID,
       availableLayers$: this.store$.select(selectOrderedVisibleLayersWithServices)
         .pipe(map(DefaultDataSourceApiService.mapLayersToDataSourceLayer)),
       dataLoader: this,
@@ -31,22 +31,30 @@ export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
   }
 
   public getFeatures$(params: GetFeaturesParams): Observable<FeaturesResponseModel> {
-    const { filter, ...getFeatureParams } = params;
-    const cqlFilter = filter
-      ? FeaturesFilterHelper.getFilter(filter) || undefined
-      : undefined;
-    const apiGetFeatureParams: Parameters<TailormapApiV1ServiceModel['getFeatures$']>[0] = { ...getFeatureParams, filter: cqlFilter };
-    if (getFeatureParams.includeGeometry) {
-      apiGetFeatureParams.simplify = false;
-      apiGetFeatureParams.onlyGeometries = true;
-    }
-    return this.api.getFeatures$(apiGetFeatureParams)
-      .pipe(map((response): FeaturesResponseModel => {
+    const { filterGroups, bbox, ...getFeatureParams } = params;
+    const bboxFilter$: Observable<string> = bbox
+      ? this.describeLayerService.getDescribeAppLayer$(params.applicationId, params.layerId)
+        .pipe(map(details => details.geometryAttribute ? `BBOX(${details.geometryAttribute}, ${bbox.join(',')})` : ''))
+      : of('');
+    return bboxFilter$.pipe(
+      switchMap(bboxFilter => {
+        const apiGetFeatureParams: Parameters<TailormapApiV1ServiceModel['getFeatures$']>[0] = {
+          ...getFeatureParams,
+          filter: CqlFilterHelper.getCqlFilterForLayer(filterGroups, params.layerId, bboxFilter),
+        };
+        if (getFeatureParams.includeGeometry) {
+          apiGetFeatureParams.simplify = false;
+          apiGetFeatureParams.onlyGeometries = true;
+        }
+        return this.api.getFeatures$(apiGetFeatureParams);
+      }),
+      map((response): FeaturesResponseModel => {
         return {
           ...response,
           page: response.page ? response.page : null,
         };
-      }));
+      }),
+    );
   }
 
   public getLayerDetails$(params: GetLayerDetailsParams) {
@@ -60,6 +68,7 @@ export class DefaultDataSourceApiService implements DataSourceApiServiceModel {
       layerName: l.layerName,
       filterable: l.service?.serverType === ServerType.GEOSERVER && l.hasAttributes,
       hasAttributes: l.hasAttributes,
+      // Never set featureInfo: FeatureInfoService already queries backend layers through the tailormap-api, so they would be queried twice
     })).filter(layer => layer.filterable || layer.hasAttributes);
   }
 

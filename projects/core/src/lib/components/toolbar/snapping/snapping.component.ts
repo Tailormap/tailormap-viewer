@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef, signal, viewChild } from '@angular/core';
 import { MapService } from '@tailormap-viewer/map';
-import { map, take } from 'rxjs';
+import { map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ApplicationStyleService } from '../../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -47,10 +47,11 @@ export class SnappingComponent implements OnInit {
   public selectedLayers$ = this.snappingService.snappingLayers$
     .pipe(map(layers => new Set(layers.map(l => l.id))));
   public selectableLayers$ = this.snappingService.selectableLayers$;
-  public hasSelectableLayers$ = this.snappingService.hasSelectableLayers$;
   public tooltip = signal($localize `:@@core.snapping.tooltip:Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.`);
 
   public maxSelectedLayers = 5;
+
+  private layersMenuTrigger = viewChild.required(MatMenuTrigger);
 
   public ngOnInit(): void {
     this.store$.select(selectComponentsConfigForType<SnappingComponentConfigModel>(BaseComponentTypeEnum.SNAPPING))
@@ -71,22 +72,16 @@ export class SnappingComponent implements OnInit {
 
   public toggleLayer(layer: DataSourceLayerModel) {
     this.snappingService.toggleLayer(layer);
-    this.snappingService.snappingLayers$.pipe(take(1)).subscribe(layers => {
-      if (layers.length > 0 && !this.snappingService.isSnappingActive()) {
-        this.toggleTool();
-      } else if (layers.length === 0 && this.snappingService.isSnappingActive()) {
-        this.toggleTool();
-      }
-    });
   }
 
   public toggleTool() {
-    if (!this.snappingService.isSnappingActive()) {
-      this.mapService.allowSnapping(true);
+    if (this.snappingService.isSnappingActive()) {
+      this.snappingService.disableSnapping();
+    } else if (this.snappingService.hasSnappingLayers()) {
       this.snappingService.enableSnapping();
     } else {
-      this.mapService.allowSnapping(false);
-      this.snappingService.disableSnapping();
+      // Snapping requires a layer to snap to, let the user pick one
+      this.layersMenuTrigger().openMenu();
     }
   }
 

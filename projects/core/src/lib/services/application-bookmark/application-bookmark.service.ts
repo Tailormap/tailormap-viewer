@@ -274,10 +274,11 @@ export class ApplicationBookmarkService {
     return combineLatest([
       this.store$.select(selectLayerTreeNodes),
       this.store$.select(selectLoadStatus),
+      this.store$.select(selectLayers),
     ]).pipe(
       filter(([ , loadStatus ]) => loadStatus === LoadingStateEnum.LOADED),
-      map(([layers]) => {
-        return MapBookmarkHelper.fragmentFromLayerTreeOrder(layers);
+      map(([ layerTreeNodes, , layers ]) => {
+        return MapBookmarkHelper.fragmentFromLayerTreeOrder(layerTreeNodes, layers);
       }),
     );
   }

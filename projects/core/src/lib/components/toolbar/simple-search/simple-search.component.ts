@@ -1,6 +1,6 @@
 import { afterEveryRender, ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal, inject, computed } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Observable, of, startWith, Subject, tap, timer } from 'rxjs';
+import { EMPTY, Observable, of, startWith, Subject, tap, timer } from 'rxjs';
 import { SimpleSearchService } from './simple-search.service';
 import { debounceTime, filter, takeUntil, withLatestFrom, switchMap } from 'rxjs/operators';
 import { MapService } from '@tailormap-viewer/map';
@@ -64,6 +64,8 @@ export class SimpleSearchComponent implements OnInit {
 
   private searchResultsSubject = new Subject<SearchResultModel[] | null>();
   public searchResults$: Observable<SearchResultModel[] | null> = this.searchResultsSubject.asObservable();
+
+  private highlightResultSubject = new Subject<SearchResultItemModel | null>();
 
   public searchStatus = signal<SearchStatusType>('empty');
   private closeFullScreen = signal<boolean>(false);
@@ -137,6 +139,13 @@ export class SimpleSearchComponent implements OnInit {
         }),
       )
       .subscribe(searchResult => this.showResult(searchResult));
+
+    this.highlightResultSubject
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(searchResult => searchResult ? this.renderHighlight$(searchResult) : EMPTY),
+      )
+      .subscribe();
   }
 
   public search() {
@@ -153,6 +162,9 @@ export class SimpleSearchComponent implements OnInit {
       setTimeout(() => this.disableTransition.set(false), 0);
     }
     this.active.set(close ? false : !this.active());
+    if (!this.active()) {
+      this.highlightResultSubject.next(null);
+    }
   }
 
   public displayLabel(result: string | SearchResultItemModel | null): string {
@@ -175,6 +187,15 @@ export class SimpleSearchComponent implements OnInit {
   }
 
   private showResult(searchResult: SearchResultItemModel) {
+    this.highlightResultSubject.next(searchResult);
+    if (this.isMobile()) {
+      this.disableTransition.set(true);
+      setTimeout(() => this.disableTransition.set(false), 0);
+      this.closeFullScreen.set(true);
+    }
+  }
+
+  private renderHighlight$(searchResult: SearchResultItemModel) {
     const style = FeatureStylingHelper.getDefaultHighlightStyle('search-result-highlight-style', {
       pointSize: 10,
       pointType: 'circle',
@@ -186,8 +207,7 @@ export class SimpleSearchComponent implements OnInit {
       crs: searchResult.projectionCode,
       attributes: {},
     });
-
-    feature$.pipe(
+    return feature$.pipe(
       withLatestFrom(this.mapService.getProjectionCode$()),
       switchMap(([ feature, projectionCode ]) => {
         if (feature.geometry && feature.crs && feature.crs !== projectionCode) {
@@ -196,13 +216,8 @@ export class SimpleSearchComponent implements OnInit {
         }
         return this.mapService.renderFeatures$('search-result-highlight', of(feature), style, { zoomToFeature: true, updateWhileAnimating: true });
       }),
-      takeUntil(timer(5000))).subscribe();
-
-    if (this.isMobile()) {
-      this.disableTransition.set(true);
-      setTimeout(() => this.disableTransition.set(false), 0);
-      this.closeFullScreen.set(true);
-    }
+      takeUntil(timer(5000)),
+    );
   }
 
   public scrollTo($event: MouseEvent, id: string) {

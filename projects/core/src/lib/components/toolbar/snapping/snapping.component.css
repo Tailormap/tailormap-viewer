@@ -43,3 +43,8 @@ tm-error-message ::ng-deep .error-message {
   padding: 8px;
   margin: 0 8px 8px 8px;
 }
+
+.no-layers {
+  padding: 8px 16px;
+  max-width: 250px;
+}
