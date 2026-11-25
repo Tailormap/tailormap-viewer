@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, within } from '@testing-library/angular';
 import { getLoadedStoreNoRows, getLoadedStoreWithRows, getLoadingStore } from '../state/mocks/attribute-list-state-test-data';
 import { AttributeListContentComponent } from './attribute-list-content.component';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -109,11 +109,11 @@ describe('AttributeListContent', () => {
         }),
       ],
     });
-    const loadingRow = (await screen.findByText('2: Test')).closest('mat-row');
-    expect(loadingRow).toHaveClass('loading_row');
+    const loadingRow = (await screen.findByText('2: Test')).closest('mat-row') as HTMLElement;
     expect(loadingRow).toHaveAttribute('aria-busy', 'true');
+    expect(within(loadingRow).getByRole('progressbar', { name: 'Loading feature' })).toBeInTheDocument();
+    expect(screen.getAllByRole('progressbar')).toHaveLength(1);
     const otherRow = screen.getByText('1: Test').closest('mat-row');
-    expect(otherRow).not.toHaveClass('loading_row');
     expect(otherRow).not.toHaveAttribute('aria-busy');
   });
 

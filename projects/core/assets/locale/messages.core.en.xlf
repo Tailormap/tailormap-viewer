@@ -44,6 +44,9 @@
       <trans-unit id="core.attribute-list.go-to-page" datatype="html">
         <source>Go to page</source>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-feature" datatype="html">
+        <source>Loading feature</source>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
       </trans-unit>

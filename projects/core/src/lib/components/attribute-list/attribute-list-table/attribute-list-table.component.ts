@@ -17,6 +17,7 @@ import {
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressBar } from '@angular/material/progress-bar';
 import { AttributeListFeatureDetailsComponent } from '../attribute-list-feature-details/attribute-list-feature-details.component';
 import { NgClass } from '@angular/common';
 import { TooltipDirective, PanelResizerComponent } from '@tailormap-viewer/shared';
@@ -47,6 +48,7 @@ const DEFAULT_COLUMN_WIDTH = 170;
     PanelResizerComponent,
     MatMenuTrigger,
     MatProgressSpinner,
+    MatProgressBar,
     AttributeListFeatureDetailsComponent,
     MatHeaderRowDef,
     MatHeaderRow,

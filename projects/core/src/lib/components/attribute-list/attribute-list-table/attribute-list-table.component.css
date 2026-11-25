@@ -227,47 +227,16 @@ mat-table {
   background-color: var(--primary-color-0_1);
 }
 
-/*
- * Indeterminate progress bar along the bottom of a row while its feature loads after selecting it. Only shown after a short delay so a
- * fast response does not flash it.
- */
+/* Progress bar along the bottom of a row while its feature loads after selecting it, see the first data cell in the template */
 .loading_row {
   position: relative;
 }
 
-.loading_row::after {
-  content: '';
+.row-loading-bar {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%) no-repeat;
-  background-size: 40% 100%;
-  opacity: 0;
-  animation: loading-row-show 0s 300ms forwards, loading-row-slide 1.2s linear infinite;
-}
-
-@keyframes loading-row-show {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes loading-row-slide {
-  from {
-    background-position: -70% 0;
-  }
-  to {
-    background-position: 170% 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loading_row::after {
-    background: var(--primary-color-0_5);
-    animation: loading-row-show 0s 300ms forwards;
-  }
 }
 
 .selected_row .mat-mdc-cell {

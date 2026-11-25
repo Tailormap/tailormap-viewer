@@ -58,6 +58,10 @@
         <source>Go to page</source>
         <target>Zur Seite gehen</target>
       </trans-unit>
+      <trans-unit id="core.attribute-list.loading-feature" datatype="html">
+        <source>Loading feature</source>
+        <target>Objekt laden</target>
+      </trans-unit>
       <trans-unit id="core.attribute-list.no-data-found" datatype="html">
         <source>No layers with administrative data found</source>
         <target>Keine Layer mit administrativen Daten gefunden</target>
