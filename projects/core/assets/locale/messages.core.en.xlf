@@ -1112,6 +1112,9 @@
       <trans-unit id="core.snapping.max-features-exceeded-warning" datatype="html">
         <source>There are more than <x id="PH" equiv-text="maxFeatures"/> objects available in the <x id="PH_1" equiv-text="layerTitle"/> snapping layer. The maximum is <x id="PH_2" equiv-text="maxFeatures"/>. Apply filters or zoom in to narrow down the selection.</source>
       </trans-unit>
+      <trans-unit id="core.snapping.no-visible-layers" datatype="html">
+        <source>There are no visible layers to snap to. Make a layer visible to snap to it.</source>
+      </trans-unit>
       <trans-unit id="core.snapping.tooltip" datatype="html">
         <source>Snapping tool. Select (visible) layers to snap to when measuring, drawing and modifying.</source>
       </trans-unit>

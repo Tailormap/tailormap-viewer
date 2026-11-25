@@ -2,7 +2,7 @@ import { DestroyRef, inject, Injectable } from '@angular/core';
 import { BaseComponentTypeEnum, SnappingComponentConfigModel } from '@tailormap-viewer/api';
 import { LoadGeometriesService } from '../../../services/load-geometries.service';
 import { selectComponentsConfigForType, selectCQLFilters, selectViewerId } from '../../../state';
-import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take, debounceTime, filter } from 'rxjs';
+import { BehaviorSubject, combineLatest, concatMap, distinctUntilChanged, forkJoin, map, Observable, of, take, debounceTime, filter, skip } from 'rxjs';
 import { FeaturesFilterHelper } from '../../../filter';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,7 +44,6 @@ export class SnappingService {
     const configuredLayers = new Set(configured);
     return available.filter(layer => configuredLayers.has(layer.id));
   }));
-  public hasSelectableLayers$ = this.selectableLayers$.pipe(map(l => l.length > 0));
 
   private snappingLayers = new BehaviorSubject<DataSourceLayerModel[]>([]);
   private snappingFeatures = new BehaviorSubject<SnappingFeature[]>([]);
@@ -146,10 +145,13 @@ export class SnappingService {
         const selectableLayerIds = new Set(selectableLayers.map(l => l.id));
         const newSnappingLayers = currentSnappingLayers.filter(layer => selectableLayerIds.has(layer.id));
         if (newSnappingLayers.length !== currentSnappingLayers.length) {
-          this.snappingLayers.next(newSnappingLayers);
-          this.cleanUpOldGeometries(newSnappingLayers);
+          this.setSnappingLayers(newSnappingLayers);
         }
       });
+
+    this.snappingActive$
+      .pipe(takeUntilDestroyed(this.destroyRef), skip(1), distinctUntilChanged())
+      .subscribe(active => this.mapService.allowSnapping(active));
   }
 
   public toggleLayer(layer: DataSourceLayerModel) {
@@ -164,20 +166,42 @@ export class SnappingService {
     } else {
       updatedLayers = [ ...currentLayers, layer ];
     }
-    this.snappingLayers.next(updatedLayers);
-    this.cleanUpOldGeometries(updatedLayers);
+    this.setSnappingLayers(updatedLayers);
+    if (idx === -1) {
+      // Selecting a layer to snap to implies the user wants to snap
+      this.enableSnapping();
+    }
   }
 
   public isSnappingActive() {
     return this.snappingActive.value;
   }
 
+  public hasSnappingLayers() {
+    return this.snappingLayers.value.length > 0;
+  }
+
+  /**
+   * Enables snapping, but only when at least one snapping layer is selected. Snapping is disabled automatically when the
+   * last snapping layer is deselected or is no longer selectable (for example because it was made invisible).
+   */
   public enableSnapping() {
+    if (!this.hasSnappingLayers()) {
+      return;
+    }
     this.snappingActive.next(true);
   }
 
   public disableSnapping() {
     this.snappingActive.next(false);
+  }
+
+  private setSnappingLayers(layers: DataSourceLayerModel[]) {
+    this.snappingLayers.next(layers);
+    this.cleanUpOldGeometries(layers);
+    if (layers.length === 0 && this.snappingActive.value) {
+      this.disableSnapping();
+    }
   }
 
   private loadGeometries(layer: DataSourceLayerModel, bbox?: GetFeaturesParams['bbox']): void {
