@@ -54,6 +54,11 @@ describe('AttributeListTabToolbarComponent', () => {
     expect(await screen.findByText('0 of 0')).not.toBeVisible();
   });
 
+  test('shows no range label when there are no features', async () => {
+    await setup(0, 1, 0);
+    expect(await screen.findByText('0 of 0')).not.toBeVisible();
+  });
+
   test('shows the total when known', async () => {
     await setup(250, 1, 100);
     expect(await screen.findByText('1 - 100 of 250')).toBeVisible();

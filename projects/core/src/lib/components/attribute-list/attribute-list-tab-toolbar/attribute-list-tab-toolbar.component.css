@@ -49,9 +49,9 @@
   display: none;
 }
 
-/* Until the first page is loaded there is no range to show (it would show "0 of 0"). Hidden with visibility so the buttons
-   don't move. */
-.paging.page-not-loaded ::ng-deep .mat-mdc-paginator-range-label {
+/* No range label ("0 of 0") until the first page is loaded or when there are no features. Hidden with visibility so the
+   buttons don't move. */
+.paging.hide-range-label ::ng-deep .mat-mdc-paginator-range-label {
   visibility: hidden;
 }
 
