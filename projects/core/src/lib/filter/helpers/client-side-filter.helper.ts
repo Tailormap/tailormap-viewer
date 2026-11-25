@@ -69,7 +69,7 @@ export class ClientSideFilterHelper {
       // Use the geometry attribute when the feature has it as WKT, otherwise the feature geometry
       const value = feature.attributes[column];
       const wkt = typeof value === 'string' ? value : feature.geometry;
-      return !!wkt && intersects(wkt);
+      return !!wkt && intersects(wkt, feature);
     });
   }
 

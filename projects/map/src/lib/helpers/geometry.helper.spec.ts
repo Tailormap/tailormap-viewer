@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { WKTReader } from 'jsts/org/locationtech/jts/io.js';
 import { GeometryHelper } from './geometry.helper';
 
 describe('GeometryHelper', () => {
@@ -141,6 +142,17 @@ describe('GeometryHelper', () => {
 
     it('should not intersect anything without geometries', () => {
       expect(GeometryHelper.intersects([])('POINT(5 5)')).toBe(false);
+    });
+
+    it('should parse a tested geometry once per cache key', () => {
+      const readSpy = vi.spyOn(WKTReader.prototype, 'read');
+      const feature = {};
+      GeometryHelper.intersects([square])('POINT(5 5)', feature);
+      const reads = readSpy.mock.calls.length;
+      expect(GeometryHelper.intersects([square])('POINT(5 5)', feature)).toBe(true);
+      expect(GeometryHelper.intersects([square])('POINT(20 20)', feature)).toBe(false);
+      // Each new test parses its filter geometry, the cached point is not parsed again
+      expect(readSpy.mock.calls.length).toBe(reads + 3);
     });
   });
 });
