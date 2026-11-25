@@ -31,6 +31,7 @@
 }
 
 .layer-description {
+  --mat-dialog-supporting-text-color: var(--text-color);
   padding-top: 0 !important;
   max-height: 100%;
   max-width: 100%;
