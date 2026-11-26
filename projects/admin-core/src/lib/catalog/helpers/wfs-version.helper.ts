@@ -1,3 +1,5 @@
+import { UrlHelper } from '@tailormap-viewer/shared';
+
 export class WfsVersionHelper {
 
   /**
@@ -6,8 +8,7 @@ export class WfsVersionHelper {
    */
   public static isUnsupportedVersion(url: string | null | undefined): boolean {
     try {
-      const params = new URL(url || '').searchParams;
-      const version = Array.from(params).find(([name]) => name.toLowerCase() === 'version')?.[1];
+      const version = UrlHelper.getParamCaseInsensitive(new URL(url || ''), 'VERSION');
       return !!version && version !== '2.0.0';
     } catch {
       // Not a (complete) URL yet
