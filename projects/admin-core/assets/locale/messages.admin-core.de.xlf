@@ -1386,6 +1386,10 @@
         <source>Use tiling</source>
         <target>Kacheln verwenden</target>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.wfs-version-warning" datatype="html">
+        <source>Only WFS version 2.0.0 is supported. Remove the VERSION parameter from the URL.</source>
+        <target>Nur WFS-Version 2.0.0 wird unterstützt. Entfernen Sie den Parameter VERSION aus der URL.</target>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
         <source>XYZ tile grid extent</source>
         <target>Ausdehnung des XYZ-Kachelrasters</target>
