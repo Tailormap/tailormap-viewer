@@ -91,7 +91,21 @@ export class DrawingObjectsListComponent {
     this.editingDescriptionForFeatureFid = null;
   }
 
-  public copyFeatureWkt(wkt: string | undefined, objectDescription?: string) {
+  public getObjectLabel(description: string | undefined, index: number): string {
+    const label = this.stripMacros(description).trim();
+    if (label) {
+      return label;
+    }
+    const objectNumber = index + 1;
+    return $localize `:@@core.drawing.object-number:Object #${objectNumber}`;
+  }
+
+  public getCopyFeatureWktTooltip(description: string | undefined, index: number): string {
+    const label = this.getObjectLabel(description, index);
+    return $localize `:@@core.drawing.copy-object-wkt:Copy WKT of ${label}`;
+  }
+
+  public copyFeatureWkt(wkt: string | undefined, description: string | undefined, index: number) {
     if (!wkt) {
       this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-not-found:No geometry found for this drawing object`);
       return;
@@ -100,7 +114,7 @@ export class DrawingObjectsListComponent {
       this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-failed:Failed to copy WKT to clipboard`);
       return;
     }
-    const label = objectDescription ? `${objectDescription}` : $localize `:@@core.drawing.object:Object`;
+    const label = this.getObjectLabel(description, index);
     this.showSnackbarMessage($localize `:@@core.drawing.copy-object-wkt-copied:${label} WKT copied to clipboard`);
   }
 

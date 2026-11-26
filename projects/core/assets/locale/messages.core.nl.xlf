@@ -391,12 +391,12 @@
         <target>Objecten kopiëren van referentielaag</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
-        <source>Copy WKT of drawing object</source>
-        <target>WKT van tekenobject kopiëren</target>
+        <source>Copy WKT of <x id="PH" equiv-text="label"/></source>
+        <target>WKT van <x id="PH" equiv-text="label"/> kopiëren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
         <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
-        <target><x id="PH" equiv-text="label"/> WKT naar klembord gekopieerd</target>
+        <target>WKT van <x id="PH" equiv-text="label"/> naar klembord gekopieerd</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -514,9 +514,9 @@
         <source>No visible layers with available geometry</source>
         <target>Geen zichtbare lagen met beschikbare geometrie</target>
       </trans-unit>
-      <trans-unit id="core.drawing.object" datatype="html">
-        <source>Object</source>
-        <target>Object</target>
+      <trans-unit id="core.drawing.object-number" datatype="html">
+        <source>Object #<x id="PH" equiv-text="objectNumber"/></source>
+        <target>Object #<x id="PH" equiv-text="objectNumber"/></target>
       </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>

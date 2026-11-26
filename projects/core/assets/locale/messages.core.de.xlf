@@ -391,12 +391,12 @@
         <target>Objekte aus Referenzschicht kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
-        <source>Copy WKT of drawing object</source>
-        <target>WKT des Zeichenobjekts kopieren</target>
+        <source>Copy WKT of <x id="PH" equiv-text="label"/></source>
+        <target>WKT von <x id="PH" equiv-text="label"/> kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
         <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
-        <target><x id="PH" equiv-text="label"/> WKT in die Zwischenablage kopiert</target>
+        <target>WKT von <x id="PH" equiv-text="label"/> in die Zwischenablage kopiert</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -514,9 +514,9 @@
         <source>No visible layers with available geometry</source>
         <target>Keine sichtbaren Ebenen mit verfügbarer Geometrie</target>
       </trans-unit>
-      <trans-unit id="core.drawing.object" datatype="html">
-        <source>Object</source>
-        <target>Objekt</target>
+      <trans-unit id="core.drawing.object-number" datatype="html">
+        <source>Object #<x id="PH" equiv-text="objectNumber"/></source>
+        <target>Objekt #<x id="PH" equiv-text="objectNumber"/></target>
       </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
