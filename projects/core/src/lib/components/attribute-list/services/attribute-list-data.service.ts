@@ -25,6 +25,7 @@ import { FeatureUpdatedService } from '../../../services/feature-updated.service
 import { AttributeListManagerService } from './attribute-list-manager.service';
 import { selectLayer } from '../../../map';
 import { MapService } from '@tailormap-viewer/map';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -258,11 +259,14 @@ export class AttributeListDataService implements OnDestroy {
             ? Sortorder.DESC
             : (selectedData.sortDirection === 'asc' ? Sortorder.ASC : undefined),
         })),
-      catchError(_e => of(null)),
+      catchError((e: unknown) => of({ apiErrorMessage: AttributeListDataService.getApiErrorMessage(e) })),
       map((response): LoadAttributeListDataResultModel => {
-        if (response === null) {
-          // eslint-disable-next-line max-len
-          return AttributeListDataService.getErrorResult(selectedData.id, $localize `:@@core.attribute-list.failed-loading-data-for:Failed to load attribute list data for ${tab.label}`);
+        if ('apiErrorMessage' in response) {
+          const message = $localize `:@@core.attribute-list.failed-loading-data-for:Failed to load attribute list data for ${tab.label}`;
+          return AttributeListDataService.getErrorResult(
+            selectedData.id,
+            response.apiErrorMessage ? `${message}: ${response.apiErrorMessage}` : message,
+          );
         }
         return {
           id: selectedData.id,
@@ -275,6 +279,12 @@ export class AttributeListDataService implements OnDestroy {
         };
       }),
     );
+  }
+
+  /** The message of an API error response, like the feature info shows. Null for other errors. */
+  private static getApiErrorMessage(error: unknown): string | null {
+    const message = error instanceof HttpErrorResponse ? error.error?.message : null;
+    return typeof message === 'string' && message.trim() !== '' ? message : null;
   }
 
   private static decorateFeatures(

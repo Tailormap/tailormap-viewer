@@ -27,6 +27,7 @@ import { AttributeListManagerService } from './attribute-list-manager.service';
 import { getMapServiceMock } from '../../../test-helpers/map-service.mock';
 import { createDummyAttributeListData, createDummyRows, getLoadedStoreWithMultipleTabs } from '../state/mocks/attribute-list-state-test-data';
 import { LoadAttributeListDataResultModel } from '../models/load-attribute-list-data-result.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const setup = (
   features?: FeaturesResponseModel,
@@ -104,6 +105,27 @@ describe('AttributeListDataService', () => {
     const result = await firstValueFrom(service.loadDataForTab$('1'));
     expect(result.success).toBe(false);
     expect(result.errorMessage).toEqual('Failed to load attribute list data');
+  });
+
+  it('shows the message of an API error response', async () => {
+    const { service, api } = setup(undefined, true);
+    TestBed.inject(AttributeListApiService).initDefaultAttributeListSource();
+    (api.getFeatures$ as Mock).mockReturnValue(throwError(() => new HttpErrorResponse({
+      status: 400,
+      error: { message: 'Paging is not supported for this WFS version', code: 400 },
+    })));
+    const result = await firstValueFrom(service.loadDataForTab$('1'));
+    expect(result.success).toBe(false);
+    expect(result.errorMessage).toEqual('Failed to load attribute list data for TEST 1: Paging is not supported for this WFS version');
+  });
+
+  it('shows the default message for an error without a message', async () => {
+    const { service, api } = setup(undefined, true);
+    TestBed.inject(AttributeListApiService).initDefaultAttributeListSource();
+    (api.getFeatures$ as Mock).mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500, error: 'Internal Server Error' })));
+    const result = await firstValueFrom(service.loadDataForTab$('1'));
+    expect(result.success).toBe(false);
+    expect(result.errorMessage).toEqual('Failed to load attribute list data for TEST 1');
   });
 
   it('returns data for tab', async () => {
