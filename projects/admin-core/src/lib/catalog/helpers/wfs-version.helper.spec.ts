@@ -17,6 +17,7 @@ describe('WfsVersionHelper', () => {
     'https://example.com/wfs?service=WFS',
     'https://example.com/wfs?VERSION=',
     'https://example.com/wfs?acceptversions=1.1.0',
+    'example.com/wfs?VERSION=1.1.0',
     '',
     null,
     undefined,
