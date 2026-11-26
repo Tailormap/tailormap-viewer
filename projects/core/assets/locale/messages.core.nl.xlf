@@ -399,12 +399,12 @@
         <target>Objecten kopiëren van referentielaag</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
-        <source>Copy WKT of drawing object</source>
-        <target>WKT van tekenobject kopiëren</target>
+        <source>Copy WKT of <x id="PH" equiv-text="label"/></source>
+        <target>WKT van <x id="PH" equiv-text="label"/> kopiëren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
-        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
-        <target>WKT van object naar klembord gekopieerd: <x id="PH" equiv-text="displayWkt"/></target>
+        <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
+        <target>WKT van <x id="PH" equiv-text="label"/> naar klembord gekopieerd</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -522,6 +522,10 @@
         <source>No visible layers with available geometry</source>
         <target>Geen zichtbare lagen met beschikbare geometrie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.object-number" datatype="html">
+        <source>Object #<x id="PH" equiv-text="objectNumber"/></source>
+        <target>Object #<x id="PH" equiv-text="objectNumber"/></target>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
         <target>Objecten</target>
@@ -541,6 +545,10 @@
       <trans-unit id="core.drawing.reference-layer" datatype="html">
         <source>Reference layer</source>
         <target>Referentielaag</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
+        <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
+        <target>Selecteer <x id="PH" equiv-text="label"/>, en start met kopiëren van objecten uit de kaart</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

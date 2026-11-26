@@ -399,12 +399,12 @@
         <target>Objekte aus Referenzschicht kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
-        <source>Copy WKT of drawing object</source>
-        <target>WKT des Zeichenobjekts kopieren</target>
+        <source>Copy WKT of <x id="PH" equiv-text="label"/></source>
+        <target>WKT von <x id="PH" equiv-text="label"/> kopieren</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
-        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
-        <target>WKT des Objekts in die Zwischenablage kopiert: <x id="PH" equiv-text="displayWkt"/></target>
+        <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
+        <target>WKT von <x id="PH" equiv-text="label"/> in die Zwischenablage kopiert</target>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -522,6 +522,10 @@
         <source>No visible layers with available geometry</source>
         <target>Keine sichtbaren Ebenen mit verfügbarer Geometrie</target>
       </trans-unit>
+      <trans-unit id="core.drawing.object-number" datatype="html">
+        <source>Object #<x id="PH" equiv-text="objectNumber"/></source>
+        <target>Objekt #<x id="PH" equiv-text="objectNumber"/></target>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
         <target>Objekte</target>
@@ -541,6 +545,10 @@
       <trans-unit id="core.drawing.reference-layer" datatype="html">
         <source>Reference layer</source>
         <target>Referenzschicht</target>
+      </trans-unit>
+      <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
+        <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
+        <target>Wählen Sie <x id="PH" equiv-text="label"/>, und starten Sie das Kopieren von Objekten aus der Karte</target>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>

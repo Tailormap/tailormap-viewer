@@ -48,7 +48,26 @@ export class DrawingCopyFromLayerComponent {
   public referenceLayers = toSignal(this.drawingCopyFeaturesService.getReferenceLayers$(), { initialValue: [] });
   public copyFromLayerActive = this.drawingService.copyFromLayerActive.asReadonly();
 
+  public layerOptions = computed(() => this.referenceLayers().map(layer => {
+    const label = layer.title || layer.layerName;
+    return {
+      id: layer.id,
+      label,
+      tooltip: $localize `:@@core.drawing.reference-layer-option-label:Select ${label}, and start copying objects from the map`,
+    };
+  }));
+
   constructor() {
+    effect(() => {
+      // Selecting a reference layer starts copying right away, so the user does not have to press the button as well
+      const selectedLayerId = this.selectedLayerId();
+      untracked(() => {
+        if (selectedLayerId && !this.copyFromLayerActive()) {
+          this.drawingService.enableCopyFromLayer();
+        }
+      });
+    });
+
     effect(() => {
       const layers = this.referenceLayers();
       untracked(() => {

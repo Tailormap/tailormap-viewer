@@ -4,8 +4,8 @@
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="reference-layer">
       <mat-label i18n="@@core.drawing.reference-layer">Reference layer</mat-label>
       <mat-select [formField]="layerForm.layerId">
-        @for (layer of referenceLayers(); track layer.id) {
-          <mat-option [value]="layer.id">{{layer.title || layer.layerName}}</mat-option>
+        @for (option of layerOptions(); track option.id) {
+          <mat-option [value]="option.id" [tmTooltip]="option.tooltip" [matTooltipPosition]="'right'">{{option.label}}</mat-option>
         }
       </mat-select>
     </mat-form-field>

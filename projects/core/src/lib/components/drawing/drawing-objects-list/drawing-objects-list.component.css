@@ -51,6 +51,12 @@ mat-panel-description {
   background-color: transparent;
   color: inherit;
   font: inherit;
+  text-align: left;
+}
+
+.row-select.editing {
+  flex: 0 0 auto;
+  padding-right: 0;
 }
 
 
@@ -62,6 +68,8 @@ mat-panel-description {
   flex: 1;
   min-width: 0;
   border: 0;
+  padding: 0;
+  margin: 0;
   font-family: var(--mat-expansion-container-text-font);
   font-size: var(--mat-expansion-container-text-size);
   line-height: var(--mat-expansion-container-text-line-height);
@@ -86,7 +94,10 @@ mat-panel-description {
 
 .row .label {
   flex-grow: 1;
+  min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .row-copy {

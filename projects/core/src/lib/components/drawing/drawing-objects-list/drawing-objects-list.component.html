@@ -14,6 +14,7 @@
            [class.selected]="feature.selected">
         <button type="button"
                 class="row-select"
+                [class.editing]="editingDescriptionForFeatureFid === feature.__fid"
                 (click)="selectFeature(feature.__fid)"
                 (dblclick)="selectFeatureAndEditDescription(feature.__fid)">
           <div class="icon">
@@ -34,10 +35,9 @@
         <button mat-icon-button
                 type="button"
                 class="row-copy"
-                (click)="copyFeatureWkt(feature.geometry)"
-                i18n-tmTooltip="@@core.drawing.copy-object-wkt"
-                tmTooltip="Copy WKT of drawing object">
-          <mat-icon svgIcon="copy"></mat-icon>
+                (click)="copyFeatureWkt(feature.geometry, feature.attributes.style.description, index)"
+                [tmTooltip]="getCopyFeatureWktTooltip(feature.attributes.style.description, index)">
+          <mat-icon svgIcon="copy_text"></mat-icon>
         </button>
       </div>
     }

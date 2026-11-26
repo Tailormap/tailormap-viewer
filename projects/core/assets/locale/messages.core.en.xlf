@@ -297,10 +297,10 @@
         <source>Copy objects from reference layer</source>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt" datatype="html">
-        <source>Copy WKT of drawing object</source>
+        <source>Copy WKT of <x id="PH" equiv-text="label"/></source>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-copied" datatype="html">
-        <source>Object WKT copied to clipboard: <x id="PH" equiv-text="displayWkt"/></source>
+        <source><x id="PH" equiv-text="label"/> WKT copied to clipboard</source>
       </trans-unit>
       <trans-unit id="core.drawing.copy-object-wkt-failed" datatype="html">
         <source>Failed to copy WKT to clipboard</source>
@@ -389,6 +389,9 @@
       <trans-unit id="core.drawing.no-reference-layers" datatype="html">
         <source>No visible layers with available geometry</source>
       </trans-unit>
+      <trans-unit id="core.drawing.object-number" datatype="html">
+        <source>Object #<x id="PH" equiv-text="objectNumber"/></source>
+      </trans-unit>
       <trans-unit id="core.drawing.objects-list" datatype="html">
         <source>Objects</source>
       </trans-unit>
@@ -403,6 +406,9 @@
       </trans-unit>
       <trans-unit id="core.drawing.reference-layer" datatype="html">
         <source>Reference layer</source>
+      </trans-unit>
+      <trans-unit id="core.drawing.reference-layer-option-label" datatype="html">
+        <source>Select <x id="PH" equiv-text="label"/>, and start copying objects from the map</source>
       </trans-unit>
       <trans-unit id="core.drawing.rotation" datatype="html">
         <source>Rotation</source>
