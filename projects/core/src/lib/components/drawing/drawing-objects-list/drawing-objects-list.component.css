@@ -51,6 +51,11 @@ mat-panel-description {
   background-color: transparent;
   color: inherit;
   font: inherit;
+  text-align: left;
+}
+
+.row-select.editing {
+  flex: 0 0 auto;
 }
 
 
@@ -86,7 +91,10 @@ mat-panel-description {
 
 .row .label {
   flex-grow: 1;
+  min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .row-copy {
