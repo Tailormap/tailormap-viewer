@@ -12,6 +12,9 @@
   @if(featureSource$ | async; as featureSource) {
     @if (featureSource.protocol !== 'JDBC') {
       <tm-error-message i18n="@@admin-core.catalog.feature-type-not-editable-warning-not-jdbc" [show]="true" [friendlyError]="true">This feature type is not editable because editing is only supported for JDBC feature sources.</tm-error-message>
+      @if (unsupportedWfsVersion$ | async) {
+        <tm-error-message i18n="@@admin-core.catalog.wfs-version-warning" [show]="true" [friendlyError]="true">Only WFS version 2.0.0 is supported. Remove the VERSION parameter from the URL.</tm-error-message>
+      }
     } @else {
       @if (!featureType.primaryKeyAttribute) {
         <tm-error-message i18n="@@admin-core.catalog.feature-type-no-pk-warning" [show]="true" [friendlyError]="true">This feature type does not have a primary key.</tm-error-message>

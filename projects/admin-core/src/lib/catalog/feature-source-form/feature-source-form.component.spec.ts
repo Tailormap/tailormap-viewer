@@ -44,6 +44,39 @@ describe('FeatureSourceFormComponent', () => {
     });
   });
 
+  test('should warn for a WFS version other than 2.0.0 in the URL', async () => {
+    const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    await render(FeatureSourceFormComponent, {
+      imports: [],
+      providers: [{ provide: AdminSseService, useValue: createAdminSseServiceMock() }],
+    });
+    await ue.click(await screen.findByPlaceholderText('Protocol'));
+    await ue.click(await screen.findByText('WFS'));
+    const url = await screen.findByPlaceholderText('URL');
+    await ue.type(url, 'https://example.com/wfs?VERSION=1.1.0');
+    expect(await screen.findByText(/Only WFS version 2\.0\.0 is supported/)).toBeInTheDocument();
+    await ue.clear(url);
+    await ue.type(url, 'https://example.com/wfs?VERSION=2.0.0');
+    expect(screen.queryByText(/Only WFS version 2\.0\.0 is supported/)).not.toBeInTheDocument();
+  });
+
+  test('should warn for an existing WFS feature source with version 1.1.0', async () => {
+    const featureSource: FeatureSourceModel = {
+      id: '123',
+      type: 'feature-source',
+      title: 'Some WFS source',
+      protocol: FeatureSourceProtocolEnum.WFS,
+      url: 'https://example.com/wfs?service=WFS&VERSION=1.1.0',
+      featureTypes: [],
+    };
+    await render(FeatureSourceFormComponent, {
+      imports: [],
+      providers: [{ provide: AdminSseService, useValue: createAdminSseServiceMock() }],
+      inputs: { featureSource },
+    });
+    expect(await screen.findByText(/Only WFS version 2\.0\.0 is supported/)).toBeInTheDocument();
+  });
+
   test('should show JDBC fields in case of JDBC protocol', async () => {
     const ue = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
     await render(FeatureSourceFormComponent, {

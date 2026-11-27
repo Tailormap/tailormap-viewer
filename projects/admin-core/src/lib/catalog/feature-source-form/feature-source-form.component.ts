@@ -11,9 +11,10 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { PasswordFieldComponent } from '../../shared/components';
-import { AutoFocusDirective } from '@tailormap-viewer/shared';
+import { AutoFocusDirective, ErrorMessageComponent } from '@tailormap-viewer/shared';
 import { MatProgressBar, ProgressBarMode } from '@angular/material/progress-bar';
 import { AdminSseService, SSECapabilitiesLoadingProgressEvent } from '../../shared/services/admin-sse.service';
+import { WfsVersionHelper } from '../helpers/wfs-version.helper';
 
 @Component({
     selector: 'tm-admin-feature-source-form',
@@ -30,6 +31,7 @@ import { AdminSseService, SSECapabilitiesLoadingProgressEvent } from '../../shar
     MatOption,
     PasswordFieldComponent,
     MatProgressBar,
+    ErrorMessageComponent,
   ],
 })
 export class FeatureSourceFormComponent implements OnInit, OnDestroy {
@@ -155,6 +157,10 @@ export class FeatureSourceFormComponent implements OnInit, OnDestroy {
 
   public isWFSSource() {
     return this.featureSourceForm.get('protocol')?.value === FeatureSourceProtocolEnum.WFS;
+  }
+
+  public hasUnsupportedWfsVersion() {
+    return this.isWFSSource() && WfsVersionHelper.isUnsupportedVersion(this.featureSourceForm.get('url')?.value);
   }
 
   public isJDBCSource() {

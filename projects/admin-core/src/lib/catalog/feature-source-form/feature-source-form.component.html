@@ -28,6 +28,9 @@
         formControlName="url"
         />
     </mat-form-field>
+    @if (hasUnsupportedWfsVersion()) {
+      <tm-error-message i18n="@@admin-core.catalog.wfs-version-warning" [show]="true" [friendlyError]="true">Only WFS version 2.0.0 is supported. Remove the VERSION parameter from the URL.</tm-error-message>
+    }
   }
   @if (isJDBCSource()) {
     <mat-form-field>

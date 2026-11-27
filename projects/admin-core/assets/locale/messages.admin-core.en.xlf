@@ -1040,6 +1040,9 @@
       <trans-unit id="admin-core.catalog.use-tiling" datatype="html">
         <source>Use tiling</source>
       </trans-unit>
+      <trans-unit id="admin-core.catalog.wfs-version-warning" datatype="html">
+        <source>Only WFS version 2.0.0 is supported. Remove the VERSION parameter from the URL.</source>
+      </trans-unit>
       <trans-unit id="admin-core.catalog.xyz-tile-grid-extent" datatype="html">
         <source>XYZ tile grid extent</source>
       </trans-unit>

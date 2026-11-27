@@ -3,11 +3,11 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { FeatureSourceService } from '../services/feature-source.service';
 import { FeatureTypeUpdateModel } from '../models/feature-source-update.model';
 import {
-  AttributeSettingsModel, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
+  AttributeSettingsModel, FeatureSourceProtocolEnum, FeatureTypeModel, FeatureTypeSettingsModel, FeatureTypeTemplateModel,
 } from '@tailormap-admin/admin-api';
 import { ExtendedFeatureSourceModel } from '../models/extended-feature-source.model';
 import { Store } from '@ngrx/store';
-import { selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
+import { selectDraftFeatureSource, selectFeatureSourceByFeatureTypeOriginalId } from '../state/catalog.selectors';
 import { AttachmentAttributeModel } from '@tailormap-viewer/api';
 import { MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
@@ -17,6 +17,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { SaveButtonComponent } from '../../shared/components/save-button/save-button.component';
 import { MatButton } from '@angular/material/button';
 import { ErrorMessageComponent, InfoMessageComponent } from '@tailormap-viewer/shared';
+import { WfsVersionHelper } from '../helpers/wfs-version.helper';
 
 @Component({
     selector: 'tm-admin-feature-type-form',
@@ -73,6 +74,8 @@ export class FeatureTypeFormComponent {
 
   public featureSource$: Observable<ExtendedFeatureSourceModel | undefined> = of(undefined);
 
+  public unsupportedWfsVersion$: Observable<boolean> = of(false);
+
   public initFeatureTypeSettings(featureType: FeatureTypeModel | null) {
     if (featureType) {
       this.updatedFeatureTypeSubject.next(null);
@@ -84,6 +87,15 @@ export class FeatureTypeFormComponent {
     this.featureSource$ = featureType
       ? this.store$.select(selectFeatureSourceByFeatureTypeOriginalId(featureType.id))
       : of(undefined);
+    // The feature source summary has no URL. The feature type is loaded from the draft feature source (see
+    // FeatureSourceService.getDraftFeatureType$), which has it.
+    this.unsupportedWfsVersion$ = featureType
+      ? this.store$.select(selectDraftFeatureSource).pipe(
+        map(featureSource => featureSource?.protocol === FeatureSourceProtocolEnum.WFS
+          && featureSource.featureTypes.some(ft => `${ft.id}` === `${featureType.id}`)
+          && WfsVersionHelper.isUnsupportedVersion(featureSource.url)),
+      )
+      : of(false);
   }
 
   public save(featureType: FeatureTypeModel) {
