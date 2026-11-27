@@ -7,10 +7,12 @@
       </button>
     }
   </mat-menu>
-  <button mat-menu-item [matMenuTriggerFor]="languageMenu">
-    @if (selectedLanguage) {
-      <mat-icon [svgIcon]="selectedLanguage.icon"></mat-icon>
-    }
-    <span>{{selectedLanguage?.nativeLabel}}</span>
-  </button>
+  @if (showTrigger()) {
+    <button mat-menu-item [matMenuTriggerFor]="languageMenu">
+      @if (selectedLanguage) {
+        <mat-icon [svgIcon]="selectedLanguage.icon"></mat-icon>
+      }
+      <span>{{selectedLanguage?.nativeLabel}}</span>
+    </button>
+  }
 }

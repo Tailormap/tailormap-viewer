@@ -6,23 +6,25 @@ import { selectShowLanguageSwitcher, selectShowLoginButton } from '../../../stat
 import { Router } from '@angular/router';
 import { AuthenticatedUserService } from '@tailormap-viewer/api';
 import { APP_BASE_HREF } from '@angular/common';
+import { LOCALE_ID } from '@angular/core';
 import { AuthenticatedUserTestHelper } from '../../../test-helpers/authenticated-user-test.helper';
 import { of } from 'rxjs';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 
-const setup = async (loggedIn: boolean, showLoginButton = true) => {
+const setup = async (loggedIn: boolean, showLoginButton = true, showLanguageSwitcher = false) => {
   const navigateFn = vi.fn();
   const store = provideMockStore({
     selectors: [
       { selector: selectShowLoginButton, value: showLoginButton },
-      { selector: selectShowLanguageSwitcher, value: false },
+      { selector: selectShowLanguageSwitcher, value: showLanguageSwitcher },
     ],
   });
   const userService = AuthenticatedUserTestHelper.getAuthenticatedUserService(loggedIn, [], loggedIn ? 'testusername' : undefined);
   const mockMobileLayoutService = { isMobileLayoutEnabled$: of(false) };
   await render(ProfileComponent, {
     providers: [
-      { provide: APP_BASE_HREF, useValue: '' },
+      { provide: APP_BASE_HREF, useValue: showLanguageSwitcher ? '/en/' : '' },
+      { provide: LOCALE_ID, useValue: 'en' },
       store,
       { provide: AuthenticatedUserService, useValue: userService },
       { provide: Router, useValue: { navigateByUrl: navigateFn } },
@@ -80,6 +82,18 @@ describe('ProfileComponent', () => {
   test('should render without login button if configured to hide login button', async () => {
     await setup(false, false);
     expect(screen.queryByText(/Login/)).not.toBeInTheDocument();
+  });
+
+  test('should reach the language toggle with the keyboard', async () => {
+    await setup(false, true, true);
+    fireEvent.click(screen.getByRole('button'));
+    const aboutItem = await screen.findByRole('menuitem', { name: 'About' });
+    const languageItem = await screen.findByRole('menuitem', { name: 'English' });
+    aboutItem.focus();
+    fireEvent.keyDown(aboutItem, { key: 'ArrowDown', keyCode: 40 });
+    await vi.waitFor(() => expect(languageItem).toHaveFocus());
+    fireEvent.keyDown(languageItem, { key: 'ArrowRight', keyCode: 39 });
+    expect(await screen.findByRole('menuitem', { name: 'Nederlands' })).toBeInTheDocument();
   });
 
 });
