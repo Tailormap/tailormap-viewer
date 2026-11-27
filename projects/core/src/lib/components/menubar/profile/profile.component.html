@@ -3,12 +3,17 @@
 @if (userDetails && !inMobilePanel() && (visible$ | async)) {
   <tm-menubar-button [menuTrigger]="userMenu"
   [icon]="(icon$ | async) ?? ''" tooltip="Profile" i18n-tooltip="@@core.profile"></tm-menubar-button>
+  <tm-language-toggle #languageToggle="tmLanguageToggle" [showTrigger]="false"></tm-language-toggle>
   <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above" class="profile-menu">
     <button mat-menu-item (click)="showAbout()">
       <span i18n="@@core.profile.about">About</span>
     </button>
-    @if (showLanguageToggle$ | async) {
-      <tm-language-toggle></tm-language-toggle>
+    <!-- Trigger is declared here, not in tm-language-toggle, so the menu includes it in keyboard navigation -->
+    @if ((showLanguageToggle$ | async) && languageToggle.menu(); as languageMenu) {
+      <button mat-menu-item [matMenuTriggerFor]="languageMenu">
+        <mat-icon [svgIcon]="languageToggle.selectedLanguage?.icon ?? ''"></mat-icon>
+        <span>{{languageToggle.selectedLanguage?.nativeLabel}}</span>
+      </button>
     }
     @if (userDetails.isAuthenticated && userDetails.username) {
       <button class="logged-in-as" mat-menu-item disabled>

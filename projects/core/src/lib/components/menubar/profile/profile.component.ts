@@ -13,7 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MenubarService } from '../menubar.service';
 import { MobileLayoutService } from '../../../services/viewer-layout/mobile-layout.service';
 import { MenubarButtonComponent } from '../menubar-button/menubar-button.component';
-import { MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -25,6 +26,8 @@ import { AsyncPipe } from '@angular/common';
         MenubarButtonComponent,
         MatMenu,
         MatMenuItem,
+        MatMenuTrigger,
+        MatIcon,
         LanguageToggleComponent,
         RouterLink,
         AsyncPipe,

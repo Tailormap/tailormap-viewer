@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, LOCALE_ID, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, LOCALE_ID, inject, input, viewChild } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { LanguageDescriptionModel } from './language-description.model';
 import { LanguageHelper } from './language.helper';
@@ -7,6 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'tm-language-toggle',
+    exportAs: 'tmLanguageToggle',
     templateUrl: './language-toggle.component.html',
     styleUrls: ['./language-toggle.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +20,10 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class LanguageToggleComponent {
   private baseHref = inject(APP_BASE_HREF);
+
+  /** Set to false to render the trigger yourself, e.g. inside a parent mat-menu, using `menu()`. */
+  public showTrigger = input(true);
+  public menu = viewChild(MatMenu);
 
 
   public availableLanguages = LanguageHelper.availableLanguages;
